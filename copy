@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+
+my $from_sl = 'article';
+my $from_pl = 'articles';
+my $from_sc = 'Article';
+my $from_pc = 'Articles';
+my $to_sl = $ARGV[0];
+my $to_pl = $ARGV[1] || $to_sl.'s';
+my $to_sc = ucfirst ($to_sl);
+my $to_pc = ucfirst ($to_pl);
+my $i;
+
+my @t = ($from_pl, $to_pl, $from_sl, $to_sl, $from_pc, $to_pc, $from_sc, $to_sc);
+
+
+use File::Find;
+
+`mkdir modules/$to_pl`;
+`cp -R modules/$from_pl/* modules/$to_pl`;
+
+find (\&editFileNames, "modules/$to_pl");
+
+sub editFileNames {
+	if (-f) {
+		my $o = $_;
+		my $n = $_;
+		for ($i = 0; $i < @t; $i+=2) {
+			$n =~ s/$t[$i]/$t[$i+1]/ge;
+		}
+		print "mv $o $n\n";
+		`mv $o $n`;
+		for ($i = 0; $i < @t; $i+=2) {
+			print "perl -pi -w -e 's/$t[$i]/$t[$i+1]/ge;' $n\n";
+			`perl -pi -w -e 's/$t[$i]/$t[$i+1]/ge;' $n`;
+		}
+	}
+}
+
+exit (0);

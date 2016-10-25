@@ -1,0 +1,18 @@
+<section>
+  <div class="page-header">
+    <h1>Teams</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="team in vm.teams" ui-sref="teams.view({ teamId: team._id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="team.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="team.user" ng-bind="team.user.displayName"></span>
+        <span ng-if="!team.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="team.title"></h4>
+      <p class="list-group-item-text" ng-bind="team.content"></p>
+    </a>
+  </div>
+</section>

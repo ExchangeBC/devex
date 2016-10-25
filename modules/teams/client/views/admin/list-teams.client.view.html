@@ -1,0 +1,26 @@
+﻿<section>
+  <div class="page-header">
+    <h1>
+      Teams
+      <a class="btn btn-primary pull-right" data-ui-sref="admin.teams.create">
+        <i class="glyphicon glyphicon-plus"></i>
+      </a>
+    </h1>
+  </div>
+  <div class="list-group">
+    <a data-ng-repeat="team in vm.teams" data-ui-sref="admin.teams.edit({teamId: team._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span data-ng-bind="team.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="team.user" ng-bind="team.user.displayName"></span>
+        <span ng-if="!team.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" data-ng-bind="team.title"></h4>
+      <p class="list-group-item-text" data-ng-bind="team.content"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" data-ng-if="teams.$resolved && !teams.length">
+    No teams yet, why don't you <a data-ui-sref="admin.teams.create">create one</a>?
+  </div>
+</section>

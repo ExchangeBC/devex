@@ -1,0 +1,18 @@
+<section>
+  <div class="page-header">
+    <h1>Programs</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="program in vm.programs" ui-sref="programs.view({ programId: program._id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="program.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="program.user" ng-bind="program.user.displayName"></span>
+        <span ng-if="!program.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="program.title"></h4>
+      <p class="list-group-item-text" ng-bind="program.content"></p>
+    </a>
+  </div>
+</section>

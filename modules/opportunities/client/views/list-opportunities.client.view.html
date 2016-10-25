@@ -1,0 +1,18 @@
+<section>
+  <div class="page-header">
+    <h1>Opportunities</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="opportunity in vm.opportunities" ui-sref="opportunities.view({ opportunityId: opportunity._id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="opportunity.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="opportunity.user" ng-bind="opportunity.user.displayName"></span>
+        <span ng-if="!opportunity.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="opportunity.title"></h4>
+      <p class="list-group-item-text" ng-bind="opportunity.content"></p>
+    </a>
+  </div>
+</section>

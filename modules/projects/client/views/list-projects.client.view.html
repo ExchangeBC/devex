@@ -1,0 +1,18 @@
+<section>
+  <div class="page-header">
+    <h1>Projects</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="project in vm.projects" ui-sref="projects.view({ projectId: project._id })" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="project.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="project.user" ng-bind="project.user.displayName"></span>
+        <span ng-if="!project.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="project.title"></h4>
+      <p class="list-group-item-text" ng-bind="project.content"></p>
+    </a>
+  </div>
+</section>
