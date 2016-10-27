@@ -50,8 +50,11 @@ RUN sudo apt-get install -yq nodejs \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY phantom /opt/mean.js/node_modules
+
 # Install MEAN.JS Prerequisites
 RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 && npm cache clean
+
 
 RUN mkdir -p /opt/mean.js/public/lib
 WORKDIR /opt/mean.js
