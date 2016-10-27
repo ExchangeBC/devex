@@ -137,6 +137,10 @@ module.exports.start = function start(options) {
     // If production only seed admin if it does not exist
     if (process.env.NODE_ENV === 'production') {
       User.generateRandomPassphrase()
+        .then(function (random) {
+          var passed = process.env.APP_ADMINPW;
+          return passed || random;
+        })
         .then(seedTheUser(adminAccount))
         .then(function () {
           resolve();
@@ -149,7 +153,10 @@ module.exports.start = function start(options) {
         .then(function () { return 'useruser'; })
         .then(seedTheUser(userAccount))
         .then(User.generateRandomPassphrase)
-        .then(function () { return 'adminadmin'; })
+        .then(function (random) {
+          var passed = process.env.APP_ADMINPW;
+          return passed || 'adminadmin';
+        })
         .then(seedTheUser(adminAccount))
         .then(function () {
           resolve();
