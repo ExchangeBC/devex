@@ -1,0 +1,75 @@
+{
+  "name": "gulp-angular-templatecache",
+  "version": "2.0.0",
+  "description": "Concatenates and registers AngularJS templates in the $templateCache.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miickel/gulp-angular-templatecache.git"
+  },
+  "engines": {
+    "node": ">=4.2.0"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "gulp",
+    "angular",
+    "angularjs",
+    "ng",
+    "html2js",
+    "templatecache"
+  ],
+  "author": {
+    "name": "Mickel",
+    "email": "andersson.mickel@gmail.com",
+    "url": "http://mickel.me"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "event-stream": "3.3.2",
+    "gulp-concat": "2.6.0",
+    "gulp-footer": "1.0.5",
+    "gulp-header": "1.8.2",
+    "gulp-util": "3.0.7",
+    "jsesc": "2.2.0"
+  },
+  "devDependencies": {
+    "mocha": "latest"
+  },
+  "gitHead": "0a0e4690220188d9047b60a32eb4866431fbe0c7",
+  "bugs": {
+    "url": "https://github.com/miickel/gulp-angular-templatecache/issues"
+  },
+  "homepage": "https://github.com/miickel/gulp-angular-templatecache#readme",
+  "_id": "gulp-angular-templatecache@2.0.0",
+  "_shasum": "29b4071ee5574481c069a162bce8967534f17155",
+  "_from": "gulp-angular-templatecache@>=2.0.0 <2.1.0",
+  "_npmVersion": "2.14.7",
+  "_nodeVersion": "4.2.1",
+  "_npmUser": {
+    "name": "mickel",
+    "email": "andersson.mickel@gmail.com"
+  },
+  "dist": {
+    "shasum": "29b4071ee5574481c069a162bce8967534f17155",
+    "tarball": "https://registry.npmjs.org/gulp-angular-templatecache/-/gulp-angular-templatecache-2.0.0.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "mickel",
+      "email": "andersson.mickel@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/gulp-angular-templatecache-2.0.0.tgz_1466334831553_0.8869804688729346"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/gulp-angular-templatecache/-/gulp-angular-templatecache-2.0.0.tgz"
+}

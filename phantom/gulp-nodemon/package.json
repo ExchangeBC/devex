@@ -1,0 +1,73 @@
+{
+  "name": "gulp-nodemon",
+  "version": "2.2.1",
+  "description": "it's gulp + nodemon + convenience",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JacksonGariety/gulp-nodemon.git"
+  },
+  "keywords": [
+    "gulp",
+    "nodemon",
+    "develop",
+    "server",
+    "restart",
+    "automatically",
+    "watch",
+    "gulpfriendly",
+    "gulpplugin"
+  ],
+  "author": {
+    "name": "Jackson Gariety"
+  },
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/JacksonGariety/gulp-nodemon/issues"
+  },
+  "homepage": "https://github.com/JacksonGariety/gulp-nodemon",
+  "dependencies": {
+    "colors": "^1.0.3",
+    "event-stream": "^3.2.1",
+    "gulp": "^3.9.1",
+    "nodemon": "^1.10.2"
+  },
+  "devDependencies": {
+    "should": "^4.0.0",
+    "gulp-jshint": "^1.6.1",
+    "gulp-mocha": "^0.2.0",
+    "is-running": "^1.0.3",
+    "coffee-script": "^1.7.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "gitHead": "485614c1bf7cf1c8192c570423bd2e5b24e5f81c",
+  "_id": "gulp-nodemon@2.2.1",
+  "_shasum": "d9bf199f5585458159d3d299153e60b46868b6f4",
+  "_from": "gulp-nodemon@>=2.2.1 <2.3.0",
+  "_npmVersion": "3.10.5",
+  "_nodeVersion": "6.3.1",
+  "_npmUser": {
+    "name": "jacksongariety",
+    "email": "jackson@gariety.xxx"
+  },
+  "dist": {
+    "shasum": "d9bf199f5585458159d3d299153e60b46868b6f4",
+    "tarball": "https://registry.npmjs.org/gulp-nodemon/-/gulp-nodemon-2.2.1.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "jacksongariety",
+      "email": "personal@jacksongariety.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/gulp-nodemon-2.2.1.tgz_1475128514312_0.4443575507029891"
+  },
+  "_resolved": "https://registry.npmjs.org/gulp-nodemon/-/gulp-nodemon-2.2.1.tgz"
+}
