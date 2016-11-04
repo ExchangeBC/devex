@@ -4,31 +4,23 @@
  * Module dependencies
  */
 var mongoose = require('mongoose'),
-  Schema = mongoose.Schema;
+	Schema = mongoose.Schema;
 
 /**
  * Program Schema
  */
 var ProgramSchema = new Schema({
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  title: {
-    type: String,
-    default: '',
-    trim: true,
-    required: 'Title cannot be blank'
-  },
-  content: {
-    type: String,
-    default: '',
-    trim: true
-  },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  }
+	code        : {type: String, default: ''},
+	title       : {type: String, default: '', required: 'Title cannot be blank'},
+	short       : {type: String, default: ''},
+	description : {type: String, default: ''},
+	owner       : {type: String, default: ''},
+	website     : {type: String, default: ''},
+	logo        : {type: String, default: ''},
+	created     : {type: Date, default: null},
+	createdBy   : {type: 'ObjectId', ref: 'User', default: null },
+	updated     : {type: Date, default: null },
+	updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
 });
 
 mongoose.model('Program', ProgramSchema);
