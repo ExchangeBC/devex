@@ -17,8 +17,6 @@
       .state('programs.list', {
         url: '',
         templateUrl: '/modules/programs/client/views/list-programs.client.view.html',
-        controller: 'ProgramsListController',
-        controllerAs: 'vm',
         data: {
           pageTitle: 'Programs List'
         }
@@ -29,7 +27,7 @@
         controller: 'ProgramsController',
         controllerAs: 'vm',
         resolve: {
-          programResolve: getProgram
+          program: getProgram
         },
         data: {
           pageTitle: 'Program {{ programResolve.title }}'

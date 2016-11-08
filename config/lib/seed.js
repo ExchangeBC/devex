@@ -84,15 +84,18 @@ function seedTheUser (user) {
             reject(err);
           });
       } else {
-        removeUser(user)
+        // removeUser(user)
+        checkUserNotExists(user)
           .then(saveUser(user))
           .then(reportSuccess(password))
           .then(function () {
             resolve();
           })
-          .catch(function (err) {
-            reject(err);
-          });
+          // .catch(function (err) {
+          //   resolve();
+          //   // reject(err);
+          // });
+          ;
       }
     });
   };

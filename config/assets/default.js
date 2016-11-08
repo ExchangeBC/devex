@@ -11,7 +11,9 @@ module.exports = {
         'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/ng-img-crop/compile/unminified/ng-img-crop.css',
         'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
-        'public/lib/font-awesome/css/font-awesome.min.css'
+        'public/lib/font-awesome/css/font-awesome.min.css',
+        'public/lib/simple-line-icons/css/simple-line-icons.css',
+        'public/device-mockups/device-mockups.min.css'
         // endbower
       ],
       js: [
@@ -26,13 +28,15 @@ module.exports = {
         'public/lib/angular-resource/angular-resource.js',
         'public/lib/angular-ui-notification/dist/angular-ui-notification.js',
         'public/lib/angular-ui-router/release/angular-ui-router.js',
-        'public/lib/owasp-password-strength-test/owasp-password-strength-test.js'
+        'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+        'public/jquery/jquery.min.js'
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
     css: [
-      'modules/*/client/css/*.css'
+      'modules/*/client/css/*.css',
+      'public/css/*.css'
     ],
     less: [
       'modules/*/client/less/*.less'
@@ -44,7 +48,8 @@ module.exports = {
       'modules/core/client/app/config.js',
       'modules/core/client/app/init.js',
       'modules/*/client/*.js',
-      'modules/*/client/**/*.js'
+      'modules/*/client/**/*.js',
+      'public/js/bc-devx.js'
     ],
     img: [
       'modules/**/*/img/**/*.jpg',

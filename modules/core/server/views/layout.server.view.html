@@ -34,37 +34,17 @@
   {{#each cssFiles}}<link rel="stylesheet" href="/{{this}}">{{/each}}
 </head>
 
-<body class="ng-cloak">
-  <header ng-include="'/modules/core/client/views/header.client.view.html'" class="navbar navbar-fixed-top navbar-inverse"></header>
-  <section class="content">
-    <section class="container">
-      {{{block "content"}}}
-    </section>
-  </section>
+<body class="ng-cloak" id="page-top">
 
-  <section>
-      <br/>
-      <div class="container" style="border-top: 1px solid #ccc">
-      <br/>
-        <div class="row">
-          <div class="col-xs-9">
-            <ul class="nav nav-pills">
-              <li><a href="https://twitter.com/hashtag/BCDev" target="_blank" > <i class="fa fa-twitter fa"></i> </a></li>
-              <li><a href="https://github.com/BCDevExchange" target="_blank" > <i class="fa fa-github fa"></i> </a></li>
-              <li><a href="mailto:Data@gov.bc.ca?subject=Feedback on BCDevExchange" > <i class="fa fa-envelope fa"></i> </a></li>
-              <li><a href="http://blog.data.gov.bc.ca/" target="_blank" > <i class="fa fa-comment fa"></i> </a></li>
-              <li><a href="/disclaimer">Disclaimer</a> </li>
-              <li><a href="/privacy">Privacy</a> </li>
-              <li><a href="/accessibility">Accessibility</a> </li>
-              <li><a href="/copyright">Copyright</a> </li>
-            </ul>
-          </div>
-          <div class="col-xs-3">
-            <img src="/modules/core/client/img/bc-sponsor.jpg" class="pull-right" />
-          </div>
-        </div>
-      </div>
-  </section>
+  <div ng-include="'/modules/core/client/views/header.client.view.html'"></div>
+
+ <!--  <div class="content">
+    <div class="container">
+ -->      {{{block "content"}}}
+<!--     </div>
+  </div>
+ -->
+  <footer class="footer-distributed" ng-include="'/modules/core/client/views/footer.client.view.html'"></footer>
 
   <noscript>
     <style>
@@ -94,7 +74,7 @@
     var sharedConfig = {{{ sharedConfig }}};
     owaspPasswordStrengthTest.config(sharedConfig.owasp);
   </script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
   {{#if livereload}}
   <!--Livereload script rendered -->
   <script type="text/javascript" src="{{host}}:35729/livereload.js"></script>

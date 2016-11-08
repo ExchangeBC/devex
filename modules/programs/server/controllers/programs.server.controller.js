@@ -26,7 +26,9 @@ var path = require('path'),
 	mongoose = require('mongoose'),
 	Program = mongoose.model('Program'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers'));
+	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	_ = require('lodash')
+	;
 
 // -------------------------------------------------------------------------
 //
@@ -52,10 +54,15 @@ var setProgramRequest = function (program, user) {
 	user.addRoles ([requestRole(program)]);
 };
 var ensureAdmin = function (program, user, res) {
-	if (!~user.roles.indexOf (adminRole(program))) {
-		return res.status(422).send({
+	if (!~user.roles.indexOf (adminRole(program)) && !~user.roles.indexOf ('admin')) {
+		console.log ('NOT admin');
+		res.status(422).send({
 			message: 'User Not Authorized'
 		});
+		return false;
+	} else {
+		console.log ('Is admin');
+		return true;
 	}
 };
 // -------------------------------------------------------------------------
@@ -183,7 +190,10 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
+	console.log ('Deleting');
 	if (ensureAdmin (req.program, req.user, res)) {
+		console.log ('Deleting');
+
 		var program = req.program;
 		program.remove(function (err) {
 			if (err) {

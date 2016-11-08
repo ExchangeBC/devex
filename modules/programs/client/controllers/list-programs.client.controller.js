@@ -9,6 +9,7 @@
 
   function ProgramsListController(ProgramsService) {
     var vm = this;
+    console.log ('inside list controller');
 
     vm.programs = ProgramsService.query();
   }
