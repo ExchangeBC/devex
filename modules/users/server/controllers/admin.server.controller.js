@@ -107,7 +107,7 @@ User.findOne({
         user.roles='gov';
     else
       {
-        
+        user.roles='user';
       }
 
       user.save(function (err) {
