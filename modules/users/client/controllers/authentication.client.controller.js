@@ -12,10 +12,12 @@
 
     vm.authentication = Authentication;
     vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
+    vm.non_gov = non_gov;
     vm.signup = signup;
+    vm.gov = gov;
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
-
+    vm.governmentSelected = governmentSelected;
     // Get an eventual error defined in the URL query string:
     if ($location.search().err) {
       Notification.error({ message: $location.search().err });
@@ -25,9 +27,21 @@
     if (vm.authentication.user) {
       $location.path('/');
     }
+    function governmentSelected() {
+      return $location.search().role == 'non_gov'?true:false;
+    }
+        function governmentSelected1() {
+      return $location.search().role == 'non_gov'?false:true;
+    }
+	function non_gov(isValid) {
+      $window.location.href = '/authentication/government?role=non_gov';
+    }
+    	function gov(isValid) {
 
+$window.location.href = '/authentication/government?role=gov';
+    }
     function signup(isValid) {
-
+//alert($location.search().role);
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 

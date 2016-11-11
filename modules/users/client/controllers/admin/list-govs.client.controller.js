@@ -3,21 +3,26 @@
 
   angular
     .module('users.admin')
-    .controller('UserListController', UserListController);
+    .controller('GovListController', GovListController);
 
-  UserListController.$inject = ['$scope', '$filter', 'AdminService'];
+  GovListController.$inject = ['$scope', '$filter', 'AdminService', '$state', '$window'];
 
-  function UserListController($scope, $filter, AdminService) {
+  function GovListController($scope, $filter, AdminService, $state, $window) {
     var vm = this;
+     vm.approve = approve;
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
-
+    
     AdminService.query(function (data) {
       vm.users = data;
       vm.buildPager();
     });
 
+	function approve( flag,user) {
+       AdminService.approve({flag:flag,user:user});
+       $window.location.href = '/admin/govs';
+    }
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 15;
@@ -27,16 +32,9 @@
 
     function figureOutItemsToDisplay() {
       vm.filteredItems = $filter('filter')(vm.users, {
-        $: vm.search
+        $: vm.search,
+        roles:'gov-request'
       });
-      var filtered = [];
-    for (var i = 0; i < vm.filteredItems.length; i++) {
-      var item = vm.filteredItems[i];
-      if (item.roles == 'user' || item.roles == 'gov' || item.roles == 'admin') {
-        filtered.push(item);
-      }
-    }
-    vm.filteredItems=filtered;
       vm.filterLength = vm.filteredItems.length;
       var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
       var end = begin + vm.itemsPerPage;

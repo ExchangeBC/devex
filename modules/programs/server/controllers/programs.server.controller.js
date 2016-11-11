@@ -1,304 +1,117 @@
 'use strict';
-/*
-
-Notes about programs
-
-Roles:
-------
-Membership in a program is defined by the user having various roles attached to their
-user record. There are only three possible states: admin, member, or request.
-When a user requests membership they get the request role only, once accepted that
-simply gets changed to the member role. Roles are simply the program code with suffixes.
-
-member  : <code>
-admin   : <code>-admin
-request : <code>-request
-
-*/
-
-'use strict';
-
 
 /**
  * Module dependencies
  */
 var path = require('path'),
-	mongoose = require('mongoose'),
-	Program = mongoose.model('Program'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	_ = require('lodash')
-	;
+  mongoose = require('mongoose'),
+  Program = mongoose.model('Program'),
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
-// -------------------------------------------------------------------------
-//
-// set a program role on a user
-//
-// -------------------------------------------------------------------------
-var adminRole = function (program) {
-	return program.code+'-admin';
-};
-var memberRole = function (program) {
-	return program.code;
-};
-var requestRole = function (program) {
-	return program.code+'-request';
-};
-var setProgramMember = function (program, user) {
-	user.addRoles ([memberRole(program)]);
-};
-var setProgramAdmin = function (program, user) {
-	user.addRoles ([memberRole(program), adminRole(program)]);
-};
-var setProgramRequest = function (program, user) {
-	user.addRoles ([requestRole(program)]);
-};
-var ensureAdmin = function (program, user, res) {
-	if (!~user.roles.indexOf (adminRole(program)) && !~user.roles.indexOf ('admin')) {
-		console.log ('NOT admin');
-		res.status(422).send({
-			message: 'User Not Authorized'
-		});
-		return false;
-	} else {
-		console.log ('Is admin');
-		return true;
-	}
-};
-// -------------------------------------------------------------------------
-//
-// this takes a program model, serializes it, and decorates it with what
-// relationship the user has to the program, and returns the JSON
-//
-// -------------------------------------------------------------------------
-var decorate = function (programModel, roles) {
-	var program = programModel ? programModel.toJSON () : {};
-	program.userIs = {
-		admin   : !!~roles.indexOf (adminRole(program)) || !!~roles.indexOf ('admin'),
-		member  : !!~roles.indexOf (memberRole(program)),
-		request : !!~roles.indexOf (requestRole(program))
-	};
-	return program;
-};
-// -------------------------------------------------------------------------
-//
-// decorate an entire list of programs
-//
-// -------------------------------------------------------------------------
-var decorateList = function (programModels, roles) {
-	return programModels.map (function (programModel) {
-		return decorate (programModel, roles);
-	});
-};
-// -------------------------------------------------------------------------
-//
-// return a list of all program members. this means all members NOT
-// including users who have requested access and are currently waiting
-//
-// -------------------------------------------------------------------------
-exports.members = function (program, cb) {
-	mongoose.model ('User').find ({roles: memberRole(program)}).exec (cb);
-};
-
-// -------------------------------------------------------------------------
-//
-// return a list of all users who are currently waiting to be added to the
-// program member list
-//
-// -------------------------------------------------------------------------
-exports.requests = function (program, cb) {
-	mongoose.model ('User').find ({roles: requestRole(program)}).exec (cb);
-};
-
-// -------------------------------------------------------------------------
-//
-// create a new program. the user doing the creation will be set as the
-// administrator
-//
-// -------------------------------------------------------------------------
+/**
+ * Create an program
+ */
 exports.create = function (req, res) {
-	console.log ('Creating a new program');
-	var program = new Program(req.body);
-	//
-	// set the code, this is used for setting roles and other stuff
-	//
-	program.code = helpers.generateCode (program.title);
-	//
-	// set the audit fields so we know who did what when
-	//
-	helpers.applyAudit (program, req.user)
-	//
-	// save and return
-	//
-	program.save(function (err) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			setProgramAdmin (program, req.user);
-			req.user.save ();
-			res.json(program);
-		}
-	});
+  var program = new Program(req.body);
+  program.user = req.user;
+
+  program.save(function (err) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(program);
+    }
+  });
 };
 
-// -------------------------------------------------------------------------
-//
-// this just takes the already queried object and pass it back
-//
-// -------------------------------------------------------------------------
+/**
+ * Show the current program
+ */
 exports.read = function (req, res) {
-	res.json (decorate (req.program, req.user ? req.user.roles : []));
+  // convert mongoose document to JSON
+  var program = req.program ? req.program.toJSON() : {};
+
+  // Add a custom field to the Program, for determining if the current User is the "owner".
+  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Program model.
+  program.isCurrentUserOwner = !!(req.user && program.user && program.user._id.toString() === req.user._id.toString());
+
+  res.json(program);
 };
 
-// -------------------------------------------------------------------------
-//
-// update the document, make sure to apply audit. We don't mess with the
-// code if they change the title as that would mean reworking all the roles
-//
-// -------------------------------------------------------------------------
+/**
+ * Update an program
+ */
 exports.update = function (req, res) {
-	if (ensureAdmin (req.program, req.user, res)) {
-		//
-		// copy over everything passed in. This will overwrite the
-		// audit fields, but they get updated in the following step
-		//
-		var program = _.assign (req.program, req.body);
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (program, req.user)
-		//
-		// save
-		//
-		program.save(function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json(program);
-			}
-		});
-	}
+  var program = req.program;
+
+  program.title = req.body.title;
+  program.content = req.body.content;
+
+  program.save(function (err) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(program);
+    }
+  });
 };
 
-// -------------------------------------------------------------------------
-//
-// delete the program
-//
-// -------------------------------------------------------------------------
+/**
+ * Delete an program
+ */
 exports.delete = function (req, res) {
-	console.log ('Deleting');
-	if (ensureAdmin (req.program, req.user, res)) {
-		console.log ('Deleting');
+  var program = req.program;
 
-		var program = req.program;
-		program.remove(function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json(program);
-			}
-		});
-	}
+  program.remove(function (err) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(program);
+    }
+  });
 };
 
-// -------------------------------------------------------------------------
-//
-// return a list of all programs
-//
-// -------------------------------------------------------------------------
+/**
+ * List of Programs
+ */
 exports.list = function (req, res) {
-	Program.find().sort('title')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.exec(function (err, programs) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json (decorateList (programs, req.user ? req.user.roles : []));
-			// res.json(programs);
-		}
-	});
+  Program.find().sort('-created').populate('user', 'displayName').exec(function (err, programs) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json(programs);
+    }
+  });
 };
 
-// -------------------------------------------------------------------------
-//
-// this is the service front to the members call
-//
-// -------------------------------------------------------------------------
-exports.listMembers = function (req, res) {
-	exports.members (req.program, function (err, users) {
-		if (err) {
-			return res.status (422).send ({
-				message: errorHandler.getErrorMessage (err)
-			});
-		} else {
-			res.json (users);
-		}
-	});
-};
-
-// -------------------------------------------------------------------------
-//
-// this is the service front to the members call
-//
-// -------------------------------------------------------------------------
-exports.listRequests = function (req, res) {
-	exports.requests (req.program, function (err, users) {
-		if (err) {
-			return res.status (422).send ({
-				message: errorHandler.getErrorMessage (err)
-			});
-		} else {
-			res.json (users);
-		}
-	});
-};
-
-// -------------------------------------------------------------------------
-//
-// new empty program
-//
-// -------------------------------------------------------------------------
-exports.new = function (req, res) {
-	console.log ('get a new program set up and return it');
-	var p = new Program ();
-	res.json(p);
-};
-
-// -------------------------------------------------------------------------
-//
-// magic that populates the program on the request
-//
-// -------------------------------------------------------------------------
+/**
+ * Program middleware
+ */
 exports.programByID = function (req, res, next, id) {
 
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		return res.status(400).send({
-			message: 'Program is invalid'
-		});
-	}
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).send({
+      message: 'Program is invalid'
+    });
+  }
 
-	Program.findById(id)
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.exec(function (err, program) {
-		if (err) {
-			return next(err);
-		} else if (!program) {
-			return res.status(404).send({
-				message: 'No program with that identifier has been found'
-			});
-		}
-		req.program = program;
-		next();
-	});
+  Program.findById(id).populate('user', 'displayName').exec(function (err, program) {
+    if (err) {
+      return next(err);
+    } else if (!program) {
+      return res.status(404).send({
+        message: 'No program with that identifier has been found'
+      });
+    }
+    req.program = program;
+    next();
+  });
 };
-

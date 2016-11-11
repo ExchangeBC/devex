@@ -16,6 +16,13 @@
             <p class="help-block error-text" ng-message="required">Last name is required.</p>
           </div>
         </div>
+         <div class="form-group" show-errors>
+          <label for="government">Organization Name</label>
+          <input type="text" id="government" name="government" class="form-control" ng-model="vm.user.government" placeholder="Organization Name" required>
+          <div ng-messages="vm.userForm.government.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Organization Name is required.</p>
+          </div>
+        </div>
         <div class="form-group" show-errors>
           <label for="email">Email</label>
           <input type="email" id="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Email" lowercase required>

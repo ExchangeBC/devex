@@ -64,7 +64,16 @@
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
-      .state('authentication.signup', {
+      .state('authentication.gov', {
+        url: '/government',
+        templateUrl: '/modules/users/client/views/authentication/gov.client.view.html',
+        controller: 'AuthenticationController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Government'
+        }
+      })
+       .state('signup', {
         url: '/signup',
         templateUrl: '/modules/users/client/views/authentication/signup.client.view.html',
         controller: 'AuthenticationController',

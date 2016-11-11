@@ -91,3 +91,37 @@ exports.userByID = function (req, res, next, id) {
     next();
   });
 };
+/**
+ * approve Gov. Request
+ */
+exports.approve = function (req, res) {
+User.findOne({
+    _id: req.body.user._id
+  }).exec(function (err, user) {
+    if (err) {
+      return next(err);
+    } else if (!user) {
+      return next(new Error('Failed to load User ' + req.body.user._id));
+    }
+    if(req.body.flag == 1)
+        user.roles='gov';
+    else
+      {
+        
+      }
+
+      user.save(function (err) {
+                  if (err) {
+            return res.status(422).send({
+              message: errorHandler.getErrorMessage(err)
+            });
+          } else {
+            res.send({
+              message: 'done'
+            });
+          }
+        });
+
+    next();
+  });
+};

@@ -18,9 +18,6 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/programs',
       permissions: '*'
     }, {
-      resources: '/api/new/program',
-      permissions: ['get']
-    }, {
       resources: '/api/programs/:programId',
       permissions: '*'
     }]
@@ -30,9 +27,6 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/programs',
       permissions: ['get']
     }, {
-      resources: '/api/new/program',
-      permissions: ['get']
-    }, {
       resources: '/api/programs/:programId',
       permissions: ['get']
     }]
@@ -40,12 +34,6 @@ exports.invokeRolesPolicies = function () {
     roles: ['guest'],
     allows: [{
       resources: '/api/programs',
-      permissions: ['get']
-    }, {
-      resources: '/api/programs/members/:programId',
-      permissions: ['get']
-    }, {
-      resources: '/api/programs/requests/:programId',
       permissions: ['get']
     }, {
       resources: '/api/programs/:programId',
@@ -59,7 +47,7 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-  console.log ('roles, method, path', roles, req.method, req.route.path);
+
   // If an program is being processed and the current user created it then allow any manipulation
   if (req.program && req.user && req.program.user && req.program.user.id === req.user.id) {
     return next();
