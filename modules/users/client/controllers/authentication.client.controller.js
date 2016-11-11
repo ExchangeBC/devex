@@ -18,6 +18,7 @@
     vm.signin = signin;
     vm.callOauthProvider = callOauthProvider;
     vm.governmentSelected = governmentSelected;
+	vm.getUserRole = getUserRole;
     // Get an eventual error defined in the URL query string:
     if ($location.search().err) {
       Notification.error({ message: $location.search().err });
@@ -30,16 +31,22 @@
     function governmentSelected() {
       return $location.search().role == 'non_gov'?true:false;
     }
-        function governmentSelected1() {
+    function governmentSelected1() {
       return $location.search().role == 'non_gov'?false:true;
     }
 	function non_gov(isValid) {
       $window.location.href = '/authentication/government?role=non_gov';
     }
-    	function gov(isValid) {
-
-$window.location.href = '/authentication/government?role=gov';
+    function gov(isValid) {
+		$window.location.href = '/authentication/government?role=gov';
     }
+	function getUserRole(){
+		if($location.search().role == 'gov'){
+			return true;	
+		}else{
+			return false;
+		}
+	}
     function signup(isValid) {
 //alert($location.search().role);
       if (!isValid) {
