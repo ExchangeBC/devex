@@ -73,6 +73,6 @@ COPY .bowerrc /opt/mean.js/.bowerrc
 RUN bower install --quiet --allow-root --config.interactive=false
 
 COPY . /opt/mean.js
-
+ENV MONGO_SEED=true
 # Run MEAN.JS server
 CMD ["npm", "start"]
