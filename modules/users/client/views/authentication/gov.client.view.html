@@ -19,14 +19,6 @@
             <p class="help-block error-text" ng-message="required">First name is required.</p>
           </div>
         </div>
-
-        <div ng-hide="vm.governmentSelected()" class="form-group" show-errors>
-          <label for="Government">Organization </label>
-          <input type="text" id="government" name="government" class="form-control" ng-model="vm.credentials.government" placeholder="Organization ">
-          <div ng-messages="vm.userForm.government.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Government is required.</p>
-          </div>
-        </div>
         <div class="form-group" show-errors>
           <label for="lastName">Last Name</label>
           <input type="text" id="lastName" name="lastName" class="form-control" ng-model="vm.credentials.lastName" placeholder="Last Name" required>
@@ -40,6 +32,13 @@
           <div ng-messages="vm.userForm.email.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Email address is required.</p>
             <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+          </div>
+        </div>
+		<div ng-hide="vm.governmentSelected()" class="form-group" show-errors>
+          <label for="Government">Organization </label>
+          <input type="text" id="government" name="government" class="form-control" ng-model="vm.credentials.government" placeholder="Organization ">
+          <div ng-messages="vm.userForm.government.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Government is required.</p>
           </div>
         </div>
         <div class="form-group" show-errors>
