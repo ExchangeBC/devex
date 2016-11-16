@@ -27,7 +27,7 @@ exports.signup = function (req, res) {
   user.provider = 'local';
   user.displayName = user.firstName + ' ' + user.lastName;
 if(user.government)
-  user.roles = 'gov-request';
+  user.roles = ['gov-request','user'];
 
   // Then save the user
   user.save(function (err) {

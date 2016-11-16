@@ -104,10 +104,10 @@ User.findOne({
       return next(new Error('Failed to load User ' + req.body.user._id));
     }
     if(req.body.flag == 1)
-        user.roles='gov';
+        user.roles=['gov',''user];
     else
       {
-        user.roles='user';
+        user.roles=['user'];
       }
 
       user.save(function (err) {
