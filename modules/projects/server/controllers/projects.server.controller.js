@@ -23,7 +23,7 @@ exports.create = function(req, res) {
 
   var url = 'https://api.github.com/user/repos';
   var user = 'dewolfe001';
-  var secret = '39c1cffc1008ed43189ecd27448bd903a75778eb';
+  var secret = ''; /* to be added */
 
   var client = github.client({
 	id: user,
