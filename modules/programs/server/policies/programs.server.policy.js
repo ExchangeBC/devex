@@ -25,7 +25,7 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/programs',
-      permissions: ['get']
+      permissions: ['get', 'post']
     }, {
       resources: '/api/programs/:programId',
       permissions: ['get']
@@ -48,7 +48,7 @@ exports.invokeRolesPolicies = function () {
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
 
-  // If an program is being processed and the current user created it then allow any manipulation
+  // If an Program is being processed and the current user created it then allow any manipulation
   if (req.program && req.user && req.program.user && req.program.user.id === req.user.id) {
     return next();
   }

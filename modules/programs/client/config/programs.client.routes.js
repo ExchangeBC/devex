@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('programs.routes')
+    .module('programs')
     .config(routeConfig);
 
   routeConfig.$inject = ['$stateProvider'];
@@ -16,23 +16,49 @@
       })
       .state('programs.list', {
         url: '',
-        templateUrl: '/modules/programs/client/views/list-programs.client.view.html',
+        templateUrl: 'modules/programs/client/views/list-programs.client.view.html',
         controller: 'ProgramsListController',
         controllerAs: 'vm',
         data: {
           pageTitle: 'Programs List'
         }
       })
-      .state('programs.view', {
-        url: '/:programId',
-        templateUrl: '/modules/programs/client/views/view-program.client.view.html',
+      .state('programs.create', {
+        url: '/create',
+        templateUrl: 'modules/programs/client/views/form-program.client.view.html',
+        controller: 'ProgramsController',
+        controllerAs: 'vm',
+        resolve: {
+          programResolve: newProgram
+        },
+        data: {
+          roles: ['user', 'admin'],
+          pageTitle: 'Create A Program'
+        }
+      })
+      .state('programs.edit', {
+        url: '/:programId/edit',
+        templateUrl: 'modules/programs/client/views/form-program.client.view.html',
         controller: 'ProgramsController',
         controllerAs: 'vm',
         resolve: {
           programResolve: getProgram
         },
         data: {
-          pageTitle: 'Program {{ programResolve.title }}'
+          roles: ['user', 'admin'],
+          pageTitle: 'Edit Program {{ programResolve.name }}'
+        }
+      })
+      .state('programs.view', {
+        url: '/:programId',
+        templateUrl: 'modules/programs/client/views/view-program.client.view.html',
+        controller: 'ProgramsController',
+        controllerAs: 'vm',
+        resolve: {
+          programResolve: getProgram
+        },
+        data: {
+          pageTitle: 'Program {{ programResolve.name }}'
         }
       });
   }
@@ -43,5 +69,11 @@
     return ProgramsService.get({
       programId: $stateParams.programId
     }).$promise;
+  }
+
+  newProgram.$inject = ['ProgramsService'];
+
+  function newProgram(ProgramsService) {
+    return new ProgramsService();
   }
 }());

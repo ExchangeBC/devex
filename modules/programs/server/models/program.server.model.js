@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Module dependencies
+ * Module dependencies.
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
@@ -10,20 +10,21 @@ var mongoose = require('mongoose'),
  * Program Schema
  */
 var ProgramSchema = new Schema({
+  name: {
+    type: String,
+    default: '',
+    required: 'Please fill the program name',
+    trim: true
+  },
+  description: {
+    type: String,
+    default: '',
+    required: 'Please complete the program description',
+    trim: true
+  },
   created: {
     type: Date,
     default: Date.now
-  },
-  title: {
-    type: String,
-    default: '',
-    trim: true,
-    required: 'Title cannot be blank'
-  },
-  content: {
-    type: String,
-    default: '',
-    trim: true
   },
   user: {
     type: Schema.ObjectId,

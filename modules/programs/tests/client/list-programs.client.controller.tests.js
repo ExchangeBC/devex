@@ -46,11 +46,10 @@
       Authentication = _Authentication_;
       ProgramsService = _ProgramsService_;
 
-      // create mock program
+      // create mock article
       mockProgram = new ProgramsService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Program about MEAN',
-        content: 'MEAN rocks!'
+        name: 'Program Name'
       });
 
       // Mock logged in user
@@ -74,12 +73,10 @@
         mockProgramList = [mockProgram, mockProgram];
       });
 
-      it('should send a GET request and return all programs', inject(function (ProgramsService) {
+      it('should send a GET request and return all Programs', inject(function (ProgramsService) {
         // Set POST response
-        $httpBackend.expectGET('/api/programs').respond(mockProgramList);
+        $httpBackend.expectGET('api/programs').respond(mockProgramList);
 
-        // Ignore parent template get on state transition
-        $httpBackend.whenGET('/modules/core/client/views/home.client.view.html').respond(200, '');
 
         $httpBackend.flush();
 

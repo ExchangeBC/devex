@@ -33,7 +33,7 @@ describe('Program CRUD tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      usernameOrEmail: 'username',
+      username: 'username',
       password: 'M3@n.jsI$Aw3$0m3'
     };
 
@@ -43,23 +43,22 @@ describe('Program CRUD tests', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
-      username: credentials.usernameOrEmail,
+      username: credentials.username,
       password: credentials.password,
       provider: 'local'
     });
 
-    // Save a user to the test db and create new program
+    // Save a user to the test db and create new Program
     user.save(function () {
       program = {
-        title: 'Program Title',
-        content: 'Program Content'
+        name: 'Program name'
       };
 
       done();
     });
   });
 
-  it('should not be able to save an program if logged in without the "admin" role', function (done) {
+  it('should be able to save a Program if logged in', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -69,18 +68,42 @@ describe('Program CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Program
         agent.post('/api/programs')
           .send(program)
-          .expect(403)
+          .expect(200)
           .end(function (programSaveErr, programSaveRes) {
-            // Call the assertion callback
-            done(programSaveErr);
-          });
+            // Handle Program save error
+            if (programSaveErr) {
+              return done(programSaveErr);
+            }
 
+            // Get a list of Programs
+            agent.get('/api/programs')
+              .end(function (programsGetErr, programsGetRes) {
+                // Handle Programs save error
+                if (programsGetErr) {
+                  return done(programsGetErr);
+                }
+
+                // Get Programs list
+                var programs = programsGetRes.body;
+
+                // Set assertions
+                (programs[0].user._id).should.equal(userId);
+                (programs[0].name).should.match('Program name');
+
+                // Call the assertion callback
+                done();
+              });
+          });
       });
   });
 
-  it('should not be able to save an program if not logged in', function (done) {
+  it('should not be able to save an Program if not logged in', function (done) {
     agent.post('/api/programs')
       .send(program)
       .expect(403)
@@ -90,7 +113,10 @@ describe('Program CRUD tests', function () {
       });
   });
 
-  it('should not be able to update an program if signed in without the "admin" role', function (done) {
+  it('should not be able to save an Program if no name is provided', function (done) {
+    // Invalidate name field
+    program.name = '';
+
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -100,23 +126,77 @@ describe('Program CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Program
         agent.post('/api/programs')
           .send(program)
-          .expect(403)
+          .expect(400)
           .end(function (programSaveErr, programSaveRes) {
-            // Call the assertion callback
+            // Set message assertion
+            (programSaveRes.body.message).should.match('Please fill Program name');
+
+            // Handle Program save error
             done(programSaveErr);
           });
       });
   });
 
-  it('should be able to get a list of programs if not signed in', function (done) {
-    // Create new program model instance
+  it('should be able to update an Program if signed in', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Program
+        agent.post('/api/programs')
+          .send(program)
+          .expect(200)
+          .end(function (programSaveErr, programSaveRes) {
+            // Handle Program save error
+            if (programSaveErr) {
+              return done(programSaveErr);
+            }
+
+            // Update Program name
+            program.name = 'WHY YOU GOTTA BE SO MEAN?';
+
+            // Update an existing Program
+            agent.put('/api/programs/' + programSaveRes.body._id)
+              .send(program)
+              .expect(200)
+              .end(function (programUpdateErr, programUpdateRes) {
+                // Handle Program update error
+                if (programUpdateErr) {
+                  return done(programUpdateErr);
+                }
+
+                // Set assertions
+                (programUpdateRes.body._id).should.equal(programSaveRes.body._id);
+                (programUpdateRes.body.name).should.match('WHY YOU GOTTA BE SO MEAN?');
+
+                // Call the assertion callback
+                done();
+              });
+          });
+      });
+  });
+
+  it('should be able to get a list of Programs if not signed in', function (done) {
+    // Create new Program model instance
     var programObj = new Program(program);
 
     // Save the program
     programObj.save(function () {
-      // Request programs
+      // Request Programs
       request(app).get('/api/programs')
         .end(function (req, res) {
           // Set assertion
@@ -129,16 +209,16 @@ describe('Program CRUD tests', function () {
     });
   });
 
-  it('should be able to get a single program if not signed in', function (done) {
-    // Create new program model instance
+  it('should be able to get a single Program if not signed in', function (done) {
+    // Create new Program model instance
     var programObj = new Program(program);
 
-    // Save the program
+    // Save the Program
     programObj.save(function () {
       request(app).get('/api/programs/' + programObj._id)
         .end(function (req, res) {
           // Set assertion
-          res.body.should.be.instanceof(Object).and.have.property('title', program.title);
+          res.body.should.be.instanceof(Object).and.have.property('name', program.name);
 
           // Call the assertion callback
           done();
@@ -146,7 +226,7 @@ describe('Program CRUD tests', function () {
     });
   });
 
-  it('should return proper error for single program with an invalid Id, if not signed in', function (done) {
+  it('should return proper error for single Program with an invalid Id, if not signed in', function (done) {
     // test is not a valid mongoose Id
     request(app).get('/api/programs/test')
       .end(function (req, res) {
@@ -158,19 +238,19 @@ describe('Program CRUD tests', function () {
       });
   });
 
-  it('should return proper error for single program which doesnt exist, if not signed in', function (done) {
-    // This is a valid mongoose Id but a non-existent program
+  it('should return proper error for single Program which doesnt exist, if not signed in', function (done) {
+    // This is a valid mongoose Id but a non-existent Program
     request(app).get('/api/programs/559e9cd815f80b4c256a8f41')
       .end(function (req, res) {
         // Set assertion
-        res.body.should.be.instanceof(Object).and.have.property('message', 'No program with that identifier has been found');
+        res.body.should.be.instanceof(Object).and.have.property('message', 'No Program with that identifier has been found');
 
         // Call the assertion callback
         done();
       });
   });
 
-  it('should not be able to delete an program if signed in without the "admin" role', function (done) {
+  it('should be able to delete an Program if signed in', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -180,43 +260,66 @@ describe('Program CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Program
         agent.post('/api/programs')
           .send(program)
-          .expect(403)
+          .expect(200)
           .end(function (programSaveErr, programSaveRes) {
-            // Call the assertion callback
-            done(programSaveErr);
+            // Handle Program save error
+            if (programSaveErr) {
+              return done(programSaveErr);
+            }
+
+            // Delete an existing Program
+            agent.delete('/api/programs/' + programSaveRes.body._id)
+              .send(program)
+              .expect(200)
+              .end(function (programDeleteErr, programDeleteRes) {
+                // Handle program error error
+                if (programDeleteErr) {
+                  return done(programDeleteErr);
+                }
+
+                // Set assertions
+                (programDeleteRes.body._id).should.equal(programSaveRes.body._id);
+
+                // Call the assertion callback
+                done();
+              });
           });
       });
   });
 
-  it('should not be able to delete an program if not signed in', function (done) {
-    // Set program user
+  it('should not be able to delete an Program if not signed in', function (done) {
+    // Set Program user
     program.user = user;
 
-    // Create new program model instance
+    // Create new Program model instance
     var programObj = new Program(program);
 
-    // Save the program
+    // Save the Program
     programObj.save(function () {
-      // Try deleting program
+      // Try deleting Program
       request(app).delete('/api/programs/' + programObj._id)
         .expect(403)
         .end(function (programDeleteErr, programDeleteRes) {
           // Set message assertion
           (programDeleteRes.body.message).should.match('User is not authorized');
 
-          // Handle program error error
+          // Handle Program error error
           done(programDeleteErr);
         });
 
     });
   });
 
-  it('should be able to get a single program that has an orphaned user reference', function (done) {
+  it('should be able to get a single Program that has an orphaned user reference', function (done) {
     // Create orphan user creds
     var _creds = {
-      usernameOrEmail: 'orphan',
+      username: 'orphan',
       password: 'M3@n.jsI$Aw3$0m3'
     };
 
@@ -226,10 +329,9 @@ describe('Program CRUD tests', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'orphan@test.com',
-      username: _creds.usernameOrEmail,
+      username: _creds.username,
       password: _creds.password,
-      provider: 'local',
-      roles: ['admin']
+      provider: 'local'
     });
 
     _orphan.save(function (err, orphan) {
@@ -250,22 +352,22 @@ describe('Program CRUD tests', function () {
           // Get the userId
           var orphanId = orphan._id;
 
-          // Save a new program
+          // Save a new Program
           agent.post('/api/programs')
             .send(program)
             .expect(200)
             .end(function (programSaveErr, programSaveRes) {
-              // Handle program save error
+              // Handle Program save error
               if (programSaveErr) {
                 return done(programSaveErr);
               }
 
-              // Set assertions on new program
-              (programSaveRes.body.title).should.equal(program.title);
+              // Set assertions on new Program
+              (programSaveRes.body.name).should.equal(program.name);
               should.exist(programSaveRes.body.user);
               should.equal(programSaveRes.body.user._id, orphanId);
 
-              // force the program to have an orphaned user reference
+              // force the Program to have an orphaned user reference
               orphan.remove(function () {
                 // now signin with valid user
                 agent.post('/api/auth/signin')
@@ -277,18 +379,18 @@ describe('Program CRUD tests', function () {
                       return done(err);
                     }
 
-                    // Get the program
+                    // Get the Program
                     agent.get('/api/programs/' + programSaveRes.body._id)
                       .expect(200)
                       .end(function (programInfoErr, programInfoRes) {
-                        // Handle program error
+                        // Handle Program error
                         if (programInfoErr) {
                           return done(programInfoErr);
                         }
 
                         // Set assertions
                         (programInfoRes.body._id).should.equal(programSaveRes.body._id);
-                        (programInfoRes.body.title).should.equal(program.title);
+                        (programInfoRes.body.name).should.equal(program.name);
                         should.equal(programInfoRes.body.user, undefined);
 
                         // Call the assertion callback
@@ -296,111 +398,6 @@ describe('Program CRUD tests', function () {
                       });
                   });
               });
-            });
-        });
-    });
-  });
-
-  it('should be able to get a single program if not signed in and verify the custom "isCurrentUserOwner" field is set to "false"', function (done) {
-    // Create new program model instance
-    var programObj = new Program(program);
-
-    // Save the program
-    programObj.save(function () {
-      request(app).get('/api/programs/' + programObj._id)
-        .end(function (req, res) {
-          // Set assertion
-          res.body.should.be.instanceof(Object).and.have.property('title', program.title);
-          // Assert the custom field "isCurrentUserOwner" is set to false for the un-authenticated User
-          res.body.should.be.instanceof(Object).and.have.property('isCurrentUserOwner', false);
-          // Call the assertion callback
-          done();
-        });
-    });
-  });
-
-  it('should be able to get single program, that a different user created, if logged in & verify the "isCurrentUserOwner" field is set to "false"', function (done) {
-    // Create temporary user creds
-    var _creds = {
-      usernameOrEmail: 'programowner',
-      password: 'M3@n.jsI$Aw3$0m3'
-    };
-
-    // Create user that will create the Program
-    var _programOwner = new User({
-      firstName: 'Full',
-      lastName: 'Name',
-      displayName: 'Full Name',
-      email: 'temp@test.com',
-      username: _creds.usernameOrEmail,
-      password: _creds.password,
-      provider: 'local',
-      roles: ['admin', 'user']
-    });
-
-    _programOwner.save(function (err, _user) {
-      // Handle save error
-      if (err) {
-        return done(err);
-      }
-
-      // Sign in with the user that will create the Program
-      agent.post('/api/auth/signin')
-        .send(_creds)
-        .expect(200)
-        .end(function (signinErr, signinRes) {
-          // Handle signin error
-          if (signinErr) {
-            return done(signinErr);
-          }
-
-          // Get the userId
-          var userId = _user._id;
-
-          // Save a new program
-          agent.post('/api/programs')
-            .send(program)
-            .expect(200)
-            .end(function (programSaveErr, programSaveRes) {
-              // Handle program save error
-              if (programSaveErr) {
-                return done(programSaveErr);
-              }
-
-              // Set assertions on new program
-              (programSaveRes.body.title).should.equal(program.title);
-              should.exist(programSaveRes.body.user);
-              should.equal(programSaveRes.body.user._id, userId);
-
-              // now signin with the test suite user
-              agent.post('/api/auth/signin')
-                .send(credentials)
-                .expect(200)
-                .end(function (err, res) {
-                  // Handle signin error
-                  if (err) {
-                    return done(err);
-                  }
-
-                  // Get the program
-                  agent.get('/api/programs/' + programSaveRes.body._id)
-                    .expect(200)
-                    .end(function (programInfoErr, programInfoRes) {
-                      // Handle program error
-                      if (programInfoErr) {
-                        return done(programInfoErr);
-                      }
-
-                      // Set assertions
-                      (programInfoRes.body._id).should.equal(programSaveRes.body._id);
-                      (programInfoRes.body.title).should.equal(program.title);
-                      // Assert that the custom field "isCurrentUserOwner" is set to false since the current User didn't create it
-                      (programInfoRes.body.isCurrentUserOwner).should.equal(false);
-
-                      // Call the assertion callback
-                      done();
-                    });
-                });
             });
         });
     });
