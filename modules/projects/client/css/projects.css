@@ -1,0 +1,20 @@
+.project-description {
+	display: block;
+	clear: both;
+}
+
+.project-link {
+	display: block;
+	clear: both;
+	margin: 4px 0 4px 0;
+}
+
+h4.list-group-item-heading.projects {
+	float: left;
+	margin-right: 10px;
+}
+
+span.edit-link {
+	float: left;
+	margin-right: 10px;
+}

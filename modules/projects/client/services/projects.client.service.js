@@ -1,35 +1,45 @@
+// Projects service used to communicate Projects REST endpoints
 (function () {
   'use strict';
 
   angular
-    .module('projects.services')
+    .module('projects')
     .factory('ProjectsService', ProjectsService);
 
   ProjectsService.$inject = ['$resource', '$log'];
 
   function ProjectsService($resource, $log) {
-    var Project = $resource('/api/projects/:projectId', {
-      projectId: '@_id'
-    }, {
+    var Project = $resource('/api/projects', {}, {
       update: {
+        method: 'PUT',
+        params: {
+          projectId: '@_id'
+        }
+      },
+      create: {
         method: 'PUT'
+      },
+      get: {
+        method: 'GET',
+        params: {
+          projectId: '@_id'
+        }
       }
     });
 
-    angular.extend(Project.prototype, {
-      createOrUpdate: function () {
-        var project = this;
-        return createOrUpdate(project);
-      }
-    });
+	angular.extend(Project.prototype, {
+		createOrUpdate: function () {
+		var project = this;
+		return createOrUpdate(project);
+	}
+	});
+	return Project;
 
-    return Project;
-
-    function createOrUpdate(project) {
+	function createOrUpdate(project) {
       if (project._id) {
-        return project.$update(onSuccess, onError);
+        return project.update(onSuccess, onError);
       } else {
-        return project.$save(onSuccess, onError);
+        return project.save(onSuccess, onError);
       }
 
       // Handle successful response
@@ -43,11 +53,11 @@
         // Handle error internally
         handleError(error);
       }
-    }
 
-    function handleError(error) {
-      // Log error
-      $log.error(error);
-    }
-  }
+      function handleError(error) {
+        // Log error
+        $log.error(error);
+      }
+	}
+}
 }());

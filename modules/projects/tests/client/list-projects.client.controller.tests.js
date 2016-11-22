@@ -46,11 +46,10 @@
       Authentication = _Authentication_;
       ProjectsService = _ProjectsService_;
 
-      // create mock project
+      // create mock article
       mockProject = new ProjectsService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Project about MEAN',
-        content: 'MEAN rocks!'
+        name: 'Project Name'
       });
 
       // Mock logged in user
@@ -74,12 +73,10 @@
         mockProjectList = [mockProject, mockProject];
       });
 
-      it('should send a GET request and return all projects', inject(function (ProjectsService) {
+      it('should send a GET request and return all Projects', inject(function (ProjectsService) {
         // Set POST response
-        $httpBackend.expectGET('/api/projects').respond(mockProjectList);
+        $httpBackend.expectGET('api/projects').respond(mockProjectList);
 
-        // Ignore parent template get on state transition
-        $httpBackend.whenGET('/modules/core/client/views/home.client.view.html').respond(200, '');
 
         $httpBackend.flush();
 

@@ -17,22 +17,20 @@ var user,
 /**
  * Unit tests
  */
-describe('Project Model Unit Tests:', function () {
-
-  beforeEach(function (done) {
+describe('Project Model Unit Tests:', function() {
+  beforeEach(function(done) {
     user = new User({
       firstName: 'Full',
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
       username: 'username',
-      password: 'M3@n.jsI$Aw3$0m3'
+      password: 'password'
     });
 
-    user.save(function () {
+    user.save(function() {
       project = new Project({
-        title: 'Project Title',
-        content: 'Project Content',
+        name: 'Project Name',
         user: user
       });
 
@@ -40,28 +38,30 @@ describe('Project Model Unit Tests:', function () {
     });
   });
 
-  describe('Method Save', function () {
-    it('should be able to save without problems', function (done) {
-      this.timeout(10000);
-      project.save(function (err) {
+  describe('Method Save', function() {
+    it('should be able to save without problems', function(done) {
+      this.timeout(0);
+      return project.save(function(err) {
         should.not.exist(err);
-        return done();
+        done();
       });
     });
 
-    it('should be able to show an error when try to save without title', function (done) {
-      project.title = '';
+    it('should be able to show an error when try to save without name', function(done) {
+      project.name = '';
 
-      project.save(function (err) {
+      return project.save(function(err) {
         should.exist(err);
-        return done();
+        done();
       });
     });
   });
 
-  afterEach(function (done) {
-    Project.remove().exec(function () {
-      User.remove().exec(done);
+  afterEach(function(done) {
+    Project.remove().exec(function() {
+      User.remove().exec(function() {
+        done();
+      });
     });
   });
 });

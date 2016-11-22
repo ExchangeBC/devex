@@ -46,11 +46,10 @@
       Authentication = _Authentication_;
       ProjectsService = _ProjectsService_;
 
-      // create mock project
+      // create mock Project
       mockProject = new ProjectsService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Project about MEAN',
-        content: 'MEAN rocks!'
+        name: 'Project Name'
       });
 
       // Mock logged in user
@@ -67,5 +66,105 @@
       // Spy on state go
       spyOn($state, 'go');
     }));
+
+    describe('vm.save() as create', function () {
+      var sampleProjectPostData;
+
+      beforeEach(function () {
+        // Create a sample Project object
+        sampleProjectPostData = new ProjectsService({
+          name: 'Project Name'
+        });
+
+        $scope.vm.project = sampleProjectPostData;
+      });
+
+      it('should send a POST request with the form input values and then locate to new object URL', inject(function (ProjectsService) {
+        // Set POST response
+        $httpBackend.expectPOST('api/projects', sampleProjectPostData).respond(mockProject);
+
+        // Run controller functionality
+        $scope.vm.save(true);
+        $httpBackend.flush();
+
+        // Test URL redirection after the Project was created
+        expect($state.go).toHaveBeenCalledWith('projects.view', {
+          projectId: mockProject._id
+        });
+      }));
+
+      it('should set $scope.vm.error if error', function () {
+        var errorMessage = 'this is an error message';
+        $httpBackend.expectPOST('api/projects', sampleProjectPostData).respond(400, {
+          message: errorMessage
+        });
+
+        $scope.vm.save(true);
+        $httpBackend.flush();
+
+        expect($scope.vm.error).toBe(errorMessage);
+      });
+    });
+
+    describe('vm.save() as update', function () {
+      beforeEach(function () {
+        // Mock Project in $scope
+        $scope.vm.project = mockProject;
+      });
+
+      it('should update a valid Project', inject(function (ProjectsService) {
+        // Set PUT response
+        $httpBackend.expectPUT(/api\/projects\/([0-9a-fA-F]{24})$/).respond();
+
+        // Run controller functionality
+        $scope.vm.save(true);
+        $httpBackend.flush();
+
+        // Test URL location to new object
+        expect($state.go).toHaveBeenCalledWith('projects.view', {
+          projectId: mockProject._id
+        });
+      }));
+
+      it('should set $scope.vm.error if error', inject(function (ProjectsService) {
+        var errorMessage = 'error';
+        $httpBackend.expectPUT(/api\/projects\/([0-9a-fA-F]{24})$/).respond(400, {
+          message: errorMessage
+        });
+
+        $scope.vm.save(true);
+        $httpBackend.flush();
+
+        expect($scope.vm.error).toBe(errorMessage);
+      }));
+    });
+
+    describe('vm.remove()', function () {
+      beforeEach(function () {
+        // Setup Projects
+        $scope.vm.project = mockProject;
+      });
+
+      it('should delete the Project and redirect to Projects', function () {
+        // Return true on confirm message
+        spyOn(window, 'confirm').and.returnValue(true);
+
+        $httpBackend.expectDELETE(/api\/projects\/([0-9a-fA-F]{24})$/).respond(204);
+
+        $scope.vm.remove();
+        $httpBackend.flush();
+
+        expect($state.go).toHaveBeenCalledWith('projects.list');
+      });
+
+      it('should should not delete the Project and not redirect', function () {
+        // Return false on confirm message
+        spyOn(window, 'confirm').and.returnValue(false);
+
+        $scope.vm.remove();
+
+        expect($state.go).not.toHaveBeenCalled();
+      });
+    });
   });
 }());
