@@ -12,7 +12,7 @@ docker run -p 3030:3000 -p 5858:5858 -p 35729:35729 \
 -e "MAILER_EMAIL_ID=<Email>" \
 -e "MAILER_PASSWORD=<Password>" \
 -e "NODE_ENV=development" \
-mean/devex nodejs server.js
+mean/devex bash
 
 # after run sh dev.sh
 # and run MAILER_SERVICE_PROVIDER="gmail" MAILER_FROM="<email>" MAILER_EMAIL_ID="<email>" MAILER_PASSWORD="<password>" NODE_ENV=development  nodejs
