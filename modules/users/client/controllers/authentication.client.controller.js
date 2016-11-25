@@ -28,10 +28,10 @@
       $location.path('/');
     }
     function governmentSelected() {
-      return $location.search().role == 'non_gov'?true:false;
+      return ($location.search().role === 'non_gov');
     }
         function governmentSelected1() {
-      return $location.search().role == 'non_gov'?false:true;
+      return ($location.search().role === 'non_gov');
     }
 	function non_gov(isValid) {
       $window.location.href = '/authentication/government?role=non_gov';
@@ -41,7 +41,7 @@
 $window.location.href = '/authentication/government?role=gov';
     }
     function signup(isValid) {
-//alert($location.search().role);
+// alert($location.search().role);
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 

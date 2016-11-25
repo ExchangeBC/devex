@@ -30,7 +30,7 @@
         $: vm.search,
 		roles:'!gov-request'
       });
-      /*var filtered = [];
+      /* var filtered = [];
     for (var i = 0; i < vm.filteredItems.length; i++) {
       var item = vm.filteredItems[i];
       if (item.roles == 'user' || item.roles == 'gov' || item.roles == 'admin') {

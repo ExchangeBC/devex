@@ -1,0 +1,93 @@
+{
+  "name": "gulp-rev",
+  "version": "7.1.2",
+  "description": "Static asset revisioning by appending content hash to filenames: unicorn.css => unicorn-d41d8cd98f.css",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sindresorhus/gulp-rev.git"
+  },
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "maintainers": [
+    {
+      "name": "sindresorhus",
+      "email": "sindresorhus@gmail.com"
+    },
+    {
+      "name": "bobthecow",
+      "email": "npm@0x7f.us"
+    }
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "rev",
+    "revving",
+    "revision",
+    "hash",
+    "optimize",
+    "version",
+    "versioning",
+    "cache",
+    "expire",
+    "static",
+    "asset",
+    "assets"
+  ],
+  "dependencies": {
+    "gulp-util": "^3.0.0",
+    "modify-filename": "^1.1.0",
+    "object-assign": "^4.0.1",
+    "rev-hash": "^1.0.0",
+    "rev-path": "^1.0.0",
+    "sort-keys": "^1.0.0",
+    "through2": "^2.0.0",
+    "vinyl-file": "^1.1.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "xo": "*"
+  },
+  "xo": {
+    "envs": [
+      "node",
+      "mocha"
+    ]
+  },
+  "gitHead": "e895123b92f4a39fcf6a3f37dbdd78bc6f93c0c5",
+  "bugs": {
+    "url": "https://github.com/sindresorhus/gulp-rev/issues"
+  },
+  "homepage": "https://github.com/sindresorhus/gulp-rev#readme",
+  "_id": "gulp-rev@7.1.2",
+  "_shasum": "5e17cc229f6b45c74256f88ad3f2d3e9a3305829",
+  "_from": "gulp-rev@>=7.1.2 <8.0.0",
+  "_npmVersion": "2.15.5",
+  "_nodeVersion": "4.4.5",
+  "_npmUser": {
+    "name": "sindresorhus",
+    "email": "sindresorhus@gmail.com"
+  },
+  "dist": {
+    "shasum": "5e17cc229f6b45c74256f88ad3f2d3e9a3305829",
+    "tarball": "https://registry.npmjs.org/gulp-rev/-/gulp-rev-7.1.2.tgz"
+  },
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/gulp-rev-7.1.2.tgz_1471045668864_0.0013231236953288317"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/gulp-rev/-/gulp-rev-7.1.2.tgz"
+}

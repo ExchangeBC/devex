@@ -1,0 +1,89 @@
+{
+  "name": "gulp-mocha",
+  "version": "3.0.1",
+  "description": "Run Mocha tests",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sindresorhus/gulp-mocha.git"
+  },
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && mocha"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "gulpplugin",
+    "mocha",
+    "test",
+    "testing",
+    "unit",
+    "framework",
+    "runner",
+    "tdd",
+    "bdd",
+    "qunit",
+    "spec",
+    "tap"
+  ],
+  "dependencies": {
+    "gulp-util": "^3.0.0",
+    "mocha": "^3.0.0",
+    "plur": "^2.1.0",
+    "req-cwd": "^1.0.1",
+    "temp": "^0.8.3",
+    "through": "^2.3.4"
+  },
+  "devDependencies": {
+    "xo": "*"
+  },
+  "xo": {
+    "envs": [
+      "node",
+      "mocha"
+    ]
+  },
+  "gitHead": "212def2e520a120d901dd35f2c34b86316630f89",
+  "bugs": {
+    "url": "https://github.com/sindresorhus/gulp-mocha/issues"
+  },
+  "homepage": "https://github.com/sindresorhus/gulp-mocha#readme",
+  "_id": "gulp-mocha@3.0.1",
+  "_shasum": "ab0ca2c39403718174dddad750e63a61be17e041",
+  "_from": "gulp-mocha@>=3.0.1 <3.1.0",
+  "_npmVersion": "2.15.5",
+  "_nodeVersion": "4.4.5",
+  "_npmUser": {
+    "name": "sindresorhus",
+    "email": "sindresorhus@gmail.com"
+  },
+  "dist": {
+    "shasum": "ab0ca2c39403718174dddad750e63a61be17e041",
+    "tarball": "https://registry.npmjs.org/gulp-mocha/-/gulp-mocha-3.0.1.tgz"
+  },
+  "maintainers": [
+    {
+      "name": "sindresorhus",
+      "email": "sindresorhus@gmail.com"
+    },
+    {
+      "name": "kevva",
+      "email": "kevinmartensson@gmail.com"
+    }
+  ],
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/gulp-mocha-3.0.1.tgz_1471046810229_0.817590473452583"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/gulp-mocha/-/gulp-mocha-3.0.1.tgz"
+}

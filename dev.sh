@@ -6,13 +6,13 @@ docker run -p 3030:3000 -p 5858:5858 -p 35729:35729 \
 -v `pwd`/modules:/opt/mean.js/modules \
 -v `pwd`/public:/opt/mean.js/public \
 -v `pwd`/uploads:/opt/mean.js/uploads \
--ti --rm --link db_devex \
 -e "MAILER_SERVICE_PROVIDER=gmail" \
 -e "MAILER_FROM=<Email>" \
 -e "MAILER_EMAIL_ID=<Email>" \
 -e "MAILER_PASSWORD=<Password>" \
 -e "NODE_ENV=development" \
-mean/devex bash
+-e "MONGO_SEED=true" \
+-ti --rm --link db_devex mean/devex bash
 
 # after run sh dev.sh
 # and run MAILER_SERVICE_PROVIDER="gmail" MAILER_FROM="<email>" MAILER_EMAIL_ID="<email>" MAILER_PASSWORD="<password>" NODE_ENV=development  nodejs

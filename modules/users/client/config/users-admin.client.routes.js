@@ -75,7 +75,7 @@
         data: {
           pageTitle: 'Edit User {{ userResolve.displayName }}'
         }
-      }) 
+      })
       ;
 
     getUser.$inject = ['$stateParams', 'AdminService'];

@@ -14,7 +14,7 @@
     vm.user = user;
     vm.remove = remove;
     vm.update = update;
-    vm.approve = approve;
+    // vm.approve = approve;
     vm.isContextUserSelf = isContextUserSelf;
 
     function remove(user) {

@@ -94,7 +94,7 @@ exports.userByID = function (req, res, next, id) {
 /**
  * approve Gov. Request
  */
-exports.approve = function (req, res) {
+exports.approve = function (req, res, next) {
 User.findOne({
     _id: req.body.user._id
   }).exec(function (err, user) {
@@ -103,8 +103,8 @@ User.findOne({
     } else if (!user) {
       return next(new Error('Failed to load User ' + req.body.user._id));
     }
-    if(req.body.flag == 1)
-        user.roles=['gov',''user];
+    if (req.body.flag === 1)
+        user.roles=['gov','user'];
     else
       {
         user.roles=['user'];
