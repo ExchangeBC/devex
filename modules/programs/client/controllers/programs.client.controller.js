@@ -1,53 +1,50 @@
 (function () {
   'use strict';
-
-  // Programs controller
-  angular
-    .module('programs')
-    .controller('ProgramsController', ProgramsController);
-
-  ProgramsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'programResolve'];
-
-  function ProgramsController ($scope, $state, $window, Authentication, program) {
+  angular.module('programs')
+  // =========================================================================
+  //
+  // Controller for all views of the program detail page
+  //
+  // =========================================================================
+  .controller('ProgramsController', function ($scope, $state, $window, program, Authentication, Notification) {
     var vm = this;
 
-    vm.authentication = Authentication;
     vm.program = program;
-    vm.error = null;
+    vm.authentication = Authentication;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
 
-    // Remove existing Program
+    // Remove existing program
     function remove() {
       if ($window.confirm('Are you sure you want to delete?')) {
-        vm.program.$remove($state.go('programs.list'));
+        vm.program.$remove(function() {
+          $state.go('programs.list');
+          Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> program deleted successfully!' });
+        });
       }
     }
 
-    // Save Program
+    // Save program
     function save(isValid) {
       if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
         return false;
       }
 
-      // TODO: move create/update logic to service
-      if (vm.program._id) {
-        vm.program.$update(successCallback, errorCallback);
-      } else {
-        vm.program.$save(successCallback, errorCallback);
-      }
+      // Create a new program, or update the current instance
+      vm.program.createOrUpdate()
+        .then(successCallback)
+        .catch(errorCallback);
 
       function successCallback(res) {
-        $state.go('programs.view', {
-          programId: res._id
-        });
+        $state.go('admin.projects.list'); // should we send the User to the list or the updated program's view?
+        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> program saved successfully!' });
       }
 
       function errorCallback(res) {
-        vm.error = res.data.message;
+        Notification.error({ message: res.data.message, title: '<i class="glyphicon glyphicon-remove"></i> program save error!' });
       }
     }
-  }
+  });
 }());

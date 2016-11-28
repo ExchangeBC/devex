@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Module dependencies.
+ * Module dependencies
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
@@ -10,26 +10,17 @@ var mongoose = require('mongoose'),
  * Program Schema
  */
 var ProgramSchema = new Schema({
-  name: {
-    type: String,
-    default: '',
-    required: 'Please fill the program name',
-    trim: true
-  },
-  description: {
-    type: String,
-    default: '',
-    required: 'Please complete the program description',
-    trim: true
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  }
+  code        : {type: String, default: ''},
+  title       : {type: String, default: '', required: 'Title cannot be blank'},
+  short       : {type: String, default: ''},
+  description : {type: String, default: ''},
+  owner       : {type: String, default: ''},
+  website     : {type: String, default: ''},
+  logo        : {type: String, default: ''},
+  created     : {type: Date, default: null},
+  createdBy   : {type: 'ObjectId', ref: 'User', default: null },
+  updated     : {type: Date, default: null },
+  updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
 });
 
 mongoose.model('Program', ProgramSchema);

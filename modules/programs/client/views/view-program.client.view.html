@@ -1,26 +1,126 @@
-<section>
-  <div class="page-header">
-    <h1 ng-bind="vm.program.name"></h1>
+<section class="static-page">
+<div class="container" role="main">
+  <div class="row" ng-show="!vm.editing">
+    <!--
+
+    Non-Edit View
+
+    -->
+    <div class="text-right" ng-show="vm.program.userIs.admin">
+      <div class="pull-right">
+        <a ng-click="vm.editing = true" class="btn btn-default">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </a>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <img class="img-responsive" src="{{vm.program.logo}}" />
+    </div>
+    <div class="col-sm-6">
+      <h2 ng-bind="vm.program.title"></h2>
+      <h4>Summary</h4>
+      <p ng-bind="vm.program.short"></p>
+      <h4>Description</h4>
+      <p ng-bind="vm.program.description"></p>
+    </div>
   </div>
-  <div class="pull-right"
-       ng-show="vm.program.isCurrentUserOwner">
-    <a class="btn btn-primary"
-       ui-sref="programs.edit({ programId: vm.program._id })">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="vm.remove()">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
+  <div class="row" ng-show="vm.program.userIs.admin && vm.editing">
+    <!--
+
+    Edit View
+
+    -->
+    <div class="col-md-12 text-right">
+      <div class="pull-left">
+        <h2>Editing {{vm.program.title}}</h2>
+      </div>
+      <div class="pull-right">
+        <a class="btn btn-danger" ng-click="vm.remove()" title="Remove">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+      <div class="pull-right">
+        <a class="btn btn-default" ng-click="vm.editing = false" title="Cancel">
+          <i class="glyphicon glyphicon-arrow-left"></i>
+        </a>
+      </div>
+      <div>
+        <a class="btn btn-primary" ng-click="vm.save(vm.form.programForm.$valid)" title="Save">
+          <i class="glyphicon glyphicon-save"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="row" ng-show="vm.program.userIs.admin && vm.editing">
+
+    <form name="vm.form.programForm" class="form-horizontal" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="title">Title</label>
+          <input name="title" type="text" ng-model="vm.program.title" id="title" class="form-control" placeholder="Title" required>
+          <div ng-messages="vm.form.programForm.title.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Program title is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="short">Short Description</label>
+          <textarea name="short" data-ng-model="vm.program.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the program"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="description">Description</label>
+          <textarea name="description" data-ng-model="vm.program.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the program"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="owner">Owner</label>
+          <input name="owner" type="text" ng-model="vm.program.owner" id="owner" class="form-control" placeholder="Program owner (ministry, organization, etc)" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="website">Website</label>
+          <input name="website" type="text" ng-model="vm.program.website" id="website" class="form-control" placeholder="Website" required>
+        </div>
+        <div class="form-group">
+          <label class="control-label" for="logo">Logo URL</label>
+          <input type="text" name="logo" ng-model="vm.program.logo" id="logo" class="form-control" placeholder="Logo URL"></input>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <div class="row" ng-show="vm.program.userIs.admin && vm.editing">
+    <div class="text-right">
+      <div class="pull-right">
+        <a class="btn btn-danger" ng-click="vm.remove()" title="Remove">
+          <i class="glyphicon glyphicon-trash"></i>
+        </a>
+      </div>
+      <div class="pull-right">
+        <a class="btn btn-default" ng-click="vm.editing = false" title="Cancel">
+          <i class="glyphicon glyphicon-arrow-left"></i>
+        </a>
+      </div>
+      <div>
+        <a class="btn btn-primary" ng-click="vm.save(vm.form.programForm.$valid)" title="Save">
+          <i class="glyphicon glyphicon-save"></i>
+        </a>
+      </div>
+    </div>
   </div>
   <small>
     <em class="text-muted">
-      Posted on
+      Created on
       <span ng-bind="vm.program.created | date:'mediumDate'"></span>
       by
-      <span ng-if="vm.program.user"
-            ng-bind="vm.program.user.displayName"></span>
-      <span ng-if="!vm.program.user">Deleted User</span>
+      <span ng-if="vm.program.createdBy" ng-bind="vm.program.createdBy.displayName"></span>
+      <span ng-if="!vm.program.createdBy">Deleted User</span>
+    </em>
+    <br/>
+    <em class="text-muted">
+      Updated on
+      <span ng-bind="vm.program.updated | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.program.updatedBy" ng-bind="vm.program.updatedBy.displayName"></span>
+      <span ng-if="!vm.program.updatedBy">Deleted User</span>
     </em>
   </small>
   <p class="lead" ng-bind="vm.program.content"></p>
+</div>
 </section>

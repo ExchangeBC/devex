@@ -1,39 +1,35 @@
-// Programs service used to communicate Programs REST endpoints
 (function () {
   'use strict';
 
   angular
-    .module('programs')
+    .module('programs.services')
     .factory('ProgramsService', ProgramsService);
 
   ProgramsService.$inject = ['$resource', '$log'];
 
   function ProgramsService($resource, $log) {
-    var Program = $resource('/api/programs', {}, {
+    var Program = $resource('/api/programs/:programId', {
+      programId: '@_id'
+    }, {
       update: {
-        method: 'PUT',
-        params: {
-          programId: '@_id'
-        }
-      },
-      create: {
         method: 'PUT'
       }
     });
 
-	angular.extend(Program.prototype, {
-		createOrUpdate: function () {
-		var program = this;
-		return createOrUpdate(program);
-	}
-	});
-	return Program;
+    angular.extend(Program.prototype, {
+      createOrUpdate: function () {
+        var program = this;
+        return createOrUpdate(program);
+      }
+    });
 
-	function createOrUpdate(program) {
+    return Program;
+
+    function createOrUpdate(program) {
       if (program._id) {
-        return program.update(onSuccess, onError);
+        return program.$update(onSuccess, onError);
       } else {
-        return program.save(onSuccess, onError);
+        return program.$save(onSuccess, onError);
       }
 
       // Handle successful response
@@ -47,11 +43,11 @@
         // Handle error internally
         handleError(error);
       }
+    }
 
-      function handleError(error) {
-        // Log error
-        $log.error(error);
-      }
-	}
-}
+    function handleError(error) {
+      // Log error
+      $log.error(error);
+    }
+  }
 }());
