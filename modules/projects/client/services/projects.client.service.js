@@ -9,23 +9,37 @@
   ProjectsService.$inject = ['$resource', '$log'];
 
   function ProjectsService($resource, $log) {
-    var Project = $resource('/api/projects', {}, {
+    var Project = $resource('/api/projects/:projectId', {
+      projectId: '@_id'
+    }, {
       update: {
-        method: 'PUT',
-        params: {
-          projectId: '@_id'
-        }
-      },
-      create: {
         method: 'PUT'
-      },
-      get: {
-        method: 'GET',
-        params: {
-          projectId: '@_id'
-        }
       }
     });
+
+    angular.extend(Project.prototype, {
+      createOrUpdate: function () {
+        var project = this;
+        return createOrUpdate(project);
+      }
+    });
+    // var Project = $resource('/api/projects', {}, {
+    //   update: {
+    //     method: 'PUT',
+    //     params: {
+    //       projectId: '@_id'
+    //     }
+    //   },
+    //   create: {
+    //     method: 'PUT'
+    //   },
+    //   get: {
+    //     method: 'GET',
+    //     params: {
+    //       projectId: '@_id'
+    //     }
+    //   }
+    // });
 
 	angular.extend(Project.prototype, {
 		createOrUpdate: function () {
