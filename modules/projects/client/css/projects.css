@@ -18,3 +18,9 @@ span.edit-link {
 	float: left;
 	margin-right: 10px;
 }
+
+.list-group div.list-group-item, 
+.list-group a.list-group-item {
+	overflow: hidden;
+}
+

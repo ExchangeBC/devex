@@ -1,30 +1,26 @@
 <div class="container">
   <section>
-    <div class="page-header">
-      <h1>Projects</h1>
-    </div>
-    <div class="list-group">
-      <div ng-repeat="project in vm.projects"
-         ui-sref="projects.view({ projectId: project._id })"
-         class="list-group-item">
-        <small class="list-group-item-text">
-          Posted on
-          <span ng-bind="project.created | date:'mediumDate'"></span>
-          by
-          <span ng-if="project.user" ng-bind="project.user.displayName"></span>
-          <span ng-if="!project.user">Deleted User</span>
-        </small>
-        <h4 class="list-group-item-heading projects" ng-bind="project.name"></h4>
-		<span class="edit-link"><a href="/projects/{{project._id}}/edit">Edit this</a>HR</span>
-		<span class="edit-link"><a href="/#!/projects/{{project._id}}/edit">Edit this</a>HR - ex</span>
-
-        <span ng-show="project.user | exists:'currentUser'">
-			<span class="edit-link"><a href="/projects/{{project._id}}/edit">Edit this</a>XXX</span>
-		</span><br/>
-        <span class="project-description" ng-bind="project.description"></span>
-        <span class="project-link">Project Github address: <a href="{{project.github}}" class="">{{project.github}}</a></span>
-      </div>
-    </div>
+	<div class="list-group">
+		<div ng-repeat="project in vm.projects"
+		 class="list-group-item">
+		 <div class="col-xs-8">
+		<small class="list-group-item-text">
+		  Posted on
+		  <span ng-bind="project.created | date:'mediumDate'"></span>
+		  by
+		  <span ng-if="project.user" ng-bind="project.user.displayName"></span>
+		  <span ng-if="!project.user">Deleted User</span>
+		</small>
+		<h4 class="list-group-item-heading" ng-bind="project.name"></h4>
+		</div>
+		<div class="col-xs-4">
+		  <button ui-sref="projects.view({ projectId: project._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
+		  <span ng-show="project.user | exists:'currentUser'">
+			<button ui-sref="projects.edit({ projectId: project._id })" type="button" class="btn btn-link pull-right">Edit &rarr;</button>
+		  </span>
+		</div>
+		</div>
+	</div>
     <div class="alert alert-warning text-center" ng-if="vm.projects.$resolved && !vm.projects.length">
       No Projects yet, why don't you <a ui-sref="projects.create">create one</a>?
     </div>

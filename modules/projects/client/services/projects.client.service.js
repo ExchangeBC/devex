@@ -41,15 +41,15 @@
     //   }
     // });
 
-	angular.extend(Project.prototype, {
-		createOrUpdate: function () {
-		var project = this;
-		return createOrUpdate(project);
-	}
-	});
-	return Project;
+    angular.extend(Project.prototype, {
+      createOrUpdate: function () {
+        var project = this;
+        return createOrUpdate(project);
+      }
+    });
+    return Project;
 
-	function createOrUpdate(project) {
+    function createOrUpdate(project) {
       if (project._id) {
         return project.update(onSuccess, onError);
       } else {
@@ -72,6 +72,6 @@
         // Log error
         $log.error(error);
       }
-	}
-}
+    }
+  }
 }());
