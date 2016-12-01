@@ -42,7 +42,7 @@ var ProjectSchema = new Schema({
   }
 });
 
-ProgramSchema.statics.findUniqueCode = function (title, suffix, callback) {
+ProjectSchema.statics.findUniqueCode = function (title, suffix, callback) {
   var _this = this;
   var possible = 'prj-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 

@@ -55,11 +55,11 @@
   }
 
 
-  angular.module("app",[]).controller("myCtrl",function($scope) {
+  angular.module('app',[]).controller('myCtrl',function($scope) {
     $scope.units = [
       {'id': 10, 'label': 'test1'},
       {'id': 27, 'label': 'test2'},
-      {'id': 39, 'label': 'test3'},
+      {'id': 39, 'label': 'test3'}
     ]
 
     $scope.data = {
@@ -76,10 +76,10 @@
     var program = Program.find({}, function(err, program) {
       if (err){
         console.log(err);
-        return json(err);
+        return err;//json(err);
       }
       else {
-        return json(program);
+        return program;//json(program);
       }
     });
   }

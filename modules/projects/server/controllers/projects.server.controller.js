@@ -18,8 +18,8 @@ exports.create = function(req, res) {
 
   var http = require('http');
   var github = require('octonode');
-  var config = require('/config/config.js');	
-  	
+  var config = require('/config/config.js');
+
   // curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
 
   var url = 'https://api.github.com/user/repos';
