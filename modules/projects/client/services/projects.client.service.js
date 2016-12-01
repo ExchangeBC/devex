@@ -14,6 +14,28 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      makeRequest: {
+        method: 'GET',
+        url :'/api/request/project/:projectId'
+      },
+      getRequests: {
+        method: 'GET',
+        url :'/api/projects/requests/:projectId',
+        isArray: true
+      },
+      getMembers: {
+        method: 'GET',
+        url :'/api/projects/members/:projectId',
+        isArray: true
+      },
+      confirmMember: {
+        method: 'GET',
+        url : '/api/projects/requests/confirm/:projectId/:userId'
+      },
+      denyMember: {
+        method: 'GET',
+        url : '/api/projects/requests/deny/:projectId/:userId'
       }
     });
 
@@ -23,23 +45,6 @@
         return createOrUpdate(project);
       }
     });
-    // var Project = $resource('/api/projects', {}, {
-    //   update: {
-    //     method: 'PUT',
-    //     params: {
-    //       projectId: '@_id'
-    //     }
-    //   },
-    //   create: {
-    //     method: 'PUT'
-    //   },
-    //   get: {
-    //     method: 'GET',
-    //     params: {
-    //       projectId: '@_id'
-    //     }
-    //   }
-    // });
 
     angular.extend(Project.prototype, {
       createOrUpdate: function () {
