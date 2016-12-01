@@ -58,10 +58,10 @@
 						projectId: $scope.project._id,
 						userId: userid
 					}).$promise.then (function () {
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateProjectMembers', 'done');
 					});
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateProjectMembers', function (event, message) {
 					reset ();
 				});
 				reset ();
@@ -107,7 +107,7 @@
 						userId: userid
 					}).$promise.then (function () {
 						// reset ();
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateProjectMembers', 'done');
 					});
 				};
 				vm.deny = function (userid, username) {
@@ -117,10 +117,10 @@
 						userId: userid
 					}).$promise.then (function () {
 						// reset ();
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateProjectMembers', 'done');
 					});
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateProjectMembers', function (event, message) {
 					reset ();
 				});
 				reset ();

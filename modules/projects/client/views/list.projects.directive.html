@@ -1,7 +1,7 @@
 <div class="list-group">
 	<ul>
 		<li ng-repeat="project in vm.projects">
-			<h2><a ui-sref="projects.view({ projectId: project._id })" ng-bind="project.title"></a></h2>
+			<h2><a ui-sref="projects.view({ projectId: project._id })" ng-bind="project.name"></a></h2>
 			<p ng-bind="project.short"></p>
 			<div class="row">
 				<div class="col-xs-6">
