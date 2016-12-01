@@ -36,19 +36,6 @@
           pageTitle: 'Create A Project'
         }
       })
-      .state('projects.edit', {
-        url: '/:projectId/edit',
-        templateUrl: 'modules/projects/client/views/form-project.client.view.html',
-        controller: 'ProjectsController',
-        controllerAs: 'vm',
-        resolve: {
-          projectResolve: getProject
-        },
-        data: {
-          roles: ['user', 'admin'],
-          pageTitle: 'Edit Project {{ projectResolve.name }}'
-        }
-      })
       .state('projects.view', {
         url: '/:projectId',
         templateUrl: 'modules/projects/client/views/view-project.client.view.html',
@@ -60,7 +47,20 @@
         data: {
           pageTitle: 'Project {{ projectResolve.name }}'
         }
-      });
+      })
+      .state('projects.edit', {
+      url: '/:projectId/edit',
+      templateUrl: 'modules/projects/client/views/form-project.client.view.html',
+      controller: 'ProjectsController',
+      controllerAs: 'vm',
+      resolve: {
+        projectResolve: getProject
+      },
+      data: {
+        roles: ['user', 'admin'],
+        pageTitle: 'Edit Project {{ projectResolve.name }}'
+      }
+    });
   }
 
   getProject.$inject = ['$stateParams', 'ProjectsService'];
