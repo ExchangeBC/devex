@@ -76,10 +76,10 @@
     var program = Program.find({}, function(err, program) {
       if (err){
         console.log(err);
-        return err;//json(err);
+        return err; // json(err);
       }
       else {
-        return program;//json(program);
+        return program; // json(program);
       }
     });
   }
