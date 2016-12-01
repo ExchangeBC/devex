@@ -1,15 +1,11 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  angular
-    .module('programs')
-    .controller('ProgramsListController', ProgramsListController);
-
-  ProgramsListController.$inject = ['ProgramsService'];
-
-  function ProgramsListController(ProgramsService) {
-    var vm = this;
-
-    vm.programs = ProgramsService.query();
-  }
+	angular.module('programs').controller('ProgramsListController', ['ProgramsService', 'Authentication', function (ProgramsService, Authentication) {
+		var vm      = this;
+		console.log ('authentication user = ', Authentication.user);
+		vm.isAdmin  = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov    = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+		vm.programs = ProgramsService.query();
+	}]);
 }());

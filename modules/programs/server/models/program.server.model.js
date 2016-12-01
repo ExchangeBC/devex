@@ -23,4 +23,23 @@ var ProgramSchema = new Schema({
   updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
 });
 
+ProgramSchema.statics.findUniqueCode = function (title, suffix, callback) {
+  var _this = this;
+  var possible = (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+
+  _this.findOne({
+    code: possible
+  }, function (err, user) {
+    if (!err) {
+      if (!user) {
+        callback(possible);
+      } else {
+        return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
+
 mongoose.model('Program', ProgramSchema);

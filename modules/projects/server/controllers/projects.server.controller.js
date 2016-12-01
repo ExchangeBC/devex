@@ -30,18 +30,18 @@ exports.create = function(req, res) {
     secret: secret
   });
 
-  project.github = client.repo({
-	'name': project.name,
-	'description' : project.description
-	},  function (err, data) {
-		if (err) {
-			return console.error(err);
-		}
-		else {
-			return data.html_url;
-		}
-	}
-  );
+ //  project.github = client.repo({
+	// 'name': project.name,
+	// 'description' : project.description
+	// },  function (err, data) {
+	// 	if (err) {
+	// 		return console.error(err);
+	// 	}
+	// 	else {
+	// 		return data.html_url;
+	// 	}
+	// }
+  // );
 
   project.save(function(err) {
     if (err) {

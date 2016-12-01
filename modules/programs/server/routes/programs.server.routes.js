@@ -28,9 +28,22 @@ module.exports = function (app) {
     .all(programsPolicy.isAllowed)
     .get(programs.listRequests);
 
+  //
+  // modify users
+  //
+  app.route('/api/programs/requests/confirm/:programId/:userId')
+    .all(programsPolicy.isAllowed)
+    .get(programs.confirmMember);
+  app.route('/api/programs/requests/deny/:programId/:userId')
+    .all(programsPolicy.isAllowed)
+    .get(programs.denyMember);
+
   app.route('/api/new/program')
     // .all(programsPolicy.isAllowed)
     .get(programs.new);
+
+  app.route('/api/request/program/:programId')
+    .get(programs.request)
 
   // Finish by binding the program middleware
   app.param('programId', programs.programByID);

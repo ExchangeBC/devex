@@ -13,6 +13,28 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      makeRequest: {
+        method: 'GET',
+        url :'/api/request/program/:programId'
+      },
+      getRequests: {
+        method: 'GET',
+        url :'/api/programs/requests/:programId',
+        isArray: true
+      },
+      getMembers: {
+        method: 'GET',
+        url :'/api/programs/members/:programId',
+        isArray: true
+      },
+      confirmMember: {
+        method: 'GET',
+        url : '/api/programs/requests/confirm/:programId/:userId'
+      },
+      denyMember: {
+        method: 'GET',
+        url : '/api/programs/requests/deny/:programId/:userId'
       }
     });
 
@@ -26,6 +48,7 @@
     return Program;
 
     function createOrUpdate(program) {
+      console.log ('create or update');
       if (program._id) {
         return program.$update(onSuccess, onError);
       } else {

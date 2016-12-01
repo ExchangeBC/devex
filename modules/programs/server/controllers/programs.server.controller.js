@@ -53,6 +53,16 @@ var setProgramAdmin = function (program, user) {
 var setProgramRequest = function (program, user) {
   user.addRoles ([requestRole(program)]);
 };
+var unsetProgramMember = function (program, user) {
+  user.removeRoles ([memberRole(program)]);
+};
+var unsetProgramAdmin = function (program, user) {
+  user.removeRoles ([memberRole(program), adminRole(program)]);
+};
+var unsetProgramRequest = function (program, user) {
+  console.log ('remove role ', requestRole(program));
+  user.removeRoles ([requestRole(program)]);
+};
 var ensureAdmin = function (program, user, res) {
   if (!~user.roles.indexOf (adminRole(program)) && !~user.roles.indexOf ('admin')) {
     console.log ('NOT admin');
@@ -76,7 +86,8 @@ var decorate = function (programModel, roles) {
   program.userIs = {
     admin   : !!~roles.indexOf (adminRole(program)) || !!~roles.indexOf ('admin'),
     member  : !!~roles.indexOf (memberRole(program)),
-    request : !!~roles.indexOf (requestRole(program))
+    request : !!~roles.indexOf (requestRole(program)),
+    gov     : !!~roles.indexOf ('gov')
   };
   return program;
 };
@@ -122,24 +133,26 @@ exports.create = function (req, res) {
   //
   // set the code, this is used for setting roles and other stuff
   //
-  program.code = helpers.generateCode (program.title);
-  //
-  // set the audit fields so we know who did what when
-  //
-  helpers.applyAudit (program, req.user)
-  //
-  // save and return
-  //
-  program.save(function (err) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      setProgramAdmin (program, req.user);
-      req.user.save ();
-      res.json(program);
-    }
+  Program.findUniqueCode (program.title, null, function (newcode) {
+    program.code = newcode;
+    //
+    // set the audit fields so we know who did what when
+    //
+    helpers.applyAudit (program, req.user)
+    //
+    // save and return
+    //
+    program.save(function (err) {
+      if (err) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      } else {
+        setProgramAdmin (program, req.user);
+        req.user.save ();
+        res.json(program);
+      }
+    });
   });
 };
 
@@ -258,6 +271,55 @@ exports.listRequests = function (req, res) {
       });
     } else {
       res.json (users);
+    }
+  });
+};
+
+// -------------------------------------------------------------------------
+//
+// have the current user request access
+//
+// -------------------------------------------------------------------------
+exports.request = function (req, res) {
+  setProgramRequest (req.program, req.user);
+  req.user.save ();
+  res.json ({ok:true});
+}
+
+// -------------------------------------------------------------------------
+//
+// deal with members
+//
+// -------------------------------------------------------------------------
+exports.confirmMember = function (req, res) {
+  var user = req.model;
+  console.log ('++++ confirm member ', user.username, user._id);
+  unsetProgramRequest (req.program, user);
+  setProgramMember (req.program, user);
+  user.save (function (err, result) {
+    if (err) {
+      return res.status (422).send ({
+        message: errorHandler.getErrorMessage (err)
+      });
+    } else {
+      console.log ('---- member roles ', result.roles);
+      res.json (result);
+    }
+  });
+};
+exports.denyMember = function (req, res) {
+  var user = req.model;
+  console.log ('++++ deny member ', user.username, user._id);
+  unsetProgramRequest (req.program, user);
+  unsetProgramMember (req.program, user);
+  user.save (function (err, result) {
+    if (err) {
+      return res.status (422).send ({
+        message: errorHandler.getErrorMessage (err)
+      });
+    } else {
+      console.log ('---- member roles ', result.roles);
+      res.json (result);
     }
   });
 };

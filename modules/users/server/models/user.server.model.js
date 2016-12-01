@@ -10,7 +10,8 @@ var mongoose = require('mongoose'),
   crypto = require('crypto'),
   validator = require('validator'),
   generatePassword = require('generate-password'),
-  owasp = require('owasp-password-strength-test');
+  owasp = require('owasp-password-strength-test'),
+  _ = require ('lodash');
 
 owasp.config(config.shared.owasp);
 
@@ -76,7 +77,7 @@ var UserSchema = new Schema({
   },
   profileImageURL: {
     type: String,
-    default: 'modules/users/client/img/profile/default.png'
+    default: '/modules/users/client/img/profile/default.png'
   },
   provider: {
     type: String,
@@ -90,8 +91,7 @@ var UserSchema = new Schema({
   additionalProvidersData: {},
   roles: {
     type: [{
-      type: String,
-      enum: ['user', 'admin','gov-request','gov']
+      type: String
     }],
     default: ['user'],
     required: 'Please provide at least one role'
@@ -156,6 +156,27 @@ UserSchema.methods.hashPassword = function (password) {
 UserSchema.methods.authenticate = function (password) {
   return this.password === this.hashPassword(password);
 };
+
+// -------------------------------------------------------------------------
+//
+// add roles to a user, ensure unique
+//
+// -------------------------------------------------------------------------
+UserSchema.methods.addRoles = function (roles) {
+  this.roles = _.union (this.roles, roles);
+  this.markModified ('roles');
+};
+UserSchema.methods.removeRoles = function (roles) {
+  var _this = this;
+  console.log ('roles:', _this.roles);
+  _.each (roles, function (role) {
+    console.log ('remove:', role);
+    roles = _.remove (_this.roles, function (v) {return v === role;});
+  });
+  console.log ('roles:', _this.roles);
+  this.markModified ('roles');
+};
+
 
 /**
  * Find possible not used username

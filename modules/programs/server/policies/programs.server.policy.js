@@ -13,12 +13,24 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
-    roles: ['admin'],
+    roles: ['admin','gov'],
     allows: [{
       resources: '/api/programs',
       permissions: '*'
     }, {
       resources: '/api/new/program',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/members/:programId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/requests/:programId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/requests/confirm/:programId/:userId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/requests/deny/:programId/:userId',
       permissions: ['get']
     }, {
       resources: '/api/programs/:programId',
@@ -30,7 +42,16 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/programs',
       permissions: ['get']
     }, {
-      resources: '/api/new/program',
+      resources: '/api/programs/members/:programId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/requests/:programId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/members/:programId/confirm/:userId',
+      permissions: ['get']
+    }, {
+      resources: '/api/programs/requests/:programId/deny/:userId',
       permissions: ['get']
     }, {
       resources: '/api/programs/:programId',
@@ -43,9 +64,6 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }, {
       resources: '/api/programs/members/:programId',
-      permissions: ['get']
-    }, {
-      resources: '/api/programs/requests/:programId',
       permissions: ['get']
     }, {
       resources: '/api/programs/:programId',

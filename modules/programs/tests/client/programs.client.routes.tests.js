@@ -94,7 +94,7 @@
           mockProgram;
 
         beforeEach(inject(function ($controller, $state, $templateCache) {
-          createstate = $state.get('programs.create');
+          createstate = $state.get('admin.programs.create');
           $templateCache.put('modules/programs/client/views/form-program.client.view.html', '');
 
           // create mock Program
@@ -140,7 +140,7 @@
           mockProgram;
 
         beforeEach(inject(function ($controller, $state, $templateCache) {
-          editstate = $state.get('programs.edit');
+          editstate = $state.get('admin.programs.edit');
           $templateCache.put('modules/programs/client/views/form-program.client.view.html', '');
 
           // create mock Program
