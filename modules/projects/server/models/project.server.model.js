@@ -10,6 +10,7 @@ var mongoose = require('mongoose'),
  * Project Schema
  */
 var ProjectSchema = new Schema({
+  code        : {type: String, default: ''},
   name: {
     type: String,
     default: '',
@@ -40,5 +41,24 @@ var ProjectSchema = new Schema({
     ref: 'User'
   }
 });
+
+ProgramSchema.statics.findUniqueCode = function (title, suffix, callback) {
+  var _this = this;
+  var possible = 'prj-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+
+  _this.findOne({
+    code: possible
+  }, function (err, user) {
+    if (!err) {
+      if (!user) {
+        callback(possible);
+      } else {
+        return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
+      }
+    } else {
+      callback(null);
+    }
+  });
+};
 
 mongoose.model('Project', ProjectSchema);
