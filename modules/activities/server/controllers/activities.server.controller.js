@@ -1,14 +1,14 @@
 'use strict';
 /*
 
-Notes about opportunities
+Notes about activities
 
 Roles:
 ------
-Membership in a opportunity is defined by the user having various roles attached to their
+Membership in a activity is defined by the user having various roles attached to their
 user record. There are only three possible states: admin, member, or request.
 When a user requests membership they get the request role only, once accepted that
-simply gets changed to the member role. Roles are simply the opportunity code with suffixes.
+simply gets changed to the member role. Roles are simply the activity code with suffixes.
 
 member  : <code>
 admin   : <code>-admin
@@ -24,7 +24,7 @@ request : <code>-request
  */
 var path = require('path'),
   mongoose = require('mongoose'),
-  Opportunity = mongoose.model('Opportunity'),
+  Activity = mongoose.model('Activity'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
   _ = require('lodash')
@@ -32,39 +32,39 @@ var path = require('path'),
 
 // -------------------------------------------------------------------------
 //
-// set a opportunity role on a user
+// set a activity role on a user
 //
 // -------------------------------------------------------------------------
-var adminRole = function (opportunity) {
-  return opportunity.code+'-admin';
+var adminRole = function (activity) {
+  return activity.code+'-admin';
 };
-var memberRole = function (opportunity) {
-  return opportunity.code;
+var memberRole = function (activity) {
+  return activity.code;
 };
-var requestRole = function (opportunity) {
-  return opportunity.code+'-request';
+var requestRole = function (activity) {
+  return activity.code+'-request';
 };
-var setOpportunityMember = function (opportunity, user) {
-  user.addRoles ([memberRole(opportunity)]);
+var setActivityMember = function (activity, user) {
+  user.addRoles ([memberRole(activity)]);
 };
-var setOpportunityAdmin = function (opportunity, user) {
-  user.addRoles ([memberRole(opportunity), adminRole(opportunity)]);
+var setActivityAdmin = function (activity, user) {
+  user.addRoles ([memberRole(activity), adminRole(activity)]);
 };
-var setOpportunityRequest = function (opportunity, user) {
-  user.addRoles ([requestRole(opportunity)]);
+var setActivityRequest = function (activity, user) {
+  user.addRoles ([requestRole(activity)]);
 };
-var unsetOpportunityMember = function (opportunity, user) {
-  user.removeRoles ([memberRole(opportunity)]);
+var unsetActivityMember = function (activity, user) {
+  user.removeRoles ([memberRole(activity)]);
 };
-var unsetOpportunityAdmin = function (opportunity, user) {
-  user.removeRoles ([memberRole(opportunity), adminRole(opportunity)]);
+var unsetActivityAdmin = function (activity, user) {
+  user.removeRoles ([memberRole(activity), adminRole(activity)]);
 };
-var unsetOpportunityRequest = function (opportunity, user) {
-  console.log ('remove role ', requestRole(opportunity));
-  user.removeRoles ([requestRole(opportunity)]);
+var unsetActivityRequest = function (activity, user) {
+  console.log ('remove role ', requestRole(activity));
+  user.removeRoles ([requestRole(activity)]);
 };
-var ensureAdmin = function (opportunity, user, res) {
-  if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
+var ensureAdmin = function (activity, user, res) {
+  if (!~user.roles.indexOf (adminRole(activity)) && !~user.roles.indexOf ('admin')) {
     console.log ('NOT admin');
     res.status(422).send({
       message: 'User Not Authorized'
@@ -77,80 +77,80 @@ var ensureAdmin = function (opportunity, user, res) {
 };
 // -------------------------------------------------------------------------
 //
-// this takes a opportunity model, serializes it, and decorates it with what
-// relationship the user has to the opportunity, and returns the JSON
+// this takes a activity model, serializes it, and decorates it with what
+// relationship the user has to the activity, and returns the JSON
 //
 // -------------------------------------------------------------------------
-var decorate = function (opportunityModel, roles) {
-  var opportunity = opportunityModel ? opportunityModel.toJSON () : {};
-  opportunity.userIs = {
-    admin   : !!~roles.indexOf (adminRole(opportunity)) || !!~roles.indexOf ('admin'),
-    member  : !!~roles.indexOf (memberRole(opportunity)),
-    request : !!~roles.indexOf (requestRole(opportunity)),
+var decorate = function (activityModel, roles) {
+  var activity = activityModel ? activityModel.toJSON () : {};
+  activity.userIs = {
+    admin   : !!~roles.indexOf (adminRole(activity)) || !!~roles.indexOf ('admin'),
+    member  : !!~roles.indexOf (memberRole(activity)),
+    request : !!~roles.indexOf (requestRole(activity)),
     gov     : !!~roles.indexOf ('gov')
   };
-  return opportunity;
+  return activity;
 };
 // -------------------------------------------------------------------------
 //
-// decorate an entire list of opportunities
+// decorate an entire list of activities
 //
 // -------------------------------------------------------------------------
-var decorateList = function (opportunityModels, roles) {
-  return opportunityModels.map (function (opportunityModel) {
-    return decorate (opportunityModel, roles);
+var decorateList = function (activityModels, roles) {
+  return activityModels.map (function (activityModel) {
+    return decorate (activityModel, roles);
   });
 };
 // -------------------------------------------------------------------------
 //
-// return a list of all opportunity members. this means all members NOT
+// return a list of all activity members. this means all members NOT
 // including users who have requested access and are currently waiting
 //
 // -------------------------------------------------------------------------
-exports.members = function (opportunity, cb) {
-  mongoose.model ('User').find ({roles: memberRole(opportunity)}).exec (cb);
+exports.members = function (activity, cb) {
+  mongoose.model ('User').find ({roles: memberRole(activity)}).exec (cb);
 };
 
 // -------------------------------------------------------------------------
 //
 // return a list of all users who are currently waiting to be added to the
-// opportunity member list
+// activity member list
 //
 // -------------------------------------------------------------------------
-exports.requests = function (opportunity, cb) {
-  mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec (cb);
+exports.requests = function (activity, cb) {
+  mongoose.model ('User').find ({roles: requestRole(activity)}).exec (cb);
 };
 
 // -------------------------------------------------------------------------
 //
-// create a new opportunity. the user doing the creation will be set as the
+// create a new activity. the user doing the creation will be set as the
 // administrator
 //
 // -------------------------------------------------------------------------
 exports.create = function (req, res) {
-  console.log ('Creating a new opportunity');
-  var opportunity = new Opportunity(req.body);
+  console.log ('Creating a new activity');
+  var activity = new Activity(req.body);
   //
   // set the code, this is used for setting roles and other stuff
   //
-  Opportunity.findUniqueCode (opportunity.title, null, function (newcode) {
-    opportunity.code = newcode;
+  Activity.findUniqueCode (activity.title, null, function (newcode) {
+    activity.code = newcode;
     //
     // set the audit fields so we know who did what when
     //
-    helpers.applyAudit (opportunity, req.user)
+    helpers.applyAudit (activity, req.user)
     //
     // save and return
     //
-    opportunity.save(function (err) {
+    activity.save(function (err) {
       if (err) {
         return res.status(422).send({
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-        setOpportunityAdmin (opportunity, req.user);
+        setActivityAdmin (activity, req.user);
         req.user.save ();
-        res.json(opportunity);
+        res.json(activity);
       }
     });
   });
@@ -162,7 +162,7 @@ exports.create = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.read = function (req, res) {
-  res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
+  res.json (decorate (req.activity, req.user ? req.user.roles : []));
 };
 
 // -------------------------------------------------------------------------
@@ -172,26 +172,26 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-  if (ensureAdmin (req.opportunity, req.user, res)) {
+  if (ensureAdmin (req.activity, req.user, res)) {
     //
     // copy over everything passed in. This will overwrite the
     // audit fields, but they get updated in the following step
     //
-    var opportunity = _.assign (req.opportunity, req.body);
+    var activity = _.assign (req.activity, req.body);
     //
     // set the audit fields so we know who did what when
     //
-    helpers.applyAudit (opportunity, req.user)
+    helpers.applyAudit (activity, req.user)
     //
     // save
     //
-    opportunity.save(function (err) {
+    activity.save(function (err) {
       if (err) {
         return res.status(422).send({
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-        res.json(opportunity);
+        res.json(activity);
       }
     });
   }
@@ -199,22 +199,22 @@ exports.update = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
-// delete the opportunity
+// delete the activity
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
   console.log ('Deleting');
-  if (ensureAdmin (req.opportunity, req.user, res)) {
+  if (ensureAdmin (req.activity, req.user, res)) {
     console.log ('Deleting');
 
-    var opportunity = req.opportunity;
-    opportunity.remove(function (err) {
+    var activity = req.activity;
+    activity.remove(function (err) {
       if (err) {
         return res.status(422).send({
           message: errorHandler.getErrorMessage(err)
         });
       } else {
-        res.json(opportunity);
+        res.json(activity);
       }
     });
   }
@@ -222,21 +222,21 @@ exports.delete = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
-// return a list of all opportunities
+// return a list of all activities
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-  Opportunity.find().sort('title')
+  Activity.find().sort('title')
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
-  .exec(function (err, opportunities) {
+  .exec(function (err, activities) {
     if (err) {
       return res.status(422).send({
         message: errorHandler.getErrorMessage(err)
       });
     } else {
-      res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-      // res.json(opportunities);
+      res.json (decorateList (activities, req.user ? req.user.roles : []));
+      // res.json(activities);
     }
   });
 };
@@ -247,7 +247,7 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listMembers = function (req, res) {
-  exports.members (req.opportunity, function (err, users) {
+  exports.members (req.activity, function (err, users) {
     if (err) {
       return res.status (422).send ({
         message: errorHandler.getErrorMessage (err)
@@ -264,7 +264,7 @@ exports.listMembers = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listRequests = function (req, res) {
-  exports.requests (req.opportunity, function (err, users) {
+  exports.requests (req.activity, function (err, users) {
     if (err) {
       return res.status (422).send ({
         message: errorHandler.getErrorMessage (err)
@@ -281,7 +281,7 @@ exports.listRequests = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.request = function (req, res) {
-  setOpportunityRequest (req.opportunity, req.user);
+  setActivityRequest (req.activity, req.user);
   req.user.save ();
   res.json ({ok:true});
 }
@@ -294,8 +294,8 @@ exports.request = function (req, res) {
 exports.confirmMember = function (req, res) {
   var user = req.model;
   console.log ('++++ confirm member ', user.username, user._id);
-  unsetOpportunityRequest (req.opportunity, user);
-  setOpportunityMember (req.opportunity, user);
+  unsetActivityRequest (req.activity, user);
+  setActivityMember (req.activity, user);
   user.save (function (err, result) {
     if (err) {
       return res.status (422).send ({
@@ -310,8 +310,8 @@ exports.confirmMember = function (req, res) {
 exports.denyMember = function (req, res) {
   var user = req.model;
   console.log ('++++ deny member ', user.username, user._id);
-  unsetOpportunityRequest (req.opportunity, user);
-  unsetOpportunityMember (req.opportunity, user);
+  unsetActivityRequest (req.activity, user);
+  unsetActivityMember (req.activity, user);
   user.save (function (err, result) {
     if (err) {
       return res.status (422).send ({
@@ -326,40 +326,61 @@ exports.denyMember = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
-// new empty opportunity
+// get projects under program
+//
+// -------------------------------------------------------------------------
+exports.forProgram = function (req, res) {
+  Activity.find({program:req.program._id}).sort('title')
+  .populate('createdBy', 'displayName')
+  .populate('updatedBy', 'displayName')
+  .exec(function (err, activities) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json (decorateList (activities, req.user ? req.user.roles : []));
+      // res.json(activities);
+    }
+  });
+};
+
+// -------------------------------------------------------------------------
+//
+// new empty activity
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-  console.log ('get a new opportunity set up and return it');
-  var p = new Opportunity ();
+  console.log ('get a new activity set up and return it');
+  var p = new Activity ();
   res.json(p);
 };
 
 // -------------------------------------------------------------------------
 //
-// magic that populates the opportunity on the request
+// magic that populates the activity on the request
 //
 // -------------------------------------------------------------------------
-exports.opportunityByID = function (req, res, next, id) {
+exports.activityByID = function (req, res, next, id) {
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
-      message: 'Opportunity is invalid'
+      message: 'Activity is invalid'
     });
   }
 
-  Opportunity.findById(id)
+  Activity.findById(id)
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
-  .exec(function (err, opportunity) {
+  .exec(function (err, activity) {
     if (err) {
       return next(err);
-    } else if (!opportunity) {
+    } else if (!activity) {
       return res.status(404).send({
-        message: 'No opportunity with that identifier has been found'
+        message: 'No activity with that identifier has been found'
       });
     }
-    req.opportunity = opportunity;
+    req.activity = activity;
     next();
   });
 };

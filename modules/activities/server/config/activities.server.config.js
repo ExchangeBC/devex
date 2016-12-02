@@ -7,7 +7,7 @@ var path = require('path'),
   config = require(path.resolve('./config/config'));
 
 /**
- * Opportunities module init function.
+ * Activities module init function.
  */
 module.exports = function (app, db) {
 

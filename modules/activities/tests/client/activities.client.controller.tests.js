@@ -1,15 +1,15 @@
 (function () {
   'use strict';
 
-  describe('Opportunities Controller Tests', function () {
+  describe('Activities Controller Tests', function () {
     // Initialize global variables
-    var OpportunitiesController,
+    var ActivitiesController,
       $scope,
       $httpBackend,
       $state,
       Authentication,
-      OpportunitiesService,
-      mockOpportunity;
+      ActivitiesService,
+      mockActivity;
 
     // The $resource service augments the response object with methods for updating and deleting the resource.
     // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -36,7 +36,7 @@
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
     // This allows us to inject a service but then attach it to a variable
     // with the same name as the service.
-    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _OpportunitiesService_) {
+    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _ActivitiesService_) {
       // Set a new global scope
       $scope = $rootScope.$new();
 
@@ -44,12 +44,12 @@
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       Authentication = _Authentication_;
-      OpportunitiesService = _OpportunitiesService_;
+      ActivitiesService = _ActivitiesService_;
 
-      // create mock Opportunity
-      mockOpportunity = new OpportunitiesService({
+      // create mock Activity
+      mockActivity = new ActivitiesService({
         _id: '525a8422f6d0f87f0e407a33',
-        name: 'Opportunity Name'
+        name: 'Activity Name'
       });
 
       // Mock logged in user
@@ -57,10 +57,10 @@
         roles: ['user']
       };
 
-      // Initialize the Opportunities controller.
-      OpportunitiesController = $controller('OpportunitiesController as vm', {
+      // Initialize the Activities controller.
+      ActivitiesController = $controller('ActivitiesController as vm', {
         $scope: $scope,
-        opportunityResolve: {}
+        activityResolve: {}
       });
 
       // Spy on state go
@@ -68,34 +68,34 @@
     }));
 
     describe('vm.save() as create', function () {
-      var sampleOpportunityPostData;
+      var sampleActivityPostData;
 
       beforeEach(function () {
-        // Create a sample Opportunity object
-        sampleOpportunityPostData = new OpportunitiesService({
-          name: 'Opportunity Name'
+        // Create a sample Activity object
+        sampleActivityPostData = new ActivitiesService({
+          name: 'Activity Name'
         });
 
-        $scope.vm.opportunity = sampleOpportunityPostData;
+        $scope.vm.activity = sampleActivityPostData;
       });
 
-      it('should send a POST request with the form input values and then locate to new object URL', inject(function (OpportunitiesService) {
+      it('should send a POST request with the form input values and then locate to new object URL', inject(function (ActivitiesService) {
         // Set POST response
-        $httpBackend.expectPOST('api/opportunities', sampleOpportunityPostData).respond(mockOpportunity);
+        $httpBackend.expectPOST('api/activities', sampleActivityPostData).respond(mockActivity);
 
         // Run controller functionality
         $scope.vm.save(true);
         $httpBackend.flush();
 
-        // Test URL redirection after the Opportunity was created
-        expect($state.go).toHaveBeenCalledWith('opportunities.view', {
-          opportunityId: mockOpportunity._id
+        // Test URL redirection after the Activity was created
+        expect($state.go).toHaveBeenCalledWith('activities.view', {
+          activityId: mockActivity._id
         });
       }));
 
       it('should set $scope.vm.error if error', function () {
         var errorMessage = 'this is an error message';
-        $httpBackend.expectPOST('api/opportunities', sampleOpportunityPostData).respond(400, {
+        $httpBackend.expectPOST('api/activities', sampleActivityPostData).respond(400, {
           message: errorMessage
         });
 
@@ -108,27 +108,27 @@
 
     describe('vm.save() as update', function () {
       beforeEach(function () {
-        // Mock Opportunity in $scope
-        $scope.vm.opportunity = mockOpportunity;
+        // Mock Activity in $scope
+        $scope.vm.activity = mockActivity;
       });
 
-      it('should update a valid Opportunity', inject(function (OpportunitiesService) {
+      it('should update a valid Activity', inject(function (ActivitiesService) {
         // Set PUT response
-        $httpBackend.expectPUT(/api\/opportunities\/([0-9a-fA-F]{24})$/).respond();
+        $httpBackend.expectPUT(/api\/activities\/([0-9a-fA-F]{24})$/).respond();
 
         // Run controller functionality
         $scope.vm.save(true);
         $httpBackend.flush();
 
         // Test URL location to new object
-        expect($state.go).toHaveBeenCalledWith('opportunities.view', {
-          opportunityId: mockOpportunity._id
+        expect($state.go).toHaveBeenCalledWith('activities.view', {
+          activityId: mockActivity._id
         });
       }));
 
-      it('should set $scope.vm.error if error', inject(function (OpportunitiesService) {
+      it('should set $scope.vm.error if error', inject(function (ActivitiesService) {
         var errorMessage = 'error';
-        $httpBackend.expectPUT(/api\/opportunities\/([0-9a-fA-F]{24})$/).respond(400, {
+        $httpBackend.expectPUT(/api\/activities\/([0-9a-fA-F]{24})$/).respond(400, {
           message: errorMessage
         });
 
@@ -141,23 +141,23 @@
 
     describe('vm.remove()', function () {
       beforeEach(function () {
-        // Setup Opportunities
-        $scope.vm.opportunity = mockOpportunity;
+        // Setup Activities
+        $scope.vm.activity = mockActivity;
       });
 
-      it('should delete the Opportunity and redirect to Opportunities', function () {
+      it('should delete the Activity and redirect to Activities', function () {
         // Return true on confirm message
         spyOn(window, 'confirm').and.returnValue(true);
 
-        $httpBackend.expectDELETE(/api\/opportunities\/([0-9a-fA-F]{24})$/).respond(204);
+        $httpBackend.expectDELETE(/api\/activities\/([0-9a-fA-F]{24})$/).respond(204);
 
         $scope.vm.remove();
         $httpBackend.flush();
 
-        expect($state.go).toHaveBeenCalledWith('opportunities.list');
+        expect($state.go).toHaveBeenCalledWith('activities.list');
       });
 
-      it('should should not delete the Opportunity and not redirect', function () {
+      it('should should not delete the Activity and not redirect', function () {
         // Return false on confirm message
         spyOn(window, 'confirm').and.returnValue(false);
 

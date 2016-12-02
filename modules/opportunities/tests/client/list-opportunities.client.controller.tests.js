@@ -46,11 +46,10 @@
       Authentication = _Authentication_;
       OpportunitiesService = _OpportunitiesService_;
 
-      // create mock opportunity
+      // create mock article
       mockOpportunity = new OpportunitiesService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Opportunity about MEAN',
-        content: 'MEAN rocks!'
+        name: 'Opportunity Name'
       });
 
       // Mock logged in user
@@ -74,12 +73,10 @@
         mockOpportunityList = [mockOpportunity, mockOpportunity];
       });
 
-      it('should send a GET request and return all opportunities', inject(function (OpportunitiesService) {
+      it('should send a GET request and return all Opportunities', inject(function (OpportunitiesService) {
         // Set POST response
-        $httpBackend.expectGET('/api/opportunities').respond(mockOpportunityList);
+        $httpBackend.expectGET('api/opportunities').respond(mockOpportunityList);
 
-        // Ignore parent template get on state transition
-        $httpBackend.whenGET('/modules/core/client/views/home.client.view.html').respond(200, '');
 
         $httpBackend.flush();
 

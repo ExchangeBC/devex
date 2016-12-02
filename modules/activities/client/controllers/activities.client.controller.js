@@ -1,19 +1,19 @@
 (function () {
 	'use strict';
-	angular.module('opportunities')
+	angular.module('activities')
 	// =========================================================================
 	//
-	// Controller the view of the opportunity page
+	// Controller the view of the activity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, opportunity, Authentication, OpportunitiesService) {
+	.controller('ActivityViewController', function ($scope, $state, activity, Authentication, ActivitiesService) {
 		var vm            = this;
-		vm.opportunity        = opportunity;
+		vm.activity        = activity;
 		vm.authentication = Authentication;
-		vm.showMember     = opportunity.userIs.gov && !opportunity.userIs.member && !opportunity.userIs.request;
+		vm.showMember     = activity.userIs.gov && !activity.userIs.member && !activity.userIs.request;
 		vm.request = function () {
-			OpportunitiesService.makeRequest({
-				opportunityId: opportunity._id
+			ActivitiesService.makeRequest({
+				activityId: activity._id
 			}).$promise.then (function () {
 				console.log ('Oh yeah, all done');
 			})
@@ -21,31 +21,31 @@
 	})
 	// =========================================================================
 	//
-	// Controller the view of the opportunity page
+	// Controller the view of the activity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $window, opportunity, editing, Authentication, Notification) {
+	.controller('ActivityEditController', function ($scope, $state, $window, activity, editing, Authentication, Notification) {
 		var vm            = this;
 		vm.editing        = editing;
-		vm.opportunity        = opportunity;
+		vm.activity        = activity;
 		vm.authentication = Authentication;
 		vm.form           = {};
 		// -------------------------------------------------------------------------
 		//
-		// remove the opportunity with some confirmation
+		// remove the activity with some confirmation
 		//
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
-				vm.opportunity.$remove(function() {
-					$state.go('opportunities.list');
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> opportunity deleted successfully!' });
+				vm.activity.$remove(function() {
+					$state.go('activities.list');
+					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> activity deleted successfully!' });
 				});
 			}
 		};
 		// -------------------------------------------------------------------------
 		//
-		// save the opportunity, could be added or edited (post or put)
+		// save the activity, could be added or edited (post or put)
 		//
 		// -------------------------------------------------------------------------
 		vm.saveme = function () {
@@ -58,21 +58,21 @@
 				return false;
 			}
 			//
-			// Create a new opportunity, or update the current instance
+			// Create a new activity, or update the current instance
 			//
-			vm.opportunity.createOrUpdate ()
+			vm.activity.createOrUpdate ()
 			//
 			// success, notify and return to list
 			//
 			.then (function (res) {
-				console.log ('now saved the new opportunity, redirect user');
+				console.log ('now saved the new activity, redirect user');
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+					message : '<i class="glyphicon glyphicon-ok"></i> activity saved successfully!'
 				});
 				if (editing) {
-					$state.go('opportunities.view', {opportunityId:opportunity._id});
+					$state.go('activities.view', {activityId:activity._id});
 				} else {
-					$state.go('opportunities.list');
+					$state.go('activities.list');
 				}
 			})
 			//
@@ -81,7 +81,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> activity save error!'
 				});
 			});
 		};

@@ -1,9 +1,19 @@
 #!/usr/bin/perl
-
-my $from_sl = 'article';
-my $from_pl = 'articles';
-my $from_sc = 'Article';
-my $from_pc = 'Articles';
+#
+# when plural is just adding an s:
+# > copy project
+#
+# when plural is non-standard:
+# > copy fly flies
+#
+my $from_sl = 'program';
+my $from_pl = 'programs';
+my $from_sc = 'Program';
+my $from_pc = 'Programs';
+# my $from_sl = 'article';
+# my $from_pl = 'articles';
+# my $from_sc = 'Article';
+# my $from_pc = 'Articles';
 my $to_sl = $ARGV[0];
 my $to_pl = $ARGV[1] || $to_sl.'s';
 my $to_sc = ucfirst ($to_sl);

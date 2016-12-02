@@ -7,23 +7,23 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 /**
- * Opportunity Schema
+ * Activity Schema
  */
-var OpportunitySchema = new Schema({
+var ActivitySchema = new Schema({
   code        : {type: String, default: ''},
   title       : {type: String, default: '', required: 'Title cannot be blank'},
   short       : {type: String, default: ''},
   description : {type: String, default: ''},
+  github      : {type: String, default: ''},
   website     : {type: String, default: ''},
   program     : {type:'ObjectId', ref: 'Program', default: null }
-  project     : {type:'ObjectId', ref: 'Project', default: null }
   created     : {type: Date, default: null},
   createdBy   : {type: 'ObjectId', ref: 'User', default: null },
   updated     : {type: Date, default: null },
   updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
 });
 
-OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
+ActivitySchema.statics.findUniqueCode = function (title, suffix, callback) {
   var _this = this;
   var possible = (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 
@@ -42,4 +42,4 @@ OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
   });
 };
 
-mongoose.model('Opportunity', OpportunitySchema);
+mongoose.model('Activity', ActivitySchema);

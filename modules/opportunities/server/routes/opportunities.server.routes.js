@@ -18,6 +18,33 @@ module.exports = function (app) {
     .put(opportunities.update)
     .delete(opportunities.delete);
 
+  //
+  // get lists of users
+  //
+  app.route('/api/opportunities/members/:opportunityId')
+    // .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.listMembers);
+  app.route('/api/opportunities/requests/:opportunityId')
+    .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.listRequests);
+
+  //
+  // modify users
+  //
+  app.route('/api/opportunities/requests/confirm/:opportunityId/:userId')
+    .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.confirmMember);
+  app.route('/api/opportunities/requests/deny/:opportunityId/:userId')
+    .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.denyMember);
+
+  app.route('/api/new/opportunity')
+    // .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.new);
+
+  app.route('/api/request/opportunity/:opportunityId')
+    .get(opportunities.request)
+
   // Finish by binding the opportunity middleware
   app.param('opportunityId', opportunities.opportunityByID);
 };

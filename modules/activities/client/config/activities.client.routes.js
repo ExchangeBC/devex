@@ -1,63 +1,63 @@
 // =========================================================================
 //
-// All the client side routes for opportunities
+// All the client side routes for activities
 //
 // =========================================================================
 (function () {
 	'use strict';
 
-	angular.module('opportunities.routes').config(['$stateProvider', function ($stateProvider) {
+	angular.module('activities.routes').config(['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//
-		// this is the top level, abstract route for all opportunity routes, it only
+		// this is the top level, abstract route for all activity routes, it only
 		// contians the ui-view that all other routes get rendered in
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunities', {
+		.state('activities', {
 			abstract: true,
-			url: '/opportunities',
+			url: '/activities',
 			template: '<ui-view/>'
 		})
 		// -------------------------------------------------------------------------
 		//
-		// opportunity listing. Resolve to all opportunities in the system and place that in
+		// activity listing. Resolve to all activities in the system and place that in
 		// the scope. listing itself is done through a directive
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunities.list', {
+		.state('activities.list', {
 			url: '',
-			templateUrl: '/modules/opportunities/client/views/list-opportunities.client.view.html',
+			templateUrl: '/modules/activities/client/views/list-activities.client.view.html',
 			data: {
-				pageTitle: 'Opportunities List'
+				pageTitle: 'Activities List'
 			},
 			resolve: {
-				opportunities: function ($stateParams, OpportunitiesService) {
-					return OpportunitiesService.query ();
+				activities: function ($stateParams, ActivitiesService) {
+					return ActivitiesService.query ();
 				}
 			},
-			controller: 'OpportunitiesListController',
+			controller: 'ActivitiesListController',
 			controllerAs: 'vm'
 		})
 		// -------------------------------------------------------------------------
 		//
-		// view a opportunity, resolve the opportunity data
+		// view a activity, resolve the activity data
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunities.view', {
-			url: '/:opportunityId',
-			templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
-			controller: 'OpportunityViewController',
+		.state('activities.view', {
+			url: '/:activityId',
+			templateUrl: '/modules/activities/client/views/view-activity.client.view.html',
+			controller: 'ActivityViewController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
-					return OpportunitiesService.get({
-						opportunityId: $stateParams.opportunityId
+				activity: function ($stateParams, ActivitiesService) {
+					return ActivitiesService.get({
+						activityId: $stateParams.activityId
 					}).$promise;
 				}
 			},
 			data: {
-				pageTitle: 'Opportunity {{ opportunityResolve.title }}'
+				pageTitle: 'Activity {{ activityResolve.title }}'
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -65,53 +65,53 @@
 		// the base for editing
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin', {
+		.state('activityadmin', {
 			abstract: true,
-			url: '/opportunityadmin',
+			url: '/activityadmin',
 			template: '<ui-view/>'
 		})
 		// -------------------------------------------------------------------------
 		//
-		// edit a opportunity
+		// edit a activity
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.edit', {
-			url: '/:opportunityId/edit',
-			templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
-			controller: 'OpportunityEditController',
+		.state('activityadmin.edit', {
+			url: '/:activityId/edit',
+			templateUrl: '/modules/activities/client/views/edit-activity.client.view.html',
+			controller: 'ActivityEditController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
-					return OpportunitiesService.get({
-						opportunityId: $stateParams.opportunityId
+				activity: function ($stateParams, ActivitiesService) {
+					return ActivitiesService.get({
+						activityId: $stateParams.activityId
 					}).$promise;
 				},
 				editing: function () { return true; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'Opportunity {{ opportunity.title }}'
+				pageTitle: 'Activity {{ activity.title }}'
 			}
 		})
 		// -------------------------------------------------------------------------
 		//
-		// create a new opportunity and edit it
+		// create a new activity and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.create', {
+		.state('activityadmin.create', {
 			url: '/create',
-			templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
-			controller: 'OpportunityEditController',
+			templateUrl: '/modules/activities/client/views/edit-activity.client.view.html',
+			controller: 'ActivityEditController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function (OpportunitiesService) {
-					return new OpportunitiesService();
+				activity: function (ActivitiesService) {
+					return new ActivitiesService();
 				},
 				editing: function () { return false; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'New Opportunity'
+				pageTitle: 'New Activity'
 			}
 		})
 		;

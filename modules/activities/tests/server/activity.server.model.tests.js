@@ -6,18 +6,18 @@
 var should = require('should'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Opportunity = mongoose.model('Opportunity');
+  Activity = mongoose.model('Activity');
 
 /**
  * Globals
  */
 var user,
-  opportunity;
+  activity;
 
 /**
  * Unit tests
  */
-describe('Opportunity Model Unit Tests:', function() {
+describe('Activity Model Unit Tests:', function() {
   beforeEach(function(done) {
     user = new User({
       firstName: 'Full',
@@ -29,8 +29,8 @@ describe('Opportunity Model Unit Tests:', function() {
     });
 
     user.save(function() {
-      opportunity = new Opportunity({
-        name: 'Opportunity Name',
+      activity = new Activity({
+        name: 'Activity Name',
         user: user
       });
 
@@ -41,16 +41,16 @@ describe('Opportunity Model Unit Tests:', function() {
   describe('Method Save', function() {
     it('should be able to save without problems', function(done) {
       this.timeout(0);
-      return opportunity.save(function(err) {
+      return activity.save(function(err) {
         should.not.exist(err);
         done();
       });
     });
 
     it('should be able to show an error when try to save without name', function(done) {
-      opportunity.name = '';
+      activity.name = '';
 
-      return opportunity.save(function(err) {
+      return activity.save(function(err) {
         should.exist(err);
         done();
       });
@@ -58,7 +58,7 @@ describe('Opportunity Model Unit Tests:', function() {
   });
 
   afterEach(function(done) {
-    Opportunity.remove().exec(function() {
+    Activity.remove().exec(function() {
       User.remove().exec(function() {
         done();
       });

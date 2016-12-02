@@ -33,7 +33,7 @@ describe('Opportunity CRUD tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      usernameOrEmail: 'username',
+      username: 'username',
       password: 'M3@n.jsI$Aw3$0m3'
     };
 
@@ -43,23 +43,22 @@ describe('Opportunity CRUD tests', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
-      username: credentials.usernameOrEmail,
+      username: credentials.username,
       password: credentials.password,
       provider: 'local'
     });
 
-    // Save a user to the test db and create new opportunity
+    // Save a user to the test db and create new Opportunity
     user.save(function () {
       opportunity = {
-        title: 'Opportunity Title',
-        content: 'Opportunity Content'
+        name: 'Opportunity name'
       };
 
       done();
     });
   });
 
-  it('should not be able to save an opportunity if logged in without the "admin" role', function (done) {
+  it('should be able to save a Opportunity if logged in', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -69,18 +68,42 @@ describe('Opportunity CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Opportunity
         agent.post('/api/opportunities')
           .send(opportunity)
-          .expect(403)
+          .expect(200)
           .end(function (opportunitySaveErr, opportunitySaveRes) {
-            // Call the assertion callback
-            done(opportunitySaveErr);
-          });
+            // Handle Opportunity save error
+            if (opportunitySaveErr) {
+              return done(opportunitySaveErr);
+            }
 
+            // Get a list of Opportunities
+            agent.get('/api/opportunities')
+              .end(function (opportunitiesGetErr, opportunitiesGetRes) {
+                // Handle Opportunities save error
+                if (opportunitiesGetErr) {
+                  return done(opportunitiesGetErr);
+                }
+
+                // Get Opportunities list
+                var opportunities = opportunitiesGetRes.body;
+
+                // Set assertions
+                (opportunities[0].user._id).should.equal(userId);
+                (opportunities[0].name).should.match('Opportunity name');
+
+                // Call the assertion callback
+                done();
+              });
+          });
       });
   });
 
-  it('should not be able to save an opportunity if not logged in', function (done) {
+  it('should not be able to save an Opportunity if not logged in', function (done) {
     agent.post('/api/opportunities')
       .send(opportunity)
       .expect(403)
@@ -90,7 +113,10 @@ describe('Opportunity CRUD tests', function () {
       });
   });
 
-  it('should not be able to update an opportunity if signed in without the "admin" role', function (done) {
+  it('should not be able to save an Opportunity if no name is provided', function (done) {
+    // Invalidate name field
+    opportunity.name = '';
+
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -100,23 +126,77 @@ describe('Opportunity CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Opportunity
         agent.post('/api/opportunities')
           .send(opportunity)
-          .expect(403)
+          .expect(400)
           .end(function (opportunitySaveErr, opportunitySaveRes) {
-            // Call the assertion callback
+            // Set message assertion
+            (opportunitySaveRes.body.message).should.match('Please fill Opportunity name');
+
+            // Handle Opportunity save error
             done(opportunitySaveErr);
           });
       });
   });
 
-  it('should be able to get a list of opportunities if not signed in', function (done) {
-    // Create new opportunity model instance
+  it('should be able to update an Opportunity if signed in', function (done) {
+    agent.post('/api/auth/signin')
+      .send(credentials)
+      .expect(200)
+      .end(function (signinErr, signinRes) {
+        // Handle signin error
+        if (signinErr) {
+          return done(signinErr);
+        }
+
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Opportunity
+        agent.post('/api/opportunities')
+          .send(opportunity)
+          .expect(200)
+          .end(function (opportunitySaveErr, opportunitySaveRes) {
+            // Handle Opportunity save error
+            if (opportunitySaveErr) {
+              return done(opportunitySaveErr);
+            }
+
+            // Update Opportunity name
+            opportunity.name = 'WHY YOU GOTTA BE SO MEAN?';
+
+            // Update an existing Opportunity
+            agent.put('/api/opportunities/' + opportunitySaveRes.body._id)
+              .send(opportunity)
+              .expect(200)
+              .end(function (opportunityUpdateErr, opportunityUpdateRes) {
+                // Handle Opportunity update error
+                if (opportunityUpdateErr) {
+                  return done(opportunityUpdateErr);
+                }
+
+                // Set assertions
+                (opportunityUpdateRes.body._id).should.equal(opportunitySaveRes.body._id);
+                (opportunityUpdateRes.body.name).should.match('WHY YOU GOTTA BE SO MEAN?');
+
+                // Call the assertion callback
+                done();
+              });
+          });
+      });
+  });
+
+  it('should be able to get a list of Opportunities if not signed in', function (done) {
+    // Create new Opportunity model instance
     var opportunityObj = new Opportunity(opportunity);
 
     // Save the opportunity
     opportunityObj.save(function () {
-      // Request opportunities
+      // Request Opportunities
       request(app).get('/api/opportunities')
         .end(function (req, res) {
           // Set assertion
@@ -129,16 +209,16 @@ describe('Opportunity CRUD tests', function () {
     });
   });
 
-  it('should be able to get a single opportunity if not signed in', function (done) {
-    // Create new opportunity model instance
+  it('should be able to get a single Opportunity if not signed in', function (done) {
+    // Create new Opportunity model instance
     var opportunityObj = new Opportunity(opportunity);
 
-    // Save the opportunity
+    // Save the Opportunity
     opportunityObj.save(function () {
       request(app).get('/api/opportunities/' + opportunityObj._id)
         .end(function (req, res) {
           // Set assertion
-          res.body.should.be.instanceof(Object).and.have.property('title', opportunity.title);
+          res.body.should.be.instanceof(Object).and.have.property('name', opportunity.name);
 
           // Call the assertion callback
           done();
@@ -146,7 +226,7 @@ describe('Opportunity CRUD tests', function () {
     });
   });
 
-  it('should return proper error for single opportunity with an invalid Id, if not signed in', function (done) {
+  it('should return proper error for single Opportunity with an invalid Id, if not signed in', function (done) {
     // test is not a valid mongoose Id
     request(app).get('/api/opportunities/test')
       .end(function (req, res) {
@@ -158,19 +238,19 @@ describe('Opportunity CRUD tests', function () {
       });
   });
 
-  it('should return proper error for single opportunity which doesnt exist, if not signed in', function (done) {
-    // This is a valid mongoose Id but a non-existent opportunity
+  it('should return proper error for single Opportunity which doesnt exist, if not signed in', function (done) {
+    // This is a valid mongoose Id but a non-existent Opportunity
     request(app).get('/api/opportunities/559e9cd815f80b4c256a8f41')
       .end(function (req, res) {
         // Set assertion
-        res.body.should.be.instanceof(Object).and.have.property('message', 'No opportunity with that identifier has been found');
+        res.body.should.be.instanceof(Object).and.have.property('message', 'No Opportunity with that identifier has been found');
 
         // Call the assertion callback
         done();
       });
   });
 
-  it('should not be able to delete an opportunity if signed in without the "admin" role', function (done) {
+  it('should be able to delete an Opportunity if signed in', function (done) {
     agent.post('/api/auth/signin')
       .send(credentials)
       .expect(200)
@@ -180,43 +260,66 @@ describe('Opportunity CRUD tests', function () {
           return done(signinErr);
         }
 
+        // Get the userId
+        var userId = user.id;
+
+        // Save a new Opportunity
         agent.post('/api/opportunities')
           .send(opportunity)
-          .expect(403)
+          .expect(200)
           .end(function (opportunitySaveErr, opportunitySaveRes) {
-            // Call the assertion callback
-            done(opportunitySaveErr);
+            // Handle Opportunity save error
+            if (opportunitySaveErr) {
+              return done(opportunitySaveErr);
+            }
+
+            // Delete an existing Opportunity
+            agent.delete('/api/opportunities/' + opportunitySaveRes.body._id)
+              .send(opportunity)
+              .expect(200)
+              .end(function (opportunityDeleteErr, opportunityDeleteRes) {
+                // Handle opportunity error error
+                if (opportunityDeleteErr) {
+                  return done(opportunityDeleteErr);
+                }
+
+                // Set assertions
+                (opportunityDeleteRes.body._id).should.equal(opportunitySaveRes.body._id);
+
+                // Call the assertion callback
+                done();
+              });
           });
       });
   });
 
-  it('should not be able to delete an opportunity if not signed in', function (done) {
-    // Set opportunity user
+  it('should not be able to delete an Opportunity if not signed in', function (done) {
+    // Set Opportunity user
     opportunity.user = user;
 
-    // Create new opportunity model instance
+    // Create new Opportunity model instance
     var opportunityObj = new Opportunity(opportunity);
 
-    // Save the opportunity
+    // Save the Opportunity
     opportunityObj.save(function () {
-      // Try deleting opportunity
+      // Try deleting Opportunity
       request(app).delete('/api/opportunities/' + opportunityObj._id)
         .expect(403)
         .end(function (opportunityDeleteErr, opportunityDeleteRes) {
           // Set message assertion
           (opportunityDeleteRes.body.message).should.match('User is not authorized');
 
-          // Handle opportunity error error
+          // Handle Opportunity error error
           done(opportunityDeleteErr);
         });
 
     });
   });
 
-  it('should be able to get a single opportunity that has an orphaned user reference', function (done) {
+  it('should be able to get a single Opportunity that has an orphaned user reference', function (done) {
     // Create orphan user creds
     var _creds = {
-      usernameOrEmail: 'orphan',
+      username: 'orphan',
       password: 'M3@n.jsI$Aw3$0m3'
     };
 
@@ -226,10 +329,9 @@ describe('Opportunity CRUD tests', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'orphan@test.com',
-      username: _creds.usernameOrEmail,
+      username: _creds.username,
       password: _creds.password,
-      provider: 'local',
-      roles: ['admin']
+      provider: 'local'
     });
 
     _orphan.save(function (err, orphan) {
@@ -250,22 +352,22 @@ describe('Opportunity CRUD tests', function () {
           // Get the userId
           var orphanId = orphan._id;
 
-          // Save a new opportunity
+          // Save a new Opportunity
           agent.post('/api/opportunities')
             .send(opportunity)
             .expect(200)
             .end(function (opportunitySaveErr, opportunitySaveRes) {
-              // Handle opportunity save error
+              // Handle Opportunity save error
               if (opportunitySaveErr) {
                 return done(opportunitySaveErr);
               }
 
-              // Set assertions on new opportunity
-              (opportunitySaveRes.body.title).should.equal(opportunity.title);
+              // Set assertions on new Opportunity
+              (opportunitySaveRes.body.name).should.equal(opportunity.name);
               should.exist(opportunitySaveRes.body.user);
               should.equal(opportunitySaveRes.body.user._id, orphanId);
 
-              // force the opportunity to have an orphaned user reference
+              // force the Opportunity to have an orphaned user reference
               orphan.remove(function () {
                 // now signin with valid user
                 agent.post('/api/auth/signin')
@@ -277,18 +379,18 @@ describe('Opportunity CRUD tests', function () {
                       return done(err);
                     }
 
-                    // Get the opportunity
+                    // Get the Opportunity
                     agent.get('/api/opportunities/' + opportunitySaveRes.body._id)
                       .expect(200)
                       .end(function (opportunityInfoErr, opportunityInfoRes) {
-                        // Handle opportunity error
+                        // Handle Opportunity error
                         if (opportunityInfoErr) {
                           return done(opportunityInfoErr);
                         }
 
                         // Set assertions
                         (opportunityInfoRes.body._id).should.equal(opportunitySaveRes.body._id);
-                        (opportunityInfoRes.body.title).should.equal(opportunity.title);
+                        (opportunityInfoRes.body.name).should.equal(opportunity.name);
                         should.equal(opportunityInfoRes.body.user, undefined);
 
                         // Call the assertion callback
@@ -296,111 +398,6 @@ describe('Opportunity CRUD tests', function () {
                       });
                   });
               });
-            });
-        });
-    });
-  });
-
-  it('should be able to get a single opportunity if not signed in and verify the custom "isCurrentUserOwner" field is set to "false"', function (done) {
-    // Create new opportunity model instance
-    var opportunityObj = new Opportunity(opportunity);
-
-    // Save the opportunity
-    opportunityObj.save(function () {
-      request(app).get('/api/opportunities/' + opportunityObj._id)
-        .end(function (req, res) {
-          // Set assertion
-          res.body.should.be.instanceof(Object).and.have.property('title', opportunity.title);
-          // Assert the custom field "isCurrentUserOwner" is set to false for the un-authenticated User
-          res.body.should.be.instanceof(Object).and.have.property('isCurrentUserOwner', false);
-          // Call the assertion callback
-          done();
-        });
-    });
-  });
-
-  it('should be able to get single opportunity, that a different user created, if logged in & verify the "isCurrentUserOwner" field is set to "false"', function (done) {
-    // Create temporary user creds
-    var _creds = {
-      usernameOrEmail: 'opportunityowner',
-      password: 'M3@n.jsI$Aw3$0m3'
-    };
-
-    // Create user that will create the Opportunity
-    var _opportunityOwner = new User({
-      firstName: 'Full',
-      lastName: 'Name',
-      displayName: 'Full Name',
-      email: 'temp@test.com',
-      username: _creds.usernameOrEmail,
-      password: _creds.password,
-      provider: 'local',
-      roles: ['admin', 'user']
-    });
-
-    _opportunityOwner.save(function (err, _user) {
-      // Handle save error
-      if (err) {
-        return done(err);
-      }
-
-      // Sign in with the user that will create the Opportunity
-      agent.post('/api/auth/signin')
-        .send(_creds)
-        .expect(200)
-        .end(function (signinErr, signinRes) {
-          // Handle signin error
-          if (signinErr) {
-            return done(signinErr);
-          }
-
-          // Get the userId
-          var userId = _user._id;
-
-          // Save a new opportunity
-          agent.post('/api/opportunities')
-            .send(opportunity)
-            .expect(200)
-            .end(function (opportunitySaveErr, opportunitySaveRes) {
-              // Handle opportunity save error
-              if (opportunitySaveErr) {
-                return done(opportunitySaveErr);
-              }
-
-              // Set assertions on new opportunity
-              (opportunitySaveRes.body.title).should.equal(opportunity.title);
-              should.exist(opportunitySaveRes.body.user);
-              should.equal(opportunitySaveRes.body.user._id, userId);
-
-              // now signin with the test suite user
-              agent.post('/api/auth/signin')
-                .send(credentials)
-                .expect(200)
-                .end(function (err, res) {
-                  // Handle signin error
-                  if (err) {
-                    return done(err);
-                  }
-
-                  // Get the opportunity
-                  agent.get('/api/opportunities/' + opportunitySaveRes.body._id)
-                    .expect(200)
-                    .end(function (opportunityInfoErr, opportunityInfoRes) {
-                      // Handle opportunity error
-                      if (opportunityInfoErr) {
-                        return done(opportunityInfoErr);
-                      }
-
-                      // Set assertions
-                      (opportunityInfoRes.body._id).should.equal(opportunitySaveRes.body._id);
-                      (opportunityInfoRes.body.title).should.equal(opportunity.title);
-                      // Assert that the custom field "isCurrentUserOwner" is set to false since the current User didn't create it
-                      (opportunityInfoRes.body.isCurrentUserOwner).should.equal(false);
-
-                      // Call the assertion callback
-                      done();
-                    });
-                });
             });
         });
     });

@@ -1,15 +1,15 @@
-﻿(function () {
+(function () {
   'use strict';
 
-  describe('Admin Opportunities List Controller Tests', function () {
+  describe('Activities List Controller Tests', function () {
     // Initialize global variables
-    var OpportunitiesAdminListController,
+    var ActivitiesListController,
       $scope,
       $httpBackend,
       $state,
       Authentication,
-      OpportunitiesService,
-      mockOpportunity;
+      ActivitiesService,
+      mockActivity;
 
     // The $resource service augments the response object with methods for updating and deleting the resource.
     // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -36,7 +36,7 @@
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
     // This allows us to inject a service but then attach it to a variable
     // with the same name as the service.
-    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _OpportunitiesService_) {
+    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _ActivitiesService_) {
       // Set a new global scope
       $scope = $rootScope.$new();
 
@@ -44,26 +44,21 @@
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       Authentication = _Authentication_;
-      OpportunitiesService = _OpportunitiesService_;
+      ActivitiesService = _ActivitiesService_;
 
-      // Ignore parent template get on state transitions
-      $httpBackend.whenGET('/modules/opportunities/client/views/list-opportunities.client.view.html').respond(200, '');
-      $httpBackend.whenGET('/modules/core/client/views/home.client.view.html').respond(200, '');
-
-      // create mock opportunity
-      mockOpportunity = new OpportunitiesService({
+      // create mock article
+      mockActivity = new ActivitiesService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Opportunity about MEAN',
-        content: 'MEAN rocks!'
+        name: 'Activity Name'
       });
 
       // Mock logged in user
       Authentication.user = {
-        roles: ['user', 'admin']
+        roles: ['user']
       };
 
-      // Initialize the Opportunities List controller.
-      OpportunitiesAdminListController = $controller('OpportunitiesAdminListController as vm', {
+      // Initialize the Activities List controller.
+      ActivitiesListController = $controller('ActivitiesListController as vm', {
         $scope: $scope
       });
 
@@ -72,23 +67,23 @@
     }));
 
     describe('Instantiate', function () {
-      var mockOpportunityList;
+      var mockActivityList;
 
       beforeEach(function () {
-        mockOpportunityList = [mockOpportunity, mockOpportunity];
+        mockActivityList = [mockActivity, mockActivity];
       });
 
-      it('should send a GET request and return all opportunities', inject(function (OpportunitiesService) {
+      it('should send a GET request and return all Activities', inject(function (ActivitiesService) {
         // Set POST response
-        $httpBackend.expectGET('/api/opportunities').respond(mockOpportunityList);
+        $httpBackend.expectGET('api/activities').respond(mockActivityList);
 
 
         $httpBackend.flush();
 
         // Test form inputs are reset
-        expect($scope.vm.opportunities.length).toEqual(2);
-        expect($scope.vm.opportunities[0]).toEqual(mockOpportunity);
-        expect($scope.vm.opportunities[1]).toEqual(mockOpportunity);
+        expect($scope.vm.activities.length).toEqual(2);
+        expect($scope.vm.activities[0]).toEqual(mockActivity);
+        expect($scope.vm.activities[1]).toEqual(mockActivity);
 
       }));
     });

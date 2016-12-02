@@ -13,6 +13,28 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      makeRequest: {
+        method: 'GET',
+        url :'/api/request/opportunity/:opportunityId'
+      },
+      getRequests: {
+        method: 'GET',
+        url :'/api/opportunities/requests/:opportunityId',
+        isArray: true
+      },
+      getMembers: {
+        method: 'GET',
+        url :'/api/opportunities/members/:opportunityId',
+        isArray: true
+      },
+      confirmMember: {
+        method: 'GET',
+        url : '/api/opportunities/requests/confirm/:opportunityId/:userId'
+      },
+      denyMember: {
+        method: 'GET',
+        url : '/api/opportunities/requests/deny/:opportunityId/:userId'
       }
     });
 
@@ -26,6 +48,7 @@
     return Opportunity;
 
     function createOrUpdate(opportunity) {
+      console.log ('create or update');
       if (opportunity._id) {
         return opportunity.$update(onSuccess, onError);
       } else {
