@@ -1,0 +1,77 @@
+<section class="static-page">
+<div class="container" role="main">
+	<div class="row">
+		<h2 ng-if="vm.editing">Editing {{vm.project.title}}</h2>
+		<h2 ng-if="!vm.editing">New Project</h2>
+	</div>
+	<div class="row">
+		<div class="pull-right">
+			<div class="list-group list-group-horizontal">
+				<a class="list-group-item active" ng-click="vm.saveme()" title="Save">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</a>
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a ng-if="!vm.editing && !vm.programId" class="list-group-item" ui-sref="projects.list" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a ng-if="!vm.editing && vm.programId" class="list-group-item" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+					<i class="glyphicon glyphicon-trash"></i> Remove
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<form id="projectform" name="vm.form.projectForm" class="form-horizontal" ng-submit="vm.save(vm.form.projectForm.$valid)" novalidate>
+			<fieldset>
+				<div class="form-group" show-errors>
+					<label class="control-label" for="title">Name</label>
+					<input name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>
+					<div ng-messages="vm.form.projectForm.name.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Project name is required.</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="short">Short Description</label>
+					<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the project"></textarea>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="description">Description</label>
+					<textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project"></textarea>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="github">Github</label>
+					<input name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo" readonly>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+	<div class="row">
+		<div class="pull-right">
+			<div class="list-group list-group-horizontal">
+				<a class="list-group-item active" ng-click="vm.saveme(vm.form.projectForm.$valid)" title="Save">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</a>
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a ng-if="!vm.editing && !vm.programId" class="list-group-item" ui-sref="projects.list" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a ng-if="!vm.editing && vm.programId" class="list-group-item" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+					<i class="glyphicon glyphicon-trash"></i> Remove
+				</a>
+			</div>
+		</div>
+	</div>
+	<div><p>&nbsp;</p></div>
+</div>
+</section>
+

@@ -94,7 +94,7 @@
           mockOpportunity;
 
         beforeEach(inject(function ($controller, $state, $templateCache) {
-          createstate = $state.get('admin.opportunities.create');
+          createstate = $state.get('opportunities.create');
           $templateCache.put('modules/opportunities/client/views/form-opportunity.client.view.html', '');
 
           // create mock Opportunity
@@ -140,7 +140,7 @@
           mockOpportunity;
 
         beforeEach(inject(function ($controller, $state, $templateCache) {
-          editstate = $state.get('admin.opportunities.edit');
+          editstate = $state.get('opportunities.edit');
           $templateCache.put('modules/opportunities/client/views/form-opportunity.client.view.html', '');
 
           // create mock Opportunity

@@ -4,24 +4,24 @@
 	<div class="row">
 		<div class="pull-right">
 			<div class="list-group list-group-horizontal">
-				<a class="list-group-item active" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.projectId" class="list-group-item active" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
 				</a>
-				<a ng-show="vm.opportunity.userIs.admin" class="list-group-item" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+				<a ng-if="vm.projectId" class="list-group-item active" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Back
+				</a>
+				<a ng-if="vm.opportunity.userIs.admin" class="list-group-item" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
 					<i class="glyphicon glyphicon-pencil"></i> Edit
 				</a>
-				<a ng-show="vm.showMember" class="list-group-item" ng-click="vm.request()" title="Request">
+				<a ng-if="vm.showMember" class="list-group-item" ng-click="vm.request()" title="Request">
 					<i class="glyphicon glyphicon-user"></i> Request Membership
 				</a>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-6 pull-left">
-			<img class="img-responsive pull-left" src="{{vm.opportunity.logo}}" />
-		</div>
 		<div>
-			<h2 ng-bind="vm.opportunity.title"></h2>
+			<h2 ng-bind="vm.opportunity.name"></h2>
 			<h4>Summary</h4>
 			<p ng-bind="vm.opportunity.short"></p>
 			<h4>Description</h4>
@@ -52,5 +52,67 @@
 	</div>
 	<opportunity-member-list opportunity="vm.opportunity"></opportunity-member-list>
 	<opportunity-member-requests opportunity="vm.opportunity" ng-if="vm.opportunity.userIs.admin"></opportunity-member-requests>
+
+	<div>
+		<a ng-if="vm.opportunity.userIs.admin" class="list-group-item active pull-right" ui-sref="opportunityadmin.create" title="New">
+			<i class="glyphicon glyphicon-plus"></i> Add New Opportunity
+		</a>
+	</div>
+	<div class="row">
+		<h1>Opportunities</h1>
+		<h3>Opportunities for this Opportunity</h3>
+	</div>
+	<div>
+		<opportunity-list opportunity="vm.opportunity"></opportunity-list>
+	</div>
+	<div class="row">
+		<div class="pull-right">
+			<div class="list-group list-group-horizontal">
+				<a ng-if="!vm.projectId" class="list-group-item active" ui-sref="opportunities.list" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Back
+				</a>
+				<a ng-if="vm.projectId" class="list-group-item active" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Back
+				</a>
+				<a ng-if="vm.opportunity.userIs.admin" class="list-group-item" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+					<i class="glyphicon glyphicon-pencil"></i> Edit
+				</a>
+				<a ng-if="vm.showMember" class="list-group-item" ng-click="vm.request()" title="Request">
+					<i class="glyphicon glyphicon-user"></i> Request Membership
+				</a>
+			</div>
+		</div>
+	</div>
 </div>
 </section>
+<!-- <section>
+	<div class="container">
+	  <div class="col-xs-12">
+		<h1 ng-bind="vm.opportunity.name"></h1>
+		<span class="opportunity-description" ng-bind="vm.opportunity.description"></span>
+		<span class="opportunity-link">Opportunity: <a href="/opportunities/{{vm.opportunity.opportunity._id}}" class="">{{vm.opportunity.opportunity.name}}</a></span>
+		<span class="opportunity-link">Opportunity Github address: <a href="{{vm.opportunity.github}}" class="">{{vm.opportunity.github}}</a></span>
+	  </div>
+	  <div class="pull-right"
+		   ng-if="vm.opportunity.isCurrentUserOwner">
+		<a class="btn btn-primary"
+		   ui-sref="opportunities.edit({ opportunityId: vm.opportunity._id })">
+		  <i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" ng-click="vm.remove()">
+		  <i class="glyphicon glyphicon-trash"></i>
+		</a>
+	  </div>
+	  <small>
+		<em class="text-muted">
+		  Posted on
+		  <span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
+		  by
+		  <span ng-if="vm.opportunity.user"
+				ng-bind="vm.opportunity.user.displayName"></span>
+		  <span ng-if="!vm.opportunity.user">Deleted User</span>
+		</em>
+	  </small>
+	  <p class="lead" ng-bind="vm.opportunity.content"></p>
+	</div>
+</section> -->

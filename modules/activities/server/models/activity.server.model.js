@@ -16,7 +16,7 @@ var ActivitySchema = new Schema({
   description : {type: String, default: ''},
   github      : {type: String, default: ''},
   website     : {type: String, default: ''},
-  program     : {type:'ObjectId', ref: 'Program', default: null }
+  program     : {type:'ObjectId', ref: 'Program', default: null },
   created     : {type: Date, default: null},
   createdBy   : {type: 'ObjectId', ref: 'User', default: null },
   updated     : {type: Date, default: null },

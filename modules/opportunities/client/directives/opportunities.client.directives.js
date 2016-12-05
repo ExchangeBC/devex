@@ -10,12 +10,22 @@
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',
-			scope        : {},
+			scope        : {
+				project: '='
+			},
 			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
 			controller   : function ($scope, OpportunitiesService, Authentication) {
 				var vm = this;
-				console.log ('inside directive', Authentication);
-				vm.opportunities = OpportunitiesService.query ();
+				console.log ('inside directive, project = ', $scope.project);
+				if ($scope.project) {
+					vm.projectId = $scope.project._id;
+					vm.opportunities = OpportunitiesService.forProject ({
+						projectId: $scope.project._id
+					});
+				} else {
+					vm.projectId = null;
+					vm.opportunities = OpportunitiesService.query ();
+				}
 			}
 		}
 	})
@@ -58,10 +68,10 @@
 						opportunityId: $scope.opportunity._id,
 						userId: userid
 					}).$promise.then (function () {
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateOpportunityMembers', 'done');
 					});
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateOpportunityMembers', function (event, message) {
 					reset ();
 				});
 				reset ();
@@ -107,7 +117,7 @@
 						userId: userid
 					}).$promise.then (function () {
 						// reset ();
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateOpportunityMembers', 'done');
 					});
 				};
 				vm.deny = function (userid, username) {
@@ -117,10 +127,10 @@
 						userId: userid
 					}).$promise.then (function () {
 						// reset ();
-						$rootScope.$broadcast('updateMembers', 'done');
+						$rootScope.$broadcast('updateOpportunityMembers', 'done');
 					});
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateOpportunityMembers', function (event, message) {
 					reset ();
 				});
 				reset ();

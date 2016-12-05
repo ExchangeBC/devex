@@ -1,16 +1,39 @@
 <section class="list-page">
 <div class="container" role="main">
-	<div>
-		<a ng-show="vm.isAdmin || vm.isGov" class="list-group-item active pull-right" ui-sref="opportunityadmin.create" title="New">
-			<i class="glyphicon glyphicon-plus"></i> Add New Opportunity
-		</a>
-	</div>
 	<div class="row">
-		<h1>Government Partners</h1>
-		<h3>Meet government innovators open to new ways to develop technology.</h3>
+		<h1>Opportunities</h1>
+		<h3>All Opportunities listed on the BCDevExchange.</h3>
 	</div>
 	<div>
 		<opportunity-list></opportunity-list>
 	</div>
 </div>
 </section>
+<!-- <div class="container">
+  <section>
+	<div class="list-group">
+		<div ng-repeat="opportunity in vm.opportunities"
+		 class="list-group-item">
+		 <div class="col-xs-8">
+		<small class="list-group-item-text">
+		  Posted on
+		  <span ng-bind="opportunity.created | date:'mediumDate'"></span>
+		  by
+		  <span ng-if="opportunity.user" ng-bind="opportunity.user.displayName"></span>
+		  <span ng-if="!opportunity.user">Deleted User</span>
+		</small>
+		<h4 class="list-group-item-heading" ng-bind="opportunity.name"></h4>
+		</div>
+		<div class="col-xs-4">
+		  <button ui-sref="opportunities.view({ opportunityId: opportunity._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
+		  <span ng-if="opportunity.user | exists:'currentUser'">
+			<button ui-sref="opportunities.edit({ opportunityId: opportunity._id })" type="button" class="btn btn-link pull-right">Edit &rarr;</button>
+		  </span>
+		</div>
+		</div>
+	</div>
+    <div class="alert alert-warning text-center" ng-if="vm.opportunities.$resolved && !vm.opportunities.length">
+      No Opportunities yet, why don't you <a ui-sref="opportunities.create">create one</a>?
+    </div>
+  </section>
+</div> -->

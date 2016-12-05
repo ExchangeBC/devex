@@ -1,8 +1,9 @@
+// Opportunities service used to communicate Opportunities REST endpoints
 (function () {
   'use strict';
 
   angular
-    .module('opportunities.services')
+    .module('opportunities')
     .factory('OpportunitiesService', OpportunitiesService);
 
   OpportunitiesService.$inject = ['$resource', '$log'];
@@ -13,6 +14,11 @@
     }, {
       update: {
         method: 'PUT'
+      },
+      forProject: {
+        method: 'GET',
+        url: '/api/opportunities/for/project/:projectId',
+        isArray: true
       },
       makeRequest: {
         method: 'GET',
@@ -45,10 +51,15 @@
       }
     });
 
+    angular.extend(Opportunity.prototype, {
+      createOrUpdate: function () {
+        var opportunity = this;
+        return createOrUpdate(opportunity);
+      }
+    });
     return Opportunity;
 
     function createOrUpdate(opportunity) {
-      console.log ('create or update');
       if (opportunity._id) {
         return opportunity.$update(onSuccess, onError);
       } else {
@@ -66,11 +77,11 @@
         // Handle error internally
         handleError(error);
       }
-    }
 
-    function handleError(error) {
-      // Log error
-      $log.error(error);
+      function handleError(error) {
+        // Log error
+        $log.error(error);
+      }
     }
   }
 }());

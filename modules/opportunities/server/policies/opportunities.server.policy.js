@@ -18,7 +18,7 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/opportunities',
       permissions: '*'
     }, {
-      resources: '/api/new/opportunity',
+      resources: '/api/new/activity',
       permissions: ['get']
     }, {
       resources: '/api/opportunities/members/:opportunityId',
@@ -77,8 +77,8 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
-  console.log ('roles, method, path', roles, req.method, req.route.path);
-  // If an opportunity is being processed and the current user created it then allow any manipulation
+
+  // If an Opportunity is being processed and the current user created it then allow any manipulation
   if (req.opportunity && req.user && req.opportunity.user && req.opportunity.user.id === req.user.id) {
     return next();
   }

@@ -1,8 +1,8 @@
 <section class="static-page">
 <div class="container" role="main">
 	<div class="row">
-		<h2 ng-show="vm.editing">Editing {{vm.opportunity.title}}</h2>
-		<h2 ng-show="!vm.editing">New Opportunity</h2>
+		<h2 ng-if="vm.editing">Editing {{vm.opportunity.title}}</h2>
+		<h2 ng-if="!vm.editing">New Opportunity</h2>
 	</div>
 	<div class="row">
 		<div class="pull-right">
@@ -10,13 +10,16 @@
 				<a class="list-group-item active" ng-click="vm.saveme()" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a ng-show="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-show="!vm.editing" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.editing && !vm.projectId" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-show="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a ng-if="!vm.editing && vm.projectId" class="list-group-item" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
@@ -26,10 +29,10 @@
 		<form id="opportunityform" name="vm.form.opportunityForm" class="form-horizontal" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 			<fieldset>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="title">Title</label>
-					<input name="title" type="text" ng-model="vm.opportunity.title" id="title" class="form-control" placeholder="Title" required>
-					<div ng-messages="vm.form.opportunityForm.title.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">Opportunity title is required.</p>
+					<label class="control-label" for="title">Name</label>
+					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Name" required>
+					<div ng-messages="vm.form.opportunityForm.name.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Opportunity name is required.</p>
 					</div>
 				</div>
 				<div class="form-group">
@@ -41,16 +44,8 @@
 					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="owner">Owner</label>
-					<input name="owner" type="text" ng-model="vm.opportunity.owner" id="owner" class="form-control" placeholder="Opportunity owner (ministry, organization, etc)" required>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="website">Website</label>
-					<input name="website" type="text" ng-model="vm.opportunity.website" id="website" class="form-control" placeholder="Website" required>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="logo">Logo URL</label>
-					<input type="text" name="logo" ng-model="vm.opportunity.logo" id="logo" class="form-control" placeholder="Logo URL"></input>
+					<label class="control-label" for="github">Github</label>
+					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
 				</div>
 			</fieldset>
 		</form>
@@ -61,13 +56,16 @@
 				<a class="list-group-item active" ng-click="vm.saveme(vm.form.opportunityForm.$valid)" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a ng-show="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-show="!vm.editing" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.editing && !vm.projectId" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-show="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a ng-if="!vm.editing && vm.projectId" class="list-group-item" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>

@@ -16,19 +16,15 @@ request : <code>-request
 
 */
 
-'use strict';
-
-
 /**
- * Module dependencies
+ * Module dependencies.
  */
 var path = require('path'),
   mongoose = require('mongoose'),
   Opportunity = mongoose.model('Opportunity'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-  _ = require('lodash')
-  ;
+  _ = require('lodash');
 
 // -------------------------------------------------------------------------
 //
@@ -121,19 +117,22 @@ exports.requests = function (opportunity, cb) {
   mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec (cb);
 };
 
+/**
+ * Create a Opportunity
+ */
 // -------------------------------------------------------------------------
 //
 // create a new opportunity. the user doing the creation will be set as the
 // administrator
 //
 // -------------------------------------------------------------------------
-exports.create = function (req, res) {
+exports.create = function(req, res) {
   console.log ('Creating a new opportunity');
   var opportunity = new Opportunity(req.body);
   //
   // set the code, this is used for setting roles and other stuff
   //
-  Opportunity.findUniqueCode (opportunity.title, null, function (newcode) {
+  Opportunity.findUniqueCode (opportunity.name, null, function (newcode) {
     opportunity.code = newcode;
     //
     // set the audit fields so we know who did what when
@@ -154,6 +153,52 @@ exports.create = function (req, res) {
       }
     });
   });
+
+/*
+
+GITHUB related stuff
+
+  var opportunity = new Opportunity(req.body);
+  opportunity.user = req.user;
+
+  var http = require('http');
+  var github = require('octonode');
+  var config = require('/config/config.js');
+
+  // curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
+
+  var url = 'https://api.github.com/user/repos';
+  var user = config.github.clientID;  // 'dewolfe001';
+  var secret = config.github.clientSecret; // '39c1cffc1008ed43189ecd27448bd903a75778eb';
+
+  var client = github.client({
+	id: user,
+    secret: secret
+  });
+
+ //  opportunity.github = client.repo({
+	// 'name': opportunity.name,
+	// 'description' : opportunity.description
+	// },  function (err, data) {
+	// 	if (err) {
+	// 		return console.error(err);
+	// 	}
+	// 	else {
+	// 		return data.html_url;
+	// 	}
+	// }
+  // );
+
+  opportunity.save(function(err) {
+    if (err) {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.jsonp(opportunity);
+    }
+  });
+  */
 };
 
 // -------------------------------------------------------------------------
@@ -168,7 +213,7 @@ exports.read = function (req, res) {
 // -------------------------------------------------------------------------
 //
 // update the document, make sure to apply audit. We don't mess with the
-// code if they change the title as that would mean reworking all the roles
+// code if they change the name as that would mean reworking all the roles
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
@@ -226,7 +271,7 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-  Opportunity.find().sort('title')
+  Opportunity.find().sort('name')
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
   .exec(function (err, opportunities) {
@@ -320,6 +365,27 @@ exports.denyMember = function (req, res) {
     } else {
       console.log ('---- member roles ', result.roles);
       res.json (result);
+    }
+  });
+};
+
+// -------------------------------------------------------------------------
+//
+// get opportunities under project
+//
+// -------------------------------------------------------------------------
+exports.forProject = function (req, res) {
+  Opportunity.find({project:req.project._id}).sort('name')
+  .populate('createdBy', 'displayName')
+  .populate('updatedBy', 'displayName')
+  .exec(function (err, opportunities) {
+    if (err) {
+      return res.status(422).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    } else {
+      res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+      // res.json(opportunities);
     }
   });
 };

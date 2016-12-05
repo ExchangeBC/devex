@@ -13,19 +13,46 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
   acl.allow([{
-    roles: ['user', 'admin'],
+    roles: ['admin','gov'],
     allows: [{
       resources: '/api/projects',
       permissions: '*'
+    }, {
+      resources: '/api/new/activity',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/members/:projectId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/requests/:projectId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/requests/confirm/:projectId/:userId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/requests/deny/:projectId/:userId',
+      permissions: ['get']
     }, {
       resources: '/api/projects/:projectId',
       permissions: '*'
     }]
   }, {
-    roles: ['user', 'admin'],
+    roles: ['user'],
     allows: [{
       resources: '/api/projects',
-      permissions: ['get', 'post']
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/members/:projectId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/requests/:projectId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/members/:projectId/confirm/:userId',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/requests/:projectId/deny/:userId',
+      permissions: ['get']
     }, {
       resources: '/api/projects/:projectId',
       permissions: ['get']
@@ -34,6 +61,9 @@ exports.invokeRolesPolicies = function () {
     roles: ['guest'],
     allows: [{
       resources: '/api/projects',
+      permissions: ['get']
+    }, {
+      resources: '/api/projects/members/:projectId',
       permissions: ['get']
     }, {
       resources: '/api/projects/:projectId',

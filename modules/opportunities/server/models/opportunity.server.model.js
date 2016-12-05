@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Module dependencies
+ * Module dependencies.
  */
 var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
@@ -11,21 +11,40 @@ var mongoose = require('mongoose'),
  */
 var OpportunitySchema = new Schema({
   code        : {type: String, default: ''},
-  title       : {type: String, default: '', required: 'Title cannot be blank'},
-  short       : {type: String, default: ''},
-  description : {type: String, default: ''},
-  website     : {type: String, default: ''},
-  program     : {type:'ObjectId', ref: 'Program', default: null }
-  project     : {type:'ObjectId', ref: 'Project', default: null }
-  created     : {type: Date, default: null},
-  createdBy   : {type: 'ObjectId', ref: 'User', default: null },
-  updated     : {type: Date, default: null },
-  updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
+  name: {
+    type: String,
+    default: '',
+    required: 'Please fill the opportunity name',
+    trim: true
+  },
+  description: {
+    type: String,
+    default: '',
+    required: 'Please complete the opportunity description',
+    trim: true
+  },
+  github: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  created: {
+    type: Date,
+    default: Date.now
+  },
+  project: {
+    type: Schema.ObjectId,
+    ref: 'Project'
+  },
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
   var _this = this;
-  var possible = (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+  var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 
   _this.findOne({
     code: possible

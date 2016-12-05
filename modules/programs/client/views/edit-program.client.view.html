@@ -1,8 +1,8 @@
 <section class="static-page">
 <div class="container" role="main">
 	<div class="row">
-		<h2 ng-show="vm.editing">Editing {{vm.program.title}}</h2>
-		<h2 ng-show="!vm.editing">New Program</h2>
+		<h2 ng-if="vm.editing">Editing {{vm.program.title}}</h2>
+		<h2 ng-if="!vm.editing">New Program</h2>
 	</div>
 	<div class="row">
 		<div class="pull-right">
@@ -10,13 +10,13 @@
 				<a class="list-group-item active" ng-click="vm.saveme()" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a ng-show="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-show="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
+				<a ng-if="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-show="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
@@ -61,13 +61,13 @@
 				<a class="list-group-item active" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a ng-show="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
+				<a ng-if="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-show="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
+				<a ng-if="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-show="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>

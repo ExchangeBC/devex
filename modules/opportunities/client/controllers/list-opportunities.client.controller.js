@@ -9,3 +9,12 @@
 		vm.opportunities = OpportunitiesService.query();
 	}]);
 }());
+// (function () {
+//   'use strict';
+
+// 	angular.module('opportunities').controller('OpportunitiesListController', ['OpportunitiesService', 'Authentication', function (OpportunitiesService, Authentication) {
+// 		var vm = this;
+// 		vm.isAdmin  = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+// 		vm.opportunities = OpportunitiesService.query();
+// 	}]);
+// }());

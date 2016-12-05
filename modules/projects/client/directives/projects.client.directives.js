@@ -10,12 +10,22 @@
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',
-			scope        : {},
+			scope        : {
+				program: '='
+			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
 			controller   : function ($scope, ProjectsService, Authentication) {
 				var vm = this;
-				console.log ('inside directive', Authentication);
-				vm.projects = ProjectsService.query ();
+				console.log ('inside directive, program = ', $scope.program);
+				if ($scope.program) {
+					vm.programId = $scope.program._id;
+					vm.projects = ProjectsService.forProgram ({
+						programId: $scope.program._id
+					});
+				} else {
+					vm.programId = null;
+					vm.projects = ProjectsService.query ();
+				}
 			}
 		}
 	})

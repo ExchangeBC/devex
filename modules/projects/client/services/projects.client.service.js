@@ -15,6 +15,11 @@
       update: {
         method: 'PUT'
       },
+      forProgram: {
+        method: 'GET',
+        url: '/api/projects/for/program/:programId',
+        isArray: true
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/project/:projectId'
@@ -56,9 +61,9 @@
 
     function createOrUpdate(project) {
       if (project._id) {
-        return project.update(onSuccess, onError);
+        return project.$update(onSuccess, onError);
       } else {
-        return project.save(onSuccess, onError);
+        return project.$save(onSuccess, onError);
       }
 
       // Handle successful response

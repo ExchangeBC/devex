@@ -13,7 +13,7 @@
 						<p class="card-subtitle"><small><em class="text-muted">Member Since: {{member.created | date:'mediumDate'}}</em></small></p>
 					</div>
 				</div>
-				<div class="col-xs-4" ng-show="vm.program.userIs.admin">
+				<div class="col-xs-4" ng-if="vm.program.userIs.admin">
 					<a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username)" title="Delete">
 						<i class="glyphicon glyphicon-remove"></i> Delete
 					</a>

@@ -6,7 +6,7 @@
 	// directive for listing activities
 	//
 	// -------------------------------------------------------------------------
-	.directive ('projectList', function () {
+	.directive ('activityList', function () {
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',

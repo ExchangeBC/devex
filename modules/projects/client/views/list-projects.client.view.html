@@ -1,4 +1,15 @@
-<div class="container">
+<section class="list-page">
+<div class="container" role="main">
+	<div class="row">
+		<h1>Projects</h1>
+		<h3>All Projects listed on the BCDevExchange.</h3>
+	</div>
+	<div>
+		<project-list></project-list>
+	</div>
+</div>
+</section>
+<!-- <div class="container">
   <section>
 	<div class="list-group">
 		<div ng-repeat="project in vm.projects"
@@ -15,7 +26,7 @@
 		</div>
 		<div class="col-xs-4">
 		  <button ui-sref="projects.view({ projectId: project._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
-		  <span ng-show="project.user | exists:'currentUser'">
+		  <span ng-if="project.user | exists:'currentUser'">
 			<button ui-sref="projects.edit({ projectId: project._id })" type="button" class="btn btn-link pull-right">Edit &rarr;</button>
 		  </span>
 		</div>
@@ -25,4 +36,4 @@
       No Projects yet, why don't you <a ui-sref="projects.create">create one</a>?
     </div>
   </section>
-</div>
+</div> -->
