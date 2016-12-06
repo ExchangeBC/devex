@@ -165,11 +165,11 @@ GITHUB related stuff
   var github = require('octonode');
   var config = require('/config/config.js');
 
-  // curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
+  // curl -u "[github account]:[secret]" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
 
   var url = 'https://api.github.com/user/repos';
-  var user = config.github.clientID;  // 'dewolfe001';
-  var secret = config.github.clientSecret; // '39c1cffc1008ed43189ecd27448bd903a75778eb';
+  var user = config.github.clientID;  // tested with 'dewolfe001';
+  var secret = config.github.clientSecret; // tested  with '39c1cffc1008ed43189ecd27448bd903a75778eb' (since revoked);
 
   var client = github.client({
 	id: user,
@@ -429,4 +429,3 @@ exports.projectByID = function (req, res, next, id) {
     next();
   });
 };
-
