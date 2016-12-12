@@ -343,15 +343,15 @@ exports.request = function (req, res) {
 // -------------------------------------------------------------------------
 var assignMember = function (opportunity, user) {
   return new Promise (function (resolve, reject) {
-    unsetOpportunityRequest (req.opportunity, user);
-    setOpportunityMember (req.opportunity, user);
+    unsetOpportunityRequest (opportunity, user);
+    setOpportunityMember (opportunity, user);
     user.save ().then (resolve, reject);
   });
 };
 var unassignMember = function (opportunity, user) {
   return new Promise (function (resolve, reject) {
-    unsetOpportunityRequest (req.opportunity, user);
-    unsetOpportunityMember (req.opportunity, user);
+    unsetOpportunityRequest (opportunity, user);
+    unsetOpportunityMember (opportunity, user);
     user.save ().then (resolve, reject);
   });
 };
@@ -368,7 +368,7 @@ exports.confirmMember = function (req, res) {
   //
   .then (function (result) {
     assignedMember = result;
-    return mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec();
+    return mongoose.model ('User').find ({roles: requestRole(req.opportunity)}).exec();
   })
   //
   // make a promise array of those by running them through the
