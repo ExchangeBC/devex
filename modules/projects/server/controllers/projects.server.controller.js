@@ -274,6 +274,7 @@ exports.list = function (req, res) {
   Project.find().sort('name')
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
+  .populate('program', 'title')
   .exec(function (err, projects) {
     if (err) {
       return res.status(422).send({
@@ -417,6 +418,7 @@ exports.projectByID = function (req, res, next, id) {
   Project.findById(id)
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
+  .populate('program', 'title')
   .exec(function (err, project) {
     if (err) {
       return next(err);

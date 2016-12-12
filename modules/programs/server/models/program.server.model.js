@@ -17,6 +17,7 @@ var ProgramSchema = new Schema({
   owner       : {type: String, default: ''},
   website     : {type: String, default: ''},
   logo        : {type: String, default: ''},
+  tags        : [String],
   created     : {type: Date, default: null},
   createdBy   : {type: 'ObjectId', ref: 'User', default: null },
   updated     : {type: Date, default: null },

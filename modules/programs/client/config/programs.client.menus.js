@@ -1,25 +1,33 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  angular
-    .module('programs')
-    .run(menuConfig);
+	angular.module('programs').run(['menuService', function (menuService) {
+		menuService.addMenuItem ('topbar', {
+			title: 'Programs',
+			state: 'programs.list',
+			roles: ['*']
+		});
+	}]);
 
-  menuConfig.$inject = ['menuService'];
+	// angular
+	// 	.module('programs')
+	// 	.run(menuConfig);
 
-  function menuConfig(menuService) {
-    menuService.addMenuItem('topbar', {
-      title: 'Programs',
-      state: 'programs',
-      type: 'dropdown',
-      roles: ['*']
-    });
+	// menuConfig.$inject = ['menuService'];
 
-    // Add the dropdown list item
-    menuService.addSubMenuItem('topbar', 'programs', {
-      title: 'List Programs',
-      state: 'programs.list',
-      roles: ['*']
-    });
-  }
+	// function menuConfig(menuService) {
+	// 	menuService.addMenuItem('topbar', {
+	// 		title: 'Programs',
+	// 		state: 'programs',
+	// 		type: 'dropdown',
+	// 		roles: ['*']
+	// 	});
+
+	// 	// Add the dropdown list item
+	// 	menuService.addSubMenuItem('topbar', 'programs', {
+	// 		title: 'List Programs',
+	// 		state: 'programs.list',
+	// 		roles: ['*']
+	// 	});
+	// }
 }());

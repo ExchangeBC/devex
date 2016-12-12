@@ -2,117 +2,105 @@
 <div class="container" role="main">
 
 	<div class="row">
-		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a ng-if="!vm.programId" class="list-group-item active" ui-sref="projects.list" title="Cancel">
+		<h2>Project: {{vm.project.name}}</h2>
+		<p class="text-right">
+				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
 				</a>
-				<a ng-if="vm.programId" class="list-group-item active" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+				&nbsp;
+				<a ng-if="vm.programId" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
 				</a>
-				<a ng-if="vm.project.userIs.admin" class="list-group-item" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+				&nbsp;
+				<a ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
 					<i class="glyphicon glyphicon-pencil"></i> Edit
 				</a>
-				<a ng-if="vm.showMember" class="list-group-item" ng-click="vm.request()" title="Request">
+				&nbsp;
+				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
 					<i class="glyphicon glyphicon-user"></i> Request Membership
 				</a>
-			</div>
-		</div>
+		</p>
 	</div>
-	<div class="row">
-		<div>
-			<h2 ng-bind="vm.project.name"></h2>
-			<h4>Summary</h4>
-			<p ng-bind="vm.project.short"></p>
-			<h4>Description</h4>
-			<p ng-bind="vm.project.description"></p>
-		</div>
-	</div>
-	<div class="row">
-		<small>
-			<em class="text-muted">
-				Created on
-				<span ng-bind="vm.project.created | date:'mediumDate'"></span>
-				by
-				<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
-				<span ng-if="!vm.project.createdBy">Deleted User</span>
-			</em>
-			<br/>
-			<em class="text-muted">
-				Updated on
-				<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
-				by
-				<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
-				<span ng-if="!vm.project.updatedBy">Deleted User</span>
-			</em>
-		</small>
-	</div>
-	<div class="row">
-		<p class="lead" ng-bind="vm.project.content"></p>
-	</div>
-	<project-member-list project="vm.project"></project-member-list>
-	<project-member-requests project="vm.project" ng-if="vm.project.userIs.admin"></project-member-requests>
 
-	<div>
-		<a ng-if="vm.project.userIs.admin" class="list-group-item active pull-right" ui-sref="opportunityadmin.create" title="New">
-			<i class="glyphicon glyphicon-plus"></i> Add New Opportunity
-		</a>
-	</div>
 	<div class="row">
-		<h1>Opportunities</h1>
-		<h3>Opportunities for this Project</h3>
-	</div>
-	<div>
-		<opportunity-list project="vm.project"></opportunity-list>
-	</div>
-	<div class="row">
-		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a ng-if="!vm.programId" class="list-group-item active" ui-sref="projects.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				<a ng-if="vm.programId" class="list-group-item active" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				<a ng-if="vm.project.userIs.admin" class="list-group-item" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-					<i class="glyphicon glyphicon-pencil"></i> Edit
-				</a>
-				<a ng-if="vm.showMember" class="list-group-item" ng-click="vm.request()" title="Request">
-					<i class="glyphicon glyphicon-user"></i> Request Membership
-				</a>
+		<div class="panel panel-default">
+		<div class="panel-body">
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-xs-3">Program</div>
+				<div class="col-xs-8">
+				<a ui-sref="programs.view({programId:vm.project.program._id})">{{vm.project.program.title}}</a>
+				</div>
 			</div>
 		</div>
+		<div class="col-sm-6">
+			<div class="row">
+				<div class="col-xs-3">Tags</div>
+				<div class="col-xs-8">
+				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-6">
+			<small>
+				<em class="text-muted">
+					Created on
+					<span ng-bind="vm.project.created | date:'mediumDate'"></span>
+					by
+					<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
+					<span ng-if="!vm.project.createdBy">Deleted User</span>
+				</em>
+			</small>
+			<br/>
+ 			<small>
+				<em class="text-muted">
+					Updated on
+					<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
+					by
+					<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
+					<span ng-if="!vm.project.updatedBy">Deleted User</span>
+				</em>
+			</small>
+		</div>
+		</div>
+		</div>
+	</div>
+	<div class="row">
+			<div class="panel panel-default">
+			<div class="panel-body">
+				<h4>Summary</h4>
+				<p ng-bind="vm.project.short"></p></div>
+			</div>
+			<div class="panel panel-default">
+			<div class="panel-body">
+				<h4>Description</h4>
+				<p ng-bind="vm.project.description"></p></div>
+			</div>
+	</div>
+
+ 	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-list>
+	<core-member-requests model="vm.project" idstring="vm.idString" service="vm.ProjectsService" ng-if="vm.project.userIs.admin"></core-member-requests>
+	<opportunity-list project="vm.project"></opportunity-list>
+
+	<div class="row">
+		<h2 ng-bind="vm.program.title"></h2>
+		<p class="text-right">
+				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Back
+				</a>
+				&nbsp;
+				<a ng-if="vm.programId" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Back
+				</a>
+				&nbsp;
+				<a ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+					<i class="glyphicon glyphicon-pencil"></i> Edit
+				</a>
+				&nbsp;
+				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+					<i class="glyphicon glyphicon-user"></i> Request Membership
+				</a>
+		</p>
 	</div>
 </div>
 </section>
-<!-- <section>
-	<div class="container">
-	  <div class="col-xs-12">
-		<h1 ng-bind="vm.project.name"></h1>
-		<span class="project-description" ng-bind="vm.project.description"></span>
-		<span class="project-link">Project: <a href="/projects/{{vm.project.project._id}}" class="">{{vm.project.project.name}}</a></span>
-		<span class="project-link">Project Github address: <a href="{{vm.project.github}}" class="">{{vm.project.github}}</a></span>
-	  </div>
-	  <div class="pull-right"
-		   ng-if="vm.project.isCurrentUserOwner">
-		<a class="btn btn-primary"
-		   ui-sref="projects.edit({ projectId: vm.project._id })">
-		  <i class="glyphicon glyphicon-edit"></i>
-		</a>
-		<a class="btn btn-primary" ng-click="vm.remove()">
-		  <i class="glyphicon glyphicon-trash"></i>
-		</a>
-	  </div>
-	  <small>
-		<em class="text-muted">
-		  Posted on
-		  <span ng-bind="vm.project.created | date:'mediumDate'"></span>
-		  by
-		  <span ng-if="vm.project.user"
-				ng-bind="vm.project.user.displayName"></span>
-		  <span ng-if="!vm.project.user">Deleted User</span>
-		</em>
-	  </small>
-	  <p class="lead" ng-bind="vm.project.content"></p>
-	</div>
-</section> -->

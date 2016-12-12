@@ -39,7 +39,8 @@ var ProjectSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  tags: [String]
 });
 
 ProjectSchema.statics.findUniqueCode = function (title, suffix, callback) {

@@ -274,6 +274,8 @@ exports.list = function (req, res) {
   Opportunity.find().sort('name')
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
+  .populate('project', 'name _id')
+  .populate('program', 'title _id')
   .exec(function (err, opportunities) {
     if (err) {
       return res.status(422).send({
@@ -335,37 +337,74 @@ exports.request = function (req, res) {
 //
 // deal with members
 //
+// in the context of opportunities, confirming a member is assigning them
+// to the opportunity. so, all others are rejected upon this action
+//
 // -------------------------------------------------------------------------
+var assignMember = function (opportunity, user) {
+  return new Promise (function (resolve, reject) {
+    unsetOpportunityRequest (req.opportunity, user);
+    setOpportunityMember (req.opportunity, user);
+    user.save ().then (resolve, reject);
+  });
+};
+var unassignMember = function (opportunity, user) {
+  return new Promise (function (resolve, reject) {
+    unsetOpportunityRequest (req.opportunity, user);
+    unsetOpportunityMember (req.opportunity, user);
+    user.save ().then (resolve, reject);
+  });
+};
 exports.confirmMember = function (req, res) {
   var user = req.model;
   console.log ('++++ confirm member ', user.username, user._id);
-  unsetOpportunityRequest (req.opportunity, user);
-  setOpportunityMember (req.opportunity, user);
-  user.save (function (err, result) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      console.log ('---- member roles ', result.roles);
-      res.json (result);
-    }
+  var assignedMember;
+  //
+  // assign the member
+  //
+  assignMember (req.opportunity, user)
+  //
+  // get the list of remaining applicants
+  //
+  .then (function (result) {
+    assignedMember = result;
+    return mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec();
+  })
+  //
+  // make a promise array of those by running them through the
+  // unassign method
+  //
+  .then (function (list) {
+    return Promise.all (list.map (function (member) {
+      return unassignMember (req.opportunity, member);
+    }));
+  })
+  //
+  // all OK, return the assigned user
+  //
+  .then (function () {
+    res.json (assignedMember);
+  })
+  //
+  // not going very well, figure out the error
+  //
+  .catch (function (err) {
+    res.status (422).send ({
+      message: errorHandler.getErrorMessage (err)
+    });
   });
 };
 exports.denyMember = function (req, res) {
   var user = req.model;
   console.log ('++++ deny member ', user.username, user._id);
-  unsetOpportunityRequest (req.opportunity, user);
-  unsetOpportunityMember (req.opportunity, user);
-  user.save (function (err, result) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      console.log ('---- member roles ', result.roles);
-      res.json (result);
-    }
+  unassignMember (req.opportunity, user)
+  .then (function (result) {
+    res.json (result);
+  })
+  .catch (function (err) {
+    res.status (422).send ({
+      message: errorHandler.getErrorMessage (err)
+    });
   });
 };
 
@@ -417,6 +456,8 @@ exports.opportunityByID = function (req, res, next, id) {
   Opportunity.findById(id)
   .populate('createdBy', 'displayName')
   .populate('updatedBy', 'displayName')
+  .populate('project', 'name _id')
+  .populate('program', 'title _id')
   .exec(function (err, opportunity) {
     if (err) {
       return next(err);

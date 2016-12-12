@@ -3,21 +3,33 @@
 	angular.module('programs')
 	// =========================================================================
 	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller('ProgramsListController', function (ProgramsService) {
+		var vm      = this;
+		vm.programs = ProgramsService.query();
+	})
+	// =========================================================================
+	//
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($scope, $state, program, Authentication, ProgramsService) {
-		var vm            = this;
-		vm.program        = program;
-		vm.authentication = Authentication;
-		vm.showMember     = program.userIs.gov && !program.userIs.member && !program.userIs.request;
-		vm.request = function () {
+	.controller('ProgramViewController', function ($scope, $state, program, Authentication, ProgramsService, Notification) {
+		var vm             = this;
+		vm.program         = program;
+		vm.authentication  = Authentication;
+		vm.ProgramsService = ProgramsService;
+		vm.idString        = 'programId';
+		vm.showMember      = Authentication.user && program.userIs.gov && !program.userIs.member && !program.userIs.request;
+		vm.request         = function () {
 			ProgramsService.makeRequest({
 				programId: program._id
 			}).$promise.then (function () {
-				console.log ('Oh yeah, all done');
-			})
+				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+			});
 		};
+		console.log ('program = ', program);
 	})
 	// =========================================================================
 	//
@@ -30,6 +42,7 @@
 		vm.program        = program;
 		vm.authentication = Authentication;
 		vm.form           = {};
+		vm.program.taglist = vm.program.tags? vm.program.tags.join (', ') : '';
 		// -------------------------------------------------------------------------
 		//
 		// remove the program with some confirmation
@@ -57,6 +70,7 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
 				return false;
 			}
+			vm.program.tags = vm.program.taglist.split(/ *, */);
 			//
 			// Create a new program, or update the current instance
 			//
