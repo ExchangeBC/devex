@@ -1,39 +1,5 @@
 <section class="list-page">
 <div class="container" role="main">
-	<div class="row">
-		<h1>Projects</h1>
-		<h3>All Projects listed on the BCDevExchange.</h3>
-	</div>
-	<div>
-		<project-list></project-list>
-	</div>
+	<project-list></project-list>
 </div>
 </section>
-<!-- <div class="container">
-  <section>
-	<div class="list-group">
-		<div ng-repeat="project in vm.projects"
-		 class="list-group-item">
-		 <div class="col-xs-8">
-		<small class="list-group-item-text">
-		  Posted on
-		  <span ng-bind="project.created | date:'mediumDate'"></span>
-		  by
-		  <span ng-if="project.user" ng-bind="project.user.displayName"></span>
-		  <span ng-if="!project.user">Deleted User</span>
-		</small>
-		<h4 class="list-group-item-heading" ng-bind="project.name"></h4>
-		</div>
-		<div class="col-xs-4">
-		  <button ui-sref="projects.view({ projectId: project._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
-		  <span ng-if="project.user | exists:'currentUser'">
-			<button ui-sref="projects.edit({ projectId: project._id })" type="button" class="btn btn-link pull-right">Edit &rarr;</button>
-		  </span>
-		</div>
-		</div>
-	</div>
-    <div class="alert alert-warning text-center" ng-if="vm.projects.$resolved && !vm.projects.length">
-      No Projects yet, why don't you <a ui-sref="projects.create">create one</a>?
-    </div>
-  </section>
-</div> -->

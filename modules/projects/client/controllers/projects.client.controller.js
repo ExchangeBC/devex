@@ -3,21 +3,32 @@
 	angular.module('projects')
 	// =========================================================================
 	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller('ProjectsListController', function (ProjectsService) {
+		var vm      = this;
+		vm.projects = ProjectsService.query();
+	})
+	// =========================================================================
+	//
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectViewController', function ($scope, $state, $stateParams, project, Authentication, ProjectsService) {
-		var vm            = this;
-		vm.programId      = $stateParams.programId;
-		vm.project        = project;
-		vm.authentication = Authentication;
-		vm.showMember     = project.userIs.gov && !project.userIs.member && !project.userIs.request;
-		vm.request = function () {
+	.controller('ProjectViewController', function ($scope, $state, $stateParams, project, Authentication, ProjectsService, Notification) {
+		var vm             = this;
+		vm.programId       = $stateParams.programId;
+		vm.project         = project;
+		vm.authentication  = Authentication;
+		vm.ProjectsService = ProjectsService;
+		vm.idString        = 'projectId';
+		vm.showMember      = Authentication.user && project.userIs.gov && !project.userIs.member && !project.userIs.request;
+		vm.request         = function () {
 			ProjectsService.makeRequest({
 				projectId: project._id
 			}).$promise.then (function () {
-				console.log ('Oh yeah, all done');
-			})
+				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+			});
 		};
 	})
 	// =========================================================================
@@ -35,6 +46,7 @@
 		}
 		vm.authentication = Authentication;
 		vm.form           = {};
+		vm.project.taglist = vm.project.tags? vm.project.tags.join (', ') : '';
 		// -------------------------------------------------------------------------
 		//
 		// remove the project with some confirmation
@@ -62,6 +74,7 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
 				return false;
 			}
+			vm.project.tags = vm.project.taglist.split(/ *, */);
 			//
 			// Create a new project, or update the current instance
 			//

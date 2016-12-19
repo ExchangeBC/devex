@@ -1,7 +1,21 @@
+<div class="panel panel-info">
+<div class="panel-heading">
+	<h2 class="panel-title">{{vm.title}}</h2>
+</div>
+<div class="panel-body">
+	<p class="text-right" ng-if="vm.userCanAdd" >
+	<a ui-sref="opportunityadmin.create({project:vm.project._id})" title="New">
+		<i class="glyphicon glyphicon-plus"></i> Add New Opportunity
+	</a>
+	</p>
 <div class="list-group">
 	<ul>
 		<li ng-repeat="opportunity in vm.opportunities">
 			<h2><a ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-bind="opportunity.name"></a></h2>
+			<p ng-if="!vm.project">
+				<b>Project : </b><a ui-sref="projects.view({projectId:opportunity.project._id})">{{opportunity.project.name}}</a><br/>
+				<b>Program : </b><a ui-sref="programs.view({programId:opportunity.program._id})">{{opportunity.program.title}}</a>
+			</p>
 			<p ng-bind="opportunity.short"></p>
 			<div class="row">
 				<div class="col-xs-6">
@@ -14,4 +28,6 @@
 			</a>
 		</li>
 	</ul>
+</div>
+</div>
 </div>

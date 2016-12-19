@@ -1,32 +1,40 @@
 (function () {
-  'use strict';
+	'use strict';
 
-  angular
-    .module('projects')
-    .run(menuConfig);
+	angular.module('programs').run(['menuService', function (menuService) {
+		menuService.addMenuItem ('topbar', {
+			title: 'Projects',
+			state: 'projects.list',
+			roles: ['*']
+		});
+	}]);
 
-  menuConfig.$inject = ['menuService'];
+	// angular
+	// 	.module('projects')
+	// 	.run(menuConfig);
 
-  function menuConfig(menuService) {
-    // Set top bar menu items
-    menuService.addMenuItem('topbar', {
-      title: 'Projects',
-      state: 'projects',
-      type: 'dropdown',
-      roles: ['*']
-    });
+	// menuConfig.$inject = ['menuService'];
 
-    // Add the dropdown list item
-    menuService.addSubMenuItem('topbar', 'projects', {
-      title: 'List Projects',
-      state: 'projects.list'
-    });
+	// function menuConfig(menuService) {
+	// 	// Set top bar menu items
+	// 	menuService.addMenuItem('topbar', {
+	// 		title: 'Projects',
+	// 		state: 'projects',
+	// 		type: 'dropdown',
+	// 		roles: ['*']
+	// 	});
 
-    // Add the dropdown create item
-    menuService.addSubMenuItem('topbar', 'projects', {
-      title: 'Create Project',
-      state: 'projects.create',
-      roles: ['user']
-    });
-  }
+	// 	// Add the dropdown list item
+	// 	menuService.addSubMenuItem('topbar', 'projects', {
+	// 		title: 'List Projects',
+	// 		state: 'projects.list'
+	// 	});
+
+	// 	// Add the dropdown create item
+	// 	menuService.addSubMenuItem('topbar', 'projects', {
+	// 		title: 'Create Project',
+	// 		state: 'projects.create',
+	// 		roles: ['user']
+	// 	});
+	// }
 }());

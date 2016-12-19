@@ -1,5 +1,8 @@
-<div class="row">
-<h3>Member Requests</h3>
+<div class="panel panel-info" ng-if="vm.members.length > 0">
+<div class="panel-heading">
+	<h2 class="panel-title">{{vm.title}}</h2>
+</div>
+<div class="panel-body">
 	<div class="col-sm-6" ng-repeat="column in vm.columns">
 		<div class="card card-block" ng-repeat="member in vm.members | slice:column.start:column.end">
 			<div class="row">
@@ -13,7 +16,7 @@
 						<p class="card-subtitle"><small><em class="text-muted">Member Since: {{member.created | date:'mediumDate'}}</em></small></p>
 					</div>
 				</div>
-				<div class="col-xs-4" ng-if="vm.program.userIs.admin">
+				<div class="col-xs-4" ng-if="vm.model.userIs.admin">
 					<a href="javascript:void(0);" ng-click="vm.confirm(member._id, member.username)" title="Confirm">
 						<i class="glyphicon glyphicon-ok"></i> Confirm
 					</a><br/>
@@ -24,4 +27,5 @@
 			</div>
 		</div>
 	</div>
+</div>
 </div>

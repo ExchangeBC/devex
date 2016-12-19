@@ -1,11 +1,24 @@
+<div class="panel panel-info">
+<div class="panel-heading">
+	<h2 class="panel-title">{{vm.title}}</h2>
+</div>
+<div class="panel-body">
+	<p class="text-right" ng-if="vm.userCanAdd" >
+	<a ui-sref="projectadmin.create({program:vm.program._id})" title="New">
+		<i class="glyphicon glyphicon-plus"></i> Add New Project
+	</a>
+	</p>
 <div class="list-group">
 	<ul>
 		<li ng-repeat="project in vm.projects">
 			<h2><a ui-sref="projects.view({ projectId: project._id, programId: vm.programId })" ng-bind="project.name"></a></h2>
+			<p ng-if="!vm.program">
+				<b>Program : </b><a ui-sref="programs.view({programId:project.program._id})">{{project.program.title}}</a>
+			</p>
 			<p ng-bind="project.short"></p>
 			<div class="row">
 				<div class="col-xs-6">
-					<span class="label label-info">code</span>
+					<span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>
 				</div>
 				<div class="col-xs-6">
 					<button ui-sref="projects.view({ projectId: project._id, programId: vm.programId })" type="button" class="btn btn-link pull-right">View &rarr;</button>
@@ -14,4 +27,6 @@
 			</a>
 		</li>
 	</ul>
+</div>
+</div>
 </div>

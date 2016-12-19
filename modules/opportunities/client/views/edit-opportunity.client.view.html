@@ -5,25 +5,25 @@
 		<h2 ng-if="!vm.editing">New Opportunity</h2>
 	</div>
 	<div class="row">
-		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a class="list-group-item active" ng-click="vm.saveme()" title="Save">
+			<p class="text-right">
+				<a href="javascript:void(0);" ng-click="vm.saveme()" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
+				&nbsp;
 				</a>
-				<a ng-if="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
+				<a ng-if="vm.editing" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && !vm.projectId" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.editing && !vm.projectId" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && vm.projectId" class="list-group-item" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+				<a ng-if="!vm.editing && vm.projectId" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+				&nbsp;
+				<a href="javascript:void(0);" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
-			</div>
-		</div>
+			</p>
 	</div>
 	<div class="row">
 		<form id="opportunityform" name="vm.form.opportunityForm" class="form-horizontal" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
@@ -47,29 +47,41 @@
 					<label class="control-label" for="github">Github</label>
 					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
 				</div>
+				<div class="form-group">
+					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
+					<input type="text" name="taglist" ng-model="vm.opportunity.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="skilllist">Skills (comma delimited list)</label>
+					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="earn">Earn</label>
+					<input type="text" name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" placeholder="Earn"></input>
+				</div>
 			</fieldset>
 		</form>
 	</div>
 	<div class="row">
-		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a class="list-group-item active" ng-click="vm.saveme(vm.form.opportunityForm.$valid)" title="Save">
+			<p class="text-right">
+				<a href="javascript:void(0);" ng-click="vm.saveme()" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
+				&nbsp;
 				</a>
-				<a ng-if="vm.editing" class="list-group-item" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
+				<a ng-if="vm.editing" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && !vm.projectId" class="list-group-item" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.editing && !vm.projectId" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && vm.projectId" class="list-group-item" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+				<a ng-if="!vm.editing && vm.projectId" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+				&nbsp;
+				<a href="javascript:void(0);" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
-			</div>
-		</div>
+			</p>
 	</div>
 	<div><p>&nbsp;</p></div>
 </div>
