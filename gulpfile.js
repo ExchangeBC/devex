@@ -87,20 +87,23 @@ gulp.task('watch', function () {
   // Start livereload
   plugins.refresh.listen();
 
-  // Add watch rules
-  gulp.watch(defaultAssets.server.views).on('change', plugins.refresh.changed);
-  gulp.watch(defaultAssets.server.allJS, ['eslint']).on('change', plugins.refresh.changed);
-  gulp.watch(defaultAssets.client.js, ['eslint']).on('change', plugins.refresh.changed);
-  gulp.watch(defaultAssets.client.css, ['csslint']).on('change', plugins.refresh.changed);
-  gulp.watch(defaultAssets.client.sass, ['sass', 'csslint']).on('change', plugins.refresh.changed);
-  gulp.watch(defaultAssets.client.less, ['less', 'csslint']).on('change', plugins.refresh.changed);
+  if(! process.env.DISABLE_WATCH) {
+    // Add watch rules
+    gulp.watch(defaultAssets.server.views).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.server.allJS, ['eslint']).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.client.js, ['eslint']).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.client.css, ['csslint']).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.client.sass, ['sass', 'csslint']).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.client.less, ['less', 'csslint']).on('change', plugins.refresh.changed);
+    gulp.watch(defaultAssets.client.theme.less, ['themecss', 'csslint']);
 
-  if (process.env.NODE_ENV === 'production') {
-    gulp.watch(defaultAssets.server.gulpConfig, ['templatecache', 'eslint']);
-    gulp.watch(defaultAssets.client.views, ['templatecache']).on('change', plugins.refresh.changed);
-  } else {
-    gulp.watch(defaultAssets.server.gulpConfig, ['eslint']);
-    gulp.watch(defaultAssets.client.views).on('change', plugins.refresh.changed);
+    if (process.env.NODE_ENV === 'production') {
+      gulp.watch(defaultAssets.server.gulpConfig, ['templatecache', 'eslint']);
+      gulp.watch(defaultAssets.client.views, ['templatecache']).on('change', plugins.refresh.changed);
+    } else {
+      gulp.watch(defaultAssets.server.gulpConfig, ['eslint']);
+      gulp.watch(defaultAssets.client.views).on('change', plugins.refresh.changed);
+    }
   }
 });
 
