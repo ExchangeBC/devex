@@ -40,8 +40,8 @@ The node_modules directory does NOT exist in the repo and should not be added in
 Production Mode:
 In Production:
 ```bash
-MONGO_SEED=true npm start:prod
-npm start:prod
+MONGO_SEED=true npm run start:prod
+npm run start:prod
 ```
 Tests:
 
