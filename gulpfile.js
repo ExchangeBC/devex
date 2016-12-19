@@ -138,6 +138,15 @@ gulp.task('csslint', function () {
     // .pipe(plugins.csslint.failFormatter());
 });
 
+// Compile theme CSS
+gulp.task('themecss', function() {
+  return gulp.src(defaultAssets.client.theme.less)
+    .pipe(plugins.less())
+    .pipe(plugins.autoprefixer())
+    .pipe(plugins.concat('theme.css'))
+    .pipe(gulp.dest('public/dist'));
+});
+
 // ESLint JS linting task
 gulp.task('eslint', function () {
   var assets = _.union(
@@ -160,7 +169,7 @@ gulp.task('uglify', function () {
     defaultAssets.client.js,
     defaultAssets.client.templates
   );
-  del(['public/dist/*']);
+  del(['public/dist/*.js']);
 
   return gulp.src(assets)
     .pipe(plugins.ngAnnotate())
@@ -174,6 +183,8 @@ gulp.task('uglify', function () {
 
 // CSS minifying task
 gulp.task('cssmin', function () {
+  del(['public/dist/application*.css']);
+
   return gulp.src(defaultAssets.client.css)
     .pipe(plugins.csso())
     .pipe(plugins.concat('application.min.css'))
@@ -422,7 +433,7 @@ gulp.task('protractor', ['webdriver_update'], function () {
 
 // Lint CSS and JavaScript files.
 gulp.task('lint', function (done) {
-  runSequence('less', 'sass', ['csslint', 'eslint'], done);
+  runSequence('less', 'sass', 'themecss', ['csslint', 'eslint'], done);
 });
 
 // Lint project files and minify them into two production files.

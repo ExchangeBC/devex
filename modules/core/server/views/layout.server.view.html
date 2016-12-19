@@ -32,18 +32,19 @@
 
   <!-- Application CSS Files -->
   {{#each cssFiles}}<link rel="stylesheet" href="/{{this}}">{{/each}}
+
+  <!-- Custom Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
 </head>
 
-<body class="ng-cloak" id="page-top">
+<body class="ng-cloak" id="page-top" >
 
   <div ng-include="'/modules/core/client/views/header.client.view.html'"></div>
 
- <!--  <div class="content">
-    <div class="container">
- -->      {{{block "content"}}}
-<!--     </div>
-  </div>
- -->
+  {{{block "content"}}}
+
   <footer class="footer-distributed" ng-include="'/modules/core/client/views/footer.client.view.html'"></footer>
 
   <noscript>

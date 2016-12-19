@@ -36,8 +36,14 @@ module.exports = {
     },
     css: [
       'modules/*/client/css/*.css',
-      'public/css/*.css'
+      'public/css/*.css',
+      'public/dist/theme.css'
     ],
+    theme: {
+    	less: [
+    		'public/less/bc-devx.less',
+    	]
+    },
     less: [
       'modules/*/client/less/*.less'
     ],
