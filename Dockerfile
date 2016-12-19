@@ -44,6 +44,10 @@ RUN apt-get update -q  \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install dumb-init
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64.deb
+RUN dpkg -i dumb-init_*.deb
+
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 RUN sudo apt-get install -yq nodejs \
@@ -53,7 +57,7 @@ RUN sudo apt-get install -yq nodejs \
 COPY phantom /opt/mean.js/node_modules
 
 # Install MEAN.JS Prerequisites
-RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 && npm cache clean
+RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 gulp-if && npm cache clean
 
 
 RUN mkdir -p /opt/mean.js/public/lib
@@ -75,4 +79,5 @@ RUN bower install --quiet --allow-root --config.interactive=false
 COPY . /opt/mean.js
 
 # Run MEAN.JS server
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["npm", "start"]
