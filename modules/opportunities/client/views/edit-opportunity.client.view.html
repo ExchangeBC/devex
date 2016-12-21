@@ -29,7 +29,7 @@
 		<form id="opportunityform" name="vm.form.opportunityForm" class="form-horizontal" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 			<fieldset>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="title">Name</label>
+					<label class="control-label" for="title">Title</label>
 					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Name" required>
 					<div ng-messages="vm.form.opportunityForm.name.$error" role="alert">
 						<p class="help-block error-text" ng-message="required">Opportunity name is required.</p>
