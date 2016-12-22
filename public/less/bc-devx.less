@@ -1,6 +1,3 @@
-@import "variables.less";
-@import "mixins.less";
-
 // Global Components
 html,
 body {
@@ -304,7 +301,7 @@ header {
 
 section {
   padding: 20px 0;
-  .btn {
+  .btn-solo {
     margin-right: 23px;
   }
   @media (min-width: 768px) {
@@ -318,8 +315,8 @@ section.intro {
   min-height: auto;
   overflow-y: hidden;
   background: rgb(0,181,230); /* fallback for old browsers */
-  background: url("/modules/core/client/img/theme/inspiration-geometry.png"), -webkit-linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* Chrome 10-25, Safari 5.1-6 */
-  background: url("/modules/core/client/img/theme/inspiration-geometry.png"), linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: @header-bg, -webkit-linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* Chrome 10-25, Safari 5.1-6 */
+  background: @header-bg, linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   color: white;
   // padding-bottom: 160px !important;
   h1 {
@@ -342,8 +339,8 @@ section.intro {
 }
 
 section.audience {
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 0;
+  padding-bottom: 0;
   p {
     font-size: 16px;
     line-height: 1.75em;
@@ -596,14 +593,12 @@ section.partners {
   white-space: nowrap;
   display: inline-block;
   height: 40px;
-  line-height: 40px;
+  line-height: 38px;
   padding: 0 14px;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
   background: white;
   border-radius: 3px;
-  border: none;
   font-size: 14px;
-  text-transform: uppercase;
   letter-spacing: .025em;
   color: white;
   text-decoration: none;
@@ -696,6 +691,12 @@ section.partners {
 
 .btn-link {
   color: rgb(0,164,227);
+}
+
+.col-form-buttons {
+  @media (min-width: 768px) {
+    margin-top: 20px;
+  }
 }
 
 // Labels
@@ -805,7 +806,6 @@ section.partners {
 }
 
 // Cards
-@import 'public/lib/bootstrap/less/variables.less';
 .card {
   position: relative;
   margin-bottom: @line-height-computed;

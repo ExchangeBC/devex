@@ -7,8 +7,6 @@ module.exports = {
     lib: {
       css: [
         // bower:css
-        'public/lib/bootstrap/dist/css/bootstrap.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.css',
         'public/lib/ng-img-crop/compile/unminified/ng-img-crop.css',
         'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
         'public/lib/font-awesome/css/font-awesome.min.css',
@@ -34,16 +32,18 @@ module.exports = {
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']
     },
-    css: [
-      'modules/*/client/css/*.css',
-      'public/css/*.css',
-      'public/dist/theme.css'
-    ],
     theme: {
-    	less: [
-    		'public/less/bc-devx.less',
-    	]
+    	less: {
+    		// includes bootstrap
+    		entry: 'public/less/theme.less',
+    		watch: ['public/less/*.less']
+    	}
     },
+    css: [
+      'public/dist/theme.css',
+      'public/css/*.css',
+      'modules/*/client/css/*.css'
+    ],
     less: [
       'modules/*/client/less/*.less'
     ],

@@ -22,9 +22,12 @@
   "overrides": {
     "bootstrap": {
       "main": [
-        "dist/css/bootstrap.css",
-        "dist/css/bootstrap-theme.css",
         "less/bootstrap.less"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.min.css"
       ]
     },
     "jquery": {

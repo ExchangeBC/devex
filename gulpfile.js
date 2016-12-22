@@ -87,7 +87,7 @@ gulp.task('watch', function () {
   // Start livereload
   plugins.refresh.listen();
 
-  if(! process.env.DISABLE_WATCH) {
+  if (! process.env.DISABLE_WATCH) {
     // Add watch rules
     gulp.watch(defaultAssets.server.views).on('change', plugins.refresh.changed);
     gulp.watch(defaultAssets.server.allJS, ['eslint']).on('change', plugins.refresh.changed);
@@ -95,7 +95,7 @@ gulp.task('watch', function () {
     gulp.watch(defaultAssets.client.css, ['csslint']).on('change', plugins.refresh.changed);
     gulp.watch(defaultAssets.client.sass, ['sass', 'csslint']).on('change', plugins.refresh.changed);
     gulp.watch(defaultAssets.client.less, ['less', 'csslint']).on('change', plugins.refresh.changed);
-    gulp.watch(defaultAssets.client.theme.less, ['themecss', 'csslint']);
+    gulp.watch(defaultAssets.client.theme.less.watch, ['themecss', 'csslint']);
 
     if (process.env.NODE_ENV === 'production') {
       gulp.watch(defaultAssets.server.gulpConfig, ['templatecache', 'eslint']);
@@ -143,7 +143,7 @@ gulp.task('csslint', function () {
 
 // Compile theme CSS
 gulp.task('themecss', function() {
-  return gulp.src(defaultAssets.client.theme.less)
+  return gulp.src(defaultAssets.client.theme.less.entry)
     .pipe(plugins.less())
     .pipe(plugins.autoprefixer())
     .pipe(plugins.concat('theme.css'))
@@ -482,5 +482,5 @@ gulp.task('debug', function (done) {
 
 // Run the project in production mode
 gulp.task('prod', function (done) {
-  runSequence(['copyLocalEnvConfig', 'makeUploadsDir', 'templatecache'], 'build', 'env:prod', 'lint', ['nodemon', 'watch'], done);
+  runSequence(['copyLocalEnvConfig', 'makeUploadsDir', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
 });

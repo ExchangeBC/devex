@@ -8,9 +8,8 @@ module.exports = {
       css: [
         // bower:css
         'public/lib/angular-ui-notification/dist/angular-ui-notification.min.css',
-        'public/lib/bootstrap/dist/css/bootstrap.min.css',
-        'public/lib/bootstrap/dist/css/bootstrap-theme.min.css',
         'public/lib/ng-img-crop/compile/minified/ng-img-crop.css',
+        'public/lib/font-awesome/css/font-awesome.min.css',
         'public/lib/simple-line-icons/css/simple-line-icons.css'
         // endbower
       ],
