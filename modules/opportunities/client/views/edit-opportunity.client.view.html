@@ -2,11 +2,11 @@
 <div class="container" role="main">
   <form id="opportunityform" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row">
-	  <div class="col-sm-7">
-  	  <h2 ng-if="vm.editing">Editing {{vm.opportunity.title}}</h2>
+	  <div class="col-md-7">
+  	  <h2 ng-if="vm.editing">Editing {{vm.opportunity.name}}</h2>
 	    <h2 ng-if="!vm.editing">New Opportunity</h2>
     </div>
-    <div class="col-sm-5 col-form-buttons">
+    <div class="col-md-5 col-form-buttons">
       <div class="pull-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
@@ -34,36 +34,56 @@
 	<div class="col-sm-12">
 			<fieldset>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="title">Title</label>
-					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Name" required>
+					<label class="control-label" for="title">Title</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity title" tooltip-placement="bottom"></i>
+					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Title" required>
 					<div ng-messages="vm.form.opportunityForm.name.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">Opportunity name is required.</p>
+						<p class="help-block error-text" ng-message="required">Opportunity title is required.</p>
 					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="short">Short Description</label>
+					<label class="control-label" for="short">Short Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity short description" tooltip-placement="bottom"></i>
 					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the opportunity"></textarea>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="description">Description</label>
+					<label class="control-label" for="description">Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity full description" tooltip-placement="bottom"></i>
 					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="github">Github</label>
+					<label class="control-label" for="description">Acceptance Criteria</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity acceptance criteria" tooltip-placement="bottom"></i>
+					<textarea name="description" data-ng-model="vm.opportunity.criteria" id="description" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="github">Github Repository</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Repository URL" tooltip-placement="bottom"></i>
 					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
+					<label class="control-label" for="taglist">Tags (comma delimited list)</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity tags" tooltip-placement="bottom"></i>
 					<input type="text" name="taglist" ng-model="vm.opportunity.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="skilllist">Skills (comma delimited list)</label>
-					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
+					<label class="control-label" for="earn">Reward</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Opportunity reward" tooltip-placement="bottom"></i>
+					<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" ng-options="(v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000] track by v">
+					  <option value="">Select reward amount</option>
+					</select>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="earn">Earn</label>
-					<input type="text" name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" placeholder="Earn"></input>
-				</div>
+					<label class="control-label" for="taglist">Proposal Deadline</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline" tooltip-placement="bottom"></i>
+          <div class="input-group">
+            <input type="text" class="form-control" name="deadline" id="deadline" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline" is-open="vm.showdate" ng-required="true" close-text="Close" placeholder="Date"/>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </div>
+        </div>
+				<div class="form-group">
+					<label class="control-label" for="taglist">Proposal Time</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline time" tooltip-placement="bottom"></i>
+          <div class="input-group">
+            <input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" ng-required="true" placeholder="Time" />
+            <span class="input-group-addon">
+              PST
+            </span>
+          </div>
+        </div>
 			</fieldset>
   </div>
 	</div>
