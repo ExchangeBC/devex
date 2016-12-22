@@ -1,8 +1,10 @@
 <section class="static-page">
 <div class="container" role="main">
-
-	<div class="row">
+	<div class="row form-head">
+  <div class="col-sm-7">
 		<h2 ng-bind="vm.program.title"></h2>
+	</div>
+	<div class="col-sm-5 col-text-buttons">
 		<p class="text-right">
 				<a ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
@@ -17,7 +19,8 @@
 				</a>
 		</p>
 	</div>
-	<div class="row">
+	</div>
+
 		<div class="panel panel-default">
 		<div class="panel-body">
 			<div class="row">
@@ -59,20 +62,19 @@
 			</div>
 		</div>
 		</div>
-	</div>
-	<div class="row">
-			<div class="panel panel-default">
-			<div class="panel-body">
-				<h4>Description</h4>
-				<p ng-bind="vm.program.description"></p></div>
-			</div>
-	</div>
+
+    <div class="panel panel-default">
+    <div class="panel-body">
+      <h4>Description</h4>
+      <p ng-bind="vm.program.description"></p></div>
+    </div>
 
  	<core-member-list     model="vm.program" idstring="vm.idString" service="vm.ProgramsService"></core-member-list>
 	<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.program.userIs.admin"></core-member-requests>
 	<project-list program="vm.program"></project-list>
 
 	<div class="row">
+	<div class="col-sm-12">
 		<p class="text-right">
 				<a ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
@@ -86,6 +88,7 @@
 					<i class="glyphicon glyphicon-user"></i> Request Membership
 				</a>
 		</p>
+	</div>
 	</div>
 </div>
 </section>

@@ -1,8 +1,10 @@
 <section class="static-page">
 <div class="container" role="main">
-
-	<div class="row">
+	<div class="row form-head">
+	<div class="col-sm-7">
 		<h2>Project: {{vm.project.name}}</h2>
+	</div>
+	<div class="col-sm-5 col-text-buttons">
 		<p class="text-right">
 				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
@@ -21,8 +23,8 @@
 				</a>
 		</p>
 	</div>
+	</div>
 
-	<div class="row">
 		<div class="panel panel-default">
 		<div class="panel-body">
 		<div class="col-sm-6">
@@ -64,26 +66,24 @@
 		</div>
 		</div>
 		</div>
-	</div>
-	<div class="row">
-			<div class="panel panel-default">
-			<div class="panel-body">
-				<h4>Summary</h4>
-				<p ng-bind="vm.project.short"></p></div>
-			</div>
-			<div class="panel panel-default">
-			<div class="panel-body">
-				<h4>Description</h4>
-				<p ng-bind="vm.project.description"></p></div>
-			</div>
-	</div>
+
+    <div class="panel panel-default">
+    <div class="panel-body">
+      <h4>Summary</h4>
+      <p ng-bind="vm.project.short"></p></div>
+    </div>
+    <div class="panel panel-default">
+    <div class="panel-body">
+      <h4>Description</h4>
+      <p ng-bind="vm.project.description"></p></div>
+    </div>
 
  	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-list>
 	<core-member-requests model="vm.project" idstring="vm.idString" service="vm.ProjectsService" ng-if="vm.project.userIs.admin"></core-member-requests>
 	<opportunity-list project="vm.project"></opportunity-list>
 
 	<div class="row">
-		<h2 ng-bind="vm.program.title"></h2>
+  <div class="col-sm-12">
 		<p class="text-right">
 				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Back
@@ -101,6 +101,7 @@
 					<i class="glyphicon glyphicon-user"></i> Request Membership
 				</a>
 		</p>
+	</div>
 	</div>
 </div>
 </section>

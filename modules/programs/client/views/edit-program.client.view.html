@@ -1,29 +1,32 @@
 <section class="static-page">
 <div class="container" role="main">
+  <form id="programform" name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
 	<div class="row">
+	<div class="col-sm-7">
 		<h2 ng-if="vm.editing">Editing {{vm.program.title}}</h2>
 		<h2 ng-if="!vm.editing">New Program</h2>
 	</div>
-	<div class="row">
+	<div class="col-sm-5 col-form-buttons">
 		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a class="list-group-item active" ng-click="vm.saveme()" title="Save">
+			<div class="btn-group">
+				<button class="btn btn-primary" type="submit" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
-				</a>
-				<a ng-if="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
+				</button>
+				<a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
+				<a ng-if="!vm.editing" class="btn btn-default" ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
 		</div>
 	</div>
+	</div>
 	<div class="row">
-		<form id="programform" name="vm.form.programForm" class="form-horizontal" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
+	<div class="col-sm-12">
 			<fieldset>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Title</label>
@@ -57,27 +60,29 @@
 					<input type="text" name="taglist" ng-model="vm.program.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
 			</fieldset>
-		</form>
+	</div>
 	</div>
 	<div class="row">
+	<div class="col-sm-12">
 		<div class="pull-right">
-			<div class="list-group list-group-horizontal">
-				<a class="list-group-item active" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
+			<div class="btn-group">
+				<a class="btn btn-primary" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a ng-if="vm.editing" class="list-group-item" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
+				<a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing" class="list-group-item" ui-sref="programs.list" title="Cancel">
+				<a ng-if="!vm.editing" class="btn btn-default" ui-sref="programs.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a class="list-group-item" ng-if="vm.editing" ng-click="vm.remove()" title="Remove">
+				<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
 		</div>
 	</div>
-	<div><p>&nbsp;</p></div>
+	</div>
+  </form>
 </div>
 </section>
 
