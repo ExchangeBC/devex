@@ -55,7 +55,9 @@ p {
     font-size: 16px;
     font-weight: 400;
     line-height: 1.5;
-    margin-bottom: 20px;
+}
+.section p {
+	margin-bottom: 20px;
 }
 
 // Container
@@ -300,12 +302,12 @@ header {
 // Sections
 
 section {
-  padding: 20px 0;
+  padding: 10px 0;
   .btn-solo {
     margin-right: 23px;
   }
   @media (min-width: 768px) {
-    padding: 30px 0 50px 0;
+    padding: 20px 0 40px 0;
   }
 }
 
@@ -592,10 +594,6 @@ section.partners {
   .alt-font;
   white-space: nowrap;
   display: inline-block;
-  height: 40px;
-  line-height: 38px;
-  padding: 0 14px;
-  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
   background: white;
   border-radius: 3px;
   font-size: 14px;
@@ -604,7 +602,13 @@ section.partners {
   text-decoration: none;
   -webkit-transition: all .15s ease;
   transition: all .15s ease;
+}
 
+.btn-solo {
+  height: 40px;
+  line-height: 38px;
+  padding: 0 14px;
+  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
   &:hover {
     -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
@@ -695,7 +699,7 @@ section.partners {
 
 @media (min-width: 768px) {
   .col-form-buttons {
-    margin-top: 20px;
+    margin-top: 25px;
   }
   .col-text-buttons {
     margin-top: 30px;
@@ -814,6 +818,16 @@ section.partners {
 .list-group-item.active {
   background-color: @theme-primary;
   border-color: darken(@theme-primary, 5%);
+}
+.list-group-item > h2 {
+	margin-top: 10px;
+}
+.list-group-item > h2 a {
+	display: block;
+}
+.panel-tools {
+	text-align: right;
+	margin: 0;
 }
 
 // Cards

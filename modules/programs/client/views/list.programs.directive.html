@@ -2,15 +2,15 @@
 <div class="panel-heading">
 	<h2 class="panel-title">Government Partners</h2>
 </div>
-<div class="panel-body">
-	<p class="text-right">
-	<a ng-if="vm.userCanAdd" ui-sref="programadmin.create" title="New">
+<div class="panel-body" ng-if="vm.userCanAdd">
+	<p class="panel-tools">
+	<a ui-sref="programadmin.create" title="New">
 		<i class="glyphicon glyphicon-plus"></i> Add New Program
 	</a>
 	</p>
-<div class="list-group">
-	<ul>
-		<li ng-repeat="program in vm.programs">
+</div>
+	<ul class="list-group">
+		<li class="list-group-item" ng-repeat="program in vm.programs">
 			<h3><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
 			<p ng-bind="program.short"></p>
 			<div class="row">
@@ -21,9 +21,7 @@
 					<button ui-sref="programs.view({ programId: program._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
 				</div>
 			</div>
-			</a>
 		</li>
 	</ul>
-</div>
 </div>
 </div>
