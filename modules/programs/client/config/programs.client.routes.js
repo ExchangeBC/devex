@@ -31,6 +31,9 @@
 			data: {
 				pageTitle: 'Programs List'
 			},
+			ncyBreadcrumb: {
+				label: 'Programs'
+			},
 			resolve: {
 				programs: function ($stateParams, ProgramsService) {
 					return ProgramsService.query ();
@@ -57,7 +60,11 @@
 				}
 			},
 			data: {
-				pageTitle: 'Program {{ programResolve.title }}'
+				pageTitle: 'Program {{program.title}}'
+			},
+			ncyBreadcrumb: {
+				label: '{{vm.program.title}}',
+				parent: 'programs.list'
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -91,6 +98,10 @@
 			data: {
 				roles: ['admin', 'gov'],
 				pageTitle: 'Program {{ program.title }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Edit Program',
+				parent: 'programs.list'
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -112,6 +123,10 @@
 			data: {
 				roles: ['admin', 'gov'],
 				pageTitle: 'New Program'
+			},
+			ncyBreadcrumb: {
+				label: 'New Program',
+				parent: 'programs.list'
 			}
 		})
 		;

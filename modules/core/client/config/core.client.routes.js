@@ -31,7 +31,10 @@
         url: '/',
         templateUrl: '/modules/core/client/views/home.client.view.html',
         controller: 'HomeController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        ncyBreadcrumb: {
+          label: 'Home'
+        }
       })
       .state('not-found', {
         url: '/not-found',
@@ -46,6 +49,9 @@
         data: {
           ignoreState: true,
           pageTitle: 'Not Found'
+        },
+        ncyBreadcrumb: {
+          label: 'Not Found'
         }
       })
       .state('bad-request', {
@@ -61,6 +67,9 @@
         data: {
           ignoreState: true,
           pageTitle: 'Bad Request'
+        },
+        ncyBreadcrumb: {
+          label: 'Bad Request'
         }
       })
       .state('forbidden', {
@@ -84,7 +93,7 @@
         templateUrl: '/modules/core/client/views/privacy.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'Disclaimer'
+          pageTitle: 'Privacy'
         }
       })
       .state('accessibility', {
@@ -92,7 +101,7 @@
         templateUrl: '/modules/core/client/views/accessibility.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'Disclaimer'
+          pageTitle: 'Accessibility'
         }
       })
       .state('copyright', {
@@ -100,7 +109,7 @@
         templateUrl: '/modules/core/client/views/copyright.client.view.html',
         data: {
           ignoreState: true,
-          pageTitle: 'Disclaimer'
+          pageTitle: 'Copyright'
         }
       })
       ;

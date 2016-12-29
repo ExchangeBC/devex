@@ -31,6 +31,9 @@
       data: {
         pageTitle: 'Projects List'
       },
+      ncyBreadcrumb: {
+        label: 'Projects'
+      },
       resolve: {
         projects: function ($stateParams, ProjectsService) {
           return ProjectsService.query ();
@@ -61,6 +64,10 @@
       },
       data: {
         pageTitle: 'Project {{ projectResolve.title }}'
+      },
+      ncyBreadcrumb: {
+        label: '{{vm.project.name}}',
+        parent: 'projects.list'
       }
     })
     // -------------------------------------------------------------------------
@@ -97,6 +104,10 @@
       data: {
         roles: ['admin', 'gov'],
         pageTitle: 'Project {{ project.title }}'
+      },
+      ncyBreadcrumb: {
+        label: 'Edit Project',
+        parent: 'projects.list'
       }
     })
     // -------------------------------------------------------------------------
@@ -121,6 +132,10 @@
       data: {
         roles: ['admin', 'gov'],
         pageTitle: 'New Project'
+      },
+      ncyBreadcrumb: {
+        label: 'New Project',
+        parent: 'projects.list'
       }
     })
     ;

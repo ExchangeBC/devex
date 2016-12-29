@@ -31,6 +31,9 @@
       data: {
         pageTitle: 'Opportunities List'
       },
+      ncyBreadcrumb: {
+        label: 'Opportunities'
+      },
       resolve: {
         opportunities: function ($stateParams, OpportunitiesService) {
           return OpportunitiesService.query ();
@@ -61,6 +64,10 @@
       },
       data: {
         pageTitle: 'Opportunity {{ opportunityResolve.title }}'
+      },
+      ncyBreadcrumb: {
+        label: '{{vm.opportunity.name}}',
+        parent: 'opportunities.list'
       }
     })
     // -------------------------------------------------------------------------
@@ -97,6 +104,10 @@
       data: {
         roles: ['admin', 'gov'],
         pageTitle: 'Opportunity {{ opportunity.title }}'
+      },
+      ncyBreadcrumb: {
+        label: 'Edit Opportunity',
+        parent: 'opportunities.list'
       }
     })
     // -------------------------------------------------------------------------
@@ -121,6 +132,10 @@
       data: {
         roles: ['admin', 'gov'],
         pageTitle: 'New Opportunity'
+      },
+      ncyBreadcrumb: {
+        label: 'New Opportunity',
+        parent: 'opportunities.list'
       }
     })
     ;
