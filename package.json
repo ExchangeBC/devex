@@ -69,6 +69,7 @@
     "passport-paypal-openidconnect": "~0.1.1",
     "passport-twitter": "~1.0.4",
     "phantomjs-prebuilt": "~2.1.4",
+    "pngquant-bin":"~3.1.1",
     "replace-ext": "~1.0.0",
     "serve-favicon": "~2.3.0",
     "socket.io": "^1.4.8",
