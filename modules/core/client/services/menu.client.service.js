@@ -55,7 +55,8 @@
         roles: ((options.roles === null || typeof options.roles === 'undefined') ? service.defaultRoles : options.roles),
         position: options.position || 0,
         items: [],
-        shouldRender: shouldRender
+        shouldRender: shouldRender,
+        icon: options.icon || ''
       });
 
       // Add submenu items

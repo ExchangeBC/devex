@@ -1,4 +1,4 @@
-<nav id="mainNav" class="navbar" ng-controller="HeaderController as vm" ng-class="{'navbar-transparent': isHomePage(), 'navbar-default': !isHomePage()}">
+<nav id="mainNav" class="navbar navbar-default" ng-controller="HeaderController as vm" ng-class="{'navbar-intro': isHomePage()}">
 <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -37,15 +37,15 @@
         </ul>
       </li>
     </ul>
-    <ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
+    <ul class="nav navbar-nav navbar-main" ng-if="vm.menu.shouldRender(vm.authentication.user);">
       <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
-        <a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button">{{::item.title}}&nbsp;<span class="caret"></span></a>
+        <a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
         <ul ng-switch-when="dropdown" class="dropdown-menu">
           <li ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
             <a ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
           </li>
         </ul>
-        <a ng-switch-default ui-sref="{{item.state}}" ng-bind="item.title"></a>
+        <a ng-switch-default ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
       </li>
     </ul>
   </nav>

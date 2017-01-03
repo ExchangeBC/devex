@@ -5,7 +5,9 @@
 		menuService.addMenuItem ('topbar', {
 			title: 'Opportunities',
 			state: 'opportunities.list',
-			roles: ['*']
+			roles: ['*'],
+			icon: 'fa fa-tasks',
+			position: 5
 		});
 	}]);
 

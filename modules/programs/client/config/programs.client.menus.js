@@ -5,7 +5,9 @@
 		menuService.addMenuItem ('topbar', {
 			title: 'Programs',
 			state: 'programs.list',
-			roles: ['*']
+			roles: ['*'],
+			icon: 'fa fa-university',
+			position: 1
 		});
 	}]);
 
