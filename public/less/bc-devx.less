@@ -753,9 +753,8 @@ section.partners {
   .body-font;
   font-weight: 300;
   letter-spacing: 1px;
-  text-transform: lowercase;
   border-radius: 500px;
-  padding: 3px 12px;
+  padding: 3px 12px 4px 12px;
 }
 
 .label-primary {
@@ -883,6 +882,7 @@ section.partners {
 }
 
 .card-block {
+  &:extend(.clearfix all);
   padding: @panel-body-padding;
 }
 
@@ -897,6 +897,9 @@ section.partners {
 .card-title {
   margin-top: 0;
   margin-bottom: .5em;
+  > a {
+  	display: block;
+  }
 }
 
 .card-subtitle {
@@ -938,11 +941,20 @@ section.partners {
 .card-header {
   padding: @panel-heading-padding;
   background-color: @panel-default-heading-bg;
-  border-bottom: 1px solid @panel-default-border;
+  /*border-bottom: 1px solid @panel-default-border;*/
 
   &:first-child {
     border-radius: (@border-radius-base - 1) (@border-radius-base - 1) 0 0;
   }
+}
+
+.card-flat {
+	.card-header {
+		border-bottom: none;
+	}
+	.card-footer {
+		border-top: none;
+	}
 }
 
 .card-header-tabs {
@@ -960,6 +972,11 @@ section.partners {
   &:last-child {
     border-radius: 0 0 (@panel-border-radius - 1) (@panel-border-radius - 1);
   }
+}
+
+.card-tools {
+  float: right;
+  margin-left: 10px;
 }
 
 //
@@ -1050,7 +1067,7 @@ section.partners {
   width: 75px;
   height: 75px;
   border-radius: @panel-border-radius;
-  margin-right: 10px;
+  margin-right: 14px;
 }
 .card-img-bottom {
   border-radius: 0 0 @panel-border-radius @panel-border-radius;

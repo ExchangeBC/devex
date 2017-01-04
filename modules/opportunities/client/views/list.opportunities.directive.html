@@ -1,31 +1,45 @@
-<div class="panel panel-info">
-<div class="panel-heading">
-	<h2 class="panel-title">{{vm.title}}</h2>
+<div class="row">
+<div class="col-sm-7">
+  <h2 ng-bind="vm.title"></h2>
 </div>
-<div class="panel-body" ng-if="vm.userCanAdd">
-	<p class="panel-tools">
-	<a ui-sref="opportunityadmin.create({project:vm.project._id})" title="New">
-		<i class="glyphicon glyphicon-plus"></i> Add New Opportunity
-	</a>
-	</p>
-</div>
-	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="opportunity in vm.opportunities">
-			<h2><a ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-bind="opportunity.name"></a></h2>
-			<p ng-if="!vm.project">
-				<b>Project : </b><a ui-sref="projects.view({projectId:opportunity.project._id})">{{opportunity.project.name}}</a><br/>
-				<b>Program : </b><a ui-sref="programs.view({programId:opportunity.program._id})">{{opportunity.program.title}}</a>
-			</p>
-			<p ng-bind="opportunity.short"></p>
-			<div class="row">
-				<div class="col-xs-6">
-					<span class="label label-info">code</span>
-				</div>
-				<div class="col-xs-6">
-					<button ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" type="button" class="btn btn-link pull-right">View &rarr;</button>
-				</div>
-			</div>
-		</li>
-	</ul>
+<div class="col-sm-5 col-text-buttons">
+  <p class="text-right" ng-if="(1 || vm.userCanAdd)">
+    <a ui-sref="opportunityadmin.create({project:vm.project?vm.project._id:''})" title="New">
+      <i class="glyphicon glyphicon-plus"></i> Add New Opportunity
+    </a>
+  </p>
 </div>
 </div>
+
+<div class="row">
+<div class="col-sm-6" ng-repeat="opportunity in vm.opportunities">
+  <div class="card card-flat card-rise" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })">
+    <div class="card-header">
+      <div class="pull-right">Closing in <b>5 hours</b></div>
+      <h4 class="card-title">
+        <i class="fa fa-tag"></i> {{opportunity.earn|currency}}
+      </h4>
+      <div class="card-tags">
+        <div class="card-tools" ng-if="opportunity.userIs.admin">
+          <a href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+            <i class="glyphicon glyphicon-pencil"></i>
+          </a>
+        </div>
+        <span class="label label-warning">CSS</span>
+        <span class="label label-warning">Bootstrap</span>
+      </div>
+  </div>
+  <div class="card-block">
+    <div class="card-img" ng-if="!vm.project">
+      <img class="card-img-left" src="/modules/core/client/img/logo/avatar-2.png"/>
+    </div>
+    <div>
+      <h4 class="card-title">
+        <a ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
+      </h4>
+      <p class="card-subtitle" ng-bind="opportunity.short"></p>
+    </div>
+  </div>
+</div>
+</div>
+
