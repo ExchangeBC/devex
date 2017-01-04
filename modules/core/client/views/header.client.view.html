@@ -2,15 +2,6 @@
 <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" ng-click="vm.isCollapsed = !vm.isCollapsed">
-            <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-        </button>
-        <a class="navbar-brand page-scroll" ui-sref="home" href="/">
-          <img height="38" src="/modules/core/client/img/logo/new-logo.png" alt="BCDevExchange">
-        </a>
-    </div>
-
-  <nav class="navbar-collapse" uib-collapse="!vm.isCollapsed" role="navigation">
     <ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
       <li ui-sref-active="active">
         <a ui-sref="signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
@@ -37,7 +28,13 @@
         </ul>
       </li>
     </ul>
-    <ul class="nav navbar-nav navbar-main" ng-if="vm.menu.shouldRender(vm.authentication.user);">
+        <a class="navbar-brand page-scroll" ui-sref="home" href="/">
+          <img height="38" src="/modules/core/client/img/logo/new-logo.png" alt="BCDevExchange">
+        </a>
+    </div>
+
+  <nav class="navbar-main" role="navigation">
+    <ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
       <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
         <a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
         <ul ng-switch-when="dropdown" class="dropdown-menu">

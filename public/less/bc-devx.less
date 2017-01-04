@@ -230,7 +230,38 @@ p {
 
 .nav-icon {
 	font-size: 20px;
-	vertical-align: -2px;
+	vertical-align: -2.5px;
+}
+
+@media (max-width: 767px) {
+	.navbar-right {
+		display: block;
+		float: right;
+		margin: 7.5px;
+	}
+	.navbar-right > li {
+		display: inline-block;
+	}
+	.navbar-main {
+		display: table;
+		width: 100%;
+	}
+	.navbar-main > ul {
+		display: table-row;
+	}
+	.navbar-main > ul > li {
+		display: table-cell;
+	}
+	.navbar-main > ul > li > a {
+		display: block;
+		font-size: 10px;
+		padding: 5px;
+		text-align: center;
+	}
+	.nav-icon {
+		font-size: 32px;
+		display: block;
+	}
 }
 
 .navbar-intro {
@@ -240,14 +271,11 @@ p {
 @media (min-width: 768px) /* and (max-width: 991px) */ {
 	.navbar-default, .navbar-transparent {
 		min-height: 64px;
-		.navbar-right {
-        	margin-top: -44px;
-        }
 	}
 	.nav-icon {
 		font-size: 20px;
 		display: inline;
-		vertical-align: center;
+		vertical-align: -2px;
 	}
 }
 
@@ -348,6 +376,9 @@ section.intro {
   ul {
     font-size: 18px;
     font-weight: 300;
+  }
+  @media (min-width: 768px) {
+    padding-top: 20px;
   }
 }
 
@@ -930,7 +961,6 @@ section.partners {
     border-radius: 0 0 (@panel-border-radius - 1) (@panel-border-radius - 1);
   }
 }
-
 
 //
 // Background variations
