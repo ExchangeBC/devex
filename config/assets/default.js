@@ -37,7 +37,7 @@ module.exports = {
     	less: {
     		// includes bootstrap
     		entry: 'public/less/theme.less',
-    		watch: ['public/less/*.less']
+    		watch: ['public/less/include/*.less']
     	}
     },
     css: [
