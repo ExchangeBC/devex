@@ -17,8 +17,21 @@
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
     $scope.isHomePage = function() {
-    	var path = $location.path();
+        var path = $location.path();
         return (! path) || path === '/';
+    };
+    $scope.isActiveMenu = function(item) {
+        var route = item.state || '',
+            active = $state.current.name || '',
+            mr = route.match(/^(.*)\.(list)$/),
+            ma = active.match(/^(.*)\.(edit|view|list)$/);
+        if (mr) route = mr[1];
+        if (ma) active = ma[1];
+        if (route === active)
+            return true;
+            console.log(route, active);
+        if (route === 'admin' && active.substring(0, 5) === 'admin')
+            return true;
     };
 
     function stateChangeSuccess() {
@@ -26,4 +39,6 @@
       vm.isCollapsed = false;
     }
   }
+
+
 }());
