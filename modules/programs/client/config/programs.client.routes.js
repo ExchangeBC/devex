@@ -32,7 +32,7 @@
 				pageTitle: 'Programs List'
 			},
 			ncyBreadcrumb: {
-				label: 'Programs'
+				label: 'All programs'
 			},
 			resolve: {
 				programs: function ($stateParams, ProgramsService) {
@@ -60,7 +60,7 @@
 				}
 			},
 			data: {
-				pageTitle: 'Program {{program.title}}'
+				pageTitle: 'Program: {{program.title}}'
 			},
 			ncyBreadcrumb: {
 				label: '{{vm.program.title}}',

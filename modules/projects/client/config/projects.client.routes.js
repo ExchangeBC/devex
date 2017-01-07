@@ -32,7 +32,7 @@
         pageTitle: 'Projects List'
       },
       ncyBreadcrumb: {
-        label: 'Projects'
+        label: 'All projects'
       },
       resolve: {
         projects: function ($stateParams, ProjectsService) {
@@ -63,7 +63,7 @@
         }
       },
       data: {
-        pageTitle: 'Project {{ projectResolve.title }}'
+        pageTitle: 'Project: {{ project.name }}'
       },
       ncyBreadcrumb: {
         label: '{{vm.project.name}}',

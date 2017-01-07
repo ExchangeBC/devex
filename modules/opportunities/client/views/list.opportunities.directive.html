@@ -1,13 +1,11 @@
 <div class="row">
 <div class="col-sm-7">
-  <h2 ng-bind="vm.title" class="list-page-hide"></h2>
+  <h3 ng-bind="vm.title" class="list-page-hide"></h3>
 </div>
-<div class="col-sm-5 col-form-buttons">
-  <p class="text-right" ng-if="(1 || vm.userCanAdd)">
-    <button class="btn btn-default btn-lg" ui-sref="opportunityadmin.create({project:vm.project?vm.project._id:''})" title="New">
-      <i class="glyphicon glyphicon-plus"></i> Add New Opportunity
-    </button>
-  </p>
+<div class="col-sm-5 col-form-buttons text-right">
+  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="opportunityadmin.create({project:vm.project?vm.project._id:''})" title="New">
+    <i class="glyphicon glyphicon-plus"></i> New Opportunity
+  </button>
 </div>
 </div>
 

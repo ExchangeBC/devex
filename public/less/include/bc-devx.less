@@ -751,11 +751,11 @@ section.partners {
 
 @media (min-width: 768px) {
   .col-form-buttons {
-    margin-top: 25px;
+    margin-top: 10px;
     margin-bottom: 10px;
   }
   .col-text-buttons {
-    margin-top: 30px;
+    margin-top: 15px;
   }
   .list-page .col-form-buttons, .list-page .col-text-buttons,
   .col-text-buttons.foot {
@@ -930,6 +930,7 @@ section.partners {
 
 .card-rise {
   &:hover {
+  	border-color: @theme-primary;
     -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
     box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08);
@@ -1342,12 +1343,43 @@ img::selection, img::-moz-selection {
 	display: none;
 }
 
-.panel-default .panel-body .panel-title {
-	color: darken(@theme-primary, 10%);
+.panel-body .panel-title {
 	margin-top: 16px;
 	margin-bottom: 16px;
 	font-size: 18px;
 	&:first-child {
 		margin-top: 0;
 	}
+}
+
+.panel-default .panel-body .panel-title {
+	color: darken(@theme-primary, 10%);
+}
+
+.list-img-outer {
+	position: relative;
+}
+.list-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 110px;
+	text-align: center;
+}
+.panel-default .list-img {
+	background: @panel-default-heading-bg;
+}
+.panel-info .list-img {
+	background: lighten(@theme-info, 10%);
+}
+.list-img img {
+	margin-top: 20px;
+	width: 75px;
+	height: 75px;
+	border-radius: @border-radius-base;
+}
+.list-img + .list-img-body {
+	margin-left: 115px;
+	min-height: 75px;
 }

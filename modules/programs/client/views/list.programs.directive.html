@@ -1,27 +1,26 @@
-<div class="panel panel-info">
-<div class="panel-heading">
-	<h2 class="panel-title">Government Partners</h2>
+<div class="row">
+<div class="col-sm-7">
+  <h2 class="list-page-hide">Government Partners</h2>
 </div>
-<div class="panel-body" ng-if="vm.userCanAdd">
-	<p class="panel-tools">
-	<a ui-sref="programadmin.create" title="New">
-		<i class="glyphicon glyphicon-plus"></i> Add New Program
-	</a>
-	</p>
+<div class="col-sm-5 col-form-buttons text-right">
+  <button ng-if="vm.userCanAdd" class="btn btn-default btn-lg" ui-sref="programadmin.create()" title="New">
+    <i class="glyphicon glyphicon-plus"></i> New Program
+  </button>
 </div>
-	<ul class="list-group">
-		<li class="list-group-item" ng-repeat="program in vm.programs">
-			<h3><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
-			<p ng-bind="program.short"></p>
-			<div class="row">
-				<div class="col-xs-6">
-					<span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>
-				</div>
-				<div class="col-xs-6">
-					<button ui-sref="programs.view({ programId: program._id })" type="button" class="btn btn-link pull-right">View &rarr;</button>
-				</div>
-			</div>
-		</li>
-	</ul>
 </div>
+
+
+<div class="panel panel-info card-panel" ng-repeat="program in vm.programs">
+  <div class="panel-body list-img-outer">
+    <div class="list-img">
+      <img src="/modules/core/client/img/logo/avatar-2.png"/>
+    </div>
+    <div class="list-img-body">
+      <h3 class="card-title"><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
+      <p ng-bind="program.short"></p>
+      <div class="label-list">
+        <span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>
+      </div>
+    </div>
+  </div>
 </div>
