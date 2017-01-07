@@ -10,7 +10,12 @@
 </div>
 
 <div class="row">
-<div class="col-md-6"  ng-repeat="column in vm.opportunities | columnRanges:2">
+<div class="col-md-6" ng-if="! vm.opportunities.length">
+  <div class="panel panel-default panel-body">
+    <span class="text-muted">No opportunities found.</span>
+  </div>
+</div>
+<div class="col-md-6" ng-repeat="column in vm.opportunities | columnRanges:2">
   <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end">
     <div class="card-header">
       <div class="pull-right">Closing in <b>5 hours</b></div>

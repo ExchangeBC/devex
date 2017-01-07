@@ -52,9 +52,9 @@
   </div>
   </div>
 
- 	<core-member-list     model="vm.program" idstring="vm.idString" service="vm.ProgramsService"></core-member-list>
+ 	<core-member-list     model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Program Members"></core-member-list>
 	<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.program.userIs.admin"></core-member-requests>
-	<project-list program="vm.program"></project-list>
+	<project-list program="vm.program" title="Projects"></project-list>
 
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">

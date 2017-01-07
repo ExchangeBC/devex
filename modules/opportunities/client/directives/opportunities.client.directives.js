@@ -11,7 +11,8 @@
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
-				project: '='
+				project: '=',
+				title: '@'
 			},
 			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
 			controller   : function ($scope, OpportunitiesService, Authentication) {
@@ -36,6 +37,7 @@
 					vm.userCanAdd    = false;
 					vm.opportunities = OpportunitiesService.query ();
 				}
+				if ($scope.title) vm.title = $scope.title;
 			}
 		}
 	})

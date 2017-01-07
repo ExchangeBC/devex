@@ -113,6 +113,7 @@
 
 	.filter ('slice', function () {
 		return function(arr, start, end) {
+			if (! arr || ! arr.slice) return;
 			return arr.slice(start, end);
 		};
 	})
@@ -129,9 +130,11 @@
 				var arr = [],
 					i = 0,
 					start = 0;
-				for (; i < count; i++) {
-					arr.push({start: start, end: Math.min(start + len, itemlen)});
-					start += len;
+				if (itemlen) {
+					for (; i < count; i++) {
+						arr.push({start: start, end: Math.min(start + len, itemlen)});
+						start += len;
+					}
 				}
 				memo[count][len] = arr;
 			}

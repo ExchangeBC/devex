@@ -679,6 +679,7 @@ section {
 		border-radius: @border-radius-base;
 	}
 	+ .list-img-body {
+		border-left: none;
 		margin-left: (@thumb-md + 80);
 		min-height: @thumb-md;
 	}
@@ -688,12 +689,12 @@ section {
 			margin-left: (@thumb-md + 40);
 		}
 	}
-}
-.panel-default .list-img {
-	background: @panel-default-heading-bg;
-}
-.panel-info .list-img {
-	background: lighten(@theme-info, 10%);
+	.panel-default & {
+		background: @panel-default-heading-bg;
+	}
+	.panel-info & {
+		background: lighten(@theme-info, 10%);
+	}
 }
 .img-logo {
 	margin-left: auto;
@@ -1263,6 +1264,14 @@ img::selection, img::-moz-selection {
 // hide titles only on list pages
 .list-page .list-page-hide {
 	display: none;
+}
+
+.list-head h3:after {
+	display: block;
+	content: "";
+	height: 2px;
+	margin-top: 4px;
+	#gradient > .horizontal(#d9e3ee; #fff; 40%);
 }
 
 // Utility styles

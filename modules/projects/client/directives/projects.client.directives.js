@@ -11,7 +11,8 @@
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
-				program: '='
+				program: '=',
+				title: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
 			controller   : function ($scope, ProjectsService, Authentication) {
@@ -36,6 +37,7 @@
 					vm.projects   = ProjectsService.query ();
 					vm.columnCount = 1;
 				}
+				if ($scope.title) vm.title = $scope.title;
 			}
 		}
 	})

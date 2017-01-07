@@ -63,9 +63,9 @@
 		</div>
 		</div>
 
- 	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-list>
+ 	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
 	<core-member-requests model="vm.project" idstring="vm.idString" service="vm.ProjectsService" ng-if="vm.project.userIs.admin"></core-member-requests>
-	<opportunity-list project="vm.project"></opportunity-list>
+	<opportunity-list project="vm.project" title="Project Opportunities"></opportunity-list>
 
 	<div class="row form-foot">
   <div class="col-sm-12 col-form-buttons text-right">
