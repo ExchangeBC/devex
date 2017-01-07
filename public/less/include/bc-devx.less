@@ -51,15 +51,6 @@ h6 {
     margin-bottom: 0.75em;
 }
 
-p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-.section p {
-	margin-bottom: 20px;
-}
-
 // Container
 .container {
   max-width: 1040px;
@@ -350,6 +341,13 @@ section {
   }
   @media (min-width: 768px) {
     padding: 20px 0 40px 0;
+    p.lg {
+    	font-size: 16px;
+    }
+    &.feature p {
+      font-size: 16px;
+      margin-bottom: 16px;
+    }
   }
 }
 
@@ -361,8 +359,8 @@ section.intro {
   background: rgb(0,181,230); /* fallback for old browsers */
   background: @header-bg, -webkit-linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* Chrome 10-25, Safari 5.1-6 */
   background: @header-bg, linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-size: 100% auto;
   color: white;
-  // padding-bottom: 160px !important;
   h1 {
     font-weight: 700;
     font-size: 46px;
@@ -376,6 +374,9 @@ section.intro {
   ul {
     font-size: 18px;
     font-weight: 300;
+  }
+  .btn-solo {
+  	border-color: @gray-dark;
   }
   @media (min-width: 768px) {
     padding-top: 20px;
@@ -673,20 +674,25 @@ section.partners {
 .btn-xs {
   font-size: 10px;
   height: 20px;
-  line-height: 20px;
+  line-height: 16px;
 }
 
 .btn-default {
-  color: @gray;
+  color: @theme-primary;
   background-color: white;
-  border-color: rgb(153,153,153);
+  border-color: #999;
   &:hover {
+  	color: @theme-primary;
     background-color: @gray-lighter;
+  }
+  &:hover,&:focus {
+    border-color: darken(@theme-primary, 10%);
   }
 }
 
 .btn-primary {
   background-color: @theme-primary;
+  border-color: darken(@theme-primary, 10%);
   &:hover {
     background-color: lighten(@theme-primary, 12%);
   }
@@ -717,6 +723,7 @@ section.partners {
 
 .btn-warning {
   background-color: @theme-warning;
+  border-color: darken(@theme-warning, 10%);
   &:hover {
     background-color: lighten(@theme-warning, 12%);
   }
@@ -737,14 +744,27 @@ section.partners {
 
 .btn-link {
   color: rgb(0,164,227);
+  background: none;
+}
+
+.col-text-buttons a {
+  margin-left: 0.5em;
 }
 
 @media (min-width: 768px) {
   .col-form-buttons {
     margin-top: 25px;
+    margin-bottom: 10px;
   }
   .col-text-buttons {
     margin-top: 30px;
+  }
+  .list-page .col-form-buttons, .list-page .col-text-buttons,
+  .col-text-buttons.foot {
+  	margin-top: 0;
+  }
+  .col-form-buttons.foot {
+  	margin-top: 10px;
   }
 }
 
@@ -775,6 +795,10 @@ section.partners {
 
 .label-danger {
   background-color: @theme-danger;
+}
+
+.label-list .label:not(:last-child) {
+	margin-right: 0.5em;
 }
 
 .field-tt-source {
@@ -880,7 +904,27 @@ section.partners {
   background-color: white;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
 }
+.card-panel {
+  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
+  .panel-body + .panel-body {
+  	border-top: 1px solid @panel-default-border;
+  }
+  dt {
+  	color: @gray-light;
+  	font-size: 85%;
+  	line-height: 1.7;
+  }
+  dl {
+  	margin-bottom: 10px;
+  	&.dl-horizontal dd {
+  	  margin-bottom: 5px;
+  	}
+  }
+}
 
+.card-header {
+  &:extend(.clearfix all);
+}
 .card-block {
   &:extend(.clearfix all);
   padding: @panel-body-padding;
@@ -1252,32 +1296,19 @@ section.partners {
 
 // Extras
 // -- Highlight Color Customization
-::-moz-selection {
+::-moz-selection, ::selection {
     color: white;
     text-shadow: none;
-    background: @gray-darker;
+    background: @gray-dark;
 }
-
-::selection {
-    color: white;
-    text-shadow: none;
-    background: @gray-darker;
-}
-
-img::selection {
-    color: white;
-    background: transparent;
-}
-
-img::-moz-selection {
-    color: white;
-    background: transparent;
-}
-
 body {
-    webkit-tap-highlight-color: @gray-darker;
+    webkit-tap-highlight-color: @gray-dark;
 }
 
+img::selection, img::-moz-selection {
+    color: white;
+    background: transparent;
+}
 
 .tag {
     display: inline-block;
@@ -1297,4 +1328,28 @@ body {
 
 .breadcrumb {
 	margin-bottom: 0;
+}
+.breadcrumb .active {
+	// only interested in ancestors
+	display: none;
+}
+.breadcrumb li:first-child:before {
+	content: '< ';
+	color: @gray-light;
+	margin-right: 2px;
+}
+
+// hide titles only on list pages
+.list-page .list-page-hide {
+	display: none;
+}
+
+.panel-default .panel-body .panel-title {
+	color: darken(@theme-primary, 10%);
+	margin-top: 16px;
+	margin-bottom: 16px;
+	font-size: 18px;
+	&:first-child {
+		margin-top: 0;
+	}
 }
