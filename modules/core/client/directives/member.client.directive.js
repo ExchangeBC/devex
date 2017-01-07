@@ -110,10 +110,33 @@
 			}
 		}
 	})
+
 	.filter ('slice', function () {
 		return function(arr, start, end) {
 			return arr.slice(start, end);
 		};
+	})
+
+	.filter('columnRanges', function() {
+		var memo = [];
+		return function(items, count) {
+			var itemlen = items ? items.length : 0,
+				len = Math.floor(itemlen / 2) + (itemlen % 2);
+			if (! memo[count])
+				memo[count] = [];
+			if (! memo[count][len]) {
+				var arr = [],
+					i = 0,
+					start = 0;
+				for (; i < count; i++) {
+					arr.push({start: start, end: Math.min(start + len, itemlen)});
+					start += len;
+				}
+				memo[count][len] = arr;
+			}
+			return memo[count][len];
+		}
 	});
-	;
+
+
 }());
