@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row list-head">
 <div class="col-sm-7">
   <h2 class="list-page-hide">Government Partners</h2>
 </div>
@@ -16,6 +16,11 @@
       <img src="/modules/core/client/img/logo/avatar-2.png"/>
     </div>
     <div class="list-img-body">
+      <div class="card-tools" ng-if="program.userIs.admin">
+        <a href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </a>
+      </div>
       <h3 class="card-title"><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
       <p ng-bind="program.short"></p>
       <div class="label-list">

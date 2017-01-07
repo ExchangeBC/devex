@@ -5,90 +5,62 @@
   <div class="col-sm-7">
 		<h2 ng-bind="vm.program.title"></h2>
 	</div>
-	<div class="col-sm-5 col-text-buttons">
-		<p class="text-right">
-				<a ui-sref="programs.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.program.userIs.admin" ui-sref="programadmin.edit({programId:vm.program._id})" title="Edit">
-					<i class="glyphicon glyphicon-pencil"></i> Edit
-				</a>
-				&nbsp;
-				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-					<i class="glyphicon glyphicon-user"></i> Request Membership
-				</a>
-		</p>
+	<div class="col-sm-5 col-form-buttons text-right">
+    <button type="button" class="btn btn-default" ng-if="vm.program.userIs.admin" ui-sref="programadmin.edit({programId:vm.program._id})" title="Edit">
+      <i class="glyphicon glyphicon-pencil"></i> Edit
+    </button>
+    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+      <i class="glyphicon glyphicon-user"></i> Request Membership
+    </button>
 	</div>
 	</div>
 
-		<div class="panel panel-default">
-		<div class="panel-body">
-			<div class="row">
-				<div class="col-sm-6">
-					<div>
-						<span class="label label-info" ng-repeat="code in vm.program.tags">{{code}}</span>
-					</div>
-					<div>
-						<h4>Summary</h4>
-						<p ng-bind="vm.program.short"></p>
-					</div>
-					<div>
-						<small>
-							<em class="text-muted">
-								Created on
-								<span ng-bind="vm.program.created | date:'mediumDate'"></span>
-								by
-								<span ng-if="vm.program.createdBy" ng-bind="vm.program.createdBy.displayName"></span>
-								<span ng-if="!vm.program.createdBy">Deleted User</span>
-							</em>
-						</small>
-						<br/>
-			 			<small>
-							<em class="text-muted">
-								Updated on
-								<span ng-bind="vm.program.updated | date:'mediumDate'"></span>
-								by
-								<span ng-if="vm.program.updatedBy" ng-bind="vm.program.updatedBy.displayName"></span>
-								<span ng-if="!vm.program.updatedBy">Deleted User</span>
-							</em>
-						</small>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div>
-						<img class="img-responsive" src="{{vm.program.logo}}" />
-					</div>
-				</div>
-			</div>
-		</div>
-		</div>
-
-    <div class="panel panel-default">
-    <div class="panel-body">
-      <h4>Description</h4>
-      <p ng-bind="vm.program.description"></p></div>
+  <div class="panel panel-default panel-flat card-panel">
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-sm-7">
+        <p class="lead" ng-bind="vm.program.short"></p>
+        <p ng-if="vm.program.website"><a ng-href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+        <p class="label-list">
+          <span class="label label-info" ng-repeat="code in vm.program.tags">{{code}}</span>
+        </p>
+        <p class="long-desc pre-line" ng-bind="vm.program.description"></p>
+      </div>
+      <div class="col-sm-5 text-right">
+        <img class="img-responsive" src="{{vm.program.logo}}" />
+      </div>
     </div>
+  </div>
+  <div class="panel-footer">
+    <em class="small text-muted">
+      Created on
+      <span ng-bind="vm.program.created | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.program.createdBy" ng-bind="vm.program.createdBy.displayName"></span>
+      <span ng-if="!vm.program.createdBy">Deleted User</span>
+    </em><br/>
+    <em class="small text-muted">
+      Updated on
+      <span ng-bind="vm.program.updated | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.program.updatedBy" ng-bind="vm.program.updatedBy.displayName"></span>
+      <span ng-if="!vm.program.updatedBy">Deleted User</span>
+    </em>
+  </div>
+  </div>
 
  	<core-member-list     model="vm.program" idstring="vm.idString" service="vm.ProgramsService"></core-member-list>
 	<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.program.userIs.admin"></core-member-requests>
 	<project-list program="vm.program"></project-list>
 
-	<div class="row">
-	<div class="col-sm-12">
-		<p class="text-right">
-				<a ui-sref="programs.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.program.userIs.admin" ui-sref="programadmin.edit({programId:vm.program._id})" title="Edit">
-					<i class="glyphicon glyphicon-pencil"></i> Edit
-				</a>
-				&nbsp;
-				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-					<i class="glyphicon glyphicon-user"></i> Request Membership
-				</a>
-		</p>
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+    <button type="button" class="btn btn-default" ng-if="vm.program.userIs.admin" ui-sref="programadmin.edit({programId:vm.program._id})" title="Edit">
+      <i class="glyphicon glyphicon-pencil"></i> Edit
+    </button>
+    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+      <i class="glyphicon glyphicon-user"></i> Request Membership
+    </button>
 	</div>
 	</div>
 </div>

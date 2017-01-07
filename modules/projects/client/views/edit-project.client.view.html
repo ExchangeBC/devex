@@ -2,31 +2,29 @@
 <div class="container" role="main">
   <div ncy-breadcrumb></div>
   <form id="projectform" name="vm.form.projectForm" class="form" ng-submit="vm.save(vm.form.projectForm.$valid)" novalidate>
-	<div class="row">
+	<div class="row form-head">
 	<div class="col-sm-7">
 		<h2 ng-if="vm.editing">Editing: {{vm.project.name}}</h2>
 		<h2 ng-if="!vm.editing">New Project</h2>
 	</div>
-	<div class="col-sm-5 col-form-buttons">
-		<div class="pull-right">
-			<div class="btn-group" role="group">
-				<button type="submit" class="btn btn-primary" title="Save">
-					<i class="glyphicon glyphicon-save"></i> Save
-				</button>
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="projects.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-					<i class="glyphicon glyphicon-trash"></i> Remove
-				</a>
-			</div>
-		</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+    <div class="btn-group" role="group">
+      <button type="submit" class="btn btn-primary" title="Save">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </button>
+      <a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="projects.list" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+        <i class="glyphicon glyphicon-trash"></i> Remove
+      </a>
+    </div>
 	</div>
 	</div>
 	<div class="row">
@@ -41,7 +39,7 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="short">Short Description</label>
-					<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the project"></textarea>
+					<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the project"></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="description">Description</label>
@@ -58,27 +56,25 @@
 			</fieldset>
 	</div>
 	</div>
-	<div class="row">
-	<div class="col-sm-12">
-		<div class="pull-right">
-			<div class="btn-group">
-				<a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
-					<i class="glyphicon glyphicon-save"></i> Save
-				</a>
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="projects.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-					<i class="glyphicon glyphicon-trash"></i> Remove
-				</a>
-			</div>
-		</div>
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+    <div class="btn-group">
+      <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
+        <i class="glyphicon glyphicon-save"></i> Save
+      </a>
+      <a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="projects.list" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+        <i class="glyphicon glyphicon-fast-backward"></i> Cancel
+      </a>
+      <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+        <i class="glyphicon glyphicon-trash"></i> Remove
+      </a>
+    </div>
 	</div>
 	</div>
   </form>

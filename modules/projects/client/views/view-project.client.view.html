@@ -5,103 +5,74 @@
 	<div class="col-sm-7">
 		<h2>Project: {{vm.project.name}}</h2>
 	</div>
-	<div class="col-sm-5 col-text-buttons">
-		<p class="text-right">
-				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.programId" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-					<i class="glyphicon glyphicon-pencil"></i> Edit
-				</a>
-				&nbsp;
-				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-					<i class="glyphicon glyphicon-user"></i> Request Membership
-				</a>
-		</p>
+	<div class="col-sm-5 col-text-buttons text-right">
+    <button type="button" class="btn btn-default" ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+      <i class="glyphicon glyphicon-pencil"></i> Edit
+    </button>
+    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+      <i class="glyphicon glyphicon-user"></i> Request Membership
+    </button>
 	</div>
 	</div>
 
-		<div class="panel panel-default">
+		<div class="panel panel-default panel-flat card-panel">
 		<div class="panel-body">
+		<div class="row">
 		<div class="col-sm-6">
-			<div class="row">
-				<div class="col-xs-3">Program</div>
-				<div class="col-xs-8">
-				<a ui-sref="programs.view({programId:vm.project.program._id})">{{vm.project.program.title}}</a>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-6">
-			<div class="row">
-				<div class="col-xs-3">Tags</div>
-				<div class="col-xs-8">
+      <p class="lead" ng-bind="vm.project.short"></p>
+			<p class="label-list">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
-				</div>
-			</div>
+			</p>
 		</div>
 		<div class="col-sm-6">
-			<small>
-				<em class="text-muted">
-					Created on
-					<span ng-bind="vm.project.created | date:'mediumDate'"></span>
-					by
-					<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
-					<span ng-if="!vm.project.createdBy">Deleted User</span>
-				</em>
-			</small>
-			<br/>
- 			<small>
-				<em class="text-muted">
-					Updated on
-					<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
-					by
-					<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
-					<span ng-if="!vm.project.updatedBy">Deleted User</span>
-				</em>
-			</small>
+		  <dl class="dl-horizontal">
+		  <dt>Program:</dt>
+		  <dd>
+		    <a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})">{{vm.project.program.title}}</a>
+		    <span ng-if="!vm.project.program" class="text-muted">No program</span>
+		  </dd>
+		  <!-- github link -->
+		  </dl>
 		</div>
 		</div>
-		</div>
+		<div class="row">
+		<div class="col-sm-12">
+      <p class="long-desc pre-line" ng-bind="vm.project.description"></p>
+    </div>
+    </div>
+    </div>
 
-    <div class="panel panel-default">
-    <div class="panel-body">
-      <h4>Summary</h4>
-      <p ng-bind="vm.project.short"></p></div>
-    </div>
-    <div class="panel panel-default">
-    <div class="panel-body">
-      <h4>Description</h4>
-      <p ng-bind="vm.project.description"></p></div>
-    </div>
+		<div class="panel-footer">
+      <em class="small text-muted">
+        Created on
+        <span ng-bind="vm.project.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
+        <span ng-if="!vm.project.createdBy">Deleted User</span>
+      </em>
+			<br/>
+      <em class="small text-muted">
+        Updated on
+        <span ng-bind="vm.project.updated | date:'mediumDate'"></span>
+        by
+        <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
+        <span ng-if="!vm.project.updatedBy">Deleted User</span>
+      </em>
+		</div>
+		</div>
 
  	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-list>
 	<core-member-requests model="vm.project" idstring="vm.idString" service="vm.ProjectsService" ng-if="vm.project.userIs.admin"></core-member-requests>
 	<opportunity-list project="vm.project"></opportunity-list>
 
-	<div class="row">
-  <div class="col-sm-12">
-		<p class="text-right">
-				<a ng-if="!vm.programId" ui-sref="projects.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.programId" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Back
-				</a>
-				&nbsp;
-				<a ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-					<i class="glyphicon glyphicon-pencil"></i> Edit
-				</a>
-				&nbsp;
-				<a ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-					<i class="glyphicon glyphicon-user"></i> Request Membership
-				</a>
-		</p>
+	<div class="row form-foot">
+  <div class="col-sm-12 col-text-buttons text-right">
+    <button type="button" class="btn btn-default" ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+      <i class="glyphicon glyphicon-pencil"></i> Edit
+    </button>
+    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+      <i class="glyphicon glyphicon-user"></i> Request Membership
+    </button>
 	</div>
 	</div>
 </div>

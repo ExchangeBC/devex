@@ -103,7 +103,7 @@
       },
       data: {
         roles: ['admin', 'gov'],
-        pageTitle: 'Opportunity {{ opportunity.title }}'
+        pageTitle: 'Opportunity: {{ opportunity.name }}'
       },
       ncyBreadcrumb: {
         label: 'Edit Opportunity',

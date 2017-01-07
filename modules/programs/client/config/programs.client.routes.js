@@ -97,7 +97,7 @@
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'Program {{ program.title }}'
+				pageTitle: 'Program: {{ program.title }}'
 			},
 			ncyBreadcrumb: {
 				label: 'Edit Program',

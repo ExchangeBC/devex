@@ -2,13 +2,12 @@
 <div class="container" role="main">
   <div ncy-breadcrumb></div>
   <form id="opportunityform" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
-	<div class="row">
+	<div class="row form-head">
 	  <div class="col-md-7">
   	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
 	    <h2 ng-if="!vm.editing">New Opportunity</h2>
     </div>
-    <div class="col-md-5 col-form-buttons">
-      <div class="pull-right">
+    <div class="col-md-5 col-form-buttons text-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
@@ -25,7 +24,6 @@
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
-			</div>
       </div>
     </div>
 	</div>
@@ -41,7 +39,7 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="short">Short Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity short description" tooltip-placement="bottom"></i>
-					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the opportunity"></textarea>
+					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the opportunity"></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="description">Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity full description" tooltip-placement="bottom"></i>
@@ -86,7 +84,7 @@
 			</fieldset>
   </div>
 	</div>
-	<div class="row">
+	<div class="row form-foot">
     <div class="col-sm-12 col-form-buttons foot text-right">
 			<div class="btn-group">
 				<a href="javascript:void(0);" title="Save" class="btn btn-primary" ng-click="vm.saveme()">

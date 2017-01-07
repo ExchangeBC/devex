@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row list-head">
 <div class="col-sm-7">
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
 </div>
@@ -17,6 +17,11 @@
       <img src="/modules/core/client/img/logo/avatar-2.png"/>
     </div>
     <div class="list-img-body">
+      <div class="card-tools" ng-if="project.userIs.admin">
+        <a href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: vm.programId })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+          <i class="glyphicon glyphicon-pencil"></i>
+        </a>
+      </div>
       <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: vm.programId })" ng-bind="project.name"></a></h3>
 			<p ng-if="!vm.program">
 				<b>Program: </b><a ui-sref="programs.view({programId:project.program._id})">{{project.program.title}}</a>
