@@ -11,7 +11,9 @@
 </div>
 
 
-<div class="panel panel-default card-panel" ng-repeat="project in vm.projects">
+<div class="row">
+<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.projects | columnRanges:vm.columnCount">
+<div class="panel panel-default card-panel" ng-repeat="project in vm.projects | slice:column.start:column.end">
   <div class="panel-body list-img-outer">
     <div class="list-img" ng-if="!vm.program">
       <img src="/modules/core/client/img/logo/avatar-2.png"/>
@@ -33,5 +35,6 @@
     </div>
   </div>
 </div>
-
+</div>
+</div>
 

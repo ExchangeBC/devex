@@ -120,8 +120,9 @@
 	.filter('columnRanges', function() {
 		var memo = [];
 		return function(items, count) {
+			if(count < 1) count = 1;
 			var itemlen = items ? items.length : 0,
-				len = Math.floor(itemlen / 2) + (itemlen % 2);
+				len = (count == 1) ? itemlen : Math.floor(itemlen / count) + (itemlen % count);
 			if (! memo[count])
 				memo[count] = [];
 			if (! memo[count][len]) {

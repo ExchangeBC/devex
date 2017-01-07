@@ -28,11 +28,13 @@
 					vm.projects   = ProjectsService.forProgram ({
 						programId: $scope.program._id
 					});
+					vm.columnCount = 2;
 				} else {
 					vm.title      = 'All Projects';
 					vm.programId  = null;
 					vm.userCanAdd = false;
 					vm.projects   = ProjectsService.query ();
+					vm.columnCount = 1;
 				}
 			}
 		}
