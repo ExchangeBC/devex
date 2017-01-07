@@ -20,7 +20,7 @@
 		<div class="row">
 		<div class="col-sm-6">
       <p class="lead" ng-bind="vm.project.short"></p>
-			<p class="label-list">
+			<p class="label-list" ng-if="vm.project.taglist">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
 			</p>
 		</div>
@@ -28,13 +28,15 @@
 		  <dl class="dl-horizontal">
 		  <dt>Program:</dt>
 		  <dd>
-		    <a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})">{{vm.project.program.title}}</a>
+		    <a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
 		    <span ng-if="!vm.project.program" class="text-muted">No program</span>
 		  </dd>
 		  <!-- github link -->
 		  </dl>
 		</div>
 		</div>
+		</div>
+		<div class="panel-body">
 		<div class="row">
 		<div class="col-sm-12">
       <p class="long-desc pre-line" ng-bind="vm.project.description"></p>

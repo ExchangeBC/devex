@@ -17,7 +17,7 @@
 	// =========================================================================
 	.controller('ProjectViewController', function ($scope, $state, $stateParams, project, Authentication, ProjectsService, Notification) {
 		var vm             = this;
-		vm.programId       = $stateParams.programId;
+		vm.programId       = project.program ? project.program._id : $stateParams.programId;
 		vm.project         = project;
 		vm.authentication  = Authentication;
 		vm.ProjectsService = ProjectsService;

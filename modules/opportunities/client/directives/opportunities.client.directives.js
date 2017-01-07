@@ -23,6 +23,7 @@
 				//
 				if ($scope.project) {
 					vm.title         = 'Opportunities for '+$scope.project.name;
+					vm.programId     = $scope.project.program ? $scope.project.program._id : null;
 					vm.projectId     = $scope.project._id;
 					vm.userCanAdd    = $scope.project.userIs.admin;
 					vm.opportunities = OpportunitiesService.forProject ({
@@ -30,6 +31,7 @@
 					});
 				} else {
 					vm.title         = 'All Opportunities';
+					vm.programId     = null;
 					vm.projectId     = null;
 					vm.userCanAdd    = false;
 					vm.opportunities = OpportunitiesService.query ();

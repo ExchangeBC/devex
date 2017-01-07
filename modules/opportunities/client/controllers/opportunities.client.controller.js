@@ -38,10 +38,12 @@
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, opportunity, editing, Authentication, Notification) {
 		var vm         = this;
+		vm.programId   = $stateParams.programId;
 		vm.projectId   = $stateParams.projectId;
 		vm.editing     = editing;
 		vm.opportunity = opportunity;
 		if (!vm.editing) {
+			vm.opportunity.program = $stateParams.programId;
 			vm.opportunity.project = $stateParams.projectId;
 		}
 		vm.authentication = Authentication;

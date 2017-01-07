@@ -20,17 +20,20 @@
     <div class="row">
       <div class="col-sm-7">
         <p class="lead" ng-bind="vm.program.short"></p>
-        <p ng-if="vm.program.website"><a ng-href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+        <p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
         <p class="label-list">
           <span class="label label-info" ng-repeat="code in vm.program.tags">{{code}}</span>
         </p>
-        <p class="long-desc pre-line" ng-bind="vm.program.description"></p>
       </div>
-      <div class="col-sm-5 text-right">
-        <img class="img-responsive" src="{{vm.program.logo}}" />
+      <div class="col-sm-5">
+        <img class="img-responsive img-logo text-center" src="{{vm.program.logo}}" />
       </div>
     </div>
   </div>
+  <div class="panel-body">
+    <p class="long-desc pre-line" ng-bind="vm.program.description"></p>
+  </div>
+
   <div class="panel-footer">
     <em class="small text-muted">
       Created on

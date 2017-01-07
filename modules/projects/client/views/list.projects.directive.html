@@ -4,7 +4,7 @@
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
 </div>
 <div class="col-sm-5 col-form-buttons text-right">
-  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="projectadmin.create({program:vm.program._id})" title="New">
+  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="projectadmin.create({programId:vm.program._id})" title="New">
     <i class="glyphicon glyphicon-plus"></i> New Project
   </button>
 </div>
@@ -18,14 +18,14 @@
     </div>
     <div class="list-img-body">
       <div class="card-tools" ng-if="project.userIs.admin">
-        <a href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: vm.programId })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+        <a href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
         </a>
       </div>
-      <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: vm.programId })" ng-bind="project.name"></a></h3>
-			<p ng-if="!vm.program">
-				<b>Program: </b><a ui-sref="programs.view({programId:project.program._id})">{{project.program.title}}</a>
+			<p ng-if="!vm.program && project.program">
+				<a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
 			</p>
+      <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a></h3>
 			<p ng-bind="project.short"></p>
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>

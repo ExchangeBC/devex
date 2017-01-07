@@ -37,12 +37,12 @@
         </dd>
         <dt>Program:</dt>
         <dd>
-          <a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.program.title}}</a>
+          <a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program._id})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
           <span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
         </dd>
         <dt>Project:</dt>
         <dd>
-          <a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-university"></i> {{vm.opportunity.project.name}}</a>
+          <a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
           <span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
         </dd>
         <dt>Assigned to:</dt>

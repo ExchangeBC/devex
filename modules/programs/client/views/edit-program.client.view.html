@@ -1,7 +1,7 @@
 <section class="static-page">
 <div class="container" role="main">
   <div ncy-breadcrumb></div>
-  <form id="programform" name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
+  <form id="programForm" name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
 	<div class="row form-head">
 	<div class="col-sm-7">
 		<h2 ng-if="vm.editing">Editing: {{vm.program.title}}</h2>
@@ -34,9 +34,9 @@
 						<p class="help-block error-text" ng-message="required">Program title is required.</p>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group" show-errors>
 					<label class="control-label" for="short">Short Description</label>
-					<textarea name="short" data-ng-model="vm.program.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the program"></textarea>
+					<textarea name="short" data-ng-model="vm.program.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the program" required></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="description">Description</label>

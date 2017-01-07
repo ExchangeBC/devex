@@ -67,7 +67,7 @@
 		vm.save = function (isValid) {
 			console.log ('saving form');
 			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
+				$scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
 				return false;
 			}
 			vm.program.tags = vm.program.taglist.split(/ *, */);

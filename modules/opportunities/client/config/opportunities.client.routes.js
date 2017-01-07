@@ -50,7 +50,8 @@
     .state('opportunities.view', {
       url: '/:opportunityId',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
       controller: 'OpportunityViewController',
@@ -88,7 +89,8 @@
     .state('opportunityadmin.edit', {
       url: '/:opportunityId/edit',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
       controller: 'OpportunityEditController',
@@ -118,7 +120,8 @@
     .state('opportunityadmin.create', {
       url: '/create',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
       controller: 'OpportunityEditController',
