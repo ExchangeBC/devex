@@ -17,6 +17,12 @@ var ProjectSchema = new Schema({
     required: 'Please fill the project name',
     trim: true
   },
+  short: {
+    type: String,
+    default: '',
+    required: 'Please complete the project short description',
+    trim: true
+  },
   description: {
     type: String,
     default: '',
@@ -31,6 +37,20 @@ var ProjectSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  createdBy: {
+    type: 'ObjectId',
+    ref: 'User',
+    default: null
+  },
+  updated: {
+    type: Date,
+    default: Date.now
+  },
+  updatedBy: {
+    type: 'ObjectId',
+    ref: 'User',
+    default: null
   },
   program: {
     type: Schema.ObjectId,
