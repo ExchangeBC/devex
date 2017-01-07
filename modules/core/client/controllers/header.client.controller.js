@@ -29,7 +29,6 @@
         if (ma) active = ma[1];
         if (route === active)
             return true;
-            console.log(route, active);
         if (route === 'admin' && active.substring(0, 5) === 'admin')
             return true;
     };
