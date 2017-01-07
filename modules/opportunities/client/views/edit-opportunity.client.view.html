@@ -12,7 +12,6 @@
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
-				&nbsp;
 				</button>
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
@@ -23,7 +22,6 @@
 				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				&nbsp;
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
@@ -58,8 +56,8 @@
 					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="taglist">Tags (comma delimited list)</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity tags" tooltip-placement="bottom"></i>
-					<input type="text" name="taglist" ng-model="vm.opportunity.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+					<label class="control-label" for="skilllist">Skills (comma delimited list)</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity skills" tooltip-placement="bottom"></i>
+					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="earn">Reward</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Opportunity reward" tooltip-placement="bottom"></i>
@@ -89,13 +87,11 @@
   </div>
 	</div>
 	<div class="row">
-    <div class="col-sm-12">
-      <div class="pull-right">
+    <div class="col-sm-12 col-form-buttons foot text-right">
 			<div class="btn-group">
 				<a href="javascript:void(0);" title="Save" class="btn btn-primary" ng-click="vm.saveme()">
 					<i class="glyphicon glyphicon-save"></i> Save
-				&nbsp;
-				</button>
+				</a>
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
@@ -105,7 +101,6 @@
 				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				&nbsp;
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>

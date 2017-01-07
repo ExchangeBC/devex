@@ -32,7 +32,7 @@
         pageTitle: 'Opportunities List'
       },
       ncyBreadcrumb: {
-        label: 'Opportunities'
+        label: 'All opportunities'
       },
       resolve: {
         opportunities: function ($stateParams, OpportunitiesService) {
@@ -63,7 +63,7 @@
         }
       },
       data: {
-        pageTitle: 'Opportunity {{ opportunityResolve.title }}'
+        pageTitle: 'Opportunity: {{opportunity.name}}'
       },
       ncyBreadcrumb: {
         label: '{{vm.opportunity.name}}',
