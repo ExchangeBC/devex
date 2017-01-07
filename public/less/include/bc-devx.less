@@ -56,7 +56,48 @@ h6 {
   max-width: 1040px;
 }
 
+
 // Navigation
+
+
+// Default navbar
+.navbar-default {
+  #gradient > .vertical(@start-color: lighten(@navbar-default-bg, 10%); @end-color: @navbar-default-bg);
+  .reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
+  border-radius: @navbar-border-radius;
+  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 5px rgba(0,0,0,.075);
+  .box-shadow(@shadow);
+
+  .navbar-nav > .open > a,
+  .navbar-nav > .active > a {
+    #gradient > .vertical(@start-color: darken(@navbar-default-link-active-bg, 5%); @end-color: darken(@navbar-default-link-active-bg, 2%));
+    .box-shadow(inset 0 3px 9px rgba(0,0,0,.075));
+  }
+}
+.navbar-brand,
+.navbar-nav > li > a {
+  text-shadow: 0 1px 0 rgba(255,255,255,.25);
+}
+
+// Undo rounded corners in static and fixed navbars
+.navbar-static-top,
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  border-radius: 0;
+}
+
+// Fix active state of dropdown items in collapsed mode
+@media (max-width: @grid-float-breakpoint-max) {
+  .navbar .navbar-nav .open .dropdown-menu > .active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: #fff;
+      #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
+    }
+  }
+}
+
 .nav {
   > li {
     > a {
@@ -258,7 +299,7 @@ h6 {
 	margin-bottom: 0;
 }
 
-@media (min-width: 768px) /* and (max-width: 991px) */ {
+@media (min-width: 768px) {
 	.navbar-default, .navbar-transparent {
 		min-height: 64px;
 	}
@@ -630,17 +671,15 @@ section.partners {
 }
 
 // Button Styles
+
 .btn {
   .alt-font(@letter-spacing: 0.025em);
   white-space: nowrap;
-  display: inline-block;
   background: white;
   border-radius: 3px;
   font-size: 14px;
-  color: white;
   text-decoration: none;
-  -webkit-transition: all .15s ease;
-  transition: all .15s ease;
+  .transition-all(0.15s);
 }
 
 .btn-solo {
@@ -673,24 +712,81 @@ section.partners {
   line-height: 16px;
 }
 
+.btn-default,
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
+  .box-shadow(@shadow);
+  // Reset the shadow
+  &:active,
+  &.active {
+    .box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    .box-shadow(none);
+  }
+  .badge {
+    text-shadow: none;
+  }
+}
+
 .btn-default {
-  color: @theme-primary;
-  background-color: white;
+  color: @gray-light;
   border-color: #999;
+  #gradient > .vertical(@start-color: #fff; @end-color: #eef3f6; @start-percent: 50%; @end-percent: 110%);
+  text-shadow: 0 1px 0 #fff;
+  .input-group-btn & {
+    border-color: @input-border;
+  }
+  .has-success .input-group-btn & {
+    border-color: @state-success-text;
+    color: @state-success-text;
+  }
+  .has-warning .input-group-btn & {
+    border-color: @state-warning-text;
+    color: @state-warning-text;
+  }
+  .has-error .input-group-btn & {
+    border-color: @state-danger-text;
+    color: @state-danger-text;
+    background: @state-danger-bg;
+  }
   &:hover {
   	color: @theme-primary;
-    background-color: @gray-lighter;
+	#gradient > .vertical(@start-color: #eee; @end-color: #e0e3f0; @start-percent: 50%; @end-percent: 110%);
   }
   &:hover,&:focus {
     border-color: darken(@theme-primary, 10%);
+  }
+  &:active,
+  &.active {
+    background-image: none;
+  }
+  &.btn-default-primary {
+    color: @theme-primary;
+    border-color: darken(@theme-primary, 8%);
+  }
+  &.btn-default-success {
+    color: @theme-success;
+    border-color: darken(@theme-success, 8%);
+  }
+  &.btn-default-danger {
+    color: @theme-danger;
+    border-color: darken(@theme-danger, 8%);
   }
 }
 
 .btn-primary {
   background-color: @theme-primary;
-  border-color: darken(@theme-primary, 10%);
-  &:hover {
-    background-color: lighten(@theme-primary, 12%);
+  border-color: darken(@theme-primary, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-primary, 10%);
   }
   &:active,&:focus {
     background-color: darken(@theme-primary, 10%);
@@ -699,18 +795,20 @@ section.partners {
 
 .btn-success {
   background-color: @theme-success;
-  &:hover {
-    background-color: lighten(@theme-success, 5%);
+  border-color: darken(@theme-success, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-success, 8%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-success, 8%);
+    background-color: darken(@theme-success, 10%);
   }
 }
 
 .btn-info {
-  background-color: @theme-info;
-  &:hover {
-    background-color: darken(@theme-info, 5%);
+  background-color: darken(@theme-info, 2%);
+  border-color: darken(@theme-info, 14%);
+  &:hover,&:active:hover {
+    background-color: darken(@theme-info, 8%);
   }
   &:active,&:focus {
     background-color: darken(@theme-info, 10%);
@@ -720,21 +818,22 @@ section.partners {
 .btn-warning {
   background-color: @theme-warning;
   border-color: darken(@theme-warning, 10%);
-  &:hover {
-    background-color: lighten(@theme-warning, 12%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-warning, 10%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-warning, 10%);
+    background-color: darken(@theme-warning, 8%);
   }
 }
 
 .btn-danger {
   background-color: @theme-danger;
-  &:hover {
-    background-color: lighten(@theme-danger, 12%);
+  border-color: darken(@theme-danger, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-danger, 10%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-danger, 10%);
+    background-color: darken(@theme-danger, 8%);
   }
 }
 
@@ -742,6 +841,196 @@ section.partners {
   color: rgb(0,164,227);
   background: none;
 }
+
+
+//
+// Dropdowns
+// --------------------------------------------------
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  #gradient > .vertical(@start-color: @dropdown-link-hover-bg; @end-color: darken(@dropdown-link-hover-bg, 5%));
+  background-color: darken(@dropdown-link-hover-bg, 5%);
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
+  background-color: darken(@dropdown-link-active-bg, 5%);
+}
+
+// Alerts
+
+// Common styles
+.alert {
+  text-shadow: 0 1px 0 rgba(255,255,255,.2);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);
+  .box-shadow(@shadow);
+}
+
+// Mixin for generating new styles
+.alert-styles(@color) {
+  #gradient > .vertical(@start-color: @color; @end-color: darken(@color, 7.5%));
+  border-color: darken(@color, 15%);
+}
+
+// Apply the mixin to the alerts
+.alert-success    { .alert-styles(@alert-success-bg); }
+.alert-info       { .alert-styles(@alert-info-bg); }
+.alert-warning    { .alert-styles(@alert-warning-bg); }
+.alert-danger     { .alert-styles(@alert-danger-bg); }
+
+
+// Progress bars
+
+// Give the progress background some depth
+.progress {
+  #gradient > .vertical(@start-color: darken(@progress-bg, 4%); @end-color: @progress-bg);
+  appearance: none;
+  height: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background-color: @gray-lighter;
+  border-radius: 40px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+  &[value]::-webkit-progress-value {
+    transition: width .4s ease-out;
+  }
+}
+
+// Mixin for generating new styles
+.progress-bar-styles(@color) {
+  #gradient > .vertical(@start-color: @color; @end-color: darken(@color, 10%));
+}
+
+// Apply the mixin to the progress bars
+.progress-bar            { .progress-bar-styles(@progress-bar-bg); }
+.progress-bar-primary    { .progress-bar-styles(@theme-primary); }
+.progress-bar-success    { .progress-bar-styles(@theme-success); }
+.progress-bar-info       { .progress-bar-styles(@theme-info); }
+.progress-bar-warning    { .progress-bar-styles(@theme-warning); }
+.progress-bar-danger     { .progress-bar-styles(@theme-danger); }
+
+// Reset the striped class because our mixins don't do multiple gradients and
+// the above custom styles override the new `.progress-bar-striped` in v3.2.0.
+.progress-bar-striped {
+  #gradient > .striped();
+}
+
+
+// Panels
+
+// Common styles
+.panel {
+  .box-shadow(0 1px 2px rgba(0,0,0,.05));
+}
+
+// Mixin for generating new styles
+.panel-heading-normal(@bg) {
+  > .panel-heading {
+    #gradient > .vertical(@start-color: @bg; @end-color: darken(@bg, 5%));
+  }
+}
+.panel-heading-lighten(@bg; @color: #fff) {
+  > .panel-heading {
+    #gradient > .vertical(@start-color: lighten(@bg, 16%); @end-color: lighten(@bg, 8%));
+    border-color: lighten(@bg, 6%);
+    color: @color;
+  }
+  > .panel-body, > .panel-footer, {
+    border-color: lighten(@bg, 6%);
+  }
+  border-color: lighten(@bg, 6%); 
+}
+
+// Apply the mixin to the panel headings only
+.panel-default  { .panel-heading-normal(@panel-default-heading-bg); }
+.panel-primary  { .panel-heading-lighten(@theme-primary); }
+.panel-success  { .panel-heading-lighten(@theme-success); }
+.panel-info     { .panel-heading-lighten(@theme-info, #31708f); }
+.panel-warning  { .panel-heading-lighten(@theme-warning); }
+.panel-danger   { .panel-heading-lighten(@theme-danger); }
+
+
+// Custom panel styles
+
+.panel-flat {
+	.panel-heading {
+		border-bottom: none;
+	}
+	.panel-footer {
+		border-top: none;
+	}
+}
+
+.panel-body .panel-title {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	font-size: 18px;
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+.panel-default .panel-body .panel-title {
+	color: darken(@theme-primary, 10%);
+}
+
+
+// Panels with logo images on the side
+
+.list-img-outer {
+	position: relative;
+}
+.list-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: (@thumb-md + 75);
+	text-align: center;
+	img {
+		margin-top: 20px;
+		width: @thumb-md;
+		height: @thumb-md;
+		border-radius: @border-radius-base;
+	}
+	+ .list-img-body {
+		margin-left: (@thumb-md + 80);
+		min-height: @thumb-md;
+	}
+	@media (max-width: 767px) {
+		width: (@thumb-md + 35);
+		+ .list-img-body {
+			margin-left: (@thumb-md + 40);
+		}
+	}
+}
+.panel-default .list-img {
+	background: @panel-default-heading-bg;
+}
+.panel-info .list-img {
+	background: lighten(@theme-info, 10%);
+}
+.img-logo {
+	margin-left: auto;
+	margin-right: auto;
+	max-height: @thumb-lg;
+}
+
+
+// Wells
+
+.well {
+  #gradient > .vertical(@start-color: darken(@well-bg, 5%); @end-color: @well-bg);
+  border-color: darken(@well-bg, 10%);
+  @shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
+  .box-shadow(@shadow);
+}
+
+
+// Form header
 
 .col-text-buttons a {
   margin-left: 0.5em;
@@ -824,67 +1113,6 @@ section.partners {
       background-color: @theme-primary;
     }
   }
-}
-
-// Alerts
-.alert-success {
-  color: @theme-success;
-  background-color: fadeout(@theme-success, 80%);
-  border-color: fadeout(@theme-success, 70%);
-}
-
-.alert-info {
-  color: darken(@theme-info, 20%);
-  background-color: fadeout(@theme-info, 80%);
-  border-color: fadeout(@theme-info, 50%);
-}
-
-.alert-warning {
-  color: darken(@theme-warning, 20%);
-  background-color: fadeout(@theme-warning, 80%);
-  border-color: fadeout(@theme-warning, 50%);
-}
-
-.alert-danger {
-  color: @theme-danger;
-  background-color: fadeout(@theme-danger, 80%);
-  border-color: fadeout(@theme-danger, 70%);
-}
-
-// Progress Bars
-.progress {
-	appearance: none;
-  height: 10px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  background-color: @gray-lighter;
-  border-radius: 40px;
-  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-
-	&[value]::-webkit-progress-value{
-		transition: width .4s ease-out;
-	}
-}
-
-.progress-bar-primary {
-	background-color: @theme-primary;
-}
-
-.progress-bar-success {
-	background-color: @theme-success;
-}
-
-.progress-bar-info {
-	background-color: @theme-info;
-}
-
-.progress-bar-warning {
-	background-color: @theme-warning;
-}
-
-.progress-bar-danger {
-	background-color: @theme-danger;
 }
 
 // List Groups
@@ -1355,71 +1583,7 @@ img::selection, img::-moz-selection {
 	display: none;
 }
 
-// Custom panel styles
-
-.panel-flat {
-	.panel-heading {
-		border-bottom: none;
-	}
-	.panel-footer {
-		border-top: none;
-	}
-}
-
-.panel-body .panel-title {
-	margin-top: 16px;
-	margin-bottom: 16px;
-	font-size: 18px;
-	&:first-child {
-		margin-top: 0;
-	}
-}
-
-.panel-default .panel-body .panel-title {
-	color: darken(@theme-primary, 10%);
-}
-
-
-// Panels with logo images on the side
-
-.list-img-outer {
-	position: relative;
-}
-.list-img {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
-	width: (@thumb-md + 75);
-	text-align: center;
-	img {
-		margin-top: 20px;
-		width: @thumb-md;
-		height: @thumb-md;
-		border-radius: @border-radius-base;
-	}
-	+ .list-img-body {
-		margin-left: (@thumb-md + 80);
-		min-height: @thumb-md;
-	}
-	@media (max-width: 767px) {
-		width: (@thumb-md + 35);
-		+ .list-img-body {
-			margin-left: (@thumb-md + 40);
-		}
-	}
-}
-.panel-default .list-img {
-	background: @panel-default-heading-bg;
-}
-.panel-info .list-img {
-	background: lighten(@theme-info, 10%);
-}
-.img-logo {
-	margin-left: auto;
-	margin-right: auto;
-	max-height: @thumb-lg;
-}
+// Utility styles
 
 .pre-line {
 	white-space: pre-line;	
@@ -1430,4 +1594,17 @@ img::selection, img::-moz-selection {
 }
 .long-desc {
 	font-size: (@font-size-base - 1);
+}
+
+.margin-top {
+	margin-top: @grid-gutter-width;
+}
+.margin-top-lg {
+	margin-top: (@grid-gutter-width * 2);
+}
+.margin-bottom {
+	margin-bottom: @grid-gutter-width;
+}
+.margin-bottom-lg {
+	margin-bottom: (@grid-gutter-width * 2);
 }
