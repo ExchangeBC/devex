@@ -149,9 +149,8 @@ h6 {
     .nav {
         > li {
             > a {
-                .alt-font;
+                .alt-font(@font-weight: 600);
                 font-size: 11px;
-                font-weight: 600;
                 &:hover {
                   background-color: transparent;
                 }
@@ -632,13 +631,12 @@ section.partners {
 
 // Button Styles
 .btn {
-  .alt-font;
+  .alt-font(@letter-spacing: 0.025em);
   white-space: nowrap;
   display: inline-block;
   background: white;
   border-radius: 3px;
   font-size: 14px;
-  letter-spacing: .025em;
   color: white;
   text-decoration: none;
   -webkit-transition: all .15s ease;
@@ -1119,8 +1117,8 @@ section.partners {
 .card-img-left {
   position: relative;
   float: left!important;
-  width: 75px;
-  height: 75px;
+  width: @thumb-md;
+  height: @thumb-md;
   border-radius: @panel-border-radius;
   margin-right: 14px;
 }
@@ -1337,6 +1335,8 @@ img::selection, img::-moz-selection {
     background-color: #818a91;
 }
 
+// Customize breadcrumbs
+
 .breadcrumb {
 	margin-bottom: 0;
 }
@@ -1354,6 +1354,8 @@ img::selection, img::-moz-selection {
 .list-page .list-page-hide {
 	display: none;
 }
+
+// Custom panel styles
 
 .panel-flat {
 	.panel-heading {
@@ -1377,6 +1379,9 @@ img::selection, img::-moz-selection {
 	color: darken(@theme-primary, 10%);
 }
 
+
+// Panels with logo images on the side
+
 .list-img-outer {
 	position: relative;
 }
@@ -1385,8 +1390,24 @@ img::selection, img::-moz-selection {
 	left: 0;
 	top: 0;
 	bottom: 0;
-	width: 110px;
+	width: (@thumb-md + 75);
 	text-align: center;
+	img {
+		margin-top: 20px;
+		width: @thumb-md;
+		height: @thumb-md;
+		border-radius: @border-radius-base;
+	}
+	+ .list-img-body {
+		margin-left: (@thumb-md + 80);
+		min-height: @thumb-md;
+	}
+	@media (max-width: 767px) {
+		width: (@thumb-md + 35);
+		+ .list-img-body {
+			margin-left: (@thumb-md + 40);
+		}
+	}
 }
 .panel-default .list-img {
 	background: @panel-default-heading-bg;
@@ -1394,15 +1415,10 @@ img::selection, img::-moz-selection {
 .panel-info .list-img {
 	background: lighten(@theme-info, 10%);
 }
-.list-img img {
-	margin-top: 20px;
-	width: 75px;
-	height: 75px;
-	border-radius: @border-radius-base;
-}
-.list-img + .list-img-body {
-	margin-left: 115px;
-	min-height: 75px;
+.img-logo {
+	margin-left: auto;
+	margin-right: auto;
+	max-height: @thumb-lg;
 }
 
 .pre-line {
@@ -1413,5 +1429,5 @@ img::selection, img::-moz-selection {
 	margin: 15px 25px;
 }
 .long-desc {
-	font-size: 13px;
+	font-size: (@font-size-base - 1);
 }
