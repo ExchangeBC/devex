@@ -36,7 +36,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, opportunity, editing, Authentication, Notification) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, Authentication, Notification) {
 		var vm         = this;
 		vm.programId   = $stateParams.programId;
 		vm.projectId   = $stateParams.projectId;
@@ -106,6 +106,18 @@
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
 				});
 			});
+		};
+		vm.popoverCache = {};
+		vm.popoverContent       = function(field) {
+			if (! field) return;
+			if (! vm.popoverCache[field]) {
+				var help = $('#opportunityForm').find('.input-help[data-field='+field+']'),
+					html = '';
+				if (help.length)
+					html = help.html();
+				vm.popoverCache[field] = $sce.trustAsHtml(html);
+			}
+			return vm.popoverCache[field];
 		};
 	})
 	;
