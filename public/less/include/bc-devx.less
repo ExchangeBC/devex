@@ -50,10 +50,13 @@ h6 {
     padding: 0;
     margin-bottom: 0.75em;
 }
+.page-header h1 {
+	margin-bottom: 10px;
+}
 
 // Container
 .container {
-  max-width: 1040px;
+	max-width: 1040px;
 }
 
 
@@ -583,7 +586,7 @@ section {
 
 // Mixin for generating new styles
 .progress-bar-styles(@color) {
-  #gradient > .vertical(@start-color: @color; @end-color: darken(@color, 10%));
+  #gradient > .vertical(@start-color: lighten(@color, 5%); @end-color: darken(@color, 5%));
 }
 
 // Apply the mixin to the progress bars
@@ -614,9 +617,9 @@ section {
     #gradient > .vertical(@start-color: @bg; @end-color: darken(@bg, 5%));
   }
 }
-.panel-heading-lighten(@bg; @color: #fff) {
+.panel-heading-lighten(@bg; @color: #fff; @pc1: 16%; @pc2: 8%) {
   > .panel-heading {
-    #gradient > .vertical(@start-color: lighten(@bg, 16%); @end-color: lighten(@bg, 8%));
+    #gradient > .vertical(@start-color: lighten(@bg, @pc1); @end-color: lighten(@bg, @pc2));
     border-color: lighten(@bg, 6%);
     color: @color;
   }
@@ -628,7 +631,7 @@ section {
 
 // Apply the mixin to the panel headings only
 .panel-default  { .panel-heading-normal(@panel-default-heading-bg); }
-.panel-primary  { .panel-heading-lighten(@theme-primary); }
+.panel-primary  { .panel-heading-lighten(@theme-primary; #fff; 20%); }
 .panel-success  { .panel-heading-lighten(@theme-success); }
 .panel-info     { .panel-heading-lighten(@theme-info, #31708f); }
 .panel-warning  { .panel-heading-lighten(@theme-warning); }
@@ -656,7 +659,7 @@ section {
 }
 
 .panel-default .panel-body .panel-title {
-	color: darken(@theme-primary, 10%);
+	color: desaturate(@theme-primary, 10%);
 }
 
 
@@ -766,7 +769,7 @@ section {
 }
 
 .label-info {
-  background-color: @theme-info;
+  background-color: darken(@theme-info, 5%);
 }
 
 .label-warning {
@@ -774,19 +777,23 @@ section {
 }
 
 .label-danger {
-  background-color: @theme-danger;
+  background-color: lighten(@theme-danger, 5%);
 }
 
 .label-list .label:not(:last-child) {
 	margin-right: 0.5em;
 }
 
-.field-tt-source {
+.input-popover-source {
   color: @theme-primary;
   &:hover,
   &:focus {
     color: darken(@theme-primary, 10%);
   }
+  cursor: pointer;
+}
+.input-help {
+  display: none;
 }
 
 // Badges
@@ -1266,12 +1273,15 @@ img::selection, img::-moz-selection {
 	display: none;
 }
 
-.list-head h3:after {
-	display: block;
-	content: "";
-	height: 2px;
-	margin-top: 4px;
-	#gradient > .horizontal(#d9e3ee; #fff; 40%);
+.list-head h3 {
+	color: #555;
+	&:after {
+		display: block;
+		content: "";
+		height: 2px;
+		margin-top: 4px;
+		#gradient > .horizontal(lighten(@theme-info, 10%); #fff; 40%);
+	}
 }
 
 // Utility styles
