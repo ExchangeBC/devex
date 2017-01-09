@@ -18,6 +18,7 @@ var ProgramSchema = new Schema({
   website     : {type: String, default: ''},
   logo        : {type: String, default: ''},
   tags        : [String],
+  isPublished : {type: Boolean, default: false},
   created     : {type: Date, default: null},
   createdBy   : {type: 'ObjectId', ref: 'User', default: null },
   updated     : {type: Date, default: null },
@@ -26,7 +27,7 @@ var ProgramSchema = new Schema({
 
 ProgramSchema.statics.findUniqueCode = function (title, suffix, callback) {
   var _this = this;
-  var possible = (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+  var possible = 'pro-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 
   _this.findOne({
     code: possible

@@ -20,11 +20,11 @@ request : <code>-request
  * Module dependencies.
  */
 var path = require('path'),
-  mongoose = require('mongoose'),
-  Opportunity = mongoose.model('Opportunity'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-  _ = require('lodash');
+	mongoose = require('mongoose'),
+	Opportunity = mongoose.model('Opportunity'),
+	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	_ = require('lodash');
 
 // -------------------------------------------------------------------------
 //
@@ -32,44 +32,44 @@ var path = require('path'),
 //
 // -------------------------------------------------------------------------
 var adminRole = function (opportunity) {
-  return opportunity.code+'-admin';
+	return opportunity.code+'-admin';
 };
 var memberRole = function (opportunity) {
-  return opportunity.code;
+	return opportunity.code;
 };
 var requestRole = function (opportunity) {
-  return opportunity.code+'-request';
+	return opportunity.code+'-request';
 };
 var setOpportunityMember = function (opportunity, user) {
-  user.addRoles ([memberRole(opportunity)]);
+	user.addRoles ([memberRole(opportunity)]);
 };
 var setOpportunityAdmin = function (opportunity, user) {
-  user.addRoles ([memberRole(opportunity), adminRole(opportunity)]);
+	user.addRoles ([memberRole(opportunity), adminRole(opportunity)]);
 };
 var setOpportunityRequest = function (opportunity, user) {
-  user.addRoles ([requestRole(opportunity)]);
+	user.addRoles ([requestRole(opportunity)]);
 };
 var unsetOpportunityMember = function (opportunity, user) {
-  user.removeRoles ([memberRole(opportunity)]);
+	user.removeRoles ([memberRole(opportunity)]);
 };
 var unsetOpportunityAdmin = function (opportunity, user) {
-  user.removeRoles ([memberRole(opportunity), adminRole(opportunity)]);
+	user.removeRoles ([memberRole(opportunity), adminRole(opportunity)]);
 };
 var unsetOpportunityRequest = function (opportunity, user) {
-  console.log ('remove role ', requestRole(opportunity));
-  user.removeRoles ([requestRole(opportunity)]);
+	console.log ('remove role ', requestRole(opportunity));
+	user.removeRoles ([requestRole(opportunity)]);
 };
 var ensureAdmin = function (opportunity, user, res) {
-  if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
-    console.log ('NOT admin');
-    res.status(422).send({
-      message: 'User Not Authorized'
-    });
-    return false;
-  } else {
-    console.log ('Is admin');
-    return true;
-  }
+	if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
+		console.log ('NOT admin');
+		res.status(422).send({
+			message: 'User Not Authorized'
+		});
+		return false;
+	} else {
+		console.log ('Is admin');
+		return true;
+	}
 };
 // -------------------------------------------------------------------------
 //
@@ -78,14 +78,14 @@ var ensureAdmin = function (opportunity, user, res) {
 //
 // -------------------------------------------------------------------------
 var decorate = function (opportunityModel, roles) {
-  var opportunity = opportunityModel ? opportunityModel.toJSON () : {};
-  opportunity.userIs = {
-    admin   : !!~roles.indexOf (adminRole(opportunity)) || !!~roles.indexOf ('admin'),
-    member  : !!~roles.indexOf (memberRole(opportunity)),
-    request : !!~roles.indexOf (requestRole(opportunity)),
-    gov     : !!~roles.indexOf ('gov')
-  };
-  return opportunity;
+	var opportunity = opportunityModel ? opportunityModel.toJSON () : {};
+	opportunity.userIs = {
+		admin   : !!~roles.indexOf (adminRole(opportunity)) || !!~roles.indexOf ('admin'),
+		member  : !!~roles.indexOf (memberRole(opportunity)),
+		request : !!~roles.indexOf (requestRole(opportunity)),
+		gov     : !!~roles.indexOf ('gov')
+	};
+	return opportunity;
 };
 // -------------------------------------------------------------------------
 //
@@ -93,9 +93,30 @@ var decorate = function (opportunityModel, roles) {
 //
 // -------------------------------------------------------------------------
 var decorateList = function (opportunityModels, roles) {
-  return opportunityModels.map (function (opportunityModel) {
-    return decorate (opportunityModel, roles);
-  });
+	return opportunityModels.map (function (opportunityModel) {
+		return decorate (opportunityModel, roles);
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get a list of all my opportunities, but only ones I have access to as a normal
+// member or admin, just not as request
+//
+// -------------------------------------------------------------------------
+exports.my = function (req, res) {
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : { code: { $in: me.opportunities.member } };
+	Opportunity.find (search)
+	.select ('code name short')
+	.exec (function (err, opportunities) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (opportunities);
+		}
+	});
 };
 // -------------------------------------------------------------------------
 //
@@ -104,7 +125,7 @@ var decorateList = function (opportunityModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.members = function (opportunity, cb) {
-  mongoose.model ('User').find ({roles: memberRole(opportunity)}).exec (cb);
+	mongoose.model ('User').find ({roles: memberRole(opportunity)}).exec (cb);
 };
 
 // -------------------------------------------------------------------------
@@ -114,7 +135,7 @@ exports.members = function (opportunity, cb) {
 //
 // -------------------------------------------------------------------------
 exports.requests = function (opportunity, cb) {
-  mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec (cb);
+	mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec (cb);
 };
 
 /**
@@ -127,54 +148,54 @@ exports.requests = function (opportunity, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-  console.log ('Creating a new opportunity');
-  var opportunity = new Opportunity(req.body);
-  //
-  // set the code, this is used for setting roles and other stuff
-  //
-  Opportunity.findUniqueCode (opportunity.name, null, function (newcode) {
-    opportunity.code = newcode;
-    //
-    // set the audit fields so we know who did what when
-    //
-    helpers.applyAudit (opportunity, req.user)
-    //
-    // save and return
-    //
-    opportunity.save(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        setOpportunityAdmin (opportunity, req.user);
-        req.user.save ();
-        res.json(opportunity);
-      }
-    });
-  });
+	console.log ('Creating a new opportunity');
+	var opportunity = new Opportunity(req.body);
+	//
+	// set the code, this is used for setting roles and other stuff
+	//
+	Opportunity.findUniqueCode (opportunity.name, null, function (newcode) {
+		opportunity.code = newcode;
+		//
+		// set the audit fields so we know who did what when
+		//
+		helpers.applyAudit (opportunity, req.user)
+		//
+		// save and return
+		//
+		opportunity.save(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				setOpportunityAdmin (opportunity, req.user);
+				req.user.save ();
+				res.json(opportunity);
+			}
+		});
+	});
 
 /*
 
 GITHUB related stuff
 
-  var opportunity = new Opportunity(req.body);
-  opportunity.user = req.user;
+	var opportunity = new Opportunity(req.body);
+	opportunity.user = req.user;
 
-  var http = require('http');
-  var github = require('octonode');
-  var config = require('/config/config.js');
+	var http = require('http');
+	var github = require('octonode');
+	var config = require('/config/config.js');
 
-  // curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
+	// curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
 
-  var url = 'https://api.github.com/user/repos';
-  var user = config.github.clientID;  // 'dewolfe001';
-  var secret = config.github.clientSecret; // '39c1cffc1008ed43189ecd27448bd903a75778eb';
+	var url = 'https://api.github.com/user/repos';
+	var user = config.github.clientID;  // 'dewolfe001';
+	var secret = config.github.clientSecret; // '39c1cffc1008ed43189ecd27448bd903a75778eb';
 
-  var client = github.client({
+	var client = github.client({
 	id: user,
-    secret: secret
-  });
+		secret: secret
+	});
 
  //  opportunity.github = client.repo({
 	// 'name': opportunity.name,
@@ -187,18 +208,18 @@ GITHUB related stuff
 	// 		return data.html_url;
 	// 	}
 	// }
-  // );
+	// );
 
-  opportunity.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(opportunity);
-    }
-  });
-  */
+	opportunity.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(opportunity);
+		}
+	});
+	*/
 };
 
 // -------------------------------------------------------------------------
@@ -207,7 +228,7 @@ GITHUB related stuff
 //
 // -------------------------------------------------------------------------
 exports.read = function (req, res) {
-  res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
+	res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 };
 
 // -------------------------------------------------------------------------
@@ -217,29 +238,29 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-  if (ensureAdmin (req.opportunity, req.user, res)) {
-    //
-    // copy over everything passed in. This will overwrite the
-    // audit fields, but they get updated in the following step
-    //
-    var opportunity = _.assign (req.opportunity, req.body);
-    //
-    // set the audit fields so we know who did what when
-    //
-    helpers.applyAudit (opportunity, req.user)
-    //
-    // save
-    //
-    opportunity.save(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        res.json(opportunity);
-      }
-    });
-  }
+	if (ensureAdmin (req.opportunity, req.user, res)) {
+		//
+		// copy over everything passed in. This will overwrite the
+		// audit fields, but they get updated in the following step
+		//
+		var opportunity = _.assign (req.opportunity, req.body);
+		//
+		// set the audit fields so we know who did what when
+		//
+		helpers.applyAudit (opportunity, req.user)
+		//
+		// save
+		//
+		opportunity.save(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(opportunity);
+			}
+		});
+	}
 };
 
 // -------------------------------------------------------------------------
@@ -248,21 +269,21 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-  console.log ('Deleting');
-  if (ensureAdmin (req.opportunity, req.user, res)) {
-    console.log ('Deleting');
+	console.log ('Deleting');
+	if (ensureAdmin (req.opportunity, req.user, res)) {
+		console.log ('Deleting');
 
-    var opportunity = req.opportunity;
-    opportunity.remove(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        res.json(opportunity);
-      }
-    });
-  }
+		var opportunity = req.opportunity;
+		opportunity.remove(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(opportunity);
+			}
+		});
+	}
 };
 
 // -------------------------------------------------------------------------
@@ -271,21 +292,23 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-  Opportunity.find().sort('name')
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .populate('project', 'name _id')
-  .populate('program', 'title _id')
-  .exec(function (err, opportunities) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-      // res.json(opportunities);
-    }
-  });
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
+	Opportunity.find(search).sort('name')
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('project', 'name _id')
+	.populate('program', 'title _id')
+	.exec(function (err, opportunities) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+			// res.json(opportunities);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -294,15 +317,15 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listMembers = function (req, res) {
-  exports.members (req.opportunity, function (err, users) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      res.json (users);
-    }
-  });
+	exports.members (req.opportunity, function (err, users) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (users);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -311,15 +334,15 @@ exports.listMembers = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listRequests = function (req, res) {
-  exports.requests (req.opportunity, function (err, users) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      res.json (users);
-    }
-  });
+	exports.requests (req.opportunity, function (err, users) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (users);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -328,9 +351,9 @@ exports.listRequests = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.request = function (req, res) {
-  setOpportunityRequest (req.opportunity, req.user);
-  req.user.save ();
-  res.json ({ok:true});
+	setOpportunityRequest (req.opportunity, req.user);
+	req.user.save ();
+	res.json ({ok:true});
 }
 
 // -------------------------------------------------------------------------
@@ -342,70 +365,70 @@ exports.request = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var assignMember = function (opportunity, user) {
-  return new Promise (function (resolve, reject) {
-    unsetOpportunityRequest (opportunity, user);
-    setOpportunityMember (opportunity, user);
-    user.save ().then (resolve, reject);
-  });
+	return new Promise (function (resolve, reject) {
+		unsetOpportunityRequest (opportunity, user);
+		setOpportunityMember (opportunity, user);
+		user.save ().then (resolve, reject);
+	});
 };
 var unassignMember = function (opportunity, user) {
-  return new Promise (function (resolve, reject) {
-    unsetOpportunityRequest (opportunity, user);
-    unsetOpportunityMember (opportunity, user);
-    user.save ().then (resolve, reject);
-  });
+	return new Promise (function (resolve, reject) {
+		unsetOpportunityRequest (opportunity, user);
+		unsetOpportunityMember (opportunity, user);
+		user.save ().then (resolve, reject);
+	});
 };
 exports.confirmMember = function (req, res) {
-  var user = req.model;
-  console.log ('++++ confirm member ', user.username, user._id);
-  var assignedMember;
-  //
-  // assign the member
-  //
-  assignMember (req.opportunity, user)
-  //
-  // get the list of remaining applicants
-  //
-  .then (function (result) {
-    assignedMember = result;
-    return mongoose.model ('User').find ({roles: requestRole(req.opportunity)}).exec();
-  })
-  //
-  // make a promise array of those by running them through the
-  // unassign method
-  //
-  .then (function (list) {
-    return Promise.all (list.map (function (member) {
-      return unassignMember (req.opportunity, member);
-    }));
-  })
-  //
-  // all OK, return the assigned user
-  //
-  .then (function () {
-    res.json (assignedMember);
-  })
-  //
-  // not going very well, figure out the error
-  //
-  .catch (function (err) {
-    res.status (422).send ({
-      message: errorHandler.getErrorMessage (err)
-    });
-  });
+	var user = req.model;
+	console.log ('++++ confirm member ', user.username, user._id);
+	var assignedMember;
+	//
+	// assign the member
+	//
+	assignMember (req.opportunity, user)
+	//
+	// get the list of remaining applicants
+	//
+	.then (function (result) {
+		assignedMember = result;
+		return mongoose.model ('User').find ({roles: requestRole(req.opportunity)}).exec();
+	})
+	//
+	// make a promise array of those by running them through the
+	// unassign method
+	//
+	.then (function (list) {
+		return Promise.all (list.map (function (member) {
+			return unassignMember (req.opportunity, member);
+		}));
+	})
+	//
+	// all OK, return the assigned user
+	//
+	.then (function () {
+		res.json (assignedMember);
+	})
+	//
+	// not going very well, figure out the error
+	//
+	.catch (function (err) {
+		res.status (422).send ({
+			message: errorHandler.getErrorMessage (err)
+		});
+	});
 };
 exports.denyMember = function (req, res) {
-  var user = req.model;
-  console.log ('++++ deny member ', user.username, user._id);
-  unassignMember (req.opportunity, user)
-  .then (function (result) {
-    res.json (result);
-  })
-  .catch (function (err) {
-    res.status (422).send ({
-      message: errorHandler.getErrorMessage (err)
-    });
-  });
+	var user = req.model;
+	console.log ('++++ deny member ', user.username, user._id);
+	unassignMember (req.opportunity, user)
+	.then (function (result) {
+		res.json (result);
+	})
+	.catch (function (err) {
+		res.status (422).send ({
+			message: errorHandler.getErrorMessage (err)
+		});
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -414,19 +437,19 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProject = function (req, res) {
-  Opportunity.find({project:req.project._id}).sort('name')
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .exec(function (err, opportunities) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-      // res.json(opportunities);
-    }
-  });
+	Opportunity.find({project:req.project._id}).sort('name')
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.exec(function (err, opportunities) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+			// res.json(opportunities);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -435,9 +458,9 @@ exports.forProject = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-  console.log ('get a new opportunity set up and return it');
-  var p = new Opportunity ();
-  res.json(p);
+	console.log ('get a new opportunity set up and return it');
+	var p = new Opportunity ();
+	res.json(p);
 };
 
 // -------------------------------------------------------------------------
@@ -447,27 +470,27 @@ exports.new = function (req, res) {
 // -------------------------------------------------------------------------
 exports.opportunityByID = function (req, res, next, id) {
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Opportunity is invalid'
-    });
-  }
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(400).send({
+			message: 'Opportunity is invalid'
+		});
+	}
 
-  Opportunity.findById(id)
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .populate('project', 'name _id')
-  .populate('program', 'title _id')
-  .exec(function (err, opportunity) {
-    if (err) {
-      return next(err);
-    } else if (!opportunity) {
-      return res.status(404).send({
-        message: 'No opportunity with that identifier has been found'
-      });
-    }
-    req.opportunity = opportunity;
-    next();
-  });
+	Opportunity.findById(id)
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('project', 'name _id')
+	.populate('program', 'title _id')
+	.exec(function (err, opportunity) {
+		if (err) {
+			return next(err);
+		} else if (!opportunity) {
+			return res.status(404).send({
+				message: 'No opportunity with that identifier has been found'
+			});
+		}
+		req.opportunity = opportunity;
+		next();
+	});
 };
 

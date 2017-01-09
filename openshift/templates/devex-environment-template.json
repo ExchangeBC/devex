@@ -10,7 +10,7 @@
     }
   },
   "labels": {
-    "template": "devex-environment"
+    "template": "devxp-environment"
   },
   "objects": [
     {
@@ -457,14 +457,14 @@
       "name": "APP_IMAGE_NAME",
       "displayName": "Application image name.",
       "description": "Application image name.",
-      "value": "devex",
+      "value": "devxp",
       "required": true
     },
     {
       "name": "APP_IMAGE_NAMESPACE",
       "displayName": "Namespace containing application images.",
       "description": "Namespace containing application images.",
-      "value": "devex",
+      "value": "devxp",
       "required": true
     },
     {

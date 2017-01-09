@@ -36,11 +36,15 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, opportunity, editing, Authentication, Notification) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, opportunity, editing, programs, projects, Authentication, Notification) {
 		var vm         = this;
+		vm.projects    = projects;
+		vm.programs    = programs;
 		vm.projectId   = $stateParams.projectId;
 		vm.editing     = editing;
 		vm.opportunity = opportunity;
+		vm.projectId   = (opportunity.project && opportunity.project)? opportunity.project._id : null;
+		vm.programId   = (opportunity.program && opportunity.program)? opportunity.program._id : null;
 		if (!vm.editing) {
 			vm.opportunity.project = $stateParams.projectId;
 		}

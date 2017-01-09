@@ -20,6 +20,11 @@
         url: '/api/opportunities/for/project/:projectId',
         isArray: true
       },
+      my: {
+        method: 'GET',
+        url: '/api/my/opportunities',
+        isArray: true
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/opportunity/:opportunityId'

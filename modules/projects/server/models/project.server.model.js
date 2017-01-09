@@ -23,11 +23,13 @@ var ProjectSchema = new Schema({
     required: 'Please complete the project description',
     trim: true
   },
+  short       : {type: String, default: ''},
   github: {
     type: String,
     default: '',
     trim: true
   },
+  isPublished : {type: Boolean, default: false},
   created: {
     type: Date,
     default: Date.now

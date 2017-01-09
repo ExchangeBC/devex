@@ -18,6 +18,11 @@
         method: 'GET',
         url :'/api/request/program/:programId'
       },
+      my: {
+        method: 'GET',
+        url: '/api/my/programs',
+        isArray: true
+      },
       getRequests: {
         method: 'GET',
         url :'/api/programs/requests/:programId',

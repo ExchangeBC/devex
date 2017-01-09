@@ -17,6 +17,10 @@ module.exports = function(app) {
     .put(opportunities.update)
     .delete(opportunities.delete);
 
+
+  app.route('/api/my/opportunities').all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.my);
+
   //
   // opportunities for project
   //

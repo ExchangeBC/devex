@@ -24,7 +24,12 @@
         method: 'GET',
         url :'/api/request/project/:projectId'
       },
-      getRequests: {
+      my: {
+        method: 'GET',
+        url: '/api/my/projects',
+        isArray: true
+      },
+     getRequests: {
         method: 'GET',
         url :'/api/projects/requests/:projectId',
         isArray: true

@@ -99,6 +99,12 @@
             opportunityId: $stateParams.opportunityId
           }).$promise;
         },
+        programs: function (ProgramsService) {
+          return ProgramsService.my ().$promise;
+        },
+        projects: function (ProjectsService) {
+          return ProjectsService.my ().$promise;
+        },
         editing: function () { return true; }
       },
       data: {
@@ -127,7 +133,13 @@
         opportunity: function (OpportunitiesService) {
           return new OpportunitiesService();
         },
-        editing: function () { return false; }
+        programs: function (ProgramsService) {
+          return ProgramsService.my ().$promise;
+        },
+        projects: function (ProjectsService) {
+          return ProjectsService.my ().$promise;
+        },
+       editing: function () { return false; }
       },
       data: {
         roles: ['admin', 'gov'],

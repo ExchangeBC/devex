@@ -18,6 +18,9 @@ module.exports = function (app) {
     .put(programs.update)
     .delete(programs.delete);
 
+  app.route('/api/my/programs').all(programsPolicy.isAllowed)
+    .get(programs.my);
+
   //
   // get lists of users
   //

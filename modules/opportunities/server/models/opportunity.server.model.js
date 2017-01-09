@@ -21,6 +21,7 @@ var OpportunitySchema = new Schema({
 	earn        : {type: Number, default: 0},
 	tags        : [String],
 	status      : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
+	isPublished : {type: Boolean, default: false},
 	assignedTo  : {type: 'ObjectId', ref: 'User', default: null },
 	created     : {type: Date, default: null},
 	createdBy   : {type: 'ObjectId', ref: 'User', default: null },

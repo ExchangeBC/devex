@@ -20,11 +20,11 @@ request : <code>-request
  * Module dependencies.
  */
 var path = require('path'),
-  mongoose = require('mongoose'),
-  Project = mongoose.model('Project'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-  helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-  _ = require('lodash');
+	mongoose = require('mongoose'),
+	Project = mongoose.model('Project'),
+	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	_ = require('lodash');
 
 // -------------------------------------------------------------------------
 //
@@ -32,44 +32,44 @@ var path = require('path'),
 //
 // -------------------------------------------------------------------------
 var adminRole = function (project) {
-  return project.code+'-admin';
+	return project.code+'-admin';
 };
 var memberRole = function (project) {
-  return project.code;
+	return project.code;
 };
 var requestRole = function (project) {
-  return project.code+'-request';
+	return project.code+'-request';
 };
 var setProjectMember = function (project, user) {
-  user.addRoles ([memberRole(project)]);
+	user.addRoles ([memberRole(project)]);
 };
 var setProjectAdmin = function (project, user) {
-  user.addRoles ([memberRole(project), adminRole(project)]);
+	user.addRoles ([memberRole(project), adminRole(project)]);
 };
 var setProjectRequest = function (project, user) {
-  user.addRoles ([requestRole(project)]);
+	user.addRoles ([requestRole(project)]);
 };
 var unsetProjectMember = function (project, user) {
-  user.removeRoles ([memberRole(project)]);
+	user.removeRoles ([memberRole(project)]);
 };
 var unsetProjectAdmin = function (project, user) {
-  user.removeRoles ([memberRole(project), adminRole(project)]);
+	user.removeRoles ([memberRole(project), adminRole(project)]);
 };
 var unsetProjectRequest = function (project, user) {
-  console.log ('remove role ', requestRole(project));
-  user.removeRoles ([requestRole(project)]);
+	console.log ('remove role ', requestRole(project));
+	user.removeRoles ([requestRole(project)]);
 };
 var ensureAdmin = function (project, user, res) {
-  if (!~user.roles.indexOf (adminRole(project)) && !~user.roles.indexOf ('admin')) {
-    console.log ('NOT admin');
-    res.status(422).send({
-      message: 'User Not Authorized'
-    });
-    return false;
-  } else {
-    console.log ('Is admin');
-    return true;
-  }
+	if (!~user.roles.indexOf (adminRole(project)) && !~user.roles.indexOf ('admin')) {
+		console.log ('NOT admin');
+		res.status(422).send({
+			message: 'User Not Authorized'
+		});
+		return false;
+	} else {
+		console.log ('Is admin');
+		return true;
+	}
 };
 // -------------------------------------------------------------------------
 //
@@ -78,14 +78,14 @@ var ensureAdmin = function (project, user, res) {
 //
 // -------------------------------------------------------------------------
 var decorate = function (projectModel, roles) {
-  var project = projectModel ? projectModel.toJSON () : {};
-  project.userIs = {
-    admin   : !!~roles.indexOf (adminRole(project)) || !!~roles.indexOf ('admin'),
-    member  : !!~roles.indexOf (memberRole(project)),
-    request : !!~roles.indexOf (requestRole(project)),
-    gov     : !!~roles.indexOf ('gov')
-  };
-  return project;
+	var project = projectModel ? projectModel.toJSON () : {};
+	project.userIs = {
+		admin   : !!~roles.indexOf (adminRole(project)) || !!~roles.indexOf ('admin'),
+		member  : !!~roles.indexOf (memberRole(project)),
+		request : !!~roles.indexOf (requestRole(project)),
+		gov     : !!~roles.indexOf ('gov')
+	};
+	return project;
 };
 // -------------------------------------------------------------------------
 //
@@ -93,9 +93,30 @@ var decorate = function (projectModel, roles) {
 //
 // -------------------------------------------------------------------------
 var decorateList = function (projectModels, roles) {
-  return projectModels.map (function (projectModel) {
-    return decorate (projectModel, roles);
-  });
+	return projectModels.map (function (projectModel) {
+		return decorate (projectModel, roles);
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get a list of all my projects, but only ones I have access to as a normal
+// member or admin, just not as request
+//
+// -------------------------------------------------------------------------
+exports.my = function (req, res) {
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : { code: { $in: me.projects.member } };
+	Project.find (search)
+	.select ('code name short')
+	.exec (function (err, projects) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (projects);
+		}
+	});
 };
 // -------------------------------------------------------------------------
 //
@@ -104,7 +125,7 @@ var decorateList = function (projectModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.members = function (project, cb) {
-  mongoose.model ('User').find ({roles: memberRole(project)}).exec (cb);
+	mongoose.model ('User').find ({roles: memberRole(project)}).exec (cb);
 };
 
 // -------------------------------------------------------------------------
@@ -114,7 +135,7 @@ exports.members = function (project, cb) {
 //
 // -------------------------------------------------------------------------
 exports.requests = function (project, cb) {
-  mongoose.model ('User').find ({roles: requestRole(project)}).exec (cb);
+	mongoose.model ('User').find ({roles: requestRole(project)}).exec (cb);
 };
 
 /**
@@ -127,54 +148,54 @@ exports.requests = function (project, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-  console.log ('Creating a new project');
-  var project = new Project(req.body);
-  //
-  // set the code, this is used for setting roles and other stuff
-  //
-  Project.findUniqueCode (project.name, null, function (newcode) {
-    project.code = newcode;
-    //
-    // set the audit fields so we know who did what when
-    //
-    helpers.applyAudit (project, req.user)
-    //
-    // save and return
-    //
-    project.save(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        setProjectAdmin (project, req.user);
-        req.user.save ();
-        res.json(project);
-      }
-    });
-  });
+	console.log ('Creating a new project');
+	var project = new Project(req.body);
+	//
+	// set the code, this is used for setting roles and other stuff
+	//
+	Project.findUniqueCode (project.name, null, function (newcode) {
+		project.code = newcode;
+		//
+		// set the audit fields so we know who did what when
+		//
+		helpers.applyAudit (project, req.user)
+		//
+		// save and return
+		//
+		project.save(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				setProjectAdmin (project, req.user);
+				req.user.save ();
+				res.json(project);
+			}
+		});
+	});
 
 /*
 
 GITHUB related stuff
 
-  var project = new Project(req.body);
-  project.user = req.user;
+	var project = new Project(req.body);
+	project.user = req.user;
 
-  var http = require('http');
-  var github = require('octonode');
-  var config = require('/config/config.js');
+	var http = require('http');
+	var github = require('octonode');
+	var config = require('/config/config.js');
 
-  // curl -u "[github account]:[secret]" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
+	// curl -u "[github account]:[secret]" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
 
-  var url = 'https://api.github.com/user/repos';
-  var user = config.github.clientID;  // tested with 'dewolfe001';
-  var secret = config.github.clientSecret; // tested  with '39c1cffc1008ed43189ecd27448bd903a75778eb' (since revoked);
+	var url = 'https://api.github.com/user/repos';
+	var user = config.github.clientID;  // tested with 'dewolfe001';
+	var secret = config.github.clientSecret; // tested  with '39c1cffc1008ed43189ecd27448bd903a75778eb' (since revoked);
 
-  var client = github.client({
+	var client = github.client({
 	id: user,
-    secret: secret
-  });
+		secret: secret
+	});
 
  //  project.github = client.repo({
 	// 'name': project.name,
@@ -187,18 +208,18 @@ GITHUB related stuff
 	// 		return data.html_url;
 	// 	}
 	// }
-  // );
+	// );
 
-  project.save(function(err) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(project);
-    }
-  });
-  */
+	project.save(function(err) {
+		if (err) {
+			return res.status(400).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.jsonp(project);
+		}
+	});
+	*/
 };
 
 // -------------------------------------------------------------------------
@@ -207,7 +228,7 @@ GITHUB related stuff
 //
 // -------------------------------------------------------------------------
 exports.read = function (req, res) {
-  res.json (decorate (req.project, req.user ? req.user.roles : []));
+	res.json (decorate (req.project, req.user ? req.user.roles : []));
 };
 
 // -------------------------------------------------------------------------
@@ -217,29 +238,29 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-  if (ensureAdmin (req.project, req.user, res)) {
-    //
-    // copy over everything passed in. This will overwrite the
-    // audit fields, but they get updated in the following step
-    //
-    var project = _.assign (req.project, req.body);
-    //
-    // set the audit fields so we know who did what when
-    //
-    helpers.applyAudit (project, req.user)
-    //
-    // save
-    //
-    project.save(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        res.json(project);
-      }
-    });
-  }
+	if (ensureAdmin (req.project, req.user, res)) {
+		//
+		// copy over everything passed in. This will overwrite the
+		// audit fields, but they get updated in the following step
+		//
+		var project = _.assign (req.project, req.body);
+		//
+		// set the audit fields so we know who did what when
+		//
+		helpers.applyAudit (project, req.user)
+		//
+		// save
+		//
+		project.save(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(project);
+			}
+		});
+	}
 };
 
 // -------------------------------------------------------------------------
@@ -248,21 +269,21 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-  console.log ('Deleting');
-  if (ensureAdmin (req.project, req.user, res)) {
-    console.log ('Deleting');
+	console.log ('Deleting');
+	if (ensureAdmin (req.project, req.user, res)) {
+		console.log ('Deleting');
 
-    var project = req.project;
-    project.remove(function (err) {
-      if (err) {
-        return res.status(422).send({
-          message: errorHandler.getErrorMessage(err)
-        });
-      } else {
-        res.json(project);
-      }
-    });
-  }
+		var project = req.project;
+		project.remove(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(project);
+			}
+		});
+	}
 };
 
 // -------------------------------------------------------------------------
@@ -271,20 +292,22 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-  Project.find().sort('name')
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .populate('program', 'title')
-  .exec(function (err, projects) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json (decorateList (projects, req.user ? req.user.roles : []));
-      // res.json(projects);
-    }
-  });
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
+	Project.find(search).sort('name')
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('program', 'title')
+	.exec(function (err, projects) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (decorateList (projects, req.user ? req.user.roles : []));
+			// res.json(projects);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -293,15 +316,15 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listMembers = function (req, res) {
-  exports.members (req.project, function (err, users) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      res.json (users);
-    }
-  });
+	exports.members (req.project, function (err, users) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (users);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -310,15 +333,15 @@ exports.listMembers = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.listRequests = function (req, res) {
-  exports.requests (req.project, function (err, users) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      res.json (users);
-    }
-  });
+	exports.requests (req.project, function (err, users) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (users);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -327,9 +350,9 @@ exports.listRequests = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.request = function (req, res) {
-  setProjectRequest (req.project, req.user);
-  req.user.save ();
-  res.json ({ok:true});
+	setProjectRequest (req.project, req.user);
+	req.user.save ();
+	res.json ({ok:true});
 }
 
 // -------------------------------------------------------------------------
@@ -338,36 +361,36 @@ exports.request = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.confirmMember = function (req, res) {
-  var user = req.model;
-  console.log ('++++ confirm member ', user.username, user._id);
-  unsetProjectRequest (req.project, user);
-  setProjectMember (req.project, user);
-  user.save (function (err, result) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      console.log ('---- member roles ', result.roles);
-      res.json (result);
-    }
-  });
+	var user = req.model;
+	console.log ('++++ confirm member ', user.username, user._id);
+	unsetProjectRequest (req.project, user);
+	setProjectMember (req.project, user);
+	user.save (function (err, result) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			console.log ('---- member roles ', result.roles);
+			res.json (result);
+		}
+	});
 };
 exports.denyMember = function (req, res) {
-  var user = req.model;
-  console.log ('++++ deny member ', user.username, user._id);
-  unsetProjectRequest (req.project, user);
-  unsetProjectMember (req.project, user);
-  user.save (function (err, result) {
-    if (err) {
-      return res.status (422).send ({
-        message: errorHandler.getErrorMessage (err)
-      });
-    } else {
-      console.log ('---- member roles ', result.roles);
-      res.json (result);
-    }
-  });
+	var user = req.model;
+	console.log ('++++ deny member ', user.username, user._id);
+	unsetProjectRequest (req.project, user);
+	unsetProjectMember (req.project, user);
+	user.save (function (err, result) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			console.log ('---- member roles ', result.roles);
+			res.json (result);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -376,19 +399,19 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProgram = function (req, res) {
-  Project.find({program:req.program._id}).sort('name')
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .exec(function (err, projects) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.json (decorateList (projects, req.user ? req.user.roles : []));
-      // res.json(projects);
-    }
-  });
+	Project.find({program:req.program._id}).sort('name')
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.exec(function (err, projects) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (decorateList (projects, req.user ? req.user.roles : []));
+			// res.json(projects);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -397,9 +420,9 @@ exports.forProgram = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-  console.log ('get a new project set up and return it');
-  var p = new Project ();
-  res.json(p);
+	console.log ('get a new project set up and return it');
+	var p = new Project ();
+	res.json(p);
 };
 
 // -------------------------------------------------------------------------
@@ -409,25 +432,25 @@ exports.new = function (req, res) {
 // -------------------------------------------------------------------------
 exports.projectByID = function (req, res, next, id) {
 
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).send({
-      message: 'Project is invalid'
-    });
-  }
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(400).send({
+			message: 'Project is invalid'
+		});
+	}
 
-  Project.findById(id)
-  .populate('createdBy', 'displayName')
-  .populate('updatedBy', 'displayName')
-  .populate('program', 'title')
-  .exec(function (err, project) {
-    if (err) {
-      return next(err);
-    } else if (!project) {
-      return res.status(404).send({
-        message: 'No project with that identifier has been found'
-      });
-    }
-    req.project = project;
-    next();
-  });
+	Project.findById(id)
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('program', 'title')
+	.exec(function (err, project) {
+		if (err) {
+			return next(err);
+		} else if (!project) {
+			return res.status(404).send({
+				message: 'No project with that identifier has been found'
+			});
+		}
+		req.project = project;
+		next();
+	});
 };

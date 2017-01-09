@@ -48,6 +48,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/opportunities/requests/:opportunityId',
       permissions: ['get']
     }, {
+      resources: '/api/my/opportunities',
+      permissions: ['get']
+    }, {
       resources: '/api/opportunities/members/:opportunityId/confirm/:userId',
       permissions: ['get']
     }, {

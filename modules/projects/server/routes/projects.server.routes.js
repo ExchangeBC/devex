@@ -17,6 +17,10 @@ module.exports = function(app) {
     .put(projects.update)
     .delete(projects.delete);
 
+
+  app.route('/api/my/projects').all(projectsPolicy.isAllowed)
+    .get(projects.my);
+
   //
   // projects for program
   //

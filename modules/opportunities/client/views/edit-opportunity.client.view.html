@@ -4,16 +4,22 @@
   <form id="opportunityform" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row">
 	  <div class="col-md-7">
-  	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
-	    <h2 ng-if="!vm.editing">New Opportunity</h2>
-    </div>
-    <div class="col-md-5 col-form-buttons">
-      <div class="pull-right">
+	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
+		<h2 ng-if="!vm.editing">New Opportunity</h2>
+	</div>
+	<div class="col-md-5 col-form-buttons">
+	  <div class="pull-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
 				&nbsp;
 				</button>
+				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+				</a>
+				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+					<i class="glyphicon glyphicon-ok-circle"></i> Publish
+				</a>
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
@@ -28,12 +34,22 @@
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
-      </div>
-    </div>
+	  </div>
+	</div>
 	</div>
 	<div class="row">
 	<div class="col-sm-12">
 			<fieldset>
+				<div class="form-group">
+					<label class="control-label" for="program">Program</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i>
+					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
+					</select>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
+					<select name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects">
+					</select>
+				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Title</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity title" tooltip-placement="bottom"></i>
 					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Title" required>
@@ -69,33 +85,39 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="taglist">Proposal Deadline</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline" tooltip-placement="bottom"></i>
-          <div class="input-group">
-            <input type="text" class="form-control" name="deadline" id="deadline" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline" is-open="vm.showdate" ng-required="true" close-text="Close" placeholder="Date"/>
-            <span class="input-group-btn">
-              <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </div>
-        </div>
+		  <div class="input-group">
+			<input type="text" class="form-control" name="deadline" id="deadline" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline" is-open="vm.showdate" ng-required="true" close-text="Close" placeholder="Date"/>
+			<span class="input-group-btn">
+			  <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
+			</span>
+		  </div>
+		</div>
 				<div class="form-group">
 					<label class="control-label" for="taglist">Proposal Time</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline time" tooltip-placement="bottom"></i>
-          <div class="input-group">
-            <input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" ng-required="true" placeholder="Time" />
-            <span class="input-group-addon">
-              PST
-            </span>
-          </div>
-        </div>
+		  <div class="input-group">
+			<input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" ng-required="true" placeholder="Time" />
+			<span class="input-group-addon">
+			  PST
+			</span>
+		  </div>
+		</div>
 			</fieldset>
   </div>
 	</div>
 	<div class="row">
-    <div class="col-sm-12">
-      <div class="pull-right">
+	<div class="col-sm-12">
+	  <div class="pull-right">
 			<div class="btn-group">
 				<a href="javascript:void(0);" title="Save" class="btn btn-primary" ng-click="vm.saveme()">
 					<i class="glyphicon glyphicon-save"></i> Save
 				&nbsp;
 				</button>
+				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+				</a>
+				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+					<i class="glyphicon glyphicon-ok-circle"></i> Publish
+				</a>
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
@@ -110,8 +132,8 @@
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
 			</div>
-      </div>
-    </div>
+	  </div>
+	</div>
   </div>
 </section>
 

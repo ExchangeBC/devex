@@ -2,7 +2,7 @@
   "kind": "Template",
   "apiVersion": "v1",
   "metadata": {
-    "name": "generic-node-s2i-build",
+    "name": "devex-platform-devxp-build",
     "annotations": {
       "description": "",
       "tags": "nodejs",
@@ -111,7 +111,7 @@
       "displayName": "Name",
       "description": "The name assigned to all of the frontend objects defined in this template.",
       "required": true,
-      "value": "devex"
+      "value": "devxp"
     },
     {
       "name": "S2I_NAMESPACE",
