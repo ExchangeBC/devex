@@ -133,7 +133,7 @@ h6 {
   > li {
     .dropdown-menu {
       .alt-font;
-      font-size: 11px;
+      font-size: 10px;
       padding: 20px 10px;
       margin-bottom: @line-height-computed;
       border: 1px solid @panel-default-border;
@@ -143,6 +143,9 @@ h6 {
       > li {
         display: block;
         padding: 3px 0;
+      }
+      @media (min-width: 768px) {
+        font-size: 12px;
       }
     }
   }
@@ -316,7 +319,7 @@ h6 {
 // Sections
 
 section {
-  padding: 10px 0;
+  padding: 10px 0 20px 0;
   .btn-solo {
     margin-right: 23px;
   }
