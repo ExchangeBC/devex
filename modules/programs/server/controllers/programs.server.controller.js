@@ -212,7 +212,8 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.json(program);
+				res.json (decorate (program, req.user ? req.user.roles : []));
+				// res.json(program);
 			}
 		});
 	}

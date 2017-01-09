@@ -257,7 +257,8 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.json(project);
+				// res.json(project);
+				res.json (decorate (project, req.user ? req.user.roles : []));
 			}
 		});
 	}

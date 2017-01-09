@@ -22,13 +22,21 @@
       <div class="card-tools" ng-if="project.userIs.admin">
         <a href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
+          &nbsp;
+        </a>
+        <a ng-cloak ng-if="project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+          <i class="glyphicon glyphicon-ban-circle"></i>
+        </a>
+        <a ng-cloak ng-if="!project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+          <i class="glyphicon glyphicon-ok-circle"></i>
         </a>
       </div>
 			<p ng-if="!vm.program && project.program">
 				<a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
 			</p>
       <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a></h3>
-			<p ng-bind="project.short"></p>
+      <p ng-if="!project.isPublished"><span class="label label-warning">Not Published</span></p>
+      <p ng-bind="project.short"></p>
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
       </div>

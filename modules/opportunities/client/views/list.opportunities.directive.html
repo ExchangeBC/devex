@@ -16,7 +16,8 @@
   </div>
 </div>
 <div class="col-md-6" ng-repeat="column in vm.opportunities | columnRanges:2">
-  <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end">
+  <!-- <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end"> -->
+  <div class="card card-flat card-rise" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end">
     <div class="card-header">
       <div class="pull-right">Closing in <b>5 hours</b></div>
       <h4 class="card-title">
@@ -26,7 +27,14 @@
         <div class="card-tools" ng-if="opportunity.userIs.admin">
           <a href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
             <i class="glyphicon glyphicon-pencil"></i>
-          </a>
+          &nbsp;
+        </a>
+        <a ng-cloak ng-if="opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+          <i class="glyphicon glyphicon-ban-circle"></i>
+        </a>
+        <a ng-cloak ng-if="!opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+          <i class="glyphicon glyphicon-ok-circle"></i>
+        </a>
         </div>
         <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
@@ -40,6 +48,7 @@
       <h4 class="card-title">
         <a ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
       </h4>
+      <p ng-if="!opportunity.isPublished"><span class="label label-warning">Not Published</span></p>
       <p class="card-subtitle" ng-bind="opportunity.short"></p>
     </div>
   </div>

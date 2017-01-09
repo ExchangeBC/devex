@@ -257,7 +257,8 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.json(opportunity);
+				// res.json(opportunity);
+				res.json (decorateList (opportunity, req.user ? req.user.roles : []));
 			}
 		});
 	}

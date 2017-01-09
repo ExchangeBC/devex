@@ -12,12 +12,36 @@
 			controllerAs : 'vm',
 			scope        : {},
 			templateUrl  : '/modules/programs/client/views/list.programs.directive.html',
-			controller   : function ($scope, ProgramsService, Authentication) {
+			controller   : function ($scope, ProgramsService, Authentication, Notification) {
 				var vm = this;
 				var isAdmin  = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 				var isGov    = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 				vm.userCanAdd = (isAdmin || isGov);
 				vm.programs = ProgramsService.query ();
+				vm.publish = function (program, state) {
+					var publishedState = program.isPublished;
+					var t = state ? 'Published' : 'Un-Published'
+					program.isPublished = state;
+					program.createOrUpdate ()
+					//
+					// success, notify and return to list
+					//
+					.then (function (res) {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> Program '+t+' Successfully!'
+						});
+					})
+					//
+					// fail, notify and stay put
+					//
+					.catch (function (res) {
+						program.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Program '+t+' Error!'
+						});
+					});
+				};
 			}
 		}
 	})

@@ -38,6 +38,30 @@
 					vm.opportunities = OpportunitiesService.query ();
 				}
 				if ($scope.title) vm.title = $scope.title;
+				vm.publish = function (opportunity, state) {
+					var publishedState = opportunity.isPublished;
+					var t = state ? 'Published' : 'Un-Published'
+					opportunity.isPublished = state;
+					opportunity.createOrUpdate ()
+					//
+					// success, notify and return to list
+					//
+					.then (function (res) {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+						});
+					})
+					//
+					// fail, notify and stay put
+					//
+					.catch (function (res) {
+						opportunity.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
+						});
+					});
+				};
 			}
 		}
 	})

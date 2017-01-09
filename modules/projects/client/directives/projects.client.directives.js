@@ -15,7 +15,7 @@
 				title: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
-			controller   : function ($scope, ProjectsService, Authentication) {
+			controller   : function ($scope, ProjectsService, Authentication, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
 				//
@@ -38,6 +38,30 @@
 					vm.columnCount = 1;
 				}
 				if ($scope.title) vm.title = $scope.title;
+				vm.publish = function (project, state) {
+					var publishedState = project.isPublished;
+					var t = state ? 'Published' : 'Un-Published'
+					project.isPublished = state;
+					project.createOrUpdate ()
+					//
+					// success, notify and return to list
+					//
+					.then (function (res) {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> Project '+t+' Successfully!'
+						});
+					})
+					//
+					// fail, notify and stay put
+					//
+					.catch (function (res) {
+						project.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Project '+t+' Error!'
+						});
+					});
+				};
 			}
 		}
 	})
