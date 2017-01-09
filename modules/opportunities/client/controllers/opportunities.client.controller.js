@@ -36,18 +36,14 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, opportunity, editing, programs, projects, Authentication, Notification) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, programs, projects, Authentication, Notification) {
 		var vm         = this;
 		vm.projects    = projects;
 		vm.programs    = programs;
-		vm.projectId   = $stateParams.projectId;
 		vm.editing     = editing;
 		vm.opportunity = opportunity;
-		vm.projectId   = (opportunity.project && opportunity.project)? opportunity.project._id : null;
-		vm.programId   = (opportunity.program && opportunity.program)? opportunity.program._id : null;
-		if (!vm.editing) {
-			vm.opportunity.project = $stateParams.projectId;
-		}
+		vm.projectId   = (opportunity.project && opportunity.project._id)? opportunity.project._id : null;
+		vm.programId   = (opportunity.program && opportunity.program._id)? opportunity.program._id : null;
 		vm.authentication = Authentication;
 		vm.form           = {};
 		vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
@@ -108,6 +104,18 @@
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
 				});
 			});
+		};
+		vm.popoverCache = {};
+		vm.popoverContent       = function(field) {
+			if (! field) return;
+			if (! vm.popoverCache[field]) {
+				var help = $('#opportunityForm').find('.input-help[data-field='+field+']'),
+					html = '';
+				if (help.length)
+					html = help.html();
+				vm.popoverCache[field] = $sce.trustAsHtml(html);
+			}
+			return vm.popoverCache[field];
 		};
 	})
 	;

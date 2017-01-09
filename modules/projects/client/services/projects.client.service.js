@@ -55,13 +55,6 @@
         return createOrUpdate(project);
       }
     });
-
-    angular.extend(Project.prototype, {
-      createOrUpdate: function () {
-        var project = this;
-        return createOrUpdate(project);
-      }
-    });
     return Project;
 
     function createOrUpdate(project) {

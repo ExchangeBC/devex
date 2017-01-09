@@ -7,6 +7,7 @@
   "fallback-colors": false,
   "floats": false,
   "font-sizes": false,
+  "gradients": false,
   "important": false,
   "known-properties": false,
   "order-alphabetical": false,
@@ -17,6 +18,6 @@
   "unique-headings": false,
   "universal-selector": false,
   "unqualified-attributes": false,
-  "vendor-prefix": true,
+  "vendor-prefix": false,
   "zero-units": false
 }

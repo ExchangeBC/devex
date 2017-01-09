@@ -1,18 +1,16 @@
 <section class="static-page">
 <div class="container" role="main">
   <div ncy-breadcrumb></div>
-  <form id="opportunityform" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
-	<div class="row">
+  <form id="opportunityForm" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
+	<div class="row form-head">
 	  <div class="col-md-7">
-	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
-		<h2 ng-if="!vm.editing">New Opportunity</h2>
-	</div>
-	<div class="col-md-5 col-form-buttons">
-	  <div class="pull-right">
+  	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
+	    <h2 ng-if="!vm.editing">New Opportunity</h2>
+    </div>
+    	<div class="col-md-5 col-form-buttons text-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
-				&nbsp;
 				</button>
 				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
 					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
@@ -29,13 +27,11 @@
 				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				&nbsp;
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>
-			</div>
-	  </div>
-	</div>
+      		</div>
+    	</div>
 	</div>
 	<div class="row">
 	<div class="col-sm-12">
@@ -51,73 +47,110 @@
 					</select>
 				</div>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="title">Title</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity title" tooltip-placement="bottom"></i>
+					<label class="control-label" for="title">Title</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('title')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
 					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Title" required>
-					<div ng-messages="vm.form.opportunityForm.name.$error" role="alert">
+					<div class="input-help" data-field="title">
+					  Opportunity title
+					</div>
+					<div ng-messages="vm.form.opportunityForm.title.$error" role="alert">
 						<p class="help-block error-text" ng-message="required">Opportunity title is required.</p>
 					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label" for="short">Short Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity short description" tooltip-placement="bottom"></i>
-					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="10" placeholder="A short description of the opportunity"></textarea>
+				<div class="form-group" show-errors>
+					<label class="control-label" for="short">Short Description</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('short')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the opportunity" required></textarea>
+					<div class="input-help" data-field="short">
+					  Opportunity short description
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="description">Description</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity full description" tooltip-placement="bottom"></i>
+					<label class="control-label" for="description">Description</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('description')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
 					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
+					<div class="input-help" data-field="description">
+					  Opportunity description
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="description">Acceptance Criteria</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity acceptance criteria" tooltip-placement="bottom"></i>
-					<textarea name="description" data-ng-model="vm.opportunity.criteria" id="description" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
+					<label class="control-label" for="description">Acceptance Criteria</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('criteria')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+					<textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
+					<div class="input-help" data-field="criteria">
+					  Opportunity acceptance criteria
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="github">Github Repository</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Repository URL" tooltip-placement="bottom"></i>
+					<label class="control-label" for="github">Github Repository</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('github')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
 					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
+					<div class="input-help" data-field="github">
+					  Opportunity Github repository
+					</div>
 				</div>
 				<div class="form-group">
-					<label class="control-label" for="taglist">Tags (comma delimited list)</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity tags" tooltip-placement="bottom"></i>
-					<input type="text" name="taglist" ng-model="vm.opportunity.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+					<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('skilllist')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
+					<div class="input-help" data-field="skilllist">
+					  Opportunity required skills
+					</div>
 				</div>
-				<div class="form-group">
-					<label class="control-label" for="earn">Reward</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Opportunity reward" tooltip-placement="bottom"></i>
-					<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" ng-options="(v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000] track by v">
-					  <option value="">Select reward amount</option>
-					</select>
+				<div class="row">
+				<div class="col-sm-4">
+          <div class="form-group" show-errors>
+            <label class="control-label" for="earn">Reward</label>
+            <i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('reward')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+            <select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000]">
+              <option value="">Select reward amount</option>
+            </select>
+            <div class="input-help" data-field="reward">
+              Opportunity reward amount
+            </div>
+          </div>
 				</div>
-				<div class="form-group">
-					<label class="control-label" for="taglist">Proposal Deadline</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline" tooltip-placement="bottom"></i>
-		  <div class="input-group">
-			<input type="text" class="form-control" name="deadline" id="deadline" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline" is-open="vm.showdate" ng-required="true" close-text="Close" placeholder="Date"/>
-			<span class="input-group-btn">
-			  <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
-			</span>
-		  </div>
-		</div>
-				<div class="form-group">
-					<label class="control-label" for="taglist">Proposal Time</label> <i class="glyphicon glyphicon-question-sign field-tt-source" uib-tooltip="Opportunity proposal deadline time" tooltip-placement="bottom"></i>
-		  <div class="input-group">
-			<input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" ng-required="true" placeholder="Time" />
-			<span class="input-group-addon">
-			  PST
-			</span>
-		  </div>
-		</div>
+				<div class="col-sm-4">
+          <div class="form-group" show-errors>
+            <label class="control-label" for="deadline_date">Proposal Deadline</label>
+            <i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('deadline')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+            <div class="input-group">
+              <input type="text" class="form-control" name="deadline_date" id="deadline_date" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline_date" is-open="vm.showdate" required close-text="Close" placeholder="Date"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+            </div>
+            <div class="input-help" data-field="deadline">
+              Opportunity proposal deadline
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group" show-errors>
+            <label class="control-label" for="deadline_time">Proposal Time</label>
+            <div class="input-group">
+              <input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" required placeholder="Time" />
+              <span class="input-group-addon">
+                PST
+              </span>
+            </div>
+          </div>
+        </div>
+        </div>
 			</fieldset>
   </div>
 	</div>
-	<div class="row">
-	<div class="col-sm-12">
-	  <div class="pull-right">
+	<div class="row form-foot">
+    <div class="col-sm-12 col-form-buttons foot text-right">
 			<div class="btn-group">
 				<a href="javascript:void(0);" title="Save" class="btn btn-primary" ng-click="vm.saveme()">
 					<i class="glyphicon glyphicon-save"></i> Save
-				&nbsp;
-				</button>
+				</a>
 				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
 					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 				</a>
 				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
 					<i class="glyphicon glyphicon-ok-circle"></i> Publish
-				</a>
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
@@ -127,7 +160,6 @@
 				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				&nbsp;
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 					<i class="glyphicon glyphicon-trash"></i> Remove
 				</a>

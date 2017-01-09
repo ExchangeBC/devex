@@ -50,22 +50,57 @@ h6 {
     padding: 0;
     margin-bottom: 0.75em;
 }
-
-p {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.5;
-}
-.section p {
-	margin-bottom: 20px;
+.page-header h1 {
+	margin-bottom: 10px;
 }
 
 // Container
 .container {
-  max-width: 1040px;
+	max-width: 1040px;
 }
 
+
 // Navigation
+
+
+// Default navbar
+.navbar-default {
+  #gradient > .vertical(@start-color: lighten(@navbar-default-bg, 10%); @end-color: @navbar-default-bg);
+  .reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
+  border-radius: @navbar-border-radius;
+  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 5px rgba(0,0,0,.075);
+  .box-shadow(@shadow);
+
+  .navbar-nav > .open > a,
+  .navbar-nav > .active > a {
+    #gradient > .vertical(@start-color: darken(@navbar-default-link-active-bg, 5%); @end-color: darken(@navbar-default-link-active-bg, 2%));
+    .box-shadow(inset 0 3px 9px rgba(0,0,0,.075));
+  }
+}
+.navbar-brand,
+.navbar-nav > li > a {
+  text-shadow: 0 1px 0 rgba(255,255,255,.25);
+}
+
+// Undo rounded corners in static and fixed navbars
+.navbar-static-top,
+.navbar-fixed-top,
+.navbar-fixed-bottom {
+  border-radius: 0;
+}
+
+// Fix active state of dropdown items in collapsed mode
+@media (max-width: @grid-float-breakpoint-max) {
+  .navbar .navbar-nav .open .dropdown-menu > .active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: #fff;
+      #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
+    }
+  }
+}
+
 .nav {
   > li {
     > a {
@@ -98,7 +133,7 @@ p {
   > li {
     .dropdown-menu {
       .alt-font;
-      font-size: 11px;
+      font-size: 10px;
       padding: 20px 10px;
       margin-bottom: @line-height-computed;
       border: 1px solid @panel-default-border;
@@ -108,6 +143,9 @@ p {
       > li {
         display: block;
         padding: 3px 0;
+      }
+      @media (min-width: 768px) {
+        font-size: 12px;
       }
     }
   }
@@ -158,9 +196,8 @@ p {
     .nav {
         > li {
             > a {
-                .alt-font;
+                .alt-font(@font-weight: 600);
                 font-size: 11px;
-                font-weight: 600;
                 &:hover {
                   background-color: transparent;
                 }
@@ -268,7 +305,7 @@ p {
 	margin-bottom: 0;
 }
 
-@media (min-width: 768px) /* and (max-width: 991px) */ {
+@media (min-width: 768px) {
 	.navbar-default, .navbar-transparent {
 		min-height: 64px;
 	}
@@ -279,266 +316,23 @@ p {
 	}
 }
 
-// Homepage Header
-
-header {
-    .header-content {
-        text-align: center;
-        padding: 150px 0 50px;
-        position: relative;
-        .header-content-inner {
-            position: relative;
-            max-width: 500px;
-            margin: 0 auto;
-            h1 {
-                margin-top: 0;
-                margin-bottom: 30px;
-                font-size: 30px;
-            }
-            .list-badges {
-                margin-bottom: 25px;
-                img {
-                    height: 50px;
-                    margin-bottom: 25px;
-                }
-            }
-        }
-    }
-    .device-container {
-        max-width: 300px;
-        margin: 0 auto 100px;
-        .screen img {
-            border-radius: 3px;
-        }
-    }
-    @media (min-width: 768px) {
-        min-height: 100%;
-        .header-content {
-            text-align: left;
-            padding: 0;
-            height: 100vh;
-            .header-content-inner {
-                max-width: none;
-                margin: 0;
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                h1 {
-                    font-size: 35px;
-                }
-            }
-        }
-        .device-container {
-            max-width: none;
-            max-height: calc(100vh - 100px);
-            margin: 100px auto 0;
-        }
-    }
-    @media (min-width: 992px) {
-        .header-content .header-content-inner h1 {
-            font-size: 50px;
-        }
-    }
-}
-
 // Sections
 
 section {
-  padding: 10px 0;
+  padding: 10px 0 20px 0;
   .btn-solo {
     margin-right: 23px;
   }
   @media (min-width: 768px) {
     padding: 20px 0 40px 0;
-  }
-}
-
-section.intro {
-  position: relative;
-  width: 100%;
-  min-height: auto;
-  overflow-y: hidden;
-  background: rgb(0,181,230); /* fallback for old browsers */
-  background: @header-bg, -webkit-linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* Chrome 10-25, Safari 5.1-6 */
-  background: @header-bg, linear-gradient(to left, rgb(0,118,204), rgb(0,181,230)); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  color: white;
-  // padding-bottom: 160px !important;
-  h1 {
-    font-weight: 700;
-    font-size: 46px;
-    line-height: 1.2;
-  }
-  p {
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 1.6em;
-  }
-  ul {
-    font-size: 18px;
-    font-weight: 300;
-  }
-  @media (min-width: 768px) {
-    padding-top: 20px;
-  }
-}
-
-section.audience {
-  padding-top: 0;
-  padding-bottom: 0;
-  p {
-    font-size: 16px;
-    line-height: 1.75em;
-  }
-  @media (min-width: 768px) {
-    margin-top: -100px;
-  }
-}
-
-section.about {
-    position: relative;
-    h2 {
-      margin-top: 0;
-      font-size: 32px;
-      line-height: 1.325;
+    p.lg {
+    	font-size: 16px;
     }
-    p {
+    &.feature p {
       font-size: 16px;
-      line-height: 1.75em;
+      margin-bottom: 16px;
     }
-    .badges {
-        .badge-link {
-            display: block;
-            margin-bottom: 25px;
-            &:last-child {
-                margin-bottom: 0;
-            }
-            img {
-                height: 60px;
-            }
-            @media(min-width: 768px) {
-                display: inline-block;
-                margin-bottom: 0;
-            }
-        }
-    }
-}
-
-section.events {
-    position: relative;
-    .section-heading {
-        h2 {
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 0;
-        }
-        margin-bottom: 10px;
-    }
-}
-
-section.features {
-    .section-heading {
-        h2 {
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 0;
-        }
-        margin-bottom: 10px;
-    }
-    .device-container,
-    .feature-item {
-        max-width: 300px;
-        margin: 0 auto;
-    }
-    .device-container {
-        margin-bottom: 100px;
-        @media(min-width: 992px) {
-            margin-bottom: 0;
-        }
-    }
-    .feature-item {
-        text-align: center;
-        margin-bottom: 100px;
-        h3 {
-            font-size: 30px;
-        }
-        i {
-            font-size: 80px;
-              background: @theme-success;
-              -webkit-background-clip: text;
-              -webkit-text-fill-color: transparent;
-        }
-    }
-    @media(min-width: 992px) {
-        .device-container,
-        .feature-item {
-            max-width: none;
-        }
-    }
-}
-
-section.cta {
-    position: relative;
-    .background-cover;
-    background-position: center;
-    background-image: url('/modules/core/client/img/theme/bg-cta.jpg');
-    padding: 150px 0;
-    .cta-content {
-        position: relative;
-        z-index: 1;
-        h2 {
-            margin-top: 0;
-            margin-bottom: 25px;
-            color: white;
-            max-width: 400px;
-            font-size: 40px;
-        }
-        @media (min-width: 768px) {
-            h2 {
-                font-size: 60px;
-            }
-        }
-    }
-    .overlay {
-        height: 100%;
-        width: 100%;
-        background-color: fade(black, 50%);
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-}
-
-section.partners {
-    .section-heading {
-        h2 {
-            margin-top: 0;
-        }
-        p {
-            margin-bottom: 0;
-        }
-        margin-bottom: 10px;
-    }
-    h2 {
-        margin-top: 0;
-        margin-bottom: 25px;
-    }
-    ul.list-partners {
-        margin: 50px 0;
-        li {
-          margin-right: 20px;
-          }
-          a {
-              display: block;
-              height: 80px;
-              width: 80px;
-              line-height: 80px;
-              font-size: 40px;
-              border-radius: 100%;
-              color: white;
-          }
-    }
+  }
 }
 
 // Bootstrap Overrides
@@ -564,86 +358,16 @@ section.partners {
   box-shadow: inset 0 0 0 1000px fade(@theme-primary, 50%);
 }
 
-// Colours
-.demo {
-  width: 55px;
-  height: 100px;
-  float: left;
-  padding: 5px;
-  color: #FFF;
-  font-size: 10px;
-  box-sizing: border-box;
-}
-.demo ,
-.demo-default  {
-  background-color: transparent;
-}
-.demo-primary  {
-  background-color: @theme-primary;
-}
-.demo-success  {
-  background-color: @theme-success;
-}
-.demo-info  {
-  background-color: @theme-info;
-}
-.demo-warning  {
-  background-color: @theme-warning;
-}
-.demo-danger  {
-  background-color: @theme-danger;
-}
-.demo-theme-red  {
-  background-color: @theme-red;
-}
-.demo-theme-pink  {
-  background-color: @theme-pink;
-}
-.demo-theme-purple  {
-  background-color: @theme-purple;
-}
-.demo-theme-lightblue  {
-  background-color: @theme-light-blue;
-}
-.demo-theme-darkblue  {
-  background-color: @theme-dark-blue;
-}
-.demo-theme-lightgreen  {
-  background-color: @theme-light-green;
-}
-.demo-theme-darkgreen  {
-  background-color: @theme-dark-green;
-}
-.demo-theme-yellow  {
-  background-color: @theme-yellow;
-  color: #4D4D4D;
-}
-.demo-theme-orange  {
-  background-color: @theme-orange;
-}
-.demo-theme-deeporange  {
-  background-color: @theme-deeporange;
-}
-.demo-theme-darkgrey  {
-  background-color: @gray-dark;;
-}
-.demo-theme-lightgrey  {
-  background-color: @gray-light;
-}
-
 // Button Styles
+
 .btn {
-  .alt-font;
+  .alt-font(@letter-spacing: 0.025em);
   white-space: nowrap;
-  display: inline-block;
   background: white;
   border-radius: 3px;
   font-size: 14px;
-  letter-spacing: .025em;
-  color: white;
   text-decoration: none;
-  -webkit-transition: all .15s ease;
-  transition: all .15s ease;
+  .transition-all(0.15s);
 }
 
 .btn-solo {
@@ -673,22 +397,84 @@ section.partners {
 .btn-xs {
   font-size: 10px;
   height: 20px;
-  line-height: 20px;
+  line-height: 16px;
+}
+
+.btn-default,
+.btn-primary,
+.btn-success,
+.btn-info,
+.btn-warning,
+.btn-danger {
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
+  .box-shadow(@shadow);
+  // Reset the shadow
+  &:active,
+  &.active {
+    .box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    .box-shadow(none);
+  }
+  .badge {
+    text-shadow: none;
+  }
 }
 
 .btn-default {
-  color: @gray;
-  background-color: white;
-  border-color: rgb(153,153,153);
+  color: @gray-light;
+  border-color: #999;
+  #gradient > .vertical(@start-color: #fff; @end-color: #eef3f6; @start-percent: 50%; @end-percent: 110%);
+  text-shadow: 0 1px 0 #fff;
+  .input-group-btn & {
+    border-color: @input-border;
+  }
+  .has-success .input-group-btn & {
+    border-color: @state-success-text;
+    color: @state-success-text;
+  }
+  .has-warning .input-group-btn & {
+    border-color: @state-warning-text;
+    color: @state-warning-text;
+  }
+  .has-error .input-group-btn & {
+    border-color: @state-danger-text;
+    color: @state-danger-text;
+    background: @state-danger-bg;
+  }
   &:hover {
-    background-color: @gray-lighter;
+  	color: @theme-primary;
+	#gradient > .vertical(@start-color: #eee; @end-color: #e0e3f0; @start-percent: 50%; @end-percent: 110%);
+  }
+  &:hover,&:focus {
+    border-color: darken(@theme-primary, 10%);
+  }
+  &:active,
+  &.active {
+    background-image: none;
+  }
+  &.btn-default-primary {
+    color: @theme-primary;
+    border-color: darken(@theme-primary, 8%);
+  }
+  &.btn-default-success {
+    color: @theme-success;
+    border-color: darken(@theme-success, 8%);
+  }
+  &.btn-default-danger {
+    color: @theme-danger;
+    border-color: darken(@theme-danger, 8%);
   }
 }
 
 .btn-primary {
   background-color: @theme-primary;
-  &:hover {
-    background-color: lighten(@theme-primary, 12%);
+  border-color: darken(@theme-primary, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-primary, 10%);
   }
   &:active,&:focus {
     background-color: darken(@theme-primary, 10%);
@@ -697,18 +483,20 @@ section.partners {
 
 .btn-success {
   background-color: @theme-success;
-  &:hover {
-    background-color: lighten(@theme-success, 5%);
+  border-color: darken(@theme-success, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-success, 8%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-success, 8%);
+    background-color: darken(@theme-success, 10%);
   }
 }
 
 .btn-info {
-  background-color: @theme-info;
-  &:hover {
-    background-color: darken(@theme-info, 5%);
+  background-color: darken(@theme-info, 2%);
+  border-color: darken(@theme-info, 14%);
+  &:hover,&:active:hover {
+    background-color: darken(@theme-info, 8%);
   }
   &:active,&:focus {
     background-color: darken(@theme-info, 10%);
@@ -717,34 +505,252 @@ section.partners {
 
 .btn-warning {
   background-color: @theme-warning;
-  &:hover {
-    background-color: lighten(@theme-warning, 12%);
+  border-color: darken(@theme-warning, 10%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-warning, 10%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-warning, 10%);
+    background-color: darken(@theme-warning, 8%);
   }
 }
 
 .btn-danger {
   background-color: @theme-danger;
-  &:hover {
-    background-color: lighten(@theme-danger, 12%);
+  border-color: darken(@theme-danger, 8%);
+  &:hover,&:active:hover {
+    background-color: lighten(@theme-danger, 10%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-danger, 10%);
+    background-color: darken(@theme-danger, 8%);
   }
 }
 
 .btn-link {
   color: rgb(0,164,227);
+  background: none;
+}
+
+
+//
+// Dropdowns
+// --------------------------------------------------
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  #gradient > .vertical(@start-color: @dropdown-link-hover-bg; @end-color: darken(@dropdown-link-hover-bg, 5%));
+  background-color: darken(@dropdown-link-hover-bg, 5%);
+}
+.dropdown-menu > .active > a,
+.dropdown-menu > .active > a:hover,
+.dropdown-menu > .active > a:focus {
+  #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
+  background-color: darken(@dropdown-link-active-bg, 5%);
+}
+
+// Alerts
+
+// Common styles
+.alert {
+  text-shadow: 0 1px 0 rgba(255,255,255,.2);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 1px 2px rgba(0,0,0,.05);
+  .box-shadow(@shadow);
+}
+
+// Mixin for generating new styles
+.alert-styles(@color) {
+  #gradient > .vertical(@start-color: @color; @end-color: darken(@color, 7.5%));
+  border-color: darken(@color, 15%);
+}
+
+// Apply the mixin to the alerts
+.alert-success    { .alert-styles(@alert-success-bg); }
+.alert-info       { .alert-styles(@alert-info-bg); }
+.alert-warning    { .alert-styles(@alert-warning-bg); }
+.alert-danger     { .alert-styles(@alert-danger-bg); }
+
+
+// Progress bars
+
+// Give the progress background some depth
+.progress {
+  #gradient > .vertical(@start-color: darken(@progress-bg, 4%); @end-color: @progress-bg);
+  appearance: none;
+  height: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background-color: @gray-lighter;
+  border-radius: 40px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+  &[value]::-webkit-progress-value {
+    transition: width .4s ease-out;
+  }
+}
+
+// Mixin for generating new styles
+.progress-bar-styles(@color) {
+  #gradient > .vertical(@start-color: lighten(@color, 5%); @end-color: darken(@color, 5%));
+}
+
+// Apply the mixin to the progress bars
+.progress-bar            { .progress-bar-styles(@progress-bar-bg); }
+.progress-bar-primary    { .progress-bar-styles(@theme-primary); }
+.progress-bar-success    { .progress-bar-styles(@theme-success); }
+.progress-bar-info       { .progress-bar-styles(@theme-info); }
+.progress-bar-warning    { .progress-bar-styles(@theme-warning); }
+.progress-bar-danger     { .progress-bar-styles(@theme-danger); }
+
+// Reset the striped class because our mixins don't do multiple gradients and
+// the above custom styles override the new `.progress-bar-striped` in v3.2.0.
+.progress-bar-striped {
+  #gradient > .striped();
+}
+
+
+// Panels
+
+// Common styles
+.panel {
+  .box-shadow(0 1px 2px rgba(0,0,0,.05));
+}
+
+// Mixin for generating new styles
+.panel-heading-normal(@bg) {
+  > .panel-heading {
+    #gradient > .vertical(@start-color: @bg; @end-color: darken(@bg, 5%));
+  }
+}
+.panel-heading-lighten(@bg; @color: #fff; @pc1: 16%; @pc2: 8%) {
+  > .panel-heading {
+    #gradient > .vertical(@start-color: lighten(@bg, @pc1); @end-color: lighten(@bg, @pc2));
+    border-color: lighten(@bg, 6%);
+    color: @color;
+  }
+  > .panel-body, > .panel-footer, {
+    border-color: lighten(@bg, 6%);
+  }
+  border-color: lighten(@bg, 6%); 
+}
+
+// Apply the mixin to the panel headings only
+.panel-default  { .panel-heading-normal(@panel-default-heading-bg); }
+.panel-primary  { .panel-heading-lighten(@theme-primary; #fff; 20%); }
+.panel-success  { .panel-heading-lighten(@theme-success); }
+.panel-info     { .panel-heading-lighten(@theme-info, #31708f); }
+.panel-warning  { .panel-heading-lighten(@theme-warning); }
+.panel-danger   { .panel-heading-lighten(@theme-danger); }
+
+
+// Custom panel styles
+
+.panel-flat {
+	.panel-heading {
+		border-bottom: none;
+	}
+	.panel-footer {
+		border-top: none;
+	}
+}
+
+.panel-body .panel-title {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	font-size: 18px;
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+.panel-default .panel-body .panel-title {
+	color: desaturate(@theme-primary, 10%);
+}
+
+
+// Panels with logo images on the side
+
+.list-img-outer {
+	position: relative;
+}
+.list-img {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: (@thumb-md + 75);
+	text-align: center;
+	img {
+		margin-top: 20px;
+		width: @thumb-md;
+		height: @thumb-md;
+		border-radius: @border-radius-base;
+	}
+	+ .list-img-body {
+		border-left: none;
+		margin-left: (@thumb-md + 80);
+		min-height: @thumb-md;
+	}
+	@media (max-width: 767px) {
+		width: (@thumb-md + 35);
+		+ .list-img-body {
+			margin-left: (@thumb-md + 40);
+		}
+	}
+	.panel-default & {
+		background: @panel-default-heading-bg;
+	}
+	.panel-info & {
+		background: lighten(@theme-info, 10%);
+	}
+}
+.img-logo {
+	margin-left: auto;
+	margin-right: auto;
+	max-height: @thumb-lg;
+}
+
+
+// Wells
+
+.well {
+  #gradient > .vertical(@start-color: darken(@well-bg, 5%); @end-color: @well-bg);
+  border-color: darken(@well-bg, 10%);
+  @shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
+  .box-shadow(@shadow);
+}
+
+
+// Form header
+
+.col-text-buttons a {
+  margin-left: 0.5em;
+}
+
+.list-head {
+  margin-bottom: 20px;
+    .col-form-buttons {
+       margin-top: 10px;
+  }
+}
+
+.form-head .col-form-buttons {
+  margin-bottom: 10px;
+}
+.form-foot {
+  margin-top: 10px;
 }
 
 @media (min-width: 768px) {
-  .col-form-buttons {
-    margin-top: 25px;
+  .form-head .col-form-buttons {
+    margin-top: 20px;
   }
-  .col-text-buttons {
-    margin-top: 30px;
+  .form-head .col-text-buttons {
+    margin-top: 15px;
+  }
+  .list-head .col-form-buttons {
+  	margin-top: 10px;
+  }
+  .list-page .list-head .col-form-buttons {
+  	margin-top: 0;
   }
 }
 
@@ -766,7 +772,7 @@ section.partners {
 }
 
 .label-info {
-  background-color: @theme-info;
+  background-color: darken(@theme-info, 5%);
 }
 
 .label-warning {
@@ -774,15 +780,23 @@ section.partners {
 }
 
 .label-danger {
-  background-color: @theme-danger;
+  background-color: lighten(@theme-danger, 5%);
 }
 
-.field-tt-source {
+.label-list .label:not(:last-child) {
+	margin-right: 0.5em;
+}
+
+.input-popover-source {
   color: @theme-primary;
   &:hover,
   &:focus {
     color: darken(@theme-primary, 10%);
   }
+  cursor: pointer;
+}
+.input-help {
+  display: none;
 }
 
 // Badges
@@ -792,67 +806,6 @@ section.partners {
       background-color: @theme-primary;
     }
   }
-}
-
-// Alerts
-.alert-success {
-  color: @theme-success;
-  background-color: fadeout(@theme-success, 80%);
-  border-color: fadeout(@theme-success, 70%);
-}
-
-.alert-info {
-  color: darken(@theme-info, 20%);
-  background-color: fadeout(@theme-info, 80%);
-  border-color: fadeout(@theme-info, 50%);
-}
-
-.alert-warning {
-  color: darken(@theme-warning, 20%);
-  background-color: fadeout(@theme-warning, 80%);
-  border-color: fadeout(@theme-warning, 50%);
-}
-
-.alert-danger {
-  color: @theme-danger;
-  background-color: fadeout(@theme-danger, 80%);
-  border-color: fadeout(@theme-danger, 70%);
-}
-
-// Progress Bars
-.progress {
-	appearance: none;
-  height: 10px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  background-color: @gray-lighter;
-  border-radius: 40px;
-  -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
-
-	&[value]::-webkit-progress-value{
-		transition: width .4s ease-out;
-	}
-}
-
-.progress-bar-primary {
-	background-color: @theme-primary;
-}
-
-.progress-bar-success {
-	background-color: @theme-success;
-}
-
-.progress-bar-info {
-	background-color: @theme-info;
-}
-
-.progress-bar-warning {
-	background-color: @theme-warning;
-}
-
-.progress-bar-danger {
-	background-color: @theme-danger;
 }
 
 // List Groups
@@ -880,7 +833,27 @@ section.partners {
   background-color: white;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
 }
+.card-panel {
+  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
+  .panel-body + .panel-body {
+  	border-top: 1px solid @panel-default-border;
+  }
+  dt {
+  	color: @gray-light;
+  	font-size: 85%;
+  	line-height: 1.7;
+  }
+  dl {
+  	margin-bottom: 10px;
+  	&.dl-horizontal dd {
+  	  margin-bottom: 5px;
+  	}
+  }
+}
 
+.card-header {
+  &:extend(.clearfix all);
+}
 .card-block {
   &:extend(.clearfix all);
   padding: @panel-body-padding;
@@ -888,6 +861,7 @@ section.partners {
 
 .card-rise {
   &:hover {
+  	border-color: @theme-primary;
     -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
     box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08);
@@ -1064,8 +1038,8 @@ section.partners {
 .card-img-left {
   position: relative;
   float: left!important;
-  width: 75px;
-  height: 75px;
+  width: @thumb-md;
+  height: @thumb-md;
   border-radius: @panel-border-radius;
   margin-right: 14px;
 }
@@ -1252,32 +1226,19 @@ section.partners {
 
 // Extras
 // -- Highlight Color Customization
-::-moz-selection {
+::-moz-selection, ::selection {
     color: white;
     text-shadow: none;
-    background: @gray-darker;
+    background: @gray-dark;
 }
-
-::selection {
-    color: white;
-    text-shadow: none;
-    background: @gray-darker;
-}
-
-img::selection {
-    color: white;
-    background: transparent;
-}
-
-img::-moz-selection {
-    color: white;
-    background: transparent;
-}
-
 body {
-    webkit-tap-highlight-color: @gray-darker;
+    webkit-tap-highlight-color: @gray-dark;
 }
 
+img::selection, img::-moz-selection {
+    color: white;
+    background: transparent;
+}
 
 .tag {
     display: inline-block;
@@ -1295,6 +1256,59 @@ body {
     background-color: #818a91;
 }
 
+// Customize breadcrumbs
+
 .breadcrumb {
 	margin-bottom: 0;
+}
+.breadcrumb .active {
+	// only interested in ancestors
+	display: none;
+}
+.breadcrumb li:first-child:before {
+	content: '< ';
+	color: @gray-light;
+	margin-right: 2px;
+}
+
+// hide titles only on list pages
+.list-page .list-page-hide {
+	display: none;
+}
+
+.list-head h3 {
+	color: #555;
+	&:after {
+		display: block;
+		content: "";
+		height: 2px;
+		margin-top: 4px;
+		#gradient > .horizontal(lighten(@theme-info, 10%); #fff; 40%);
+	}
+}
+
+// Utility styles
+
+.pre-line {
+	white-space: pre-line;	
+}
+.med-desc, .long-desc {
+	color: @gray;
+	margin: 15px 25px;
+}
+.long-desc {
+	font-size: (@font-size-base - 1);
+}
+
+.margin-top {
+	margin-top: @grid-gutter-width;
+}
+.margin-top-lg {
+	margin-top: (@grid-gutter-width * 2);
+}
+.margin-bottom {
+	margin-bottom: @grid-gutter-width;
+}
+.margin-bottom-lg {
+	margin-bottom: (@grid-gutter-width * 2);
 }

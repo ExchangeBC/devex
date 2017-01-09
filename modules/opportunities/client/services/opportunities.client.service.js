@@ -55,13 +55,6 @@
         return createOrUpdate(opportunity);
       }
     });
-
-    angular.extend(Opportunity.prototype, {
-      createOrUpdate: function () {
-        var opportunity = this;
-        return createOrUpdate(opportunity);
-      }
-    });
     return Opportunity;
 
     function createOrUpdate(opportunity) {

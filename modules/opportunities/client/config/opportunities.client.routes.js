@@ -32,7 +32,7 @@
         pageTitle: 'Opportunities List'
       },
       ncyBreadcrumb: {
-        label: 'Opportunities'
+        label: 'All opportunities'
       },
       resolve: {
         opportunities: function ($stateParams, OpportunitiesService) {
@@ -50,7 +50,8 @@
     .state('opportunities.view', {
       url: '/:opportunityId',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
       controller: 'OpportunityViewController',
@@ -63,7 +64,7 @@
         }
       },
       data: {
-        pageTitle: 'Opportunity {{ opportunityResolve.title }}'
+        pageTitle: 'Opportunity: {{opportunity.name}}'
       },
       ncyBreadcrumb: {
         label: '{{vm.opportunity.name}}',
@@ -88,7 +89,8 @@
     .state('opportunityadmin.edit', {
       url: '/:opportunityId/edit',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
       controller: 'OpportunityEditController',
@@ -109,7 +111,7 @@
       },
       data: {
         roles: ['admin', 'gov'],
-        pageTitle: 'Opportunity {{ opportunity.title }}'
+        pageTitle: 'Opportunity: {{ opportunity.name }}'
       },
       ncyBreadcrumb: {
         label: 'Edit Opportunity',
@@ -124,7 +126,8 @@
     .state('opportunityadmin.create', {
       url: '/create',
       params: {
-        programId: null
+        programId: null,
+        projectId: null
       },
       templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
       controller: 'OpportunityEditController',

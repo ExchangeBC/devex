@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 var ProgramSchema = new Schema({
   code        : {type: String, default: ''},
   title       : {type: String, default: '', required: 'Title cannot be blank'},
-  short       : {type: String, default: ''},
+  short       : {type: String, default: '', required: 'Short description cannot be blank'},
   description : {type: String, default: ''},
   owner       : {type: String, default: ''},
   website     : {type: String, default: ''},
