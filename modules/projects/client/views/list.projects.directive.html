@@ -29,19 +29,15 @@
       <div class="card-tools">
         <a ng-if="project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
-          &nbsp;
         </a>
         <a ng-if="project.userIs.admin && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
           <i class="glyphicon glyphicon-ban-circle"></i>
-          &nbsp;
         </a>
         <a ng-if="project.userIs.admin && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
           <i class="glyphicon glyphicon-ok-circle"></i>
-          &nbsp;
         </a>
         <a ng-cloak ng-if="!project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
           <i class="glyphicon glyphicon-user"></i>
-          &nbsp;
         </a>
       </div>
 
