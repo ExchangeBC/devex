@@ -3,7 +3,7 @@
   <div ncy-breadcrumb></div>
 	<div class="row form-head">
 	<div class="col-sm-7">
-		<h2>Project: {{vm.project.name}}</h2>
+		<h2>{{vm.project.name}}</h2>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
     <button type="button" class="btn btn-default" ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
