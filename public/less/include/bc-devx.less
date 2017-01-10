@@ -629,7 +629,7 @@ section {
   > .panel-body, > .panel-footer, {
     border-color: lighten(@bg, 6%);
   }
-  border-color: lighten(@bg, 6%); 
+  border-color: lighten(@bg, 8%); 
 }
 
 // Apply the mixin to the panel headings only
@@ -700,6 +700,18 @@ section {
 	}
 	.panel-info & {
 		background: lighten(@theme-info, 10%);
+	}
+	.panel-primary & {
+		background: lighten(@theme-primary, 15%);
+	}
+	.panel-success & {
+		background: lighten(@theme-success, 15%);
+	}
+	.panel-warning & {
+		background: lighten(@theme-warning, 15%);
+	}
+	.panel-danger & {
+		background: lighten(@theme-danger, 15%);
 	}
 }
 .img-logo {
@@ -1000,11 +1012,12 @@ section {
 
 .card-greyed {
 	color: #999;
+	border-color: #ddd;
 	.card-img, .list-img {
 		opacity: 0.6;
 	}
-	.card-block {
-		a { color: desaturate(@theme-primary, 40%); }
+	a:not(:hover) {
+		color: lighten(desaturate(@theme-primary, 25%), 15%);
 	}
 }
 
