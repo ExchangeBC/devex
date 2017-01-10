@@ -4,7 +4,7 @@
   <form id="opportunityForm" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row form-head">
 	  <div class="col-md-7">
-  	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
+  	  <h2 ng-if="vm.editing">Editing: {{::vm.opportunity.name}}</h2>
 	    <h2 ng-if="!vm.editing">New Opportunity</h2>
     </div>
     	<div class="col-md-5 col-form-buttons text-right">
