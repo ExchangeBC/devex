@@ -41,6 +41,7 @@
 					vm.opportunities = OpportunitiesService.forProgram ({
 						programId: vm.programId
 					});
+					vm.columnCount   = 2;
 				} else {
 					vm.programId    = null;
 					vm.programTitle = null;
@@ -49,6 +50,7 @@
 					vm.title         = 'All Opportunities';
 					vm.userCanAdd    = true;
 					vm.opportunities = OpportunitiesService.query ();
+					vm.columnCount   = 1;
 				}
 				if ($scope.title) vm.title = $scope.title;
 				vm.publish = function (opportunity, state) {
