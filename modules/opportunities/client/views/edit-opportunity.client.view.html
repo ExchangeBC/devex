@@ -79,7 +79,7 @@
 					<label class="control-label" for="description">Description</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('description')"></i>
 					<div class="input-help alert alert-info" data-field="description" ng-show="vm.displayHelp.description">
-					  Opportunity description
+					  Here’s where you can fully describe any useful background, and what you’re trying to accomplish by offering this opportunity.
 					</div>
 					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
 				</div>
@@ -111,7 +111,7 @@
 					<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
 					<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
-					  Opportunity required skills
+					  List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
 					</div>
 					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
 				</div>
