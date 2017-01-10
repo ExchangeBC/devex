@@ -12,12 +12,21 @@
 			controllerAs : 'vm',
 			scope        : {
 				program: '=',
-				title: '@'
+				title: '@',
+				context: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
 			controller   : function ($scope, ProjectsService, Authentication, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
+				vm.context = $scope.context;
+				if (vm.context === 'program') {
+					vm.programId = vm.program._id;
+					vm.programTitle = vm.program.title;
+				} else {
+					vm.programId = null;
+					vm.programTitle = null;
+				}
 				//
 				// if a program is supplied, then only list projects under it
 				// also allow adding a new project (because it has context)
@@ -59,6 +68,21 @@
 						Notification.error ({
 							message : res.data.message,
 							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Project '+t+' Error!'
+						});
+					});
+				};
+				vm.request = function (project) {
+					ProjectsService.makeRequest ({
+						projectId: project._id
+					}).$promise
+					.then (function () {
+						project.userIs.request = true;
+						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+					})
+					.catch (function (res) {
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Membership Request Error!'
 						});
 					});
 				};

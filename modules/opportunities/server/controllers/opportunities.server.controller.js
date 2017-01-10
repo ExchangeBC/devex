@@ -151,7 +151,7 @@ exports.create = function(req, res) {
 	console.log ('Creating a new opportunity');
 	var opportunity = new Opportunity(req.body);
 	//
-	// set the code, this is used for setting roles and other stuff
+	// set the code, this is used setting roles and other stuff
 	//
 	Opportunity.findUniqueCode (opportunity.name, null, function (newcode) {
 		opportunity.code = newcode;
@@ -439,6 +439,26 @@ exports.denyMember = function (req, res) {
 // -------------------------------------------------------------------------
 exports.forProject = function (req, res) {
 	Opportunity.find({project:req.project._id}).sort('name')
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.exec(function (err, opportunities) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+			// res.json(opportunities);
+		}
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get opportunities under program
+//
+// -------------------------------------------------------------------------
+exports.forProgram = function (req, res) {
+	Opportunity.find({program:req.program._id}).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.exec(function (err, opportunities) {

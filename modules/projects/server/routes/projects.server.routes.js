@@ -20,6 +20,8 @@ module.exports = function(app) {
 
   app.route('/api/my/projects').all(projectsPolicy.isAllowed)
     .get(projects.my);
+  app.route('/api/myadmin/projects').all(projectsPolicy.isAllowed)
+    .get(projects.myadmin);
 
   //
   // projects for program
@@ -47,11 +49,11 @@ module.exports = function(app) {
     .all(projectsPolicy.isAllowed)
     .get(projects.denyMember);
 
-  app.route('/api/new/activity')
+  app.route('/api/new/project')
     // .all(projectsPolicy.isAllowed)
     .get(projects.new);
 
-  app.route('/api/request/activity/:projectId')
+  app.route('/api/request/project/:projectId')
     .get(projects.request)
 
   // Finish by binding the Project middleware

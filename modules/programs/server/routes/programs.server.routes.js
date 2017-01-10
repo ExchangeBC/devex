@@ -20,6 +20,8 @@ module.exports = function (app) {
 
   app.route('/api/my/programs').all(programsPolicy.isAllowed)
     .get(programs.my);
+  app.route('/api/myadmin/programs').all(programsPolicy.isAllowed)
+    .get(programs.myadmin);
 
   //
   // get lists of users

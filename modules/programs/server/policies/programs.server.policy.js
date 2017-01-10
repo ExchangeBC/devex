@@ -51,6 +51,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/my/programs',
       permissions: ['get']
     }, {
+      resources: '/api/myadmin/programs',
+      permissions: ['get']
+    }, {
       resources: '/api/programs/members/:programId/confirm/:userId',
       permissions: ['get']
     }, {

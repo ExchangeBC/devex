@@ -88,7 +88,7 @@
     .state('projectadmin.edit', {
       url: '/:projectId/edit',
       params: {
-        programId: null
+        context: null
       },
       templateUrl: '/modules/projects/client/views/edit-project.client.view.html',
       controller: 'ProjectEditController',
@@ -98,6 +98,9 @@
           return ProjectsService.get({
             projectId: $stateParams.projectId
           }).$promise;
+        },
+        programs: function (ProgramsService) {
+          return ProgramsService.my ().$promise;
         },
         editing: function () { return true; }
       },
@@ -118,7 +121,9 @@
     .state('projectadmin.create', {
       url: '/create',
       params: {
-        programId: null
+        programId: null,
+        programTitle: null,
+        context: null
       },
       templateUrl: '/modules/projects/client/views/edit-project.client.view.html',
       controller: 'ProjectEditController',
@@ -126,6 +131,9 @@
       resolve: {
         project: function (ProjectsService) {
           return new ProjectsService();
+        },
+        programs: function (ProgramsService) {
+          return ProgramsService.myadmin ().$promise;
         },
         editing: function () { return false; }
       },

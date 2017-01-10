@@ -94,7 +94,7 @@
       .state('password', {
         abstract: true,
         url: '/password',
-        template: '<ui-view/>'
+        template: '<ui-view autoscroll="true"/>'
       })
       .state('password.forgot', {
         url: '/forgot',
@@ -108,7 +108,7 @@
       .state('password.reset', {
         abstract: true,
         url: '/reset',
-        template: '<ui-view/>'
+        template: '<ui-view autoscroll="true"/>'
       })
       .state('password.reset.invalid', {
         url: '/invalid',

@@ -26,6 +26,8 @@ module.exports = function(app) {
   //
   app.route('/api/opportunities/for/project/:projectId')
     .get(opportunities.forProject);
+  app.route('/api/opportunities/for/program/:programId')
+    .get(opportunities.forProgram);
 
   //
   // get lists of users
@@ -47,11 +49,11 @@ module.exports = function(app) {
     .all(opportunitiesPolicy.isAllowed)
     .get(opportunities.denyMember);
 
-  app.route('/api/new/activity')
+  app.route('/api/new/opportunity')
     // .all(opportunitiesPolicy.isAllowed)
     .get(opportunities.new);
 
-  app.route('/api/request/activity/:opportunityId')
+  app.route('/api/request/opportunity/:opportunityId')
     .get(opportunities.request)
 
   // Finish by binding the Opportunity middleware

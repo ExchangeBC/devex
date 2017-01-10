@@ -127,7 +127,10 @@
       url: '/create',
       params: {
         programId: null,
-        projectId: null
+        programTitle: null,
+        projectId: null,
+        projectTitle: null,
+        context: null
       },
       templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
       controller: 'OpportunityEditController',
@@ -136,11 +139,8 @@
         opportunity: function (OpportunitiesService) {
           return new OpportunitiesService();
         },
-        programs: function (ProgramsService) {
-          return ProgramsService.my ().$promise;
-        },
         projects: function (ProjectsService) {
-          return ProjectsService.my ().$promise;
+          return ProjectsService.myadmin ().$promise;
         },
        editing: function () { return false; }
       },

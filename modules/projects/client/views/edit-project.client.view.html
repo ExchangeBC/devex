@@ -30,6 +30,14 @@
 	<div class="row">
 	<div class="col-sm-12">
 			<fieldset>
+				<div class="form-group" ng-if="vm.programLink" >
+					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
+				</div>
+				<div class="form-group" ng-if="!vm.programLink" >
+					<label class="control-label" for="program">Program</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i>
+					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
+					</select>
+				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Name</label>
 					<input name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>

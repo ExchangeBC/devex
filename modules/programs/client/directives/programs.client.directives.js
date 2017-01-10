@@ -42,6 +42,21 @@
 						});
 					});
 				};
+				vm.request = function (program) {
+					ProgramsService.makeRequest ({
+						programId: program._id
+					}).$promise
+					.then (function () {
+						program.userIs.request = true;
+						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+					})
+					.catch (function (res) {
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Membership Request Error!'
+						});
+					});
+				};
 			}
 		}
 	})

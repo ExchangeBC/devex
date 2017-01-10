@@ -12,7 +12,7 @@
       .state('admin', {
         abstract: true,
         url: '/admin',
-        template: '<ui-view/>',
+        template: '<ui-view autoscroll="true"/>',
         data: {
           roles: ['admin']
         }

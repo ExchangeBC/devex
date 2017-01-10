@@ -118,6 +118,22 @@ exports.my = function (req, res) {
 		}
 	});
 };
+exports.myadmin = function (req, res) {
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
+	Project.find (search)
+	.populate ('program', 'code title short')
+	.select ('code name short program')
+	.exec (function (err, projects) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (projects);
+		}
+	});
+};
 // -------------------------------------------------------------------------
 //
 // return a list of all project members. this means all members NOT

@@ -37,13 +37,19 @@
 	<div class="col-sm-12">
 			<fieldset>
 				<div class="form-group">
-					<label class="control-label" for="program">Program</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i>
-					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
-					</select>
+					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				</div>
-				<div class="form-group">
+				<div class="form-group" ng-if="vm.projectLink" >
+					<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-university"></i> {{vm.projectTitle}}</a>
+				</div>
+				<div class="form-group" ng-if="vm.projectLink && vm.context === 'program'" >
 					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
 					<select name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects">
+					</select>
+				</div>
+				<div class="form-group" ng-if="vm.projectLink && vm.context === 'project'" >
+					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
+					<select name="project" ng-change="vm.updateProgramProject()" ng-model="vm.project" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
 					</select>
 				</div>
 				<div class="form-group" show-errors>

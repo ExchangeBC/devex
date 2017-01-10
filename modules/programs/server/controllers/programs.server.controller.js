@@ -122,6 +122,21 @@ exports.my = function (req, res) {
 		}
 	});
 };
+exports.myadmin = function (req, res) {
+	var me = helpers.myStuff (req.user.roles);
+	var search = me.isAdmin ? {} : { code: { $in: me.programs.admin } };
+	Program.find (search)
+	.select ('code title short')
+	.exec (function (err, programs) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (programs);
+		}
+	});
+};
 // -------------------------------------------------------------------------
 //
 // return a list of all program members. this means all members NOT

@@ -29,7 +29,12 @@
         url: '/api/my/projects',
         isArray: true
       },
-     getRequests: {
+      myadmin: {
+        method: 'GET',
+        url: '/api/myadmin/projects',
+        isArray: true
+      },
+      getRequests: {
         method: 'GET',
         url :'/api/projects/requests/:projectId',
         isArray: true

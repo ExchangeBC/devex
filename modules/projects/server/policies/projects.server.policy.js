@@ -51,6 +51,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/my/projects',
       permissions: ['get']
     }, {
+      resources: '/api/myadmin/projects',
+      permissions: ['get']
+    }, {
       resources: '/api/projects/members/:projectId/confirm/:userId',
       permissions: ['get']
     }, {

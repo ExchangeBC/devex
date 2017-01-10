@@ -20,6 +20,11 @@
         url: '/api/opportunities/for/project/:projectId',
         isArray: true
       },
+      forProgram: {
+        method: 'GET',
+        url: '/api/opportunities/for/program/:programId',
+        isArray: true
+      },
       my: {
         method: 'GET',
         url: '/api/my/opportunities',

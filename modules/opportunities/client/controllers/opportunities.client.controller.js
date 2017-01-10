@@ -36,18 +36,59 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, programs, projects, Authentication, Notification) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification) {
 		var vm         = this;
 		vm.projects    = projects;
-		vm.programs    = programs;
 		vm.editing     = editing;
 		vm.opportunity = opportunity;
-		vm.projectId   = (opportunity.project && opportunity.project._id)? opportunity.project._id : null;
-		vm.programId   = (opportunity.program && opportunity.program._id)? opportunity.program._id : null;
 		vm.authentication = Authentication;
 		vm.form           = {};
 		vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist   = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		//
+		// do we have existing contexts for program and project ?
+		// deal with all that noise right here
+		//
+		vm.projectLink  = true;
+		vm.programId    = $stateParams.programId;
+		vm.programTitle = $stateParams.programTitle;
+		vm.projectId    = $stateParams.projectId;
+		vm.projectTitle = $stateParams.projectTitle;
+		//
+		// if editing, set from existing
+		//
+		if (vm.editing) {
+			vm.programId    = opportunity.program._id;
+			vm.programTitle = opportunity.program.title;
+			vm.projectId    = opportunity.project._id;
+			vm.projectTitle = opportunity.project.name;
+		}
+		else {
+			if (vm.context === 'allopportunities') {
+				vm.projectLink  = false;
+			}
+			else if (vm.context === 'program') {
+				vm.projectLink  = false;
+				vm.opportunity.program = vm.programId;
+			}
+			else if (vm.context === 'project') {
+				vm.projectLink  = true;
+				vm.opportunity.project = vm.projectId;
+				vm.opportunity.program = vm.programId;
+			}
+		}
+		// -------------------------------------------------------------------------
+		//
+		// this is used when we are setting the entire hierarchy from the project
+		// select box
+		//
+		// -------------------------------------------------------------------------
+		vm.updateProgramProject = function () {
+			vm.projectId    = vm.project._id;
+			vm.projectTitle = vm.project.name;
+			vm.programId    = vm.project.program.project._id;
+			vm.programTitle = vm.project.program.project.title;
+		};
 		// -------------------------------------------------------------------------
 		//
 		// remove the opportunity with some confirmation
@@ -77,6 +118,19 @@
 			}
 			vm.opportunity.tags   = vm.opportunity.taglist.split(/ *, */);
 			vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
+			//
+			// if any context pieces were being set then copy in to the
+			// right place here
+			//
+			if (!vm.editing) {
+				if (vm.context === 'allopportunities') {
+					vm.opportunity.project = vm.projectId;
+					vm.opportunity.program = vm.programId;
+				}
+				else if (vm.context === 'program') {
+					vm.opportunity.project = vm.projectId;
+				}
+			}
 			//
 			// Create a new opportunity, or update the current instance
 			//

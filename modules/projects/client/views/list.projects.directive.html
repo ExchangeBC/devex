@@ -4,7 +4,7 @@
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
 </div>
 <div class="col-sm-5 col-form-buttons text-right">
-  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="projectadmin.create({programId:vm.program._id})" title="New">
+  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
     <i class="glyphicon glyphicon-plus"></i> New Project
   </button>
 </div>
@@ -19,23 +19,36 @@
       <img src="/modules/core/client/img/logo/avatar-2.png"/>
     </div>
     <div class="list-img-body">
-      <div class="card-tools" ng-if="project.userIs.admin">
-        <a href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+
+      <div class="card-tools">
+        <a ng-if="project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
           &nbsp;
         </a>
-        <a ng-cloak ng-if="project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+        <a ng-if="project.userIs.admin && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
           <i class="glyphicon glyphicon-ban-circle"></i>
+          &nbsp;
         </a>
-        <a ng-cloak ng-if="!project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+        <a ng-if="project.userIs.admin && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
           <i class="glyphicon glyphicon-ok-circle"></i>
+          &nbsp;
+        </a>
+        <a ng-cloak ng-if="!project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
+          <i class="glyphicon glyphicon-user"></i>
+          &nbsp;
         </a>
       </div>
+
 			<p ng-if="!vm.program && project.program">
 				<a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
 			</p>
       <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a></h3>
-      <p ng-if="!project.isPublished"><span class="label label-warning">Not Published</span></p>
+      <p>
+        <span ng-if="project.userIs.admin"   class="label label-primary">Admin</span>
+        <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-primary">Member</span>
+        <span ng-if="project.userIs.request" class="label label-primary">Pending Member</span>
+        <span ng-if="!project.isPublished"   class="label label-warning">Not Published</span>
+      </p>
       <p ng-bind="project.short"></p>
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>

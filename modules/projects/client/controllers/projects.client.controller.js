@@ -36,17 +36,48 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectEditController', function ($scope, $state, $stateParams, $window, project, editing, Authentication, Notification) {
-		var vm            = this;
-		vm.programId      = $stateParams.programId;
-		vm.editing        = editing;
-		vm.project        = project;
-		if (!vm.editing) {
-			vm.project.program = $stateParams.programId;
-		}
-		vm.authentication = Authentication;
-		vm.form           = {};
+	.controller('ProjectEditController', function ($scope, $state, $stateParams, $window, project, editing, programs, Authentication, Notification) {
+		var vm             = this;
+		vm.project         = project;
+		vm.authentication  = Authentication;
+		vm.form            = {};
 		vm.project.taglist = vm.project.tags? vm.project.tags.join (', ') : '';
+		vm.editing         = editing;
+		vm.context         = $stateParams.context;
+		vm.programs        = programs;
+		//
+		// if adding we care about the context
+		// if editing, the program field is locked (and is just a link)
+		// if adding then the user is restricted to add under a program they have
+		// admin over. If adding wihin the context of a program then restrict to
+		// that program only
+		//
+		//
+		// defaults
+		//
+		vm.programLink  = true;
+		vm.programId    = $stateParams.programId;
+		vm.programTitle = $stateParams.programTitle;
+		//
+		// if editing, set from existing
+		//
+		if (vm.editing) {
+			vm.programId    = project.program._id;
+			vm.programTitle = project.program.title;
+		} else {
+			//
+			// if adding with no program context display select box
+			//
+			if (vm.context === 'allprojects') {
+				vm.programLink = false;
+			}
+			//
+			// if adding with program context set the program on the record
+			//
+			else if (vm.context === 'program') {
+				vm.project.program = vm.programId;
+			}
+		}
 		// -------------------------------------------------------------------------
 		//
 		// remove the project with some confirmation
@@ -75,6 +106,13 @@
 				return false;
 			}
 			vm.project.tags = vm.project.taglist.split(/ *, */);
+			//
+			// if we were adding, then set the selected programId, unless it was adding inside
+			// a program context already, then just use the one that is already set
+			//
+			if (!editing && vm.context === 'allprojects') {
+				vm.project.program = vm.programId;
+			}
 			//
 			// Create a new project, or update the current instance
 			//

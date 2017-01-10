@@ -23,7 +23,7 @@
 		vm.idString        = 'programId';
 		vm.showMember      = Authentication.user && program.userIs.gov && !program.userIs.member && !program.userIs.request;
 		vm.request         = function () {
-			ProgramsService.makeRequest({
+			ProgramsService.makeRequest ({
 				programId: program._id
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });

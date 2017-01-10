@@ -23,6 +23,11 @@
         url: '/api/my/programs',
         isArray: true
       },
+      myadmin: {
+        method: 'GET',
+        url: '/api/myadmin/programs',
+        isArray: true
+      },
       getRequests: {
         method: 'GET',
         url :'/api/programs/requests/:programId',
