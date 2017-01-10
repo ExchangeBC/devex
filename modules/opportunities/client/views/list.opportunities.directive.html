@@ -3,13 +3,8 @@
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
 </div>
 <div class="col-sm-5 col-form-buttons text-right">
-<<<<<<< 86ec8b5ef114da587fb904dad1b9ca6692e8ce97
   <button ng-if="vm.userCanAdd" class="btn btn-default btn-lg" ui-sref="opportunityadmin.create({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New">
-    <i class="glyphicon glyphicon-plus"></i> New Opportunity
-=======
-  <button ng-if="(1 || vm.userCanAdd)" class="btn btn-default btn-lg" ui-sref="opportunityadmin.create({programId:vm.programId, projectId:vm.projectId})" title="New">
     <i class="glyphicon glyphicon-plus"></i> Post an Opportunity
->>>>>>> switch to single column; change button label
   </button>
 </div>
 </div>
@@ -32,27 +27,14 @@
         <div class="card-tools">
           <a ng-if="opportunity.userIs.admin" href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
             <i class="glyphicon glyphicon-pencil"></i>
-<<<<<<< 86ec8b5ef114da587fb904dad1b9ca6692e8ce97
-          &nbsp;
           </a>
-          <a ng-cloak ng-if="opportunity.userIs.admin && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+          <a ng-cloak ng-if="opportunity.userIs.admin && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
             <i class="glyphicon glyphicon-ban-circle"></i>
-            &nbsp;
           </a>
-          <a ng-cloak ng-if="opportunity.userIs.admin && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+          <a ng-cloak ng-if="opportunity.userIs.admin && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" title="Publish" uib-tooltip="Publish">
             <i class="glyphicon glyphicon-ok-circle"></i>
-            &nbsp;
           </a>
-          <button ng-if="!opportunity.userIs.request" class="btn btn-sm">Apply</button>
-=======
-        </a>
-        <a ng-cloak ng-if="opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
-          <i class="glyphicon glyphicon-ban-circle"></i>
-        </a>
-        <a ng-cloak ng-if="!opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" title="Publish" uib-tooltip="Publish">
-          <i class="glyphicon glyphicon-ok-circle"></i>
-        </a>
->>>>>>> switch to single column; change button label
+          <button ng-if="!opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
         </div>
         <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
