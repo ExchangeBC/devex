@@ -105,7 +105,7 @@ h6 {
   > li {
     > a {
       .alt-font;
-      font-size: 11px;
+      font-size: 12px;
     }
   }
 }
@@ -197,7 +197,7 @@ h6 {
         > li {
             > a {
                 .alt-font(@font-weight: 600);
-                font-size: 11px;
+                font-size: 12px;
                 &:hover {
                   background-color: transparent;
                 }
@@ -662,7 +662,7 @@ section {
 }
 
 .panel-default .panel-body .panel-title {
-	color: desaturate(@theme-primary, 10%);
+	color: #888;
 }
 
 
@@ -951,8 +951,29 @@ section {
 .card-tools {
   float: right;
   a, button {
+  	float: left;
   	margin-left: 8px;
   }
+}
+
+.card-flags {
+	position: absolute;
+	right: 1px;
+	bottom: 1px;
+	.label {
+		float: left;
+		border-radius: 0;
+		padding: 10px 12px;
+		&:first-child {
+			border-top-left-radius: (@panel-border-radius - 1);
+		}
+		&:last-child {
+			border-bottom-right-radius: (@panel-border-radius - 1);
+		}
+		+ .label {
+			margin-left: 1px;
+		}
+	}
 }
 
 //
@@ -978,6 +999,16 @@ section {
 .card-danger {
   background-color: @brand-danger;
   border-color: @brand-danger;
+}
+
+.card-greyed {
+	color: #999;
+	.card-img, .list-img {
+		opacity: 0.6;
+	}
+	.card-block {
+		a { color: desaturate(@theme-primary, 40%); }
+	}
 }
 
 

@@ -41,7 +41,7 @@
 					vm.opportunities = OpportunitiesService.forProgram ({
 						programId: vm.programId
 					});
-					vm.columnCount   = 2;
+					vm.columnCount   = 1;
 				} else {
 					vm.programId    = null;
 					vm.programTitle = null;

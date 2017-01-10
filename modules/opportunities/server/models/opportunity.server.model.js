@@ -14,6 +14,7 @@ var OpportunitySchema = new Schema({
 	name        : {type: String, default: '', required: 'Name cannot be blank'},
 	short       : {type: String, default: '', required: 'Short description cannot be blank'},
 	description : {type: String, default: ''},
+	evaluation  : {type: String, default: ''},
 	criteria    : {type: String, default: ''},
 	github      : {type: String, default: ''},
 	program     : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},

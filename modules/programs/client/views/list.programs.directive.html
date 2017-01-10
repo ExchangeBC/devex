@@ -11,12 +11,18 @@
 
 
 <div class="panel panel-info card-panel" ng-repeat="program in vm.programs">
-  <div class="panel-body list-img-outer">
+  <div class="panel-body list-img-outer" ng-class="{'card-greyed': !program.isPublished}">
     <div class="list-img">
       <img src="/modules/core/client/img/logo/avatar-2.png"/>
     </div>
     <div class="list-img-body">
 
+      <div class="card-flags">
+        <span ng-if="program.userIs.admin"   class="label label-primary">Admin</span>
+        <span ng-if="program.userIs.member && !program.userIs.admin"  class="label label-primary">Member</span>
+        <span ng-if="program.userIs.request" class="label label-primary">Pending Member</span>
+        <span ng-if="!program.isPublished"   class="label label-warning">Not Published</span>
+      </div>
       <div class="card-tools" >
         <a ng-if="program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
@@ -37,12 +43,6 @@
       </div>
 
       <h3 class="card-title"><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
-      <p>
-        <span ng-if="program.userIs.admin"   class="label label-primary">Admin</span>
-        <span ng-if="program.userIs.member && !program.userIs.admin"  class="label label-primary">Member</span>
-        <span ng-if="program.userIs.request" class="label label-primary">Pending Member</span>
-        <span ng-if="!program.isPublished"   class="label label-warning">Not Published</span>
-      </p>
       <p ng-bind="program.short"></p>
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>

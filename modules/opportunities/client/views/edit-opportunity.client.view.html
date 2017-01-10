@@ -84,6 +84,14 @@
 					</div>
 				</div>
 				<div class="form-group">
+					<label class="control-label" for="description">Proposal Evaluation Criteria</label>
+					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('evaluation')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+					<textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea>
+					<div class="input-help" data-field="criteria">
+					  Proposal evaluation criteria
+					</div>
+				</div>
+				<div class="form-group">
 					<label class="control-label" for="description">Acceptance Criteria</label>
 					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('criteria')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
 					<textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
