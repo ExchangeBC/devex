@@ -3,11 +3,11 @@
   <div ncy-breadcrumb></div>
   <form id="opportunityForm" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row form-head">
-	  <div class="col-md-7">
-  	  <h2 ng-if="vm.editing">Editing: {{vm.opportunity.name}}</h2>
+	  <div class="col-md-6">
+  	  <h2 ng-if="vm.editing">Editing: {{::vm.opportunity.name}}</h2>
 	    <h2 ng-if="!vm.editing">New Opportunity</h2>
     </div>
-    	<div class="col-md-5 col-form-buttons text-right">
+    	<div class="col-md-6 col-form-buttons text-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
@@ -40,100 +40,112 @@
 					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				</div>
 				<div class="form-group" ng-if="vm.projectLink" >
-					<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-university"></i> {{vm.projectTitle}}</a>
+					<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 				</div>
 				<div class="form-group" ng-if="vm.projectLink && vm.context === 'program'" >
-					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
+					<label class="control-label" for="project">Project</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
+					<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
+					  Project offering this opportunity
+					</div>
 					<select name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects">
 					</select>
 				</div>
 				<div class="form-group" ng-if="vm.projectLink && vm.context === 'project'" >
-					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
+					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign input-help-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
 					<select name="project" ng-change="vm.updateProgramProject()" ng-model="vm.project" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
 					</select>
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Title</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('title')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Title" required>
-					<div class="input-help" data-field="title">
-					  Opportunity title
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('title')"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="vm.displayHelp.title">
+					  Create a short title for the opportunity that conveys the core of the work you need done.
 					</div>
+					<input name="title" type="text" ng-model="vm.opportunity.name" id="title" class="form-control" placeholder="Title" required>
 					<div ng-messages="vm.form.opportunityForm.title.$error" role="alert">
 						<p class="help-block error-text" ng-message="required">Opportunity title is required.</p>
 					</div>
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="short">Short Description</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('short')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the opportunity" required></textarea>
-					<div class="input-help" data-field="short">
-					  Opportunity short description
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('short')"></i>
+					<div class="input-help alert alert-info" data-field="short" ng-show="vm.displayHelp.short">
+					  Enter a 1-2 sentence description that will entice the reader to apply. Describe what you are inviting them to.
 					</div>
+					<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the opportunity" required></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="description">Description</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('description')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
-					<div class="input-help" data-field="description">
-					  Opportunity description
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('description')"></i>
+					<div class="input-help alert alert-info" data-field="description" ng-show="vm.displayHelp.description">
+					  Here’s where you can fully describe any useful background, and what you’re trying to accomplish by offering this opportunity.
 					</div>
+					<textarea name="description" data-ng-model="vm.opportunity.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the opportunity"></textarea>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="description">Proposal Evaluation Criteria</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
+					<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
+					  State the evaluation criteria you will use to evaluate/score proposals. It is at your discretion which mandatory and weighted criteria you wish to use. Refer to <a href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">the Government of B.C.'s information on procurement</a> for guidance.
+					</div>
+					<textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="description">Acceptance Criteria</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('criteria')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
-					<div class="input-help" data-field="criteria">
-					  Opportunity acceptance criteria
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('criteria')"></i>
+					<div class="input-help alert alert-info" data-field="criteria" ng-show="vm.displayHelp.criteria">
+					  Define the product that must be delivered, or the criteria which must be met, in order for the assignee to be paid.
 					</div>
+					<textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="github">Github Repository</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('github')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
-					<div class="input-help" data-field="github">
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
+					<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
 					  Opportunity Github repository
 					</div>
+					<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
-					<i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('skilllist')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
-					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
-					<div class="input-help" data-field="skilllist">
-					  Opportunity required skills
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
+					<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
+					  List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
 					</div>
+					<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
 				</div>
 				<div class="row">
 				<div class="col-sm-4">
           <div class="form-group" show-errors>
             <label class="control-label" for="earn">Reward</label>
-            <i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('reward')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+            <i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
+            <div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
+              Scope the work and estimate a $$ value for the opportunity. To the best of your estimating ability, determine a reasonable and fair $$ value for the amount of work that needs to be done to solve your issue. Currently, you can use Code With Us to procure up to $10,000 worth of work for a single issue
+            </div>
             <select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000]">
               <option value="">Select reward amount</option>
             </select>
-            <div class="input-help" data-field="reward">
-              Opportunity reward amount
-            </div>
           </div>
 				</div>
 				<div class="col-sm-4">
           <div class="form-group" show-errors>
-            <label class="control-label" for="deadline_date">Proposal Deadline</label>
-            <i class="glyphicon glyphicon-question-sign input-popover-source" uib-popover-html="vm.popoverContent('deadline')" popover-trigger="outsideClick" ng-click="$event.preventDefault()"></i>
+            <label class="control-label" for="deadline_date">Proposal Deadline - Date</label>
+            <i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
+            <div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
+              Choose a deadline for receiving proposals. The longer lead time, the more proposals you are likely to get. A deadline that's at least 5 days after you publish is a good guideline. Also, it's possible that you may have to field questions that come in at the last minute - so choose a time of day when you'll be able to respond. 
+            </div>
             <div class="input-group">
               <input type="text" class="form-control" name="deadline_date" id="deadline_date" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline_date" is-open="vm.showdate" required close-text="Close" placeholder="Date"/>
               <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
               </span>
             </div>
-            <div class="input-help" data-field="deadline">
-              Opportunity proposal deadline
-            </div>
           </div>
         </div>
         <div class="col-sm-4">
           <div class="form-group" show-errors>
-            <label class="control-label" for="deadline_time">Proposal Time</label>
+            <label class="control-label" for="deadline_time">Proposal Deadline - Time</label>
             <div class="input-group">
               <input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" required placeholder="Time" />
               <span class="input-group-addon">

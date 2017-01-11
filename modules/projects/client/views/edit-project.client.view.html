@@ -4,7 +4,7 @@
   <form id="projectForm" name="vm.form.projectForm" class="form" ng-submit="vm.save(vm.form.projectForm.$valid)" novalidate>
 	<div class="row form-head">
 	<div class="col-sm-7">
-		<h2 ng-if="vm.editing">Editing: {{vm.project.name}}</h2>
+		<h2 ng-if="vm.editing">Editing: {{::vm.project.name}}</h2>
 		<h2 ng-if="!vm.editing">New Project</h2>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">

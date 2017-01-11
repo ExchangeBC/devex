@@ -20,7 +20,7 @@
           <i class="fa fa-tag"></i> {{vm.opportunity.earn|currency}}
         </h4>
         <p class="lg">Closing in <b>5 hours</b></p>
-        <dl>
+        <dl ng-if="vm.opportunity.skills.length">
           <dt>Required Skills:</dt>
           <dd class="label-list">
           <span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
@@ -61,6 +61,8 @@
     <p class="med-desc">We are offering a fixed price for the work described below, according to the terms of our experimental procurement model, Code-With-Us.</p>
     <h2 class="panel-title">Description</h2>
     <p class="med-desc pre-line" ng-bind="vm.opportunity.description"></p>
+    <h2 class="panel-title">Acceptance Criteria</h2>
+    <p class="med-desc pre-line" ng-bind="vm.opportunity.criteria"></p>
   </div>
   <div class="panel-footer">
     <em class="small text-muted">
@@ -100,7 +102,7 @@
     </ol>
     <p>If we are satisfied with the proposals we will assign the work by 4:00pm on January 7.</p>
     </div>
-    <button ng-if="vm.showMember" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+    <button ng-if="1" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Request">
       <i class="fa fa-sign-in"></i> Apply Now
     </button>
   </div>

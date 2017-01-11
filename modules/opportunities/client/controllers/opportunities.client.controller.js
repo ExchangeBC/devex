@@ -160,6 +160,7 @@
 			});
 		};
 		vm.popoverCache = {};
+		vm.displayHelp = {};
 		vm.popoverContent       = function(field) {
 			if (! field) return;
 			if (! vm.popoverCache[field]) {
@@ -170,6 +171,9 @@
 				vm.popoverCache[field] = $sce.trustAsHtml(html);
 			}
 			return vm.popoverCache[field];
+		};
+		vm.toggleHelp = function(field) {
+			vm.displayHelp[field] = ! vm.displayHelp[field];
 		};
 	})
 	;

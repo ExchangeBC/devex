@@ -29,7 +29,6 @@ var ProjectSchema = new Schema({
     required: 'Please complete the project description',
     trim: true
   },
-  short       : {type: String, default: ''},
   github: {
     type: String,
     default: '',

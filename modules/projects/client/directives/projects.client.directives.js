@@ -38,7 +38,7 @@
 					vm.projects   = ProjectsService.forProgram ({
 						programId: $scope.program._id
 					});
-					vm.columnCount = 2;
+					vm.columnCount = 1;
 				} else {
 					vm.title      = 'All Projects';
 					vm.programId  = null;

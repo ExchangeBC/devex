@@ -105,7 +105,7 @@ h6 {
   > li {
     > a {
       .alt-font;
-      font-size: 11px;
+      font-size: 12px;
     }
   }
 }
@@ -122,7 +122,7 @@ h6 {
 }
 
 .navbar-brand {
-  padding: 10px;
+  padding: 0 10px;
   width: 240px;
   @media (min-width: 768px) {
     padding-left: 2px;
@@ -197,7 +197,7 @@ h6 {
         > li {
             > a {
                 .alt-font(@font-weight: 600);
-                font-size: 11px;
+                font-size: 12px;
                 &:hover {
                   background-color: transparent;
                 }
@@ -629,7 +629,7 @@ section {
   > .panel-body, > .panel-footer, {
     border-color: lighten(@bg, 6%);
   }
-  border-color: lighten(@bg, 6%); 
+  border-color: lighten(@bg, 8%); 
 }
 
 // Apply the mixin to the panel headings only
@@ -662,7 +662,7 @@ section {
 }
 
 .panel-default .panel-body .panel-title {
-	color: desaturate(@theme-primary, 10%);
+	color: #888;
 }
 
 
@@ -700,6 +700,18 @@ section {
 	}
 	.panel-info & {
 		background: lighten(@theme-info, 10%);
+	}
+	.panel-primary & {
+		background: lighten(@theme-primary, 15%);
+	}
+	.panel-success & {
+		background: lighten(@theme-success, 15%);
+	}
+	.panel-warning & {
+		background: lighten(@theme-warning, 15%);
+	}
+	.panel-danger & {
+		background: lighten(@theme-danger, 15%);
 	}
 }
 .img-logo {
@@ -787,16 +799,13 @@ section {
 	margin-right: 0.5em;
 }
 
-.input-popover-source {
+.input-help-source {
   color: @theme-primary;
   &:hover,
   &:focus {
     color: darken(@theme-primary, 10%);
   }
   cursor: pointer;
-}
-.input-help {
-  display: none;
 }
 
 // Badges
@@ -950,7 +959,30 @@ section {
 
 .card-tools {
   float: right;
-  margin-left: 10px;
+  a, button {
+  	float: left;
+  	margin-left: 8px;
+  }
+}
+
+.card-flags {
+	position: absolute;
+	right: 1px;
+	bottom: 1px;
+	.label {
+		float: left;
+		border-radius: 0;
+		padding: 10px 12px;
+		&:first-child {
+			border-top-left-radius: (@panel-border-radius - 1);
+		}
+		&:last-child {
+			border-bottom-right-radius: (@panel-border-radius - 1);
+		}
+		+ .label {
+			margin-left: 1px;
+		}
+	}
 }
 
 //
@@ -976,6 +1008,17 @@ section {
 .card-danger {
   background-color: @brand-danger;
   border-color: @brand-danger;
+}
+
+.card-greyed {
+	color: #999;
+	border-color: #ddd;
+	.card-img, .list-img {
+		opacity: 0.6;
+	}
+	a:not(:hover) {
+		color: lighten(desaturate(@theme-primary, 25%), 15%);
+	}
 }
 
 
