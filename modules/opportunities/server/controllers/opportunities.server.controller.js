@@ -104,7 +104,7 @@ var decorateList = function (opportunityModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.my = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : { code: { $in: me.opportunities.member } };
 	Opportunity.find (search)
 	.select ('code name short')
@@ -293,7 +293,7 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
 	Opportunity.find(search).sort('name')
 	.populate('createdBy', 'displayName')

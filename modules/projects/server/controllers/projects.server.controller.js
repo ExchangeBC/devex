@@ -104,7 +104,7 @@ var decorateList = function (projectModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.my = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : { code: { $in: me.projects.member } };
 	Project.find (search)
 	.select ('code name short')
@@ -119,7 +119,7 @@ exports.my = function (req, res) {
 	});
 };
 exports.myadmin = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
 	Project.find (search)
 	.populate ('program', 'code title short')
@@ -309,7 +309,7 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
 	Project.find(search).sort('name')
 	.populate('createdBy', 'displayName')

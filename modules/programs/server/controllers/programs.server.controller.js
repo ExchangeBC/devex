@@ -108,7 +108,7 @@ var decorateList = function (programModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.my = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : { code: { $in: me.programs.member } };
 	Program.find (search)
 	.select ('code title short')
@@ -123,7 +123,7 @@ exports.my = function (req, res) {
 	});
 };
 exports.myadmin = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : { code: { $in: me.programs.admin } };
 	Program.find (search)
 	.select ('code title short')
@@ -263,7 +263,7 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	var me = helpers.myStuff (req.user.roles);
+	var me = helpers.myStuff (req.user.roles || null);
 	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.programs.admin}}]}
 	Program.find(search).sort('title')
 	.populate('createdBy', 'displayName')
