@@ -27,7 +27,6 @@
 				var reset = function () {
 					modelService.getMembers (queryObject).$promise.then (function (result) {
 						vm.members = result;
-						console.log ('Members:',result);
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
 							start : 0,
@@ -78,7 +77,6 @@
 				var reset = function () {
 					modelService.getRequests (queryObject).$promise.then (function (result) {
 						vm.members = result;
-						console.log ('Requests:',result);
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
 							start : 0,

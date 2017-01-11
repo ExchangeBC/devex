@@ -21,6 +21,7 @@
 				var vm     = this;
 				vm.project = $scope.project;
 				vm.program = $scope.program;
+				vm.context = $scope.context;
 				if (vm.context === 'project') {
 					vm.programId    = vm.program._id;
 					vm.programTitle = vm.program.title;

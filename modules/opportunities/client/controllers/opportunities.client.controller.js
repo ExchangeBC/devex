@@ -36,9 +36,12 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState) {
 		var vm         = this;
 		vm.projects    = projects;
+		vm.context     = $stateParams.context;
+		console.log ('projects = ', projects);
+		console.log ('stateParams = ', $stateParams);
 		vm.editing     = editing;
 		vm.opportunity = opportunity;
 		vm.authentication = Authentication;
@@ -70,6 +73,11 @@
 			else if (vm.context === 'program') {
 				vm.projectLink  = false;
 				vm.opportunity.program = vm.programId;
+				var projects = [];
+				vm.projects.forEach (function (o) {
+					if (o.program._id === vm.programId) projects.push (o);
+				});
+				vm.projects = projects;
 			}
 			else if (vm.context === 'project') {
 				vm.projectLink  = true;
@@ -77,17 +85,38 @@
 				vm.opportunity.program = vm.programId;
 			}
 		}
+		//
+		// if there are no available projects then post a warning and kick the user back to
+		// where they came from
+		//
+		if (vm.projects.length === 0) {
+			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
+			$state.go (previousState.name, previousState.params);
+		}
+		//
+		// if there is only one available project just force it
+		//
+		else if (vm.projects.length === 1) {
+			vm.projectLink = true;
+			vm.projectId = vm.projects[0]._id;
+			vm.projectTitle = vm.projects[0].name;
+			vm.opportunity.project = vm.projectId;
+			vm.programId    = vm.projects[0].program._id;
+			vm.programTitle = vm.projects[0].program.title;
+			vm.opportunity.program = vm.programId;
+		}
 		// -------------------------------------------------------------------------
 		//
 		// this is used when we are setting the entire hierarchy from the project
 		// select box
 		//
 		// -------------------------------------------------------------------------
-		vm.updateProgramProject = function () {
-			vm.projectId    = vm.project._id;
-			vm.projectTitle = vm.project.name;
-			vm.programId    = vm.project.program.project._id;
-			vm.programTitle = vm.project.program.project.title;
+		vm.updateProgramProject = function (selected) {
+			console.log ('selected', vm.projectobj);
+			vm.projectId    = vm.projectobj._id;
+			vm.projectTitle = vm.projectobj.name;
+			vm.programId    = vm.projectobj.program._id;
+			vm.programTitle = vm.projectobj.program.title;
 		};
 		// -------------------------------------------------------------------------
 		//

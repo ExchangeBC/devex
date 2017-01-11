@@ -42,7 +42,7 @@
 				<div class="form-group" ng-if="vm.projectLink" >
 					<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 				</div>
-				<div class="form-group" ng-if="vm.projectLink && vm.context === 'program'" >
+				<div class="form-group" ng-if="!vm.projectLink && vm.context === 'program'" >
 					<label class="control-label" for="project">Project</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
 					<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
@@ -51,9 +51,9 @@
 					<select name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects">
 					</select>
 				</div>
-				<div class="form-group" ng-if="vm.projectLink && vm.context === 'project'" >
+				<div class="form-group" ng-if="!vm.projectLink && vm.context === 'allopportunities'" >
 					<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign input-help-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
-					<select name="project" ng-change="vm.updateProgramProject()" ng-model="vm.project" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
+					<select name="project" ng-change="vm.updateProgramProject()" ng-model="vm.projectobj" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
 					</select>
 				</div>
 				<div class="form-group" show-errors>
@@ -133,7 +133,7 @@
             <label class="control-label" for="deadline_date">Proposal Deadline - Date</label>
             <i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
             <div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
-              Choose a deadline for receiving proposals. The longer lead time, the more proposals you are likely to get. A deadline that's at least 5 days after you publish is a good guideline. Also, it's possible that you may have to field questions that come in at the last minute - so choose a time of day when you'll be able to respond. 
+              Choose a deadline for receiving proposals. The longer lead time, the more proposals you are likely to get. A deadline that's at least 5 days after you publish is a good guideline. Also, it's possible that you may have to field questions that come in at the last minute - so choose a time of day when you'll be able to respond.
             </div>
             <div class="input-group">
               <input type="text" class="form-control" name="deadline_date" id="deadline_date" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline_date" is-open="vm.showdate" required close-text="Close" placeholder="Date"/>
