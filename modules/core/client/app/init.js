@@ -10,9 +10,9 @@
     .module(app.applicationModuleName)
     .config(bootstrapConfig);
 
-  bootstrapConfig.$inject = ['$compileProvider', '$locationProvider', '$httpProvider', '$logProvider'];
+  bootstrapConfig.$inject = ['$compileProvider', '$locationProvider', '$httpProvider', '$logProvider', '$uiViewScrollProvider'];
 
-  function bootstrapConfig($compileProvider, $locationProvider, $httpProvider, $logProvider) {
+  function bootstrapConfig($compileProvider, $locationProvider, $httpProvider, $logProvider, $uiViewScrollProvider) {
     $locationProvider.html5Mode({
       enabled: true,
       requireBase: false
@@ -24,6 +24,8 @@
     // @link https://docs.angularjs.org/guide/production
     $compileProvider.debugInfoEnabled(app.applicationEnvironment !== 'production');
     $logProvider.debugEnabled(app.applicationEnvironment !== 'production');
+
+    $uiViewScrollProvider.useAnchorScroll();
   }
 
 
