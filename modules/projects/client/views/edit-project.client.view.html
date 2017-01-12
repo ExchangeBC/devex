@@ -51,7 +51,15 @@
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="description">Description</label>
-					<textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project" ng-required="true"></textarea>
+					<!-- <textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project" ng-required="true"></textarea> -->
+					<textarea
+						name="description"
+						id="description"
+						class="form-control input-sm"
+						ui-tinymce="vm.tinymceOptions"
+						placeholder="A full description of the project"
+						ng-model="vm.project.description">
+					</textarea>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="github">Github</label>

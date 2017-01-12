@@ -15,9 +15,10 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($scope, $state, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', function ($scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
 		var vm             = this;
 		vm.program         = program;
+		vm.program.description = $sce.trustAsHtml(vm.program.description);
 		vm.authentication  = Authentication;
 		vm.ProgramsService = ProgramsService;
 		vm.idString        = 'programId';
@@ -44,6 +45,15 @@
 		vm.form           = {};
 		vm.program.taglist = vm.program.tags? vm.program.tags.join (', ') : '';
 		vm.filename = {name:'none'};
+		vm.tinymceOptions = {
+			resize      : true,
+			width       : '100%',  // I *think* its a number and not '400' string
+			height      : 100,
+			menubar     :'',
+			elementpath : false,
+			plugins     : 'textcolor lists advlist',
+			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor'
+		};
 		// -------------------------------------------------------------------------
 		//
 		// remove the program with some confirmation

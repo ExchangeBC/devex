@@ -15,10 +15,11 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectViewController', function ($scope, $state, $stateParams, project, Authentication, ProjectsService, Notification) {
+	.controller('ProjectViewController', function ($scope, $state, $sce, $stateParams, project, Authentication, ProjectsService, Notification) {
 		var vm             = this;
 		vm.programId       = project.program ? project.program._id : $stateParams.programId;
 		vm.project         = project;
+		vm.project.description = $sce.trustAsHtml(vm.project.description);
 		vm.authentication  = Authentication;
 		vm.ProjectsService = ProjectsService;
 		vm.idString        = 'projectId';
@@ -45,6 +46,15 @@
 		vm.editing         = editing;
 		vm.context         = $stateParams.context;
 		vm.programs        = programs;
+		vm.tinymceOptions = {
+			resize      : true,
+			width       : '100%',  // I *think* its a number and not '400' string
+			height      : 100,
+			menubar     :'',
+			elementpath : false,
+			plugins     : 'textcolor lists advlist',
+			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor'
+		};
 		//
 		// if adding we care about the context
 		// if editing, the program field is locked (and is just a link)
