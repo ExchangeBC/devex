@@ -19,7 +19,7 @@
   <!-- <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end"> -->
   <div class="card card-flat" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end">
     <div class="card-header">
-      <div class="pull-right">Closing in <b>5 hours</b></div>
+      <div class="pull-right">Closing in: <b>{{vm.closing(opportunity)}}</b></div>
       <h4 class="card-title">
         <i class="fa fa-tag"></i> {{opportunity.earn|currency}}
       </h4>

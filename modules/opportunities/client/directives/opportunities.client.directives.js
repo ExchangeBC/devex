@@ -18,6 +18,7 @@
 			},
 			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
 			controller   : function ($scope, OpportunitiesService, Authentication, Notification) {
+				var rightNow = new Date ();
 				var vm     = this;
 				vm.project = $scope.project;
 				vm.program = $scope.program;
@@ -91,6 +92,20 @@
 							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Membership Request Error!'
 						});
 					});
+				};
+				vm.closing = function (opportunity) {
+					var ret = 'CLOSED';
+					var d = (new Date(opportunity.deadline)) - rightNow;
+					if (d > 0) {
+						var dd = Math.floor(d / 86400000); // days
+						var dh = Math.floor((d % 86400000) / 3600000); // hours
+						var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+						ret = dm+' minutes';
+						if (dd > 0) ret = dd+' days '+dh+' hours '+dm+' minutes';
+						else if (dh > 0) ret = dh+' hours '+dm+' minutes';
+						else ret = dm+' minutes';
+					}
+					return ret;
 				};
 			}
 		}

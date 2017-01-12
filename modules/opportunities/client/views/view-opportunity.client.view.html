@@ -19,7 +19,7 @@
         <h4 class="card-title">
           <i class="fa fa-tag"></i> {{vm.opportunity.earn|currency}}
         </h4>
-        <p class="lg">Closing in <b>5 hours</b></p>
+        <p class="lg">Closing in: <b>{{vm.closing}}</b></p>
         <dl ng-if="vm.opportunity.skills.length">
           <dt>Required Skills:</dt>
           <dd class="label-list">
@@ -60,9 +60,9 @@
     <h2 class="panel-title">Terms</h2>
     <p class="med-desc">We are offering a fixed price for the work described below, according to the terms of our experimental procurement model, Code-With-Us.</p>
     <h2 class="panel-title">Description</h2>
-    <p class="med-desc pre-line" ng-bind="vm.opportunity.description"></p>
+    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.description"></p>
     <h2 class="panel-title">Acceptance Criteria</h2>
-    <p class="med-desc pre-line" ng-bind="vm.opportunity.criteria"></p>
+    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.criteria"></p>
   </div>
   <div class="panel-footer">
     <em class="small text-muted">
@@ -93,14 +93,10 @@
   </div>
   <div class="panel-body">
     <div class="med-desc margin-bottom">
-    <p>Log in and upload your proposal by <b>4:00pm</b> Pacific Time on <b>Monday, January 2, 2017</b>.</p>
-    <p>We will score uploads by the following criteria:</p>
-    <ol>
-    <li>&nbsp;</li>
-    <li>&nbsp;</li>
-    <li>&nbsp;</li>
-    </ol>
-    <p>If we are satisfied with the proposals we will assign the work by 4:00pm on January 7.</p>
+    <p>Log in and upload your proposal by <b>{{vm.deadline}}</b>.</p>
+    <h2 class="panel-title">Evaluation Criteria</h2>
+    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.evaluation"></p>
+    <p>If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
     </div>
     <button ng-if="1" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Request">
       <i class="fa fa-sign-in"></i> Apply Now

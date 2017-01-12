@@ -258,7 +258,7 @@ exports.update = function (req, res) {
 				});
 			} else {
 				// res.json(opportunity);
-				res.json (decorateList (opportunity, req.user ? req.user.roles : []));
+				res.json (decorate (opportunity, req.user ? req.user.roles : []));
 			}
 		});
 	}

@@ -107,7 +107,14 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.my ().$promise;
 				},
-				editing: function () { return true; }
+				editing: function () { return true; },
+				previousState: function ($state) {
+					return {
+						name: $state.current.name,
+						params: $state.params,
+						url: $state.href($state.current.name, $state.params)
+					};
+				}
 			},
 			data: {
 				roles: ['admin', 'gov'],

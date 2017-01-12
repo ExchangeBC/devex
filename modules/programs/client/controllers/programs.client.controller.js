@@ -43,6 +43,7 @@
 		vm.authentication = Authentication;
 		vm.form           = {};
 		vm.program.taglist = vm.program.tags? vm.program.tags.join (', ') : '';
+		vm.filename = {name:'none'};
 		// -------------------------------------------------------------------------
 		//
 		// remove the program with some confirmation

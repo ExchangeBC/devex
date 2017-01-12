@@ -15,16 +15,42 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, opportunity, Authentication, OpportunitiesService, Notification) {
-		var vm                  = this;
-		vm.projectId            = $stateParams.projectId;
-		vm.opportunity          = opportunity;
-		vm.authentication       = Authentication;
-		vm.OpportunitiesService = OpportunitiesService;
-		vm.idString             = 'opportunityId';
-		vm.showMember           = Authentication.user && !opportunity.userIs.gov && !opportunity.userIs.member && !opportunity.userIs.request;
-		vm.request              = function () {
-			OpportunitiesService.makeRequest({
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification) {
+		var vm                     = this;
+		vm.projectId               = $stateParams.projectId;
+		vm.opportunity             = opportunity;
+		vm.opportunity.deadline    = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment  = new Date (vm.opportunity.assignment);
+		vm.opportunity.start       = new Date (vm.opportunity.start)		;
+		vm.authentication          = Authentication;
+		vm.OpportunitiesService    = OpportunitiesService;
+		vm.idString                = 'opportunityId';
+		vm.showMember              = Authentication.user && !opportunity.userIs.gov && !opportunity.userIs.member && !opportunity.userIs.request;
+		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
+		vm.opportunity.evaluation  = $sce.trustAsHtml(vm.opportunity.evaluation);
+		vm.opportunity.criteria    = $sce.trustAsHtml(vm.opportunity.criteria);
+		var rightNow               = new Date ();
+		vm.closing = 'CLOSED';
+		var d                      = vm.opportunity.deadline - rightNow;
+		if (d > 0) {
+			var dd = Math.floor(d / 86400000); // days
+			var dh = Math.floor((d % 86400000) / 3600000); // hours
+			var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+			vm.closing = dm+' minutes';
+			if (dd > 0) vm.closing = dd+' days '+dh+' hours '+dm+' minutes';
+			else if (dh > 0) vm.closing = dh+' hours '+dm+' minutes';
+			else vm.closing = dm+' minutes';
+		}
+		var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+		var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		var dt = vm.opportunity.deadline;
+		vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		dt = vm.opportunity.assignment;
+		vm.assignment = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		dt = vm.opportunity.start;
+		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		vm.request = function () {
+			OpportunitiesService.makeRequest ({
 				opportunityId: opportunity._id
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Successfully Applied!' });
@@ -37,26 +63,32 @@
 	//
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState) {
-		var vm         = this;
-		vm.projects    = projects;
-		vm.context     = $stateParams.context;
-		console.log ('projects = ', projects);
-		console.log ('stateParams = ', $stateParams);
-		vm.editing     = editing;
-		vm.opportunity = opportunity;
-		vm.authentication = Authentication;
-		vm.form           = {};
-		vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist   = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		var rightNow = new Date();
+		console.log ('rightnow = ', rightNow);
+		var vm                    = this;
+		vm.projects               = projects;
+		vm.context                = $stateParams.context;
+		// console.log ('projects    = ', projects);
+		// console.log ('stateParams = ', $stateParams);
+		vm.editing                = editing;
+		vm.opportunity            = opportunity;
+		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+		vm.opportunity.start      = new Date (vm.opportunity.start)		;
+		console.log ('vm.opportunity.deadline =', vm.opportunity.deadline);
+		vm.authentication         = Authentication;
+		vm.form                   = {};
+		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.opportunity.taglist    = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//
 		// do we have existing contexts for program and project ?
 		// deal with all that noise right here
 		//
-		vm.projectLink  = true;
-		vm.programId    = $stateParams.programId;
-		vm.programTitle = $stateParams.programTitle;
-		vm.projectId    = $stateParams.projectId;
-		vm.projectTitle = $stateParams.projectTitle;
+		vm.projectLink            = true;
+		vm.programId              = $stateParams.programId;
+		vm.programTitle           = $stateParams.programTitle;
+		vm.projectId              = $stateParams.projectId;
+		vm.projectTitle           = $stateParams.projectTitle;
 		//
 		// if editing, set from existing
 		//
@@ -71,16 +103,16 @@
 				vm.projectLink  = false;
 			}
 			else if (vm.context === 'program') {
-				vm.projectLink  = false;
+				vm.projectLink         = false;
 				vm.opportunity.program = vm.programId;
-				var projects = [];
+				var projects           = [];
 				vm.projects.forEach (function (o) {
 					if (o.program._id === vm.programId) projects.push (o);
 				});
 				vm.projects = projects;
 			}
 			else if (vm.context === 'project') {
-				vm.projectLink  = true;
+				vm.projectLink         = true;
 				vm.opportunity.project = vm.projectId;
 				vm.opportunity.program = vm.programId;
 			}
@@ -97,14 +129,23 @@
 		// if there is only one available project just force it
 		//
 		else if (vm.projects.length === 1) {
-			vm.projectLink = true;
-			vm.projectId = vm.projects[0]._id;
-			vm.projectTitle = vm.projects[0].name;
+			vm.projectLink         = true;
+			vm.projectId           = vm.projects[0]._id;
+			vm.projectTitle        = vm.projects[0].name;
 			vm.opportunity.project = vm.projectId;
-			vm.programId    = vm.projects[0].program._id;
-			vm.programTitle = vm.projects[0].program.title;
+			vm.programId           = vm.projects[0].program._id;
+			vm.programTitle        = vm.projects[0].program.title;
 			vm.opportunity.program = vm.programId;
 		}
+		vm.tinymceOptions = {
+			resize      : true,
+			width       : '100%',  // I *think* its a number and not '400' string
+			height      : 100,
+			menubar     :'',
+			elementpath : false,
+			plugins     : 'textcolor lists advlist',
+			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor'
+		};
 		// -------------------------------------------------------------------------
 		//
 		// this is used when we are setting the entire hierarchy from the project
@@ -142,6 +183,7 @@
 		vm.save = function (isValid) {
 			console.log ('saving form', vm.opportunity);
 			if (!isValid) {
+				console.log ('form is not valid');
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.opportunityForm');
 				return false;
 			}
@@ -149,17 +191,22 @@
 			vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
 			//
 			// if any context pieces were being set then copy in to the
-			// right place here
+			// right place here (only when adding)
 			//
 			if (!vm.editing) {
 				if (vm.context === 'allopportunities') {
-					vm.opportunity.project = vm.projectId;
-					vm.opportunity.program = vm.programId;
+					vm.opportunity.project = vm.projectobj._id;
+					vm.opportunity.program = vm.projectobj.program._id;
 				}
 				else if (vm.context === 'program') {
 					vm.opportunity.project = vm.projectId;
 				}
 			}
+			//
+			// set the time on the 2 dates that care about it
+			//
+			vm.opportunity.deadline.setHours(16);
+			vm.opportunity.assignment.setHours(16);
 			//
 			// Create a new opportunity, or update the current instance
 			//
@@ -169,6 +216,9 @@
 			//
 			.then (function (res) {
 				console.log ('now saved the new opportunity, redirect user');
+				vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+				vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+				vm.opportunity.start      = new Date (vm.opportunity.start);
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
@@ -193,10 +243,8 @@
 		vm.popoverContent       = function(field) {
 			if (! field) return;
 			if (! vm.popoverCache[field]) {
-				var help = $('#opportunityForm').find('.input-help[data-field='+field+']'),
-					html = '';
-				if (help.length)
-					html = help.html();
+				var help = $('#opportunityForm').find('.input-help[data-field='+field+']');
+				var	html = (help.length) ? help.html () : '';
 				vm.popoverCache[field] = $sce.trustAsHtml(html);
 			}
 			return vm.popoverCache[field];
