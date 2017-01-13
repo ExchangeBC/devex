@@ -95,7 +95,7 @@
 				<label class="control-label" for="description">Proposal Evaluation Criteria</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
 				<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
-					State the evaluation criteria you will use to evaluate/score proposals. It is at your discretion which mandatory and weighted criteria you wish to use. Refer to <a href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">the Government of B.C.'s information on procurement</a> for guidance.
+					State the criteria you will use to score the proposals you receive and assign a developer. It is at your discretion which mandatory and weighted criteria you wish to use. Refer to <a href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">the Government of B.C.'s information on procurement</a> for guidance.
 				</div>
 				<!-- <textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea> -->
 				<textarea
@@ -111,7 +111,7 @@
 				<label class="control-label" for="description">Acceptance Criteria</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('criteria')"></i>
 				<div class="input-help alert alert-info" data-field="criteria" ng-show="vm.displayHelp.criteria">
-					Define the product that must be delivered, or the criteria which must be met, in order for the assignee to be paid.
+					Clearly define what must be delivered and any criteria that must be met, in order for you to be satisfied and ready to pay the developer.
 				</div>
 				<!-- <textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea> -->
 				<textarea
@@ -145,7 +145,7 @@
 						<label class="control-label" for="earn">Reward</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
 						<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
-							Scope the work and estimate a $$ value for the opportunity. To the best of your estimating ability, determine a reasonable and fair $$ value for the amount of work that needs to be done to solve your issue. Currently, you can use Code With Us to procure up to $10,000 worth of work for a single issue
+							To the best of your ability, estimate a fair price for the amount of work you can estimate is required to meet the acceptance criteria. (It's best to over-estimate.) 
 						</div>
 						<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000]">
 							<option value="">Select reward amount</option>
@@ -157,10 +157,10 @@
 						<label class="control-label" for="deadline">Proposal Deadline</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
 						<div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
-							Choose a deadline for receiving proposals. The longer lead time, the more proposals you are likely to get.
-							A deadline that's at least 5 days after you publish is a good guideline.
-							Also, it's possible that you may have to field questions that come in at the last minute.
-							The deadline time will be 16:00 PST the day of.
+              <p>Choose a deadline for receiving proposals. (Time is fixed at <b>16:00 PST</b>.)</p>
+              <p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
+							<p>Keep in mind that you'll want to have people able to respond to questions that come in close to the deadline.</p>
+							
 						</div>
 						<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
 					</div>
@@ -170,8 +170,7 @@
 						<label class="control-label" for="assignment">Assignment Date</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('assignment')"></i>
 						<div class="input-help alert alert-info" data-field="assignment" ng-show="vm.displayHelp.assignment">
-							This is the date that you commit to making a decision and announcment of that decision.
-							Time is fixed at 16:00 PST the day of.
+							This is the date that you will commit to assigning a developer. (Time is fixed at <b>16:00 PST</b>.)
 						</div>
 						<input type="date" name="assignment" required ng-model="vm.opportunity.assignment"/>
 					</div>
@@ -181,7 +180,7 @@
 						<label class="control-label" for="start">Proposed Start</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('start')"></i>
 						<div class="input-help alert alert-info" data-field="start" ng-show="vm.displayHelp.start">
-							The proposed start date of the actual work.
+							This is the date you would like the developer to begin working.
 						</div>
 						<input type="date" name="start" ng-model="vm.opportunity.start"/>
 					</div>
