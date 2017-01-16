@@ -23,6 +23,8 @@
 		vm.ProgramsService = ProgramsService;
 		vm.idString        = 'programId';
 		vm.showMember      = Authentication.user && program.userIs.gov && !program.userIs.member && !program.userIs.request;
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
 		vm.request         = function () {
 			ProgramsService.makeRequest ({
 				programId: program._id
@@ -37,8 +39,10 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $window, program, editing, Authentication, Notification) {
+	.controller('ProgramEditController', function ($scope, $state, $sce, $window, program, editing, Authentication, Notification) {
 		var vm            = this;
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.editing        = editing;
 		vm.program        = program;
 		vm.authentication = Authentication;

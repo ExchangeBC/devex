@@ -24,6 +24,8 @@
 		vm.ProjectsService = ProjectsService;
 		vm.idString        = 'projectId';
 		vm.showMember      = Authentication.user && project.userIs.gov && !project.userIs.member && !project.userIs.request;
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
 		vm.request         = function () {
 			ProjectsService.makeRequest({
 				projectId: project._id
@@ -37,8 +39,10 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectEditController', function ($scope, $state, $stateParams, $window, project, editing, programs, Authentication, Notification) {
+	.controller('ProjectEditController', function ($scope, $state, $sce, $stateParams, $window, project, editing, programs, Authentication, Notification) {
 		var vm             = this;
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.project         = project;
 		vm.authentication  = Authentication;
 		vm.form            = {};

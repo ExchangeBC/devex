@@ -26,7 +26,8 @@
 		vm.OpportunitiesService    = OpportunitiesService;
 		vm.idString                = 'opportunityId';
 		vm.showMember              = Authentication.user && !opportunity.userIs.gov && !opportunity.userIs.member && !opportunity.userIs.request;
-		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
 		vm.opportunity.evaluation  = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.opportunity.criteria    = $sce.trustAsHtml(vm.opportunity.criteria);
 		var rightNow               = new Date ();
@@ -41,14 +42,14 @@
 			else if (dh > 0) vm.closing = dh+' hours '+dm+' minutes';
 			else vm.closing = dm+' minutes';
 		}
-		var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		var dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		var dt = vm.opportunity.deadline;
-		vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.assignment;
-		vm.assignment = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		vm.assignment = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.start;
-		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear(); //Monday, January 2, 2017
+		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		vm.request = function () {
 			OpportunitiesService.makeRequest ({
 				opportunityId: opportunity._id
@@ -66,6 +67,8 @@
 		var rightNow = new Date();
 		console.log ('rightnow = ', rightNow);
 		var vm                    = this;
+		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.projects               = projects;
 		vm.context                = $stateParams.context;
 		// console.log ('projects    = ', projects);

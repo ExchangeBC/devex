@@ -4,9 +4,9 @@
 	<form id="opportunityForm" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row form-head">
 		<div class="col-md-6">
-		<h2 ng-if="vm.editing">Editing: {{::vm.opportunity.name}}</h2>
-		<h2 ng-if="!vm.editing">New Opportunity</h2>
-	</div>
+			<h2 ng-if="vm.editing">Editing: {{::vm.opportunity.name}}</h2>
+			<h2 ng-if="!vm.editing">New Opportunity</h2>
+		</div>
 		<div class="col-md-6 col-form-buttons text-right">
 			<div class="btn-group">
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
@@ -14,7 +14,7 @@
 				</button>
 				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
 					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
-				</a>
+														</a>
 				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
 					<i class="glyphicon glyphicon-ok-circle"></i> Publish
 				</a>
@@ -34,28 +34,30 @@
 		</div>
 	</div>
 	<div class="row">
+		<div class="well">
+			Instructions for the form go here
+		</div>
+	</div>
+	<div class="row">
 	<div class="col-sm-12">
 		<fieldset>
 			<div class="form-group">
 				<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 			</div>
+
 			<div class="form-group" ng-if="vm.projectLink" >
 				<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 			</div>
-			<div class="form-group" ng-if="!vm.projectLink && vm.context === 'program'" >
+			<div class="form-group" >
 				<label class="control-label" for="project">Project</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
 				<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
 					Project offering this opportunity
 				</div>
-				<select name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects">
-				</select>
+				<select ng-if="!vm.projectLink && vm.context === 'program'" name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects" />
+				<select ng-if="!vm.projectLink && vm.context === 'allopportunities'" name="project" ng-change="vm.updateProgramProject()" ng-model="vm.projectobj" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects" />
 			</div>
-			<div class="form-group" ng-if="!vm.projectLink && vm.context === 'allopportunities'" >
-				<label class="control-label" for="project">Project</label> <i class="glyphicon glyphicon-question-sign input-help-source" ng-required="true" uib-tooltip="Project offering this opportunity" tooltip-placement="bottom"></i>
-				<select name="project" ng-change="vm.updateProgramProject()" ng-model="vm.projectobj" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
-				</select>
-			</div>
+
 			<div class="form-group" show-errors>
 				<label class="control-label" for="title">Title</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('title')"></i>
@@ -67,6 +69,7 @@
 					<p class="help-block error-text" ng-message="required">Opportunity title is required.</p>
 				</div>
 			</div>
+
 			<div class="form-group" show-errors>
 				<label class="control-label" for="short">Short Description</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('short')"></i>
@@ -91,21 +94,21 @@
 					ng-model="vm.opportunity.description">
 				</textarea>
 			</div>
-			<div class="form-group">
-				<label class="control-label" for="description">Proposal Evaluation Criteria</label>
-				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
-				<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
-					State the criteria you will use to score the proposals you receive and assign a developer. It is at your discretion which mandatory and weighted criteria you wish to use. Refer to <a href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">the Government of B.C.'s information on procurement</a> for guidance.
+			<div class="form-group" ng-if="vm.isAdmin">
+				<label class="control-label" for="github">Github Repository</label>
+				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
+				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
+					Opportunity Github repository
 				</div>
-				<!-- <textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea> -->
-				<textarea
-					name="evaluation"
-					id="evaluation"
-					class="form-control input-sm"
-					ui-tinymce="vm.tinymceOptions"
-					placeholder="Evaluation criteria"
-					ng-model="vm.opportunity.evaluation">
-				</textarea>
+				<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
+				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
+				<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
+					List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
+				</div>
+				<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
 			</div>
 			<div class="form-group">
 				<label class="control-label" for="description">Acceptance Criteria</label>
@@ -124,20 +127,20 @@
 				</textarea>
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="github">Github Repository</label>
-				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
-				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
-					Opportunity Github repository
+				<label class="control-label" for="description">Proposal Evaluation Criteria</label>
+				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
+				<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
+					State the criteria you will use to score the proposals you receive and assign a developer. It is at your discretion which mandatory and weighted criteria you wish to use. Refer to <a href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">the Government of B.C.'s information on procurement</a> for guidance.
 				</div>
-				<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Opportunity github repo" readonly>
-			</div>
-			<div class="form-group">
-				<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
-				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
-				<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
-					List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
-				</div>
-				<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="Skill List"></input>
+				<!-- <textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea> -->
+				<textarea
+					name="evaluation"
+					id="evaluation"
+					class="form-control input-sm"
+					ui-tinymce="vm.tinymceOptions"
+					placeholder="Evaluation criteria"
+					ng-model="vm.opportunity.evaluation">
+				</textarea>
 			</div>
 			<div class="row">
 				<div class="col-sm-3">
@@ -145,7 +148,7 @@
 						<label class="control-label" for="earn">Reward</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
 						<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
-							To the best of your ability, estimate a fair price for the amount of work you can estimate is required to meet the acceptance criteria. (It's best to over-estimate.) 
+							To the best of your ability, estimate a fair price for the amount of work you can estimate is required to meet the acceptance criteria. (It's best to over-estimate.)
 						</div>
 						<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000]">
 							<option value="">Select reward amount</option>
@@ -160,7 +163,7 @@
               <p>Choose a deadline for receiving proposals. (Time is fixed at <b>16:00 PST</b>.)</p>
               <p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
 							<p>Keep in mind that you'll want to have people able to respond to questions that come in close to the deadline.</p>
-							
+
 						</div>
 						<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
 					</div>
