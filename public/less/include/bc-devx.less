@@ -629,7 +629,7 @@ section {
   > .panel-body, > .panel-footer, {
     border-color: lighten(@bg, 6%);
   }
-  border-color: lighten(@bg, 8%); 
+  border-color: lighten(@bg, 8%);
 }
 
 // Apply the mixin to the panel headings only
@@ -715,9 +715,15 @@ section {
 	}
 }
 .img-logo {
+  margin-left: auto;
+  margin-right: auto;
+  max-height: @thumb-lg;
+}
+.img-logo2 {
 	margin-left: auto;
 	margin-right: auto;
-	max-height: @thumb-lg;
+  max-height: 100%;
+	max-width: 100%;
 }
 
 
@@ -1333,7 +1339,7 @@ img::selection, img::-moz-selection {
 // Utility styles
 
 .pre-line {
-	white-space: pre-line;	
+	white-space: pre-line;
 }
 .med-desc, .long-desc {
 	color: @gray;
