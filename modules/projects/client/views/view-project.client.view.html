@@ -6,12 +6,20 @@
 		<h2>{{vm.project.name}}</h2>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
-    <button type="button" class="btn btn-default" ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-      <i class="glyphicon glyphicon-pencil"></i> Edit
-    </button>
-    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-      <i class="glyphicon glyphicon-user"></i> Request Membership
-    </button>
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+				<i class="glyphicon glyphicon-pencil"></i> Edit
+			</button>
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+				<i class="glyphicon glyphicon-user"></i> Request Membership
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+				<i class="glyphicon glyphicon-ok-circle"></i> Publish
+			</a>
+		</div>
 	</div>
 	</div>
 
@@ -19,7 +27,7 @@
 		<div class="panel-body">
 		<div class="row">
 		<div class="col-sm-6">
-      <p class="lead" ng-bind="vm.project.short"></p>
+	  <p class="lead" ng-bind="vm.project.short"></p>
 			<p class="label-list" ng-if="vm.project.taglist">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
 			</p>
@@ -28,8 +36,8 @@
 		  <dl class="dl-horizontal">
 		  <dt>Program:</dt>
 		  <dd>
-		    <a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
-		    <span ng-if="!vm.project.program" class="text-muted">No program</span>
+			<a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
+			<span ng-if="!vm.project.program" class="text-muted">No program</span>
 		  </dd>
 		  <!-- github link -->
 		  </dl>
@@ -39,42 +47,50 @@
 		<div class="panel-body">
 		<div class="row">
 		<div class="col-sm-12">
-      <p class="long-desc pre-line" ng-bind-html="vm.project.description"></p>
-    </div>
-    </div>
-    </div>
+	  <p class="long-desc pre-line" ng-bind-html="vm.project.description"></p>
+	</div>
+	</div>
+	</div>
 
 		<div class="panel-footer">
-      <em class="small text-muted">
-        Created on
-        <span ng-bind="vm.project.created | date:'mediumDate'"></span>
-        by
-        <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
-        <span ng-if="!vm.project.createdBy">Deleted User</span>
-      </em>
+	  <em class="small text-muted">
+		Created on
+		<span ng-bind="vm.project.created | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
+		<span ng-if="!vm.project.createdBy">Deleted User</span>
+	  </em>
 			<br/>
-      <em class="small text-muted">
-        Updated on
-        <span ng-bind="vm.project.updated | date:'mediumDate'"></span>
-        by
-        <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
-        <span ng-if="!vm.project.updatedBy">Deleted User</span>
-      </em>
+	  <em class="small text-muted">
+		Updated on
+		<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
+		<span ng-if="!vm.project.updatedBy">Deleted User</span>
+	  </em>
 		</div>
 		</div>
 
- 	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
-	<core-member-requests model="vm.project" idstring="vm.idString" service="vm.ProjectsService" ng-if="vm.project.userIs.admin"></core-member-requests>
+	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
+	<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
 	<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
 
 	<div class="row form-foot">
-  <div class="col-sm-12 col-form-buttons text-right">
-    <button type="button" class="btn btn-default" ng-if="vm.project.userIs.admin" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-      <i class="glyphicon glyphicon-pencil"></i> Edit
-    </button>
-    <button type="button" class="btn btn-default" ng-if="vm.showMember" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-      <i class="glyphicon glyphicon-user"></i> Request Membership
-    </button>
+  	<div class="col-sm-12 col-form-buttons text-right">
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+				<i class="glyphicon glyphicon-pencil"></i> Edit
+			</button>
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+				<i class="glyphicon glyphicon-user"></i> Request Membership
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+				<i class="glyphicon glyphicon-ok-circle"></i> Publish
+			</a>
+		</div>
 	</div>
 	</div>
 </div>

@@ -1,6 +1,6 @@
 <section class="static-page">
 <div class="container" role="main">
-	<div ncy-breadcrumb></div>
+	<!-- <div ncy-breadcrumb></div> -->
 	<form id="opportunityForm" name="vm.form.opportunityForm" class="form" ng-submit="vm.save(vm.form.opportunityForm.$valid)" novalidate>
 	<div class="row form-head">
 		<div class="col-md-6">
@@ -12,19 +12,7 @@
 				<button type="submit" href="javascript:void(0);" title="Save" class="btn btn-primary">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</button>
-				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
-					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
-														</a>
-				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
-					<i class="glyphicon glyphicon-ok-circle"></i> Publish
-				</a>
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && !vm.projectId" class="btn btn-default" ui-sref="opportunities.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+ 				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
@@ -229,11 +217,7 @@
 				<a href="javascript:void(0);" title="Save" class="btn btn-primary" ng-click="vm.saveme()">
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
-				<a href="javascript:void(0);" ng-if="vm.editing && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
-					<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
-				</a>
-				<a href="javascript:void(0);" ng-if="vm.editing && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
-					<i class="glyphicon glyphicon-ok-circle"></i> Publish
+
 				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>

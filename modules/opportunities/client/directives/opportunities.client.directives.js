@@ -20,6 +20,10 @@
 			controller   : function ($scope, OpportunitiesService, Authentication, Notification) {
 				var rightNow = new Date ();
 				var vm     = this;
+				var isUser = Authentication.user;
+				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
+				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
+				vm.canApplyGeneral = isUser && !vm.isAdmin && !vm.isGov;
 				vm.project = $scope.project;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
@@ -29,7 +33,7 @@
 					vm.projectId    = vm.project._id;
 					vm.projectTitle = vm.project.name;
 					vm.title         = 'Opportunities for '+vm.projectTitle;
-					vm.userCanAdd    = vm.project.userIs.admin;
+					vm.userCanAdd    = vm.project.userIs.admin || vm.isAdmin;
 					vm.opportunities = OpportunitiesService.forProject ({
 						projectId: vm.projectId
 					});
@@ -39,7 +43,7 @@
 					vm.projectId    = null;
 					vm.projectTitle = null;
 					vm.title         = 'Opportunities for '+vm.programTitle;
-					vm.userCanAdd    = true;
+					vm.userCanAdd    = (vm.isAdmin || vm.isGov);
 					vm.opportunities = OpportunitiesService.forProgram ({
 						programId: vm.programId
 					});
@@ -50,7 +54,7 @@
 					vm.projectId    = null;
 					vm.projectTitle = null;
 					vm.title         = 'All Opportunities';
-					vm.userCanAdd    = true;
+					vm.userCanAdd    = (vm.isAdmin || vm.isGov);
 					vm.opportunities = OpportunitiesService.query ();
 					vm.columnCount   = 1;
 				}

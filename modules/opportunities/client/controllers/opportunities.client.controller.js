@@ -25,11 +25,20 @@
 		vm.authentication          = Authentication;
 		vm.OpportunitiesService    = OpportunitiesService;
 		vm.idString                = 'opportunityId';
-		vm.showMember              = Authentication.user && !opportunity.userIs.gov && !opportunity.userIs.member && !opportunity.userIs.request;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
+		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
 		vm.opportunity.evaluation  = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.opportunity.criteria    = $sce.trustAsHtml(vm.opportunity.criteria);
+		//
+		// what can the user do here?
+		//
+		var isUser                 = Authentication.user;
+		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
+		vm.loggedIn                = isUser;
+		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+		vm.canApply                = isUser && !isAdmin && !isGov && !isMemberOrWaiting;
+		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
 		var rightNow               = new Date ();
 		vm.closing = 'CLOSED';
 		var d                      = vm.opportunity.deadline - rightNow;
@@ -50,12 +59,46 @@
 		vm.assignment = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.start;
 		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+		// -------------------------------------------------------------------------
+		//
+		// issue a request for membership
+		//
+		// -------------------------------------------------------------------------
 		vm.request = function () {
 			OpportunitiesService.makeRequest ({
 				opportunityId: opportunity._id
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Successfully Applied!' });
 			})
+		};
+		// -------------------------------------------------------------------------
+		//
+		// publish or un publish the opportunity
+		//
+		// -------------------------------------------------------------------------
+		vm.publish = function (state) {
+			var publishedState = opportunity.isPublished;
+			var t = state ? 'Published' : 'Un-Published'
+			opportunity.isPublished = state;
+			opportunity.createOrUpdate ()
+			//
+			// success, notify and return to list
+			//
+			.then (function (res) {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+				});
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				opportunity.isPublished = publishedState;
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
+				});
+			});
 		};
 	})
 	// =========================================================================
@@ -67,8 +110,14 @@
 		var rightNow = new Date();
 		console.log ('rightnow = ', rightNow);
 		var vm                    = this;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+		vm.previousState = previousState;
+		console.log (previousState);
+		//
+		// what can the user do here?
+		//
+		var isUser                 = Authentication.user;
+		vm.isAdmin                 = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.projects               = projects;
 		vm.context                = $stateParams.context;
 		// console.log ('projects    = ', projects);
@@ -83,6 +132,10 @@
 		vm.form                   = {};
 		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist    = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		//
+		// if the user doesn't have the right access then kick them out
+		//
+		if (editing && !vm.isAdmin && !opportunity.userIs.admin) $state.go('forbidden');
 		//
 		// do we have existing contexts for program and project ?
 		// deal with all that noise right here

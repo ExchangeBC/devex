@@ -80,7 +80,7 @@ var ensureAdmin = function (opportunity, user, res) {
 var decorate = function (opportunityModel, roles) {
 	var opportunity = opportunityModel ? opportunityModel.toJSON () : {};
 	opportunity.userIs = {
-		admin   : !!~roles.indexOf (adminRole(opportunity)) || !!~roles.indexOf ('admin'),
+		admin   : !!~roles.indexOf (adminRole(opportunity)),
 		member  : !!~roles.indexOf (memberRole(opportunity)),
 		request : !!~roles.indexOf (requestRole(opportunity)),
 		gov     : !!~roles.indexOf ('gov')

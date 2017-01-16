@@ -3,7 +3,7 @@
   <h2 class="list-page-hide">Government Partners</h2>
 </div>
 <div class="col-sm-5 col-form-buttons text-right">
-  <button ng-if="vm.userCanAdd" class="btn btn-default btn-lg" ui-sref="programadmin.create()" title="New">
+  <button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="programadmin.create()" title="New">
     <i class="glyphicon glyphicon-plus"></i> New Program
   </button>
 </div>
@@ -24,16 +24,16 @@
         <span ng-if="!program.isPublished"   class="label label-warning">Not Published</span>
       </div>
       <div class="card-tools" >
-        <a ng-if="program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+        <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
           <i class="glyphicon glyphicon-pencil"></i>
         </a>
-        <a ng-cloak ng-if="program.userIs.admin && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+        <a ng-cloak ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
           <i class="glyphicon glyphicon-ban-circle"></i>
         </a>
-        <a ng-cloak ng-if="program.userIs.admin && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+        <a ng-cloak ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
           <i class="glyphicon glyphicon-ok-circle"></i>
         </a>
-        <a ng-cloak ng-if="!program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
+        <a ng-cloak ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
           <i class="glyphicon glyphicon-user"></i>
         </a>
       </div>

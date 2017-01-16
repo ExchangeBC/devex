@@ -16,6 +16,8 @@
 				var vm = this;
 				var isAdmin  = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 				var isGov    = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+				vm.isAdmin = isAdmin;
+				vm.isGov = isGov;
 				vm.userCanAdd = (isAdmin || isGov);
 				vm.programs = ProgramsService.query ();
 				vm.publish = function (program, state) {

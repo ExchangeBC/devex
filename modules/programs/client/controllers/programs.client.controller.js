@@ -22,30 +22,75 @@
 		vm.authentication  = Authentication;
 		vm.ProgramsService = ProgramsService;
 		vm.idString        = 'programId';
-		vm.showMember      = Authentication.user && program.userIs.gov && !program.userIs.member && !program.userIs.request;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
-		vm.request         = function () {
+		//
+		// what can the user do here?
+		//
+		var isUser                 = Authentication.user;
+		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		var isMemberOrWaiting      = program.userIs.member || program.userIs.request;
+		vm.loggedIn                = isUser;
+		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+		vm.canEdit                 = isAdmin || program.userIs.admin;
+		// -------------------------------------------------------------------------
+		//
+		// issue a request for membership
+		//
+		// -------------------------------------------------------------------------
+		vm.request = function () {
 			ProgramsService.makeRequest ({
 				programId: program._id
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
 			});
 		};
-		console.log ('program = ', program);
+		// -------------------------------------------------------------------------
+		//
+		// publish or un publish the opportunity
+		//
+		// -------------------------------------------------------------------------
+		vm.publish = function (state) {
+			var publishedState = program.isPublished;
+			var t = state ? 'Published' : 'Un-Published'
+			program.isPublished = state;
+			program.createOrUpdate ()
+			//
+			// success, notify and return to list
+			//
+			.then (function (res) {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Program '+t+' Successfully!'
+				});
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				program.isPublished = publishedState;
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Program '+t+' Error!'
+				});
+			});
+		};
 	})
 	// =========================================================================
 	//
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $sce, $window, program, editing, Authentication, Notification) {
+	.controller('ProgramEditController', function ($scope, $state, $sce, $window, program, editing, Authentication, Notification, previousState) {
 		var vm            = this;
+		vm.previousState = previousState;
 		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.editing        = editing;
 		vm.program        = program;
 		vm.authentication = Authentication;
+		//
+		// if the user doesn't have the right access then kick them out
+		//
+		if (!vm.isAdmin && !program.userIs.admin) $state.go('forbidden');
 		vm.form           = {};
 		vm.program.taglist = vm.program.tags? vm.program.tags.join (', ') : '';
 		vm.filename = {name:'none'};

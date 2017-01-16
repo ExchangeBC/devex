@@ -23,14 +23,55 @@
 		vm.authentication  = Authentication;
 		vm.ProjectsService = ProjectsService;
 		vm.idString        = 'projectId';
-		vm.showMember      = Authentication.user && project.userIs.gov && !project.userIs.member && !project.userIs.request;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
-		vm.request         = function () {
+		//
+		// what can the user do here?
+		//
+		var isUser                 = Authentication.user;
+		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		var isMemberOrWaiting      = project.userIs.member || project.userIs.request;
+		vm.loggedIn                = isUser;
+		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+		vm.canEdit                 = isAdmin || project.userIs.admin;
+		// -------------------------------------------------------------------------
+		//
+		// issue a request for membership
+		//
+		// -------------------------------------------------------------------------
+		vm.request = function () {
 			ProjectsService.makeRequest({
 				projectId: project._id
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// publish or un publish the opportunity
+		//
+		// -------------------------------------------------------------------------
+		vm.publish = function (state) {
+			var publishedState = project.isPublished;
+			var t = state ? 'Published' : 'Un-Published'
+			project.isPublished = state;
+			project.createOrUpdate ()
+			//
+			// success, notify and return to list
+			//
+			.then (function (res) {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Project '+t+' Successfully!'
+				});
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				project.isPublished = publishedState;
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Project '+t+' Error!'
+				});
 			});
 		};
 	})
@@ -39,12 +80,17 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectEditController', function ($scope, $state, $sce, $stateParams, $window, project, editing, programs, Authentication, Notification) {
+	.controller('ProjectEditController', function ($scope, $state, $sce, $stateParams, $window, project, editing, programs, Authentication, Notification, previousState) {
 		var vm             = this;
+		vm.previousState = previousState;
 		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.project         = project;
 		vm.authentication  = Authentication;
+		//
+		// if the user doesn't have the right access then kick them out
+		//
+		if (!vm.isAdmin && !project.userIs.admin) $state.go('forbidden');
 		vm.form            = {};
 		vm.project.taglist = vm.project.tags? vm.project.tags.join (', ') : '';
 		vm.editing         = editing;

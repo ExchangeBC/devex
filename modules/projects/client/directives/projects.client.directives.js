@@ -20,6 +20,9 @@
 				var vm     = this;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
+				var isUser = Authentication.user;
+				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
+				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				if (vm.context === 'program') {
 					vm.programId = vm.program._id;
 					vm.programTitle = vm.program.title;
@@ -42,7 +45,7 @@
 				} else {
 					vm.title      = 'All Projects';
 					vm.programId  = null;
-					vm.userCanAdd = false;
+					vm.userCanAdd = (vm.isAdmin || vm.isGov);
 					vm.projects   = ProjectsService.query ();
 					vm.columnCount = 1;
 				}

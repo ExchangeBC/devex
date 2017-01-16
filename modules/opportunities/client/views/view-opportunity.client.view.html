@@ -1,114 +1,134 @@
 <section class="static-page">
 <div class="container" role="main">
-  <div ncy-breadcrumb></div>
+	<div ncy-breadcrumb></div>
 	<div class="row form-head">
 	<div class="col-sm-7">
 		<h2>{{vm.opportunity.name}}</h2>
-  </div>
-  <div class="col-sm-5 col-form-buttons text-right">
-    <button type="button" class="btn btn-default" ng-if="vm.opportunity.userIs.admin" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
-      <i class="glyphicon glyphicon-pencil"></i> Edit
-    </button>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+				<i class="glyphicon glyphicon-pencil"></i> Edit
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+				<i class="glyphicon glyphicon-ok-circle"></i> Publish
+			</a>
+		</div>
 	</div>
 	</div>
 
-  <div class="panel panel-default panel-flat card-panel">
-  <div class="panel-body">
-    <div class="row">
-      <div class="col-sm-5">
-        <h4 class="card-title">
-          <i class="fa fa-tag"></i> {{vm.opportunity.earn|currency}}
-        </h4>
-        <p class="lg">Closing in: <b>{{vm.closing}}</b></p>
-        <dl ng-if="vm.opportunity.skills.length">
-          <dt>Required Skills:</dt>
-          <dd class="label-list">
-          <span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
-          </dd>
-        </dl>
-      </div>
-      <div class="col-sm-7">
-        <dl class="dl-horizontal">
-        <dt>Posted by:</dt>
-        <dd>
-          <i class="fa fa-user-circle-o"></i>
+	<div class="panel panel-default panel-flat card-panel">
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-sm-5">
+				<h4 class="card-title">
+					<i class="fa fa-tag"></i> {{vm.opportunity.earn|currency}}
+				</h4>
+				<p ng-if="vm.opportunity.isPublished" class="lg">Closing in: <b>{{vm.closing}}</b></p>
+				<p ng-if="!vm.opportunity.isPublished"><span class="label label-danger" >Not Published</span></p>
+				<dl ng-if="vm.opportunity.skills.length">
+					<dt>Required Skills:</dt>
+					<dd class="label-list">
+					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+					</dd>
+				</dl>
+			</div>
+			<div class="col-sm-7">
+				<dl class="dl-horizontal">
+				<dt>Posted by:</dt>
+				<dd>
+					<i class="fa fa-user-circle-o"></i>
 					<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
 					<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
-        </dd>
-        <dt>Program:</dt>
-        <dd>
-          <a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program._id})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
-          <span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
-        </dd>
-        <dt>Project:</dt>
-        <dd>
-          <a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
-          <span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
-        </dd>
-        <dt>Assigned to:</dt>
-        <dd>
+				</dd>
+				<dt>Program:</dt>
+				<dd>
+					<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program._id})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+					<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
+				</dd>
+				<dt>Project:</dt>
+				<dd>
+					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+					<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
+				</dd>
+				<dt>Assigned to:</dt>
+				<dd>
 					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
 					<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>
-        </dl>
-      </div>
-    </div>
-  </div>
-  <div class="panel-body">
-    <span class="lead" ng-bind="vm.opportunity.short"></span>
-  </div>
-  <div class="panel-body">
-    <h2 class="panel-title">Terms</h2>
-    <p class="med-desc">We are offering a fixed price for the work described below, according to the terms of our experimental procurement model, Code-With-Us.</p>
-    <h2 class="panel-title">Description</h2>
-    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.description"></p>
-    <h2 class="panel-title">Acceptance Criteria</h2>
-    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.criteria"></p>
-  </div>
-  <div class="panel-footer">
-    <em class="small text-muted">
-      Created on
-      <span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
-      by
-      <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-      <span ng-if="!vm.opportunity.createdBy">Deleted User</span>
-    </em><br/>
-    <em class="small text-muted">
-      Updated on
-      <span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
-      by
-      <span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
-      <span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
-    </em>
-  </div>
-  </div>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<div class="panel-body">
+		<span class="lead" ng-bind="vm.opportunity.short"></span>
+	</div>
+	<div class="panel-body">
+		<h2 class="panel-title">Terms</h2>
+		<p class="med-desc">We are offering a fixed price for the work described below, according to the terms of our experimental procurement model, Code-With-Us.</p>
+		<h2 class="panel-title">Description</h2>
+		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.description"></p>
+		<h2 class="panel-title">Acceptance Criteria</h2>
+		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.criteria"></p>
+	</div>
+	<div class="panel-footer">
+		<em class="small text-muted">
+			Created on
+			<span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
+			by
+			<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+			<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+		</em><br/>
+		<em class="small text-muted">
+			Updated on
+			<span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
+			by
+			<span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
+			<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
+		</em>
+	</div>
+	</div>
 
 <!--
- 	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
+	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
 -->
 	<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
 
-  <div class="panel panel-success">
-  <div class="panel-heading">
-    <h2 class="panel-title">Apply</h2>
-  </div>
-  <div class="panel-body">
-    <div class="med-desc margin-bottom">
-    <p>Log in and upload your proposal by <b>{{vm.deadline}}</b>.</p>
-    <h2 class="panel-title">Evaluation Criteria</h2>
-    <p class="med-desc pre-line" ng-bind-html="vm.opportunity.evaluation"></p>
-    <p>If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
-    </div>
-    <button ng-if="1" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-      <i class="fa fa-sign-in"></i> Apply Now
-    </button>
-  </div>
-  </div>
+	<div class="panel panel-success">
+	<div class="panel-heading">
+		<h2 class="panel-title">Apply</h2>
+	</div>
+	<div class="panel-body">
+		<div class="med-desc margin-bottom">
+		<p>Log in and upload your proposal by <b>{{vm.deadline}}</b>.</p>
+		<h2 class="panel-title">Evaluation Criteria</h2>
+		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.evaluation"></p>
+		<p>If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
+		</div>
+		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+			<i class="fa fa-sign-in"></i> Sign up or log in to apply
+		</button>
+		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
+			<i class="fa fa-sign-in"></i> Apply Now
+		</button>
+	</div>
+	</div>
 
-  <div class="row form-foot">
-  <div class="col-sm-12 col-form-buttons foot text-right">
-    <button type="button" class="btn btn-default" ng-if="vm.opportunity.userIs.admin" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
-      <i class="glyphicon glyphicon-pencil"></i> Edit
-    </button>
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons foot text-right">
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+				<i class="glyphicon glyphicon-pencil"></i> Edit
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+				<i class="glyphicon glyphicon-ok-circle"></i> Publish
+			</a>
+		</div>
 	</div>
 	</div>
 

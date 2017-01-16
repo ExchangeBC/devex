@@ -84,7 +84,7 @@ var ensureAdmin = function (program, user, res) {
 var decorate = function (programModel, roles) {
 	var program = programModel ? programModel.toJSON () : {};
 	program.userIs = {
-		admin   : !!~roles.indexOf (adminRole(program)) || !!~roles.indexOf ('admin'),
+		admin   : !!~roles.indexOf (adminRole(program)),
 		member  : !!~roles.indexOf (memberRole(program)),
 		request : !!~roles.indexOf (requestRole(program)),
 		gov     : !!~roles.indexOf ('gov')

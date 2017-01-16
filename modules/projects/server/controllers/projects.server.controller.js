@@ -80,7 +80,7 @@ var ensureAdmin = function (project, user, res) {
 var decorate = function (projectModel, roles) {
 	var project = projectModel ? projectModel.toJSON () : {};
 	project.userIs = {
-		admin   : !!~roles.indexOf (adminRole(project)) || !!~roles.indexOf ('admin'),
+		admin   : !!~roles.indexOf (adminRole(project)),
 		member  : !!~roles.indexOf (memberRole(project)),
 		request : !!~roles.indexOf (requestRole(project)),
 		gov     : !!~roles.indexOf ('gov')
