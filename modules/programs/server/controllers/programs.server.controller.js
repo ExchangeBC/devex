@@ -23,10 +23,12 @@ request : <code>-request
  * Module dependencies
  */
 var path = require('path'),
+	config = require(path.resolve('./config/config')),
 	mongoose = require('mongoose'),
 	Program = mongoose.model('Program'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	multer = require('multer'),
 	_ = require('lodash')
 	;
 
@@ -401,5 +403,32 @@ exports.programByID = function (req, res, next, id) {
 		req.program = program;
 		next();
 	});
+};
+// -------------------------------------------------------------------------
+//
+// Logo upload
+//
+// -------------------------------------------------------------------------
+exports.logo = function (req, res) {
+	var program       = req.program;
+	var upload        = multer (config.uploads.fileUpload).single ('logo');
+	upload.fileFilter = require(path.resolve('./config/lib/multer')).profileUploadFileFilter;
+	var up            = helpers.fileUploadFunctions (program, Program, 'logo', req, res, upload, program.logo);
+
+	if (program) {
+		up.uploadImage ()
+		.then (up.updateDocument)
+		.then (up.deleteOldImage)
+		.then (function () {
+			res.json (program);
+		})
+		.catch (function (err) {
+			res.status(422).send(err);
+		});
+	} else {
+		res.status(401).send({
+			message: 'invalid program or program not supplied'
+		});
+	}
 };
 

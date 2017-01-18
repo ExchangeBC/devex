@@ -122,7 +122,7 @@ exports.myadmin = function (req, res) {
 	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
 	Project.find (search)
-	.populate ('program', 'code title short')
+	.populate ('program', 'code title short logo')
 	.select ('code name short program')
 	.exec (function (err, projects) {
 		if (err) {
@@ -314,7 +314,7 @@ exports.list = function (req, res) {
 	Project.find(search).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('program', 'title')
+	.populate('program', 'title logo')
 	.exec(function (err, projects) {
 		if (err) {
 			return res.status(422).send({
@@ -458,7 +458,7 @@ exports.projectByID = function (req, res, next, id) {
 	Project.findById(id)
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('program', 'title')
+	.populate('program', 'title logo')
 	.exec(function (err, project) {
 		if (err) {
 			return next(err);

@@ -78,13 +78,41 @@
 			</div>
 			<div class="fb-upload-target-border"></div>
 		</div>
- -->					<div class="btn btn-default" ngf-select ng-model="vm.filename" name="file" ngf-pattern="'image/*'"
+ -->
+ <!--
+ 	<div class="btn btn-default" ngf-select ng-model="vm.filename" name="file" ngf-pattern="'image/*'"
 	ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100"
 	ngf-resize="{width: 300, height: 300}">Select File {{vm.filename}}</div>
+	-->
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
 					<input type="text" name="taglist" ng-model="vm.program.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+				</div>
+				<div class="form-group">
+					<fieldset>
+						<div ng-show="vm.fileSelected" class="text-center form-group">
+							<p>Crop your picture then press upload below:</p>
+							<div ngf-drop ng-model="vm.picFile" ngf-pattern="image/*" class="text-center cropArea">
+								<img-crop image="vm.picFile | ngfDataUrl" result-image="vm.croppedDataUrl" ng-init="vm.croppedDataUrl=''"></img-crop>
+							</div>
+						</div>
+						<div class="form-group text-center">
+							<img ng-src="{{vm.fileSelected ? vm.croppedDataUrl : '/' + vm.program.logo}}" alt="Program Logo" class="img-thumbnail user-profile-picture" ngf-drop>
+						</div>
+						<div ng-show="!vm.fileSelected" class="text-center form-group">
+							<button type="button" class="btn btn-default btn-file" ngf-select="vm.fileSelected = true" ng-model="vm.picFile" accept="image/*">Select Picture</button>
+						</div>
+						<div ng-show="0 && vm.fileSelected" class="text-center form-group">
+							<button  type="button" class="btn btn-primary" ng-click="vm.upload(vm.croppedDataUrl, vm.picFile.name)">Upload</button>
+							<button  type="button" class="btn btn-default" ng-click="vm.fileSelected = false">Cancel</button>
+						</div>
+						<div ng-show="vm.fileSelected" class="progress text-center">
+							<div class="progress-bar" role="progressbar" aria-valuenow="{{vm.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{vm.progress}}%" ng-bind="vm.progress + '%'">
+								<span class="sr-only">{{vm.progress}}% Complete</span>
+							</div>
+						</div>
+					</fieldset>
 				</div>
 			</fieldset>
 	</div>

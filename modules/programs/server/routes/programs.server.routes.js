@@ -48,7 +48,14 @@ module.exports = function (app) {
     .get(programs.new);
 
   app.route('/api/request/program/:programId')
-    .get(programs.request)
+    .get(programs.request);
+
+  //
+  // upload logo
+  //
+  app.route('/api/upload/logo/program/:programId')
+    .all (programsPolicy.isAllowed)
+    .post (programs.logo);
 
   // Finish by binding the program middleware
   app.param('programId', programs.programByID);

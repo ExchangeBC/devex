@@ -1,5 +1,8 @@
 'use strict';
 var _ = require('lodash');
+var path = require('path');
+var config = require(path.resolve('./config/config'));
+var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 exports.generateCode = function (s) {
 	return s.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-');
@@ -61,4 +64,53 @@ exports.myStuff = function (roles) {
 	}
 	return r;
 }
+
+exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, existingImageUrl) {
+	var fs = require('fs');
+	return {
+		uploadImage : function () {
+			return new Promise(function (resolve, reject) {
+				upload(req, res, function (uploadError) {
+					if (uploadError) {
+						reject(errorHandler.getErrorMessage(uploadError));
+					} else {
+						resolve();
+					}
+				});
+			});
+		},
+		updateDocument : function () {
+			return new Promise(function (resolve, reject) {
+				doc[field] = config.uploads.fileUpload.dest + req.file.filename;
+				doc.save(function (err, result) {
+					if (err) {
+						reject(err);
+					} else {
+						resolve();
+					}
+				});
+			});
+		},
+		deleteOldImage : function () {
+			return new Promise(function (resolve, reject) {
+				if (existingImageUrl !== Model.schema.path(field).defaultValue) {
+					fs.unlink(existingImageUrl, function (unlinkError) {
+						if (unlinkError) {
+							console.log(unlinkError);
+							resolve({
+								message: 'Error occurred while deleting old profile picture'
+							});
+						} else {
+							resolve();
+						}
+					});
+				} else {
+					resolve();
+				}
+			});
+		}
+
+	}
+}
+
 

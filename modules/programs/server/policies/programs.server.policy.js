@@ -60,6 +60,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/programs/requests/:programId/deny/:userId',
       permissions: ['get']
     }, {
+      resources: '/api/upload/logo/program/:programId',
+      permissions: ['post']
+    }, {
       resources: '/api/programs/:programId',
       permissions: ['get']
     }]

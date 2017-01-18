@@ -79,8 +79,14 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $sce, $window, program, editing, Authentication, Notification, previousState) {
+	.controller('ProgramEditController', function ($scope, $state, $sce, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
 		var vm            = this;
+		vm.user = Authentication.user;
+		vm.fileSelected = false;
+		vm.progress = 0;
+		vm.croppedDataUrl = '';
+		vm.picFile = null;
+
 		vm.previousState = previousState;
 		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
@@ -139,15 +145,21 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
-				console.log ('now saved the new program, redirect user');
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> program saved successfully!'
 				});
-				if (editing) {
-					$state.go('programs.view', {programId:program._id});
-				} else {
-					$state.go('programs.list');
-				}
+				console.log ('now saved the new program, redirect user');
+				//
+				// saved the record, now we can upload the logo if it was changed at all
+				//
+				((vm.fileSelected) ? vm.upload (vm.croppedDataUrl, vm.picFile, vm.program._id) : Promise.resolve ())
+				.then (function () {
+					if (editing) {
+						$state.go('programs.view', {programId:program._id});
+					} else {
+						$state.go('programs.list');
+					}
+				});
 			})
 			//
 			// fail, notify and stay put
@@ -157,6 +169,41 @@
 					message : res.data.message,
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> program save error!'
 				});
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// does the work of uploading the logo file
+		//
+		// -------------------------------------------------------------------------
+		vm.upload = function (url, name, programId) {
+			return new Promise (function (resolve, reject) {
+				Upload.upload ({
+					url: '/api/upload/logo/program/'+programId,
+					data: {
+						logo: Upload.dataUrltoBlob (url, name)
+					}
+				})
+				.then (
+					function (response) {
+						$timeout (function () {
+							Notification.success ({ message: '<i class="glyphicon glyphicon-ok"></i> Update of logo successful!' });
+							vm.fileSelected = false;
+							vm.progress = 0;
+						});
+						resolve ();
+					},
+					function (response) {
+						if (response.status > 0) {
+							vm.fileSelected = false;
+							Notification.error ({ message: response.message, title: '<i class="glyphicon glyphicon-remove"></i> Update of logo failed!' });
+						}
+						reject ();
+					},
+					function (evt) {
+						vm.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+					}
+				);
 			});
 		};
 	})

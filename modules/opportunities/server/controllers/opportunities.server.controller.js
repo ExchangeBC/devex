@@ -299,7 +299,7 @@ exports.list = function (req, res) {
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'name _id')
-	.populate('program', 'title _id')
+	.populate('program', 'title _id logo')
 	.exec(function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
@@ -501,7 +501,7 @@ exports.opportunityByID = function (req, res, next, id) {
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'name _id')
-	.populate('program', 'title _id')
+	.populate('program', 'title _id logo')
 	.exec(function (err, opportunity) {
 		if (err) {
 			return next(err);

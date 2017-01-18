@@ -16,7 +16,7 @@
 <div class="panel panel-warning card-panel" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
   <div class="panel-body list-img-outer">
     <div class="list-img" ng-if="!vm.program">
-      <img src="/modules/core/client/img/logo/avatar-2.png"/>
+      <img src="/{{project.program.logo}}"/>
     </div>
     <div class="list-img-body">
       <div class="card-flags">
