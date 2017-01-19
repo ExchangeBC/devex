@@ -2,6 +2,7 @@
 
 ### Added
 * Log in
+
 **Government users** can: 
 * Create profile pages for their **programs** and **projects**
 * Create a _Code With Us_ opportunity
