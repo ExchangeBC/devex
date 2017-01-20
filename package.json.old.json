@@ -16,6 +16,7 @@
   },
   "scripts": {
     "update": "npm update && npm prune && bower install --allow-root && bower prune --allow-root",
+    "start": "gulp",
     "start:prod": "gulp prod",
     "start:debug": "gulp debug",
     "gulp": "gulp",
@@ -26,7 +27,7 @@
     "test:client": "gulp test:client",
     "test:e2e": "gulp test:e2e",
     "test:coverage": "gulp test:coverage",
-    "postinstall": "bower install --config.interactive=false --allow-root && bower prune --allow-root && gulp build",
+    "postinstall": "bower install --allow-root && bower prune --allow-root && gulp build",
     "generate-ssl-certs": "scripts/generate-ssl-certs.sh"
   },
   "dependencies": {
