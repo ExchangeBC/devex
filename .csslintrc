@@ -1,5 +1,6 @@
 {
   "adjoining-classes": false,
+  "text-indent":false,
   "box-model": false,
   "box-sizing": false,
   "compatible-vendor-prefixes": false,
@@ -19,5 +20,6 @@
   "universal-selector": false,
   "unqualified-attributes": false,
   "vendor-prefix": false,
-  "zero-units": false
+  "zero-units": false,
+  "shorthand": false
 }
