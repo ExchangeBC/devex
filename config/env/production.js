@@ -15,8 +15,8 @@ module.exports = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.MONGODB_SERVICE_HOST || process.env.DB_DEVEX_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
     options: {
-      user: '',
-      pass: ''
+      user: process.env.MONGODB_USER || '',
+      pass: process.env.MONGODB_PASSWORD || ''
       /**
         * Uncomment to enable ssl certificate based authentication to mongodb
         * servers. Adjust the settings below for your specific certificate
