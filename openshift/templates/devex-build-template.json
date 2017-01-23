@@ -63,14 +63,13 @@
           }
         },
         "strategy": {
-          "type": "Docker",
-          "dockerStrategy": {
-            "noCache": false,
-            "forcePull": false,
-            "env": [{
-              "name": "DUMMY",
-              "value": "DUMMY"
-            }]
+          "type": "Source",
+          "sourceStrategy": {
+            "from": {
+              "kind": "ImageStreamTag",
+              "namespace": "${S2I_NAMESPACE}",
+              "name": "nodejs:4.6.0"
+            }
           }
         },
         "output": {
