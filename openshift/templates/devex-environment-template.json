@@ -160,6 +160,10 @@
                   {
                     "name": "ADMINPW",
                     "value": "${APP_ADMINPW}"
+                  },
+                  {
+                    "name": "SESSION_SECRET",
+                    "value": "${SESSION_SECRET}"
                   }
                 ],
                 "readinessProbe": {
@@ -452,6 +456,13 @@
       "description": "Initital devex Admin password.",
       "generate": "expression",
       "from": "[a-zA-Z0-9]{16}"
+    },
+    {
+      "name": "SESSION_SECRET",
+      "displayName": "Session Secret",
+      "description": "Session Secret",
+      "generate": "expression",
+      "from": "[a-zA-Z0-9]{32}"
     },
     {
       "name": "APP_IMAGE_NAME",

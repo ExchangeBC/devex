@@ -141,7 +141,7 @@ module.exports.start = function start(options) {
     if (process.env.NODE_ENV === 'production') {
       User.generateRandomPassphrase()
         .then(function (random) {
-          var passed = process.env.APP_ADMINPW;
+          var passed = process.env.ADMINPW;
           return passed || random;
         })
         .then(seedTheUser(adminAccount))
@@ -157,7 +157,7 @@ module.exports.start = function start(options) {
         .then(seedTheUser(userAccount))
         .then(User.generateRandomPassphrase)
         .then(function (random) {
-          var passed = process.env.APP_ADMINPW;
+          var passed = process.env.ADMINPW;
           return passed || 'adminadmin';
         })
         .then(seedTheUser(adminAccount))
