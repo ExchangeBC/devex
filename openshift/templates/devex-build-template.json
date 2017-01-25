@@ -47,8 +47,12 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${S2I_NAMESPACE}",
-              "name": "nodejs:4.6.0"
-            }
+              "name": "nodejs:latest"
+            },
+            "env": [{
+              "name": "BUILD_LOGLEVEL",
+              "value": "2"
+            }]
           }
         },
         "strategy-docker": {
@@ -68,8 +72,12 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${S2I_NAMESPACE}",
-              "name": "nodejs:4.6.0"
-            }
+              "name": "nodejs:latest"
+            },
+            "env": [{
+              "name": "BUILD_LOGLEVEL",
+              "value": "2"
+            }]
           }
         },
         "output": {
