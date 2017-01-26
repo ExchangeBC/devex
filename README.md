@@ -11,7 +11,7 @@ To get up and running developing, run the following to set things up the first t
 $ setup.sh
 ```
 
-This will start a container running mongo and build a new image for the applicaiton code.  If you already have an instance of mongo running
+This will start a container running mongo and build a new image for the application code.  If you already have an instance of mongo running
 then you will likely get errors.  Make sure to shutdown your local mongo instance.
 
 Once setup has finished you can run the codebase with:
