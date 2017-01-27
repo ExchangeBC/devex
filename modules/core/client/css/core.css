@@ -1,43 +1,65 @@
 .content {
-  margin-top: 50px;
+	margin-top: 50px;
 }
 .undecorated-link:hover {
-  text-decoration: none;
+	text-decoration: none;
 }
 [ng\:cloak],
 [ng-cloak],
 [x-ng-cloak],
 .ng-cloak,
 .x-ng-cloak {
-  display: none !important;
+	display: none !important;
 }
 .header-profile-image {
-  border-radius: 50%;
-  height: 28px;
-  margin-right: 5px;
-  opacity: 0.8;
-  width: 28px;
+	border-radius: 50%;
+	height: 28px;
+	margin-right: 5px;
+	opacity: 0.8;
+	width: 28px;
 }
 .open .header-profile-image,
 a:hover .header-profile-image {
-  opacity: 1;
+	opacity: 1;
 }
 .user-header-dropdown-toggle {
-  padding-bottom: 11px !important;
-  padding-top: 11px !important;
+	padding-bottom: 11px !important;
+	padding-top: 11px !important;
 }
 .user-primary-account {
-  font-size: 30px;
-  position: absolute;
-  right: 10px;
-  top: 10px;
+	font-size: 30px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
 .error-text {
-  display: none;
+	display: none;
 }
 .has-error .help-block.error-text {
-  display: block;
+	display: block;
 }
 .has-error .help-inline.error-text {
-  display: inline;
+	display: inline;
+}
+section.intro {
+	padding-top: 40px;
+}
+
+section.audience {
+	padding-top: 140px;
+	padding-bottom: 30px;
+}
+section.audience p {
+	font-size: 16px;
+	padding-bottom: 30px;
+}
+@media (max-width: 767px) {
+	.img-responsive {
+		max-width: 80px;
+	}
+}
+@media (min-width: 768px) {
+	.img-responsive {
+		max-width: 50%;
+	}
 }

@@ -33,6 +33,7 @@
 		<fieldset>
 			<div class="form-group">
 				<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
+				<span ng-if="!vm.programId">To choose a program, please select a Project.</span>
 			</div>
 
 			<div class="form-group" ng-if="vm.projectLink" >
@@ -44,8 +45,21 @@
 				<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
 					Project offering this opportunity
 				</div>
-				<select ng-if="!vm.projectLink && vm.context === 'program'" name="project" ng-model="vm.projectId" id="project" class="form-control" ng-options="obj._id as obj.name for obj in vm.projects" />
-				<select ng-if="!vm.projectLink && vm.context === 'allopportunities'" name="project" ng-change="vm.updateProgramProject()" ng-model="vm.projectobj" id="project" class="form-control" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects" />
+				<select ng-if="!vm.projectLink && vm.context === 'program'"
+					name="project"
+					ng-model="vm.projectId"
+					id="project"
+					class="form-control"
+					ng-options="obj._id as obj.name for obj in vm.projects"
+				></select>
+				<select ng-if="!vm.projectLink && vm.context === 'allopportunities'"
+					name="project"
+					ng-change="vm.updateProgramProject()"
+					ng-model="vm.projectobj"
+					id="project"
+					class="form-control"
+					ng-options="obj as obj.name group by obj.program.title for obj in vm.projects"
+				></select>
 			</div>
 
 			<div class="form-group" show-errors>
