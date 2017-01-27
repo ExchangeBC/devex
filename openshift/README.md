@@ -1,35 +1,72 @@
-h1. How to configure a CI/CD pipeline for ESM on OpenShift
+h1. How to configure a OpenShift for EPIC (and EPIC like critters)
 
-- Create a project to house the Jenkins instance that will be responsible for promoting application images (via OpenShift ImageStreamTagS) across environment; the exact project name used was "esm".
-- Create the BuildConfiguration within this project using the ```oc``` command and "esm-build-template.json" file in the templates directory:
+h2. Project Set Initialization
 
-```oc create -f esm-build-template.json```
+- Request that your friendly neighbourhood DevOps Lead provision a set of OpenShift projects to house your applications CI/CD tooling as well as deployment environments.  Typically this set consists of 'tools', 'dev', 'test', and 'prod' projects.  Collectively, this is referred to as a "Project Set". Note that "Project Set" is a fabricated term (there is no such construct in OpenShift or Kubernetes) used to describe two or more OpenShift projects that relate to the same app/project.  For reference, the script that is typically used by the DevOps Lead is located [here](https://github.com/BCDevOps/openshift-tools/blob/master/provisioning/create-env.sh)
+- The projects will follow a naming convention similar to <team_name>-<product_name>-<environment_name>. For example, 'devex-platform-tools' would be the 'tools' environment for the platform product, owned by a devex team.
+- One or more of your team members will be assigned as 'admin' permission on your Project Set and will be responsible for managing team members' access to each project via OpenShift tools.
+- The 'tools' project will house the OpenShift BuildConfiguration for your app, and also likely a Jenkins instance that will be responsible for promoting application images (via OpenShift ImageStreamTagS) across your deployment environments. 
 
-- Deploy a Jenkins instance with persistent storage into the esm project using the web gui
-- Install the Promoted Builds Jenkins plugin
-- Configure a job that has an OpenShift ImageStream Watcher as its SCM source and promotion states for each environment
-- In each promotion configuration, tag the target build's image to the appropriate promotion level; this was done using a shell command because the OpenShift plugins do not appear to handle parameter subsitution inside promotions properly.
-- Create an OpenShift project for each "environment" (e.g. DEV, TEST, PROD, DEMO, TRAIN); Exact names used were esm-dev, esm-test, esm-prod, esm-demo, esm-train
-- Configure the access controls to allow the Jenkins instance to tag imagestreams in the environment projects, and to allow the environment projects to pull images from the esm project:
- 
-```
-oc policy add-role-to-user system:image-puller system:serviceaccount:esm-<env-name>:default -n esm
-oc policy add-role-to-user edit system:serviceaccount:esm:default -n esm-<env-name>
-```
- 
-- Use the JSON files in this directory  and `oc` tool to create the necessary resources within each project:
+h2. Build and CI/CD Promotion Pipeline Setup
+
+- To create the BuildConfiguration within your 'tools' project, use the ```oc``` command and "esm-build-template.json" file in the templates directory as follows
 
 ```
-oc process -f esm-environment-template.json -v NAME=esm-<env-name>,APPLICATION_DOMAIN=esm-<env-name>.pathfinder.bcgov,APP_IMAGE_NAMESPACE=esm,APP_DEPLOYMENT_TAG=<env-name> | oc create -f -
+oc process -f devex-build-template.json -v NAME=<product_name> -v SOURCE_REPOSITORY_URL=https://github.com/BCDevExchange/devex.git -v SOURCE_REPOSITORY_REF=<branch>| oc create -n <team_name>-<product_name>-tools -f - 
 ```
 
 For example:
 
 ```
-oc process -f esm-environment-template.json -v NAME=esm-prod,APPLICATION_DOMAIN=esm-prod.pathfinder.bcgov,APP_IMAGE_NAMESPACE=esm,APP_DEPLOYMENT_TAG=prod,DOCUMENT_VOLUME_CAPACITY=200Gi,DATABASE_VOLUME_CAPACITY=10Gi | oc create -f -
+oc process -f devex-build-template.json -v NAME=devxp -v SOURCE_REPOSITORY_URL=https://github.com/BCDevExchange/devex.git -v SOURCE_REPOSITORY_REF=master | oc create -n devex-platform-tools -f -
 ```
 
-h1. ESM Environments
+- Configure the access controls to allow the deployment environment projects to pull images from the 'tools' project:
+
+```
+oc policy add-role-to-user system:image-puller system:serviceaccount:<team_name>-<product_name>-<environment_name>:default -n <team_name>-<product_name>-tools 
+```
+
+For example:
+
+```
+oc policy add-role-to-user system:image-puller system:serviceaccount:devex-platform-dev:default -n devex-platform-tools
+oc policy add-role-to-user system:image-puller system:serviceaccount:devex-platform-test:default -n devex-platform-tools
+oc policy add-role-to-user system:image-puller system:serviceaccount:devex-platform-prod:default -n devex-platform-tools
+
+```
+
+h2. Jenkins Setup
+
+- Deploy a Jenkins instance (with persistent storage) into your 'tools' project using the OpenShift web gui; accept the defaults, or specific your own values when prompted.
+- Log into Jenkins using the generated admin password, or one you provided in the step above.
+- Install the Promoted Builds Jenkins plugin
+- @todo describe the recommended job configuation
+- In each promotion configuration, tag the target build's image to the appropriate promotion level; this was done using a shell command because the OpenShift plugins do not appear to handle parameter subsitution inside promotions properly.
+
+- Configure the access controls to allow the OpenShift service account that the Jenkins instance runs as to manipulate its own project contents:
+ 
+```
+oc policy add-role-to-user edit system:serviceaccount:<team_name>-<product_name>-tools:default -n <team_name>-<product_name>-tools
+```
+
+h2. Deployment Environment Configuration
+ 
+- Use the JSON files in this directory  and `oc` tool to create the necessary deployment resources (DeploymentConfig, PersistentVolumeClaims) within each deployment project:
+
+```
+oc process -f devex-environment-template.json -v NAME=<project_name>-<env>,APPLICATION_DOMAIN=<project_name>-<env>.<domain>,APP_IMAGE_NAMESPACE=<team_name>-<product_name>-tools,APP_IMAGE_NAME=<product_na,e>,APP_DEPLOYMENT_TAG=<environment_name>,DOCUMENT_VOLUME_CAPACITY=<doc_storage_space>,DATABASE_VOLUME_CAPACITY=<db_storage_space>| oc create -n -n <team_name>-<product_name>-<environment> -f -
+```
+
+For example:
+
+```
+oc process -f devex-environment-template.json -v NAME=platform-dev,APPLICATION_DOMAIN=platform-dev.pathfinder.gov.bc.ca,APP_IMAGE_NAMESPACE=devex-platform-tools,APP_IMAGE_NAME=devxp,APP_DEPLOYMENT_TAG=dev,DOCUMENT_VOLUME_CAPACITY=1Gi,DATABASE_VOLUME_CAPACITY=5Gi | oc create -n devex-platform-dev -f -
+oc process -f devex-environment-template.json -v NAME=platform-test,APPLICATION_DOMAIN=platform-test.pathfinder.gov.bc.ca,APP_IMAGE_NAMESPACE=devex-platform-tools,APP_IMAGE_NAME=devxp,APP_DEPLOYMENT_TAG=test,DOCUMENT_VOLUME_CAPACITY=1Gi,DATABASE_VOLUME_CAPACITY=5Gi | oc create -n devex-platform-test -f -
+oc process -f devex-environment-template.json -v NAME=platform-prod,APPLICATION_DOMAIN=platform-prod.pathfinder.gov.bc.ca,APP_IMAGE_NAMESPACE=devex-platform-tools,APP_IMAGE_NAME=devxp,APP_DEPLOYMENT_TAG=prod,DOCUMENT_VOLUME_CAPACITY=1Gi,DATABASE_VOLUME_CAPACITY=5Gi | oc create -n devex-platform-prod -f -
+```
+
+h1. platform Environments
 
 There are several environments set up for different purposes within OpenShift. They are available at the URLs below.
 
@@ -38,10 +75,6 @@ There are several environments set up for different purposes within OpenShift. T
 |DEV|esm-dev.pathfinder.gov.bc.ca||
 |TEST|esm-test.pathfinder.gov.bc.ca||
 |PROD|projects.eao.gov.bc.ca|SiteMinder is enabled for this environment|
-|DEMO|esm-demo.pathfinder.gov.bc.ca||
-|TRAIN|esm-train.pathfinder.gov.bc.ca||
-
-
 
 h1. How to access Jenkins for ESM
 
