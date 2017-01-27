@@ -21,7 +21,7 @@
 		vm.opportunity             = opportunity;
 		vm.opportunity.deadline    = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment  = new Date (vm.opportunity.assignment);
-		vm.opportunity.start       = new Date (vm.opportunity.start)		;
+		vm.opportunity.start       = new Date (vm.opportunity.start);
 		vm.authentication          = Authentication;
 		vm.OpportunitiesService    = OpportunitiesService;
 		vm.idString                = 'opportunityId';
@@ -141,13 +141,18 @@
 		// deal with all that noise right here
 		//
 		vm.projectLink            = true;
-		vm.programId              = $stateParams.programId;
-		vm.programTitle           = $stateParams.programTitle;
-		vm.projectId              = $stateParams.projectId;
-		vm.projectTitle           = $stateParams.projectTitle;
+		vm.programId              = $stateParams.programId || null;
+		vm.programTitle           = $stateParams.programTitle || null;
+		vm.projectId              = $stateParams.projectId || null;
+		vm.projectTitle           = $stateParams.projectTitle || null;
 		//
 		// if editing, set from existing
 		//
+		console.log ('editing', vm.editing);
+		console.log ('programId', vm.programId);
+		console.log ('programTitle', vm.programTitle);
+		console.log ('projectId', vm.projectId);
+		console.log ('projectTitle', vm.projectTitle);
 		if (vm.editing) {
 			vm.programId    = opportunity.program._id;
 			vm.programTitle = opportunity.program.title;
