@@ -470,6 +470,17 @@ gulp.task('test:coverage', function (done) {
   runSequence('env:test', ['copyLocalEnvConfig', 'makeUploadsDir', 'dropdb'], 'lint', 'mocha:coverage', 'karma:coverage', done);
 });
 
+
+//
+// run in development mode, but without the file system watch. the watch
+// causes some machines running docker to run very hot, causing the fan to run
+// non-stop, or if all solid state, causing the processor to downgrade speed
+// this means that changes need a stop and start, but oh well...
+//
+gulp.task('quiet', function (done) {
+  runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['nodemon'], done);
+});
+
 // Run the project in development mode
 gulp.task('default', function (done) {
   runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['nodemon', 'watch'], done);

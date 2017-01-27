@@ -119,7 +119,6 @@
 		vm.isAdmin                 = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.projects               = projects;
-		vm.context                = $stateParams.context;
 		// console.log ('projects    = ', projects);
 		// console.log ('stateParams = ', $stateParams);
 		vm.editing                = editing;
@@ -141,6 +140,7 @@
 		// deal with all that noise right here
 		//
 		vm.projectLink            = true;
+		vm.context                = $stateParams.context || 'allopportunities';
 		vm.programId              = $stateParams.programId || null;
 		vm.programTitle           = $stateParams.programTitle || null;
 		vm.projectId              = $stateParams.projectId || null;
@@ -153,6 +153,7 @@
 		console.log ('programTitle', vm.programTitle);
 		console.log ('projectId', vm.projectId);
 		console.log ('projectTitle', vm.projectTitle);
+		console.log ('context', vm.context);
 		if (vm.editing) {
 			vm.programId    = opportunity.program._id;
 			vm.programTitle = opportunity.program.title;

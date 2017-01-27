@@ -1,6 +1,6 @@
 <section class="static-page">
 <div class="container" role="main">
-  <!-- <div ncy-breadcrumb></div> -->
+<!-- <div ncy-breadcrumb></div> -->
 	<div class="row form-head">
 	<div class="col-sm-7">
 		<h2>{{vm.project.name}}</h2>
@@ -27,60 +27,60 @@
 		<div class="panel-body">
 		<div class="row">
 		<div class="col-sm-7">
-	  <p ng-bind="vm.project.short"></p>
+	<p ng-bind="vm.project.short"></p>
 			<p class="label-list" ng-if="vm.project.taglist">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
 			</p>
 		</div>
 		<div class="col-sm-5">
-		  <dl class="dl-horizontal">
-		  <dt>Program:</dt>
-		  <dd>
+		<dl class="dl-horizontal">
+		<dt>Program:</dt>
+		<dd>
 			<a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
 			<span ng-if="!vm.project.program" class="text-muted">No program</span>
-		  </dd>
-		  <!-- github link -->
-		  <dt>Github Repo:</dt>
-		  <dd>
-				<p ng-if="vm.program.github"><a href="{{vm.program.github}}" rel="nofollow"><i class="fa fa-external-link"></i> Project Github Repo</a></p>
-		  </dd>
-		  </dl>
+		</dd>
+		<!-- github link -->
+		<dt>Github Repo:</dt>
+		<dd>
+				<p ng-if="vm.program.github"><a href="{{vm.program.github}}" rel="nofollow"><i class="fa fa-github"></i> Project Github Repo</a></p>
+		</dd>
+		</dl>
 		</div>
 		</div>
 		</div>
 		<div class="panel-body">
 		<div class="row">
 		<div class="col-sm-12">
-	  <p class="long-desc pre-line" ng-bind-html="vm.project.description"></p>
+	<p class="long-desc pre-line" ng-bind-html="vm.project.description"></p>
 	</div>
 	</div>
 	</div>
 
 		<div class="panel-footer">
-	  <em class="small text-muted">
+	<em class="small text-muted">
 		Created on
 		<span ng-bind="vm.project.created | date:'mediumDate'"></span>
 		by
 		<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
 		<span ng-if="!vm.project.createdBy">Deleted User</span>
-	  </em>
+	</em>
 			<br/>
-	  <em class="small text-muted">
+	<em class="small text-muted">
 		Updated on
 		<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
 		by
 		<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
 		<span ng-if="!vm.project.updatedBy">Deleted User</span>
-	  </em>
+	</em>
 		</div>
 		</div>
 
-	<core-member-list     model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
+	<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
 	<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
 	<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
 
 	<div class="row form-foot">
-  	<div class="col-sm-12 col-form-buttons text-right">
+	<div class="col-sm-12 col-form-buttons text-right">
 		<div class="btn-group">
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
 				<i class="glyphicon glyphicon-pencil"></i> Edit

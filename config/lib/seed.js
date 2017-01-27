@@ -142,7 +142,7 @@ module.exports.start = function start(options) {
       User.generateRandomPassphrase()
         .then(function (random) {
           var passed = process.env.ADMINPW;
-          return passed || random;
+          return passed || 'adminadmin';
         })
         .then(seedTheUser(adminAccount))
         .then(function () {

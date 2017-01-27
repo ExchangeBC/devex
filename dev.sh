@@ -1,7 +1,10 @@
 #!/bin/bash
 docker stop db_devex
 docker start db_devex
-docker run -p 3030:3000 -p 5858:5858 -p 35729:35729 \
+docker run \
+-p 3030:3000 \
+-p 5858:5858 \
+-p 35729:35729 \
 -v `pwd`/config:/opt/mean.js/config \
 -v `pwd`/modules:/opt/mean.js/modules \
 -v `pwd`/public:/opt/mean.js/public \
