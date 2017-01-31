@@ -47,47 +47,22 @@
 						ng-model="vm.program.description">
 					</textarea>
 				</div>
+<!--
 				<div class="form-group">
 					<label class="control-label" for="owner">Owner</label>
 					<input name="owner" type="text" ng-model="vm.program.owner" id="owner" class="form-control" placeholder="Program owner (ministry, organization, etc)" required>
 				</div>
 				<div class="form-group">
+					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
+					<input type="text" name="taglist" ng-model="vm.program.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+				</div>
+-->
+				<div class="form-group">
 					<label class="control-label" for="website">Website</label>
 					<input name="website" type="text" ng-model="vm.program.website" id="website" class="form-control" placeholder="Website" required>
 				</div>
-<!-- 				<div class="form-group">
-					<label class="control-label" for="logo">Logo URL</label>
-					<input type="text" name="logo" ng-model="vm.program.logo" id="logo" class="form-control" placeholder="Logo URL"></input>
-				</div>
- -->
 				<div class="form-group">
 					<label class="control-label" for="logo">Logo</label>
-					<!-- <input type="text" name="logo" ng-model="vm.program.logo" id="logo" class="form-control" placeholder="Logo URL"></input> -->
-					<!-- <button ng-show="!vm.fileSelected" class="btn btn-default btn-file" ngf-select="vm.fileSelected = true" ng-model="vm.pictureFile" accept="image/*">Select Picture</button> -->
-<!-- 		<div class="fb-upload-target"
-			ngf-drop
-			ngf-select
-			ng-model="vm.filename"
-			ngf-drag-over-class="fb-upload-target-hover"
-			ngf-multiple="false"
-			ngf-allow-dir="true">
-			{{vm.filename | json}}
-			<div class="fb-upload-target-content">
-				<span class="glyphicon glyphicon-open icon-default"></span>
-				<span class="fb-upload-target-msg"><b>Drag &amp; Drop</b> or <b>browse files</b> to upload.</span>
-			</div>
-			<div class="fb-upload-target-border"></div>
-		</div>
- -->
- <!--
- 	<div class="btn btn-default" ngf-select ng-model="vm.filename" name="file" ngf-pattern="'image/*'"
-	ngf-accept="'image/*'" ngf-max-size="20MB" ngf-min-height="100"
-	ngf-resize="{width: 300, height: 300}">Select File {{vm.filename}}</div>
-	-->
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
-					<input type="text" name="taglist" ng-model="vm.program.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
 				<div class="form-group">
 					<fieldset>

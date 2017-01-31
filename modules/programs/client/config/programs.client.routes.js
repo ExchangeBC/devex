@@ -102,13 +102,6 @@
 					};
 				}
 			},
-			// data: function (program) {
-			// 	console.log ('running now, program = ',program);
-			// 	return {
-			// 		roles: ['admin', 'gov'],
-			// 		pageTitle: 'Program: {{ program.title }}'
-			// 	};
-			// },
 			data: {
 				roles: ['admin', 'gov'],
 				pageTitle: 'Program: {{ program.title }}'
@@ -132,7 +125,14 @@
 				program: function (ProgramsService) {
 					return new ProgramsService();
 				},
-				editing: function () { return false; }
+				editing: function () { return false; },
+				previousState: function ($state) {
+				  return {
+					name: $state.current.name,
+					params: $state.params,
+					url: $state.href($state.current.name, $state.params)
+				  };
+				}
 			},
 			data: {
 				roles: ['admin', 'gov'],

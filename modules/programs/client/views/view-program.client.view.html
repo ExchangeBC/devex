@@ -29,9 +29,11 @@
 			<div class="col-sm-8">
 				<p ng-bind="vm.program.short"></p>
 				<p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+				<!--
 				<p class="label-list">
 					<span class="label label-info" ng-repeat="code in vm.program.tags">{{code}}</span>
 				</p>
+				-->
 			</div>
 			<div class="col-sm-4">
 				<img class="img-responsive img-logo2 text-center" src="/{{vm.program.logo}}" />

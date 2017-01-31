@@ -6,7 +6,7 @@
 			title: 'Opportunities',
 			state: 'opportunities.list',
 			roles: ['*'],
-			icon: 'fa fa-tasks',
+			icon: 'fa fa-usd',
 			position: 5
 		});
 	}]);
