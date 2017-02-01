@@ -67,7 +67,7 @@
 				<div class="form-group">
 					<fieldset>
 						<div ng-show="vm.fileSelected" class="text-center form-group">
-							<p>Crop your picture then press upload below:</p>
+							<p>Crop your picture then press save</p>
 							<div ngf-drop ng-model="vm.picFile" ngf-pattern="image/*" class="text-center cropArea">
 								<img-crop image="vm.picFile | ngfDataUrl" result-image="vm.croppedDataUrl" ng-init="vm.croppedDataUrl=''"></img-crop>
 							</div>
