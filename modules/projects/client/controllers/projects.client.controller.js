@@ -16,13 +16,14 @@
 	//
 	// =========================================================================
 	.controller('ProjectViewController', function ($scope, $state, $sce, $stateParams, project, Authentication, ProjectsService, Notification) {
-		var vm             = this;
-		vm.programId       = project.program ? project.program._id : $stateParams.programId;
-		vm.project         = project;
-		vm.project.description = $sce.trustAsHtml(vm.project.description);
-		vm.authentication  = Authentication;
-		vm.ProjectsService = ProjectsService;
-		vm.idString        = 'projectId';
+		var vm                 = this;
+		vm.programId           = project.program ? project.program._id : $stateParams.programId;
+		vm.project             = project;
+		vm.display             = {};
+		vm.display.description = $sce.trustAsHtml(vm.project.description);
+		vm.authentication      = Authentication;
+		vm.ProjectsService     = ProjectsService;
+		vm.idString            = 'projectId';
 		//
 		// what can the user do here?
 		//

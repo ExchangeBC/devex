@@ -68,9 +68,9 @@
 	<div class="panel-body">
 
 		<h2 class="panel-title">Description</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.description"></p>
+		<p class="med-desc pre-line" ng-bind-html="vm.displauy.description"></p>
 		<h2 class="panel-title">Acceptance Criteria</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.criteria"></p>
+		<p class="med-desc pre-line" ng-bind-html="vm.display.criteria"></p>
 		<h2 class="panel-title">Terms</h2>
 		<p class="med-desc">
 		This is a fixed price opportunity governed by the terms of our lightweight procurement model, Code With Us. Read more to understand how it works.
@@ -107,7 +107,7 @@
 		<div class="med-desc margin-bottom">
 		<p>Log in and upload your proposal by <b>{{vm.deadline}}</b>.</p>
 		<h2 class="panel-title">Evaluation Criteria</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.opportunity.evaluation"></p>
+		<p class="med-desc pre-line" ng-bind-html="vm.display.evaluation"></p>
 		<p>If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
 		</div>
 		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">

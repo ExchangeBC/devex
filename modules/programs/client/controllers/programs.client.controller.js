@@ -16,12 +16,13 @@
 	//
 	// =========================================================================
 	.controller('ProgramViewController', function ($scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
-		var vm             = this;
-		vm.program         = program;
-		vm.program.description = $sce.trustAsHtml(vm.program.description);
-		vm.authentication  = Authentication;
-		vm.ProgramsService = ProgramsService;
-		vm.idString        = 'programId';
+		var vm                 = this;
+		vm.program             = program;
+		vm.display             = {};
+		vm.display.description = $sce.trustAsHtml(vm.program.description);
+		vm.authentication      = Authentication;
+		vm.ProgramsService     = ProgramsService;
+		vm.idString            = 'programId';
 		//
 		// what can the user do here?
 		//
