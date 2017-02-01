@@ -30,6 +30,7 @@
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var isMemberOrWaiting      = project.userIs.member || project.userIs.request;
+		vm.isAdmin                 = isAdmin;
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || project.userIs.admin;
