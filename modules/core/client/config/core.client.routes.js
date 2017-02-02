@@ -104,6 +104,14 @@
           pageTitle: 'Accessibility'
         }
       })
+      .state('codewithus', {
+        url: '/codewithus',
+        templateUrl: '/modules/core/client/views/codewithus.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Code With Us'
+        }
+      })
       .state('copyright', {
         url: '/copyright',
         templateUrl: '/modules/core/client/views/copyright.client.view.html',
