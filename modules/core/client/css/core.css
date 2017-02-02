@@ -56,16 +56,27 @@ section.intro p {
   font-weight: 300;
   font-size: 22px;
   line-height: 1.8em;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
 }
 section.audience {
 	padding-top: 40px;
 	padding-bottom: 40px;
 }
 section.audience p {
-  font-size: 16px;
-  line-height: 1.8em;
-  padding-bottom: 30px;
+  font-size: 18px;
+  line-height: 1.6em;
+  font-weight: 300;
+  padding-bottom: 10px;
+}
+section.audience h5 {
+	font-weight: 300;
+	font-size: 19px;
+	line-height: 1.7em;
+	padding-bottom: 30px;
+}
+section.audience footer {
+	font-size: 16px;
+	font-weight: 300;
 }
 section.events {
 	padding-top: 40px;
@@ -80,6 +91,7 @@ section.footer {
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
+	color: #595959;
 }
 section.static h1 {
 	padding-bottom: 20px;
@@ -88,7 +100,13 @@ section.static h2,h3,h4,h5 {
 	padding-top: 25px;
 }
 section.static p {
-	font-size: 14px;
+	font-size: 16px;
+	line-height: 1.8em;
+	padding-bottom: 10px;
+}
+section.static li {
+	font-size: 16px;
+	line-height: 1.8em;
 }
 @media (max-width: 767px) {
 	.img-responsive {
