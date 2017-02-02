@@ -8,10 +8,15 @@
   EditProfileController.$inject = ['$scope', '$http', '$location', 'UsersService', 'Authentication', 'Notification'];
 
   function EditProfileController($scope, $http, $location, UsersService, Authentication, Notification) {
-    var vm = this;
-
-    vm.user = Authentication.user;
+    var vm               = this;
+    var isUser           = Authentication.user;
+    var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
+    var wasGovRequest    = isUser && !!~Authentication.user.roles.indexOf ('gov-request');
+    vm.user              = Authentication.user;
     vm.updateUserProfile = updateUserProfile;
+
+    vm.isgov = (wasGov || wasGovRequest);
+    vm.goveditable = !wasGov;
 
     // Update a user profile
     function updateUserProfile(isValid) {
@@ -21,7 +26,34 @@
 
         return false;
       }
-
+      //
+      // self-selected as gov
+      //
+      if (vm.isgov) {
+        //
+        // were not already gov
+        //
+        if (!wasGov) {
+          //
+          // were not awaiting gov
+          //
+          if (!wasGovRequest) {
+            vm.user.roles.push ('gov-request');
+          }
+        }
+      }
+      else {
+        //
+        // were not already gov
+        //
+        if (!wasGov) {
+          var roles = [];
+          vm.roles.forEach (function (role) {
+            if (role !== 'gov-request') roles.push (role);
+          });
+          vm.roles = roles;
+        }
+      }
       var user = new UsersService(vm.user);
 
       user.$update(function (response) {
