@@ -5,9 +5,9 @@
     .module('users')
     .controller('AuthenticationController', AuthenticationController);
 
-  AuthenticationController.$inject = ['$scope', '$state', 'UsersService', '$location', '$window', 'Authentication', 'PasswordValidator', 'Notification'];
+  AuthenticationController.$inject = ['$scope', '$rootScope', '$state', 'UsersService', '$location', '$window', 'Authentication', 'PasswordValidator', 'Notification'];
 
-  function AuthenticationController($scope, $state, UsersService, $location, $window, Authentication, PasswordValidator, Notification) {
+  function AuthenticationController($scope, $rootScope, $state, UsersService, $location, $window, Authentication, PasswordValidator, Notification) {
     var vm = this;
 
     vm.authentication = Authentication;
@@ -30,7 +30,7 @@
     function governmentSelected() {
       return ($location.search().role === 'non_gov');
     }
-        function governmentSelected1() {
+    function governmentSelected1() {
       return ($location.search().role === 'non_gov');
     }
 	function non_gov(isValid) {
@@ -71,7 +71,7 @@ $window.location.href = '/authentication/government?role=gov';
       if ($state.previous && $state.previous.href) {
         url += '?redirect_to=' + encodeURIComponent($state.previous.href);
       }
-
+      $rootScope.authRole = $location.search().role;
       // Effectively call OAuth authentication route:
       $window.location.href = url;
     }

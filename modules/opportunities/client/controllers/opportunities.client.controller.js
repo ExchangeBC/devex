@@ -16,18 +16,19 @@
 	//
 	// =========================================================================
 	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification) {
-		var vm                     = this;
-		vm.projectId               = $stateParams.projectId;
-		vm.opportunity             = opportunity;
-		vm.opportunity.deadline    = new Date (vm.opportunity.deadline);
-		vm.opportunity.assignment  = new Date (vm.opportunity.assignment);
-		vm.opportunity.start       = new Date (vm.opportunity.start);
-		vm.authentication          = Authentication;
-		vm.OpportunitiesService    = OpportunitiesService;
-		vm.idString                = 'opportunityId';
-		vm.opportunity.description = $sce.trustAsHtml(vm.opportunity.description);
-		vm.opportunity.evaluation  = $sce.trustAsHtml(vm.opportunity.evaluation);
-		vm.opportunity.criteria    = $sce.trustAsHtml(vm.opportunity.criteria);
+		var vm                    = this;
+		vm.projectId              = $stateParams.projectId;
+		vm.opportunity            = opportunity;
+		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+		vm.opportunity.start      = new Date (vm.opportunity.start);
+		vm.authentication         = Authentication;
+		vm.OpportunitiesService   = OpportunitiesService;
+		vm.idString               = 'opportunityId';
+		vm.display                = {};
+		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
+		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
+		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		//
 		// what can the user do here?
 		//
