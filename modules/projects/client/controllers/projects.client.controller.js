@@ -104,8 +104,8 @@
 			height      : 100,
 			menubar     :'',
 			elementpath : false,
-			plugins     : 'textcolor lists advlist',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | forecolor backcolor'
+			plugins     : 'textcolor lists advlist link',
+			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		//
 		// if adding we care about the context

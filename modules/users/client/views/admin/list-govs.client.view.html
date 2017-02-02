@@ -1,4 +1,5 @@
-<section>
+<section class="list-page"><div class="container" role="main">
+
   <div class="page-header">
     <div class="row">
       <div class="col-md-4">
@@ -23,8 +24,9 @@ background: linear-gradient(to bottom, #cc0000 0%,#cc0000 100%); /* W3C, IE10+, 
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#cc0000', endColorstr='#cc0000',GradientType=0 );;border-color:#b4e391"/></p>
       <p class="list-group-item-text" ng-bind="user.email" ui-sref="admin.user({userId: user._id})"></p>
     </div>
-    
+
   </div>
 
   <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
-</section>
+
+</div></section>
