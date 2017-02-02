@@ -42,20 +42,58 @@ a:hover .header-profile-image {
 	display: inline;
 }
 section.intro {
-	padding-top: 40px;
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  overflow-y: hidden;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  background: #ddd url('/modules/core/client/img/headers/co-design-darkened.png') no-repeat center;
+  background-size: cover;
+  color: white;
 }
-
+section.intro p {
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 1.8em;
+  padding-bottom: 10px;
+}
 section.audience {
-	padding-top: 140px;
-	padding-bottom: 30px;
+	padding-top: 40px;
+	padding-bottom: 40px;
 }
 section.audience p {
-	font-size: 16px;
-	padding-bottom: 30px;
+  font-size: 16px;
+  line-height: 1.8em;
+  padding-bottom: 30px;
+}
+section.events {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+section.footer {
+	background-color: #1a1a1a;
+	color: #fff;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+section.static {
+	padding-top: 10px;
+	padding-bottom: 40px;
+}
+section.static h1 {
+	padding-bottom: 20px;
+}
+section.static h2,h3,h4,h5 {
+	padding-top: 25px;
+}
+section.static p {
+	font-size: 14px;
 }
 @media (max-width: 767px) {
 	.img-responsive {
 		max-width: 80px;
+		min-height: 60px;
 	}
 }
 @media (min-width: 768px) {
