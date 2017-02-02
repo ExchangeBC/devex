@@ -18,6 +18,7 @@
     vm.isgov = (wasGov || wasGovRequest);
     vm.goveditable = !wasGov;
 
+
     // Update a user profile
     function updateUserProfile(isValid) {
 
@@ -27,39 +28,25 @@
         return false;
       }
       //
-      // self-selected as gov
+      // if changes to government flag ...
       //
-      if (vm.isgov) {
-        //
-        // were not already gov
-        //
-        if (!wasGov) {
-          //
-          // were not awaiting gov
-          //
-          if (!wasGovRequest) {
-            vm.user.roles.push ('gov-request');
-          }
+      if (!wasGov) {
+        if (vm.isgov) {
+          vm.user.addRequest = true;
+          vm.user.removeRequest = false;
+        } else {
+          vm.user.addRequest = false;
+          vm.user.removeRequest = true;
         }
       }
-      else {
-        //
-        // were not already gov
-        //
-        if (!wasGov) {
-          var roles = [];
-          vm.roles.forEach (function (role) {
-            if (role !== 'gov-request') roles.push (role);
-          });
-          vm.roles = roles;
-        }
-      }
+      var govRequest = vm.user.addRequest;
+      var successMessage = 'Edit profile successful!';
+      var govSuccessMessage = successMessage + ' You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.';
       var user = new UsersService(vm.user);
-
       user.$update(function (response) {
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 
-        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Edit profile successful!' });
+        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> '+(govRequest? govSuccessMessage : successMessage) });
         Authentication.user = response;
       }, function (response) {
         Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });

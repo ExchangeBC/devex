@@ -13,7 +13,8 @@ var _ = require('lodash'),
 	User = mongoose.model('User'),
 	validator = require('validator');
 
-var whitelistedFields = ['firstName', 'lastName', 'email', 'username'];
+ // CC:  USERFIELDS
+var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government'];
 
 /**
  * Update user details
@@ -26,9 +27,18 @@ exports.update = function (req, res) {
 		// Update whitelisted fields only
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
+		//
+		// this deals with marking the user as government or not
+		//
+		if (req.body.addRequest) {
+			user.addRoles (['gov-request']);
+		}
+		if (req.body.removeRequest) {
+			user.removeRoles (['gov-request']);
+		}
+
 		user.updated = Date.now();
 		user.displayName = user.firstName + ' ' + user.lastName;
-
 		user.save(function (err) {
 			if (err) {
 				return res.status(422).send({
@@ -144,6 +154,7 @@ exports.changeProfilePicture = function (req, res) {
 exports.me = function (req, res) {
 	// Sanitize the user - short term solution. Copied from core.server.controller.js
 	// TODO create proper passport mock: See https://gist.github.com/mweibel/5219403
+	 // CC:  USERFIELDS
 	var safeUserObject = null;
 	if (req.user) {
 		safeUserObject = {
@@ -156,7 +167,8 @@ exports.me = function (req, res) {
 			email: validator.escape(req.user.email),
 			lastName: validator.escape(req.user.lastName),
 			firstName: validator.escape(req.user.firstName),
-			additionalProvidersData: req.user.additionalProvidersData
+			additionalProvidersData: req.user.additionalProvidersData,
+			government: req.user.government
 		};
 	}
 
