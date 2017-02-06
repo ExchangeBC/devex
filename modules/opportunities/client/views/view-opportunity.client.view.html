@@ -7,13 +7,13 @@
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>
@@ -120,13 +120,13 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons foot text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="Edit">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>
