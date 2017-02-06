@@ -24,9 +24,7 @@
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-sm-5">
-				<h4 class="card-title">
-					<i class="fa fa-tag"></i> {{vm.opportunity.earn|currency}}
-				</h4>
+				<h4 class="card-title">{{vm.opportunity.earn|currency}}</h4>
 				<p ng-if="vm.opportunity.isPublished" class="lg">Closing in: <b>{{vm.closing}}</b></p>
 				<p ng-if="!vm.opportunity.isPublished"><span class="label label-danger" >Not Published</span></p>
 				<dl ng-if="vm.opportunity.skills.length">
