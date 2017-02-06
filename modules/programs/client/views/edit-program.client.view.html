@@ -1,22 +1,21 @@
-
 <section class="static-page">
 <div class="container" role="main">
   <!-- <div ncy-breadcrumb></div> -->
   <form id="programForm" name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
 	<div class="row form-head">
 	<div class="col-sm-7">
-		<h2 ng-if="vm.editing">Editing: {{::vm.program.name}}</h2>
+		<h2 ng-if="vm.editing">Editing: {{::vm.program.title}}</h2>
 		<h2 ng-if="!vm.editing">New Program</h2>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
 	<div class="btn-group">
-	  <button class="btn btn-primary" type="submit" name="Save">
+	  <button class="btn btn-primary" type="submit" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </button>
-				<a class="btn btn-default" href="{{vm.previousState.url}}" name="Cancel">
+				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" name="Remove">
+	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 		<i class="glyphicon glyphicon-trash"></i> Remove
 	  </a>
 	</div>
@@ -26,14 +25,10 @@
 	<div class="col-sm-12">
 			<fieldset>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="name">Name</label>
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('name')"></i>
-					<div class="input-help alert alert-info" data-field="name" ng-show="vm.displayHelp.name">
-						Create a short name for the opportunity that conveys the core of the work you need done.
-					</div>
-					<input name="name" type="text" ng-model="vm.program.name" id="name" class="form-control" placeholder="name" required>
-					<div ng-messages="vm.form.programForm.name.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">Enter the name of your public sector program.</p>
+					<label class="control-label" for="title">Title</label>
+					<input name="title" type="text" ng-model="vm.program.title" id="title" class="form-control" placeholder="Title" required>
+					<div ng-messages="vm.form.programForm.title.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Program title is required.</p>
 					</div>
 				</div>
 				<div class="form-group" show-errors>
@@ -100,16 +95,16 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
 	<div class="btn-group">
-	  <a class="btn btn-primary" ng-click="vm.saveme(vm.form.programForm.$valid)" name="Save">
+	  <a class="btn btn-primary" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program._id})" name="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="programs.list" name="Cancel">
+	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="programs.list" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" name="Remove">
+	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
 		<i class="glyphicon glyphicon-trash"></i> Remove
 	  </a>
 	</div>
