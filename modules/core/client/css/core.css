@@ -127,19 +127,27 @@ section.static h1 {
 section.static h2,h3,h4,h5 {
 	padding-top: 25px;
 	padding-bottom: 0;
-	color: #0a4d8d
+	color: #0a4d8d;
+}
+section.static h2 {
+	font-size: 23px;
+	color: #0a4d8d;
 }
 section.static h3 {
 	font-size: 20px;
+	color: #0a4d8d;
 }
 section.static p {
+	font-weight: 100;
 	font-size: 16px;
 	line-height: 1.8em;
 	padding-bottom: 10px;
 }
 section.static li {
+	font-weight: 100;
 	font-size: 16px;
 	line-height: 1.8em;
+	padding-bottom: 10px;
 }
 @media (max-width: 767px) {
 	.img-responsive {
@@ -153,8 +161,8 @@ section.static li {
 	}
 }
 .card-header {
-	padding-top: 2px;
-	padding-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 .card-header h1, h2, h3, h4, h5 {
 	color: #595959;
@@ -163,6 +171,11 @@ section.static li {
 }
 .card-header h4 {
 	font-size: 15px;
+	font-weight: 100;
+	padding-top: 5px;
+}
+.card-header h5 {
+	font-size: 13px;
 	font-weight: 100;
 }
 .card-header h3 {
