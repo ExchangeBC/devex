@@ -50,7 +50,7 @@ section.intro {
   padding-bottom: 40px;
   background: #ddd url('/modules/core/client/img/headers/co-design-darkened.png') no-repeat center;
   background-size: cover;
-  color: white;
+  color: #ffffff;
 }
 section.intro h2 {
   font-weight: 300;
@@ -59,7 +59,7 @@ section.intro h2 {
 }
 section.intro h5 {
 	font-weight: 200;
-	font-size: 18px;
+	font-size: 19px;
 	line-height: 1.7em;
 	padding-bottom: 20px;
 }
@@ -67,7 +67,7 @@ section.intro h5 {
 section.audience {
 	padding-top: 40px;
 	padding-bottom: 40px;
-	color: #0a4d8d;
+	color: #595959;
 }
 section.audience p {
   font-size: 17px;
@@ -81,10 +81,13 @@ section.audience h5 {
 	line-height: 1.7em;
 	padding-bottom: 30px;
 }
+section.audience blockquote {
+	padding-bottom: 30px;
+}
 section.audience footer {
 	font-size: 15px;
 	font-weight: 300;
-	color: #052748;
+	color: #595959;
 }
 
 section.events {
@@ -113,20 +116,26 @@ section.form-page .well {
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
-	color: #0a4d8d;
+	color: #595959;
 }
 section.static h1 {
+	padding-top: 0px;
 	padding-bottom: 20px;
-	color: #052748;
+	font-size: 26px;
+	color: #0a4d8d;
 }
 section.static h2,h3,h4,h5 {
 	padding-top: 25px;
+	padding-bottom: 0;
+	color: #0a4d8d
+}
+section.static h3 {
+	font-size: 20px;
 }
 section.static p {
 	font-size: 16px;
 	line-height: 1.8em;
 	padding-bottom: 10px;
-	color: #052748;
 }
 section.static li {
 	font-size: 16px;
