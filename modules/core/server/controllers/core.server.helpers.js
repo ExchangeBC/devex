@@ -95,14 +95,15 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 			return new Promise(function (resolve, reject) {
 				if (existingImageUrl !== Model.schema.path(field).defaultValue) {
 					fs.unlink(existingImageUrl, function (unlinkError) {
-						if (unlinkError) {
-							console.log(unlinkError);
-							resolve({
-								message: 'Error occurred while deleting old profile picture'
-							});
-						} else {
-							resolve();
-						}
+						resolve ();
+						// if (unlinkError) {
+						// 	console.log(unlinkError);
+						// 	resolve({
+						// 		message: 'Error occurred while deleting old profile picture'
+						// 	});
+						// } else {
+						// 	resolve();
+						// }
 					});
 				} else {
 					resolve();
