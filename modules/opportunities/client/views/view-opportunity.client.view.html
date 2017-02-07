@@ -1,16 +1,17 @@
+
 <section class="static">
 	
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div class="btn-group">
-				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
+				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 				</button>
-				<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
+				<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 				</a>
-				<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
+				<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 				</a>
 			</div>
@@ -18,13 +19,12 @@
 				<h1>{{vm.opportunity.name}}</h1>
 				<p style="font-weight: 200; font-size: 18px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
 			</div>
-		</div>
-			
+		</div>			
 	</div>
-	
 	
 
 	<!--<div class="panel panel-default panel-flat card-panel">-->
+
 <div class="card card-flat">
 	<div class="card-header">
 		<div class="row">
@@ -68,7 +68,7 @@
 	
 	<div class="panel-body">
 		<h3 class="panel-title">Description</h3>
-		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.displauy.description"></p>
+		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
 		<h3 class="panel-title">Acceptance Criteria</h3>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.criteria"></p>
 	</div>
@@ -122,13 +122,13 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons foot text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>
