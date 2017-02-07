@@ -1,97 +1,98 @@
-<section class="static-page">
-<div class="container" role="main">
-<!-- <div ncy-breadcrumb></div> -->
-	<div class="row form-head">
-	<div class="col-sm-7">
-		<h2>{{vm.project.name}}</h2>
-	</div>
-	<div class="col-sm-5 col-form-buttons text-right">
-		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
-				<i class="glyphicon glyphicon-pencil"></i> Edit
-			</button>
-			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request">
-				<i class="glyphicon glyphicon-user"></i> Request Membership
-			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
-				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
-			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
-				<i class="glyphicon glyphicon-ok-circle"></i> Publish
-			</a>
+<section class="static">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" uib-tooltip="You can edit the details of this project">
+						<i class="glyphicon glyphicon-pencil"></i> Edit
+					</button>
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Request to be listed as a member of this project.">
+						<i class="glyphicon glyphicon-user"></i> Request Membership
+					</button>
+					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is live and anyone can view it. You can un-publish it here.">
+						<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+					</a>
+					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
+						<i class="glyphicon glyphicon-ok-circle"></i> Publish
+					</a>
+				</div>
+				<div class="col-xs-12 col-sm-12 text-left">
+					<h1>{{vm.project.name}}</h1>
+					<p style="font-weight: 200; font-size: 18px; padding-bottom: 30px;"><span ng-bind="vm.project.short"></span></p>
+				</div>
+			</div>
 		</div>
-	</div>
 	</div>
 
-		<div class="panel panel-default panel-flat card-panel">
-		<div class="panel-body">
+<div class="container">
+<div class="card card-flat">	
+	<div class="card-header">
 		<div class="row">
-		<div class="col-sm-7">
-	<p ng-bind="vm.project.short"></p>
-			<p class="label-list" ng-if="vm.project.taglist">
-				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span>
-			</p>
+			<div class="col-sm-5">
+				<p class="label-list" ng-if="vm.project.taglist">
+				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span></p>
+			</div>
+			<div class="col-sm-7">
+				<dl class="dl-horizontal">
+				<dt>Program:</dt>
+				<dd>
+				<a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
+				<span ng-if="!vm.project.program" class="text-muted">No program</span>
+				</dd>
+				<!-- github link -->
+				<dt>Github Repo:</dt>
+				<dd>
+				<p ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a></p>
+				</dd>
+				</dl>
+			</div>
 		</div>
-		<div class="col-sm-5">
-		<dl class="dl-horizontal">
-		<dt>Program:</dt>
-		<dd>
-			<a ng-if="vm.project.program" ui-sref="programs.view({programId:vm.project.program._id})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
-			<span ng-if="!vm.project.program" class="text-muted">No program</span>
-		</dd>
-		<!-- github link -->
-		<dt>Github Repo:</dt>
-		<dd>
-			<p ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a></p>
-		</dd>
-		</dl>
-		</div>
-		</div>
-		</div>
-		<div class="panel-body">
-		<div class="row">
-		<div class="col-sm-12">
-	<p class="long-desc pre-line" ng-bind-html="vm.display.description"></p>
-	</div>
-	</div>
 	</div>
 
-		<div class="panel-footer">
-	<em class="small text-muted">
+	<div class="panel-body">
+		<p class="med-desc pre-line" ng-bind-html="vm.display.description"></p>
+	</div>
+
+	<div class="panel-footer" style="background-color: #f2f2f2">
+		<em class="small text-muted">
 		Created on
 		<span ng-bind="vm.project.created | date:'mediumDate'"></span>
 		by
 		<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
 		<span ng-if="!vm.project.createdBy">Deleted User</span>
-	</em>
+		</em>
 			<br/>
-	<em class="small text-muted">
+		<em class="small text-muted">
 		Updated on
 		<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
 		by
 		<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
 		<span ng-if="!vm.project.updatedBy">Deleted User</span>
-	</em>
-		</div>
-		</div>
-
+		</em>
+	</div>
+</div>
+</div>
+	
+<div class="container">
 	<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
 	<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
 	<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
+</div>
 
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" title="Edit">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" uib-tooltip="You can edit the details of this project">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request">
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Request to be listed as a member of this project.">
 				<i class="glyphicon glyphicon-user"></i> Request Membership
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="UnPublish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Publish">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>

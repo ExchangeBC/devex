@@ -1,57 +1,63 @@
-
 <div class="row list-head">
-<div class="col-sm-7">
+  <div class="col-sm-7">
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
-</div>
-<div class="col-sm-5 col-form-buttons text-right">
+  </div>
+  <div class="col-sm-5 col-form-buttons text-right">
   <button ng-if="vm.userCanAdd" class="btn " ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
     <i class="glyphicon glyphicon-plus"></i> New Project
   </button>
+  </div>
 </div>
-</div>
-
 
 <div class="row">
 <div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.projects | columnRanges:vm.columnCount">
-<div class="panel panel-warning card-panel" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
-  <div class="panel-body list-img-outer">
-    <div class="list-img" ng-if="!vm.program">
-      <img src="/{{project.program.logo}}"/>
-    </div>
-    <div class="list-img-body">
-      <div class="card-flags">
-        <span ng-if="project.userIs.admin"   class="label label-primary">Admin</span>
-        <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-primary">Member</span>
-        <span ng-if="project.userIs.request" class="label label-primary">Pending Member</span>
-        <span ng-if="!project.isPublished"   class="label label-danger">Not Published</span>
-      </div>
 
-      <div class="card-tools">
-        <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
-          <i class="glyphicon glyphicon-pencil"></i>
-        </a>
-        <a ng-if="(vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
-          <i class="glyphicon glyphicon-ban-circle"></i>
-        </a>
-        <a ng-if="(vm.isAdmin || project.userIs.admin) && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
-          <i class="glyphicon glyphicon-ok-circle"></i>
-        </a>
-        <a ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
-          <i class="glyphicon glyphicon-user"></i>
-        </a>
-      </div>
 
-			<p ng-if="!vm.program && project.program">
-				<a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
-			</p>
-      <h3 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a></h3>
-      <p ng-bind="project.short"></p>
+<div class="card card-flat" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
+  
+  <div class="card-header" ng-if="opportunity.userIs.admin" style="text-align: right">
+    <span ng-if="project.userIs.admin"   class="label label-primary">Admin</span>
+    &nbsp;
+    <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-primary">Member</span>
+    &nbsp;
+    <span ng-if="project.userIs.request" class="label label-primary">Pending Member</span>
+    &nbsp;
+    <span ng-if="!project.isPublished"   class="label label-danger">Not Published</span> 
+    &nbsp;
+    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+    <i class="glyphicon glyphicon-pencil"></i>
+    </a>
+    &nbsp;
+    <a ng-if="(vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    </a>
+    &nbsp;
+    <a ng-if="(vm.isAdmin || project.userIs.admin) && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+    <i class="glyphicon glyphicon-ok-circle"></i>
+    </a>
+    &nbsp;
+    <a ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
+    <i class="glyphicon glyphicon-user"></i>
+    </a>
+  </div>
+  
+  <div class="card-block">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+        <h4 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a>
+        </h4>
+        <p style="font-weight: 100; font-size: 16px;" ng-bind="project.short"></p>
+      </div>
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
       </div>
     </div>
   </div>
-</div>
-</div>
-</div>
 
+  <div class="card-header">
+    <h5 ng-if="!vm.program && project.program">
+        <a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
+    </h5>
+  </div>
+
+</div>
