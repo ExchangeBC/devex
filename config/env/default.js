@@ -29,6 +29,11 @@ module.exports = {
   // sessionKey is the cookie session name
   sessionKey: 'sessionId',
   sessionCollection: 'sessions',
+  github: {
+    clientID: process.env.GITHUB_ID || 'fbcf57c13acde5c036c6',
+    clientSecret: process.env.GITHUB_SECRET || 'c8f0654b5ce9e8af026116b10afa6dfba419f558',
+    callbackURL: '/api/auth/github/callback'
+  },
   // Lusca config
   csrf: {
     csrf: false,
@@ -41,7 +46,7 @@ module.exports = {
   favicon: 'modules/core/client/img/brand/favicon.ico',
   uploads: {
     profileUpload: {
-      dest: 'modules/users/client/img/uploads/', // Profile upload destination path
+      dest: 'modules/core/client/img/uploads/', // Profile upload destination path
       // dest: 'modules/users/client/img/profile/uploads/', // Profile upload destination path
       limits: {
         fileSize: 1 * 1024 * 1024 // Max file size in bytes (1 MB)
