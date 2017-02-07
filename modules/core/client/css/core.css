@@ -41,6 +41,28 @@ a:hover .header-profile-image {
 .has-error .help-inline.error-text {
 	display: inline;
 }
+
+section.about {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  overflow-y: hidden;
+  background: #ddd url('/modules/core/client/img/photos/facilitation.jpg') no-repeat center;
+  background-size: cover;
+  color: white;
+}
+section.about h2 {
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 1.6em;
+}
+section.about h5 {
+	font-weight: 200;
+	font-size: 19px;
+	line-height: 1.7em;
+	padding-bottom: 20px;
+}
+
 section.intro {
   position: relative;
   width: 100%;
@@ -50,18 +72,20 @@ section.intro {
   padding-bottom: 40px;
   background: #ddd url('/modules/core/client/img/headers/co-design-darkened.png') no-repeat center;
   background-size: cover;
-  color: #ffffff;
+  color: #fff;
 }
 section.intro h2 {
   font-weight: 300;
   font-size: 24px;
   line-height: 1.6em;
+  color: #fff;
 }
 section.intro h5 {
-	font-weight: 200;
-	font-size: 19px;
-	line-height: 1.7em;
-	padding-bottom: 20px;
+  font-weight: 200;
+  font-size: 19px;
+  line-height: 1.7em;
+  padding-bottom: 30px;
+  color: #fff;
 }
 
 section.audience {
@@ -85,15 +109,20 @@ section.audience blockquote {
 	padding-bottom: 30px;
 }
 section.audience footer {
-	font-size: 15px;
-	font-weight: 300;
+	font-size: 13px;
+	font-weight: 100;
 	color: #595959;
 }
 
 section.events {
+	position: relative;
+	width: 100%;
+	min-height: auto;
+	overflow-y: hidden;
+	background: url('/modules/core/client/img/photos/laughing.jpg') no-repeat center;
+	background-size: cover;
 	padding-top: 40px;
 	padding-bottom: 40px;
-	color: #052748;
 }
 
 section.footer {
@@ -127,24 +156,32 @@ section.static h1 {
 section.static h2,h3,h4,h5 {
 	padding-top: 25px;
 	padding-bottom: 0;
-	color: #0a4d8d
+	color: #0a4d8d;
+}
+section.static h2 {
+	font-size: 23px;
+	color: #0a4d8d;
 }
 section.static h3 {
 	font-size: 20px;
+	color: #0a4d8d;
 }
 section.static p {
+	font-weight: 100;
 	font-size: 16px;
 	line-height: 1.8em;
 	padding-bottom: 10px;
 }
 section.static li {
+	font-weight: 100;
 	font-size: 16px;
 	line-height: 1.8em;
+	padding-bottom: 10px;
 }
 @media (max-width: 767px) {
 	.img-responsive {
-		max-width: 80px;
-		min-height: 60px;
+		max-width: 70px;
+		min-height: 50px;
 	}
 }
 @media (min-width: 768px) {
@@ -153,8 +190,8 @@ section.static li {
 	}
 }
 .card-header {
-	padding-top: 2px;
-	padding-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 .card-header h1, h2, h3, h4, h5 {
 	color: #595959;
@@ -163,6 +200,11 @@ section.static li {
 }
 .card-header h4 {
 	font-size: 15px;
+	font-weight: 100;
+	padding-top: 5px;
+}
+.card-header h5 {
+	font-size: 13px;
 	font-weight: 100;
 }
 .card-header h3 {

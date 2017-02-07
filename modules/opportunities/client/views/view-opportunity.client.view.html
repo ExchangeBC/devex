@@ -1,38 +1,42 @@
-<section class="static-page">
-<div class="container" role="main">
-	<!-- <div ncy-breadcrumb></div> -->
-	<div class="row form-head">
-	<div class="col-sm-7">
-		<h2>{{vm.opportunity.name}}</h2>
-	</div>
-	<div class="col-sm-5 col-form-buttons text-right">
-		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
+<section class="static">
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div class="btn-group">
+				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
-			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
+				</button>
+				<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
-			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
+				</a>
+				<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
-			</a>
-		</div>
+				</a>
+			</div>
+			<div class="col-xs-12 col-sm-12 text-left">
+				<h1>{{vm.opportunity.name}}</h1>
+				<p style="font-weight: 200; font-size: 18px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
+			</div>
+		</div>			
 	</div>
-	</div>
+	
 
-	<div class="panel panel-default panel-flat card-panel">
-	<div class="panel-body">
+	<!--<div class="panel panel-default panel-flat card-panel">-->
+
+<div class="card card-flat">
+	<div class="card-header">
 		<div class="row">
 			<div class="col-sm-5">
-				<h4 class="card-title">{{vm.opportunity.earn|currency}}</h4>
-				<p ng-if="vm.opportunity.isPublished" class="lg">Closing in: <b>{{vm.closing}}</b></p>
-				<p ng-if="!vm.opportunity.isPublished"><span class="label label-danger" >Not Published</span></p>
+				<h3 class="card-title" style="color: #0a4d8d">{{vm.opportunity.earn|currency}}</h3>
 				<dl ng-if="vm.opportunity.skills.length">
-					<dt>Required Skills:</dt>
+					<!--<dt>Required Skills:</dt>-->
 					<dd class="label-list">
 					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
 					</dd>
 				</dl>
+				<p ng-if="vm.opportunity.isPublished" class="lg">Closing in: <b>{{vm.closing}}</b></p>
+				<p ng-if="!vm.opportunity.isPublished"><span class="label label-danger" >Not Published</span></p>
 			</div>
 			<div class="col-sm-7">
 				<dl class="dl-horizontal">
@@ -60,21 +64,41 @@
 			</div>
 		</div>
 	</div>
+	
 	<div class="panel-body">
-		<span class="lead" ng-bind="vm.opportunity.short"></span>
+		<h3 class="panel-title">Description</h3>
+		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
+		<h3 class="panel-title">Acceptance Criteria</h3>
+		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.criteria"></p>
 	</div>
-	<div class="panel-body">
 
-		<h2 class="panel-title">Description</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.displauy.description"></p>
-		<h2 class="panel-title">Acceptance Criteria</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.display.criteria"></p>
-		<h2 class="panel-title">Terms</h2>
-		<p class="med-desc">
-		This is a fixed price opportunity governed by the terms of our lightweight procurement model, Code With Us. Read more to understand how it works.
-		</p>
+<!--
+	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
+	<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
+-->
+
+	<div class="panel-body style">
+		<h3 class="panel-title">How to Apply</h3>
+		<p class="med-desc pre-line" style="font-weight: 100">Send us your proposal by <b>{{vm.deadline}}</b>.</p>
+		<h3 class="panel-title">Proposal Evaluation Criteria</h3>
+		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.evaluation"></p>
+		<p class="med-desc pre-line" style="font-weight: 100">If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
 	</div>
-	<div class="panel-footer">
+		<!--<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+			<i class="fa fa-sign-in"></i> Sign up or log in to apply
+		</button>
+		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
+			<i class="fa fa-sign-in"></i> Apply Now
+		</button>-->
+
+	<div class="panel-body" style="background-color: #e9f6fc">
+		<h3 class="panel-title">Terms</h3>
+		<p class="med-desc" style="font-weight: 100">
+		This is a fixed price opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
+		</p>	
+	</div>
+
+	<div class="panel-footer" style="background-color: #f2f2f2">
 		<em class="small text-muted">
 			Created on
 			<span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
@@ -90,43 +114,20 @@
 			<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
 		</em>
 	</div>
-	</div>
 
-<!--
-	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
--->
-	<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
+</div>
 
-	<div class="panel panel-success">
-	<div class="panel-heading">
-		<h2 class="panel-title">Apply</h2>
-	</div>
-	<div class="panel-body">
-		<div class="med-desc margin-bottom">
-		<p>Log in and upload your proposal by <b>{{vm.deadline}}</b>.</p>
-		<h2 class="panel-title">Evaluation Criteria</h2>
-		<p class="med-desc pre-line" ng-bind-html="vm.display.evaluation"></p>
-		<p>If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
-		</div>
-		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
-			<i class="fa fa-sign-in"></i> Sign up or log in to apply
-		</button>
-		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
-			<i class="fa fa-sign-in"></i> Apply Now
-		</button>
-	</div>
-	</div>
 
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons foot text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" title="You can edit the details of this opportunity.">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" title="Ready to make this opportunity public?">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>

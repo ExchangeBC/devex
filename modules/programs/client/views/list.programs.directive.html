@@ -1,48 +1,55 @@
 <div class="row list-head">
-<div class="col-sm-7">
-  <h2 class="list-page-hide">Government Partners</h2>
-</div>
-<div class="col-sm-5 col-form-buttons text-right">
-  <button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="programadmin.create()" title="New">
-    <i class="glyphicon glyphicon-plus"></i> New Program
-  </button>
-</div>
+  <div class="col-sm-7">
+    <h2 class="list-page-hide">Government Partners</h2>
+  </div>
+  <div class="col-sm-5 col-form-buttons text-right">
+    <button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="programadmin.create()" title="New">
+      <i class="glyphicon glyphicon-plus"></i> New Program
+    </button>
+  </div>
 </div>
 
 
-<div class="panel panel-info card-panel" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
-  <div class="panel-body list-img-outer">
-    <div class="list-img">
-      <img src="/{{program.logo}}"/>
+<div class="card card-flat" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
+
+  <div class="card-header" ng-if="program.userIs.admin" style="text-align: right">
+    <span ng-if="program.userIs.admin" class="label label-primary" uib-tooltip="You are an admin for this program">Admin</span>
+    &nbsp;
+    <span ng-if="program.userIs.member && !program.userIs.admin" class="label label-primary">Member</span>
+    &nbsp;
+    <span ng-if="program.userIs.request" class="label label-primary" uib-tooltip="Your membership request is pending approval">Pending Member</span>
+    &nbsp;
+    <span ng-if="!program.isPublished"   class="label label-warning" uib-tooltip="This program isn't published yet - no one can see it but you.">Not Published</span>
+    &nbsp;
+    <a ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" uib-tooltip="UnPublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
+    &nbsp;
+    <a ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-ok-circle"></i></a>
+    &nbsp;
+    <a ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" uib-tooltip="Request Membership"><i class="glyphicon glyphicon-user"></i></a>
+    &nbsp;
+    <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+  </div>
+
+  <div class="card-block">
+    <div class="row">
+      <div class="col-xs-12 col-sm-2" style="text-align: center">
+        <div class="card-img">
+          <img class="img-rounded" style="height: 100px;" src="/{{program.logo}}"/>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-10">
+        <h4 class="card-title">
+          <a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a>
+        </h4>
+        <p style="font-weight: 100; font-size: 16px;" ng-bind="program.short"></p>
+      </div>
     </div>
-    <div class="list-img-body">
-
-      <div class="card-flags">
-        <span ng-if="program.userIs.admin"   class="label label-primary">Admin</span>
-        <span ng-if="program.userIs.member && !program.userIs.admin"  class="label label-primary">Member</span>
-        <span ng-if="program.userIs.request" class="label label-primary">Pending Member</span>
-        <span ng-if="!program.isPublished"   class="label label-warning">Not Published</span>
-      </div>
-      <div class="card-tools" >
-        <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program._id })" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
-          <i class="glyphicon glyphicon-pencil"></i>
-        </a>
-        <a ng-cloak ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
-          <i class="glyphicon glyphicon-ban-circle"></i>
-        </a>
-        <a ng-cloak ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
-          <i class="glyphicon glyphicon-ok-circle"></i>
-        </a>
-        <a ng-cloak ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
-          <i class="glyphicon glyphicon-user"></i>
-        </a>
-      </div>
-
-      <h3 class="card-title"><a ui-sref="programs.view({ programId: program._id })" ng-bind="program.title"></a></h3>
-      <p ng-bind="program.short"></p>
+    <!--<div class="row">
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>
       </div>
-    </div>
+    </div>-->
   </div>
+  
 </div>
+      
