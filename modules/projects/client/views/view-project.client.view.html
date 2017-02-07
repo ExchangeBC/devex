@@ -4,16 +4,16 @@
 		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" uib-tooltip="You can edit the details of this project">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" uib-tooltip="You can edit the details of this project.">
 						<i class="glyphicon glyphicon-pencil"></i> Edit
 					</button>
-					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Request to be listed as a member of this project.">
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Request it here.">
 						<i class="glyphicon glyphicon-user"></i> Request Membership
 					</button>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is live and anyone can view it. You can un-publish it here.">
+					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
 						<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 					</a>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
+					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
 						<i class="glyphicon glyphicon-ok-circle"></i> Publish
 					</a>
 				</div>
@@ -80,23 +80,25 @@
 	<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
 </div>
 
+<div class="container">
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
 		<div class="btn-group">
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project._id})" uib-tooltip="You can edit the details of this project">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
-			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Request to be listed as a member of this project.">
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Request it here.">
 				<i class="glyphicon glyphicon-user"></i> Request Membership
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is live and anyone can view it. You can un-publish it here.">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this opportunity public?">
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>
 	</div>
 	</div>
+</div>
 </div>
 </section>
