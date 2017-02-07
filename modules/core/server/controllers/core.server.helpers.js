@@ -81,7 +81,7 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 		},
 		updateDocument : function () {
 			return new Promise(function (resolve, reject) {
-				doc[field] = config.uploads.fileUpload.dest + req.file.filename;
+				doc[field] = config.uploads.fileUpload.display + req.file.filename;
 				doc.save(function (err, result) {
 					if (err) {
 						reject(err);
