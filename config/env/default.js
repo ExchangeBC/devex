@@ -29,11 +29,6 @@ module.exports = {
   // sessionKey is the cookie session name
   sessionKey: 'sessionId',
   sessionCollection: 'sessions',
-  github: {
-    clientID: process.env.GITHUB_ID || 'fbcf57c13acde5c036c6',
-    clientSecret: process.env.GITHUB_SECRET || 'c8f0654b5ce9e8af026116b10afa6dfba419f558',
-    callbackURL: '/api/auth/github/callback'
-  },
   // Lusca config
   csrf: {
     csrf: false,
