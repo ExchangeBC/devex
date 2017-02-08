@@ -112,6 +112,14 @@
           pageTitle: 'Code With Us'
         }
       })
+      .state('codewithusps', {
+        url: '/codewithusps',
+        templateUrl: '/modules/core/client/views/codewithus-ps.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Code With Us'
+        }
+      })
       .state('about', {
         url: '/about',
         templateUrl: '/modules/core/client/views/about.view.html',
