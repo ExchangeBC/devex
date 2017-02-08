@@ -6,9 +6,11 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitiesListController', function (OpportunitiesService) {
+	.controller('OpportunitiesListController', function (OpportunitiesService, Authentication) {
 		var vm      = this;
 		vm.opportunities = OpportunitiesService.query();
+		var isUser = Authentication.user;
+		vm.isUser = isUser;
 	})
 	// =========================================================================
 	//

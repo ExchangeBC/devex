@@ -21,6 +21,7 @@
 				var rightNow = new Date ();
 				var vm     = this;
 				var isUser = Authentication.user;
+				vm.isUser = isUser;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				vm.canApplyGeneral = isUser && !vm.isAdmin && !vm.isGov;
