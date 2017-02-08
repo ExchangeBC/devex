@@ -26,11 +26,11 @@
 	</div>
 
 <div class="container">
-<div class="card card-flat">	
+<div class="card card-flat">
 	<div class="card-header">
 		<div class="row">
 			<div class="col-sm-5">
-				<p class="label-list" ng-if="vm.project.taglist">
+				<p class="label-list" ng-if="vm.project.tags">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span></p>
 			</div>
 			<div class="col-sm-7">
@@ -73,7 +73,7 @@
 	</div>
 </div>
 </div>
-	
+
 <div class="container">
 	<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
 	<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
