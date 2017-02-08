@@ -68,10 +68,10 @@ section.intro {
   width: 100%;
   min-height: auto;
   overflow-y: hidden;
+  background: url('/modules/core/client/img/photos/co-design-darkened.jpg') no-repeat center;
+  background-size: cover;
   padding-top: 20px;
   padding-bottom: 40px;
-  background: #ddd url('/modules/core/client/img/photos/co-design-darkened.jpg') no-repeat center;
-  background-size: cover;
   color: #fff;
 }
 section.intro h2 {
