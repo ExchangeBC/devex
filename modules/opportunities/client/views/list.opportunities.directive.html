@@ -18,7 +18,13 @@
   </div>
 </div>
 
-
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12" style="text-align: center; line-height: 1.5em;">
+      <h3 style="font-weight: 100; padding-bottom: 30px;">Want to get notified when new opportunities are posted?<br><br><a ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a>  
+    </div>  
+  </div>  
+</div>
   
 <div class="col-md-{{12/vm.columnCount}}" ng-repeat="column in vm.opportunities | columnRanges:vm.columnCount">
   <!-- <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end"> -->
