@@ -64,9 +64,9 @@
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
-      .state('authentication.gov', {
-        url: '/government',
-        templateUrl: '/modules/users/client/views/authentication/gov.client.view.html',
+      .state('authentication.admin', {
+        url: '/authadmin',
+        templateUrl: '/modules/users/client/views/authentication/authadmin.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
@@ -85,6 +85,15 @@
       .state('authentication.signin', {
         url: '/signin?err',
         templateUrl: '/modules/users/client/views/authentication/signin.client.view.html',
+        controller: 'AuthenticationController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Signin'
+        }
+      })
+      .state('authentication.signinadmin', {
+        url: '/signinadmin?err',
+        templateUrl: '/modules/users/client/views/authentication/signin.admin.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
