@@ -24,7 +24,7 @@
     &nbsp;
     <span ng-if="!project.isPublished"   class="label label-danger">Not Published</span> 
     &nbsp;
-    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit" uib-tooltip="Edit">
+    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()">
     <i class="glyphicon glyphicon-pencil"></i>
     </a>
     &nbsp;
