@@ -33,7 +33,7 @@
         <a ng-if="(vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-ok-circle"></i>
         </a>
         &nbsp;
-        <a ng-if="opportunity.userIs.admin" href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit details"><i class="glyphicon glyphicon-pencil"></i></a>
+        <a ng-if="opportunity.userIs.admin" href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()"><i class="glyphicon glyphicon-pencil"></i></a>
         <!-- <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>-->
     </div>
 
