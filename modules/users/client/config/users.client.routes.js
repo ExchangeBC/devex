@@ -64,16 +64,25 @@
         controller: 'AuthenticationController',
         controllerAs: 'vm'
       })
-      .state('authentication.admin', {
-        url: '/authadmin',
-        templateUrl: '/modules/users/client/views/authentication/authadmin.client.view.html',
+      .state('authentication.gov', {
+        url: '/government',
+        templateUrl: '/modules/users/client/views/authentication/gov.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
           pageTitle: 'Government'
         }
       })
-       .state('signup', {
+      .state('authentication.signinadmin', {
+        url: '/signinadmin?err',
+        templateUrl: '/modules/users/client/views/authentication/signin.admin.client.view.html',
+        controller: 'AuthenticationController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Signin'
+        }
+      })
+     .state('signup', {
         url: '/signup',
         templateUrl: '/modules/users/client/views/authentication/signup.client.view.html',
         controller: 'AuthenticationController',
@@ -85,15 +94,6 @@
       .state('authentication.signin', {
         url: '/signin?err',
         templateUrl: '/modules/users/client/views/authentication/signin.client.view.html',
-        controller: 'AuthenticationController',
-        controllerAs: 'vm',
-        data: {
-          pageTitle: 'Signin'
-        }
-      })
-      .state('authentication.signinadmin', {
-        url: '/signinadmin?err',
-        templateUrl: '/modules/users/client/views/authentication/signin.admin.client.view.html',
         controller: 'AuthenticationController',
         controllerAs: 'vm',
         data: {
