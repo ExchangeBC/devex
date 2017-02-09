@@ -110,30 +110,27 @@
 	//
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState) {
-		var rightNow = new Date();
-		console.log ('rightnow = ', rightNow);
-		var vm                    = this;
-		vm.previousState = previousState;
-		console.log (previousState);
+		var rightNow                          = new Date();
+		var vm                                = this;
+		vm.previousState                      = previousState;
 		//
 		// what can the user do here?
 		//
-		var isUser                 = Authentication.user;
-		vm.isAdmin                 = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.projects               = projects;
-		// console.log ('projects    = ', projects);
-		// console.log ('stateParams = ', $stateParams);
-		vm.editing                = editing;
-		vm.opportunity            = opportunity;
-		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
-		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
-		vm.opportunity.start      = new Date (vm.opportunity.start)		;
-		console.log ('vm.opportunity.deadline =', vm.opportunity.deadline);
-		vm.authentication         = Authentication;
-		vm.form                   = {};
-		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist    = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		var isUser                            = Authentication.user;
+		vm.isAdmin                            = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                              = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.projects                           = projects;
+		// console.log ('projects             = ', projects);
+		// console.log ('stateParams          = ', $stateParams);
+		vm.editing                            = editing;
+		vm.opportunity                        = opportunity;
+		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
+		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
+		vm.authentication                     = Authentication;
+		vm.form                               = {};
+		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//
 		// if the user doesn't have the right access then kick them out
 		//
@@ -151,12 +148,12 @@
 		//
 		// if editing, set from existing
 		//
-		console.log ('editing', vm.editing);
-		console.log ('programId', vm.programId);
-		console.log ('programTitle', vm.programTitle);
-		console.log ('projectId', vm.projectId);
-		console.log ('projectTitle', vm.projectTitle);
-		console.log ('context', vm.context);
+		// console.log ('editing', vm.editing);
+		// console.log ('programId', vm.programId);
+		// console.log ('programTitle', vm.programTitle);
+		// console.log ('projectId', vm.projectId);
+		// console.log ('projectTitle', vm.projectTitle);
+		// console.log ('context', vm.context);
 		if (vm.editing) {
 			vm.programId    = opportunity.program._id;
 			vm.programTitle = opportunity.program.title;
@@ -218,7 +215,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.updateProgramProject = function (selected) {
-			console.log ('selected', vm.projectobj);
+			// console.log ('selected', vm.projectobj);
 			vm.projectId    = vm.projectobj._id;
 			vm.projectTitle = vm.projectobj.name;
 			vm.programId    = vm.projectobj.program._id;
@@ -246,9 +243,9 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
-			console.log ('saving form', vm.opportunity);
+			// console.log ('saving form', vm.opportunity);
 			if (!isValid) {
-				console.log ('form is not valid');
+				// console.log ('form is not valid');
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.opportunityForm');
 				return false;
 			}
@@ -280,7 +277,7 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
-				console.log ('now saved the new opportunity, redirect user');
+				// console.log ('now saved the new opportunity, redirect user');
 				vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 				vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 				vm.opportunity.start      = new Date (vm.opportunity.start);

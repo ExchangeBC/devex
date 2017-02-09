@@ -89,6 +89,7 @@
 		vm.picFile = null;
 
 		vm.previousState = previousState;
+		console.log ('program',program);
 		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.editing        = editing;
@@ -97,7 +98,7 @@
 		//
 		// if the user doesn't have the right access then kick them out
 		//
-		if (!vm.isAdmin && !program.userIs.admin) $state.go('forbidden');
+		if (editing && !(program.userIs.admin || vm.isAdmin)) $state.go('forbidden');
 		vm.form           = {};
 		vm.program.taglist = vm.program.tags? vm.program.tags.join (', ') : '';
 		vm.filename = {name:'none'};

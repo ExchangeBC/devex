@@ -84,21 +84,21 @@
 	// =========================================================================
 	.controller('ProjectEditController', function ($scope, $state, $sce, $stateParams, $window, project, editing, programs, Authentication, Notification, previousState) {
 		var vm             = this;
-		vm.previousState = previousState;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+		vm.previousState   = previousState;
+		vm.isAdmin         = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov           = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.project         = project;
 		vm.authentication  = Authentication;
 		//
 		// if the user doesn't have the right access then kick them out
 		//
-		if (!vm.isAdmin && !project.userIs.admin) $state.go('forbidden');
+		if (editing && !vm.isAdmin && !project.userIs.admin) $state.go('forbidden');
 		vm.form            = {};
 		vm.project.taglist = vm.project.tags? vm.project.tags.join (', ') : '';
 		vm.editing         = editing;
 		vm.context         = $stateParams.context;
 		vm.programs        = programs;
-		vm.tinymceOptions = {
+		vm.tinymceOptions  = {
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string
 			height      : 100,
@@ -107,6 +107,10 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+		if (vm.programs.length === 0) {
+			alert ('You do not have a program for which you are able to create a project. Please browse to or create a program to put the new project under.');
+			$state.go (previousState.name, previousState.params);
+		}
 		//
 		// if adding we care about the context
 		// if editing, the program field is locked (and is just a link)
@@ -162,7 +166,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
-			console.log ('saving form', vm.project);
+			// console.log ('saving form', vm.project);
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
 				return false;
@@ -183,7 +187,7 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
-				console.log ('now saved the new project, redirect user');
+				// console.log ('now saved the new project, redirect user');
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'
 				});
