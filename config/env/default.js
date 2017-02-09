@@ -40,6 +40,16 @@ module.exports = {
   logo: 'modules/core/client/img/brand/logo.png',
   favicon: 'modules/core/client/img/brand/favicon.ico',
   uploads: {
+    diskStorage: {
+      destination: function (req, file, cb) {
+        cb (null, 'public/uploads/')
+      },
+      filename: function (req, file, cb) {
+        var datetimestamp = Date.now();
+        // console.log ('file.originalname', file.originalname);
+        cb (null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+      }
+    },
     profileUpload: {
       dest: 'public/uploads/', // Profile upload destination path
       display: 'uploads/',

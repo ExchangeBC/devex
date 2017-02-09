@@ -168,12 +168,12 @@ UserSchema.methods.addRoles = function (roles) {
 };
 UserSchema.methods.removeRoles = function (roles) {
   var _this = this;
-  console.log ('roles:', _this.roles);
+  // console.log ('roles:', _this.roles);
   _.each (roles, function (role) {
-    console.log ('remove:', role);
+    // console.log ('remove:', role);
     roles = _.remove (_this.roles, function (v) {return v === role;});
   });
-  console.log ('roles:', _this.roles);
+  // console.log ('roles:', _this.roles);
   this.markModified ('roles');
 };
 

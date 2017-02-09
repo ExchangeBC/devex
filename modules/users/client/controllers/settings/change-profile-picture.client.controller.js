@@ -14,7 +14,7 @@
     vm.fileSelected = false;
 
     vm.upload = function (dataUrl, name) {
-
+      // console.log ('name = ', name);
       Upload.upload({
         url: '/api/users/picture',
         data: {

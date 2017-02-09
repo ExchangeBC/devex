@@ -58,7 +58,7 @@
     return Program;
 
     function createOrUpdate(program) {
-      console.log ('create or update');
+      // console.log ('create or update');
       if (program._id) {
         return program.$update(onSuccess, onError);
       } else {

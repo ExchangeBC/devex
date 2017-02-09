@@ -56,18 +56,18 @@ var unsetOpportunityAdmin = function (opportunity, user) {
 	user.removeRoles ([memberRole(opportunity), adminRole(opportunity)]);
 };
 var unsetOpportunityRequest = function (opportunity, user) {
-	console.log ('remove role ', requestRole(opportunity));
+	// console.log ('remove role ', requestRole(opportunity));
 	user.removeRoles ([requestRole(opportunity)]);
 };
 var ensureAdmin = function (opportunity, user, res) {
 	if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
-		console.log ('NOT admin');
+		// console.log ('NOT admin');
 		res.status(422).send({
 			message: 'User Not Authorized'
 		});
 		return false;
 	} else {
-		console.log ('Is admin');
+		// console.log ('Is admin');
 		return true;
 	}
 };
@@ -148,7 +148,7 @@ exports.requests = function (opportunity, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-	console.log ('Creating a new opportunity');
+	// console.log ('Creating a new opportunity');
 	var opportunity = new Opportunity(req.body);
 	//
 	// set the code, this is used setting roles and other stuff
@@ -270,9 +270,9 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-	console.log ('Deleting');
+	// console.log ('Deleting');
 	if (ensureAdmin (req.opportunity, req.user, res)) {
-		console.log ('Deleting');
+		// console.log ('Deleting');
 
 		var opportunity = req.opportunity;
 		opportunity.remove(function (err) {
@@ -381,7 +381,7 @@ var unassignMember = function (opportunity, user) {
 };
 exports.confirmMember = function (req, res) {
 	var user = req.model;
-	console.log ('++++ confirm member ', user.username, user._id);
+	// console.log ('++++ confirm member ', user.username, user._id);
 	var assignedMember;
 	//
 	// assign the member
@@ -420,7 +420,7 @@ exports.confirmMember = function (req, res) {
 };
 exports.denyMember = function (req, res) {
 	var user = req.model;
-	console.log ('++++ deny member ', user.username, user._id);
+	// console.log ('++++ deny member ', user.username, user._id);
 	unassignMember (req.opportunity, user)
 	.then (function (result) {
 		res.json (result);
@@ -479,7 +479,7 @@ exports.forProgram = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-	console.log ('get a new opportunity set up and return it');
+	// console.log ('get a new opportunity set up and return it');
 	var p = new Opportunity ();
 	res.json(p);
 };

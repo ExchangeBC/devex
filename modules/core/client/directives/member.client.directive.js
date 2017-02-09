@@ -38,7 +38,7 @@
 					});
 				}
 				vm.delete = function (userid, username) {
-					console.log ('delete user ', username, userid);
+					// console.log ('delete user ', username, userid);
 					queryObject.userId = userid;
 					modelService.denyMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
@@ -88,14 +88,14 @@
 					});
 				}
 				vm.confirm = function (userid, username) {
-					console.log ('confirm user ', username, userid);
+					// console.log ('confirm user ', username, userid);
 					queryObject.userId = userid;
 					modelService.confirmMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
 					});
 				};
 				vm.deny = function (userid, username) {
-					console.log ('deny user ', username, userid);
+					// console.log ('deny user ', username, userid);
 					queryObject.userId = userid;
 					modelService.denyMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
