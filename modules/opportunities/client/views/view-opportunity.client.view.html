@@ -56,6 +56,10 @@
 					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
 					<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
 				</dd>
+				<!-- github link -->
+				<dt>Github Repo:</dt>
+				<dd>
+				<a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a>
 				<dt>Assigned to:</dt>
 				<dd>
 					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
