@@ -1,4 +1,4 @@
-<section class="static">
+<section class="detail">
 
 	<div class="container">
 		<div class="row">
@@ -22,20 +22,21 @@
 	</div>
 
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12 col-sm-2" style="text-align: center;">
-				<img class="img-rounded" style="height: 100px;" src="/{{vm.program.logo}}"/>				
-			</div>
-		</div>
-		<br><br>
-		
+		<br>
 		<div class="card card-flat">
 			<div class="card-header">
-				<h3 ng-bind="vm.program.title"></h3>
-			</div>
-			<div class="panel-body">
-				<p style="font-weight: 100" ng-bind="vm.program.short"></p>
-				<p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+				<div class="row">
+					<div class="col-xs-2 vcenter">
+						<img class="img-rounded" style="max-height: 40px;" src="/{{vm.program.logo}}"/>
+					</div>
+					<div class="col-xs-10 vcenter">
+						<h3 ng-bind="vm.program.title"></h3>	
+					</div>
+					<div class="panel-body">
+						<p style="font-weight: 100" ng-bind="vm.program.short"></p>
+						<p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+					</div>
+				</div>
 			</div>	
 				
 				<!--
@@ -45,7 +46,7 @@
 				-->
 		
 			<div class="panel-body">
-				<p class="long-desc pre-line" ng-bind-html="vm.display.description"></p>
+				<p ng-bind-html="vm.display.description"></p>
 			</div>
 
 			<div class="panel-footer" style="background-color: #f2f2f2">

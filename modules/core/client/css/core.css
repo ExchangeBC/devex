@@ -120,7 +120,7 @@ section.events {
 	width: 100%;
 	min-height: auto;
 	overflow-y: hidden;
-	background: url('/modules/core/client/img/photos/laughing.jpg') no-repeat center;
+	background: url('/modules/core/client/img/photos/laughing-faded.jpg') no-repeat center;
 	background-size: cover;
 	padding-top: 40px;
 	padding-bottom: 40px;
@@ -143,6 +143,51 @@ section.form-page h4 {
 section.form-page .well {
 	background-color: #ffffff;
 }
+section.detail {
+	padding-top: 10px;
+	padding-bottom: 40px;
+	color: #595959;
+}
+section.detail h1 {
+	padding-top: 0px;
+	padding-bottom: 20px;
+	font-size: 26px;
+	color: #0a4d8d;
+}
+
+section.detail h2 {
+	font-size: 23px;
+	color: #0a4d8d;
+}
+section.detail h3 {
+	font-size: 20px;
+	color: #0a4d8d;
+}
+section.detail h5 {
+	padding-top: 15px;
+	font-size: 14px;
+	text-transform: uppercase;
+	color: #0a4d8d;
+}
+
+section.detail p {
+	font-weight: 100;
+	font-size: 14px;
+	line-height: 1.6em;
+	padding-bottom: 0px;
+}
+section.detail li {
+	font-weight: 100;
+	font-size: 14px;
+	line-height: 1.6em;
+	padding-bottom: 0px;
+}
+section.detail dt {
+	font-size: 13px;
+	font-weight: 100;
+	color: #a6a6a6;
+}
+
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
@@ -214,4 +259,9 @@ section.static li {
 }
 .card-img-left {
 	padding-right: 20px;
+}
+.vcenter {
+	display: inline-block;
+    vertical-align: middle;
+    float: none;
 }

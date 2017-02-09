@@ -1,4 +1,4 @@
-<section class="static">
+<section class="detail">
 	
 	<div class="container">
 		<div class="row">
@@ -56,19 +56,30 @@
 					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
 					<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
 				</dd>
-				<dt>Assigned to:</dt>
+				<!-- github link -->
+				<dt>Github Repo:</dt>
+				<dd>
+				<a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a>
+				<!--<dt>Assigned to:</dt>
 				<dd>
 					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
-					<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>
+					<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
 				</dl>
 			</div>
 		</div>
 	</div>
 	
+	<div class="panel-body" style="background-color: #e9f6fc">
+		<h5>Terms</h5>
+		<p class="med-desc" style="font-weight: 100">
+		This is a fixed price opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
+		</p>	
+	</div>
+	
 	<div class="panel-body">
-		<h3 class="panel-title">Description</h3>
+		<h5>Description</h5>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
-		<h3 class="panel-title">Acceptance Criteria</h3>
+		<h5>Acceptance Criteria</h5>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.criteria"></p>
 	</div>
 
@@ -78,9 +89,9 @@
 -->
 
 	<div class="panel-body style">
-		<h3 class="panel-title">How to Apply</h3>
+		<h5>How to Apply</h5>
 		<p class="med-desc pre-line" style="font-weight: 100">Send us your proposal by <b>{{vm.deadline}}</b>.</p>
-		<h3 class="panel-title">Proposal Evaluation Criteria</h3>
+		<h5>Proposal Evaluation Criteria</h5>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.evaluation"></p>
 		<p class="med-desc pre-line" style="font-weight: 100">If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
 	</div>
@@ -91,12 +102,7 @@
 			<i class="fa fa-sign-in"></i> Apply Now
 		</button>-->
 
-	<div class="panel-body" style="background-color: #e9f6fc">
-		<h3 class="panel-title">Terms</h3>
-		<p class="med-desc" style="font-weight: 100">
-		This is a fixed price opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
-		</p>	
-	</div>
+	
 
 	<div class="panel-footer" style="background-color: #f2f2f2">
 		<em class="small text-muted">

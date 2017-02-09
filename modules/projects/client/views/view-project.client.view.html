@@ -1,4 +1,4 @@
-<section class="static">
+<section class="detail">
 
 	<div class="container">
 		<div class="row">
@@ -43,7 +43,7 @@
 				<!-- github link -->
 				<dt>Github Repo:</dt>
 				<dd>
-				<p ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a></p>
+				<a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Project on Github</a>
 				</dd>
 				</dl>
 			</div>
@@ -51,7 +51,7 @@
 	</div>
 
 	<div class="panel-body">
-		<p class="med-desc pre-line" ng-bind-html="vm.display.description"></p>
+		<p ng-bind-html="vm.display.description"></p>
 	</div>
 
 	<div class="panel-footer" style="background-color: #f2f2f2">
