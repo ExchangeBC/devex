@@ -77,7 +77,7 @@ exports.changeProfilePicture = function (req, res) {
 		existingImageUrl = user.profileImageURL;
 		uploadImage()
 			.then(updateUser)
-			.then(deleteOldImage)
+			// .then(deleteOldImage)
 			.then(login)
 			.then(function () {
 				res.json(user);
@@ -95,8 +95,10 @@ exports.changeProfilePicture = function (req, res) {
 		return new Promise(function (resolve, reject) {
 			upload(req, res, function (uploadError) {
 				if (uploadError) {
+					console.log ('error uploading');
 					reject(errorHandler.getErrorMessage(uploadError));
 				} else {
+					console.log ('uploaded');
 					resolve();
 				}
 			});
@@ -105,8 +107,10 @@ exports.changeProfilePicture = function (req, res) {
 
 	function updateUser () {
 		return new Promise(function (resolve, reject) {
-			user.profileImageURL = config.uploads.profileUpload.dest + req.file.filename;
+			user.profileImageURL = config.uploads.profileUpload.display + req.file.filename;
+			console.log ('new profile = ', user.profileImageURL);
 			user.save(function (err, theuser) {
+				console.log ('the user', theuser);
 				if (err) {
 					reject(err);
 				} else {
