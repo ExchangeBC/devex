@@ -28,12 +28,21 @@
 					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				</div>
 				<div class="form-group" ng-if="!vm.programLink" >
-					<label class="control-label" for="program">Program</label> <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i>
+					<label class="control-label" for="program">Program</label>
+					<!-- <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i> -->
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sprogram = !sprogram"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="sprogram">
+						Program offering this opportunity
+					</div>
 					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
 					</select>
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Name</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sname = !sname"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="sname">
+						Name
+					</div>
 					<input name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>
 					<div ng-messages="vm.form.projectForm.title.$error" role="alert">
 						<p class="help-block error-text" ng-message="required">Project name is required.</p>
@@ -41,10 +50,18 @@
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="short">Short Description</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="ssdesc = !ssdesc"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="ssdesc">
+						Short Description
+					</div>
 					<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the project" ng-required="true"></textarea>
 				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="description">Description</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sdesc = !sdesc"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="sdesc">
+						Description
+					</div>
 					<!-- <textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project" ng-required="true"></textarea> -->
 					<textarea
 						name="description"
@@ -57,11 +74,19 @@
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="github">Github</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sgit = !sgit"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="sgit">
+						Github
+					</div>
 					<input ng-if="vm.isAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo">
 					<input ng-if="!vm.isAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo" readonly>
 				</div>
 				<div class="form-group">
 					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="stags = !stags"></i>
+					<div class="input-help alert alert-info" data-field="title" ng-show="stags">
+						Tags
+					</div>
 					<input type="text" name="taglist" ng-model="vm.project.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
 			</fieldset>
