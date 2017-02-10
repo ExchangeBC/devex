@@ -71,6 +71,16 @@ var ensureAdmin = function (opportunity, user, res) {
 		return true;
 	}
 };
+var forProgram = function (id) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.find ({program:id}).exec ().then (resolve, reject);
+	});
+};
+var forProject = function (id) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.find ({project:id}).exec ().then (resolve, reject);
+	});
+};
 // -------------------------------------------------------------------------
 //
 // this takes a opportunity model, serializes it, and decorates it with what
@@ -244,6 +254,7 @@ exports.update = function (req, res) {
 		// audit fields, but they get updated in the following step
 		//
 		var opportunity = _.assign (req.opportunity, req.body);
+		opportunity.wasPublished = opportunity.isPublished;
 		//
 		// set the audit fields so we know who did what when
 		//
@@ -298,8 +309,8 @@ exports.list = function (req, res) {
 	Opportunity.find(search).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('project', 'name _id')
-	.populate('program', 'title _id logo')
+	.populate('project', 'name _id isPublished')
+	.populate('program', 'title _id logo isPublished')
 	.exec(function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
@@ -500,8 +511,8 @@ exports.opportunityByID = function (req, res, next, id) {
 	Opportunity.findById(id)
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('project', 'name _id')
-	.populate('program', 'title _id logo')
+	.populate('project', 'name _id isPublished')
+	.populate('program', 'title _id logo isPublished')
 	.exec(function (err, opportunity) {
 		if (err) {
 			return next(err);
@@ -514,4 +525,28 @@ exports.opportunityByID = function (req, res, next, id) {
 		next();
 	});
 };
-
+// -------------------------------------------------------------------------
+//
+// publish or unpublish whole sets of opportunities by either program or
+// project
+//
+// -------------------------------------------------------------------------
+exports.rePublishOpportunities = function (programId, projectId) {
+	return (projectId ? forProject (projectId) : forProgram (programId))
+	.then (function (opportunities) {
+		return Promise.all (opportunities.map (function (opportunity) {
+			opportunity.isPublished = opportunity.wasPublished;
+			return opportunity.save ();
+		}));
+	});
+};
+exports.unPublishOpportunities = function (programId, projectId) {
+	return (projectId ? forProject (projectId) : forProgram (programId))
+	.then (function (opportunities) {
+		return Promise.all (opportunities.map (function (opportunity) {
+			opportunity.wasPublished = opportunity.isPublished;
+			opportunity.isPublished = false;
+			return opportunity.save ();
+		}));
+	});
+};

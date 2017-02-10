@@ -24,6 +24,7 @@ var path = require('path'),
 	Project = mongoose.model('Project'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
 	_ = require('lodash');
 
 // -------------------------------------------------------------------------
@@ -70,6 +71,11 @@ var ensureAdmin = function (project, user, res) {
 		// console.log ('Is admin');
 		return true;
 	}
+};
+var forProgram = function (id) {
+	return new Promise (function (resolve, reject) {
+		Project.find ({program:id}).exec ().then (resolve, reject);
+	});
 };
 // -------------------------------------------------------------------------
 //
@@ -255,11 +261,21 @@ exports.read = function (req, res) {
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
 	if (ensureAdmin (req.project, req.user, res)) {
+		var wasPublished = req.project.isPublished;
+		var isPublished = req.body.isPublished;
+		if (!wasPublished && isPublished) {
+			Opportunities.rePublishOpportunities (req.project.program._id, req.project._id);
+		}
+		else if (wasPublished && !isPublished) {
+			Opportunities.unPublishOpportunities (req.project.program._id, req.project._id);
+		}
 		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step
 		//
 		var project = _.assign (req.project, req.body);
+		project.wasPublished = project.isPublished;
+
 		//
 		// set the audit fields so we know who did what when
 		//
@@ -314,7 +330,7 @@ exports.list = function (req, res) {
 	Project.find(search).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('program', 'title logo')
+	.populate('program', 'title logo isPublished')
 	.exec(function (err, projects) {
 		if (err) {
 			return res.status(422).send({
@@ -458,7 +474,7 @@ exports.projectByID = function (req, res, next, id) {
 	Project.findById(id)
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('program', 'title logo')
+	.populate('program', 'title logo isPublished')
 	.exec(function (err, project) {
 		if (err) {
 			return next(err);
@@ -469,5 +485,30 @@ exports.projectByID = function (req, res, next, id) {
 		}
 		req.project = project;
 		next();
+	});
+};
+
+// -------------------------------------------------------------------------
+//
+// publish or unpublish whole sets of projects by program id
+//
+// -------------------------------------------------------------------------
+exports.rePublishProjects = function (programId) {
+	return forProgram (programId)
+	.then (function (projects) {
+		return Promise.all (projects.map (function (project) {
+			project.isPublished = project.wasPublished;
+			return project.save ();
+		}));
+	});
+};
+exports.unPublishProjects = function (programId) {
+	return forProgram (programId)
+	.then (function (projects) {
+		return Promise.all (projects.map (function (project) {
+			project.wasPublished = project.isPublished;
+			project.isPublished = false;
+			return project.save ();
+		}));
 	});
 };

@@ -28,6 +28,8 @@ var path = require('path'),
 	Program = mongoose.model('Program'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
+	Projects = require(path.resolve('./modules/projects/server/controllers/projects.server.controller')),
 	multer = require('multer'),
 	_ = require('lodash')
 	;
@@ -211,6 +213,16 @@ exports.read = function (req, res) {
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
 	if (ensureAdmin (req.program, req.user, res)) {
+		var wasPublished = req.program.isPublished;
+		var isPublished = req.body.isPublished;
+		if (!wasPublished && isPublished) {
+			Projects.rePublishProjects (req.program._id);
+			Opportunities.rePublishOpportunities (req.program._id, null);
+		}
+		else if (wasPublished && !isPublished) {
+			Projects.unPublishProjects (req.program._id);
+			Opportunities.unPublishOpportunities (req.program._id, null);
+		}
 		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step

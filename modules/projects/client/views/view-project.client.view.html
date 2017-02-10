@@ -10,10 +10,10 @@
 					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Request it here.">
 						<i class="glyphicon glyphicon-user"></i> Request Membership
 					</button>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
+					<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
 						<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 					</a>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
+					<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
 						<i class="glyphicon glyphicon-ok-circle"></i> Publish
 					</a>
 				</div>
@@ -90,10 +90,10 @@
 			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Request it here.">
 				<i class="glyphicon glyphicon-user"></i> Request Membership
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
+			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can un-publish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
+			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to make this project public?">
 				<i class="glyphicon glyphicon-ok-circle"></i> Publish
 			</a>
 		</div>

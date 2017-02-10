@@ -34,7 +34,8 @@ var ProjectSchema = new Schema({
     default: '',
     trim: true
   },
-  isPublished : {type: Boolean, default: false},
+  isPublished  : {type: Boolean, default: false},
+  wasPublished : {type: Boolean, default: false},
   created: {
     type: Date,
     default: Date.now
