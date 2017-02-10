@@ -32,7 +32,7 @@
 					<!-- <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i> -->
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sprogram = !sprogram"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="sprogram">
-						Program offering this opportunity
+						Select the program that is the owner/sponsor of this project.
 					</div>
 					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
 					</select>
@@ -41,7 +41,7 @@
 					<label class="control-label" for="title">Name</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sname = !sname"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="sname">
-						Name
+						Enter a name for your project. It's best if the name matches the name of your GitHub repo.
 					</div>
 					<input name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>
 					<div ng-messages="vm.form.projectForm.title.$error" role="alert">
@@ -52,7 +52,7 @@
 					<label class="control-label" for="short">Short Description</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="ssdesc = !ssdesc"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="ssdesc">
-						Short Description
+						This is a teaser to interest developers in contributing to your project. Summarize the goals, end-user benefits and value for British Columbians!
 					</div>
 					<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the project" ng-required="true"></textarea>
 				</div>
@@ -60,7 +60,7 @@
 					<label class="control-label" for="description">Description</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sdesc = !sdesc"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="sdesc">
-						Description
+						Here’s where you can go into more detail...
 					</div>
 					<!-- <textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project" ng-required="true"></textarea> -->
 					<textarea
@@ -76,7 +76,7 @@
 					<label class="control-label" for="github">Github</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sgit = !sgit"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="sgit">
-						Github
+						Paste the URL of the GitHub repo for this project. 
 					</div>
 					<input ng-if="vm.isAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo">
 					<input ng-if="!vm.isAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo" readonly>
@@ -85,7 +85,7 @@
 					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="stags = !stags"></i>
 					<div class="input-help alert alert-info" data-field="title" ng-show="stags">
-						Tags
+						Create tags as quick cues for interested developers. For example, the code language, or other keywords that indicate what’s involved in the work.
 					</div>
 					<input type="text" name="taglist" ng-model="vm.project.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
