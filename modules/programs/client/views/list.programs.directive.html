@@ -12,8 +12,8 @@
 
 <div class="card card-flat" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
 
-  <div class="card-header" ng-if="program.userIs.admin" style="text-align: right">
-    <span ng-if="program.userIs.admin" class="label label-primary" uib-tooltip="You are an admin for this program">Admin</span>
+  <div class="card-header" ng-if="vm.isAdmin || program.userIs.admin" style="text-align: right">
+    <span ng-if="vm.isAdmin || program.userIs.admin" class="label label-primary" uib-tooltip="You are an admin for this program">Admin</span>
     &nbsp;
     <span ng-if="program.userIs.member && !program.userIs.admin" class="label label-primary">Member</span>
     &nbsp;
@@ -50,6 +50,6 @@
       </div>
     </div>-->
   </div>
-  
+
 </div>
-      
+

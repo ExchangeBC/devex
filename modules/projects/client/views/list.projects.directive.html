@@ -15,8 +15,8 @@
 
 <div class="card card-flat" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
 
-  <div class="card-header" ng-if="project.userIs.admin" style="text-align: right">
-    <span ng-if="project.userIs.admin"   class="label label-primary">Admin</span>
+  <div class="card-header" ng-if="vm.isAdmin || project.userIs.admin" style="text-align: right">
+    <span ng-if="vm.isAdmin || project.userIs.admin"   class="label label-primary">Admin</span>
     &nbsp;
     <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-primary">Member</span>
     &nbsp;
