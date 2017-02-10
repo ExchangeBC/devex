@@ -451,7 +451,7 @@
 			"name": "DOCUMENT_MOUNT_PATH",
 			"displayName": "Document Mount Path",
 			"description": "Path in container where document volume should be mounted.",
-			"value": "/uploads",
+			"value": "/opt/app-root/src/public/uploads",
 			"required": true
 		},
 		{
