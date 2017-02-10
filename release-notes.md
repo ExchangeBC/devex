@@ -1,17 +1,23 @@
-# February XX, 2017
+# February 10, 2017
 
 ### Added
-* **Sign in**, which enables new user activity:
-  * **Government users** can now: 
-    * Create profile pages for their **programs** and **projects** (upon publishing a new project that doesn't have an existing GitHub repo, publish will trigger the build of a new repo) 
-    * Create and publish **opportunities** (upon publish, details will be populated into a new issue in GitHub) 
-    * View proposals that come in on opportunities 
-    * Assign developers to work on opportunities
-  * **Non-government users** can:
-    * Sign up for notifications when new opportunities are published
-    * Apply on opportunities, including accepting the _Code With Us_ legal terms with a checkbox, uploading a document
-* Detail pages for **projects** and **opportunities**: Users can now read the details about open projects and opportunities on the site, as well as in the repo on GitHub. 
+* **Sign Up / Sign In**: By signing up, users will receive email notifications about new opportunities when they are published. 
+* **Sign Up / Sign In**: Users can upload their own profile picture.
+* **Sign Up / Sign In**: Users can request to be listed as members of programs and projects.
+* **Sign Up / Sign In**: Public sector users can create program, project, and opportunity pages.
+* **Sign Up / Sign In**: Public sector users who create program and project pages can confirm or deny requests from other users to be listed as members. 
+* **About page**: Gives some context around what the BCDevExchange is, and its aspirations.
+* **Code With Us pages**: Gives more detailed explanations for developers and public sector product managers about how the procurements model works.
+* **Opportunities list**: Shows deadline to closing time on opportunities.
+* **Opportunities list**: Provides a short description of the opportunity
+* **Opportunities list**: Users can now read full details about paid opportunities on our site, then click through to the GitHub repo.
+* **Government Partners detail pages**: Individual projects now listed under a single program. This replaces the limitation of only linking to a single GitHub Repo per program.
 
 ### Changed
-* **Opportunities list:** Changed from a table format to a card format. Default sort with most recent open opportunities at top of list.
-* **Program detail pages:** Updated format.
+* **Homepage**: new design to call to Sign Up, search for opportunities, explore featured open projects, and participate in upcoming events.
+* **Nav**: emphasizes programs, projects and opportunities. 
+* **Nav**: APIs list moved to footer
+* **Code With Us/Opportunities page**: opportunities now displayed as a list of individual cards instead of a wide table (more accessible when viewing on mobile).
+* **Government Partners pages**: ‘Partners’ changed to ‘Programs.’ 
+* **Government Partners pages**: Detail pages are plainer with a rich text description replacing the separate APIs & Resources, Community, and News headings.
+* **Blog**: Removed for now.
