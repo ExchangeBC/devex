@@ -35,6 +35,7 @@
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || project.userIs.admin;
+		// console.log ('vm = ', vm);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership

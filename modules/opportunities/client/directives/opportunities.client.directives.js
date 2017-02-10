@@ -38,6 +38,7 @@
 					vm.opportunities = OpportunitiesService.forProject ({
 						projectId: vm.projectId
 					});
+					vm.columnCount   = 1;
 				} else if (vm.context === 'program') {
 					vm.programId    = vm.program._id;
 					vm.programTitle = vm.program.title;
