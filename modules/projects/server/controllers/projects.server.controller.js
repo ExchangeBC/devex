@@ -77,6 +77,16 @@ var forProgram = function (id) {
 		Project.find ({program:id}).exec ().then (resolve, reject);
 	});
 };
+var searchTerm = function (req, opts) {
+	opts = opts || {};
+	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	if (!me.isAdmin) {
+		opts['$or'] = [{isPublished:true}, {code: {$in: me.projects.admin}}];
+	}
+	// console.log ('me = ', me);
+	// console.log ('opts = ', opts);
+	return opts;
+};
 // -------------------------------------------------------------------------
 //
 // this takes a project model, serializes it, and decorates it with what
@@ -125,9 +135,9 @@ exports.my = function (req, res) {
 	});
 };
 exports.myadmin = function (req, res) {
-	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
-	Project.find (search)
+	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	// var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
+	Project.find (searchTerm (req))
 	.populate ('program', 'code title short logo')
 	.select ('code name short program')
 	.exec (function (err, projects) {
@@ -325,9 +335,9 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
-	Project.find(search).sort('name')
+	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
+	Project.find(searchTerm (req)).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('program', 'title logo isPublished')
@@ -432,7 +442,7 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProgram = function (req, res) {
-	Project.find({program:req.program._id}).sort('name')
+	Project.find(searchTerm (req, {program:req.program._id})).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.exec(function (err, projects) {

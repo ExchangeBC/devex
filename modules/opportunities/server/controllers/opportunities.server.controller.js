@@ -81,6 +81,16 @@ var forProject = function (id) {
 		Opportunity.find ({project:id}).exec ().then (resolve, reject);
 	});
 };
+var searchTerm = function (req, opts) {
+	opts = opts || {};
+	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	if (!me.isAdmin) {
+		opts['$or'] = [{isPublished:true}, {code: {$in: me.opportunities.admin}}];
+	}
+	// console.log ('me = ', me);
+	// console.log ('opts = ', opts);
+	return opts;
+};
 // -------------------------------------------------------------------------
 //
 // this takes a opportunity model, serializes it, and decorates it with what
@@ -114,9 +124,9 @@ var decorateList = function (opportunityModels, roles) {
 //
 // -------------------------------------------------------------------------
 exports.my = function (req, res) {
-	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	var search = me.isAdmin ? {} : { code: { $in: me.opportunities.member } };
-	Opportunity.find (search)
+	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	// var search = me.isAdmin ? {} : { code: { $in: me.opportunities.member } };
+	Opportunity.find (searchTerm (req))
 	.select ('code name short')
 	.exec (function (err, opportunities) {
 		if (err) {
@@ -304,9 +314,10 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
-	Opportunity.find(search).sort('name')
+	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
+	// console.log ('me = ', me);
+	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
+	Opportunity.find (searchTerm (req)).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'name _id isPublished')
@@ -449,7 +460,7 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProject = function (req, res) {
-	Opportunity.find({project:req.project._id}).sort('name')
+	Opportunity.find(searchTerm (req, {project:req.project._id})).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.exec(function (err, opportunities) {
@@ -469,7 +480,7 @@ exports.forProject = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProgram = function (req, res) {
-	Opportunity.find({program:req.program._id}).sort('name')
+	Opportunity.find(searchTerm (req, {program:req.program._id})).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.exec(function (err, opportunities) {
