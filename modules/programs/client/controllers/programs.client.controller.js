@@ -138,7 +138,12 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
 				return false;
 			}
-			vm.program.tags = vm.program.taglist.split(/ *, */);
+			// vm.program.tags = vm.program.taglist.split(/ *, */);
+			if (vm.program.taglist !== '') {
+				vm.program.tags = vm.program.taglist.split(/ *, */);
+			} else {
+				vm.program.tags = [];
+			}
 			//
 			// Create a new program, or update the current instance
 			//

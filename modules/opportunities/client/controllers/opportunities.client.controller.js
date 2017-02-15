@@ -249,8 +249,18 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.opportunityForm');
 				return false;
 			}
-			vm.opportunity.tags   = vm.opportunity.taglist.split(/ *, */);
-			vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
+			// vm.opportunity.tags   = vm.opportunity.taglist.split(/ *, */);
+			// vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
+			if (vm.opportunity.taglist !== '') {
+				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
+			} else {
+				vm.opportunity.tags = [];
+			}
+			if (vm.opportunity.skilllist !== '') {
+				vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
+			} else {
+				vm.opportunity.skills = [];
+			}
 			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)

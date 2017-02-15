@@ -172,7 +172,11 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
 				return false;
 			}
-			vm.project.tags = vm.project.taglist.split(/ *, */);
+			if (vm.project.taglist !== '') {
+				vm.project.tags = vm.project.taglist.split(/ *, */);
+			} else {
+				vm.project.tags = [];
+			}
 			//
 			// if we were adding, then set the selected programId, unless it was adding inside
 			// a program context already, then just use the one that is already set
