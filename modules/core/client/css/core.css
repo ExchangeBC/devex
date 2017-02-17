@@ -163,23 +163,32 @@ section.detail h3 {
 	font-size: 20px;
 	color: #0a4d8d;
 }
+section.detail h4 {
+	padding-top: 15px;
+}
 section.detail h5 {
 	padding-top: 15px;
-	font-size: 14px;
+	font-size: 19px;
 	text-transform: uppercase;
 	color: #0a4d8d;
 }
-
 section.detail p {
 	font-weight: 100;
 	font-size: 14px;
 	line-height: 1.6em;
 	padding-bottom: 0px;
+	padding-top: 0px;
 }
 section.detail li {
 	font-weight: 100;
 	font-size: 14px;
 	line-height: 1.6em;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+section.detail ol {
+	line-height: 1.6em;
+	padding-top: 0px;
 	padding-bottom: 0px;
 }
 section.detail dt {

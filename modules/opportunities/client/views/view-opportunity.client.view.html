@@ -69,18 +69,20 @@
 		</div>
 	</div>
 
-	<div class="panel-body" style="background-color: #e9f6fc">
-		<h5>Terms</h5>
-		<p class="med-desc" style="font-weight: 100">
-		This is a fixed price opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
+	<div class="panel-body" style="background-color: #e6e6e6; text-align: center;">
+		<p style="font-size: 16px; font-weight: 500; padding-top: 10px;">
+		This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
 		</p>
 	</div>
 
 	<div class="panel-body">
 		<h5>Description</h5>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
+	</div>
+	
+	<div class="panel-body" style="background-color: #f2f2f2">
 		<h5>Acceptance Criteria</h5>
-		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.criteria"></p>
+		<p class="med-desc pre-line" ng-bind-html="vm.display.criteria"></p>
 	</div>
 
 <!--
@@ -95,6 +97,15 @@
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.evaluation"></p>
 		<p class="med-desc pre-line" style="font-weight: 100">If we are satisfied with the proposals we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
 	</div>
+
+	<div class="panel-body" style="background-color: #f2f2f2; text-align: center;">
+		<h5>Questions?</h5>
+		<p style="font-size: 16px; font-weight: 500">
+		<a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
+		</p>
+	</div>
+
+
 		<!--<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
 			<i class="fa fa-sign-in"></i> Sign up or log in to apply
 		</button>
