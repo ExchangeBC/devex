@@ -111,7 +111,7 @@ exports.changeProfilePicture = function (req, res) {
 	function updateUser () {
 		return new Promise(function (resolve, reject) {
 			// console.log ('req.file.filename', req.file);
-			user.profileImageURL = config.uploads.profileUpload.display + req.file.filename;
+			user.profileImageURL = '/'+config.uploads.profileUpload.display + req.file.filename;
 			// console.log ('new profile = ', user.profileImageURL);
 			user.save(function (err, theuser) {
 				// console.log ('the user', theuser);
