@@ -8,7 +8,7 @@
 			<div class="row">
 				<div class="col-xs-8">
 					<div class="card-img">
-						<img class="card-img-left" src="/{{member.profileImageURL}}"/>
+						<img class="card-img-left" src="{{((member.profileImageURL.substr(0,1) == '/' || member.profileImageURL.substr(0,4) == 'http') ? '' : '/') + member.profileImageURL}}"/>
 					</div>
 					<div>
 						<h4 class="card-title">{{member.firstName}} {{member.lastName}}</h4>
@@ -16,7 +16,7 @@
 						<p class="card-subtitle"><small><em class="text-muted">Member Since: {{member.created | date:'mediumDate'}}</em></small></p>
 					</div>
 				</div>
-				<div class="col-xs-4" ng-if="vm.model.userIs.admin">
+				<div class="col-xs-4" ng-if="vm.isAdmin || vm.model.userIs.admin">
 					<a href="javascript:void(0);" ng-click="vm.confirm(member._id, member.username)" title="Confirm">
 						<i class="glyphicon glyphicon-ok"></i> Confirm
 					</a><br/>

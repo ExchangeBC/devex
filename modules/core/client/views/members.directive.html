@@ -14,13 +14,13 @@
 </div>
 <div class="col-md-6" ng-repeat="column in vm.members | columnRanges:2">
   <div class="card card-block" ng-repeat="member in vm.members | slice:column.start:column.end">
-    <div class="card-tools" ng-if="vm.model.userIs.admin">
+    <div class="card-tools" ng-if="vm.isAdmin || vm.model.userIs.admin">
       <a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username)" title="Remove" uib-tooltip="Remove">
         <i class="glyphicon glyphicon-remove"></i>
       </a>
     </div>
     <div class="card-img">
-      <img class="card-img-left" src="/{{member.profileImageURL}}"/>
+      <img class="card-img-left" src="{{((member.profileImageURL.substr(0,1) == '/' || member.profileImageURL.substr(0,4) == 'http') ? '' : '/') + member.profileImageURL}}"/>
     </div>
     <div>
       <h4 class="card-title">{{member.firstName}} {{member.lastName}}</h4>
