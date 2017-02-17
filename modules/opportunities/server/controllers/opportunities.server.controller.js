@@ -145,7 +145,10 @@ exports.my = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.members = function (opportunity, cb) {
-	mongoose.model ('User').find ({roles: memberRole(opportunity)}).exec (cb);
+	mongoose.model ('User')
+	.find ({roles: memberRole(opportunity)})
+	.select ('username displayName updated created roles government profileImageURL email lastName firstName')
+	.exec (cb);
 };
 
 // -------------------------------------------------------------------------
@@ -155,7 +158,10 @@ exports.members = function (opportunity, cb) {
 //
 // -------------------------------------------------------------------------
 exports.requests = function (opportunity, cb) {
-	mongoose.model ('User').find ({roles: requestRole(opportunity)}).exec (cb);
+	mongoose.model ('User')
+	.find ({roles: requestRole(opportunity)})
+	.select ('username displayName updated created roles government profileImageURL email lastName firstName')
+	.exec (cb);
 };
 
 /**
