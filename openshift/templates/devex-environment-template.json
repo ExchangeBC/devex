@@ -476,6 +476,12 @@
 			"required": true
 		},
 		{
+			"name": "DOMAIN",
+			"displayName": "Fully qualified domain name (route)",
+			"description": "Fully qualified domain name (route)",
+			"value": "bcdevexchange.org"
+		},
+		{
 			"name": "APP_IMAGE_NAMESPACE",
 			"displayName": "Namespace containing application images.",
 			"description": "Namespace containing application images.",
