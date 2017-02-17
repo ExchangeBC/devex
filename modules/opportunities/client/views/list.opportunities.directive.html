@@ -62,7 +62,7 @@
     </div>
 
     <div class="card-header">
-      <h5 ng-if="!vm.project && opportunity.project"><a ui-sref="projects.view({projectId: opportunity.project._id})" ng-click="$event.stopPropagation()" title="Project"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></h5>
+      <h5 ng-if="opportunity.project"><a ui-sref="projects.view({projectId: opportunity.project._id})" ng-click="$event.stopPropagation()" title="Project"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></h5>
     </div>
 
   </div>
