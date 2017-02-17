@@ -19,13 +19,17 @@
 			templateUrl  : '/modules/core/client/views/members.directive.html',
 			controller   : function ($scope, $rootScope, Authentication) {
 				var vm = this;
+				var isUser                 = Authentication.user;
+				vm.isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
 				vm.model = $scope.model;
 				vm.title = $scope.title || 'Members';
 				var modelService = $scope.service;
 				var queryObject = {};
-				queryObject[$scope.idstring] = $scope.model._id;
 				var reset = function () {
+					queryObject = {};
+					queryObject[$scope.idstring] = $scope.model._id;
 					modelService.getMembers (queryObject).$promise.then (function (result) {
+					// console.log ('resetting member list', result);
 						vm.members = result;
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
@@ -45,6 +49,7 @@
 					});
 				};
 				$rootScope.$on('updateMembers', function (event, message) {
+					// console.log ('received broadcast');
 					reset ();
 				});
 				reset ();
@@ -69,13 +74,16 @@
 			templateUrl  : '/modules/core/client/views/member.requests.directive.html',
 			controller   : function ($scope, $rootScope, Authentication) {
 				var vm = this;
-				vm.model = $scope.model;
+				var isUser                 = Authentication.user;
+				vm.isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
 				vm.title = $scope.title || 'Member Requests';
 				var modelService = $scope.service;
 				var queryObject = {};
-				queryObject[$scope.idstring] = $scope.model._id;
 				var reset = function () {
+					queryObject = {};
+					queryObject[$scope.idstring] = $scope.model._id;
 					modelService.getRequests (queryObject).$promise.then (function (result) {
+						// console.log ('resetting member request list', result);
 						vm.members = result;
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
@@ -102,6 +110,7 @@
 					});
 				};
 				$rootScope.$on('updateMembers', function (event, message) {
+					// console.log ('received broadcast');
 					reset ();
 				});
 				reset ();
