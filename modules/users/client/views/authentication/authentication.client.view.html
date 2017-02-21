@@ -5,7 +5,7 @@
   <section class="row">
 
     <div class="col-xs-12 col-md-6" style="text-align: center; background-color: white; padding-bottom: 30px; margin-bottom: 30px;">
-      <h3>Sign in with your GitHub account</h3>
+      <h3><a ng-click="vm.callOauthProvider('/api/auth/github')">Sign in with your GitHub account</h3>
       <!--<div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/github')" ng-src="/modules/users/client/img/buttons/github.png"></a></div>
       <br><br>-->
       <h2><a ng-click="vm.callOauthProvider('/api/auth/github')"><i class="fa fa-github fa-3x"></i></a></h2>
