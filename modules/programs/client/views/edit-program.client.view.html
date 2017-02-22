@@ -99,7 +99,7 @@
 	  <a class="btn btn-primary" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program._id})" title="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="programs.view({programId:vm.program.code})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
 	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="programs.list" title="Cancel">

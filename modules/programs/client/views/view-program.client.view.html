@@ -4,7 +4,7 @@
 		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program._id})" uib-tooltip="You can edit the details about this program.">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="You can edit the details about this program.">
 						<i class="glyphicon glyphicon-pencil"></i> Edit
 					</button>
 					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Request membership here.">
@@ -30,21 +30,21 @@
 						<img class="img-rounded" style="max-height: 40px;" src="/{{vm.program.logo}}"/>
 					</div>
 					<div class="col-xs-10 vcenter">
-						<h3 ng-bind="vm.program.title"></h3>	
+						<h3 ng-bind="vm.program.title"></h3>
 					</div>
 					<div class="panel-body">
 						<p style="font-weight: 100" ng-bind="vm.program.short"></p>
 						<p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
 					</div>
 				</div>
-			</div>	
-				
+			</div>
+
 				<!--
 				<p class="label-list">
 					<span class="label label-info" ng-repeat="code in vm.program.tags">{{code}}</span>
 				</p>
 				-->
-		
+
 			<div class="panel-body">
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
@@ -69,7 +69,7 @@
 		</div>
 
 	</div>
-		
+
 	<div class="container">
 		<core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Program Members"></core-member-list>
 		<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.canEdit"></core-member-requests>
@@ -81,7 +81,7 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program._id})" uib-tooltip="You can edit the details about this program.">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="You can edit the details about this program.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
 			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Request membership here.">
