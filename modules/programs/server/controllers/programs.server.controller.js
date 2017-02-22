@@ -395,7 +395,7 @@ exports.new = function (req, res) {
 // -------------------------------------------------------------------------
 exports.programByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'pro' ) {
-		Program.findById({code:id})
+		Program.findOne({code:id})
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
 		.exec(function (err, program) {

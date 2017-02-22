@@ -519,7 +519,7 @@ exports.new = function (req, res) {
 // -------------------------------------------------------------------------
 exports.opportunityByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'opp' ) {
-		Opportunity.findById({code:id})
+		Opportunity.findOne({code:id})
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'name _id isPublished')
