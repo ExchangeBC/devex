@@ -98,7 +98,7 @@
 	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project._id})" title="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="projects.view({projectId:vm.project.code})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
 	  <a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="projects.list" title="Cancel">

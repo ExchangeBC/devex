@@ -198,7 +198,7 @@
 					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'
 				});
 				if (editing) {
-					$state.go('projects.view', {projectId:project._id});
+					$state.go('projects.view', {projectId:project.code});
 				} else {
 					$state.go('projects.list');
 				}

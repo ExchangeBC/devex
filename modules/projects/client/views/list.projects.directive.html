@@ -24,7 +24,7 @@
     &nbsp;
     <span ng-if="!project.isPublished"   class="label label-danger">Not Published</span>
     &nbsp;
-    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project._id, programId: project.program._id, context:vm.context})" ng-click="$event.stopPropagation()">
+    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project.code, programId: project.program.code, context:vm.context})" ng-click="$event.stopPropagation()">
     <i class="glyphicon glyphicon-pencil"></i>
     </a>
     &nbsp;
@@ -44,7 +44,7 @@
   <div class="card-block">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-        <h4 class="card-title"><a ui-sref="projects.view({ projectId: project._id, programId: project.program._id })" ng-bind="project.name"></a>
+        <h4 class="card-title"><a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
         </h4>
         <p style="font-weight: 100; font-size: 16px;" ng-bind="project.short"></p>
       </div>
@@ -58,7 +58,7 @@
 
   <div class="card-header">
     <h5 ng-if="!vm.program && project.program">
-        <a ui-sref="programs.view({programId:project.program._id})"><i class="fa fa-university"></i> {{project.program.title}}</a>
+        <a ui-sref="programs.view({programId:project.program.code})"><i class="fa fa-university"></i> {{project.program.title}}</a>
     </h5>
   </div>
 

@@ -162,7 +162,7 @@
 				((vm.fileSelected) ? vm.upload (vm.croppedDataUrl, vm.picFile, vm.program._id) : Promise.resolve ())
 				.then (function () {
 					if (editing) {
-						$state.go('programs.view', {programId:program._id});
+						$state.go('programs.view', {programId:program.code});
 					} else {
 						$state.go('programs.list');
 					}

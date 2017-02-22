@@ -326,8 +326,8 @@ exports.list = function (req, res) {
 	Opportunity.find (searchTerm (req)).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('project', 'name _id isPublished')
-	.populate('program', 'title _id logo isPublished')
+	.populate('project', 'code name _id isPublished')
+	.populate('program', 'code title _id logo isPublished')
 	.exec(function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
@@ -522,8 +522,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		Opportunity.findOne({code:id})
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
-		.populate('project', 'name _id isPublished')
-		.populate('program', 'title _id logo isPublished')
+		.populate('project', 'code name _id isPublished')
+		.populate('program', 'code title _id logo isPublished')
 		.exec(function (err, opportunity) {
 			if (err) {
 				return next(err);
@@ -546,8 +546,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		Opportunity.findById(id)
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
-		.populate('project', 'name _id isPublished')
-		.populate('program', 'title _id logo isPublished')
+		.populate('project', 'code name _id isPublished')
+		.populate('program', 'code title _id logo isPublished')
 		.exec(function (err, opportunity) {
 			if (err) {
 				return next(err);

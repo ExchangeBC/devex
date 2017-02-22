@@ -340,7 +340,7 @@ exports.list = function (req, res) {
 	Project.find(searchTerm (req)).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('program', 'title logo isPublished')
+	.populate('program', 'code title logo isPublished')
 	.exec(function (err, projects) {
 		if (err) {
 			return res.status(422).send({
@@ -478,7 +478,7 @@ exports.projectByID = function (req, res, next, id) {
 		Project.findOne({code:id})
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
-		.populate('program', 'title logo isPublished')
+		.populate('program', 'code title logo isPublished')
 		.exec(function (err, project) {
 			if (err) {
 				return next(err);
@@ -501,7 +501,7 @@ exports.projectByID = function (req, res, next, id) {
 		Project.findById(id)
 		.populate('createdBy', 'displayName')
 		.populate('updatedBy', 'displayName')
-		.populate('program', 'title logo isPublished')
+		.populate('program', 'code title logo isPublished')
 		.exec(function (err, project) {
 			if (err) {
 				return next(err);

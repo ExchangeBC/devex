@@ -4,7 +4,7 @@
 		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div class="btn-group">
-				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
+				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 				</button>
 				<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && m.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">
@@ -48,18 +48,18 @@
 				</dd>
 				<dt>Program:</dt>
 				<dd>
-					<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program._id})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+					<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
 					<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
 				</dd>
 				<dt>Project:</dt>
 				<dd>
-					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project._id})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
 					<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
 				</dd>
 				<!-- github link -->
 				<dt>Code:</dt>
 				<dd>
-				<a ng-if="vm.opportunity.github"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> View Issue on Github</a>
+				<a ng-if="vm.opportunity.github && vm.opportunity.github.length() > 0"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> View Issue on Github</a>
 				<!--<dt>Assigned to:</dt>
 				<dd>
 					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
@@ -138,7 +138,7 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons foot text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity._id})" uib-tooltip="You can edit the details of this opportunity.">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="You can edit the details of this opportunity.">
 				<i class="glyphicon glyphicon-pencil"></i> Edit
 			</button>
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can un-publish it here.">

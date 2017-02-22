@@ -60,7 +60,7 @@
 					id="project"
 					class="form-control"
 					ng-options="obj as obj.name group by obj.program.title for obj in vm.projects"
-				><option value="">Select Project</option>					
+				><option value="">Select Project</option>
 				</select>
 			</div>
 
@@ -101,7 +101,7 @@
 					ng-model="vm.opportunity.description">
 				</textarea>
 			</div>
-			
+
 			<br><br>
 			<div class="form-group" ng-if="vm.isAdmin">
 				<label class="control-label" for="github">Github Repository</label>
@@ -153,7 +153,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<br><br>
 			<div class="form-group">
 				<label class="control-label" for="description">Proposal Evaluation Criteria</label>
@@ -182,7 +182,7 @@
 			</div>
 
 			<div class="row">
-				
+
 				<div class="col-sm-4">
 					<div class="form-group" show-errors>
 						<label class="control-label" for="deadline">Proposal Deadline</label>
@@ -257,7 +257,7 @@
 					<i class="glyphicon glyphicon-save"></i> Save
 				</a>
 
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity._id})" title="Cancel">
+				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
 				<a ng-if="!vm.editing && !vm.projectId" class="btn btn-default" ui-sref="opportunities.list" title="Cancel">

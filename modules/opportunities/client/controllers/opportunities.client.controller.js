@@ -295,7 +295,7 @@
 					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
 				if (editing) {
-					$state.go('opportunities.view', {opportunityId:opportunity._id});
+					$state.go('opportunities.view', {opportunityId:opportunity.code});
 				} else {
 					$state.go('opportunities.list');
 				}
