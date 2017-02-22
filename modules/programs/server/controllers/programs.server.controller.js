@@ -394,27 +394,45 @@ exports.new = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.programByID = function (req, res, next, id) {
-
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		return res.status(400).send({
-			message: 'Program is invalid'
+	if (id.substr (0, 3) === 'pro' ) {
+		Program.findById({code:id})
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.exec(function (err, program) {
+			if (err) {
+				return next(err);
+			} else if (!program) {
+				return res.status(404).send({
+					message: 'No program with that identifier has been found'
+				});
+			}
+			req.program = program;
+			next();
 		});
-	}
 
-	Program.findById(id)
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.exec(function (err, program) {
-		if (err) {
-			return next(err);
-		} else if (!program) {
-			return res.status(404).send({
-				message: 'No program with that identifier has been found'
+	} else {
+
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).send({
+				message: 'Program is invalid'
 			});
 		}
-		req.program = program;
-		next();
-	});
+
+		Program.findById(id)
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.exec(function (err, program) {
+			if (err) {
+				return next(err);
+			} else if (!program) {
+				return res.status(404).send({
+					message: 'No program with that identifier has been found'
+				});
+			}
+			req.program = program;
+			next();
+		});
+	}
 };
 // -------------------------------------------------------------------------
 //

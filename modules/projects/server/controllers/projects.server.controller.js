@@ -474,28 +474,46 @@ exports.new = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.projectByID = function (req, res, next, id) {
-
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		return res.status(400).send({
-			message: 'Project is invalid'
+	if (id.substr (0, 3) === 'prj' ) {
+		Project.findOne({code:id})
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('program', 'title logo isPublished')
+		.exec(function (err, project) {
+			if (err) {
+				return next(err);
+			} else if (!project) {
+				return res.status(404).send({
+					message: 'No project with that identifier has been found'
+				});
+			}
+			req.project = project;
+			next();
 		});
-	}
 
-	Project.findById(id)
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('program', 'title logo isPublished')
-	.exec(function (err, project) {
-		if (err) {
-			return next(err);
-		} else if (!project) {
-			return res.status(404).send({
-				message: 'No project with that identifier has been found'
+	} else {
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).send({
+				message: 'Project is invalid'
 			});
 		}
-		req.project = project;
-		next();
-	});
+
+		Project.findById(id)
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('program', 'title logo isPublished')
+		.exec(function (err, project) {
+			if (err) {
+				return next(err);
+			} else if (!project) {
+				return res.status(404).send({
+					message: 'No project with that identifier has been found'
+				});
+			}
+			req.project = project;
+			next();
+		});
+	}
 };
 
 // -------------------------------------------------------------------------

@@ -518,29 +518,48 @@ exports.new = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.opportunityByID = function (req, res, next, id) {
-
-	if (!mongoose.Types.ObjectId.isValid(id)) {
-		return res.status(400).send({
-			message: 'Opportunity is invalid'
+	if (id.substr (0, 3) === 'opp' ) {
+		Opportunity.findById({code:id})
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('project', 'name _id isPublished')
+		.populate('program', 'title _id logo isPublished')
+		.exec(function (err, opportunity) {
+			if (err) {
+				return next(err);
+			} else if (!opportunity) {
+				return res.status(404).send({
+					message: 'No opportunity with that identifier has been found'
+				});
+			}
+			req.opportunity = opportunity;
+			next();
 		});
-	}
+	} else {
 
-	Opportunity.findById(id)
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('project', 'name _id isPublished')
-	.populate('program', 'title _id logo isPublished')
-	.exec(function (err, opportunity) {
-		if (err) {
-			return next(err);
-		} else if (!opportunity) {
-			return res.status(404).send({
-				message: 'No opportunity with that identifier has been found'
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			return res.status(400).send({
+				message: 'Opportunity is invalid'
 			});
 		}
-		req.opportunity = opportunity;
-		next();
-	});
+
+		Opportunity.findById(id)
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('project', 'name _id isPublished')
+		.populate('program', 'title _id logo isPublished')
+		.exec(function (err, opportunity) {
+			if (err) {
+				return next(err);
+			} else if (!opportunity) {
+				return res.status(404).send({
+					message: 'No opportunity with that identifier has been found'
+				});
+			}
+			req.opportunity = opportunity;
+			next();
+		});
+	}
 };
 // -------------------------------------------------------------------------
 //
