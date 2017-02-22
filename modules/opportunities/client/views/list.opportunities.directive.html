@@ -34,7 +34,7 @@
         </a>
         &nbsp;
         <a ng-if="opportunity.userIs.admin" href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity._id, projectId: vm.projectId })" ng-click="$event.stopPropagation()"><i class="glyphicon glyphicon-pencil"></i></a>
-        <!-- <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>-->
+       <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
     </div>
 
     <div class="card-header">

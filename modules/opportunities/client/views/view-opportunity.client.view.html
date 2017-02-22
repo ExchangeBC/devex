@@ -79,16 +79,16 @@
 		<h5>Description</h5>
 		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
 	</div>
-	
+
 	<div class="panel-body" style="background-color: #f2f2f2">
 		<h5>Acceptance Criteria</h5>
 		<p class="med-desc pre-line" ng-bind-html="vm.display.criteria"></p>
 	</div>
 
-<!--
+
 	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
 	<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
--->
+
 
 	<div class="panel-body style">
 		<h5>How to Apply</h5>
@@ -106,12 +106,12 @@
 	</div>
 
 
-		<!--<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
 			<i class="fa fa-sign-in"></i> Sign up or log in to apply
 		</button>
 		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
 			<i class="fa fa-sign-in"></i> Apply Now
-		</button>-->
+		</button>
 
 
 
