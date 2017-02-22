@@ -106,7 +106,7 @@
 	</div>
 
 
-		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ng-click="vm.signInAndApply()" title="Apply">
 			<i class="fa fa-sign-in"></i> Sign up or log in to apply
 		</button>
 		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">

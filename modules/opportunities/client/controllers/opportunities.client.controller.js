@@ -103,6 +103,20 @@
 				});
 			});
 		};
+		// -------------------------------------------------------------------------
+		//
+		// sign in and apply
+		//
+		// -------------------------------------------------------------------------
+		vm.signInAndApply = function () {
+			$state.go('authentication.signin').then(function () {
+				$state.previous = {
+					state: 'opportunities.view',
+					params: {opportunityId:opportunity.code},
+					href: $state.href(state, params)
+				};
+            });
+		}
 	})
 	// =========================================================================
 	//
