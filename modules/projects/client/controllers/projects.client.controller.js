@@ -88,7 +88,7 @@
 		vm.previousState   = previousState;
 		vm.isAdmin         = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isProjectAdmin  = project.userIs.admin;
+		vm.isProjectAdmin  = (vm.editing) ? project.userIs.admin : true;
 		vm.project         = project;
 		vm.authentication  = Authentication;
 		//
