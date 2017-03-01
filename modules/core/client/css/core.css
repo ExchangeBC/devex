@@ -267,7 +267,7 @@ section.static li {
 	font-size: 22px;
 }
 .card-img-left {
-	padding-right: 20px;
+	margin-right: 14px;
 }
 .vcenter {
 	display: inline-block;
