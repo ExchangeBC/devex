@@ -1,6 +1,10 @@
 <section class="static-page"><div class="container" role="main">
 <div class="row">
-	<div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4">
+<div class="col-sm-3">
+   <img width="200" height="200" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
+</div>
+	<!-- <div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4"> -->
+	<div class="col-sm-5">
 		<form name="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
 			<fieldset>
 				<div class="form-group" show-errors>

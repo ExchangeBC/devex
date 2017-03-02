@@ -9,7 +9,6 @@
           <a ui-sref="settings.profile">Edit Profile</a>
         </li>
         <li ui-sref-active="active">
-          <img width="200" height="200" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
           <a ui-sref="settings.picture">Change Profile Picture</a>
         </li>
         <li ui-sref-active="active" ng-show="vm.user.provider === 'local'">
