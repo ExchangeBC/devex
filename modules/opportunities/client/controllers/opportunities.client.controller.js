@@ -113,7 +113,7 @@
 				$state.previous = {
 					state: 'opportunities.view',
 					params: {opportunityId:opportunity.code},
-					href: $state.href(state, params)
+					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
 				};
             });
 		}

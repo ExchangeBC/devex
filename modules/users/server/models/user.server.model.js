@@ -46,10 +46,7 @@ var UserSchema = new Schema({
     default: '',
     validate: [validateLocalStrategyProperty, 'Please fill in your last name']
   },
-  displayName: {
-    type: String,
-    trim: true
-  },
+  displayName: {type: String, trim: true },
   email: {
     type: String,
     index: {
@@ -68,48 +65,22 @@ var UserSchema = new Schema({
     lowercase: true,
     trim: true
   },
-  password: {
-    type: String,
-    default: ''
-  },
-  salt: {
-    type: String
-  },
-  profileImageURL: {
-    type: String,
-    default: 'img/default.png'
-  },
-  provider: {
-    type: String,
-    required: 'Provider is required'
-  },
-  government: {
-    type: String,
-    default: ''
-  },
-  providerData: {},
-  additionalProvidersData: {},
-  roles: {
-    type: [{
-      type: String
-    }],
-    default: ['user'],
-    required: 'Please provide at least one role'
-  },
-  updated: {
-    type: Date
-  },
-  created: {
-    type: Date,
-    default: Date.now
-  },
+  password                : {type: String, default: ''},
+  salt                    : {type: String },
+  profileImageURL         : {type: String, default: 'img/default.png'},
+  provider                : {type: String, required: 'Provider is required'},
+  government              : {type: String, default: ''},
+  notifyOpportunities     : {type: Boolean, default:false},
+  notifyEvents            : {type: Boolean, default:false},
+  notifyBlogs             : {type: Boolean, default:false},
+  providerData            : {},
+  additionalProvidersData : {},
+  roles                   : {type: [{type: String }], default: ['user'], required: 'Please provide at least one role'},
+  updated                 : {type: Date },
+  created                 : {type: Date, default: Date.now },
   /* For reset password */
-  resetPasswordToken: {
-    type: String
-  },
-  resetPasswordExpires: {
-    type: Date
-  }
+  resetPasswordToken      : {type: String },
+  resetPasswordExpires    : {type: Date }
 });
 
 /**

@@ -111,7 +111,7 @@ exports.oauthCallback = function (strategy) {
           return res.redirect('/authentication/signin');
         }
 
-        return res.redirect(info.redirect_to || '/');
+        return res.redirect(info.redirect_to || '/settings/profile');
       });
     })(req, res, next);
   };

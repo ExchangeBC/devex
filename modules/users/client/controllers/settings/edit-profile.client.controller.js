@@ -40,13 +40,24 @@
         }
       }
       var govRequest = vm.user.addRequest;
-      var successMessage = 'Edit profile successful!';
-      var govSuccessMessage = successMessage + ' You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.';
+      var successMessage = '<h4>Edit profile successful</h4>';
+      if (govRequest) {
+        successMessage += '<p>You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.</p>';
+      }
+      if (vm.user.notifyOpportunities) {
+        successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
+      }
+      if (vm.user.notifyEvents) {
+        successMessage += '<p>We will notify you of upcoming events.</p>';
+      }
+      if (vm.user.notifyBlogs) {
+        successMessage += '<p>We will notify you of new blog posts.</p>';
+      }
       var user = new UsersService(vm.user);
       user.$update(function (response) {
         $scope.$broadcast('show-errors-reset', 'vm.userForm');
 
-        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> '+(govRequest? govSuccessMessage : successMessage) });
+        Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
         Authentication.user = response;
       }, function (response) {
         Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
