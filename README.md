@@ -1,6 +1,22 @@
-# BC Developer's Exchange Application
+# BCDevExchange Application
 
-Latest version of the BCDevExchange app as a mean.js application running in OpenShift using Docker
+The [BCDevExchange](https://bcdevexchange.org) is a platform for providing new ways for British Columbia's public sector to connect with developers and other IT professionals.
+
+The latest version is a mean.js application running in OpenShift using Docker.
+
+***
+
+## Table of Contents
+
+* [Contributing](https://github.com/BCDevExchange/devex#contribute)
+* [Development](https://github.com/BCDevExchange/devex#development)
+* [Copyright and License](https://github.com/BCDevExchange/devex#copyright-and-license)
+
+***
+
+## Contribute
+
+We are open to pull requests. Please read our [contributing guidelines](https://github.com/BCDevExchange/devex/blob/master/CONTRIBUTING.md). 
 
 ## Development
 
@@ -82,3 +98,6 @@ Finally, execute prod task `npm run start:prod`
 * enable/disable SSL mode in production environment change the `secure` option in `config/env/production.js`
 
 
+## Copyright and License
+
+Code and documentation copyright 2016-2017 the [BC Developers' Exchange](https://bcdevexchange.org). Code released under the [Apache License, Version 2.0](https://github.com/BCDevExchange/devex/blob/master/LICENSE).
