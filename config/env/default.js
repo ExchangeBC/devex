@@ -2,9 +2,9 @@
 
 module.exports = {
   app: {
-    title: 'MEAN.JS',
-    description: 'Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js',
-    keywords: 'mongodb, express, angularjs, node.js, mongoose, passport',
+    title: 'BCDevExchange - The BC Developer\'s Exchange',
+    description: 'Better ways for government and developers to work together',
+    keywords: 'developer, government, codewithus, agile, digitial service',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID',
     domain: process.env.DOMAIN || 'http://localhost:3030'
   },
