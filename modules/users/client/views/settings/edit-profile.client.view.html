@@ -1,17 +1,21 @@
 <section class="static-page"><div class="container" role="main">
 <div class="row">
-<div class="col-sm-3">
-   <img width="200" height="200" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
-</div>
 	<!-- <div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4"> -->
-	<div class="col-sm-5">
+	
+	<div class="col-xs-2 col-sm-2" style="text-align: center;">
+   		<img width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
+	</div>
+
+
+	<div class="col-xs-12 col-sm-6">
 		<form name="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
+			
 			<fieldset>
 				<div class="form-group" show-errors>
 					<label for="email">Email</label>
 					<input type="email" id="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Email" lowercase required>
 					<div ng-messages="vm.userForm.email.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">Email address is required.</p>
+						<p class="help-block error-text" ng-message="required">Please enter your Email address.</p>
 						<p class="help-block error-text" ng-message="email">Email address is invalid.</p>
 					</div>
 				</div>
@@ -19,14 +23,14 @@
 					<label for="firstName">First Name</label>
 					<input type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.user.firstName" placeholder="First Name" required autofocus>
 					<div ng-messages="vm.userForm.firstName.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">First name is required.</p>
+						<p class="help-block error-text" ng-message="required">Please enter your First Name.</p>
 					</div>
 				</div>
 				<div class="form-group" show-errors>
 					<label for="lastName">Last Name</label>
 					<input type="text" id="lastName" name="lastName" class="form-control" ng-model="vm.user.lastName" placeholder="Last Name" required>
 					<div ng-messages="vm.userForm.lastName.$error" role="alert">
-						<p class="help-block error-text" ng-message="required">Last name is required.</p>
+						<p class="help-block error-text" ng-message="required">Please enter your Last Name.</p>
 					</div>
 				</div>
 
@@ -37,6 +41,9 @@
 						<p class="help-block error-text" ng-message="required">Username is required.</p>
 					</div>
 				</div>
+
+				<br>
+				<h4>Do any of these sound like you?</h4>
 
 				<div class="form-group">
 					<label>
@@ -75,9 +82,9 @@
 					</label>
 				</div>
 
-
-				<div class="text-center form-group">
-					<button type="submit" class="btn btn-primary">Save Profile</button>
+				<br>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">Save</button>
 				</div>
 			</fieldset>
 		</form>
