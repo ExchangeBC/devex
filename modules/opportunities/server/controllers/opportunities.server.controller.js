@@ -328,6 +328,7 @@ exports.list = function (req, res) {
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'code name _id isPublished')
 	.populate('program', 'code title _id logo isPublished')
+	.sort([['status':-1],['deadline':-1]])
 	.exec(function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
