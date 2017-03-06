@@ -1,3 +1,14 @@
+
+
+# March 3, 2017
+
+### Added
+* **Sign Up / Sign In**: Once they have authenticated through their GitHub account, new users are now prompted for an email address if it has not been carried over from GitHub. This enables us to send email notification of new opportunities.
+* **Sign Up / Sign In**: New users now see their profile details which can prompt them to upload a good profile photo.
+
+### Fixed
+* **User cards**: fixed aspect of image
+
 # February 10, 2017
 
 ### Added
