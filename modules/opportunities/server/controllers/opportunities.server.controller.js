@@ -323,12 +323,12 @@ exports.list = function (req, res) {
 	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	// console.log ('me = ', me);
 	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
-	Opportunity.find (searchTerm (req)).sort('name')
+	Opportunity.find (searchTerm (req))
+	.sort([['deadline', -1],['name', 1]])
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'code name _id isPublished')
 	.populate('program', 'code title _id logo isPublished')
-	.sort([['status':-1],['deadline':-1]])
 	.exec(function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
