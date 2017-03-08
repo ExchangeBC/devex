@@ -37,7 +37,7 @@
 				if ($scope.program) {
 					vm.title      = 'Projects for '+$scope.program.title;
 					vm.programId  = $scope.program._id;
-					vm.userCanAdd = $scope.program.userIs.admin;
+					vm.userCanAdd = $scope.program.userIs.admin || vm.isAdmin;
 					vm.projects   = ProjectsService.forProgram ({
 						programId: $scope.program._id
 					});
