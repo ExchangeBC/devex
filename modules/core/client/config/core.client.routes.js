@@ -112,6 +112,14 @@
           pageTitle: 'Code With Us'
         }
       })
+      .state('iotblog', {
+        url: '/iotblog',
+        templateUrl: '/modules/core/client/views/iotblog.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'IOT Blog'
+        }
+      })
       .state('codewithusps', {
         url: '/codewithusps',
         templateUrl: '/modules/core/client/views/codewithus-ps.view.html',
