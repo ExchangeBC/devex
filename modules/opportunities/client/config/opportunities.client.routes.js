@@ -102,10 +102,10 @@
 					}).$promise;
 				},
 				programs: function (ProgramsService) {
-					return ProgramsService.my ().$promise;
+					return ProgramsService.myadmin ().$promise;
 				},
 				projects: function (ProjectsService) {
-					return ProjectsService.my ().$promise;
+					return ProjectsService.myadmin ().$promise;
 				},
 				editing: function () { return true; },
 				previousState: function ($state) {
