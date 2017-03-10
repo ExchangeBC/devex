@@ -1,4 +1,3 @@
-
 <div class="row list-head">
   <div class="col-sm-7">
     <h3 ng-bind="vm.title" class="list-page-hide"></h3>
@@ -38,7 +37,7 @@
     </div>
 
     <div class="card-header">
-      <h3 class="card-title">{{opportunity.earn|currency}}</h3>
+      <h3 class="card-title" style="font-family: Lato; font-size: 18px; font-weight: 600;">{{opportunity.earn|currency}}</h3>
       <div class="label-list">
         <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
@@ -53,10 +52,9 @@
           </div>
         </div>-->
         <div class="col-xs-12 col-sm-12">
-          <h4>
-              <a ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
-          </h4>
-          <p ng-bind="opportunity.short" style="font-weight: 100; font-size: 16px;"></p>
+          <h3 style="font-size: 16px; margin-top: 0px; font-family: Lato; text-transform: uppercase;"><a ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
+          </h3>
+          <p ng-bind="opportunity.short" style="font-size: 15px;"></p>
         </div>
       </div>
     </div>

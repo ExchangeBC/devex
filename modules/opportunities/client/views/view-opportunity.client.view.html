@@ -16,7 +16,7 @@
 			</div>
 			<div class="col-xs-12 col-sm-12 text-left">
 				<h1>{{vm.opportunity.name}}</h1>
-				<p style="font-weight: 200; font-size: 18px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
+				<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
 			</div>
 		</div>
 	</div>
@@ -28,7 +28,7 @@
 	<div class="card-header">
 		<div class="row">
 			<div class="col-sm-5">
-				<h3 class="card-title" style="color: #0a4d8d">{{vm.opportunity.earn|currency}}</h3>
+				<h3 class="card-title" style="font-family: Lato;">{{vm.opportunity.earn|currency}}</h3>
 				<dl ng-if="vm.opportunity.skills.length">
 					<!--<dt>Required Skills:</dt>-->
 					<dd class="label-list">
@@ -71,18 +71,17 @@
 
 	<div class="panel-body" style="background-color: #e6e6e6; text-align: center;">
 		<p style="font-size: 16px; font-weight: 500; padding-top: 10px;">
-		This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus">Code With Us</a>.
+		This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <i><a href="/codewithus">Code With Us</a></i>.
 		</p>
 	</div>
 
 	<div class="panel-body">
-		<h5>Description</h5>
-		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.description"></p>
+		<p ng-bind-html="vm.display.description"></p>
 	</div>
 
 	<div class="panel-body" style="background-color: #f2f2f2">
 		<h5>Acceptance Criteria</h5>
-		<p class="med-desc pre-line" ng-bind-html="vm.display.criteria"></p>
+		<p ng-bind-html="vm.display.criteria"></p>
 	</div>
 
 <!--
@@ -92,14 +91,14 @@
 
 	<div class="panel-body style">
 		<h5>How to Apply</h5>
-<!--
-		<p class="med-desc pre-line" style="font-weight: 100">Email your proposal to <b>[email address]</b> by <b>{{vm.deadline}}</b>.</p>
--->
-		<p class="med-desc pre-line" style="font-weight: 100">Submit your proposal by <b>{{vm.deadline}}</b>.</p>
-
+		<p>Email a proposal to <b>[email address]</b> by <b>{{vm.deadline}}</b>.</p>
+		<p>With your email, you must attach a copy of the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf"><i>Code With Us</i> Terms</a>, with the required information asked for in the "Acceptance" section inserted into the document.</p>
+		<p>If we are satisfied with the proposals we receive, we will assign the work by <b>{{vm.assignment}}</b> with work proposed to start on <b>{{vm.start}}</b>.</p>
+		<br>
 		<h5>Proposal Evaluation Criteria</h5>
-		<p class="med-desc pre-line">We will evaluate and score the proposals we receive by the following criteria. If we are satisfied with the proposals we receive, we will assign the work by <b>{{vm.assignment}}</b> with work proposed to commence on <b>{{vm.start}}</b>.</p>
-		<p class="med-desc pre-line" style="font-weight: 100" ng-bind-html="vm.display.evaluation"></p>
+		<p>Proposals will be scored by the following criteria:</p>
+		<p ng-bind-html="vm.display.evaluation"></p>
+		<br>
 	</div>
 
 	<div class="panel-body" style="background-color: #f2f2f2; text-align: center;">
