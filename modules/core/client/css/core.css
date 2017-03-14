@@ -68,46 +68,56 @@ section.intro {
   width: 100%;
   min-height: auto;
   overflow-y: hidden;
-  background: url('/modules/core/client/img/photos/co-design-darkened-big.jpg') no-repeat center;
+  background: url('/modules/core/client/img/headers/homepage-banner.jpg') no-repeat center;
   background-size: cover;
   padding-top: 20px;
   padding-bottom: 40px;
   color: #fff;
 }
 section.intro h2 {
-  font-weight: 300;
   font-size: 24px;
   line-height: 1.6em;
   color: #fff;
 }
 section.intro h5 {
-  font-weight: 200;
-  font-size: 19px;
-  line-height: 1.7em;
-  padding-bottom: 30px;
-  color: #fff;
+	font-weight: 300;
+	font-size: 20px;
+	line-height: 1.7em;
+	padding-bottom: 30px;
+	color: #fff;
 }
 
 section.audience {
 	padding-top: 40px;
-	padding-bottom: 40px;
-	color: #595959;
+	padding-bottom: 10px;
+	color: black;
 }
 
 section.audience p {
-  font-size: 17px;
+  font-size: 15px;
   line-height: 1.5em;
-  font-weight: 300;
+  font-weight: 500;
   padding-bottom: 10px;
 }
+section.audience h3 {
+	color: black;
+	line-height: 1.6em;
+}
+section.audience h4 {
+  	color: black;
+  	font-family: Lato;
+  	font-size: 16px;
+  	text-transform: uppercase;
+}
 section.audience h5 {
-	font-weight: 300;
-	font-size: 19px;
-	line-height: 1.7em;
-	padding-bottom: 30px;
+	color: black;
+  	font-family: Lato;
+  	font-weight: 800;
+  	font-size: 20px;
+  	text-transform: uppercase;
 }
 section.audience blockquote {
-	padding-bottom: 30px;
+	padding-bottom: 10px;
 }
 section.audience footer {
 	font-size: 13px;
@@ -120,12 +130,34 @@ section.events {
 	width: 100%;
 	min-height: auto;
 	overflow-y: hidden;
-	background: url('/modules/core/client/img/photos/laughing-faded.jpg') no-repeat center;
+	background: url('/modules/core/client/img/photos/laughing-blue.jpg') no-repeat center;
 	background-size: cover;
 	padding-top: 40px;
 	padding-bottom: 40px;
+	color: #bbe4f7;
 }
-
+section.events p {
+	font-size: 15px;
+  	line-height: 1.5em;
+  	font-weight: 500;
+  	padding-bottom: 10px;
+}
+section.events h2 {
+	margin: 6px 0px 15px 0px;
+}
+section.events h4 {
+  	color: black;
+  	font-family: Lato;
+  	font-size: 16px;
+  	text-transform: uppercase;
+}
+section.events h5 {
+	color: white;
+	font-family: Lato;
+	font-size: 18px;
+	font-weight: 600;
+	margin: 2px 0px; 
+}
 section.footer {
 	background-color: #1a1a1a;
 	color: #fff;
@@ -203,17 +235,21 @@ section.detail dt {
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
-	color: #595959;
+	color: black;
 }
 section.static h1 {
+	font-family: Lato;
+	text-transform: uppercase;
+	margin-left: 10px;
 	padding-top: 0px;
 	padding-bottom: 20px;
 	font-size: 26px;
-	color: #0a4d8d;
 }
 section.static h2,h3,h4,h5 {
+	font-weight: 600;
+	font-family: Lato;
 	padding-top: 25px;
-	padding-bottom: 0;
+	margin-bottom: 15px;
 	color: #0a4d8d;
 }
 section.static h2 {
@@ -221,17 +257,17 @@ section.static h2 {
 	color: #0a4d8d;
 }
 section.static h3 {
-	font-size: 20px;
+	font-size: 23px;
 	color: #0a4d8d;
 }
 section.static p {
-	font-weight: 100;
+	font-weight: 500;
 	font-size: 16px;
 	line-height: 1.8em;
 	padding-bottom: 10px;
 }
 section.static li {
-	font-weight: 100;
+	font-weight: 500;
 	font-size: 16px;
 	line-height: 1.8em;
 	padding-bottom: 10px;
