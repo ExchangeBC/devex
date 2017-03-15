@@ -71,16 +71,6 @@ var ensureAdmin = function (opportunity, user, res) {
 		return true;
 	}
 };
-var forProgram = function (id) {
-	return new Promise (function (resolve, reject) {
-		Opportunity.find ({program:id}).exec ().then (resolve, reject);
-	});
-};
-var forProject = function (id) {
-	return new Promise (function (resolve, reject) {
-		Opportunity.find ({project:id}).exec ().then (resolve, reject);
-	});
-};
 var searchTerm = function (req, opts) {
 	opts = opts || {};
 	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
@@ -115,6 +105,31 @@ var decorate = function (opportunityModel, roles) {
 var decorateList = function (opportunityModels, roles) {
 	return opportunityModels.map (function (opportunityModel) {
 		return decorate (opportunityModel, roles);
+	});
+};
+var opplist = function (query, req, callback) {
+	Opportunity.find (searchTerm (req))
+	.sort([['deadline', -1],['name', 1]])
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('project', 'code name _id isPublished')
+	.populate('program', 'code title _id logo isPublished')
+	.exec(function (err, opportunities) {
+		if (err) {
+			callback (err, null);
+		} else {
+			callback (null, decorateList (opportunities, req.user ? req.user.roles : []));
+		}
+	});
+}
+var forProgram = function (id) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.find ({program:id}).exec ().then (resolve, reject);
+	});
+};
+var forProject = function (id) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.find ({project:id}).exec ().then (resolve, reject);
 	});
 };
 // -------------------------------------------------------------------------
@@ -313,32 +328,37 @@ exports.delete = function (req, res) {
 		});
 	}
 };
-
 // -------------------------------------------------------------------------
 //
 // return a list of all opportunities
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// console.log ('me = ', me);
-	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.opportunities.admin}}]}
-	Opportunity.find (searchTerm (req))
-	.sort([['deadline', -1],['name', 1]])
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('project', 'code name _id isPublished')
-	.populate('program', 'code title _id logo isPublished')
-	.exec(function (err, opportunities) {
+	opplist (searchTerm (req), req, function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-			// res.json(opportunities);
+			res.json (opportunities);
 		}
 	});
+	// Opportunity.find (searchTerm (req))
+	// .sort([['deadline', -1],['name', 1]])
+	// .populate('createdBy', 'displayName')
+	// .populate('updatedBy', 'displayName')
+	// .populate('project', 'code name _id isPublished')
+	// .populate('program', 'code title _id logo isPublished')
+	// .exec(function (err, opportunities) {
+	// 	if (err) {
+	// 		return res.status(422).send({
+	// 			message: errorHandler.getErrorMessage(err)
+	// 		});
+	// 	} else {
+	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+	// 		// res.json(opportunities);
+	// 	}
+	// });
 };
 
 // -------------------------------------------------------------------------
@@ -467,19 +487,28 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProject = function (req, res) {
-	Opportunity.find(searchTerm (req, {project:req.project._id})).sort('name')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.exec(function (err, opportunities) {
+	opplist (searchTerm (req, {project:req.project._id}), req, function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-			// res.json(opportunities);
+			res.json (opportunities);
 		}
 	});
+	// Opportunity.find(searchTerm (req, {project:req.project._id})).sort('name')
+	// .populate('createdBy', 'displayName')
+	// .populate('updatedBy', 'displayName')
+	// .exec(function (err, opportunities) {
+	// 	if (err) {
+	// 		return res.status(422).send({
+	// 			message: errorHandler.getErrorMessage(err)
+	// 		});
+	// 	} else {
+	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+	// 		// res.json(opportunities);
+	// 	}
+	// });
 };
 // -------------------------------------------------------------------------
 //
@@ -487,19 +516,28 @@ exports.forProject = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forProgram = function (req, res) {
-	Opportunity.find(searchTerm (req, {program:req.program._id})).sort('name')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.exec(function (err, opportunities) {
+	opplist (searchTerm (req, {program:req.program._id}), req, function (err, opportunities) {
 		if (err) {
 			return res.status(422).send({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-			// res.json(opportunities);
+			res.json (opportunities);
 		}
 	});
+	// Opportunity.find(searchTerm (req, {program:req.program._id})).sort('name')
+	// .populate('createdBy', 'displayName')
+	// .populate('updatedBy', 'displayName')
+	// .exec(function (err, opportunities) {
+	// 	if (err) {
+	// 		return res.status(422).send({
+	// 			message: errorHandler.getErrorMessage(err)
+	// 		});
+	// 	} else {
+	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
+	// 		// res.json(opportunities);
+	// 	}
+	// });
 };
 
 // -------------------------------------------------------------------------
