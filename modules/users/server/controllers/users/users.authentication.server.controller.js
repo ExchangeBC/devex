@@ -112,8 +112,12 @@ exports.oauthCallback = function (strategy) {
         if (err) {
           return res.redirect('/authentication/signin');
         }
-
-        return res.redirect(info.redirect_to || '/settings/profile');
+        if (!user.email) {
+          return res.redirect(info.redirect_to || '/settings/profile');
+        }
+        else {
+          return res.redirect(info.redirect_to || '/');
+        }
       });
     })(req, res, next);
   };
