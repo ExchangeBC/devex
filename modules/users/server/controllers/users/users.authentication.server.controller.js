@@ -97,14 +97,12 @@ exports.oauthCall = function (strategy, scope) {
  */
 exports.oauthCallback = function (strategy) {
   return function (req, res, next) {
-  console.log ('oauthCallback is running');
 
     // info.redirect_to contains inteded redirect path
     passport.authenticate(strategy, function (err, user, info) {
       if (err) {
         return res.redirect('/authentication/signin?err=' + encodeURIComponent(errorHandler.getErrorMessage(err)));
       }
-      console.log ('in oauthcallback and user is', user);
       if (!user) {
         return res.redirect('/authentication/signin');
       }
@@ -127,7 +125,6 @@ exports.oauthCallback = function (strategy) {
  * Helper function to save or update a OAuth user profile
  */
 exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
-  console.log ('saveOAuthUserProfile is running');
   if (!req.user) {
     // Define a search query fields
     var searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;

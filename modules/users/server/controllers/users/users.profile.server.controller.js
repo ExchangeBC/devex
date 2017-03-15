@@ -165,7 +165,6 @@ exports.me = function (req, res) {
 	 // CC:  USERFIELDS
 	var safeUserObject = null;
 	if (req.user) {
-		console.log ('running me with ', req.user);
 		safeUserObject = {
 			displayName             : validator.escape(req.user.displayName),
 			provider                : validator.escape(req.user.provider),
