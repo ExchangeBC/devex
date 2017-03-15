@@ -17,6 +17,7 @@ var OpportunitySchema = new Schema({
 	evaluation   : {type: String, default: ''},
 	criteria     : {type: String, default: ''},
 	github       : {type: String, default: ''},
+	proposalEmail: {type: String, default: ''},
 	program      : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project      : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
 	skills       : [String],
