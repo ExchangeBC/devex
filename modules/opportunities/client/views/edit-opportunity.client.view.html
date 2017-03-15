@@ -103,7 +103,7 @@
 			</div>
 
 			<br><br>
-			<div class="form-group" ng-if="vm.isAdmin">
+			<div class="form-group" ng-if="vm.isAdmin|| vm.opportunity.userIs.admin">
 				<label class="control-label" for="github">Github Repository</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
 				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
@@ -172,7 +172,7 @@
 				</textarea>
 			</div>
 
-			<div class="form-group" ng-if="vm.isAdmin">
+			<div class="form-group" ng-if="vm.isAdmin|| vm.opportunity.userIs.admin">
 				<label class="control-label" for="github">Email to Receive Proposals</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
 				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
