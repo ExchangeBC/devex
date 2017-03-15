@@ -308,7 +308,8 @@ section.static ul {
 	font-size: 22px;
 }
 .card-img-left {
-	margin-right: 14px;
+	margin-right: 15px;
+	margin-left: -2px;
 }
 .vcenter {
 	display: inline-block;
