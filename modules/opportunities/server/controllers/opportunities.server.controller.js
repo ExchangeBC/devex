@@ -147,7 +147,7 @@ exports.my = function (req, res) {
 exports.members = function (opportunity, cb) {
 	mongoose.model ('User')
 	.find ({roles: memberRole(opportunity)})
-	.select ('username displayName updated created roles government profileImageURL email lastName firstName')
+	.select ('username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 	.exec (cb);
 };
 
@@ -160,7 +160,7 @@ exports.members = function (opportunity, cb) {
 exports.requests = function (opportunity, cb) {
 	mongoose.model ('User')
 	.find ({roles: requestRole(opportunity)})
-	.select ('username displayName updated created roles government profileImageURL email lastName firstName')
+	.select ('username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 	.exec (cb);
 };
 
