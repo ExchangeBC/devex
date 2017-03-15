@@ -20,6 +20,10 @@
           </div>
         </div>
         <div class="form-group" show-errors>
+          <label for="userTitle">Title</label>
+          <input type="text" id="userTitle" name="userTitle" class="form-control" ng-model="vm.user.userTitle" placeholder="Title" />
+        </div>
+        <div class="form-group" show-errors>
           <label for="government">Organization Name</label>
           <input type="text" id="government" name="government" class="form-control" ng-model="vm.user.government" placeholder="Organization Name" required />
           <div ng-messages="vm.userForm.government.$error" role="alert">

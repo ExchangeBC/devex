@@ -73,6 +73,7 @@ var UserSchema = new Schema({
   notifyOpportunities     : {type: Boolean, default:false},
   notifyEvents            : {type: Boolean, default:false},
   notifyBlogs             : {type: Boolean, default:false},
+  userTitle               : {type: String, default: ""},
   providerData            : {},
   additionalProvidersData : {},
   roles                   : {type: [{type: String }], default: ['user'], required: 'Please provide at least one role'},

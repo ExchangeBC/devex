@@ -14,7 +14,7 @@ var _ = require('lodash'),
 	validator = require('validator');
 
  // CC:  USERFIELDS
-var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'notifyEvents', 'notifyBlogs'];
+var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'notifyEvents', 'notifyBlogs', 'userTitle'];
 
 /**
  * Update user details
@@ -165,6 +165,7 @@ exports.me = function (req, res) {
 	 // CC:  USERFIELDS
 	var safeUserObject = null;
 	if (req.user) {
+		console.log ('running me with ', req.user);
 		safeUserObject = {
 			displayName             : validator.escape(req.user.displayName),
 			provider                : validator.escape(req.user.provider),
@@ -179,7 +180,8 @@ exports.me = function (req, res) {
 			government              : req.user.government,
 			notifyOpportunities     : req.user.notifyOpportunities,
 			notifyEvents            : req.user.notifyEvents,
-			notifyBlogs             : req.user.notifyBlogs
+			notifyBlogs             : req.user.notifyBlogs,
+      		userTItle               : req.user.userTitle
 
 		};
 	}
