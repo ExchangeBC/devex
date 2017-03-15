@@ -108,7 +108,7 @@ var decorateList = function (opportunityModels, roles) {
 	});
 };
 var opplist = function (query, req, callback) {
-	Opportunity.find (searchTerm (req))
+	Opportunity.find (query)
 	.sort([['deadline', -1],['name', 1]])
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
