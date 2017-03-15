@@ -271,6 +271,9 @@ section.static li {
 	line-height: 1.8em;
 	padding-bottom: 10px;
 }
+section.static ul {
+	line-height: 1.8em;
+}
 @media (max-width: 767px) {
 	.img-responsive {
 		max-width: 70px;
