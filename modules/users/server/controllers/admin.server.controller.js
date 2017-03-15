@@ -127,3 +127,30 @@ User.findOne({
     next();
   });
 };
+// -------------------------------------------------------------------------
+//
+// lists of emails and names for notifications
+//
+// -------------------------------------------------------------------------
+exports.notifyOpportunities = function (req, res, next) {
+    User.find ({notifyOpportunities:true}).select ('firstName lastName email')
+    .exec (function (err, users) {
+      if (err) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      else return res.json (users);
+    });
+};
+exports.notifyMeetings = function (req, res, next) {
+    User.find ({notifyEvents:true}).select ('firstName lastName email')
+    .exec (function (err, users) {
+      if (err) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
+      else return res.json (users);
+    });
+};

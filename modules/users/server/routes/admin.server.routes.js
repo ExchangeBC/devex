@@ -39,6 +39,9 @@ module.exports = function (app) {
   app.route('/api/users')
     .get(adminPolicy.isAllowed, admin.list);
 
+  app.route ('/api/listopps').get(adminPolicy.isAllowed, admin.notifyOpportunities);
+  app.route ('/api/listmeets').get(adminPolicy.isAllowed, admin.notifyMeetings);
+
   // Gov. Request
   app.route('/api/approve').post(adminPolicy.isAllowed,admin.approve);
 

@@ -5,9 +5,9 @@
     .module('users.admin')
     .controller('UserListController', UserListController);
 
-  UserListController.$inject = ['$scope', '$filter', 'AdminService'];
+  UserListController.$inject = ['$scope', '$state', '$filter', 'AdminService'];
 
-  function UserListController($scope, $filter, AdminService) {
+  function UserListController($scope, $state, $filter, AdminService) {
     var vm = this;
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
@@ -46,6 +46,13 @@
 
     function pageChanged() {
       vm.figureOutItemsToDisplay();
+    }
+
+    vm.listOpps = function () {
+      $state.go('admin.notifyopps');
+    }
+    vm.listMeets = function () {
+      $state.go('admin.notifymeets');
     }
   }
 }());

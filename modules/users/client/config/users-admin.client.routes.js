@@ -64,6 +64,34 @@
           pageTitle: 'Edit {{ userResolve.displayName }}'
         }
       })
+      .state('admin.notifyopps', {
+        url: '/notifyopps',
+        templateUrl: '/modules/users/client/views/admin/listopps.client.view.html',
+        controllerAs: 'vm',
+        controller: function (users) {
+          var vm = this;
+          vm.users = users;
+        },
+        resolve: {
+          users: function (AdminService) {
+            return AdminService.listopps().$promise;
+          }
+        }
+      })
+      .state('admin.notifymeets', {
+        url: '/notifymeets',
+        templateUrl: '/modules/users/client/views/admin/listmeets.client.view.html',
+        controllerAs: 'vm',
+        controller: function (users) {
+          var vm = this;
+          vm.users = users;
+        },
+        resolve: {
+          users: function (AdminService) {
+            return AdminService.listmeets().$promise;
+          }
+        }
+      })
       .state('admin.user-edit', {
         url: '/users/:userId/edit',
         templateUrl: '/modules/users/client/views/admin/edit-user.client.view.html',
@@ -73,7 +101,7 @@
           userResolve: getUser
         },
         data: {
-          pageTitle: 'Edit User {{ userResolve.displayName }}'
+          pageTitle: 'Edit {{ userResolve.displayName }}'
         }
       })
       ;

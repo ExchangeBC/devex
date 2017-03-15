@@ -90,6 +90,16 @@
           userId:'@userId'
         }
       },
+      listopps: {
+        method: 'GET',
+        url: '/api/listopps',
+        isArray: true
+      },
+      listmeets: {
+        method: 'GET',
+        url: '/api/listmeets',
+        isArray: true
+      },
       update: {
         method: 'PUT'
       }
