@@ -42,24 +42,27 @@
     </a>
   </div>
 
+  <div class="card-header" style="padding-top: 2px;">
+    <div class="container">
+        <div class="label-list" style="margin-left: -18px;">
+          <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
+        </div>
+      </div>
+  </div>
+
   <div class="card-block">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-        <h3 style="font-size: 16px; margin-top: 0px; font-family: Lato; text-transform: uppercase;"><a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
+        <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
         </h3>
-        <p style="font-size: 15px;" ng-bind="project.short"></p>
-      </div>
-      <div class="container">
-        <div class="label-list">
-          <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
-        </div>
+        <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="project.short"></p>
       </div>
     </div>
   </div>
 
   <div class="card-header">
-    <h5 ng-if="!vm.program && project.program">
-        <a ui-sref="programs.view({programId:project.program.code})"><i class="fa fa-university"></i> {{project.program.title}}</a>
+    <h5 style="padding: 3px 0px 3px 0px; margin: 0; font-size: 13px; font-weight: 300;" ng-if="!vm.program && project.program">
+        <!--<a ui-sref="programs.view({programId:project.program.code})">--><h5 style="padding: 0px 0px 3px 0px; margin: 0; font-weight: 300;"><i class="fa fa-university"></i> {{project.program.title}}</h5>
     </h5>
   </div>
 
