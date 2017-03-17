@@ -183,8 +183,7 @@ section.detail {
 section.detail h1 {
 	padding-top: 0px;
 	padding-bottom: 20px;
-	font-size: 22px;
-	text-transform: uppercase;
+	font-size: 24px;
 	color: black;
 }
 
@@ -316,6 +315,12 @@ section.static ul {
     vertical-align: middle;
     float: none;
 }
+.label-primary {
+	padding: 7px 11px;
+	margin-top: 9px;
+	font-size: 11px;
+	font-weight: 600;	
+}
 .label-info {
 	background-color: #595959;
 	padding: 7px 11px;
@@ -329,4 +334,10 @@ section.static ul {
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;
+}
+.label-danger {
+	padding: 7px 11px;
+	margin-top: 9px;
+	font-size: 11px;
+	font-weight: 600;	
 }
