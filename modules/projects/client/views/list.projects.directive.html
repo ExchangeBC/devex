@@ -50,20 +50,17 @@
       </div>
   </div>
 
-  <div class="card-block">
+  <div class="card-block" style="padding-bottom: 0px;">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-        <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
+        <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
         </h3>
         <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="project.short"></p>
+        <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;" ng-if="!vm.program && project.program">
+        <!--<a ui-sref="programs.view({programId:project.program.code})">--><i class="fa fa-university"></i> {{project.program.title}}</p>
+        </h5>
       </div>
     </div>
-  </div>
-
-  <div class="card-header">
-    <h5 style="padding: 3px 0px 3px 0px; margin: 0; font-size: 13px; font-weight: 300;" ng-if="!vm.program && project.program">
-        <!--<a ui-sref="programs.view({programId:project.program.code})">--><h5 style="padding: 0px 0px 3px 0px; margin: 0; font-weight: 300;"><i class="fa fa-university"></i> {{project.program.title}}</h5>
-    </h5>
   </div>
 
 </div>
