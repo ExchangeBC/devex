@@ -1,4 +1,26 @@
+# March 15, 2017
 
+### Added
+
+* **Sign Up/Sign In**: Users can now indicate and change their notification preferences for opportunities, meetups, and their title.
+* **Member cards**: Now display user’s title and link to their email.
+* **Admin views**: Admin can now view a list of subscribed users by each notification option and edit preferences if necessary.
+
+### Changed
+* **Sign Up/Sign In**: Users now bypass their profile detail page on subsequent sign ins after their first sign in.
+* **Homepage**: Added blue banner images; changed styling of sections.
+* **Fonts**: globally replaced light font with standard weight. 
+* **Spacing**: Fixed margins and line-height of text on program, project and opportunity detail pages.
+* **Create opportunity form**: Updated boilerplate wording about proposal evaluation criteria and added field for email address for receiving proposals.
+* **Page IDs**: Changed from numeric to human-readable for ease of reading web analytics.
+
+### Fixed
+* **Opportunity list**: Fixed sort order to display open opportunities ahead of closed ones, with the longest remaining closing date at the top.
+
+# March 8, 2017
+
+### Added
+* **Events**: Added items for the Mar 13 IoT Discovery Day (along with a news entry page about it), and the BC Tech Summit.
 
 # March 3, 2017
 
