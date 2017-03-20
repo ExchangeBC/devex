@@ -176,15 +176,15 @@ section.form-page .well {
 	background-color: #ffffff;
 }
 section.detail {
-	padding-top: 10px;
+	padding-top: 0px;
 	padding-bottom: 40px;
 	color: #595959;
 }
 section.detail h1 {
+	margin-top: 20px;
 	padding-top: 0px;
-	padding-bottom: 20px;
+	padding-bottom: 10px;
 	font-size: 24px;
-	color: black;
 }
 
 section.detail h2 {
@@ -200,9 +200,9 @@ section.detail h4 {
 	padding-top: 15px;
 }
 section.detail h5 {
-	padding-top: 10px;
-	font-size: 16px;
-	font-weight: 600;
+	padding-top: 0px;
+	font-size: 18px;
+	font-family: Lato;
 	color: black;
 	text-transform: uppercase;
 }
@@ -322,14 +322,22 @@ section.static ul {
 	font-weight: 600;	
 }
 .label-info {
-	background-color: #595959;
+	background-color: transparent;
+	border-color: #595959;
+	border-style: solid;
+	border-width: 2px;
+	color: #595959;
 	padding: 7px 11px;
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;
 }
 .label-warning {
-	background-color: #f26925;
+	background-color: transparent; 
+	border-color: #f26925;
+	border-style: solid;
+	border-width: 3px;
+	color: black;
 	padding: 7px 11px;
 	margin-top: 9px;
 	font-size: 11px;

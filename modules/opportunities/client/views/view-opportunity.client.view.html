@@ -21,7 +21,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 text-left" style="margin-left: 24px;">
+			<div class="col-xs-12 text-center">
 				<h1>{{vm.opportunity.name}}</h1>
 				<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
 			</div>
@@ -32,19 +32,17 @@
 	<!--<div class="panel panel-default panel-flat card-panel">-->
 
 <div class="card card-flat">
-	<div class="card-header" style="background-color: #595959; padding-top: 0; padding-bottom: 0;">
-		<h4 style="color: white; margin-top: 0;" ng-if="vm.opportunity.isPublished" class="lg">Closing in: <b>{{vm.closing}}</b></h4>	
-	</div>
 	<div class="card-header">
 		<div class="row">
 			<div class="col-sm-5">
+				<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="color: black; font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
 				<dl ng-if="vm.opportunity.skills.length">
 					<!--<dt>Required Skills:</dt>-->
 					<dd class="label-list">
 					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
 					</dd>
 				</dl>
-				<h5 class="card-title" style="font-family: sans-serif; color: black; font-size: 20px; padding-top: 10px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
+				<h5 class="card-title" style="font-family: sans-serif; color: black; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
 			</div>
 			<div class="col-sm-7">
 				<dl class="dl-horizontal">
@@ -78,7 +76,7 @@
 	</div>
 
 	<div class="panel-body" style="background-color: #e6e6e6;">
-		<p style="font-size: 16px; font-weight: 500; padding-top: 10px;">
+		<p style="font-size: 16px; color: black; padding-top: 10px;">
 		This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, <i><a href="/codewithus">Code With Us</a></i>.
 		</p>
 	</div>

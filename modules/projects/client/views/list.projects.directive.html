@@ -42,7 +42,7 @@
     </a>
   </div>
 
-  <div class="card-header" style="padding-top: 2px;">
+  <div class="card-header" style="background-color: #f2f2f2; padding-top: 0px;">
     <div class="container">
         <div class="label-list" style="margin-left: -18px;">
           <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
@@ -50,10 +50,11 @@
       </div>
   </div>
 
-  <div class="card-block" style="padding-bottom: 0px;">
+
+  <div class="card-block" style="padding-bottom: 0px; padding-top: 0;">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-        <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
+        <h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
         </h3>
         <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="project.short"></p>
         <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;" ng-if="!vm.program && project.program">

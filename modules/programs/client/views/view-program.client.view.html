@@ -18,9 +18,25 @@
 					</a>
 				</div>
 			</div>
+			<div class="col-xs-12 col-sm-12 text-center" style="padding-top: 0;">
+				<div class="row">
+					<div class="col-xs-2 vcenter">
+						<img class="img-rounded" style="max-height: 40px;" src="/{{vm.program.logo}}"/>
+					</div>
+					<div class="col-xs-10 vcenter">
+						<h1 style="color: text-transform: none; margin-bottom: 10px;" ng-bind="vm.program.title"></h1>
+					</div>
+					<div class="panel-body">
+						<p style="font-size: 16px; padding-bottom: 10px;" ng-bind="vm.program.short"></p>
+						<p ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></p>
+						<p ng-bind-html="vm.display.description" style="margin-top: 20px; text-align: left;"></p>
+					</div>
+				</div>		
+			</div>
 		</div>
 	</div>
 
+	<!--
 	<div class="container">
 		<br>
 		<div class="card card-flat">
@@ -30,7 +46,7 @@
 						<img class="img-rounded" style="max-height: 40px;" src="/{{vm.program.logo}}"/>
 					</div>
 					<div class="col-xs-10 vcenter">
-						<h1 style="text-transform: none; margin-bottom: 10px;" ng-bind="vm.program.title"></h1>
+						<h1 style="color: text-transform: none; margin-bottom: 10px;" ng-bind="vm.program.title"></h1>
 					</div>
 					<div class="panel-body">
 						<p style="font-size: 16px; margin-top: 10px; padding-bottom: 30px;" ng-bind="vm.program.short"></p>
@@ -38,6 +54,7 @@
 					</div>
 				</div>
 			</div>
+	-->
 
 				<!--
 				<p class="label-list">
@@ -45,6 +62,7 @@
 				</p>
 				-->
 
+	<!--
 			<div class="panel-body">
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
@@ -68,7 +86,8 @@
 
 		</div>
 
-	</div>
+	</div> 
+	-->
 
 	<div class="container">
 		<core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Program Members"></core-member-list>

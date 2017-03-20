@@ -36,11 +36,8 @@
        <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
     </div>
 
-    <div class="card-header" style="padding-top: 0; padding-bottom: 0; background-color: #595959;">
-      <h4 style="color: white;">Closing in: <b>{{vm.closing(opportunity)}}</b></h4>
-    </div>
-
     <div class="card-header" style="padding-top: 0; padding-bottom: 0;">
+      <h4 style="margin-top: 10px; margin-bottom: 5px;">Closing in:  <span style="color: black; font-size: 18px; font-weight: 800;">{{vm.closing(opportunity)}}</span></h4>
       <div class="label-list" style="padding-top: 4px;">
         <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
