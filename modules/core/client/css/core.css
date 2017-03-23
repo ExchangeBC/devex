@@ -1,6 +1,12 @@
 .content {
 	margin-top: 50px;
 }
+.col-centered {
+	float: none;
+	margin: 0 auto;
+}
+
+}
 .undecorated-link:hover {
 	text-decoration: none;
 }
@@ -88,7 +94,7 @@ section.intro h5 {
 }
 
 section.audience {
-	padding-top: 40px;
+	padding-top: 0px;
 	padding-bottom: 10px;
 	color: black;
 }
@@ -112,7 +118,7 @@ section.audience h4 {
 section.audience h5 {
 	color: black;
   	font-family: Lato;
-  	font-weight: 800;
+  	font-weight: 300;
   	font-size: 20px;
   	text-transform: uppercase;
 }
@@ -132,7 +138,7 @@ section.events {
 	overflow-y: hidden;
 	background: url('/modules/core/client/img/photos/laughing-blue.jpg') no-repeat center;
 	background-size: cover;
-	padding-top: 40px;
+	padding-top: 0px;
 	padding-bottom: 40px;
 	color: #bbe4f7;
 }
@@ -157,6 +163,9 @@ section.events h5 {
 	font-size: 18px;
 	font-weight: 600;
 	margin: 2px 0px; 
+}
+section.events .panel-default, .panel-body {
+	background-color: transparent;
 }
 section.footer {
 	background-color: #1a1a1a;
