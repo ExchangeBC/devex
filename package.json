@@ -65,7 +65,8 @@
     "validator": "~6.0.0",
     "vinyl": "~2.0.1",
     "winston": "^2.2.0",
-    "wiredep": "~4.0.0"
+    "wiredep": "~4.0.0",
+    "node-fetch": "~1.6.3"
   },
   "devDependencies": {
     "coveralls": "~2.11.6",
