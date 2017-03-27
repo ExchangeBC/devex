@@ -23,6 +23,18 @@ exports.notifier = function (notifyBChost, port, serviceName, type) {
           return res.json();
         });
     },
+    subscribeUpdate : function (subscriptionId, channelId) {
+      return fetch(url + '/api/subscriptions/' + subscriptionId, {
+        method: 'patch',
+        body: JSON.stringify({
+            userChannelId: channelId
+          }),
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json'}
+        })
+        .then(function(res) {
+          return res.json();
+        });
+    },
     unsubscribe : function (subscriptionId) {
       return fetch(url + "/api/subscriptions/" + subscriptionId, {
         method: 'delete',
