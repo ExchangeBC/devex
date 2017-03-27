@@ -24,8 +24,10 @@ var path = require('path'),
 	Opportunity = mongoose.model('Opportunity'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	_ = require('lodash');
+	_ = require('lodash'),
+	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
 
+var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
 // -------------------------------------------------------------------------
 //
 // set a opportunity role on a user
@@ -308,8 +310,24 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				// res.json(opportunity);
-				res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				// TODO: change this to (opportunity.isPublished && !opporunity.doNotNotify)
+				// when supported
+				if (opportunity.isPublished) {
+					oppEmailNotifier.notify({
+						from: 'no_reply@gov.bc.ca',
+						subject: 'New ' + opportunity.earn + ' Code With Us opportunity on BCDevExchange',
+						textBody: 'Good Day!',
+						htmlBody: 'Good Day!'
+					})
+					.catch(function() {})
+					.then(function() {
+						// res.json(opportunity);
+						res.json (decorate (opportunity, req.user ? req.user.roles : []));
+					});
+				}
+				else {
+					res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				}
 			}
 		});
 	}
