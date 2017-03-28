@@ -17,7 +17,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
-			controller   : function ($scope, OpportunitiesService, Authentication, Notification) {
+			controller   : function ($scope, OpportunitiesService, Authentication, Notification, modalService, $q) {
 				var rightNow = new Date ();
 				var vm     = this;
 				var isUser = Authentication.user;
@@ -65,10 +65,40 @@
 					var publishedState = opportunity.isPublished;
 					var t = state ? 'Published' : 'Un-Published'
 					opportunity.isPublished = state;
-					opportunity.createOrUpdate ()
-					//
+
+					opportunity.doNotNotify = false;
+					var modalOptions = {
+			        closeButtonText: 'Do Not Send Notification',
+			        actionButtonText: 'Send Notification',
+			        headerText: 'Publish Opportunity',
+			        bodyText: 'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?'
+			    };
+			    var promise;
+			    //
+			    // Bypass the modal if first time publishing OR if unpublishing
+			    //
+			    if ((opportunity.isPublished && !opportunity.lastPublished) ||
+			    			!opportunity.isPublished) {
+			    	promise = $q.resolve();
+			    }
+			    else {
+			    	promise = modalService.showModal({}, modalOptions)
+		        .then(function sendNotification (result) {
+		        		opportunity.doNotNotify = false;
+		        		console.log('send notify callback')
+		        },
+		        function doNotSendNotificaiton (result) {
+		        	opportunity.doNotNotify = true;
+		        	console.log('do not send notify callback')
+		        })
+			    }
+
+	        //
 					// success, notify and return to list
 					//
+	        promise.then(function() {
+	        	return opportunity.createOrUpdate();
+	        })
 					.then (function (res) {
 						Notification.success ({
 							message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
