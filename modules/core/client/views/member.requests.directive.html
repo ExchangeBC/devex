@@ -12,7 +12,7 @@
 					</div>
 					<div>
 						<h4 class="card-title">{{member.firstName}} {{member.lastName}}</h4>
-						<p class="card-subtitle">{{member.userTitle}}<br/><a href="mailto:{{member.email}}">email me</a></p>
+						<p class="card-subtitle">{{member.userTitle}}<br/><a ng-if="member.email" href="mailto:{{member.email}}">email me</a></p>
 						<p class="card-subtitle"><small><em class="text-muted">Member Since: {{member.created | date:'mediumDate'}}</em></small></p>
 					</div>
 				</div>

@@ -187,3 +187,10 @@ exports.me = function (req, res) {
 
 	res.json(safeUserObject || null);
 };
+
+exports.count = function (req, res) {
+	User.count ({}, function (err, cnt) {
+		if (err) res.status(400).send(err);
+		else res.json ({count:cnt});
+	});
+};

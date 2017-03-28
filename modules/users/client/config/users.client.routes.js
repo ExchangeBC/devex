@@ -62,7 +62,12 @@
         url: '/authentication',
         templateUrl: '/modules/users/client/views/authentication/authentication.client.view.html',
         controller: 'AuthenticationController',
-        controllerAs: 'vm'
+        controllerAs: 'vm',
+        resolve: {
+          usercount: function (UsersService) {
+            return UsersService.countUsers ().then (function (o) {return o.count});
+          }
+        }
       })
       .state('authentication.gov', {
         url: '/government',

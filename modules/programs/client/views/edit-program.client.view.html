@@ -2,7 +2,7 @@
 <section class="static-page">
 <div class="container" role="main">
   <!-- <div ncy-breadcrumb></div> -->
-  <form id="programForm" name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
+  <form id="programForm" warn-on-exit name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
 	<div class="row form-head">
 	<div class="col-sm-7">
 		<h2 ng-if="vm.editing">Editing: {{::vm.program.title}}</h2>

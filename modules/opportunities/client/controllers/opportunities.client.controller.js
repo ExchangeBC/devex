@@ -19,6 +19,7 @@
 	// =========================================================================
 	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification) {
 		var vm                    = this;
+		vm.pageViews = 123456;
 		vm.projectId              = $stateParams.projectId;
 		vm.opportunity            = opportunity;
 		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
@@ -123,7 +124,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService) {
 		var rightNow                          = new Date();
 		var vm                                = this;
 		vm.previousState                      = previousState;
@@ -159,6 +160,10 @@
 		vm.programTitle           = $stateParams.programTitle || null;
 		vm.projectId              = $stateParams.projectId || null;
 		vm.projectTitle           = $stateParams.projectTitle || null;
+		//
+		// cities list
+		//
+		vm.cities = dataService.cities;
 		//
 		// if editing, set from existing
 		//
