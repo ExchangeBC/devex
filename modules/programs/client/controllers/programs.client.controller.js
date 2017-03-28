@@ -152,6 +152,7 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
+				vm.form.programForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> program saved successfully!'
 				});

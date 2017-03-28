@@ -112,6 +112,47 @@
 				<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Paste link to GitHub Issue">
 			</div>
 			<br><br>
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-4 col-md-3">
+						<div class="form-group" show-errors>
+							<label class="control-label" for="location">Location</label>
+							<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('location')"></i>
+							<div class="input-help alert alert-info" data-field="location" ng-show="vm.displayHelp.location">
+								<p>Select the location where the work is to be performed</p>
+							</div>
+							<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" required ng-options="v as v for v in vm.cities">
+								<option value="">Select Location</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group">
+					<div class="col-sm-12 col-md-12">
+						<div class="form-group" show-errors>
+							<label class="control-label" >On Site Requirements</label>
+							<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('onsite')"></i>
+							<div class="input-help alert alert-info" data-field="onsite" ng-show="vm.displayHelp.onsite">
+								<p>Select whether work is required on or off site, or a mix of the two</p>
+							</div>
+							<label class="radio-inline">
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">All On-Site
+							</label>
+							<label class="radio-inline">
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">All Off-Site
+							</label>
+							<label class="radio-inline">
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="mixed">Both / Either
+							</label>
+						</div>
+					</div>
+				</div>
+
+
+
+			</div>
 
 			<div class="form-group">
 				<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>

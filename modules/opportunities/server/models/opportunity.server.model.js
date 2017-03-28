@@ -24,6 +24,8 @@ var OpportunitySchema = new Schema({
 	earn         : {type: Number, default: 0, required: 'Please provide a reward amount'},
 	tags         : [String],
 	status       : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
+	onsite       : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
+	location     : {type: String, default:''},
 	isPublished  : {type: Boolean, default: false},
 	wasPublished : {type: Boolean, default: false},
 	deadline     : {type: Date, default: null},

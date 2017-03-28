@@ -306,6 +306,7 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
+				vm.form.opportunityForm.$setPristine ();
 				// console.log ('now saved the new opportunity, redirect user');
 				vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 				vm.opportunity.assignment = new Date (vm.opportunity.assignment);

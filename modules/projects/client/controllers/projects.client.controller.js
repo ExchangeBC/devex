@@ -193,6 +193,7 @@
 			// success, notify and return to list
 			//
 			.then (function (res) {
+				vm.form.projectForm.$setPristine ();
 				// console.log ('now saved the new project, redirect user');
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'
