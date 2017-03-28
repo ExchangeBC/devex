@@ -36,33 +36,22 @@
        <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
     </div>
 
-    <div class="card-header">
-      <h4 class="card-title" style="color: black; font-size: 18px;"><b>{{opportunity.earn|currency}}</b></h4>
-      <div class="label-list">
+    <div class="card-header" style="padding-top: 0; padding-bottom: 0;">
+      <h4 style="margin-top: 10px; margin-bottom: 5px;">Closing in:  <span style="color: black; font-size: 18px; font-weight: 800;">{{vm.closing(opportunity)}}</span></h4>
+      <div class="label-list" style="padding-top: 4px;">
         <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
-      <h4>Closing in: <b>{{vm.closing(opportunity)}}</b></h4>
+      <h5 class="card-title" style="font-family: sans-serif; color: black; font-size: 20px; padding-top: 15px;"><b>{{opportunity.earn|currency}}</b></h5>
     </div>
 
-    <div class="card-block">
-      <div class="row">
-        <!--<div class="col-xs-3 col-sm-2">
-          <div class="card-img" ng-if="!vm.project && !vm.program">
-            <img class="img-rounded" style="padding-right: 20px; height: 65px;" src="/{{opportunity.program.logo}}"/>
-          </div>
-        </div>-->
-        <div class="col-xs-12 col-sm-12">
-          <h3 style="font-size: 16px; margin-top: 0px; font-family: Lato; text-transform: uppercase;"><a ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
-          </h3>
-          <p ng-bind="opportunity.short" style="font-size: 15px;"></p>
-        </div>
-      </div>
+    
+    <div class="card-block" style="padding-bottom: 0px;">
+      <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
+      </h3>
+      <p ng-bind="opportunity.short" style="font-size: 14px;"></p>
+      <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></p>
     </div>
-
-    <div class="card-header">
-      <h5 ng-if="opportunity.project"><a ui-sref="projects.view({projectId: opportunity.project.code})" ng-click="$event.stopPropagation()" title="Project"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></h5>
-    </div>
-
+    
   </div>
 
 </div>

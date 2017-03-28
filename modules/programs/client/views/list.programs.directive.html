@@ -30,15 +30,15 @@
     <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()"><i class="glyphicon glyphicon-pencil"></i></a>
   </div>
 
-  <div class="card-block">
+  <div class="card-block" style="padding: 10px;">
     <div class="row">
-      <div class="col-xs-12 col-sm-2" style="text-align: center">
+      <div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
         <div class="card-img">
-          <img class="img-rounded" style="height: 100px;" src="/{{program.logo}}"/>
+          <img class="img-rounded" style="height: 60px;" src="/{{program.logo}}"/>
         </div>
       </div>
-      <div class="col-xs-12 col-sm-10">
-        <h3 style="font-size: 16px; margin-top: 0px; font-family: Lato; text-transform: uppercase;">
+      <div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
+        <h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
           <a ui-sref="programs.view({ programId: program.code })" ng-bind="program.title"></a>
         </h3>
         <p ng-bind="program.short"></p>
