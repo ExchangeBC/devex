@@ -25,9 +25,20 @@ var path = require('path'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
-	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
+	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
+	fs = require('fs'),
+	markdown = require('helper-markdown'),
+	HandlebarsIntl = require('handlebars-intl'),
+	Handlebars = require('handlebars'),
+	htmlToText = require('html-to-text');
 
 var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
+
+Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
+HandlebarsIntl.registerWith(Handlebars);
+var emailBodyTemplateHtml = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/message_body.hbs.md'), 'utf8'));
+var emailSubjectTemplate = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/subject.hbs.md'), 'utf8'));
+
 // -------------------------------------------------------------------------
 //
 // set a opportunity role on a user
@@ -292,11 +303,24 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
 	if (ensureAdmin (req.opportunity, req.user, res)) {
 		//
+		// doNotNotify is a non persistent flag from the UI. If not explicity
+		// set we take the safer option set it to true.
+		//
+		var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
+		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step
 		//
 		var opportunity = _.assign (req.opportunity, req.body);
+
 		opportunity.wasPublished = opportunity.isPublished;
+		//
+		// set the lastPublished date so we can later determine if the
+		// opportunity have been published at least once before
+		//
+		if (opportunity.isPublished) {
+			opportunity.lastPublished = Date();
+		}
 		//
 		// set the audit fields so we know who did what when
 		//
@@ -310,14 +334,14 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				// TODO: change this to (opportunity.isPublished && !opporunity.doNotNotify)
-				// when supported
-				if (opportunity.isPublished) {
+				if (opportunity.isPublished && !doNotNotify) {
+					var htmlBody = emailBodyTemplateHtml({opportunity: opportunity});
+					var textBody = htmlToText.fromString(htmlBody, { wordwrap: 130 });
 					oppEmailNotifier.notify({
-						from: 'no_reply@gov.bc.ca',
-						subject: 'New ' + opportunity.earn + ' Code With Us opportunity on BCDevExchange',
-						textBody: 'Good Day!',
-						htmlBody: 'Good Day!'
+						from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
+						subject: emailSubjectTemplate({opportunity: opportunity}),
+						textBody: textBody,
+						htmlBody: htmlBody
 					})
 					.catch(function() {})
 					.then(function() {
