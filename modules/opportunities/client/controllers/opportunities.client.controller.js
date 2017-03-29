@@ -262,6 +262,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+			vm.form.opportunityForm.$setPristine ();
 			// console.log ('saving form', vm.opportunity);
 			if (!isValid) {
 				// console.log ('form is not valid');

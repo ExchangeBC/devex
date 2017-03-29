@@ -145,6 +145,7 @@
 			else if (vm.context === 'program') {
 				vm.project.program = vm.programId;
 			}
+			// vm.form.projectForm.$setPristine ();
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -168,6 +169,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+			vm.form.projectForm.$setPristine ();
 			// console.log ('saving form', vm.project);
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
@@ -201,7 +203,8 @@
 				if (editing) {
 					$state.go('projects.view', {projectId:project.code});
 				} else {
-					$state.go('projects.list');
+					// $state.go('projects.list');
+					$state.go('projects.view', {projectId:project.code});
 				}
 			})
 			//

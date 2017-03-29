@@ -133,6 +133,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+			vm.form.programForm.$setPristine ();
 			// console.log ('saving form');
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
@@ -165,7 +166,8 @@
 					if (editing) {
 						$state.go('programs.view', {programId:program.code});
 					} else {
-						$state.go('programs.list');
+						$state.go('programs.view', {programId:program.code});
+						// $state.go('programs.list');
 					}
 				});
 			})
