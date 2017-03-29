@@ -5,23 +5,53 @@
     .module('users')
     .controller('EditProfileController', EditProfileController);
 
-  EditProfileController.$inject = ['$scope', '$http', '$location', 'UsersService', 'Authentication', 'Notification'];
+  EditProfileController.$inject = ['$scope', '$http', '$location', '$state', 'modalService', 'UsersService', 'Authentication', 'Notification'];
 
-  function EditProfileController($scope, $http, $location, UsersService, Authentication, Notification) {
+  function EditProfileController($scope, $http, $location, $state, modalService, UsersService, Authentication, Notification) {
     var vm               = this;
     var isUser           = Authentication.user;
     var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
     var wasGovRequest    = isUser && !!~Authentication.user.roles.indexOf ('gov-request');
-    vm.user              = Authentication.user;
+    //
+    // deep copy the model, as we don't want to update until saved
+    //
+    vm.user              = angular.copy(Authentication.user);
     vm.updateUserProfile = updateUserProfile;
-
     vm.isgov = (wasGov || wasGovRequest);
     vm.goveditable = !wasGov;
 
+    var saveChangesModalOpt = {
+        closeButtonText: 'Return User Profile Page',
+        actionButtonText: 'Continue',
+        headerText: 'Unsaved Changes!',
+        bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
+    };
+
+    var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+      var pristineUser = angular.toJson(Authentication.user);
+      if (pristineUser !== angular.toJson(vm.user)) {
+        if (toState.retryInProgress) {
+          toState.retryInProgress = false;
+          return;
+        }
+        modalService.showModal({}, saveChangesModalOpt)
+          .then(function continueStateChange (result) {
+            toState.retryInProgress = true;
+            $state.go(toState, toParams);
+          }, function() {
+
+          })
+          event.preventDefault();
+      }
+    });
+
+    $scope.$on('$destroy', function () {
+      window.onbeforeunload = null;
+      $locationChangeStartUnbind();
+    });
 
     // Update a user profile
     function updateUserProfile(isValid) {
-
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 
