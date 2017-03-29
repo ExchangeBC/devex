@@ -1,10 +1,10 @@
-<section style="background-color: #0a4d8d; padding-top: 40px; padding-bottom: 25px;">
+<section style="background: url('/modules/core/client/img/headers/signup-blue.jpg') no-repeat center; padding-top: 40px; padding-bottom: 25px;">
 
   <div class="container">
 
   <section class="row">
 
-    <div class="col-xs-12 col-md-6" style="text-align: center; background-color: white; padding-bottom: 30px; margin-bottom: 30px;">
+    <div class="col-xs-12 col-md-6" style="text-align: center; padding-bottom: 30px; margin-bottom: 30px;">
       <h3><a href ng-click="vm.callOauthProvider('/api/auth/github')">Sign in with your GitHub account</h3>
       <!--<div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/github')" ng-src="/modules/users/client/img/buttons/github.png"></a></div>
       <br><br>-->
@@ -17,6 +17,11 @@
 
       <div class="row">
         <div class="container col-md-12">
+          <h3>Join {{vm.usercount}} active users</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="container col-md-12">
           <h4 style="color: #d2edf9; line-height: 34px;"><i class="fa fa-university"></i> &nbsp; Public Sector Employees</h3>
           <p>Raise your profile with developers and build community around your open source project. Hire talent fast.</p>
         </div>
@@ -26,12 +31,6 @@
         <div class="container col-md-12">
           <h4 style="color: #d2edf9; line-height: 34px;"><i class="fa fa-user-circle-o"></i> &nbsp; Developers</h3>
           <p>Get notified as soon as new opportunities are posted.</p>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="container col-md-12">
-          <p>BCDevExchange has {{vm.usercount}} active users
         </div>
       </div>
 
