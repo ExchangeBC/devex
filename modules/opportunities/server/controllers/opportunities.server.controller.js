@@ -134,6 +134,14 @@ var forProject = function (id) {
 };
 // -------------------------------------------------------------------------
 //
+// increment the number of views of an opportunity
+//
+// -------------------------------------------------------------------------
+var incrementViews = function (id) {
+	Opportunity.update ({ _id: id }, { $inc: { views: 1 }}).exec ();
+};
+// -------------------------------------------------------------------------
+//
 // get a list of all my opportunities, but only ones I have access to as a normal
 // member or admin, just not as request
 //
@@ -270,6 +278,7 @@ GITHUB related stuff
 // -------------------------------------------------------------------------
 exports.read = function (req, res) {
 	res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
+	incrementViews (req.opportunity._id);
 };
 
 // -------------------------------------------------------------------------

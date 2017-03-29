@@ -19,9 +19,10 @@
 	// =========================================================================
 	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification) {
 		var vm                    = this;
-		vm.pageViews = 123456;
+
 		vm.projectId              = $stateParams.projectId;
 		vm.opportunity            = opportunity;
+		vm.pageViews              = opportunity.views;
 		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
