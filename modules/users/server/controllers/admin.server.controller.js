@@ -64,7 +64,7 @@ exports.delete = function (req, res) {
       });
     }
 
-    if(user.subscribeOpportunitiesId !== null) {
+    if (user.subscribeOpportunitiesId !== null) {
       oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
       .then(function() {
         res.json();
