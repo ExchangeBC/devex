@@ -5,7 +5,7 @@ exports.notifier = function (notifyBChost, port, serviceName, type) {
     port = port,
     serviceName = serviceName,
     type = type,
-    url = host + ':' + port;
+    url = port ? host + ':' + port : host;
 
   return {
     subscribe : function (channelId) {
