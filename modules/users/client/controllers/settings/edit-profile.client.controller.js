@@ -19,6 +19,7 @@
     vm.updateUserProfile = updateUserProfile;
     vm.isgov = (wasGov || wasGovRequest);
     vm.goveditable = !wasGov;
+    var pristineUser = angular.toJson(Authentication.user);
 
     var saveChangesModalOpt = {
         closeButtonText: 'Return User Profile Page',
@@ -28,7 +29,6 @@
     };
 
     var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-      var pristineUser = angular.toJson(Authentication.user);
       if (pristineUser !== angular.toJson(vm.user)) {
         if (toState.retryInProgress) {
           toState.retryInProgress = false;
@@ -89,6 +89,8 @@
 
         Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
         Authentication.user = response;
+        vm.user = angular.copy(Authentication.user);
+        pristineUser = angular.toJson(Authentication.user);
       }, function (response) {
         Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
       });
