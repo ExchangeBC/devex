@@ -57,6 +57,16 @@
 
         return false;
       }
+
+      //
+      // ensure that these flags aren't saved if email is not given
+      //
+      if(vm.user.email == null || vm.user.email === "") {
+        vm.user.notifyOpportunities = false;
+        vm.user.notifyEvents = false;
+        vm.isgov = false;
+      }
+
       //
       // if changes to government flag ...
       //

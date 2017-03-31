@@ -27,7 +27,7 @@ var validateLocalStrategyProperty = function (property) {
  * A Validation function for local strategy email
  */
 var validateLocalStrategyEmail = function (email) {
-  return ((this.provider !== 'local' && !this.updated) || validator.isEmail(email, { require_tld: false }));
+  return ((this.provider !== 'local' && !this.updated) || validator.isEmpty(email) || validator.isEmail(email, { require_tld: false }));
 };
 
 /**
@@ -37,14 +37,14 @@ var UserSchema = new Schema({
   firstName: {
     type: String,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyProperty, 'Please fill in your first name']
+    default: ''
+    //validate: [validateLocalStrategyProperty, 'Please fill in your first name']
   },
   lastName: {
     type: String,
     trim: true,
-    default: '',
-    validate: [validateLocalStrategyProperty, 'Please fill in your last name']
+    default: ''
+    //validate: [validateLocalStrategyProperty, 'Please fill in your last name']
   },
   displayName: {type: String, trim: true },
   email: {

@@ -74,6 +74,9 @@ exports.update = function (req, res) {
 
 function subscriptionHandler(user, oldUser) {
 	var promise = Promise.resolve();
+	if(user.email == null || user.email === "") {
+		return promise;
+	}
 	var notifyOppChanged = user.notifyOpportunities !== oldUser.notifyOpportunities;
 	var emailChanged = user.email !== oldUser.email;
 	// user is subscribed before record save so that we can save the subscription
