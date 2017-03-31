@@ -2,7 +2,6 @@
 
 module.exports = {
   "adminIps": [
-    '127.0.0.1',
     process.env.DEVEX_HOST
   ],
   "port": 3000,
