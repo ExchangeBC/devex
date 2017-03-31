@@ -5,8 +5,13 @@
  */
 var path = require('path'),
   mongoose = require('mongoose'),
+  _ = require('lodash'),
   User = mongoose.model('User'),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
+  userController = require(path.resolve('./modules/users/server/controllers/users.server.controller.js'));
+
+var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
 
 /**
  * Show the current user
@@ -20,6 +25,7 @@ exports.read = function (req, res) {
  */
 exports.update = function (req, res) {
   var user = req.model;
+  var prevState = _.cloneDeep(req.model);
   // CC: USERFIELDS
   // For security purposes only merge these parameters
   user.firstName           = req.body.firstName;
@@ -31,15 +37,17 @@ exports.update = function (req, res) {
   user.notifyOpportunities = req.body.notifyOpportunities;
   user.notifyEvents        = req.body.notifyEvents;
   user.notifyBlogs         = req.body.notifyBlogs;
+  userController.subscriptionHandler(user,prevState)
+  .then(function() {
+    user.save(function (err) {
+      if (err) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(err)
+        });
+      }
 
-  user.save(function (err) {
-    if (err) {
-      return res.status(422).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    }
-
-    res.json(user);
+      res.json(user);
+    });
   });
 };
 
@@ -56,7 +64,15 @@ exports.delete = function (req, res) {
       });
     }
 
-    res.json(user);
+    if (user.subscribeOpportunitiesId !== null) {
+      oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+      .then(function() {
+        res.json();
+      })
+    }
+    else {
+      res.json(user);
+    }
   });
 };
 

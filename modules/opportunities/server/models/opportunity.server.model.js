@@ -29,6 +29,7 @@ var OpportunitySchema = new Schema({
 	location     : {type: String, default:''},
 	isPublished  : {type: Boolean, default: false},
 	wasPublished : {type: Boolean, default: false},
+	lastPublished: { type: Date, default: null},
 	deadline     : {type: Date, default: null},
 	assignment   : {type: Date, default: null},
 	start        : {type: Date, default: null},

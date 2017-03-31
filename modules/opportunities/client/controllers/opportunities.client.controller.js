@@ -17,7 +17,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q) {
 		var vm                    = this;
 
 		vm.projectId              = $stateParams.projectId;
@@ -85,7 +85,37 @@
 			var publishedState = opportunity.isPublished;
 			var t = state ? 'Published' : 'Un-Published'
 			opportunity.isPublished = state;
-			opportunity.createOrUpdate ()
+			opportunity.doNotNotify = false;
+			var modalOptions = {
+	        closeButtonText: 'Do Not Send Notification',
+	        actionButtonText: 'Send Notification',
+	        headerText: 'Publish Opportunity',
+	        bodyText: 'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?'
+	    };
+	    var promise;
+	    //
+	    // Bypass the modal if first time publishing OR if unpublishing
+	    //
+	    if ((opportunity.isPublished && !opportunity.lastPublished) ||
+	    			!opportunity.isPublished) {
+	    	promise = $q.resolve();
+	    }
+	    else {
+	    	promise = modalService.showModal({}, modalOptions)
+        .then(function sendNotification (result) {
+        		opportunity.doNotNotify = false;
+        },
+        function doNotSendNotificaiton (result) {
+        	opportunity.doNotNotify = true;
+        })
+	    }
+
+      //
+			// success, notify and return to list
+			//
+      promise.then(function() {
+      	return opportunity.createOrUpdate();
+      })
 			//
 			// success, notify and return to list
 			//
@@ -125,7 +155,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q) {
 		var rightNow                          = new Date();
 		var vm                                = this;
 		vm.previousState                      = previousState;
@@ -300,10 +330,38 @@
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
-			//
+
+			vm.opportunity.doNotNotify = false;
+			var modalOptions = {
+	        closeButtonText: 'Do Not Send Notification',
+	        actionButtonText: 'Send Notification',
+	        headerText: 'Update Opportunity',
+	        bodyText: 'You are updating the properties of a published opportunity. Would you like to re-notify all subscribed users?'
+	    };
+	    var promise;
+	    //
+	    // Bypass the modal if first time publishing OR if unpublishing
+	    //
+	    if ((vm.opportunity.isPublished && !vm.opportunity.lastPublished) ||
+	    			!vm.opportunity.isPublished) {
+	    	promise = $q.resolve();
+	    }
+	    else {
+	    	promise = modalService.showModal({}, modalOptions)
+        .then(function sendNotification (result) {
+        		vm.opportunity.doNotNotify = false;
+        },
+        function doNotSendNotificaiton (result) {
+        	vm.opportunity.doNotNotify = true;
+        })
+	    }
+
+      //
 			// Create a new opportunity, or update the current instance
 			//
-			vm.opportunity.createOrUpdate ()
+      promise.then(function() {
+      	return vm.opportunity.createOrUpdate();
+      })
 			//
 			// success, notify and return to list
 			//

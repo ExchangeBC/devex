@@ -11,10 +11,12 @@ var _ = require('lodash'),
 	multer = require('multer'),
 	config = require(path.resolve('./config/config')),
 	User = mongoose.model('User'),
-	validator = require('validator');
+	validator = require('validator'),
+	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
 
  // CC:  USERFIELDS
-var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'notifyEvents', 'notifyBlogs', 'userTitle'];
+var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'subscribeOpportunitiesId', 'notifyEvents', 'notifyBlogs', 'userTitle'];
+var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
 
 /**
  * Update user details
@@ -22,11 +24,13 @@ var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'governme
 exports.update = function (req, res) {
 	// Init Variables
 	var user = req.user;
-
+	var prevState = _.cloneDeep(req.user);
 	if (user) {
 		// Update whitelisted fields only
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
+		// Previous state of user
+		var oldUser = User.find({_id: user._id});
 		//
 		// this deals with marking the user as government or not
 		//
@@ -39,28 +43,81 @@ exports.update = function (req, res) {
 
 		user.updated = Date.now();
 		user.displayName = user.firstName + ' ' + user.lastName;
-		user.save(function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				req.login(user, function (err) {
-					if (err) {
-						res.status(400).send(err);
-					} else {
-						res.json(user);
-					}
-				});
-			}
+
+		subscriptionHandler(user, prevState)
+		.then(function() {
+			return user.save(function (err) {
+				if (err) {
+					return res.status(422).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					req.login(user, function (err) {
+						if (err) {
+							res.status(400).send(err);
+						} else {
+							res.json(user);
+						}
+					});
+				}
+			});
 		});
-	} else {
+
+	}
+	else {
 		res.status(401).send({
 			message: 'User is not signed in'
 		});
 	}
 };
 
+
+function subscriptionHandler(user, oldUser) {
+	var promise = Promise.resolve();
+	if(user.email == null || user.email === "") {
+		return promise;
+	}
+	var notifyOppChanged = user.notifyOpportunities !== oldUser.notifyOpportunities;
+	var emailChanged = user.email !== oldUser.email;
+	// user is subscribed before record save so that we can save the subscription
+	// id to use when unsubscribing.
+	if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
+		promise = oppEmailNotifier.subscribe(user.email)
+			.then(function(json) {
+				// we save the id for the subscription so that was can unsubscribe at
+				// a later point.
+				user.subscribeOpportunitiesId = json.id;
+			})
+			.catch(function(err) {
+				// if there was an error, reset the notifyOpportunites flag
+				console.error('Could not subscribe user due to error from notification ' +
+					'service:' + err);
+				user.notifyOpportunites = false;
+			});
+	}
+	else if (emailChanged && user.notifyOpportunities && user.subscribeOpportunitiesId !== null ) {
+		// we need to update the subscription
+		promise = oppEmailNotifier.subscribeUpdate(user.subscribeOpportunitiesId, user.email)
+			.catch(function(err) {
+				// if there was an error, reset the notifyOpportunites flag
+				console.error('Could not update subscription for user due to error from notification ' +
+					'service:' + err);
+			});
+	}
+	else if (notifyOppChanged && !user.notifyOpportunities && user.subscribeOpportunitiesId != null) {
+		promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+			.then(function() {
+				user.subscribeOpportunitiesId = null;
+			})
+			.catch(function(err) {
+				// if there was an error, reset the notifyOpportunites flag
+			})
+	}
+
+	return promise;
+}
+
+exports.subscriptionHandler = subscriptionHandler;
 /**
  * Update profile picture
  */
