@@ -5,12 +5,16 @@ services:
     build: .
     container_name: meanjs
     ports:
-     - "3000:3000"
+     - "3030:3000"
      - "5858:5858"
      - "35729:35729"
     environment:
      - NODE_ENV=development
      - DB_DEVEX_PORT_27017_TCP_ADDR=db
+     - GITHUB_ID=3d819dee8be7237af9ee
+     - GITHUB_SECRET=e3f26152b2d04e7877e1a57a07ea1d6bab63da18
+     - NOTIFY_BC_HOST=notify-bc_devex
+     - NOTIFY_BC_PORT=3000
     depends_on:
      - db
     volumes_from:
@@ -37,3 +41,16 @@ services:
       - /var/lib/mongodb
       - /var/log/mongodb
     entrypoint: /bin/true
+  notify-bc:
+    image: notify-bc
+    container_name: notify-bc_devex
+    ports:
+      - "8888:3000"
+    volumes:
+      - ./config/notifyBC/config.development.js:/usr/src/app/server/config.development.js
+    environment:
+      - DEVEX_HOST=meanjs
+      - NODE_ENV=development
+      - MAILER_SERVICE_PROVIDER=gmail
+      - MAILER_EMAIL_ID=<email>
+      - MAILER_PASSWORD=<password>
