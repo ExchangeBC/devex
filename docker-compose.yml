@@ -47,9 +47,11 @@ services:
     ports:
       - "8888:3000"
     volumes:
+      - ./config/notifyBC/datasources.development.js:/usr/src/app/server/datasources.development.js
       - ./config/notifyBC/config.development.js:/usr/src/app/server/config.development.js
     environment:
       - DEVEX_HOST=meanjs
+      - DATABASE_SERVICE_NAME=db
       - NODE_ENV=development
       - MAILER_SERVICE_PROVIDER=gmail
       - MAILER_EMAIL_ID=<email>
