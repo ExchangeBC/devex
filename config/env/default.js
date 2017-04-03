@@ -24,6 +24,13 @@ module.exports = {
     // in HTTPS mode.
     secure: false
   },
+  //
+  // things to do with the notification service
+  //
+  notification: {
+    host: process.env.NOTIFY_BC_HOST || 'notify-bc_devex',
+    port: process.env.NOTIFY_BC_PORT || 3000
+  },
   // sessionSecret should be changed for security measures and concerns
   sessionSecret: process.env.SESSION_SECRET || 'MEAN',
   // sessionKey is the cookie session name
