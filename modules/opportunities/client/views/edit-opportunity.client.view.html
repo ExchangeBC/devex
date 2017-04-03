@@ -22,7 +22,7 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="well">
+		<div class="well" style="margin-left: 15px; margin-right: 15px;">
 	      <h4>Define what you need. Evaluate proposals. Select a developer.</h4>
 	      <p>Paid opportunities posted on the BCDevExchange are governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, Code With Us.</p>
 	      <p><a href="/codewithusps">Read more</a> to understand your responsibilities for managing an opportunity.</p>
@@ -119,7 +119,7 @@
 							<label class="control-label" for="location">Location</label>
 							<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('location')"></i>
 							<div class="input-help alert alert-info" data-field="location" ng-show="vm.displayHelp.location">
-								<p>Select the location where the work is to be performed</p>
+								<p>Where is your office?</p>
 							</div>
 							<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" required ng-options="v as v for v in vm.cities">
 								<option value="">Select Location</option>
@@ -135,17 +135,17 @@
 							<label class="control-label" >On Site Requirements</label>
 							<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('onsite')"></i>
 							<div class="input-help alert alert-info" data-field="onsite" ng-show="vm.displayHelp.onsite">
-								<p>Select whether work is required on or off site, or a mix of the two</p>
+								<p>State whether you are OK NOT to work with the developer in-person, or if you need them to work with you in-person some, or most of the time. </p>
 							</div>
 							<label class="radio-inline">
-							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">All On-Site
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">In-person work NOT required
 							</label>
 							<label class="radio-inline">
-							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">All Off-Site
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="mixed">Some in-person work required
 							</label>
 							<label class="radio-inline">
-							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="mixed">Both / Either
-							</label>
+							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">In-person work required
+							</label>							
 						</div>
 					</div>
 				</div>
