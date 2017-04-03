@@ -32,7 +32,7 @@ var path = require('path'),
 	Handlebars = require('handlebars'),
 	htmlToText = require('html-to-text');
 
-var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
+var oppEmailNotifier = notifier('opportunities', 'email');
 
 Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
 HandlebarsIntl.registerWith(Handlebars);

@@ -11,7 +11,7 @@ var path = require('path'),
   notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
   userController = require(path.resolve('./modules/users/server/controllers/users.server.controller.js'));
 
-var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
+var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
  * Show the current user

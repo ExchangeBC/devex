@@ -1,6 +1,12 @@
-var fetch = require('node-fetch');
+'use strict';
 
-exports.notifier = function (notifyBChost, port, serviceName, type) {
+var fetch  = require('node-fetch');
+var path   = require('path');
+var config = require(path.resolve('./config/config'));
+
+exports.notifier = function (serviceName, type) {
+  var notifyBChost = config.notification.host;
+  var port = config.notification.port;
   var host = notifyBChost.match(/http/) ? notifyBChost : 'http://' + notifyBChost,
     port = port,
     serviceName = serviceName,
@@ -64,4 +70,4 @@ exports.notifier = function (notifyBChost, port, serviceName, type) {
     }
 
   }
-}
+};

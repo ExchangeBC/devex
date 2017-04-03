@@ -16,7 +16,7 @@ var _ = require('lodash'),
 
  // CC:  USERFIELDS
 var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'subscribeOpportunitiesId', 'notifyEvents', 'notifyBlogs', 'userTitle'];
-var oppEmailNotifier = notifier(process.env.NOTIFY_BC_HOST, process.env.NOTIFY_BC_PORT, 'opportunities', 'email');
+var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
  * Update user details
