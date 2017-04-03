@@ -240,6 +240,34 @@ section.detail dt {
 	color: #a6a6a6;
 }
 
+section.signup {
+  position: relative;
+  width: 100%;
+  min-height: auto;
+  overflow-y: hidden;
+  background: url('/modules/core/client/img/headers/signup-darkened.jpg') no-repeat center;
+  background-size: cover;
+  margin-top: -20px;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  color: #fff;
+}
+seciton.signup p {
+	font-size: 14px;
+}
+section.signup h2 {
+  font-size: 24px;
+  line-height: 1.6em;
+  color: #fff;
+}
+section.signup h5 {
+	font-weight: 300;
+	font-size: 20px;
+	line-height: 1.7em;
+	padding-bottom: 30px;
+	color: #fff;
+}
+
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
@@ -331,22 +359,22 @@ section.static ul {
 	font-weight: 600;	
 }
 .label-info {
-	background-color: transparent;
+	background-color: #595959;
 	border-color: #595959;
 	border-style: solid;
 	border-width: 2px;
-	color: #595959;
+	color: white;
 	padding: 7px 11px;
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;
 }
 .label-warning {
-	background-color: transparent; 
+	background-color: #f26925; 
 	border-color: #f26925;
 	border-style: solid;
 	border-width: 3px;
-	color: black;
+	color: white;
 	padding: 7px 11px;
 	margin-top: 9px;
 	font-size: 11px;
