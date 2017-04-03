@@ -335,7 +335,82 @@ gulp.task('mocha', function (done) {
       });
   });
 });
+//
+// Run this task the first time after setting up the notifyBC service
+// For each devex user that has set the notifyOpportunities flag to true
+// it will subscribe the user to notifyBC and save the subscriptionOpportunitiesId
+// to its model
+//
+gulp.task('updateNotifyBC', function (done) {
+  // Open mongoose connections
+  var mg = require('./config/lib/mongoose.js');
+  var mongoose = require('mongoose');
+  mg.loadModels();
+  var subscriptionHandler = require(path.resolve('./modules/users/server/controllers/users.server.controller.js')).subscriptionHandler
+  var subscriptions = [];
+  mongoose.Promise = Promise;
+  // Connect mg
+  mg.connect(function () {
+    var User = mongoose.model('User');
+    var promise = User.find({notifyOpportunities: true}).exec()
 
+    promise.then(function(records) {
+      for(var i = 0; i < records.length; i++) {
+        var user = records[i];
+        var promise = subscriptionHandler(user, {})
+          .then(function() {
+            return user.save();
+          });
+        subscriptions.push(promise);
+      }
+      return Promise.all(subscriptions)
+    })
+    .then(function() {
+        console.log('disconnecting');
+        mg.disconnect(function () {
+          done(error);
+        });
+    });
+  });
+});
+
+//
+// This task will update the lastPublished field to the current
+// date if an Opportunity has isPublisehd set to true.
+// Adding this field will prompt users on the frontend as to whether
+// they want to resend notifications. If the lastPublished field is null,
+// it is assume that it has never been published and will send notifications
+// automatically.
+//
+gulp.task('updateLastPublished', function (done) {
+  // Open mongoose connections
+  var mg = require('./config/lib/mongoose.js');
+  var mongoose = require('mongoose');
+  mg.loadModels();
+  var opportunities = [];
+  mongoose.Promise = Promise;
+  // Connect mg
+  mg.connect(function () {
+    var Opportunity = mongoose.model('Opportunity');
+    var promise = Opportunity.find({isPublished: true, lastPublished: null}).exec()
+
+    promise.then(function(records) {
+      for(var i = 0; i < records.length; i++) {
+        var opportunity = records[i];
+        // just set it to the current date
+        opportunity.lastPublished = Date();
+        opportunities.push(opportunity.save());
+      }
+      return Promise.all(opportunities)
+    })
+    .then(function() {
+        console.log('disconnecting');
+        mg.disconnect(function () {
+          done(error);
+        });
+    });
+  });
+});
 // Prepare istanbul coverage test
 gulp.task('pre-test', function () {
 
@@ -501,3 +576,4 @@ gulp.task('prod', function (done) {
   runSequence(['copyLocalEnvConfig', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
   // runSequence(['copyLocalEnvConfig', 'makeUploadsDir', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
 });
+
