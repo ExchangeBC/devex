@@ -247,7 +247,7 @@ section.signup {
   overflow-y: hidden;
   background: url('/modules/core/client/img/headers/signup-darkened.jpg') no-repeat center;
   background-size: cover;
-  margin-top: -20px;
+  margin-top: 0px;
   padding-top: 20px;
   padding-bottom: 40px;
   color: #fff;
