@@ -3,18 +3,24 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12 text-right">
+				<div>
+					<label class="label-danger" ng-if="vm.canEdit && !vm.program.isPublished" uib-tooltip="No one can see this page until you publish it.">
+					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+					</label>
+				</div>
+				
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="You can edit the details about this program.">
-						<i class="glyphicon glyphicon-pencil"></i> Edit
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
 					</button>
-					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Request membership here.">
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Click here to send a request to the program admin.">
 						<i class="glyphicon glyphicon-user"></i> Request Membership
 					</button>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this program page is published and anyone can view it. You can un-publish it here.">
-						<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+					<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this program page is published and anyone can view it. You can unpublish it here.">
+						<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
 					</a>
-					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this page to the world?">
-						<i class="glyphicon glyphicon-ok-circle"></i> Publish
+					<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this program to the world?">
+						<i class="glyphicon glyphicon-check"></i> Publish
 					</a>
 				</div>
 			</div>
@@ -99,18 +105,23 @@
 <div class="container">
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
+		<div>
+			<label class="label-danger" ng-if="vm.canEdit && !vm.program.isPublished" uib-tooltip="No one can see this page until you publish it.">
+			<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+			</label>
+		</div>
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="You can edit the details about this program.">
-				<i class="glyphicon glyphicon-pencil"></i> Edit
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="Edit this page">
+				<i class="glyphicon glyphicon-edit"></i> Edit
 			</button>
-			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Request membership here.">
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this program? Click here to send a request to the program admin.">
 				<i class="glyphicon glyphicon-user"></i> Request Membership
 			</button>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this program page is published and anyone can view it. You can un-publish it here.">
-				<i class="glyphicon glyphicon-ban-circle"></i> Un-Publish
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this program page is published and anyone can view it. You can unpublish it here.">
+				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this page to the world?">
-				<i class="glyphicon glyphicon-ok-circle"></i> Publish
+			<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this program to the world?">
+				<i class="glyphicon glyphicon-check"></i> Publish
 			</a>
 		</div>
 	</div>

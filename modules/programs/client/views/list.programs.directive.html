@@ -13,21 +13,21 @@
 <div class="card card-flat" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
 
   <div class="card-header" ng-if="vm.isAdmin || program.userIs.admin" style="text-align: right">
-    <span ng-if="vm.isAdmin || program.userIs.admin" class="label label-primary" uib-tooltip="You are an admin for this program">Admin</span>
+    <span ng-if="vm.isAdmin || program.userIs.admin" class="label label-primary">Admin</span>
     &nbsp;
     <span ng-if="program.userIs.member && !program.userIs.admin" class="label label-primary">Member</span>
     &nbsp;
     <span ng-if="program.userIs.request" class="label label-primary" uib-tooltip="Your membership request is pending approval">Pending Member</span>
     &nbsp;
-    <span ng-if="!program.isPublished"   class="label label-warning" uib-tooltip="This program isn't published yet - no one can see it but you.">Not Published</span>
+    <span ng-if="!program.isPublished" class="label-danger" ><i class="fa fa-exclamation-triangle"></i> UNPUBLISHED</span>
     &nbsp;
-    <a ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" uib-tooltip="UnPublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
+    <a ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" uib-tooltip="Unpublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
     &nbsp;
-    <a ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-ok-circle"></i></a>
+    <a ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-check"></i></a>
     &nbsp;
     <a ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" uib-tooltip="Request Membership"><i class="glyphicon glyphicon-user"></i></a>
     &nbsp;
-    <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()"><i class="glyphicon glyphicon-pencil"></i></a>
+    <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
   </div>
 
   <div class="card-block" style="padding: 10px;">

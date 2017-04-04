@@ -189,6 +189,12 @@ section.detail {
 	padding-bottom: 40px;
 	color: #595959;
 }
+p.warning {
+	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 800;
+    color: #ff0000;
+    font-size: 14px;
+}
 section.detail h1 {
 	margin-top: 20px;
 	padding-top: 0px;
@@ -355,47 +361,52 @@ section.static ul {
     float: none;
 }
 .label-primary {
-	padding: 7px 11px;
+	padding: 5px 8px 5px 8px;
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;	
 }
 .label-info {
 	background-color: #595959;
-	border-color: #595959;
-	border-style: solid;
-	border-width: 2px;
 	color: white;
-	padding: 7px 11px;
+	padding: 5px 8px 5px 8px;
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;
 }
 .label-price {
 	background-color: black;
-	border-color: black;
-	border-style: solid;
-	border-width: 2px;
 	color: white;
-	padding: 2px 4px;
+	padding: 5px 8px 5px 8px;
 	margin-top: 9px;
 	font-size: 15px;
 	font-weight: 600;
 }
 .label-warning {
 	background-color: #f26925; 
-	border-color: #f26925;
-	border-style: solid;
-	border-width: 3px;
 	color: white;
-	padding: 7px 11px;
+	padding: 5px 8px 5px 8px;
 	margin-top: 9px;
 	font-size: 11px;
 	font-weight: 600;
 }
 .label-danger {
+	background-color: transparent;
+	border-style: none;
 	padding: 7px 11px;
 	margin-top: 9px;
-	font-size: 11px;
-	font-weight: 600;	
+	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 800;
+    color: #ff0000;
+    font-size: 14px;	
+}
+.label-counter {
+	background-color: transparent;
+	border-style: none;
+	padding: 0px;
+	margin: 0px;
+	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
+    font-weight: 800;
+    color: #595959;
+    font-size: 18px;	
 }

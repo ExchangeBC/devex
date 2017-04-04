@@ -23,18 +23,19 @@
     &nbsp;
     <span ng-if="project.userIs.request" class="label label-primary">Pending Member</span>
     &nbsp;
-    <span ng-if="!project.isPublished"   class="label label-danger">Not Published</span>
+    <span ng-if="!project.isPublished" class="label-danger">
+          <i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
     &nbsp;
-    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project.code, programId: project.program.code, context:vm.context})" ng-click="$event.stopPropagation()">
-    <i class="glyphicon glyphicon-pencil"></i>
+    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);" ui-sref="projectadmin.edit({ projectId: project.code, programId: project.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
+    <i class="glyphicon glyphicon-edit"></i>
     </a>
     &nbsp;
-    <a ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="UnPublish">
+    <a ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="Unpublish">
     <i class="glyphicon glyphicon-ban-circle"></i>
     </a>
     &nbsp;
     <a ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
-    <i class="glyphicon glyphicon-ok-circle"></i>
+    <i class="glyphicon glyphicon-check"></i>
     </a>
     &nbsp;
     <a ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
