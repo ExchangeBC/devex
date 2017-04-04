@@ -207,12 +207,12 @@ section.detail h3 {
 }
 section.detail h4 {
 	padding-top: 15px;
+	font-weight: 600;
 }
 section.detail h5 {
 	padding-top: 0px;
 	font-size: 18px;
 	font-family: Lato;
-	color: black;
 	text-transform: uppercase;
 }
 section.detail p {

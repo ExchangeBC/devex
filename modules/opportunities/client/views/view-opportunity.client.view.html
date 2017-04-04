@@ -35,15 +35,12 @@
 	<div class="card-header">
 		<div class="row">
 			<div class="col-sm-5">
-				<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="color: black; font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
-				<dl ng-if="vm.opportunity.skills.length">
-					<!--<dt>Required Skills:</dt>-->
-					<dd class="label-list">
-					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
-					</dd>
-				</dl>
-				<h5 class="card-title" style="font-family: sans-serif; color: black; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
+				<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
+				<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
+				<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker">&nbsp;</i>Location</h4>
+   				<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp; <i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp; <i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
 			</div>
+
 			<div class="col-sm-7">
 				<dl class="dl-horizontal">
 				<dt>Posted by:</dt>
@@ -71,6 +68,14 @@
 					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
 					<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
 				</dl>
+			</div>
+			<div class="col-sm-12"
+				<dl ng-if="vm.opportunity.skills.length">
+					<!--<dt>Required Skills:</dt>-->
+					<dd class="label-list">
+					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+					</dd>
+				</dl>		
 			</div>
 		</div>
 	</div>

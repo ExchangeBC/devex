@@ -43,7 +43,7 @@
 				<label class="control-label" for="project">Project</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
 				<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
-					Select the project that this opportunity is related to. If you don't see it in the dropdown list, you'll have to create a new project page before you can post an opportunity.
+					Select the project that this opportunity falls under. If you don't see the project in the dropdown list, you'll need to go to the Projects tab and create a new project page first.
 				</div>
 				<select ng-if="!vm.projectLink && vm.context === 'program'"
 					name="project"
@@ -106,8 +106,7 @@
 			<div class="form-group" ng-if="vm.isAdmin|| vm.opportunity.userIs.admin">
 				<label class="control-label" for="github">Github Repository</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
-				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
-					Paste a link to the Issue in GitHub that describes this opportunity.
+				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">Create a new Issue in your project's GitHub repository.<br> Make the title of the Issue the same as the title of this opportunity.<br>Paste the link to the Issue in this field. When published, your opportunity will link to the Issue so that people can ask questions via the comments section on the Issue in GitHub.
 				</div>
 				<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Paste link to GitHub Issue">
 			</div>
@@ -128,6 +127,7 @@
 					</div>
 				</div>
 			</div>
+			<br><br>
 			<div class="row">
 				<div class="form-group">
 					<div class="col-sm-12 col-md-12">
@@ -135,8 +135,9 @@
 							<label class="control-label" >On Site Requirements</label>
 							<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('onsite')"></i>
 							<div class="input-help alert alert-info" data-field="onsite" ng-show="vm.displayHelp.onsite">
-								<p>State whether you are OK NOT to work with the developer in-person, or if you need them to work with you in-person some, or most of the time. </p>
+								<p>State whether you are OK NOT to work with the developer in-person, or if you need them to work with you in-person some, or most of the time.</p>
 							</div>
+							<div>
 							<label class="radio-inline">
 							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">In-person work NOT required
 							</label>
@@ -145,14 +146,13 @@
 							</label>
 							<label class="radio-inline">
 							<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">In-person work required
-							</label>							
+							</label>
+							</div>							
 						</div>
 					</div>
 				</div>
-
-
-
 			</div>
+			<br><br>
 
 			<div class="form-group">
 				<label class="control-label" for="skilllist">Required Skills (comma delimited list)</label>
@@ -182,7 +182,7 @@
 			<div class="row">
 				<div class="col-sm-4 col-md-3">
 					<div class="form-group" show-errors>
-						<label class="control-label" for="earn">Reward</label>
+						<label class="control-label" for="earn">Fixed-Price Reward</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
 						<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
 							<p>To the best of your ability, estimate a fair price for the amount of work you think it should take a qualified developer to meet the acceptance criteria. It's best to over-estimate.</p>
@@ -233,7 +233,9 @@
 	              			<p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
 							<p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>
 						</div>
+						<div>
 						<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
+						</div>
 					</div>
 				</div>
 				<div class="col-sm-4">
@@ -241,9 +243,11 @@
 						<label class="control-label" for="assignment">Assignment Date</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('assignment')"></i>
 						<div class="input-help alert alert-info" data-field="assignment" ng-show="vm.displayHelp.assignment">
-							Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time is fixed at 16:00 PST.)
+							Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time of day is fixed at 16:00 Pacific Time.)
 						</div>
+						<div>
 						<input type="date" name="assignment" required ng-model="vm.opportunity.assignment"/>
+						</div>
 					</div>
 				</div>
 				<div class="col-sm-4">
@@ -253,7 +257,9 @@
 						<div class="input-help alert alert-info" data-field="start" ng-show="vm.displayHelp.start">
 							Choose the date you'd like the developer to begin working.
 						</div>
+						<div>
 						<input type="date" name="start" ng-model="vm.opportunity.start"/>
+						</div>
 					</div>
 				</div>
 <!--
