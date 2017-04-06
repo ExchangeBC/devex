@@ -74,7 +74,7 @@ exports.update = function (req, res) {
 
 function subscriptionHandler(user, oldUser) {
 	var promise = Promise.resolve();
-	if(user.email == null || user.email === "") {
+	if (user.email == null || user.email === '') {
 		return promise;
 	}
 	var notifyOppChanged = user.notifyOpportunities !== oldUser.notifyOpportunities;
