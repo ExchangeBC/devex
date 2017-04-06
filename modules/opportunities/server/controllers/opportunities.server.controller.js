@@ -28,14 +28,14 @@ var path = require('path'),
 	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
 	fs = require('fs'),
 	markdown = require('helper-markdown'),
-	HandlebarsIntl = require('handlebars-intl'),
+	// HandlebarsIntl = require('handlebars-intl'),
 	Handlebars = require('handlebars'),
 	htmlToText = require('html-to-text');
 
 var oppEmailNotifier = notifier('opportunities', 'email');
 
 Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
-HandlebarsIntl.registerWith(Handlebars);
+// HandlebarsIntl.registerWith(Handlebars);
 var emailBodyTemplateHtml = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/message_body.hbs.md'), 'utf8'));
 var emailSubjectTemplate = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/subject.hbs.md'), 'utf8'));
 
