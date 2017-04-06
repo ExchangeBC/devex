@@ -355,7 +355,7 @@ gulp.task('updateNotifyBC', function (done) {
     var promise = User.find({notifyOpportunities: true}).exec()
 
     promise.then(function(records) {
-      for(var i = 0; i < records.length; i++) {
+      for (var i = 0; i < records.length; i++) {
         var user = records[i];
         var promise = subscriptionHandler(user, {})
           .then(function() {
@@ -368,7 +368,7 @@ gulp.task('updateNotifyBC', function (done) {
     .then(function() {
         console.log('disconnecting');
         mg.disconnect(function () {
-          done(error);
+          done();
         });
     });
   });
@@ -395,7 +395,7 @@ gulp.task('updateLastPublished', function (done) {
     var promise = Opportunity.find({isPublished: true, lastPublished: null}).exec()
 
     promise.then(function(records) {
-      for(var i = 0; i < records.length; i++) {
+      for (var i = 0; i < records.length; i++) {
         var opportunity = records[i];
         // just set it to the current date
         opportunity.lastPublished = Date();
@@ -406,7 +406,7 @@ gulp.task('updateLastPublished', function (done) {
     .then(function() {
         console.log('disconnecting');
         mg.disconnect(function () {
-          done(error);
+          done();
         });
     });
   });
