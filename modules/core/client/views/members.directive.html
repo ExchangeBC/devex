@@ -15,7 +15,12 @@
 <div class="col-sm-6" ng-repeat="column in vm.columns">
   <div class="card card-block" ng-repeat="member in vm.members | slice:column.start:column.end">
     <div class="card-tools" ng-if="vm.isAdmin || vm.model.userIs.admin">
-      <a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username)" title="Remove" uib-tooltip="Remove">
+      <a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username, 'admin')" title="Remove" uib-tooltip="Remove">
+        <i class="glyphicon glyphicon-remove"></i>
+      </a>
+    </div>
+    <div class="card-tools" ng-if="vm.isUser && member.username == vm.userid">
+      <a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username, 'member')" title="Remove Me" uib-tooltip="Remove Me from this membership list">
         <i class="glyphicon glyphicon-remove"></i>
       </a>
     </div>

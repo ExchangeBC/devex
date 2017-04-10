@@ -19,8 +19,10 @@
 			templateUrl  : '/modules/core/client/views/members.directive.html',
 			controller   : function ($scope, $rootScope, Authentication) {
 				var vm = this;
-				var isUser                 = Authentication.user;
-				vm.isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
+				var isUser = Authentication.user;
+				vm.isUser = isUser ? true : false;
+				vm.userid  = Authentication.user.username;
+				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
 				vm.model = $scope.model;
 				vm.title = $scope.title || 'Members';
 				var modelService = $scope.service;
@@ -41,12 +43,17 @@
 						}];
 					});
 				}
-				vm.delete = function (userid, username) {
+				vm.delete = function (userid, username, type) {
+					var adminMessage = "Are you sure you want to remove this member?";
+					var userMessage = "Are you sure you want to remove yourself from this membership list?";
+					var message = type == 'admin' ? adminMessage : userMessage;
 					// console.log ('delete user ', username, userid);
-					queryObject.userId = userid;
-					modelService.denyMember (queryObject).$promise.then (function () {
-						$rootScope.$broadcast('updateMembers', 'done');
-					});
+					if (confirm (message)) {
+						queryObject.userId = userid;
+						modelService.denyMember (queryObject).$promise.then (function () {
+							$rootScope.$broadcast('updateMembers', 'done');
+						});
+					}
 				};
 				$rootScope.$on('updateMembers', function (event, message) {
 					// console.log ('received broadcast');
