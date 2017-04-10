@@ -20,9 +20,7 @@
 
 <div class="col-md-{{12/vm.columnCount}}" ng-repeat="column in vm.opportunities | columnRanges:vm.columnCount">
   <!-- <div class="card card-flat card-rise" role="button" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end"> -->
-
   <div class="card card-flat" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | slice:column.start:column.end">
-
     <div class="card-header" ng-if="vm.isAdmin || opportunity.userIs.admin" style="text-align: right">
         <span class="label label-primary">Admin</span>
         &nbsp;
@@ -58,9 +56,11 @@
           <h4><i class="fa fa-map-marker">&nbsp;</i>Location</h4>
         </div>
         <div class="col-xs-12 col-sm-5" style="padding: 0px; margin: 0px;">
-          <h4><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp; <i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp; <i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
+          <h4 ng-if="opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
+          <h4 ng-if="opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
+          <h4 ng-if="opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
         </div>
-        
+
         <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
           <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
         </div>
