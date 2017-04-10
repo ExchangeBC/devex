@@ -237,7 +237,7 @@ exports.me = function (req, res) {
 			notifyOpportunities     : req.user.notifyOpportunities,
 			notifyEvents            : req.user.notifyEvents,
 			notifyBlogs             : req.user.notifyBlogs,
-      		userTitle               : req.user.userTitle
+			userTitle               : req.user.userTitle
 
 		};
 	}
@@ -250,4 +250,32 @@ exports.count = function (req, res) {
 		if (err) res.status(400).send(err);
 		else res.json ({count:cnt});
 	});
+};
+
+exports.removeSelf = function (req, res) {
+	var user = req.user;
+	if (req.user) {
+		// req.logout();
+		// User.find({_id: req.user._id}, function (err, user))
+		user.remove(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+
+			if (user.subscribeOpportunitiesId !== null) {
+				oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+				.then(function() {
+					res.json (user);
+  					// res.location('/');
+				})
+			}
+			else {
+				res.json (user);
+				// res.location('/');
+			}
+		});
+
+	}
 };

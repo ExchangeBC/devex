@@ -24,6 +24,10 @@
           provider: '@provider'
         }
       },
+      removeSelf: {
+        method: 'DELETE',
+        url: '/api/users/delete'
+      },
       sendPasswordResetToken: {
         method: 'POST',
         url: '/api/auth/forgot'

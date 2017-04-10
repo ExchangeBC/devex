@@ -17,6 +17,11 @@
         <li ng-if="0" ui-sref-active="active">
           <a ui-sref="settings.accounts">Manage Social Accounts</a>
         </li>
+        <li ui-sref-active="active">
+        <a href="javascript:void(0);" ng-click="vm.delete()" title="Remove Me" uib-tooltip="Remove Me">
+          Remove me from the Developer's Exchange
+        </a>
+        </li>
       </ul>
     </nav>
     <div class="col-sm-9 col-md-8 settings-view">
