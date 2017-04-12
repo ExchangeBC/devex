@@ -1,1 +1,1 @@
-New {{ formatNumber opportunity.earn style="currency" currency="USD" }} Code With Us opporunity on BCDevExchange
+New {{ opportunity.earn }} Code With Us opporunity on BCDevExchange
