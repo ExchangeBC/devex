@@ -20,7 +20,7 @@
 			controller   : function ($scope, $rootScope, Authentication) {
 				var vm = this;
 				var isUser = Authentication.user;
-				vm.isUser = isUser ? true : false;
+				vm.isUser = isUser ;
 				vm.userid  = Authentication.user.username;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
 				vm.model = $scope.model;
