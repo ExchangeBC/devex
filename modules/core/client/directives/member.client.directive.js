@@ -44,9 +44,9 @@
 					});
 				}
 				vm.delete = function (userid, username, type) {
-					var adminMessage = "Are you sure you want to remove this member?";
-					var userMessage = "Are you sure you want to remove yourself from this membership list?";
-					var message = type == 'admin' ? adminMessage : userMessage;
+					var adminMessage = 'Are you sure you want to remove this member?';
+					var userMessage = 'Are you sure you want to remove yourself from this membership list?';
+					var message = (type === 'admin') ? adminMessage : userMessage;
 					// console.log ('delete user ', username, userid);
 					if (confirm (message)) {
 						queryObject.userId = userid;
