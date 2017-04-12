@@ -28,8 +28,8 @@ module.exports = {
   // things to do with the notification service
   //
   notification: {
-    host: process.env.NOTIFY_BC_HOST || 'notify-bc_devex',
-    port: process.env.NOTIFY_BC_PORT || 3000
+    host: process.env.NOTIFY_BC_PORT || process.env.NOTIFY_BC_HOST || '',
+    port: ''
   },
   // sessionSecret should be changed for security measures and concerns
   sessionSecret: process.env.SESSION_SECRET || 'MEAN',
