@@ -6,7 +6,7 @@ var config = require(path.resolve('./config/config'));
 
 exports.notifier = function (serviceName, type) {
   var notifyBChost = config.notification.host;
-  var port = config.notification.port;
+  var port = config.notification.port || null;
   var host = notifyBChost.match(/http/) ? notifyBChost : 'http://' + notifyBChost,
     port = port,
     serviceName = serviceName,
@@ -15,6 +15,13 @@ exports.notifier = function (serviceName, type) {
 
   return {
     subscribe : function (channelId) {
+      // console.log ('subscribing ',channelId, url + '/api/subscriptions/');
+      // console.log (JSON.stringify({
+      //       serviceName: serviceName,
+      //       channel: type,
+      //       userChannelId: channelId,
+      //       state: 'confirmed'
+      //     }));
       return fetch(url + '/api/subscriptions/', {
         method: 'post',
         body: JSON.stringify({
