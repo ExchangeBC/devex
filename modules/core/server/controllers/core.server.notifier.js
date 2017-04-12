@@ -15,13 +15,7 @@ exports.notifier = function (serviceName, type) {
 
   return {
     subscribe : function (channelId) {
-      // console.log ('subscribing ',channelId, url + '/api/subscriptions/');
-      // console.log (JSON.stringify({
-      //       serviceName: serviceName,
-      //       channel: type,
-      //       userChannelId: channelId,
-      //       state: 'confirmed'
-      //     }));
+      console.log ('subscribe ',channelId, url);
       return fetch(url + '/api/subscriptions/', {
         method: 'post',
         body: JSON.stringify({
@@ -37,6 +31,7 @@ exports.notifier = function (serviceName, type) {
         });
     },
     subscribeUpdate : function (subscriptionId, channelId) {
+      console.log ('subscribeUpdate ',subscriptionId, channelId, url);
       return fetch(url + '/api/subscriptions/' + subscriptionId, {
         method: 'patch',
         body: JSON.stringify({
@@ -49,6 +44,7 @@ exports.notifier = function (serviceName, type) {
         });
     },
     unsubscribe : function (subscriptionId) {
+      console.log ('unsubscribe ',subscriptionId, url);
       return fetch(url + '/api/subscriptions/' + subscriptionId, {
         method: 'delete',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json'}
@@ -58,6 +54,7 @@ exports.notifier = function (serviceName, type) {
         });
     },
     notify : function (messageObj) {
+      console.log ('notify ',messageObj, url);
       return fetch(url + '/api/notifications/', {
         method: 'post',
         body: JSON.stringify({
