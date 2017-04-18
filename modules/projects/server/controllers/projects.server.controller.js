@@ -157,7 +157,7 @@ exports.myadmin = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.members = function (project, cb) {
-	mongoose.model ('User').find ({roles: memberRole(project)}).select ('username displayName updated created roles government profileImageURL email lastName firstName userTitle').exec (cb);
+	mongoose.model ('User').find ({roles: memberRole(project)}).select ('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle').exec (cb);
 };
 
 // -------------------------------------------------------------------------
@@ -167,7 +167,7 @@ exports.members = function (project, cb) {
 //
 // -------------------------------------------------------------------------
 exports.requests = function (project, cb) {
-	mongoose.model ('User').find ({roles: requestRole(project)}).select ('username displayName updated created roles government profileImageURL email lastName firstName userTitle').exec (cb);
+	mongoose.model ('User').find ({roles: requestRole(project)}).select ('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle').exec (cb);
 };
 
 /**
