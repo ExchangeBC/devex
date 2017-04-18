@@ -37,6 +37,7 @@ exports.update = function (req, res) {
   user.notifyOpportunities = req.body.notifyOpportunities;
   user.notifyEvents        = req.body.notifyEvents;
   user.notifyBlogs         = req.body.notifyBlogs;
+  user.isDisplayEmail      = req.body.isDisplayEmail;
   userController.subscriptionHandler(user,prevState)
   .then(function() {
     user.save(function (err) {

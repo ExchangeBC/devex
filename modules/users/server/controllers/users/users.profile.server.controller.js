@@ -15,7 +15,7 @@ var _ = require('lodash'),
 	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
 
  // CC:  USERFIELDS
-var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'subscribeOpportunitiesId', 'notifyEvents', 'notifyBlogs', 'userTitle'];
+var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'subscribeOpportunitiesId', 'notifyEvents', 'notifyBlogs', 'userTitle', 'isDisplayEmail'];
 var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
@@ -73,6 +73,7 @@ exports.update = function (req, res) {
 
 
 function subscriptionHandler(user, oldUser) {
+	console.log ('++subscriptionHandler');
 	var promise = Promise.resolve();
 	if (user.email == null || user.email === '') {
 		return promise;
@@ -84,6 +85,7 @@ function subscriptionHandler(user, oldUser) {
 	if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
 		promise = oppEmailNotifier.subscribe(user.email)
 			.then(function(json) {
+				console.log ('subscrive json:', json);
 				// we save the id for the subscription so that was can unsubscribe at
 				// a later point.
 				user.subscribeOpportunitiesId = json.id;
@@ -237,7 +239,8 @@ exports.me = function (req, res) {
 			notifyOpportunities     : req.user.notifyOpportunities,
 			notifyEvents            : req.user.notifyEvents,
 			notifyBlogs             : req.user.notifyBlogs,
-			userTitle               : req.user.userTitle
+			userTitle               : req.user.userTitle,
+			isDisplayEmail          : req.user.isDisplayEmail
 
 		};
 	}

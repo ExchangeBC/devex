@@ -65,24 +65,25 @@ var UserSchema = new Schema({
     lowercase: true,
     trim: true
   },
-  password                : {type: String, default: ''},
-  salt                    : {type: String },
-  profileImageURL         : {type: String, default: 'img/default.png'},
-  provider                : {type: String, required: 'Provider is required'},
-  government              : {type: String, default: ''},
-  notifyOpportunities     : {type: Boolean, default:false},
+  password                 : {type: String, default: ''},
+  salt                     : {type: String },
+  profileImageURL          : {type: String, default: 'img/default.png'},
+  provider                 : {type: String, required: 'Provider is required'},
+  government               : {type: String, default: ''},
+  isDisplayEmail           : {type: Boolean, default:true},
+  notifyOpportunities      : {type: Boolean, default:false},
   subscribeOpportunitiesId : {type: String, default: null},
-  notifyEvents            : {type: Boolean, default:false},
-  notifyBlogs             : {type: Boolean, default:false},
-  userTitle               : {type: String, default: ''},
-  providerData            : {},
-  additionalProvidersData : {},
-  roles                   : {type: [{type: String }], default: ['user'], required: 'Please provide at least one role'},
-  updated                 : {type: Date },
-  created                 : {type: Date, default: Date.now },
+  notifyEvents             : {type: Boolean, default:false},
+  notifyBlogs              : {type: Boolean, default:false},
+  userTitle                : {type: String, default: ''},
+  providerData             : {},
+  additionalProvidersData  : {},
+  roles                    : {type: [{type: String }], default: ['user'], required: 'Please provide at least one role'},
+  updated                  : {type: Date },
+  created                  : {type: Date, default: Date.now },
   /* For reset password */
-  resetPasswordToken      : {type: String },
-  resetPasswordExpires    : {type: Date }
+  resetPasswordToken       : {type: String },
+  resetPasswordExpires     : {type: Date }
 });
 
 /**

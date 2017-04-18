@@ -26,7 +26,8 @@ exports.renderIndex = function (req, res) {
       notifyOpportunities     : req.user.notifyOpportunities,
       notifyEvents            : req.user.notifyEvents,
       notifyBlogs             : req.user.notifyBlogs,
-      userTitle               : req.user.userTitle
+      userTitle               : req.user.userTitle,
+      isDisplayEmail          : req.user.isDisplayEmail
     };
   }
 
