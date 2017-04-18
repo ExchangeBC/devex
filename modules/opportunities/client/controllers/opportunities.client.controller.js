@@ -377,7 +377,8 @@
 				if (editing) {
 					$state.go('opportunities.view', {opportunityId:opportunity.code});
 				} else {
-					$state.go('opportunities.list');
+					$state.go('opportunities.view', {opportunityId:opportunity.code});
+					// $state.go('opportunities.list');
 				}
 			})
 			//
