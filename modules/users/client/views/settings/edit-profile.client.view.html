@@ -18,6 +18,14 @@
 						<p class="help-block error-text" ng-message="email">Email address is invalid.</p>
 					</div>
 				</div>
+
+				<div class="form-group">
+					<label>
+					<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+					Allow my email to be displayed on the site &nbsp; &nbsp;
+					</label>
+				</div>
+
 				<div class="form-group" show-errors>
 					<label for="firstName">First Name</label>
 					<input type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.user.firstName" placeholder="First Name">
