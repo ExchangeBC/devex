@@ -343,7 +343,9 @@ exports.update = function (req, res) {
 						textBody: textBody,
 						htmlBody: htmlBody
 					})
-					.catch(function() {})
+					.catch(function(err) {
+						console.log (err);
+					})
 					.then(function() {
 						// res.json(opportunity);
 						res.json (decorate (opportunity, req.user ? req.user.roles : []));
