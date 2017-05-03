@@ -1,9 +1,9 @@
 {{#markdown this}}
 Good day!
 
-Just wanted to alert you to a new {{ opportunity.earn }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ opportunity.deadline }}:
+Just wanted to alert you to a new {{ opportunity.earn_f }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ opportunity.deadline_d_f }}:
 
-[{{ opportunity.name }}](https://bcdevexchange.org/opportunities/{{ opportunity.code }})
+[{{ opportunity.name }}]({{ opportunity.link }})
 
 You are receiving this email because you've either signed up on our app, or we have you on our email contact list from past interest. If you don't want to receive these email, please reply to this email and let me know.
 

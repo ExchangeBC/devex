@@ -335,8 +335,13 @@ exports.update = function (req, res) {
 				});
 			} else {
 				if (opportunity.isPublished && !doNotNotify) {
+					opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
+					opportunity.earn_f = helpers.formatMoney (opportunity.earn, 2);
+					opportunity.deadline_d_f = helpers.formatDate (opportunity.deadline);
+					opportunity.deadline_t_f = helpers.formatTime (opportunity.deadline);
 					var htmlBody = emailBodyTemplateHtml({opportunity: opportunity});
 					var textBody = htmlToText.fromString(htmlBody, { wordwrap: 130 });
+					console.log (htmlBody);
 					oppEmailNotifier.notify({
 						from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
 						subject: emailSubjectTemplate({opportunity: opportunity}),

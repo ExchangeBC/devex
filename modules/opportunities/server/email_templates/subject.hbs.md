@@ -1,1 +1,1 @@
-New {{ opportunity.earn }} Code With Us opporunity on BCDevExchange
+New {{ opportunity.earn_f }} Code With Us opporunity on BCDevExchange

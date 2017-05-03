@@ -113,5 +113,34 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 
 	}
 }
+exports.formatMoney = function(n, c, d, t){
+var c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = d === undefined ? '.' : d,
+    t = t === undefined ? ',' : t,
+    s = n < 0 ? '-' : '',
+    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
+    var j = i.length;
+    j = (j) > 3 ? j % 3 : 0;
+   return '$' +s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
+ };
+
+exports.formatDate = function (d) {
+	  var monthNames = [
+    'January', 'February', 'March',
+    'April', 'May', 'June', 'July',
+    'August', 'September', 'October',
+    'November', 'December'
+  ];
+
+  var day = d.getDate();
+  var monthIndex = d.getMonth();
+  var year = d.getFullYear();
 
 
+
+  return monthNames[monthIndex] + ' ' + day + ', '+ year;
+}
+
+exports.formatTime = function (d) {
+  return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+}
