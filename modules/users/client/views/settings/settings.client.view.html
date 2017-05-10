@@ -8,6 +8,9 @@
         <li ui-sref-active="active">
           <a ui-sref="settings.profile">Edit Profile</a>
         </li>
+        <li ui-sref-active="active" ng-if="vm.user.isDeveloper">
+          <a ui-sref="settings.payment">Edit Payment Details</a>
+        </li>
         <li ui-sref-active="active">
           <a ui-sref="settings.picture">Change Profile Picture</a>
         </li>

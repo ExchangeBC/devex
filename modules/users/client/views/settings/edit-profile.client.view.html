@@ -61,6 +61,14 @@
 					</label>
 				</div>
 
+				<div class="form-group">
+					<label ng-disabled="vm.isgov" >
+						<input ng-disabled="vm.isgov" type="checkbox" ng-model="vm.user.isDeveloper">
+						I am looking for Opportunities
+						</input>
+					</label>
+				</div>
+
 				<div ng-if="0 && vm.isgov" class="form-group" show-errors>
 					<label for="government">Organization Name</label>
 					<input type="text" id="government" name="government" class="form-control" ng-model="vm.user.government" placeholder="Organization Name" required>
