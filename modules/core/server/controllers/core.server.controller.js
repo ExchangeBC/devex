@@ -28,13 +28,13 @@ exports.renderIndex = function (req, res) {
       notifyBlogs             : req.user.notifyBlogs,
       userTitle               : req.user.userTitle,
       isDisplayEmail          : req.user.isDisplayEmail,
-      isDeveloper      : req.user.isDeveloper, 
-      paymentMethod    : req.user.paymentMethod, 
-      businessName     : req.user.businessName, 
-      businessAddress  : req.user.businessAddress, 
-      businessAddress2 : req.user.businessAddress2, 
-      businessCity     : req.user.businessCity, 
-      businessProvince : req.user.businessProvince, 
+      isDeveloper      : req.user.isDeveloper,
+      paymentMethod    : req.user.paymentMethod,
+      businessName     : req.user.businessName,
+      businessAddress  : req.user.businessAddress,
+      businessAddress2 : req.user.businessAddress2,
+      businessCity     : req.user.businessCity,
+      businessProvince : req.user.businessProvince,
       businessCode     : req.user.businessCode
     };
   }
