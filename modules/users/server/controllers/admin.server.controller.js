@@ -38,6 +38,14 @@ exports.update = function (req, res) {
   user.notifyEvents        = req.body.notifyEvents;
   user.notifyBlogs         = req.body.notifyBlogs;
   user.isDisplayEmail      = req.body.isDisplayEmail;
+      user.isDeveloper      = req.body.isDeveloper;
+      user.paymentMethod    = req.body.paymentMethod;
+      user.businessName     = req.body.businessName;
+      user.businessAddress  = req.body.businessAddress;
+      user.businessAddress2 = req.body.businessAddress2;
+      user.businessCity     = req.body.businessCity;
+      user.businessProvince = req.body.businessProvince;
+      user.businessCode     = req.body.businessCode;
   userController.subscriptionHandler(user,prevState)
   .then(function() {
     user.save(function (err) {

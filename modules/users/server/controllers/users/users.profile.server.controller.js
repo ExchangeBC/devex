@@ -15,7 +15,27 @@ var _ = require('lodash'),
 	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
 
  // CC:  USERFIELDS
-var whitelistedFields = ['firstName', 'lastName', 'email', 'username', 'government', 'notifyOpportunities', 'subscribeOpportunitiesId', 'notifyEvents', 'notifyBlogs', 'userTitle', 'isDisplayEmail'];
+var whitelistedFields = [
+	'firstName',
+	'lastName',
+	'email',
+	'username',
+	'government',
+	'notifyOpportunities',
+	'subscribeOpportunitiesId',
+	'notifyEvents',
+	'notifyBlogs',
+	'userTitle',
+	'isDisplayEmail',
+	'isDeveloper'      ,
+	'paymentMethod'    ,
+	'businessName'     ,
+	'businessAddress'  ,
+	'businessAddress2' ,
+	'businessCity'     ,
+	'businessProvince' ,
+	'businessCode'
+];
 var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
@@ -240,7 +260,15 @@ exports.me = function (req, res) {
 			notifyEvents            : req.user.notifyEvents,
 			notifyBlogs             : req.user.notifyBlogs,
 			userTitle               : req.user.userTitle,
-			isDisplayEmail          : req.user.isDisplayEmail
+			isDisplayEmail          : req.user.isDisplayEmail,
+      isDeveloper      : req.user.isDeveloper,
+      paymentMethod    : req.user.paymentMethod,
+      businessName     : req.user.businessName,
+      businessAddress  : req.user.businessAddress,
+      businessAddress2 : req.user.businessAddress2,
+      businessCity     : req.user.businessCity,
+      businessProvince : req.user.businessProvince,
+      businessCode     : req.user.businessCode
 
 		};
 	}

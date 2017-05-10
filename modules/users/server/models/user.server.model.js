@@ -83,7 +83,19 @@ var UserSchema = new Schema({
   created                  : {type: Date, default: Date.now },
   /* For reset password */
   resetPasswordToken       : {type: String },
-  resetPasswordExpires     : {type: Date }
+  resetPasswordExpires     : {type: Date },
+  //
+  // this is where we put the payment preferences for users who are developers
+  // all of these need to be added to the field whitelists
+  //
+  isDeveloper      : {type: Boolean, default: false},
+  paymentMethod    : {type: String, default:'Cheque', enum:['Cheque', 'Direct Deposit', 'PayPal']},
+  businessName     : {type: String, default: ''},
+  businessAddress  : {type: String, default: ''},
+  businessAddress2 : {type: String, default: ''},
+  businessCity     : {type: String, default: ''},
+  businessProvince : {type: String, default: '', enum: ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']},
+  businessCode     : {type: String, default: ''},
 });
 
 /**
