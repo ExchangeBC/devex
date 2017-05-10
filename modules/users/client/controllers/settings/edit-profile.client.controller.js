@@ -79,6 +79,12 @@
           vm.user.removeRequest = true;
         }
       }
+      //
+      // examine the developer flag, cant be looking for opps if gov user
+      //
+      if (vm.isgov) {
+        vm.user.isDeveloper = false;
+      }
       var govRequest = vm.user.addRequest;
       var successMessage = '<h4>Edit profile successful</h4>';
       if (govRequest) {

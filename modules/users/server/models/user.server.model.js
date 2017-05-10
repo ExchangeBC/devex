@@ -95,7 +95,7 @@ var UserSchema = new Schema({
   businessAddress2 : {type: String, default: ''},
   businessCity     : {type: String, default: ''},
   businessProvince : {type: String, default: '', enum: ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']},
-  businessCode     : {type: String, default: ''},
+  businessCode     : {type: String, default: ''}
 });
 
 /**
