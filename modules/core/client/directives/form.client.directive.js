@@ -92,18 +92,40 @@
 			link: function($scope, elem, attrs) {
 				window.onbeforeunload = function() {
 					if ($scope.parentForm.$dirty) {
-						return 'You are about to leave the page with unsaved data. Click Cancel to remain here.';
+						return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
 					}
 				};
-				$scope.$on('$locationChangeStart', function(event, next, current) {
+				var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+					// console.log ('started stateChangeStart');
 					if ($scope.parentForm.$dirty) {
 						if ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
+							// console.log ('stateChangeStart please don\'t leave!!!!!!');
 							// cancel to not allow.
 							event.preventDefault();
+							// console.log (event);
 							return false;
 						}
 					}
 				});
+				//
+				// CC: this event just stopped working. It seems that ui-router intercepted and ran anyhow
+				//
+				// var $locationChangeStartUnbind = $scope.$on('$locationChangeStart', function(event, next, current) {
+				// 	// console.log ('started locationChangeStart');
+				// 	if ($scope.parentForm.$dirty) {
+				// 		if ( !confirm('locationChangeStart: You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
+				// 			console.log ('please don\'t leave!!!!!!');
+				// 			// cancel to not allow.
+				// 			event.preventDefault();
+				// 			console.log (event);
+				// 			return false;
+				// 		}
+				// 	}
+				// });
+				$scope.$on('destroy', function () {
+					window.onbeforeunload = null;
+					$locationChangeStartUnbind ();
+				})
 			}
 		};
     });
