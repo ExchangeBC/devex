@@ -25,19 +25,21 @@ var path = require('path'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
-	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
-	fs = require('fs'),
-	markdown = require('helper-markdown'),
-	// HandlebarsIntl = require('handlebars-intl'),
-	Handlebars = require('handlebars'),
-	htmlToText = require('html-to-text');
+	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
+	// fs = require('fs'),
+	// markdown = require('helper-markdown'),
+	// // HandlebarsIntl = require('handlebars-intl'),
+	// Handlebars = require('handlebars'),
+	// htmlToText = require('html-to-text')
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
+	;
 
-var oppEmailNotifier = notifier('opportunities', 'email');
+// var oppEmailNotifier = notifier('opportunities', 'email');
 
-Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
-// HandlebarsIntl.registerWith(Handlebars);
-var emailBodyTemplateHtml = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/message_body.hbs.md'), 'utf8'));
-var emailSubjectTemplate = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/subject.hbs.md'), 'utf8'));
+// Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
+// // HandlebarsIntl.registerWith(Handlebars);
+// var emailBodyTemplateHtml = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/message_body.hbs.md'), 'utf8'));
+// var emailSubjectTemplate = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/subject.hbs.md'), 'utf8'));
 
 // -------------------------------------------------------------------------
 //
@@ -232,6 +234,14 @@ exports.create = function(req, res) {
 			} else {
 				setOpportunityAdmin (opportunity, req.user);
 				req.user.save ();
+				Notifications.addNotification ({
+					code: 'not-update-'+opportunity.code,
+					name: 'Update of Opportunity '+opportunity.name,
+					description: 'Update of Opportunity '+opportunity.name,
+					subjectFile: 'opportunity_update_body.md',
+					bodyFile: 'opportunity_update_subject.md',
+					target: 'Opportunity'
+				})
 				res.json(opportunity);
 			}
 		});
@@ -312,8 +322,26 @@ exports.update = function (req, res) {
 		// audit fields, but they get updated in the following step
 		//
 		var opportunity = _.assign (req.opportunity, req.body);
+		//
+		// determine what notify actions we want to send out, if any
+		// if not published, then we send nothing
+		//
+		var notificationCodes = [];
+		if (opportunity.isPublished && !doNotNotify) {
+			if (opportunity.wasPublished) {
+				//
+				// this is an update, we send both specific and general
+				//
+				notificationCodes = ['not-update-opportunity', 'not-update-'+opportunity.code];
+			} else {
+				//
+				// this is an add as it is the first time being published
+				//
+				notificationCodes = ['not-add-opportunity'];
+			}
+		}
 
-		opportunity.wasPublished = opportunity.isPublished;
+		opportunity.wasPublished = (opportunity.isPublished || opportunity.wasPublished);
 		//
 		// set the lastPublished date so we can later determine if the
 		// opportunity have been published at least once before
@@ -334,31 +362,44 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				if (opportunity.isPublished && !doNotNotify) {
-					opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
-					opportunity.earn_f = helpers.formatMoney (opportunity.earn, 2);
-					opportunity.deadline_d_f = helpers.formatDate (opportunity.deadline);
-					opportunity.deadline_t_f = helpers.formatTime (opportunity.deadline);
-					var htmlBody = emailBodyTemplateHtml({opportunity: opportunity});
-					var textBody = htmlToText.fromString(htmlBody, { wordwrap: 130 });
-					console.log (htmlBody);
-					oppEmailNotifier.notify({
-						from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
-						subject: emailSubjectTemplate({opportunity: opportunity}),
-						textBody: textBody,
-						htmlBody: htmlBody
-					})
-					.catch(function(err) {
-						console.log (err);
-					})
-					.then(function() {
-						// res.json(opportunity);
-						res.json (decorate (opportunity, req.user ? req.user.roles : []));
-					});
-				}
-				else {
+				opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
+				opportunity.earn_format_mnoney = helpers.formatMoney (opportunity.earn, 2);
+				opportunity.deadline_format_date = helpers.formatDate (opportunity.deadline);
+				opportunity.deadline_format_time = helpers.formatTime (opportunity.deadline);
+				Promise.all (notificationCodes.map (function (code) {
+					return Notifications.notifyObject (code, opportunity);
+				}))
+				.catch (function (err) {
+					console.log (err);
+				})
+				.then (function () {
 					res.json (decorate (opportunity, req.user ? req.user.roles : []));
-				}
+				});
+				// if (opportunity.isPublished && !doNotNotify) {
+				// 	opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
+				// 	opportunity.earn_f = helpers.formatMoney (opportunity.earn, 2);
+				// 	opportunity.deadline_d_f = helpers.formatDate (opportunity.deadline);
+				// 	opportunity.deadline_t_f = helpers.formatTime (opportunity.deadline);
+				// 	var htmlBody = emailBodyTemplateHtml({opportunity: opportunity});
+				// 	var textBody = htmlToText.fromString(htmlBody, { wordwrap: 130 });
+				// 	console.log (htmlBody);
+				// 	oppEmailNotifier.notify({
+				// 		from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
+				// 		subject: emailSubjectTemplate({opportunity: opportunity}),
+				// 		textBody: textBody,
+				// 		htmlBody: htmlBody
+				// 	})
+				// 	.catch(function(err) {
+				// 		console.log (err);
+				// 	})
+				// 	.then(function() {
+				// 		// res.json(opportunity);
+				// 		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				// 	});
+				// }
+				// else {
+				// 	res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				// }
 			}
 		});
 	}
