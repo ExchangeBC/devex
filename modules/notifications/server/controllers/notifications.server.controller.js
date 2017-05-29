@@ -234,7 +234,7 @@ exports.subscribeUpdateUserNotification = function (notificationidOrObject, user
 	})
 	.then (function (subscription) {
 		return exports.subscribeUpdate (subscription, user);
-	})
+	});
 };
 exports.unsubscribe = function (subscriptionIdOrObject) {
 	var subscriptionDoc;
@@ -250,6 +250,7 @@ exports.unsubscribe = function (subscriptionIdOrObject) {
 	.then (function (result) {
 		return removeSubscription (subscriptionDoc);
 	});
+};
 exports.unsubscribeUserNotification = function (notificationidOrObject, user) {
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
@@ -257,7 +258,7 @@ exports.unsubscribeUserNotification = function (notificationidOrObject, user) {
 	})
 	.then (function (subscription) {
 		return exports.unsubscribe (subscription, user);
-	})
+	});
 };
 exports.notify = function (notificationidOrObject, message) {
 	return resolveNotification (notificationidOrObject)
@@ -656,4 +657,3 @@ exports.externalSubscriptionById = function (req, res, next, id) {
 		}
 	});
 };
-

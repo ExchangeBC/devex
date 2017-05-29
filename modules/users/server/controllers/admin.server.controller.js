@@ -9,7 +9,7 @@ var path = require('path'),
   User = mongoose.model('User'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   // notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
-  userController = require(path.resolve('./modules/users/server/controllers/users.server.controller.js'))
+  userController = require(path.resolve('./modules/users/server/controllers/users.server.controller.js')),
   Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'));
 
 // var oppEmailNotifier = notifier('opportunities', 'email');
