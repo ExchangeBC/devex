@@ -55,3 +55,36 @@ mongoose.model('Notification', NotificationSchema);
 mongoose.model('Subscription', SubscriptionSchema);
 
 
+touch opportunity-add-subject.md
+touch opportunity-update-subject.md
+touch opportunity-delete-subject.md
+touch opportunity-updateany-subject.md
+touch program-add-subject.md
+touch program-update-subject.md
+touch program-delete-subject.md
+touch program-updateany-subject.md
+touch project-add-subject.md
+touch project-update-subject.md
+touch project-delete-subject.md
+touch project-updateany-subject.md
+touch user-add-subject.md
+touch user-update-subject.md
+touch user-delete-subject.md
+touch user-updateany-subject.md
+touch opportunity-add-body.md
+touch opportunity-update-body.md
+touch opportunity-delete-body.md
+touch opportunity-updateany-body.md
+touch program-add-body.md
+touch program-update-body.md
+touch program-delete-body.md
+touch program-updateany-body.md
+touch project-add-body.md
+touch project-update-body.md
+touch project-delete-body.md
+touch project-updateany-body.md
+touch user-add-body.md
+touch user-update-body.md
+touch user-delete-body.md
+touch user-updateany-body.md
+

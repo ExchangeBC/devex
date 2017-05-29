@@ -12,7 +12,9 @@ var _ = require('lodash'),
 	config = require(path.resolve('./config/config')),
 	User = mongoose.model('User'),
 	validator = require('validator'),
-	notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier;
+	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
+	;
 
  // CC:  USERFIELDS
 var whitelistedFields = [
@@ -36,7 +38,7 @@ var whitelistedFields = [
 	'businessProvince' ,
 	'businessCode'
 ];
-var oppEmailNotifier = notifier('opportunities', 'email');
+// var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
  * Update user details
@@ -103,7 +105,8 @@ function subscriptionHandler(user, oldUser) {
 	// user is subscribed before record save so that we can save the subscription
 	// id to use when unsubscribing.
 	if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
-		promise = oppEmailNotifier.subscribe(user.email)
+		// promise = oppEmailNotifier.subscribe(user.email)
+		promise = Notifications.subscribe ('not-add-opportunity', user)
 			.then(function(json) {
 				console.log ('subscrive json:', json);
 				// we save the id for the subscription so that was can unsubscribe at
@@ -119,7 +122,8 @@ function subscriptionHandler(user, oldUser) {
 	}
 	else if (emailChanged && user.notifyOpportunities && user.subscribeOpportunitiesId !== null ) {
 		// we need to update the subscription
-		promise = oppEmailNotifier.subscribeUpdate(user.subscribeOpportunitiesId, user.email)
+		// promise = oppEmailNotifier.subscribeUpdate(user.subscribeOpportunitiesId, user.email)
+		promise = Notifications.subscribeUpdateUserNotification ('not-add-opportunity', user)
 			.catch(function(err) {
 				// if there was an error, reset the notifyOpportunites flag
 				console.error('Could not update subscription for user due to error from notification ' +
@@ -127,7 +131,8 @@ function subscriptionHandler(user, oldUser) {
 			});
 	}
 	else if (notifyOppChanged && !user.notifyOpportunities && user.subscribeOpportunitiesId != null) {
-		promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
 			.then(function() {
 				user.subscribeOpportunitiesId = null;
 			})
@@ -295,17 +300,18 @@ exports.removeSelf = function (req, res) {
 				});
 			}
 
-			if (user.subscribeOpportunitiesId !== null) {
-				oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+			// if (user.subscribeOpportunitiesId !== null) {
+				// oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+				Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
 				.then(function() {
 					res.json (user);
   					// res.location('/');
-				})
-			}
-			else {
-				res.json (user);
+				});
+			// }
+			// else {
+				// res.json (user);
 				// res.location('/');
-			}
+			// }
 		});
 
 	}

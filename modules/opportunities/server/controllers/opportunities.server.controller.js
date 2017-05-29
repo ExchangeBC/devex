@@ -365,6 +365,7 @@ exports.update = function (req, res) {
 				opportunity.earn_format_mnoney = helpers.formatMoney (opportunity.earn, 2);
 				opportunity.deadline_format_date = helpers.formatDate (opportunity.deadline);
 				opportunity.deadline_format_time = helpers.formatTime (opportunity.deadline);
+				opportunity.updatenotification = 'not-update-'+opportunity.code;
 				Promise.all (notificationCodes.map (function (code) {
 					return Notifications.notifyObject (code, opportunity);
 				}))

@@ -37,6 +37,7 @@ var compileTemplates = function (obj) {
 	return obj;
 };
 var getTemplates = function (notification, data) {
+	data.domain = (process.env.DOMAIN) ? 'https://'+process.env.DOMAIN : 'http://localhost:3030';
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
@@ -134,6 +135,21 @@ var getSubscriptionByExternalID = function (id) {
 		});
 	});
 };
+var getSubscriptionByUserNotification = function (notification, user) {
+	return new Promise (function (resolve, reject) {
+		Subscription.findOne({notification:notification._id, user:user._id}).populate('notification').exec(function (err, subscription) {
+			if (err) {
+				reject (err);
+			}
+			else if (!subscription) {
+				reject ({empty:true, message: 'No subscription found'});
+			}
+			else {
+				resolve (subscription);
+			}
+		});
+	});
+};
 var resolveSubscription = function (subscription) {
 	if (typeof (subscription) === 'object' && subscription._id) {
 		return Promise.resolve (subscription);
@@ -201,15 +217,24 @@ exports.subscribe = function (notificationidOrObject, user) {
 		});
 	});
 };
-exports.subscribeUpdate = function (subscriptionIdOrObject, email) {
+exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
 		if (testingNotifications) {
-			console.log ('NOTIFICATIONS: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, email);
+			console.log ('NOTIFICATIONS: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
 			return Promise.resolve ({id:subscription.subscriptionId});
 		}
-		else return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, email);
+		else return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, user.email);
 	});
+};
+exports.subscribeUpdateUserNotification = function (notificationidOrObject, user) {
+	return resolveNotification (notificationidOrObject)
+	.then (function (notification) {
+		return getSubscriptionByUserNotification (notification, user);
+	})
+	.then (function (subscription) {
+		return exports.subscribeUpdate (subscription, user);
+	})
 };
 exports.unsubscribe = function (subscriptionIdOrObject) {
 	var subscriptionDoc;
@@ -225,6 +250,14 @@ exports.unsubscribe = function (subscriptionIdOrObject) {
 	.then (function (result) {
 		return removeSubscription (subscriptionDoc);
 	});
+exports.unsubscribeUserNotification = function (notificationidOrObject, user) {
+	return resolveNotification (notificationidOrObject)
+	.then (function (notification) {
+		return getSubscriptionByUserNotification (notification, user);
+	})
+	.then (function (subscription) {
+		return exports.unsubscribe (subscription, user);
+	})
 };
 exports.notify = function (notificationidOrObject, message) {
 	return resolveNotification (notificationidOrObject)
