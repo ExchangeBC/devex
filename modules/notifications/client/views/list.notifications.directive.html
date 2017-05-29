@@ -1,0 +1,44 @@
+
+<div class="row list-head">
+	<div class="col-sm-7">
+	<h3 ng-bind="vm.title" class="list-page-hide"></h3>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+	<button class="btn " ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="notificationadmin.create({})" title="New">
+		<i class="glyphicon glyphicon-plus"></i> New Notification
+	</button>
+	</div>
+</div>
+
+<div class="row">
+<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.notifications | columnRanges:vm.columnCount">
+
+
+<div class="card card-flat" ng-class="{'card-greyed': !notification.isPublished}" ng-repeat="notification in vm.notifications | slice:column.start:column.end">
+
+	<div class="card-header" style="text-align: right">
+		<a href="javascript:void(0);" ui-sref="notificationadmin.edit({ notificationId: notification.code, programId: notification.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
+		<i class="glyphicon glyphicon-edit"></i>
+		</a>
+	</div>
+
+	<div class="card-header" style="background-color: #f2f2f2; padding-top: 0px;">
+		<div class="container">
+				<div class="label-list" style="margin-left: -18px;">
+					<span class="label label-info" ng-repeat="code in notification.tags">{{code}}</span>
+				</div>
+			</div>
+	</div>
+
+
+	<div class="card-block" style="padding-bottom: 0px; padding-top: 0;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12">
+				<h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;">
+					<a ui-sref="notifications.view({notificationId:notification._id})" ng-bind="notification.name"></a>
+				</h3>
+			</div>
+		</div>
+	</div>
+
+</div>

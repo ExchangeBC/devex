@@ -58,7 +58,12 @@
         controller: 'UserController',
         controllerAs: 'vm',
         resolve: {
-          userResolve: getUser
+          userResolve: getUser,
+          subscriptions: function (userResolve, NotificationsService) {
+            return NotificationsService.subscriptionsForUser ({
+              userId: userResolve._id
+            }).$promise;
+          }
         },
         data: {
           pageTitle: 'Edit {{ userResolve.displayName }}'
@@ -98,7 +103,12 @@
         controller: 'UserController',
         controllerAs: 'vm',
         resolve: {
-          userResolve: getUser
+          userResolve: getUser,
+          subscriptions: function (userResolve, NotificationsService) {
+            return NotificationsService.subscriptionsForUser ({
+              userId: userResolve._id
+            }).$promise;
+          }
         },
         data: {
           pageTitle: 'Edit {{ userResolve.displayName }}'

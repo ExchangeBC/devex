@@ -31,7 +31,8 @@ var path = require('path'),
 	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
 	Projects = require(path.resolve('./modules/projects/server/controllers/projects.server.controller')),
 	multer = require('multer'),
-	_ = require('lodash')
+	_ = require('lodash'),
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
 
 // -------------------------------------------------------------------------
@@ -190,6 +191,13 @@ exports.create = function (req, res) {
 			} else {
 				setProgramAdmin (program, req.user);
 				req.user.save ();
+				Notifications.addNotification ({
+					code: 'not-update-'+program.code,
+					name: 'Update of Program '+program.name,
+					// description: 'Update of Program '+program.name,
+					target: 'Program',
+					event: 'Update'
+				});
 				res.json(program);
 			}
 		});
@@ -229,6 +237,27 @@ exports.update = function (req, res) {
 		//
 		var program = _.assign (req.program, req.body);
 		//
+		// determine what notify actions we want to send out, if any
+		// if not published, then we send nothing
+		//
+		var notificationCodes = [];
+		var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
+		if (isPublished && !doNotNotify) {
+			if (wasPublished) {
+				//
+				// this is an update, we send both specific and general
+				//
+				notificationCodes = ['not-updateany-program', 'not-update-'+program.code];
+			} else {
+				//
+				// this is an add as it is the first time being published
+				//
+				notificationCodes = ['not-add-program'];
+			}
+		}
+
+		program.wasPublished = (program.isPublished || program.wasPublished);
+		//
 		// set the audit fields so we know who did what when
 		//
 		helpers.applyAudit (program, req.user)
@@ -241,8 +270,18 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				res.json (decorate (program, req.user ? req.user.roles : []));
-				// res.json(program);
+				program.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/programs/'+program.code;
+				Promise.all (notificationCodes.map (function (code) {
+					return Notifications.notifyObject (code, program);
+				}))
+				.catch (function (err) {
+					console.log (err);
+				})
+				.then (function () {
+					res.json (decorate (program, req.user ? req.user.roles : []));
+				});
+				// // res.json(program);
+				// res.json (decorate (program, req.user ? req.user.roles : []));
 			}
 		});
 	}

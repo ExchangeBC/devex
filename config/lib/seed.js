@@ -27,6 +27,7 @@ function saveUser (user) {
       // Then save the user
       user.save(function (err, theuser) {
         if (err) {
+          console.log (err);
           reject(new Error('Failed to add local ' + user.username));
         } else {
           resolve(theuser);
@@ -47,6 +48,8 @@ function checkUserNotExists (user) {
       if (users.length === 0) {
         resolve();
       } else {
+        // console.log('Database Seeding:\t\t\t' + 'local account already exists: ' + user.username);
+        // resolve ();
         reject(new Error('Failed due to local account already exists: ' + user.username));
       }
     });
@@ -92,13 +95,66 @@ function seedTheUser (user) {
             resolve();
           })
           // .catch(function (err) {
-          //   resolve();
-          //   // reject(err);
+          //   // resolve();
+          //   reject(err);
           // });
           ;
       }
     });
   };
+}
+
+//
+// Seed the default notifications for each object type in the system
+//
+function seedNotifications () {
+    var Notification = mongoose.model ('Notification');
+    //
+    // we make notifications for add / delete for Users, Opportunities, Programs, and Projects
+    //
+    var objects = ['User', 'Program', 'Project', 'Opportunity'];
+    var events = ['Add', 'Delete', 'UpdateAny'];
+    var prefix = 'not';
+    var codes = [];
+    objects.forEach (function (obj) {
+      var lobj = obj.toLowerCase();
+      events.forEach (function (evt) {
+        var levt = evt.toLowerCase();
+        codes.push ({
+          code     : [prefix, levt, lobj].join('-'),
+          name     : evt+' '+obj,
+          // question : 'Notify me of object: ['+obj+'] event: ['+evt+']',
+          target   : obj,
+          // subject  : 'subject default',
+          // body     : 'body default',
+          event    : evt
+        });
+      });
+    });
+    // console.log (codes);
+    return Promise.all (codes.map (function (code) {
+      var notification = new Notification ({
+        code        : code.code,
+        name        : code.name,
+        // description : code.name,
+        // question    : code.question,
+        target      : code.target,
+        event       : code.event
+        // subject     : code.subject,
+        // body        : code.body
+      });
+      return new Promise (function (resolve, reject) {
+        Notification.find ({code:code.code}, function (err, result) {
+          if (err || result.length > 0) resolve ();
+          else {
+            notification.save (function (err, m) {
+              // if (err) console.error (err);
+              resolve (m);
+            });
+          }
+        });
+      });
+    }));
 }
 
 // report the error
@@ -137,34 +193,40 @@ module.exports.start = function start(options) {
     var adminAccount = new User(seedOptions.seedAdmin);
     var userAccount = new User(seedOptions.seedUser);
 
-    // If production only seed admin if it does not exist
-    if (process.env.NODE_ENV === 'production') {
-      User.generateRandomPassphrase()
-        .then(function (random) {
-          var passed = process.env.ADMINPW;
-          return passed || 'adminadmin';
-        })
-        .then(seedTheUser(adminAccount))
-        .then(function () {
-          resolve();
-        })
-        .catch(reportError(reject));
-    } else {
-      // Add both Admin and User account
+    seedNotifications ().then (function () {
+      // If production only seed admin if it does not exist
+      if (process.env.NODE_ENV === 'production') {
+        User.generateRandomPassphrase()
+          .then(function (random) {
+            var passed = process.env.ADMINPW;
+            return passed || 'adminadmin';
+          })
+          .then(seedTheUser(adminAccount))
+          .then(function () {
+            resolve();
+          })
+          .catch(reportError(reject));
+      } else {
+        // Add both Admin and User account
 
-      User.generateRandomPassphrase()
-        .then(function () { return 'useruser'; })
-        .then(seedTheUser(userAccount))
-        .then(User.generateRandomPassphrase)
-        .then(function (random) {
-          var passed = process.env.ADMINPW;
-          return passed || 'adminadmin';
-        })
-        .then(seedTheUser(adminAccount))
-        .then(function () {
-          resolve();
-        })
-        .catch(reportError(reject));
-    }
+        User.generateRandomPassphrase()
+          .then(function () { return 'useruser'; })
+          .then(seedTheUser(userAccount))
+          .then(User.generateRandomPassphrase)
+          .then(function (random) {
+            var passed = process.env.ADMINPW;
+            console.log (passed);
+            return passed || 'adminadmin';
+          })
+          .then(seedTheUser(adminAccount))
+          .then(function () {
+            resolve();
+          })
+          .catch(reportError(reject));
+      }
+
+    })
+    .catch (reportError(reject));
+
   });
 };

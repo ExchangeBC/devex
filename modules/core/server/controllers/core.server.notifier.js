@@ -11,7 +11,9 @@ exports.notifier = function (serviceName, type) {
     port = port,
     serviceName = serviceName,
     type = type,
-    url = port ? host + ':' + port : host;
+    url = port ? host + ':' + port : host,
+    mailfrom = process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>'
+    ;
 
   return {
     subscribe : function (channelId) {
@@ -54,6 +56,7 @@ exports.notifier = function (serviceName, type) {
         });
     },
     notify : function (messageObj) {
+      messageObj.from = mailfrom;
       console.log ('notify ',messageObj, url);
       return fetch(url + '/api/notifications/', {
         method: 'post',
@@ -72,6 +75,5 @@ exports.notifier = function (serviceName, type) {
         return res.json();
       });
     }
-
   }
 };

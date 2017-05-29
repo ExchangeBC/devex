@@ -5,11 +5,11 @@
     .module('users.admin')
     .controller('UserController', UserController);
 
-  UserController.$inject = ['$scope', '$state', '$window', 'Authentication', 'userResolve', 'Notification'];
+  UserController.$inject = ['$scope', '$state', '$window', 'Authentication', 'userResolve', 'Notification', 'subscriptions', 'NotificationsService'];
 
-  function UserController($scope, $state, $window, Authentication, user, Notification) {
+  function UserController($scope, $state, $window, Authentication, user, Notification, subscriptions, NotificationsService) {
     var vm = this;
-
+    vm.subscriptions = subscriptions;
     vm.authentication = Authentication;
     vm.user = user;
     vm.remove = remove;
@@ -50,6 +50,24 @@
         Notification.error({ message: errorResponse.data.message, title: '<i class="glyphicon glyphicon-remove"></i> User update error!' });
       });
     }
+
+    // -------------------------------------------------------------------------
+    //
+    // remove a subscription
+    //
+    // -------------------------------------------------------------------------
+    vm.unsubscribe = function (subscriptionId) {
+      if ($window.confirm('Are you sure you want to unsubscribe this user from this Notification?')) {
+        NotificationsService.unsubscribe ({subscriptionId: subscriptionId},  function() {
+          Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> notification deleted successfully!' });
+          NotificationsService.subscriptionsForNotification ({
+            notificationId: vm.notification._id
+          }, function (result) {
+            vm.subscriptions = result;
+          })
+        });
+      }
+    };
 
     function isContextUserSelf() {
       return vm.user.username === vm.authentication.user.username;

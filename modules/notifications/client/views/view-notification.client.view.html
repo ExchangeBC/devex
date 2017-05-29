@@ -1,0 +1,74 @@
+<section class="detail">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ui-sref="notificationadmin.edit({notificationId:vm.notification.code})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				</div>
+				<div class="col-xs-12 col-sm-12 text-center">
+					<h1>{{vm.notification.name}}</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="card card-flat">
+			<div class="card-header">
+				<div class="row">
+					Target : {{vm.notification.target}}
+					<br/>
+					Event: {{vm.notification.event}}
+				</div>
+				<div class="row">
+					<h5>Subscriptions</h5>
+					<table>
+						<tr ng-repeat="subscription in vm.subscriptions">
+							<td>{{subscription.user.displayName}}</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+			<div class="panel-footer" style="background-color: #f2f2f2">
+				<em class="small text-muted">
+					Created on
+					<span ng-bind="vm.notification.created | date:'mediumDate'"></span>
+					by
+					<span ng-if="vm.notification.createdBy" ng-bind="vm.notification.createdBy.displayName"></span>
+					<span ng-if="!vm.notification.createdBy">Deleted User</span>
+				</em>
+				<br/>
+				<em class="small text-muted">
+					Last updated on
+					<span ng-bind="vm.notification.updated | date:'mediumDate'"></span>
+					by
+					<span ng-if="vm.notification.updatedBy" ng-bind="vm.notification.updatedBy.displayName"></span>
+					<span ng-if="!vm.notification.updatedBy">Deleted User</span>
+				</em>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row form-foot">
+			<div class="col-sm-12 col-form-buttons text-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ui-sref="notificationadmin.edit({notificationId:vm.notification.code})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</section>
