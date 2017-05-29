@@ -21,9 +21,9 @@ var path         = require('path'),
 	htmlToText   = require('html-to-text'),
 	_            = require('lodash');
 
-Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
+Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }));
 
-
+var testingNotifications = (process.env.NODE_ENV === 'development');
 
 // -------------------------------------------------------------------------
 //
@@ -34,8 +34,19 @@ Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false})
 var compileTemplates = function (obj) {
 	obj.bodyTemplate    = Handlebars.compile(obj.body);
 	obj.subjectTemplate = Handlebars.compile(obj.subject);
+	return obj;
 };
-
+var getTemplates = function (notification, data) {
+	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
+	var template  =  compileTemplates ({
+		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
+		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-subject.md'), 'utf8')
+	});
+	template.htmlBody = template.bodyTemplate ({data: data});
+	template.subject  = template.subjectTemplate ({data: data});
+	template.textBody = htmlToText.fromString (template.htmlBody, { wordwrap: 130 })
+	return template;
+};
 
 // -------------------------------------------------------------------------
 //
@@ -133,43 +144,106 @@ var resolveSubscription = function (subscription) {
 
 // -------------------------------------------------------------------------
 //
+// remove a subscription
+//
+// -------------------------------------------------------------------------
+var removeSubscription = function (subscription) {
+	return new Promise (function (resolve, reject) {
+		subscription.remove (function (err) {
+			if (err) reject (err);
+			else resolve (subscription);
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// add a subscription
+//
+// -------------------------------------------------------------------------
+var saveNotification = function (subscription) {
+	return new Promise (function (resolve, reject) {
+		subscription.save (function (err) {
+			if (err) {
+				reject (err);
+			} else {
+				resolve (subscription);
+			}
+		});
+	});
+};
+var createSubscription = function (model) {
+	return saveNotification (new Subscription (model));
+};
+// -------------------------------------------------------------------------
+//
 // all notification functions return a promise
 // these can be passed an Id (our internal ids) or a mongoose document, it should
 // figure it out for itself
 //
 // -------------------------------------------------------------------------
-exports.subscribe = function (notificationidOrObject, email) {
+exports.subscribe = function (notificationidOrObject, user) {
+	var notificationDoc;
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		return notifier (notification.code, 'email').subscribe (email);
+		notificationDoc = notification;
+		if (testingNotifications) {
+			console.log ('NOTIFICATIONS: subscribe'+notification.code+' '+user.email);
+			return Promise.resolve ({id:'abcd1234'});
+		}
+		else return notifier (notification.code, 'email').subscribe (user.email);
+	})
+	.then (function (result) {
+		return createSubscription ({
+			subscriptionId   : result.id,
+			notification     : notificationDoc._id,
+			notificationCode : notificationDoc.code,
+			user             : user._id
+		});
 	});
 };
 exports.subscribeUpdate = function (subscriptionIdOrObject, email) {
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
-		return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, email);
+		if (testingNotifications) {
+			console.log ('NOTIFICATIONS: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, email);
+			return Promise.resolve ({id:subscription.subscriptionId});
+		}
+		else return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, email);
 	});
 };
 exports.unsubscribe = function (subscriptionIdOrObject) {
+	var subscriptionDoc;
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
-		return notifier (subscription.notificationCode, 'email').unsubscribe (subscription.subscriptionId);
+		subscriptionDoc = subscription;
+		if (testingNotifications) {
+			console.log ('NOTIFICATIONS: unsubscribe '+subscription.notificationCode+' '+subscription.subscriptionId);
+			return Promise.resolve ({id:subscription.subscriptionId});
+		}
+		else return notifier (subscription.notificationCode, 'email').unsubscribe (subscription.subscriptionId);
+	})
+	.then (function (result) {
+		return removeSubscription (subscriptionDoc);
 	});
 };
 exports.notify = function (notificationidOrObject, message) {
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		return notifier (notification.code, 'email').notify (message);
+		if (testingNotifications) {
+			console.log ('NOTIFICATIONS: notify '+notification.code+' '+message);
+			return Promise.resolve ({ok:true});
+		}
+		else return notifier (notification.code, 'email').notify (message);
 	});
 };
 exports.notifyObject = function (notificationidOrObject, data) {
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		var body = notification.bodyTemplate ({data: data});
+		var template = getTemplates (notification, data);
 		return exports.notify ({
-			subject  : notification.subjectTemplate ({data: data}),
-			textBody : htmlToText.fromString (body, { wordwrap: 130 }),
-			htmlBody : body
+			subject  : template.subject,
+			textBody : template.textBody,
+			htmlBody : template.htmlBody
 		});
 	});
 };
@@ -209,18 +283,10 @@ exports.myDelete = function (req, res) {
 	if (!!~req.user.roles.indexOf ('admin') || req.subscription.user === req.user._id) {
 		exports.unsubscribe (req.subscription)
 		.then (function (result) {
-			req.subscription.remove (function (err) {
-				if (err) {
-					return res.status(422).send ({
-						message: errorHandler.getErrorMessage(err)
-					});
-				} else {
-					res.json (req.subscription);
-				}
-			});
+			res.json (req.subscription);
 		})
 		.catch (function (err) {
-			res.status(422).send (err);
+			res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
 		})
 	} else {
 		return res.status(422).send ({
@@ -229,6 +295,45 @@ exports.myDelete = function (req, res) {
 	}
 };
 
+// -------------------------------------------------------------------------
+//
+// list subscriptions for either a user or for a notification
+//
+// -------------------------------------------------------------------------
+exports.forNotification = function (req, res) {
+	Subscription.find ({
+		notification: req.notification._id
+	})
+	.populate ('notification', 'name')
+	.populate ('user', 'displayName')
+	.sort ('notification.name')
+	.exec (function (err, subscriptions) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (subscriptions);
+		}
+	});
+};
+exports.forUser = function (req, res) {
+	Subscription.find ({
+		user: req.model._id
+	})
+	.populate ('notification', 'name')
+	.populate ('user', 'displayName')
+	.sort ('notification.name')
+	.exec (function (err, subscriptions) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (subscriptions);
+		}
+	});
+};
 // -------------------------------------------------------------------------
 //
 // unsubscribe from a notification, return an html message indicating such
@@ -241,21 +346,27 @@ exports.unsubscribeExternal = function (req, res) {
 	message += '<p>Thanks for using the Developer\'s Exchange!</p>';
 	exports.unsubscribe (req.subscription)
 	.then (function (result) {
-		req.subscription.remove (function (err) {
-			if (err) {
-				return res.status(422).send ({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.send (message);
-			}
-		});
+		res.json (req.subscription);
 	})
 	.catch (function (err) {
 		res.status(422).send (err);
 	});
 };
 
+exports.subscribeExternal = function (req, res) {
+	var message = '<h4>You have been successfully added to the mailing list for '+req.notification.name+'</h4>';
+	message += '<p>To view and manage other subscriptions from the BC Developer\'s Exchange, please go to:';
+	message += '<a href=\'https://bcdevexchange.org/settings/notifications\'>My Notifications</a></p>';
+	message += '<p>Thanks for using the Developer\'s Exchange!</p>';
+
+	exports.subscribe (req.subscription)
+	.then (function (result) {
+		res.send (message);
+	})
+	.catch (function (err) {
+		res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+	});
+};
 /**
  * Create / Save a Notification
  */
@@ -265,7 +376,13 @@ exports.unsubscribeExternal = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var addNotificationCode = function (notification) {
-	return new Promise (function (resolve, reject) {
+	//
+	// if the notification laready has a proper code set, then leave it alone
+	//
+	if (notification.code && notification.code.substr (0, 4) === 'not-') {
+		return Promise.resolve (notification);
+	}
+	else return new Promise (function (resolve, reject) {
 		Notification.findUniqueCode (notification.name, null, function (newcode) {
 			notification.code = newcode;
 			resolve (notification);
@@ -277,7 +394,7 @@ exports.saveNotification = function (notification) {
 		//
 		// compile the markdown into handlebar templates and make a new notification
 		//
-		compileTemplates (notification);
+		// compileTemplates (notification);
 		notification.save (function (err) {
 			if (err) {
 				reject (err);
@@ -299,6 +416,25 @@ exports.create = function (req, res) {
 		res.status(422).send ({
 			message: errorHandler.getErrorMessage(err)
 		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// this is meant to be used by other modules for adding a new notification
+// programmatically.
+//
+// The caller really only knows so much, they can name the notification
+// following the standard of not-<event>-<object>, and let us know the event
+// and the overall target.  this information will be used to select the
+// appropriate template from the file system as well
+//
+// -------------------------------------------------------------------------
+exports.addNotification = function (obj) {
+	return exports.createNotification ({
+		code   : obj.code,
+		name   : obj.name,
+		target : obj.target,
+		event  : obj.event
 	});
 };
 

@@ -237,11 +237,10 @@ exports.create = function(req, res) {
 				Notifications.addNotification ({
 					code: 'not-update-'+opportunity.code,
 					name: 'Update of Opportunity '+opportunity.name,
-					description: 'Update of Opportunity '+opportunity.name,
-					subjectFile: 'opportunity_update_body.md',
-					bodyFile: 'opportunity_update_subject.md',
-					target: 'Opportunity'
-				})
+					// description: 'Update of Opportunity '+opportunity.name,
+					target: 'Opportunity',
+					event: 'Update'
+				});
 				res.json(opportunity);
 			}
 		});
@@ -332,7 +331,7 @@ exports.update = function (req, res) {
 				//
 				// this is an update, we send both specific and general
 				//
-				notificationCodes = ['not-update-opportunity', 'not-update-'+opportunity.code];
+				notificationCodes = ['not-updateany-opportunity', 'not-update-'+opportunity.code];
 			} else {
 				//
 				// this is an add as it is the first time being published

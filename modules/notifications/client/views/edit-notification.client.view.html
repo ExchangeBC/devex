@@ -1,42 +1,29 @@
 <section class="static-page">
 <div class="container" role="main">
-  <!-- <div ncy-breadcrumb></div> -->
-  <form id="notificationForm" warn-on-exit name="vm.form.notificationForm" class="form" ng-submit="vm.save(vm.form.notificationForm.$valid)" novalidate>
+	<!-- <div ncy-breadcrumb></div> -->
+	<form id="notificationForm" warn-on-exit name="vm.form.notificationForm" class="form" ng-submit="vm.save(vm.form.notificationForm.$valid)" novalidate>
 	<div class="row form-head">
-	<div class="col-sm-7">
-		<h2 ng-if="vm.editing">Editing: {{::vm.notification.name}}</h2>
-		<h2 ng-if="!vm.editing">New Notification</h2>
-	</div>
-	<div class="col-sm-5 col-form-buttons text-right">
-	<div class="btn-group" role="group">
-	  <button type="submit" class="btn btn-primary" title="Save">
-		<i class="glyphicon glyphicon-save"></i> Save
-	  </button>
+		<div class="col-sm-7">
+			<h2 ng-if="vm.editing">Editing: {{::vm.notification.name}}</h2>
+			<h2 ng-if="!vm.editing">New Notification</h2>
+		</div>
+		<div class="col-sm-5 col-form-buttons text-right">
+			<div class="btn-group" role="group">
+				<button type="submit" class="btn btn-primary" title="Save">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</button>
 				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-		<i class="glyphicon glyphicon-trash"></i> Remove
-	  </a>
-	</div>
-	</div>
+				<a ng-if="false && vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+					<i class="glyphicon glyphicon-trash"></i> Remove
+				</a>
+			</div>
+		</div>
 	</div>
 	<div class="row">
-	<div class="col-sm-12">
+		<div class="col-sm-12">
 			<fieldset>
-				<div class="form-group" ng-if="vm.programLink" >
-					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
-				</div>
-				<div class="form-group" ng-if="!vm.programLink" >
-					<label class="control-label" for="program">Program</label>
-					<!-- <i class="glyphicon glyphicon-question-sign field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i> -->
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sprogram = !sprogram"></i>
-					<div class="input-help alert alert-info" data-field="title" ng-show="sprogram">
-						Select the program that is the owner/sponsor of this notification.
-					</div>
-					<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
-					</select>
-				</div>
 				<div class="form-group" show-errors>
 					<label class="control-label" for="title">Name</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sname = !sname"></i>
@@ -49,71 +36,56 @@
 					</div>
 				</div>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="short">Short Description</label>
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="ssdesc = !ssdesc"></i>
-					<div class="input-help alert alert-info" data-field="title" ng-show="ssdesc">
-						This is a teaser to interest developers in contributing to your notification. Summarize the goals, end-user benefits and value for British Columbians!
-					</div>
-					<textarea name="short" data-ng-model="vm.notification.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the notification" ng-required="true"></textarea>
+					<label for="target">Target</label>
+					<select id="target" name="target" class="form-control" ng-model="vm.notification.target">
+					<option value="None">BC</option>
+					<option value="Opportunity">AB</option>
+					<option value="Project">MB</option>
+					<option value="Program">NB</option>
+					<option value="User">NL</option>
+					</select>
 				</div>
 				<div class="form-group" show-errors>
-					<label class="control-label" for="description">Description</label>
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sdesc = !sdesc"></i>
-					<div class="input-help alert alert-info" data-field="title" ng-show="sdesc">
-						Here’s where you can go into more detail...
-					</div>
-					<!-- <textarea name="description" data-ng-model="vm.notification.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the notification" ng-required="true"></textarea> -->
-					<textarea
-						name="description"
-						id="description"
-						class="form-control input-sm"
-						ui-tinymce="vm.tinymceOptions"
-						placeholder="A full description of the notification"
-						ng-model="vm.notification.description">
-					</textarea>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="github">Github</label>
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sgit = !sgit"></i>
-					<div class="input-help alert alert-info" data-field="title" ng-show="sgit">
-						Paste the URL of the GitHub repo for this notification.
-					</div>
-					<input ng-if="vm.isAdmin || vm.isNotificationAdmin" name="github" type="text" ng-model="vm.notification.github" id="github" class="form-control" placeholder="Notification github repo">
-					<input ng-if="!vm.isAdmin && !vm.isNotificationAdmin" name="github" type="text" ng-model="vm.notification.github" id="github" class="form-control" placeholder="Notification github repo" readonly>
-				</div>
-				<div class="form-group">
-					<label class="control-label" for="taglist">Tags (comma delimited list)</label>
-					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="stags = !stags"></i>
-					<div class="input-help alert alert-info" data-field="title" ng-show="stags">
-						Create tags as quick cues for interested developers. For example, the code language, or other keywords that indicate what’s involved in the work.
-					</div>
-					<input type="text" name="taglist" ng-model="vm.notification.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+					<label for="event">Event</label>
+					<select id="event" name="event" class="form-control" ng-model="vm.notification.event">
+					<option value="Add">BC</option>
+					<option value="UpdateAny">AB</option>
+					<option value="Update">MB</option>
+					<option value="Delete">NB</option>
+					</select>
 				</div>
 			</fieldset>
+		</div>
 	</div>
+	<div class="row">
+		<h5>Subscriptions</h5>
+		<table>
+			<tr ng-repeat="subscription in vm.subscriptions">
+				<td>{{subscription.user.displayName}}</td>
+				<td>
+					<a ng-click="vm.unsubscribe(subscription._id)" title="Unsubscribe">
+						<i class="glyphicon glyphicon-trash"></i> Unsubscribe
+					</a>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div class="row form-foot">
-	<div class="col-sm-12 col-form-buttons text-right">
-	<div class="btn-group">
-	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
-		<i class="glyphicon glyphicon-save"></i> Save
-	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="notifications.view({notificationId:vm.notification.code})" title="Cancel">
-		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-	  </a>
-	  <a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="notifications.list" title="Cancel">
-		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-	  </a>
-	  <a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
-		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-		<i class="glyphicon glyphicon-trash"></i> Remove
-	  </a>
+		<div class="col-sm-12 col-form-buttons text-right">
+			<div class="btn-group" role="group">
+				<button type="submit" class="btn btn-primary" title="Save">
+					<i class="glyphicon glyphicon-save"></i> Save
+				</button>
+				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
+					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+				</a>
+				<a ng-if="false && vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+					<i class="glyphicon glyphicon-trash"></i> Remove
+				</a>
+			</div>
+		</div>
 	</div>
-	</div>
-	</div>
-  </form>
+	</form>
 </div>
 </section>
 

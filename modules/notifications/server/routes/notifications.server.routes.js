@@ -25,12 +25,22 @@ module.exports = function(app) {
 		.get(notifications.readSubscription)
 		.delete(notifications.myDelete);
 
+
+	app.route('/api/subscriptions/notification/:notificationId').all(notificationsPolicy.isAllowed)
+		.get(notifications.forNotification);
+
+	app.route('/api/subscriptions/user/:userId').all(notificationsPolicy.isAllowed)
+		.get(notifications.forUser);
+
 	app.route('/api/new/notification')
 		// .all(notificationsPolicy.isAllowed)
 		.get(notifications.new);
 
 	app.route('/api/unsubscribe/:externalSubscriptionId')
 		.get(notifications.unsubscribeExternal);
+
+	app.route('/api/subscribe/:externalSubscriptionId/:notificationId')
+		.get(notifications.subscribeExternal);
 
 	// Finish by binding the Notification middleware
 	app.param('notificationId', notifications.notificationByID);

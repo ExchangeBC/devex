@@ -13,27 +13,29 @@ acl = new acl(new acl.memoryBackend());
  */
 exports.invokeRolesPolicies = function () {
 	acl.allow([{
-		roles: ['admin','gov'],
+		roles: ['admin'],
 		allows: [{
-			resources: '*',
+			resources: '/api/notifications',
+			permissions: '*'
+		}, {
+			resources: '/api/notifications/:notificationId',
+			permissions: '*'
+		}, {
+			resources: '/api/my/subscriptions',
+			permissions: '*'
+		}, {
+			resources: '/api/my/subscriptions/:subscriptionId',
+			permissions: '*'
+		}, {
+			resources: '/api/subscriptions/notification/:notificationId',
+			permissions: '*'
+		}, {
+			resources: '/api/subscriptions/user/:userId',
+			permissions: '*'
+		}, {
+			resources: '/api/new/notification',
 			permissions: '*'
 		}]
-		// allows: [{
-		// 	resources: '/api/notifications',
-		// 	permissions: '*'
-		// }, {
-		// 	resources: '/api/notifications/:notificationId',
-		// 	permissions: '*'
-		// }, {
-		// 	resources: '/api/my/subscriptions',
-		// 	permissions: '*'
-		// }, {
-		// 	resources: '/api/my/subscriptions/:subscriptionId',
-		// 	permissions: '*'
-		// }, {
-		// 	resources: '/api/new/notification',
-		// 	permissions: '*'
-		// }]
 	}, {
 		roles: ['user'],
 		allows: [{
@@ -57,6 +59,9 @@ exports.invokeRolesPolicies = function () {
 		allows: [{
 			resources: '/api/unsubscribe/:externalSubscriptionId',
 			permissions: ['get']
+		}, {
+			resources: '/api/subscribe/:externalSubscriptionId/:notificationId',
+			permissions: ['get']
 		}]
 	}]);
 };
@@ -66,7 +71,7 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
 	var roles = (req.user) ? req.user.roles : ['guest'];
-
+	console.log (roles);
 	// If an Notification is being processed and the current user created it then allow any manipulation
 	if (req.notification && req.user && req.notification.user && req.notification.user.id === req.user.id) {
 		return next();

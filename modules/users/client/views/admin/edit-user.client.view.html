@@ -57,6 +57,19 @@
           Tell me about blog posts &nbsp; &nbsp;
           </label>
         </div>-->
+        <div class="row">
+          <h5>Subscriptions</h5>
+          <table>
+            <tr ng-repeat="subscription in vm.subscriptions">
+              <td>{{subscription.notification.name}}</td>
+              <td>
+                <a ng-click="vm.unsubscribe(subscription._id)" title="Unsubscribe">
+                  <i class="glyphicon glyphicon-trash"></i> Unsubscribe
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
 
         <div class="form-group">
           <input type="submit" value="Update" class="btn btn-default">

@@ -12,12 +12,12 @@ var mongoose = require('mongoose'),
 var NotificationSchema = new Schema({
 	code            : {type: String, default: '', unique: true},
 	name            : {type: String, default: ''},
-	description     : {type: String, default: ''},
-	question        : {type: String, default: 'Notify me of ...', required: 'Please fill the notification question', trim: true },
-	subject         : {type: String, default: '', required: 'Please complete the notification email subject (in markdown)', trim: true },
-	subjectTemplate : {type: String, default: ''},
-	body            : {type: String, default: '', required: 'Please complete the notification email body (in markdown)', trim: true },
-	bodyTemplate    : {type: String, default: ''},
+	// description     : {type: String, default: ''},
+	// question        : {type: String, default: 'Notify me of ...', required: 'Please fill the notification question', trim: true },
+	// subject         : {type: String, default: '', required: 'Please complete the notification email subject (in markdown)', trim: true },
+	// subjectTemplate : {type: String, default: ''},
+	// body            : {type: String, default: '', required: 'Please complete the notification email body (in markdown)', trim: true },
+	// bodyTemplate    : {type: String, default: ''},
 	target          : {type: String, default: 'None', enum: ['None', 'Opportunity', 'Program', 'Project', 'User']},
 	event           : {type: String, default: 'None', enum: ['Add', 'Update', 'Delete', 'UpdateAny']},
 	isActive        : {type: Boolean, default: false}
@@ -53,3 +53,5 @@ NotificationSchema.statics.findUniqueCode = function (name, suffix, callback) {
 
 mongoose.model('Notification', NotificationSchema);
 mongoose.model('Subscription', SubscriptionSchema);
+
+

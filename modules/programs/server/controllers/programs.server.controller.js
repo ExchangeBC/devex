@@ -191,6 +191,13 @@ exports.create = function (req, res) {
 			} else {
 				setProgramAdmin (program, req.user);
 				req.user.save ();
+				Notifications.addNotification ({
+					code: 'not-update-'+program.code,
+					name: 'Update of Program '+program.name,
+					// description: 'Update of Program '+program.name,
+					target: 'Program',
+					event: 'Update'
+				});
 				res.json(program);
 			}
 		});
@@ -240,7 +247,7 @@ exports.update = function (req, res) {
 				//
 				// this is an update, we send both specific and general
 				//
-				notificationCodes = ['not-update-program', 'not-update-'+program.code];
+				notificationCodes = ['not-updateany-program', 'not-update-'+program.code];
 			} else {
 				//
 				// this is an add as it is the first time being published
@@ -263,15 +270,15 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				program.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/programs/'+programs.code;
+				program.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/programs/'+program.code;
 				Promise.all (notificationCodes.map (function (code) {
-					return Notifications.notifyObject (code, programs);
+					return Notifications.notifyObject (code, program);
 				}))
 				.catch (function (err) {
 					console.log (err);
 				})
 				.then (function () {
-					res.json (decorate (programs, req.user ? req.user.roles : []));
+					res.json (decorate (program, req.user ? req.user.roles : []));
 				});
 				// // res.json(program);
 				// res.json (decorate (program, req.user ? req.user.roles : []));

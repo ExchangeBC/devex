@@ -60,6 +60,18 @@
 					return NotificationsService.get({
 						notificationId: $stateParams.notificationId
 					}).$promise;
+				},
+				previousState: function ($state) {
+					return {
+						name: $state.current.name,
+						params: $state.params,
+						url: $state.href($state.current.name, $state.params)
+					};
+				},
+				subscriptions: function ($stateParams, NotificationsService) {
+					return NotificationsService.subscriptionsForNotification ({
+						notificationId: $stateParams.notificationId
+					}).$promise;
 				}
 			},
 			data: {
@@ -99,9 +111,6 @@
 						notificationId: $stateParams.notificationId
 					}).$promise;
 				},
-				programs: function (ProgramsService) {
-					return ProgramsService.myadmin ().$promise;
-				},
 				editing: function () { return true; },
 				previousState: function ($state) {
 					return {
@@ -109,11 +118,16 @@
 						params: $state.params,
 						url: $state.href($state.current.name, $state.params)
 					};
+				},
+				subscriptions: function ($stateParams, NotificationsService) {
+					return NotificationsService.subscriptionsForNotification ({
+						notificationId: $stateParams.notificationId
+					}).$promise;
 				}
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'Notification {{ notification.title }}'
+				pageTitle: 'Notification {{ notification.name }}'
 			},
 			ncyBreadcrumb: {
 				label: 'Edit Notification',

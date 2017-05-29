@@ -66,6 +66,14 @@
         <div class="col-md-3"><strong>Roles</strong></div>
         <div class="col-md-6" ng-bind="vm.user.roles"></div>
       </div>
+        <div class="row">
+          <h5>Subscriptions</h5>
+          <table>
+            <tr ng-repeat="subscription in vm.subscriptions">
+              <td>{{subscription.notification.name}}</td>
+            </tr>
+          </table>
+        </div>
     </div>
   </div>
 </div></section>

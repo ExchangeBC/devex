@@ -204,6 +204,13 @@ exports.create = function(req, res) {
 			} else {
 				setProjectAdmin (project, req.user);
 				req.user.save ();
+				Notifications.addNotification ({
+					code: 'not-update-'+project.code,
+					name: 'Update of Project '+project.name,
+					// description: 'Update of Project '+project.name,
+					target: 'Project',
+					event: 'Update'
+				});
 				res.json(project);
 			}
 		});
@@ -297,7 +304,7 @@ exports.update = function (req, res) {
 				//
 				// this is an update, we send both specific and general
 				//
-				notificationCodes = ['not-update-project', 'not-update-'+project.code];
+				notificationCodes = ['not-updateany-project', 'not-update-'+project.code];
 			} else {
 				//
 				// this is an add as it is the first time being published
