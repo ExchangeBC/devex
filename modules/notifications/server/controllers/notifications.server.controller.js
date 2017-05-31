@@ -213,6 +213,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 		else return notifier (notification.code, 'email').subscribe (user.email);
 	})
 	.then (function (result) {
+		console.log ('subscribe result', result);
 		return createSubscription ({
 			subscriptionId   : result.id,
 			notification     : notificationDoc._id,
