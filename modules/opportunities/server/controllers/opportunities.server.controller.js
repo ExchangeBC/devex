@@ -361,16 +361,19 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
-				opportunity.earn_format_mnoney = helpers.formatMoney (opportunity.earn, 2);
-				opportunity.deadline_format_date = helpers.formatDate (opportunity.deadline);
-				opportunity.deadline_format_time = helpers.formatTime (opportunity.deadline);
-				opportunity.updatenotification = 'not-update-'+opportunity.code;
+				var data = {};
+				data.name                 = opportunity.name;
+				data.link                 = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
+				data.earn_format_mnoney   = helpers.formatMoney (opportunity.earn, 2);
+				data.deadline_format_date = helpers.formatDate (opportunity.deadline);
+				data.deadline_format_time = helpers.formatTime (opportunity.deadline);
+				data.updatenotification   = 'not-update-'+opportunity.code;
+
 				Promise.all (notificationCodes.map (function (code) {
-					return Notifications.notifyObject (code, opportunity);
+					return Notifications.notifyObject (code, data);
 				}))
 				.catch (function (err) {
-					console.log (err);
+					console.log ('-- ERROR: catch notifyObject', err);
 				})
 				.then (function () {
 					res.json (decorate (opportunity, req.user ? req.user.roles : []));

@@ -253,7 +253,7 @@
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string
 			height      : 100,
-			menubar     :'',
+			menubar     : '',
 			elementpath : false,
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
@@ -333,35 +333,33 @@
 
 			vm.opportunity.doNotNotify = false;
 			var modalOptions = {
-	        closeButtonText: 'Do Not Send Notification',
-	        actionButtonText: 'Send Notification',
-	        headerText: 'Update Opportunity',
-	        bodyText: 'You are updating the properties of a published opportunity. Would you like to re-notify all subscribed users?'
-	    };
-	    var promise;
-	    //
-	    // Bypass the modal if first time publishing OR if unpublishing
-	    //
-	    if ((vm.opportunity.isPublished && !vm.opportunity.lastPublished) ||
-	    			!vm.opportunity.isPublished) {
-	    	promise = $q.resolve();
-	    }
-	    else {
-	    	promise = modalService.showModal({}, modalOptions)
-        .then(function sendNotification (result) {
-        		vm.opportunity.doNotNotify = false;
-        },
-        function doNotSendNotificaiton (result) {
-        	vm.opportunity.doNotNotify = true;
-        })
-	    }
-
-      //
+		        closeButtonText: 'Do Not Send Notification',
+		        actionButtonText: 'Send Notification',
+		        headerText: 'Update Opportunity',
+		        bodyText: 'You are updating the properties of a published opportunity. Would you like to re-notify all subscribed users?'
+		    };
+		    var promise;
+		    //
+		    // Bypass the modal if unpiublished or unpublishing
+		    //
+		    if (!vm.opportunity.isPublished) {
+		    	promise = $q.resolve();
+		    }
+		    else {
+		    	promise = modalService.showModal({}, modalOptions)
+	        	.then(function sendNotification (result) {
+	        		vm.opportunity.doNotNotify = false;
+	        		},
+	        		function doNotSendNotificaiton (result) {
+	        		vm.opportunity.doNotNotify = true;
+	        	});
+	    	}
+			//
 			// Create a new opportunity, or update the current instance
 			//
-      promise.then(function() {
-      	return vm.opportunity.createOrUpdate();
-      })
+      		promise.then(function() {
+      			return vm.opportunity.createOrUpdate();
+      		})
 			//
 			// success, notify and return to list
 			//

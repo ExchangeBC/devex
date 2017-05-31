@@ -104,7 +104,8 @@ function subscriptionHandler(user, oldUser) {
 	var emailChanged = user.email !== oldUser.email;
 	// user is subscribed before record save so that we can save the subscription
 	// id to use when unsubscribing.
-	if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
+	// if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
+	if (notifyOppChanged && user.notifyOpportunities) {
 		// promise = oppEmailNotifier.subscribe(user.email)
 		promise = Notifications.subscribe ('not-add-opportunity', user)
 			.then(function(json) {
@@ -120,7 +121,8 @@ function subscriptionHandler(user, oldUser) {
 				user.notifyOpportunites = false;
 			});
 	}
-	else if (emailChanged && user.notifyOpportunities && user.subscribeOpportunitiesId !== null ) {
+	// else if (emailChanged && user.notifyOpportunities && user.subscribeOpportunitiesId !== null ) {
+	else if (emailChanged && user.notifyOpportunities) {
 		// we need to update the subscription
 		// promise = oppEmailNotifier.subscribeUpdate(user.subscribeOpportunitiesId, user.email)
 		promise = Notifications.subscribeUpdateUserNotification ('not-add-opportunity', user)
@@ -130,7 +132,7 @@ function subscriptionHandler(user, oldUser) {
 					'service:' + err);
 			});
 	}
-	else if (notifyOppChanged && !user.notifyOpportunities && user.subscribeOpportunitiesId != null) {
+	else if (notifyOppChanged && !user.notifyOpportunities ) {
 		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
 		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
 			.then(function() {

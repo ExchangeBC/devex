@@ -140,11 +140,11 @@
 				return false;
 			}
 			// vm.program.tags = vm.program.taglist.split(/ *, */);
-			if (vm.program.taglist !== '') {
-				vm.program.tags = vm.program.taglist.split(/ *, */);
-			} else {
-				vm.program.tags = [];
-			}
+			// if (vm.program.taglist !== '') {
+			// 	vm.program.tags = vm.program.taglist.split(/ *, */);
+			// } else {
+			// 	vm.program.tags = [];
+			// }
 			//
 			// Create a new program, or update the current instance
 			//
