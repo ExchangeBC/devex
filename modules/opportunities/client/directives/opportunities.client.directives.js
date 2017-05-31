@@ -66,32 +66,8 @@
 					opportunity.isPublished = state;
 					opportunity.doNotNotify = false;
 					var t = state ? 'Published' : 'Unpublished';
-					// var modalOptions = {
-					//        closeButtonText: 'Do Not Send Notification',
-					//        actionButtonText: 'Send Notification',
-					//        headerText: 'Publish Opportunity',
-					//        bodyText: 'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?'
-					//    };
-					// var promise;
-					// //
-					// // Bypass the modal if first time publishing OR if unpublishing
-					// //
-					// if ((!opportunity.isPublished) {
-					// 	console.log ()
-					// 	promise = $q.resolve();
-					// }
-					// else {
-					// 	promise = modalService.showModal({}, modalOptions)
-					//    .then(function sendNotification (result) {
-					//    		opportunity.doNotNotify = false;
-					//    		console.log('send notify callback')
-					//    },
-					//    function doNotSendNotificaiton (result) {
-					//    	opportunity.doNotNotify = true;
-					//    	console.log('do not send notify callback')
-					//    })
 
-			     	var promise = Promise.resolve ();
+					var promise = Promise.resolve ();
 					if (opportunity.isPublished) {
 						var question = opportunity.wasPublished ?
 							'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?' :
@@ -100,21 +76,21 @@
 							opportunity.doNotNotify = !result;
 						});
 					}
-			        //
-					// success, notify and return to list
-					//
 					promise.then(function() {
 						return opportunity.createOrUpdate();
 					})
 					.then (function (res) {
+						//
+						// success, notify
+						//
 						Notification.success ({
 							message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
 						});
 					})
-					//
-					// fail, notify and stay put
-					//
 					.catch (function (res) {
+						//
+						// fail, notify and stay put
+						//
 						opportunity.isPublished = publishedState;
 						Notification.error ({
 							message : res.data.message,
