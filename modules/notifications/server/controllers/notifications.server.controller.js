@@ -19,12 +19,53 @@ var path         = require('path'),
 	markdown     = require('helper-markdown'),
 	Handlebars   = require('handlebars'),
 	htmlToText   = require('html-to-text'),
+  	nodemailer   = require('nodemailer'),
+  	config       = require(path.resolve('./config/config')),
 	_            = require('lodash');
+
+var smtpTransport = nodemailer.createTransport (config.mailer.options);
 
 Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }));
 
 var testingNotifications = (process.env.NODE_ENV === 'development');
 
+
+exports.tryme = function (rew, res) {
+	smtpTransport.sendMail ({
+		to: 'chris.coldwell@gmail.com',
+		from: config.mailer.from,
+		subject: 'please work',
+		html: '<p>thisis html</p>',
+		text: 'this is text'
+	}, function (err) {
+		if (err) {
+			console.log (err);
+			res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+		}
+		else {
+			console.log ('mail sent');
+			res.status(200).send ({ message: 'mail sent' });
+		}
+	});
+}
+exports.tryme2 = function (req, res) {
+	smtpTransport.sendMail ({
+		bcc: 'chris.coldwell@gmail.com chris@3treestech.com',
+		from: config.mailer.from,
+		subject: 'please work',
+		html: '<p>tbcc list try</p>',
+		text: 'bcc list try'
+	}, function (err) {
+		if (err) {
+			console.log (err);
+			res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+		}
+		else {
+			console.log ('mail sent');
+			res.status(200).send ({ message: 'mail sent' });
+		}
+	});
+}
 // -------------------------------------------------------------------------
 //
 // compile subject and body in the object and put the results into
