@@ -50,11 +50,11 @@ exports.tryme = function (rew, res) {
 }
 exports.tryme2 = function (req, res) {
 	smtpTransport.sendMail ({
-		bcc: 'chris.coldwell@gmail.com chris@3treestech.com',
+		bcc: ['chris.coldwell@gmail.com' , 'chris@3treestech.com'],
 		from: config.mailer.from,
 		subject: 'please work',
-		html: '<p>tbcc list try</p>',
-		text: 'bcc list try'
+		html: '<p>bcc list try again</p>',
+		text: 'bcc list try again'
 	}, function (err) {
 		if (err) {
 			console.log (err);
