@@ -210,6 +210,14 @@ var getSubscriptionsForNotification = function (notificationCode) {
 		});
 	});
 };
+var removeSubscriptionsForUser = function (user) {
+	return new Promise (function (resolve, reject) {
+		Subscription.remove ({user:user._id}, function (err) {
+			if (err) reject (err);
+			else resolve ({ok:true});
+		});
+	});
+};
 
 // -------------------------------------------------------------------------
 //
@@ -308,6 +316,15 @@ exports.unsubscribe = function (subscriptionIdOrObject) {
 };
 exports.unsubscribeUserNotification = function (notificationidOrObject, user) {
 	return resolveNotification (notificationidOrObject)
+	.then (function (notification) {
+		return getSubscriptionByUserNotification (notification, user);
+	})
+	.then (function (subscription) {
+		return exports.unsubscribe (subscription, user);
+	});
+};
+exports.unsubscribeUserAll = function (user) {
+	return removeSubscriptionsForUser (user)
 	.then (function (notification) {
 		return getSubscriptionByUserNotification (notification, user);
 	})

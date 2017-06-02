@@ -304,7 +304,7 @@ exports.removeSelf = function (req, res) {
 
 			// if (user.subscribeOpportunitiesId !== null) {
 				// oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
-				Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
+				Notifications.unsubscribeUserAll (user)
 				.then(function() {
 					res.json (user);
   					// res.location('/');
