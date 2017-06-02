@@ -59,13 +59,15 @@ exports.invokeRolesPolicies = function () {
 		allows: [{
 			resources: '/api/unsubscribe/:externalSubscriptionId',
 			permissions: ['get']
-		}, {
-			resources: '/api/cc/tryme',
-			permissions: ['get']
-		}, {
-			resources: '/api/cc/tryme2',
-			permissions: ['get']
-		}, {
+		},
+		// {
+		// 	resources: '/api/cc/tryme',
+		// 	permissions: ['get']
+		// }, {
+		// 	resources: '/api/cc/tryme2',
+		// 	permissions: ['get']
+		// },
+		{
 			resources: '/api/subscribe/:externalSubscriptionId/:notificationId',
 			permissions: ['get']
 		}]

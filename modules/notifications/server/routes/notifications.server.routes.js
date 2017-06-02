@@ -42,8 +42,8 @@ module.exports = function(app) {
 	app.route('/api/subscribe/:externalSubscriptionId/:notificationId')
 		.get(notifications.subscribeExternal);
 
-	app.route('/api/cc/tryme').get(notifications.tryme);
-	app.route('/api/cc/tryme2').get(notifications.tryme2);
+	// app.route('/api/cc/tryme').get(notifications.tryme);
+	// app.route('/api/cc/tryme2').get(notifications.tryme2);
 
 	// Finish by binding the Notification middleware
 	app.param('notificationId', notifications.notificationByID);

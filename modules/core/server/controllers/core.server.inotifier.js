@@ -1,0 +1,170 @@
+'use strict';
+/*
+
+This is meant to be a drop in replacement for the core.server.notify.js module that
+talks to notify BC.  this offers up the same interface/API but does everything locally
+
+*/
+var path         = require('path');
+var config       = require(path.resolve('./config/config'));
+var nodemailer   = require('nodemailer');
+var mongoose     = require ('mongoose');
+var Notification = mongoose.model('Notification');
+var Subscription = mongoose.model('Subscription');
+var _            = require('lodash');
+
+var smtpTransport = nodemailer.createTransport (config.mailer.options);
+
+var sendmail = function (opts) {
+	opts.from = config.mailer.from;
+	return function (userEmails) {
+		opts.bcc = userEmails;
+		return new Promise (function (resolve, reject) {
+			if (userEmails && userEmails.length && userEmails.length > 0) {
+				smtpTransport.sendMail (opts, function (err) {
+					if (err) reject (err);
+					else resolve (true);
+				});
+			}
+			else resolve (true);
+		});
+	};
+};
+var getNotificationByID = function (id) {
+	console.log ('getNotificationByID:', id);
+	return new Promise (function (resolve, reject) {
+		if (id.substr && id.substr (0, 3) === 'not' ) {
+			Notification.findOne({code:id}).exec(function (err, notification) {
+				if (err) {
+					reject (err);
+				}
+				else if (!notification) {
+					reject ({empty:true, message: 'No notification with that identifier has been found'});
+				}
+				else {
+					resolve (notification)
+				}
+			});
+		} else {
+			if (!mongoose.Types.ObjectId.isValid (id)) {
+				reject ({message: 'Notification is invalid'});
+			}
+			else {
+				Notification.findById(id).exec(function (err, notification) {
+					if (err) {
+						reject (err);
+					}
+					else if (!notification) {
+						reject ({empty:true, message: 'No notification with that identifier has been found'});
+					}
+					else {
+						resolve (notification);
+					}
+				});
+			}
+		}
+	});
+};
+var getSubscriptionByID = function (id) {
+	return new Promise (function (resolve, reject) {
+		if (!mongoose.Types.ObjectId.isValid (id)) {
+			reject ({message: 'Subscription is invalid'});
+		}
+		else {
+			Subscription.findById(id).populate('notification').exec(function (err, subscription) {
+				if (err) {
+					reject (err);
+				}
+				else if (!subscription) {
+					reject ({empty:true, message: 'No subscription with that identifier has been found'});
+				}
+				else {
+					resolve (subscription);
+				}
+			});
+		}
+	});
+};
+var getSubscriptionByExternalID = function (id) {
+	return new Promise (function (resolve, reject) {
+		Subscription.findOne({subscriptionId:id}).populate('notification').populate('user','displayName email').exec(function (err, subscription) {
+			if (err) {
+				reject (err);
+			}
+			else if (!subscription) {
+				reject ({empty:true, message: 'No subscription with that identifier has been found'});
+			}
+			else {
+				resolve (subscription);
+			}
+		});
+	});
+};
+var getSubscribedUsers = function (notificationCode) {
+	return new Promise (function (resolve, reject) {
+		getNotificationByID (notificationCode).then (function (notification) {
+			Subscription.find ({notificationCode:notificationCode})
+			.populate ('user', 'email')
+			.exec (function (err, subs) {
+				if (err) reject (err);
+				else {
+					resolve ( subs.map (function (sub) {
+						return sub.user.email;
+					}));
+				}
+			});
+		});
+	});
+};
+exports.notifier = function (notificationCode, type) {
+	return {
+		//
+		// since notify bc keeps its own subscription id, we just pass one back
+		//
+		subscribe : function (emailAddress) {
+			console.log ('subscribe ',emailAddress, notificationCode);
+			var p = new Subscription ();
+			return Promise.resolve ({id: p._id.toString ()});
+		},
+		//
+		// updating is a no-op, we already updated the user record somewhere
+		//
+		subscribeUpdate : function (subscriptionId, emailAddress) {
+			console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
+			return Promise.resolve ();
+		},
+		//
+		// unsubscribe is also a no-op, as this is handled already in the caller
+		//
+		unsubscribe : function (subscriptionId) {
+			console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
+			return Promise.resolve ();
+		},
+		//
+		// notify is more fun, we have to get all the users and BCC them
+		//
+		notify : function (messageObj) {
+			console.log ('notify ',messageObj, notificationCode);
+			return getSubscribedUsers (notificationCode)
+			.then (sendmail ({
+				to   : '',
+				bcc  : null,
+				from : messageObj.from,
+				html : messageObj.htmlBody,
+				text : messageObj.textBody
+			}));
+		}
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
