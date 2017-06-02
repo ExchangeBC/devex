@@ -70,7 +70,7 @@ var getTemplates = function (notification, data) {
 //
 var getTemplatesMerge = function (subscriptions, notification, data) {
 	// console.log ('getTemplates');
-	data.domain = (process.env.DOMAIN) ? 'https://'+process.env.DOMAIN : 'http://localhost:3030';
+	data.domain = (process.env.DOMAIN) ? process.env.DOMAIN : 'http://localhost:3030';
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
