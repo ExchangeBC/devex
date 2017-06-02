@@ -15,7 +15,7 @@ var _            = require('lodash');
 
 var smtpTransport = nodemailer.createTransport (config.mailer.options);
 
-var sendmail = function (opts) {
+var sendmailBCC = function (opts) {
 	opts.from = config.mailer.from;
 	return function (userEmails) {
 		opts.bcc = userEmails;
@@ -29,6 +29,15 @@ var sendmail = function (opts) {
 			else resolve (true);
 		});
 	};
+};
+var sendmail = function (opts) {
+	opts.from = config.mailer.from;
+	return new Promise (function (resolve, reject) {
+		smtpTransport.sendMail (opts, function (err) {
+			if (err) reject (err);
+			else resolve (true);
+		});
+	});
 };
 var getNotificationByID = function (id) {
 	console.log ('getNotificationByID:', id);
@@ -104,7 +113,7 @@ var getSubscribedUsers = function (notificationCode) {
 	return new Promise (function (resolve, reject) {
 		getNotificationByID (notificationCode).then (function (notification) {
 			Subscription.find ({notificationCode:notificationCode})
-			.populate ('user', 'email')
+			.populate ('user', 'email displayName')
 			.exec (function (err, subs) {
 				if (err) reject (err);
 				else {
@@ -112,6 +121,18 @@ var getSubscribedUsers = function (notificationCode) {
 						return sub.user.email;
 					}));
 				}
+			});
+		});
+	});
+};
+var getSubscriptionsForNotification = function (notificationCode) {
+	return new Promise (function (resolve, reject) {
+		getNotificationByID (notificationCode).then (function (notification) {
+			Subscription.find ({notificationCode:notificationCode})
+			.populate ('user', 'email displayName')
+			.exec (function (err, subs) {
+				if (err) reject (err);
+				else resolve (subs);
 			});
 		});
 	});
@@ -145,14 +166,7 @@ exports.notifier = function (notificationCode, type) {
 		//
 		notify : function (messageObj) {
 			console.log ('notify ',messageObj, notificationCode);
-			return getSubscribedUsers (notificationCode)
-			.then (sendmail ({
-				to   : '',
-				bcc  : null,
-				from : messageObj.from,
-				html : messageObj.htmlBody,
-				text : messageObj.textBody
-			}));
+			return sendmail (messageObj);
 		}
 	}
 };

@@ -65,7 +65,29 @@ var getTemplates = function (notification, data) {
 	template.textBody = htmlToText.fromString (template.htmlBody, { wordwrap: 130 });
 	return template;
 };
-
+//
+// this is for internal use where we do the merge
+//
+var getTemplatesMerge = function (subscriptions, notification, data) {
+	// console.log ('getTemplates');
+	data.domain = (process.env.DOMAIN) ? 'https://'+process.env.DOMAIN : 'http://localhost:3030';
+	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
+	var template  =  compileTemplates ({
+		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
+		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-subject.md'), 'utf8')
+	});
+	return subscriptions.map (function (sub) {
+		data.username = sub.user.displayName;
+		data.subscriptionId = sub.subscriptionId;
+		var htmlbody = template.bodyTemplate ({data: data});
+		return {
+			to      : sub.user.email,
+			subject : template.subjectTemplate ({data: data}),
+			html    : htmlbody,
+			text    : htmlToText.fromString (htmlbody, { wordwrap: 130 })
+		};
+	});
+};
 // -------------------------------------------------------------------------
 //
 // notification
@@ -175,6 +197,18 @@ var resolveSubscription = function (subscription) {
 	} else {
 		return getSubscriptionByID (subscription);
 	}
+};
+var getSubscriptionsForNotification = function (notificationCode) {
+	return new Promise (function (resolve, reject) {
+		getNotificationByID (notificationCode).then (function (notification) {
+			Subscription.find ({notificationCode:notificationCode})
+			.populate ('user', 'email displayName')
+			.exec (function (err, subs) {
+				if (err) reject (err);
+				else resolve (subs);
+			});
+		});
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -295,14 +329,37 @@ exports.notifyObject = function (notificationidOrObject, data) {
 	console.log ('++ Notifications: notifyObject ');
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		console.log ('++ Notifications: notifyObject code: ', notification.code);
-		console.log ('++ Notifications: notifyObject data: ', data);
-		var template = getTemplates (notification, data);
-		return exports.notify (notification, {
-			subject  : template.subject,
-			textBody : template.textBody,
-			htmlBody : template.htmlBody
-		});
+		if (isInternalNotifier) {
+			//
+			// for internal use, message is
+			// {
+			// 	to:
+			// 	from:
+			// 	subject:
+			// 	html:
+			// 	text:
+			// }
+			//
+			return getSubscriptionsForNotification (notification.code)
+			.then (function (subscriptions) {
+				return getTemplatesMerge (subscriptions, notification, data);
+			})
+			.then (function (emails) {
+				return Promise.all (emails.map (function (message) {
+					return notifier (notification.code, 'email').notify (message);
+				}));
+			});
+		}
+		else {
+			console.log ('++ Notifications: notifyObject code: ', notification.code);
+			console.log ('++ Notifications: notifyObject data: ', data);
+			var template = getTemplates (notification, data);
+			return exports.notify (notification, {
+				subject  : template.subject,
+				textBody : template.textBody,
+				htmlBody : template.htmlBody
+			});
+		}
 	});
 };
 
