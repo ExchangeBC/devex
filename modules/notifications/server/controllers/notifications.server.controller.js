@@ -280,7 +280,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 		});
 	});
 };
-//  silly change
+//  silly cha
 exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
