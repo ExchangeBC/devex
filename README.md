@@ -1,7 +1,7 @@
 # BCDevExchange Application
 
 The [BCDevExchange](https://bcdevexchange.org) is a platform for providing new ways for British Columbia's public sector to connect with developers and other IT professionals.
-
+as
 The latest version is a mean.js application running in OpenShift using Docker.
 
 ***
@@ -103,4 +103,4 @@ Finally, execute prod task `npm run start:prod`
 Code and documentation copyright 2016-2017 the [BC Developers' Exchange](https://bcdevexchange.org). Code released under the [Apache License, Version 2.0](https://github.com/BCDevExchange/devex/blob/master/LICENSE).
 
 
-test
+
