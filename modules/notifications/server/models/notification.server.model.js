@@ -30,7 +30,7 @@ var SubscriptionSchema = new Schema({
 	user             : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true}
 });
 
-
+SubscriptionSchema.index ({user: 1, notificationCode: 1}, {unique: true});
 
 NotificationSchema.statics.findUniqueCode = function (name, suffix, callback) {
 	var _this = this;
