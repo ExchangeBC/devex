@@ -73,6 +73,7 @@ var UserSchema = new Schema({
   isDisplayEmail           : {type: Boolean, default:true},
   notifyOpportunities      : {type: Boolean, default:false},
   subscribeOpportunitiesId : {type: String, default: null},
+  convertedNotifications   : {type: Boolean, default:false},
   notifyEvents             : {type: Boolean, default:false},
   notifyBlogs              : {type: Boolean, default:false},
   userTitle                : {type: String, default: ''},

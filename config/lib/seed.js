@@ -3,6 +3,7 @@
 var _ = require('lodash'),
   config = require('../config'),
   mongoose = require('mongoose'),
+  path = require('path'),
   chalk = require('chalk'),
   crypto = require('crypto');
 
@@ -156,6 +157,7 @@ function seedNotifications () {
       });
     }));
 }
+
 
 // report the error
 function reportError (reject) {

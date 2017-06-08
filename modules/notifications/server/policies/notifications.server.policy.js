@@ -35,7 +35,11 @@ exports.invokeRolesPolicies = function () {
 		}, {
 			resources: '/api/new/notification',
 			permissions: '*'
-		}]
+		}, {
+			resources: '/api/fix/subscriptions',
+			permissions: '*'
+		}
+		]
 	}, {
 		roles: ['user'],
 		allows: [{
