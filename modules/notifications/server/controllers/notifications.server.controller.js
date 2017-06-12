@@ -99,11 +99,13 @@ var getTemplatesMerge = function (subscriptions, notification, data) {
 		data.username = sub.user.displayName;
 		data.subscriptionId = sub.subscriptionId;
 		var htmlbody = template.bodyTemplate ({data: data});
+		var textbody = htmlToText.fromString (htmlbody, { wordwrap: 130 });
+		// console.log (textbody);
 		return {
 			to      : sub.user.email,
 			subject : template.subjectTemplate ({data: data}),
 			html    : htmlbody,
-			text    : htmlToText.fromString (htmlbody, { wordwrap: 130 })
+			text    : textbody
 		};
 	});
 };
@@ -113,7 +115,7 @@ var getTemplatesMerge = function (subscriptions, notification, data) {
 //
 // -------------------------------------------------------------------------
 var getNotificationByID = function (id) {
-	console.log ('getNotificationByID:', id);
+	// console.log ('getNotificationByID:', id);
 	return new Promise (function (resolve, reject) {
 		if (id.substr && id.substr (0, 3) === 'not' ) {
 			Notification.findOne({code:id}).exec(function (err, notification) {
@@ -148,7 +150,7 @@ var getNotificationByID = function (id) {
 	});
 };
 var resolveNotification = function (notification) {
-	console.log ('resolveNotification:', notification);
+	// console.log ('resolveNotification:', notification);
 	if (typeof (notification) === 'object' && notification._id) {
 		return Promise.resolve (notification);
 	} else {
@@ -282,7 +284,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
 		notificationDoc = notification;
-		console.log ('++ Notifications: subscribe'+notification.code+' '+user.email);
+		// console.log ('++ Notifications: subscribe'+notification.code+' '+user.email);
 		if (testingNotifications) {
 			var p = new Notification ();
 			return Promise.resolve ({id: p._id});
@@ -290,7 +292,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 		else return notifier (notification.code, 'email').subscribe (user.email);
 	})
 	.then (function (result) {
-		console.log ('subscribe result', result);
+		// console.log ('subscribe result', result);
 		return createSubscription ({
 			subscriptionId   : result.id,
 			notification     : notificationDoc._id,
@@ -303,7 +305,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
-		console.log ('++ Notifications: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
+		// console.log ('++ Notifications: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
 		if (testingNotifications) {
 			return Promise.resolve ({id:subscription.subscriptionId});
 		}
@@ -324,7 +326,7 @@ exports.unsubscribe = function (subscriptionIdOrObject) {
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
 		subscriptionDoc = subscription;
-		console.log ('++ Notifications: unsubscribe '+subscription.notificationCode+' '+subscription.subscriptionId);
+		// console.log ('++ Notifications: unsubscribe '+subscription.notificationCode+' '+subscription.subscriptionId);
 		if (testingNotifications) {
 			return Promise.resolve ({id:subscription.subscriptionId});
 		}
@@ -355,7 +357,7 @@ exports.unsubscribeUserAll = function (user) {
 exports.notify = function (notificationidOrObject, message) {
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		console.log ('++ Notifications: notify '+notification.code+' '+message);
+		// console.log ('++ Notifications: notify '+notification.code+' '+message);
 		if (testingNotifications) {
 			return Promise.resolve ({ok:true});
 		}
@@ -363,7 +365,7 @@ exports.notify = function (notificationidOrObject, message) {
 	});
 };
 exports.notifyObject = function (notificationidOrObject, data) {
-	console.log ('++ Notifications: notifyObject ');
+	// console.log ('++ Notifications: notifyObject ');
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
 		if (isInternalNotifier) {
@@ -388,8 +390,8 @@ exports.notifyObject = function (notificationidOrObject, data) {
 			});
 		}
 		else {
-			console.log ('++ Notifications: notifyObject code: ', notification.code);
-			console.log ('++ Notifications: notifyObject data: ', data);
+			// console.log ('++ Notifications: notifyObject code: ', notification.code);
+			// console.log ('++ Notifications: notifyObject data: ', data);
 			var template = getTemplates (notification, data);
 			return exports.notify (notification, {
 				subject  : template.subject,
@@ -582,8 +584,8 @@ exports.create = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.addNotification = function (obj) {
-	console.log ('++ Programatically adding a new notification:');
-	console.log (obj);
+	// console.log ('++ Programatically adding a new notification:');
+	// console.log (obj);
 	return exports.createNotification ({
 		code   : obj.code,
 		name   : obj.name,
