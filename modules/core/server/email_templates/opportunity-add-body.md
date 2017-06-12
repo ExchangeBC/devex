@@ -3,7 +3,7 @@ Good day!
 
 Just wanted to alert you to a new {{ data.earn_format_money }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
 
-   [{{ data.name }}]({{ data.link }})
+   [{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})
 
 If you wish to recieve updates on this particular Opportunity, click on the link below or paste it into your browser:
 
