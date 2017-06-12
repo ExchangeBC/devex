@@ -52,9 +52,28 @@ var compileTemplates = function (obj) {
 	obj.subjectTemplate = Handlebars.compile(obj.subject);
 	return obj;
 };
+// -------------------------------------------------------------------------
+//
+// if domain has http.... in front, then leave it, otherwise append
+// http.  We beleive that if https is used then the env variable will
+// prefix correctly with https
+//
+// -------------------------------------------------------------------------
+var getDomain = function () {
+	var domain = 'http://localhost:3030';
+	if (process.env.DOMAIN) {
+		var d = process.env.DOMAIN;
+		if (d.substr (0,4) === 'http') {
+			domain = d;
+		} else {
+			domain = 'http://' + domain;
+		}
+	}
+	return domain;
+}
 var getTemplates = function (notification, data) {
 	// console.log ('getTemplates');
-	data.domain = (process.env.DOMAIN) ? 'https://'+process.env.DOMAIN : 'http://localhost:3030';
+	data.domain = getDomain ();
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
@@ -70,7 +89,7 @@ var getTemplates = function (notification, data) {
 //
 var getTemplatesMerge = function (subscriptions, notification, data) {
 	// console.log ('getTemplates');
-	data.domain = (process.env.DOMAIN) ? process.env.DOMAIN : 'http://localhost:3030';
+	data.domain = getDomain ();
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
