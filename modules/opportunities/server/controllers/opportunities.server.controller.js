@@ -328,7 +328,7 @@ exports.update = function (req, res) {
 		// if not published, then we send nothing
 		//
 		var notificationCodes = [];
-		if (opportunity.isPublished) { //} && !doNotNotify) {
+		if (opportunity.isPublished) { // } && !doNotNotify) {
 			if (opportunity.wasPublished) {
 				//
 				// this is an update, we send both specific and general
