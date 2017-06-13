@@ -37,6 +37,9 @@
 			resolve: {
 				opportunities: function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.query ();
+				},
+				subscriptions: function (NotificationsService) {
+					return NotificationsService.subscriptions().$promise;
 				}
 			},
 			controller: 'OpportunitiesListController',
@@ -61,6 +64,9 @@
 					return OpportunitiesService.get({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
+				},
+				subscriptions: function (NotificationsService) {
+					return NotificationsService.subscriptions().$promise;
 				}
 			},
 			data: {

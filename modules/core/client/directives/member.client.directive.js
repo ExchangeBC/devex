@@ -21,7 +21,7 @@
 				var vm = this;
 				var isUser = Authentication.user;
 				vm.isUser = isUser ;
-				vm.userid  = Authentication.user.username;
+				vm.userid  = isUser ? Authentication.user.username : 'Guest';
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
 				vm.model = $scope.model;
 				vm.title = $scope.title || 'Members';

@@ -39,6 +39,16 @@
 				method: 'DELETE',
 				url: '/api/my/subscriptions/:subscriptionId',
 				isArray: false
+			},
+			subscribeNotification: {
+				method: 'GET',
+				url: '/api/my/notification/:notificationId',
+				isArray: false
+			},
+			unsubscribeNotification: {
+				method: 'DELETE',
+				url: '/api/my/notification/:notificationId',
+				isArray: false
 			}
 		});
 

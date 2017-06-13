@@ -25,6 +25,10 @@ module.exports = function(app) {
 		.get(notifications.readSubscription)
 		.delete(notifications.myDelete);
 
+	app.route('/api/my/notification/:notificationId').all(notificationsPolicy.isAllowed)
+		.delete(notifications.unsubscribeMe)
+		.get(notifications.subscribeMe);
+
 
 	app.route('/api/subscriptions/notification/:notificationId').all(notificationsPolicy.isAllowed)
 		.get(notifications.forNotification);

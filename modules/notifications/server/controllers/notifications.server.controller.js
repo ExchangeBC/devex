@@ -450,6 +450,9 @@ exports.notifyObject = function (notificationidOrObject, data) {
 //
 // -------------------------------------------------------------------------
 exports.myList = function (req, res) {
+	if (!req.user) {
+		return res.json([]);
+	}
 	Subscription.find ({
 		user: req.user._id
 	})
@@ -490,7 +493,30 @@ exports.myDelete = function (req, res) {
 		});
 	}
 };
-
+exports.subscribeMe = function (req, res) {
+	if (!req.user) return res.status(422).send ({
+		message: 'You do not appear to be logged in, sorry I can\'t help you right now.'
+	});
+	exports.subscribe (req.notification, req.user)
+		.then (function (result) {
+			res.json (req.notification);
+		})
+		.catch (function (err) {
+			res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+		})
+};
+exports.unsubscribeMe = function (req, res) {
+	if (!req.user) return res.status(422).send ({
+		message: 'You do not appear to be logged in, sorry I can\'t help you right now.'
+	});
+	exports.unsubscribeUserNotification (req.notification, req.user)
+		.then (function (result) {
+			res.json (req.notification);
+		})
+		.catch (function (err) {
+			res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+		})
+};
 // -------------------------------------------------------------------------
 //
 // list subscriptions for either a user or for a notification
