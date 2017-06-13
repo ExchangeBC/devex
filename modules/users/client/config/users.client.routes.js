@@ -26,6 +26,11 @@
         templateUrl: '/modules/users/client/views/settings/edit-profile.client.view.html',
         controller: 'EditProfileController',
         controllerAs: 'vm',
+        resolve: {
+          subscriptions: function (NotificationsService) {
+            return NotificationsService.subscriptions().$promise;
+          }
+        },
         data: {
           pageTitle: 'Settings'
         }

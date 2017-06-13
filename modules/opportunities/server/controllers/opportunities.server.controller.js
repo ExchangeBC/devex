@@ -368,6 +368,7 @@ exports.update = function (req, res) {
 				data.deadline_format_date = helpers.formatDate (opportunity.deadline);
 				data.deadline_format_time = helpers.formatTime (opportunity.deadline);
 				data.updatenotification   = 'not-update-'+opportunity.code;
+				data.code                 = opportunity.code;
 
 				Promise.all (notificationCodes.map (function (code) {
 					return Notifications.notifyObject (code, data);

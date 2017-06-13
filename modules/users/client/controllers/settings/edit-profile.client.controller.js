@@ -5,9 +5,9 @@
     .module('users')
     .controller('EditProfileController', EditProfileController);
 
-  EditProfileController.$inject = ['$scope', '$http', '$location', '$state', 'modalService', 'UsersService', 'Authentication', 'Notification'];
+  EditProfileController.$inject = ['$scope', '$http', '$location', '$state', 'modalService', 'UsersService', 'Authentication', 'Notification', 'subscriptions'];
 
-  function EditProfileController($scope, $http, $location, $state, modalService, UsersService, Authentication, Notification) {
+  function EditProfileController($scope, $http, $location, $state, modalService, UsersService, Authentication, Notification, subscriptions) {
     var vm               = this;
     var isUser           = Authentication.user;
     var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
@@ -20,6 +20,19 @@
     vm.isgov = (wasGov || wasGovRequest);
     vm.goveditable = !wasGov;
     var pristineUser = angular.toJson(Authentication.user);
+    //
+    // TEMPRARY HACK HACK HACK
+    //
+    // until such time as make a dynamic list of notifications the user has subscriibed to
+    // we will sontinue to use the flag on the user schema 'notifiyOpportunities'.  however,
+    // instead of using it as the gospel truth, we set it to true on entry here only if the
+    // user has a proper subscription (one of the subs is 'not-add-opportunity').
+    // we will then set the flag using the user interface as usual, and that value is returned as usual
+    // to the back end, which then triggers the setting or removal of that subscription
+    // in future we will set the flag and use a side process to set of unset the subscription
+    //
+    console.log (subscriptions);
+    vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 
     var saveChangesModalOpt = {
         closeButtonText: 'Return User Profile Page',
@@ -40,7 +53,7 @@
             $state.go(toState, toParams);
           }, function() {
 
-          })
+          });
           event.preventDefault();
       }
     });
