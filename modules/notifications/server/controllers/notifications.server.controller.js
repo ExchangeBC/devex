@@ -14,8 +14,6 @@ var path             = require('path'),
 	Subscription     = mongoose.model('Subscription'),
 	errorHandler     = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers          = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	notifierNBC      = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
-	notifierInternal = require(path.resolve('./modules/core/server/controllers/core.server.inotifier.js')).notifier,
 	fs               = require('fs'),
 	markdown         = require('helper-markdown'),
 	Handlebars       = require('handlebars'),
@@ -23,23 +21,66 @@ var path             = require('path'),
 	config           = require(path.resolve('./config/config')),
 	nodemailer       = require('nodemailer'),
 	_                = require('lodash');
+var nodemailer   = require('nodemailer');
+var smtpTransport = nodemailer.createTransport (config.mailer.options);
 
 
 
 
 Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }));
 
-var testingNotifications = (process.env.NODE_ENV === 'development');
-testingNotifications = false;
-var isInternalNotifier = true;
-
-
-
-
-
-var notifier = isInternalNotifier ? notifierInternal : notifierNBC;
-
-
+// -------------------------------------------------------------------------
+//
+// this does the actual work
+//
+// -------------------------------------------------------------------------
+var sendmail = function (opts) {
+	opts.from = config.mailer.from;
+	return new Promise (function (resolve, reject) {
+		smtpTransport.sendMail (opts, function (err) {
+			if (err) reject (err);
+			else resolve (true);
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// this is a throwback to the older way of doing things
+//
+// -------------------------------------------------------------------------
+var notifier = function (notificationCode, type) {
+	return {
+		//
+		// since notify bc keeps its own subscription id, we just pass one back
+		//
+		subscribe : function (emailAddress) {
+			// console.log ('subscribe ',emailAddress, notificationCode);
+			var p = new Subscription ();
+			return Promise.resolve ({id: p._id.toString ()});
+		},
+		//
+		// updating is a no-op, we already updated the user record somewhere
+		//
+		subscribeUpdate : function (subscriptionId, emailAddress) {
+			// console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
+			return Promise.resolve ();
+		},
+		//
+		// unsubscribe is also a no-op, as this is handled already in the caller
+		//
+		unsubscribe : function (subscriptionId) {
+			// console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
+			return Promise.resolve ();
+		},
+		//
+		// notify is more fun, we have to get all the users and BCC them
+		//
+		notify : function (messageObj) {
+			// console.log ('notify ',messageObj, notificationCode);
+			return sendmail (messageObj);
+		}
+	}
+};
 
 // -------------------------------------------------------------------------
 //
@@ -219,6 +260,22 @@ var resolveSubscription = function (subscription) {
 		return getSubscriptionByID (subscription);
 	}
 };
+var getSubscribedUsers = function (notificationCode) {
+	return new Promise (function (resolve, reject) {
+		getNotificationByID (notificationCode).then (function (notification) {
+			Subscription.find ({notificationCode:notificationCode})
+			.populate ('user', 'email displayName')
+			.exec (function (err, subs) {
+				if (err) reject (err);
+				else {
+					resolve ( subs.map (function (sub) {
+						return sub.user.email;
+					}));
+				}
+			});
+		});
+	});
+};
 var getSubscriptionsForNotification = function (notificationCode) {
 	return new Promise (function (resolve, reject) {
 		getNotificationByID (notificationCode).then (function (notification) {
@@ -283,57 +340,55 @@ exports.subscribe = function (notificationidOrObject, user) {
 	var notificationDoc;
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		notificationDoc = notification;
-		// console.log ('++ Notifications: subscribe'+notification.code+' '+user.email);
-		if (testingNotifications) {
-			var p = new Notification ();
-			return Promise.resolve ({id: p._id});
-		}
-		else return notifier (notification.code, 'email').subscribe (user.email);
-	})
-	.then (function (result) {
-		// console.log ('subscribe result', result);
+		var p = new Subscription ();
 		return createSubscription ({
-			subscriptionId   : result.id,
-			notification     : notificationDoc._id,
-			notificationCode : notificationDoc.code,
+			subscriptionId   : p._id.toString (),
+			notification     : notification._id,
+			notificationCode : notification.code,
 			user             : user._id
 		});
 	});
 };
-//  silly cha
-exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
-	return resolveSubscription (subscriptionIdOrObject)
-	.then (function (subscription) {
-		// console.log ('++ Notifications: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
-		if (testingNotifications) {
-			return Promise.resolve ({id:subscription.subscriptionId});
-		}
-		else return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, user.email);
-	});
-};
-exports.subscribeUpdateUserNotification = function (notificationidOrObject, user) {
-	return resolveNotification (notificationidOrObject)
-	.then (function (notification) {
-		return getSubscriptionByUserNotification (notification, user);
-	})
-	.then (function (subscription) {
-		return exports.subscribeUpdate (subscription, user);
-	});
-};
+// exports.subscribe = function (notificationidOrObject, user) {
+// 	var notificationDoc;
+// 	return resolveNotification (notificationidOrObject)
+// 	.then (function (notification) {
+// 		notificationDoc = notification;
+// 		// console.log ('++ Notifications: subscribe'+notification.code+' '+user.email);
+// 		return notifier (notification.code, 'email').subscribe (user.email);
+// 	})
+// 	.then (function (result) {
+// 		// console.log ('subscribe result', result);
+// 		return createSubscription ({
+// 			subscriptionId   : result.id,
+// 			notification     : notificationDoc._id,
+// 			notificationCode : notificationDoc.code,
+// 			user             : user._id
+// 		});
+// 	});
+// };
+//
+// exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
+// 	return resolveSubscription (subscriptionIdOrObject)
+// 	.then (function (subscription) {
+// 		// console.log ('++ Notifications: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
+// 		return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, user.email);
+// 	});
+// };
+// exports.subscribeUpdateUserNotification = function (notificationidOrObject, user) {
+// 	return resolveNotification (notificationidOrObject)
+// 	.then (function (notification) {
+// 		return getSubscriptionByUserNotification (notification, user);
+// 	})
+// 	.then (function (subscription) {
+// 		return exports.subscribeUpdate (subscription, user);
+// 	});
+// };
 exports.unsubscribe = function (subscriptionIdOrObject) {
 	var subscriptionDoc;
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
-		subscriptionDoc = subscription;
-		// console.log ('++ Notifications: unsubscribe '+subscription.notificationCode+' '+subscription.subscriptionId);
-		if (testingNotifications) {
-			return Promise.resolve ({id:subscription.subscriptionId});
-		}
-		else return notifier (subscription.notificationCode, 'email').unsubscribe (subscription.subscriptionId);
-	})
-	.then (function (result) {
-		return removeSubscription (subscriptionDoc);
+		return removeSubscription (subscription);
 	});
 };
 exports.unsubscribeUserNotification = function (notificationidOrObject, user) {
@@ -354,51 +409,38 @@ exports.unsubscribeUserAll = function (user) {
 		return exports.unsubscribe (subscription, user);
 	});
 };
-exports.notify = function (notificationidOrObject, message) {
-	return resolveNotification (notificationidOrObject)
-	.then (function (notification) {
-		// console.log ('++ Notifications: notify '+notification.code+' '+message);
-		if (testingNotifications) {
-			return Promise.resolve ({ok:true});
-		}
-		else return notifier (notification.code, 'email').notify (message);
-	});
-};
+// exports.notify = function (notificationidOrObject, message) {
+// 	return resolveNotification (notificationidOrObject)
+// 	.then (function (notification) {
+// 		// console.log ('++ Notifications: notify '+notification.code+' '+message);
+// 		// return notifier (notification.code, 'email').notify (message);
+// 		return sendmail (message);
+// 	});
+// };
 exports.notifyObject = function (notificationidOrObject, data) {
 	// console.log ('++ Notifications: notifyObject ');
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		if (isInternalNotifier) {
-			//
-			// for internal use, message is
-			// {
-			// 	to:
-			// 	from:
-			// 	subject:
-			// 	html:
-			// 	text:
-			// }
-			//
-			return getSubscriptionsForNotification (notification.code)
-			.then (function (subscriptions) {
-				return getTemplatesMerge (subscriptions, notification, data);
-			})
-			.then (function (emails) {
-				return Promise.all (emails.map (function (message) {
-					return notifier (notification.code, 'email').notify (message);
-				}));
-			});
-		}
-		else {
-			// console.log ('++ Notifications: notifyObject code: ', notification.code);
-			// console.log ('++ Notifications: notifyObject data: ', data);
-			var template = getTemplates (notification, data);
-			return exports.notify (notification, {
-				subject  : template.subject,
-				textBody : template.textBody,
-				htmlBody : template.htmlBody
-			});
-		}
+		//
+		// for internal use, message is
+		// {
+		// 	to:
+		// 	from:
+		// 	subject:
+		// 	html:
+		// 	text:
+		// }
+		//
+		return getSubscriptionsForNotification (notification.code)
+		.then (function (subscriptions) {
+			return getTemplatesMerge (subscriptions, notification, data);
+		})
+		.then (function (emails) {
+			return Promise.all (emails.map (function (message) {
+				// return notifier (notification.code, 'email').notify (message);
+				return sendmail (message);
+			}));
+		});
 	});
 };
 

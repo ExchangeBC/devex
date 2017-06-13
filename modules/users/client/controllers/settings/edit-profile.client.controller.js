@@ -31,7 +31,7 @@
     // to the back end, which then triggers the setting or removal of that subscription
     // in future we will set the flag and use a side process to set of unset the subscription
     //
-    console.log (subscriptions);
+    // console.log (subscriptions);
     vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 
     var saveChangesModalOpt = {
