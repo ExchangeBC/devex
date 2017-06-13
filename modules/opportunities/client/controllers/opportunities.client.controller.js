@@ -88,40 +88,41 @@
 		// -------------------------------------------------------------------------
 		vm.publish = function (opportunity, state) {
 			var publishedState      = opportunity.isPublished;
-			opportunity.isPublished = state;
-			opportunity.doNotNotify = false;
 			var t = state ? 'Published' : 'Unpublished';
 
+			var savemeSeymour = true;
 			var promise = Promise.resolve ();
-			if (opportunity.isPublished) {
+			if (state) {
 				var question = opportunity.wasPublished ?
-					'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?' :
-					'You are publishing this opportunity. Would you like to notify all subscribed users?';
+					'You are re-publishing this opportunity. This will notify all subscribed users. Do you wish to continue?' :
+					'You are publishing this opportunity. This will notify all subscribed users. Do you wish to continue?';
 				promise = ask.yesNo (question).then (function (result) {
-					opportunity.doNotNotify = !result;
+					savemeSeymour = result;
 				});
 			}
-			promise.then(function() {
-				return opportunity.createOrUpdate();
-			})
-			.then (function (res) {
-				//
-				// success, notify
-				//
-				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+				promise.then(function() {
+					if (savemeSeymour) return opportunity.createOrUpdate();
+					else return Promise.reject ({data:{message:'Publish Cancelled'}});
+				})
+				.then (function (res) {
+					opportunity.isPublished = state;
+					//
+					// success, notify
+					//
+					Notification.success ({
+						message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+					});
+				})
+				.catch (function (res) {
+					//
+					// fail, notify and stay put
+					//
+					opportunity.isPublished = publishedState;
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
+					});
 				});
-			})
-			.catch (function (res) {
-				//
-				// fail, notify and stay put
-				//
-				opportunity.isPublished = publishedState;
-				Notification.error ({
-					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
-				});
-			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -182,6 +183,7 @@
 		var rightNow                          = new Date();
 		var vm                                = this;
 		vm.previousState                      = previousState;
+		var originalPublishedState             = vm.isPublished;
 		//
 		// what can the user do here?
 		//
@@ -311,6 +313,11 @@
 		//
 		// save the opportunity, could be added or edited (post or put)
 		//
+		// CC: changes to questions about notifications - we decided to simply warn
+		// about publishing and not link it to notifying, but only to saving
+		// so the question is really "do you want to publish"?
+		// and also remove all doNotNotify stuff
+		//
 		// -------------------------------------------------------------------------
 		vm.saveme = function () {
 			this.save (true);
@@ -354,72 +361,53 @@
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
 
-			vm.opportunity.doNotNotify = false;
-			var modalOptions = {
-		        closeButtonText: 'Do Not Send Notification',
-		        actionButtonText: 'Send Notification',
-		        headerText: 'Update Opportunity',
-		        bodyText: 'You are updating the properties of a published opportunity. Would you like to re-notify all subscribed users?'
-		    };
-
-		    // var promise;
-		    // //
-		    // // Bypass the modal if unpiublished or unpublishing
-		    // //
-		    // if (!vm.opportunity.isPublished) {
-		    // 	promise = $q.resolve();
-		    // }
-		    // else {
-		    // 	promise = modalService.showModal({}, modalOptions)
-	     //    	.then(function sendNotification (result) {
-	     //    		vm.opportunity.doNotNotify = false;
-	     //    		},
-	     //    		function doNotSendNotificaiton (result) {
-	     //    		vm.opportunity.doNotNotify = true;
-	     //    	});
-	    	// }
-
+	    	//
+	    	// confirm save only if the user is also publishing
+	    	//
+	    	var savemeSeymour = true;
 			var promise = Promise.resolve ();
-			if (vm.opportunity.isPublished) {
-				var question = 'You are updating the properties of a published opportunity. Would you like to re-notify all subscribed users?'
+			if (!originalPublishedState && vm.opportunity.isPublished) {
+				var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
 				promise = ask.yesNo (question).then (function (result) {
-					vm.opportunity.doNotNotify = !result;
+					savemeSeymour = result;
 				});
 			}
-			//
-			// Create a new opportunity, or update the current instance
-			//
-      		promise.then(function() {
-      			return vm.opportunity.createOrUpdate();
-      		})
-			//
-			// success, notify and return to list
-			//
-			.then (function (res) {
-				vm.form.opportunityForm.$setPristine ();
-				// console.log ('now saved the new opportunity, redirect user');
-				vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
-				vm.opportunity.assignment = new Date (vm.opportunity.assignment);
-				vm.opportunity.start      = new Date (vm.opportunity.start);
-				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+				//
+				// Create a new opportunity, or update the current instance
+				//
+	      		promise.then(function() {
+					if (savemeSeymour) return vm.opportunity.createOrUpdate();
+					else return Promise.reject ({data:{message:'Publish Cancelled'}});
+				})
+				//
+				// success, notify and return to list
+				//
+				.then (function (res) {
+					vm.form.opportunityForm.$setPristine ();
+					// console.log ('now saved the new opportunity, redirect user');
+					vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+					vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+					vm.opportunity.start      = new Date (vm.opportunity.start);
+					Notification.success ({
+						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+					});
+					if (editing) {
+						$state.go('opportunities.view', {opportunityId:opportunity.code});
+					} else {
+						$state.go('opportunities.view', {opportunityId:opportunity.code});
+						// $state.go('opportunities.list');
+					}
+				})
+				//
+				// fail, notify and stay put
+				//
+				.catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+					});
 				});
-				if (editing) {
-					$state.go('opportunities.view', {opportunityId:opportunity.code});
-				} else {
-					$state.go('opportunities.view', {opportunityId:opportunity.code});
-					// $state.go('opportunities.list');
-				}
-			})
-			//
-			// fail, notify and stay put
-			//
-			.catch (function (res) {
-				Notification.error ({
-					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
-				});
-			});
+
 		};
 		vm.popoverCache = {};
 		vm.displayHelp = {};

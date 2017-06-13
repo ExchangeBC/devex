@@ -308,6 +308,8 @@ exports.read = function (req, res) {
 // update the document, make sure to apply audit. We don't mess with the
 // code if they change the name as that would mean reworking all the roles
 //
+// CC: remove the doNotNotify confusion
+//
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
 	if (ensureAdmin (req.opportunity, req.user, res)) {
@@ -315,7 +317,7 @@ exports.update = function (req, res) {
 		// doNotNotify is a non persistent flag from the UI. If not explicity
 		// set we take the safer option set it to true.
 		//
-		var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
+		// var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
 		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step
@@ -326,7 +328,7 @@ exports.update = function (req, res) {
 		// if not published, then we send nothing
 		//
 		var notificationCodes = [];
-		if (opportunity.isPublished && !doNotNotify) {
+		if (opportunity.isPublished) { //} && !doNotNotify) {
 			if (opportunity.wasPublished) {
 				//
 				// this is an update, we send both specific and general
@@ -379,31 +381,6 @@ exports.update = function (req, res) {
 				.then (function () {
 					res.json (decorate (opportunity, req.user ? req.user.roles : []));
 				});
-				// if (opportunity.isPublished && !doNotNotify) {
-				// 	opportunity.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
-				// 	opportunity.earn_f = helpers.formatMoney (opportunity.earn, 2);
-				// 	opportunity.deadline_d_f = helpers.formatDate (opportunity.deadline);
-				// 	opportunity.deadline_t_f = helpers.formatTime (opportunity.deadline);
-				// 	var htmlBody = emailBodyTemplateHtml({opportunity: opportunity});
-				// 	var textBody = htmlToText.fromString(htmlBody, { wordwrap: 130 });
-				// 	console.log (htmlBody);
-				// 	oppEmailNotifier.notify({
-				// 		from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
-				// 		subject: emailSubjectTemplate({opportunity: opportunity}),
-				// 		textBody: textBody,
-				// 		htmlBody: htmlBody
-				// 	})
-				// 	.catch(function(err) {
-				// 		console.log (err);
-				// 	})
-				// 	.then(function() {
-				// 		// res.json(opportunity);
-				// 		res.json (decorate (opportunity, req.user ? req.user.roles : []));
-				// 	});
-				// }
-				// else {
-				// 	res.json (decorate (opportunity, req.user ? req.user.roles : []));
-				// }
 			}
 		});
 	}

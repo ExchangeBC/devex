@@ -63,40 +63,43 @@
 				if ($scope.title) vm.title = $scope.title;
 				vm.publish = function (opportunity, state) {
 					var publishedState      = opportunity.isPublished;
-					opportunity.isPublished = state;
-					opportunity.doNotNotify = false;
 					var t = state ? 'Published' : 'Unpublished';
 
+					var savemeSeymour = true;
 					var promise = Promise.resolve ();
-					if (opportunity.isPublished) {
+					if (state) {
 						var question = opportunity.wasPublished ?
-							'You are re-publishing this opportunity. Would you like to re-notify all subscribed users?' :
-							'You are publishing this opportunity. Would you like to notify all subscribed users?';
+							'You are re-publishing this opportunity. This will notify all subscribed users. Do you wish to continue?' :
+							'You are publishing this opportunity. This will notify all subscribed users. Do you wish to continue?';
 						promise = ask.yesNo (question).then (function (result) {
-							opportunity.doNotNotify = !result;
+							savemeSeymour = result;
 						});
 					}
-					promise.then(function() {
-						return opportunity.createOrUpdate();
-					})
-					.then (function (res) {
-						//
-						// success, notify
-						//
-						Notification.success ({
-							message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+
+						promise.then(function(r) {
+							if (savemeSeymour) return opportunity.createOrUpdate();
+							else return Promise.reject ({data:{message:'Publish Cancelled'}});
+						})
+						.then (function (res) {
+							opportunity.isPublished = state;
+
+							//
+							// success, notify
+							//
+							Notification.success ({
+								message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+							});
+						})
+						.catch (function (res) {
+							//
+							// fail, notify and stay put
+							//
+							opportunity.isPublished = publishedState;
+							Notification.error ({
+								message : res.data.message,
+								title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
+							});
 						});
-					})
-					.catch (function (res) {
-						//
-						// fail, notify and stay put
-						//
-						opportunity.isPublished = publishedState;
-						Notification.error ({
-							message : res.data.message,
-							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
-						});
-					});
 				};
 				vm.request = function (opportunity) {
 					OpportunitiesService.makeRequest({
