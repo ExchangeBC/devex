@@ -15,7 +15,7 @@ module.exports = function (app) {
 	res.status(301).send();
   });
   app.route ('/developers').get(function (req, res) {
-	res.set ('location', 'https://bcdevexchange.org/about');
+	res.set ('location', 'https://bcdevexchange.org/codewithus');
 	res.status(301).send();
   });
 
