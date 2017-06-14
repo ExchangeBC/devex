@@ -376,7 +376,7 @@ exports.update = function (req, res) {
 					return Notifications.notifyObject (code, data);
 				}))
 				.catch (function (err) {
-					console.log ('-- ERROR: catch notifyObject', err);
+					// no-op, this is logged in the mailer
 				})
 				.then (function () {
 					res.json (decorate (opportunity, req.user ? req.user.roles : []));

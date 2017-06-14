@@ -20,6 +20,7 @@ var path             = require('path'),
 	htmlToText       = require('html-to-text'),
 	config           = require(path.resolve('./config/config')),
 	nodemailer       = require('nodemailer'),
+	chalk            = require('chalk'),
 	_                = require('lodash');
 var nodemailer   = require('nodemailer');
 var smtpTransport = nodemailer.createTransport (config.mailer.options);
@@ -36,51 +37,56 @@ Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }
 // -------------------------------------------------------------------------
 var sendmail = function (opts) {
 	opts.from = config.mailer.from;
+	console.log ('Sending mail to '+opts.to+' : '+opts.subject);
 	return new Promise (function (resolve, reject) {
 		smtpTransport.sendMail (opts, function (err) {
-			if (err) reject (err);
+			if (err) {
+				console.error(chalk.red ("+++ Error sending email: "));
+				console.error (err);
+				reject (err);
+			}
 			else resolve (true);
 		});
 	});
 };
-// -------------------------------------------------------------------------
-//
-// this is a throwback to the older way of doing things
-//
-// -------------------------------------------------------------------------
-var notifier = function (notificationCode, type) {
-	return {
-		//
-		// since notify bc keeps its own subscription id, we just pass one back
-		//
-		subscribe : function (emailAddress) {
-			// console.log ('subscribe ',emailAddress, notificationCode);
-			var p = new Subscription ();
-			return Promise.resolve ({id: p._id.toString ()});
-		},
-		//
-		// updating is a no-op, we already updated the user record somewhere
-		//
-		subscribeUpdate : function (subscriptionId, emailAddress) {
-			// console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
-			return Promise.resolve ();
-		},
-		//
-		// unsubscribe is also a no-op, as this is handled already in the caller
-		//
-		unsubscribe : function (subscriptionId) {
-			// console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
-			return Promise.resolve ();
-		},
-		//
-		// notify is more fun, we have to get all the users and BCC them
-		//
-		notify : function (messageObj) {
-			// console.log ('notify ',messageObj, notificationCode);
-			return sendmail (messageObj);
-		}
-	}
-};
+// // -------------------------------------------------------------------------
+// //
+// // this is a throwback to the older way of doing things
+// //
+// // -------------------------------------------------------------------------
+// var notifier = function (notificationCode, type) {
+// 	return {
+// 		//
+// 		// since notify bc keeps its own subscription id, we just pass one back
+// 		//
+// 		subscribe : function (emailAddress) {
+// 			// console.log ('subscribe ',emailAddress, notificationCode);
+// 			var p = new Subscription ();
+// 			return Promise.resolve ({id: p._id.toString ()});
+// 		},
+// 		//
+// 		// updating is a no-op, we already updated the user record somewhere
+// 		//
+// 		subscribeUpdate : function (subscriptionId, emailAddress) {
+// 			// console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
+// 			return Promise.resolve ();
+// 		},
+// 		//
+// 		// unsubscribe is also a no-op, as this is handled already in the caller
+// 		//
+// 		unsubscribe : function (subscriptionId) {
+// 			// console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
+// 			return Promise.resolve ();
+// 		},
+// 		//
+// 		// notify is more fun, we have to get all the users and BCC them
+// 		//
+// 		notify : function (messageObj) {
+// 			// console.log ('notify ',messageObj, notificationCode);
+// 			return sendmail (messageObj);
+// 		}
+// 	}
+// };
 
 // -------------------------------------------------------------------------
 //
@@ -109,6 +115,9 @@ var getDomain = function () {
 		} else {
 			domain = 'http://' + domain;
 		}
+	}
+	if (domain ===  'http://localhost:3030') {
+		console.log ('domain is localhost and env.DOMAIN is ', process.env.DOMAIN);
 	}
 	return domain;
 }
@@ -418,7 +427,7 @@ exports.unsubscribeUserAll = function (user) {
 // 	});
 // };
 exports.notifyObject = function (notificationidOrObject, data) {
-	// console.log ('++ Notifications: notifyObject ');
+	console.log ('++ Notifications: notifyObject ');
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
 		//
@@ -613,14 +622,12 @@ var addNotificationCode = function (notification) {
 };
 exports.saveNotification = function (notification) {
 	return new Promise (function (resolve, reject) {
-		//
-		// compile the markdown into handlebar templates and make a new notification
-		//
-		// compileTemplates (notification);
 		notification.save (function (err) {
 			if (err) {
+				console.log ("Error saving notification: "+notification.code, err);
 				reject (err);
 			} else {
+				console.log ("notification saved: "+notification.code);
 				resolve (notification);
 			}
 		});

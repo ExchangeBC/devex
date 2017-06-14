@@ -77,11 +77,14 @@
 					}
 
 						promise.then(function(r) {
-							if (savemeSeymour) return opportunity.createOrUpdate();
+							if (savemeSeymour) {
+								opportunity.isPublished = state;
+								return opportunity.createOrUpdate();
+							}
 							else return Promise.reject ({data:{message:'Publish Cancelled'}});
 						})
 						.then (function (res) {
-							opportunity.isPublished = state;
+
 
 							//
 							// success, notify
