@@ -116,9 +116,7 @@ var getDomain = function () {
 			domain = 'http://' + domain;
 		}
 	}
-	if (domain ===  'http://localhost:3030') {
-		console.log ('domain is localhost and env.DOMAIN is ', process.env.DOMAIN);
-	}
+	console.log (chalk.green('domain is '+domain, process.env.DOMAIN));
 	return domain;
 }
 var getTemplates = function (notification, data) {

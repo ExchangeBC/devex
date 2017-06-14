@@ -3,11 +3,8 @@ Good day!
 
 Just wanted to alert you that the opportunity {{ data.name }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
 
-   [{{ data.name }}]({{ data.link }})
+   [{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})
 
-If you wish to recieve updates on this particular Opportunity, click on the link below or paste it into your browser:
-
-   [Notify me of updates to {{ data.name }}]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }})
 
 You are receiving this email because you've either signed up on our app, or we have you on our email contact list from past interest. If you don't want to receive these email, please click on the unsubscribe link below or paste the url into your browser:
 
