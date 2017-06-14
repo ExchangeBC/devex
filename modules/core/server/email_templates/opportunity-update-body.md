@@ -1,19 +1,17 @@
-{{#markdown this}}
-Good day!
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
 
-Just wanted to alert you that the opportunity {{ data.name }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
+### Hi {{First Name}} or if no First Name {{Username}}!
 
-   [{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})
+You subscribed for updates on this opportunity:
 
+**[{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})**
 
-You are receiving this email because you've either signed up on our app, or we have you on our email contact list from past interest. If you don't want to receive these email, please click on the unsubscribe link below or paste the url into your browser:
+It has been modified by the creator. 
 
-   [Unsubscribe from hearing about New Opportunities]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }})
+[Unfollow this opportunity]({{ Path to unsubscribe from updates on the opportunity }}) 
 
-Thanks for your interest!
+---
 
------------------------------
-BC Developers' Exchange and DevOps
-Ministry of Technology, Innovation and Citizens' Services
-[BCDevExchange.org](http://bcdevexchange.org)
-{{/markdown}}
+**Want to stop receiving these emails?**
+
+[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
