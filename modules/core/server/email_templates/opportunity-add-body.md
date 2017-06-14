@@ -1,6 +1,5 @@
 ![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
 
-{{#markdown this}}
 ### Hi {{First Name}} or if no First Name {{Username}}!
 
 We've just posted a new *Code With Us* opportunity:
