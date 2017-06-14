@@ -109,7 +109,15 @@ logger.getLogOptions = function getLogOptions() {
 logger.getMorganOptions = function getMorganOptions() {
 
   return {
-    stream: logger.stream
+    stream: logger.stream,
+      skip: function (req, res) {
+        // console.log (req.path);
+        // console.log (res.statusCode);
+        var isAPI = req.path.substr(0, 4) === '/api';
+        var isOK = res.statusCode < 400;
+        var displayIf = isAPI && !isOK;
+        return !(displayIf);
+      }
   };
 
 };
