@@ -113,7 +113,7 @@ var getDomain = function () {
 		if (d.substr (0,4) === 'http') {
 			domain = d;
 		} else {
-			domain = 'http://' + domain;
+			domain = 'http://' + d;
 		}
 	}
 	console.log (chalk.green('domain is '+domain, process.env.DOMAIN));
