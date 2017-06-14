@@ -41,7 +41,7 @@ var sendmail = function (opts) {
 	return new Promise (function (resolve, reject) {
 		smtpTransport.sendMail (opts, function (err) {
 			if (err) {
-				console.error(chalk.red ("+++ Error sending email: "));
+				console.error(chalk.red ('+++ Error sending email: '));
 				console.error (err);
 				reject (err);
 			}
@@ -624,10 +624,10 @@ exports.saveNotification = function (notification) {
 	return new Promise (function (resolve, reject) {
 		notification.save (function (err) {
 			if (err) {
-				console.log ("Error saving notification: "+notification.code, err);
+				console.log ('Error saving notification: '+notification.code, err);
 				reject (err);
 			} else {
-				console.log ("notification saved: "+notification.code);
+				console.log ('notification saved: '+notification.code);
 				resolve (notification);
 			}
 		});
