@@ -1,22 +1,31 @@
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
+
 {{#markdown this}}
-Good day!
+### Hi {{First Name}} or if no First Name {{Username}}!
 
-Just wanted to alert you to a new {{ data.earn_format_money }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
+We've just posted a new *Code With Us* opportunity:
 
-   [{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})
+- Posted: **{{ Date opportunity was created }}**
+- Value: **{{ data.earn_format_money }}**
+- Required Skills: **{{ Skills list }}**
+- Closes on: **{{ data.deadline_format_date }}**
 
-If you wish to recieve updates on this particular Opportunity, click on the link below or paste it into your browser:
+### [See the details]({{ data.domain }}/opportunities/{{ data.code }}) 
 
-   [Notify me of updates to {{ data.name }}]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }})
+**{{ Opportunity Title }}**
 
-You are receiving this email because you've either signed up on our app, or we have you on our email contact list from past interest. If you don't want to receive these email, please click on the unsubscribe link below or paste the url into your browser:
+{{Opportunity description}}
 
-   [Unsubscribe from hearing about New Opportunities]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }})
+[Subscribe for alerts about this opportunity]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }})
 
-Thanks for your interest!
+---
 
------------------------------
-BC Developers' Exchange and DevOps
-Ministry of Technology, Innovation and Citizens' Services
-[BCDevExchange.org](http://bcdevexchange.org)
-{{/markdown}}
+### Use your skills to make a difference!
+
+Contribute to this government open source project in GitHub. Get paid a fixed fee that meets the acceptance criteria.
+
+---
+
+**Want to stop receiving these emails?**
+
+[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
