@@ -365,12 +365,14 @@ exports.update = function (req, res) {
 			} else {
 				var data = {};
 				data.name                 = opportunity.name;
+				data.short                 = opportunity.short;
 				data.link                 = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
 				data.earn_format_mnoney   = helpers.formatMoney (opportunity.earn, 2);
 				data.deadline_format_date = helpers.formatDate (opportunity.deadline);
 				data.deadline_format_time = helpers.formatTime (opportunity.deadline);
 				data.updatenotification   = 'not-update-'+opportunity.code;
 				data.code                 = opportunity.code;
+				data.skills               = opportunity.skills.join (', ');
 
 				Promise.all (notificationCodes.map (function (code) {
 					return Notifications.notifyObject (code, data);

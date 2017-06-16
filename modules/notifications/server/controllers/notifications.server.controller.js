@@ -285,14 +285,12 @@ var getSubscribedUsers = function (notificationCode) {
 };
 var getSubscriptionsForNotification = function (notificationCode) {
 	return new Promise (function (resolve, reject) {
-		getNotificationByID (notificationCode).then (function (notification) {
 			Subscription.find ({notificationCode:notificationCode})
 			.populate ('user', 'email displayName')
 			.exec (function (err, subs) {
 				if (err) reject (err);
 				else resolve (subs);
 			});
-		});
 	});
 };
 var removeSubscriptionsForUser = function (user) {
@@ -425,9 +423,9 @@ exports.unsubscribeUserAll = function (user) {
 // 	});
 // };
 exports.notifyObject = function (notificationidOrObject, data) {
-	console.log ('++ Notifications: notifyObject ');
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
+		console.log ('++ Notifications: notifyObject '+notification.code, data);
 		//
 		// for internal use, message is
 		// {
@@ -440,9 +438,11 @@ exports.notifyObject = function (notificationidOrObject, data) {
 		//
 		return getSubscriptionsForNotification (notification.code)
 		.then (function (subscriptions) {
+			console.log ('subscriptions to '+notification.code, subscriptions);
 			return getTemplatesMerge (subscriptions, notification, data);
 		})
 		.then (function (emails) {
+			console.log ('++ Notifications: notifyObject '+notification.code+' sending to '+emails.length+' people');
 			return Promise.all (emails.map (function (message) {
 				// return notifier (notification.code, 'email').notify (message);
 				return sendmail (message);

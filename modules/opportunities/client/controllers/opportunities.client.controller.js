@@ -185,7 +185,7 @@
 		var rightNow                          = new Date();
 		var vm                                = this;
 		vm.previousState                      = previousState;
-		var originalPublishedState             = vm.isPublished;
+		var originalPublishedState             = opportunity.isPublished;
 		//
 		// what can the user do here?
 		//
@@ -276,6 +276,13 @@
 			vm.programTitle        = vm.projects[0].program.title;
 			vm.opportunity.program = vm.programId;
 		}
+		//
+		// if not editing, set some conveinient default dates
+		//
+		vm.opportunity.deadline   = new Date ();
+		vm.opportunity.assignment = new Date ();
+		vm.opportunity.start      = new Date ();
+
 		vm.tinymceOptions = {
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string
@@ -325,6 +332,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+			console.log (vm);
 			vm.form.opportunityForm.$setPristine ();
 			// console.log ('saving form', vm.opportunity);
 			if (!isValid) {
@@ -350,8 +358,8 @@
 			//
 			if (!vm.editing) {
 				if (vm.context === 'allopportunities') {
-					vm.opportunity.project = vm.projectobj._id;
-					vm.opportunity.program = vm.projectobj.program._id;
+					vm.opportunity.project = vm.projectId;
+					vm.opportunity.program = vm.programId;
 				}
 				else if (vm.context === 'program') {
 					vm.opportunity.project = vm.projectId;
@@ -378,18 +386,22 @@
 				// Create a new opportunity, or update the current instance
 				//
 	      		promise.then(function() {
-					if (savemeSeymour) return vm.opportunity.createOrUpdate();
+					if (savemeSeymour) {
+						console.log ('saving');
+						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+						// vm.opportunity.start      = new Date (vm.opportunity.start);
+						return vm.opportunity.createOrUpdate();
+					}
 					else return Promise.reject ({data:{message:'Publish Cancelled'}});
 				})
 				//
 				// success, notify and return to list
 				//
 				.then (function (res) {
+					console.log ('saved');
 					vm.form.opportunityForm.$setPristine ();
 					// console.log ('now saved the new opportunity, redirect user');
-					vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
-					vm.opportunity.assignment = new Date (vm.opportunity.assignment);
-					vm.opportunity.start      = new Date (vm.opportunity.start);
 					Notification.success ({
 						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 					});
@@ -404,6 +416,7 @@
 				// fail, notify and stay put
 				//
 				.catch (function (res) {
+					console.log ('caught');
 					Notification.error ({
 						message : res.data.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
