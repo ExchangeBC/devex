@@ -1,15 +1,13 @@
 {{#markdown this}}
-![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
-### Hi {{data.username}}!
+### Hi {{data.username}},
 
-You subscribed for updates on this opportunity:
+An opportunity you followed, {{ data.name }} has been updated.
 
-**[{{ data.name }}]({{ data.domain }}/opportunities/{{ data.code }})**
+### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
 
-It has been modified by the creator.
-
-[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }})
+[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) to stop receiving alerts.
 
 ---
 

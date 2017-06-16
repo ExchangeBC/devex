@@ -1,5 +1,5 @@
 {{#markdown this}}
-![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
 ### Hi {{data.username}}!
 
@@ -16,7 +16,7 @@ We've just posted a new *Code With Us* opportunity:
 
 {{data.short}}
 
-[Subscribe for alerts about this opportunity]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }})
+[Follow this opportunity]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }}) to get alerts.
 
 ---
 

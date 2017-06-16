@@ -1,16 +1,13 @@
 {{#markdown this}}
-Good day!
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
-The Opportunity {{ data.name }} on the BCDevExchange has been removed.
+### Dear {{data.username}},
 
-You are receiving this email because you've either signed up on our app, or we have you on our email contact list from past interest. If you don't want to receive these email, please click on the unsubscribe link below or paste the url into your browser:
+An opportunity you followed, **{{ data.name }}** has been deleted by its creator.
 
-   [Unsubscribe from hearing about Opportunities]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }})
+---
 
-Thanks for your interest!
+**Want to stop receiving these emails?**
 
------------------------------
-BC Developers' Exchange and DevOps
-Ministry of Technology, Innovation and Citizens' Services
-[BCDevExchange.org](http://bcdevexchange.org)
+[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
 {{/markdown}}

@@ -1,17 +1,17 @@
-![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
+{{#markdown this}}
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
-### Hi {{First Name}} or if no First Name {{Username}}!
+### Hi {{data.username}}!
 
-You subscribed for updates on this opportunity:
+An opportunity you followed, {{ data.name }} has been republished!
 
-**[{{ Opportunity Title }}]**
+### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
 
-It has been republished by the creator. 
-
-[Unfollow this opportunity]({{ Path to unsubscribe from updates on the opportunity }}) 
+[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) to stop receiving alerts. 
 
 ---
 
 **Want to stop receiving these emails?**
 
 [Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
+{{/markdown}}
