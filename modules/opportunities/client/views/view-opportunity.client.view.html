@@ -3,15 +3,18 @@
 	<div class="container">
 	<div class="row" ng-if="!vm.loggedIn">
 		Interested in being notified of updates to this opportunity?
-		<a ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+		<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
 		or
-		<a ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+		<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
 	</div>
 	<div class="row" ng-if="vm.loggedIn">
 		<div ng-if="vm.notifyMe">
 			<button ng-click="vm.subscribe(false)">Un-Subscribe me from notifications about this opportunity</button>
 		</div>
-		<div ng-if="!vm.notifyMe">
+		<div ng-if="!vm.notifyMe && !vm.hasEmail">
+			<a href class="btn" ui-sref="settings.profile">Enter your email address to subscribe to notifications about this opportunity</a>
+		</div>
+		<div ng-if="!vm.notifyMe && vm.hasEmail">
 			<button ng-click="vm.subscribe(true)">Subscribe me to notifications about this opportunity</button>
 		</div>
 	</div>
