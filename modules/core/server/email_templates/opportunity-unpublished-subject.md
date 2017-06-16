@@ -1,1 +1,1 @@
-{{ Opportunity Name }} has been unpublished
+Opportunity {{ data.name }} has been unpublished

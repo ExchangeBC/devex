@@ -1,1 +1,1 @@
-New {{ data.earn_format_money }} *Code With Us* opportunity!
+New Code With Us opportunity has just been posted!

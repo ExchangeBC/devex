@@ -1,1 +1,1 @@
-{{ Opportunity Name }} has been republished!
+Opportunity {{ data.name }} has been republished!

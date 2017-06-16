@@ -1,1 +1,1 @@
-{{ data.name }} has been updated
+Opportunity {{ data.name }} has been updated

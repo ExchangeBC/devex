@@ -1,1 +1,1 @@
-Opportunity {{ data.earn_format_money }} has been deleted
+Opportunity {{ data.name }} has been deleted
