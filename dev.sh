@@ -9,7 +9,7 @@ docker run \
 -v `pwd`/modules:/opt/mean.js/modules \
 -v `pwd`/public:/opt/mean.js/public \
 -v `pwd`/uploads:/opt/mean.js/uploads \
--e "MAILER_SERVICE_PROVIDER=gmail" \
+-e "MAILER_SERVICE_PROVIDER=gggmail" \
 -e "MAILER_FROM=<Email>" \
 -e "MAILER_EMAIL_ID=<Email>" \
 -e "MAILER_PASSWORD=<Password>" \
