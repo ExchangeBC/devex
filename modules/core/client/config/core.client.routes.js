@@ -112,6 +112,14 @@
           pageTitle: 'Code With Us'
         }
       })
+      .state('roadmap', {
+        url: '/roadmap',
+        templateUrl: '/modules/core/client/views/roadmap.view.html',
+        data: {
+          ignoreState: true,
+          pageTitle: 'Roadmap'
+        }
+      })
       .state('iotblog', {
         url: '/iotblog',
         templateUrl: '/modules/core/client/views/iotblog.view.html',
