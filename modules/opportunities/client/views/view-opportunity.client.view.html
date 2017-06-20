@@ -11,8 +11,7 @@
 	</div>
 	<div class="row" ng-if="vm.loggedIn">
 		<div ng-if="vm.notifyMe">
-			<button ng-click="vm.subscribe(true)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button>
-			<button ng-click="vm.subscribe(false)">Unfollow</button>
+			<button ng-click="vm.subscribe(false)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button>
 			<p style="font-size: 12px;">You’re receiving updates because you’re following this opportunity.</p>
 		</div>
 		<div ng-if="!vm.notifyMe && !vm.hasEmail">
