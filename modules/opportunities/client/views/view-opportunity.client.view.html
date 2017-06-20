@@ -21,7 +21,7 @@
 		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div>
-					<label class="label-danger" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" uib-tooltip="No one can see this page until you publish it.">
+					<label class="label-danger" ng-if="vm.canEdit && !vm.opportunity.isPublished" uib-tooltip="No one can see this page until you publish it.">
 					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
 					</label>
 				</div>

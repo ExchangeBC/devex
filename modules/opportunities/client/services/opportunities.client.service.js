@@ -30,6 +30,14 @@
         url: '/api/my/opportunities',
         isArray: true
       },
+      publish: {
+        method: 'GET',
+        url :'/api/opportunities/publish/:opportunityId'
+      },
+      unpublish: {
+        method: 'DELETE',
+        url :'/api/opportunities/publish/:opportunityId'
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/opportunity/:opportunityId'

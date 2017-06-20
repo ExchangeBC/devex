@@ -33,6 +33,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/opportunities/requests/deny/:opportunityId/:userId',
       permissions: ['get']
     }, {
+      resources: '/api/opportunities/publish/:opportunityId',
+      permissions: ['*']
+    }, {
       resources: '/api/opportunities/:opportunityId',
       permissions: '*'
     }]
@@ -57,6 +60,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/opportunities/requests/:opportunityId/deny/:userId',
       permissions: ['get']
     }, {
+      resources: '/api/opportunities/publish/:opportunityId',
+      permissions: ['*']
+   }, {
       resources: '/api/opportunities/:opportunityId',
       permissions: ['get']
     }]

@@ -157,6 +157,30 @@ var incrementViews = function (id) {
 };
 // -------------------------------------------------------------------------
 //
+// all the info we need for notification merging
+//
+// -------------------------------------------------------------------------
+var setNotificationData = function (opportunity) {
+	return {
+		name                 : opportunity.name,
+		short                : opportunity.short,
+		description          : opportunity.description,
+		earn_format_mnoney   : helpers.formatMoney (opportunity.earn, 2),
+		earn                 : helpers.formatMoney (opportunity.earn, 2),
+		dateDeadline         : helpers.formatDate (opportunity.deadline),
+		timeDeadline         : helpers.formatTime (opportunity.deadline),
+		dateAssignment       : helpers.formatDate (opportunity.assignment),
+		dateStart            : helpers.formatDate (opportunity.start),
+		datePublished        : helpers.formatDate (opportunity.lastPublished),
+		deadline_format_date : helpers.formatDate (opportunity.deadline),
+		deadline_format_time : helpers.formatTime (opportunity.deadline),
+		updatenotification   : 'not-update-'+opportunity.code,
+		code                 : opportunity.code,
+		skills               : opportunity.skills.join (', ')
+	};
+};
+// -------------------------------------------------------------------------
+//
 // get a list of all my opportunities, but only ones I have access to as a normal
 // member or admin, just not as request
 //
@@ -241,6 +265,20 @@ exports.create = function(req, res) {
 					target: 'Opportunity',
 					event: 'Update'
 				});
+				// Notifications.addNotification ({
+				// 	code: 'not-unpublish-'+opportunity.code,
+				// 	name: 'Suspension of Opportunity '+opportunity.name,
+				// 	// description: 'Update of Opportunity '+opportunity.name,
+				// 	target: 'Opportunity',
+				// 	event: 'unpublish'
+				// });
+				// Notifications.addNotification ({
+				// 	code: 'not-republish-'+opportunity.code,
+				// 	name: 'Re-Posting of Opportunity '+opportunity.name,
+				// 	// description: 'Update of Opportunity '+opportunity.name,
+				// 	target: 'Opportunity',
+				// 	event: 'republish'
+				// });
 				res.json(opportunity);
 			}
 		});
@@ -303,6 +341,15 @@ exports.read = function (req, res) {
 	incrementViews (req.opportunity._id);
 };
 
+
+var updateSave = function (opportunity) {
+	return new Promise (function (resolve, reject) {
+		opportunity.save (function (err) {
+			if (err) reject (err);
+			else resolve (opportunity);
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // update the document, make sure to apply audit. We don't mess with the
@@ -312,81 +359,98 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-	if (ensureAdmin (req.opportunity, req.user, res)) {
-		//
-		// doNotNotify is a non persistent flag from the UI. If not explicity
-		// set we take the safer option set it to true.
-		//
-		// var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
-		//
-		// copy over everything passed in. This will overwrite the
-		// audit fields, but they get updated in the following step
-		//
-		var opportunity = _.assign (req.opportunity, req.body);
-		//
-		// determine what notify actions we want to send out, if any
-		// if not published, then we send nothing
-		//
-		var notificationCodes = [];
-		if (opportunity.isPublished) { // } && !doNotNotify) {
-			if (opportunity.wasPublished) {
-				//
-				// this is an update, we send both specific and general
-				//
-				notificationCodes = ['not-updateany-opportunity', 'not-update-'+opportunity.code];
-			} else {
-				//
-				// this is an add as it is the first time being published
-				//
-				notificationCodes = ['not-add-opportunity'];
-			}
-		}
 
-		opportunity.wasPublished = (opportunity.isPublished || opportunity.wasPublished);
-		//
-		// set the lastPublished date so we can later determine if the
-		// opportunity have been published at least once before
-		//
-		if (opportunity.isPublished) {
-			opportunity.lastPublished = Date();
-		}
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (opportunity, req.user)
-		//
-		// save
-		//
-		opportunity.save(function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				var data = {};
-				data.name                 = opportunity.name;
-				data.short                 = opportunity.short;
-				data.link                 = 'https://'+(process.env.DOMAIN || 'localhost')+'/opportunities/'+opportunity.code;
-				data.earn_format_mnoney   = helpers.formatMoney (opportunity.earn, 2);
-				data.deadline_format_date = helpers.formatDate (opportunity.deadline);
-				data.deadline_format_time = helpers.formatTime (opportunity.deadline);
-				data.updatenotification   = 'not-update-'+opportunity.code;
-				data.code                 = opportunity.code;
-				data.skills               = opportunity.skills.join (', ');
-
-				Promise.all (notificationCodes.map (function (code) {
-					return Notifications.notifyObject (code, data);
-				}))
-				.catch (function (err) {
-					// no-op, this is logged in the mailer
-				})
-				.then (function () {
-					res.json (decorate (opportunity, req.user ? req.user.roles : []));
-				});
-			}
-		});
+	//
+	// if we dont have permission to do this just return as a no-op
+	//
+	if (!ensureAdmin (req.opportunity, req.user, res)) {
+		console.log ('NOT ALLOWED');
+		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 	}
+	//
+	// copy over everything passed in. This will overwrite the
+	// audit fields, but they get updated in the following step
+	//
+	var opportunity = _.assign (req.opportunity, req.body);
+	//
+	// set the audit fields so we know who did what when
+	//
+	helpers.applyAudit (opportunity, req.user)
+	//
+	// save
+	//
+	updateSave (opportunity)
+	.then (function () {
+		var data = setNotificationData (opportunity);
+		// console.log ('++ update notification data', data);
+		if (opportunity.isPublished) {
+			Notifications.notifyObject ('not-updateany-opportunity', data);
+			Notifications.notifyObject ('not-update-'+opportunity.code, data);
+		}
+		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+	})
+	.catch (function (err) {
+		return res.status(422).send({
+			message: errorHandler.getErrorMessage(err)
+		});
+	});
 };
+// -------------------------------------------------------------------------
+//
+// publish or unpublish
+//
+// -------------------------------------------------------------------------
+var pub = function (req, res, isToBePublished) {
+	var opportunity = req.opportunity;
+	//
+	// if no change or we dont have permission to do this just return as a no-op
+	//
+	if (req.opportunity.isPublished === isToBePublished || !ensureAdmin (req.opportunity, req.user, res)) {
+		console.log ('NOT ALLOWED');
+		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
+	}
+	//
+	// determine first time or not
+	//
+	var firstTime = (isToBePublished && !opportunity.wasPublished);
+	//
+	// set the correct new state and set the publish date if being published
+	//
+	opportunity.isPublished = isToBePublished;
+	if (isToBePublished) {
+		opportunity.lastPublished = new Date ();
+		opportunity.wasPublished = true;
+	}
+	// console.log ('opportunity.ispublished', opportunity.isPublished);
+	// console.log ('firstTime', firstTime);
+	// console.log ('isToBePublished', isToBePublished);
+
+	//
+	// save and notify
+	//
+	updateSave (opportunity)
+	.then (function () {
+		var data = setNotificationData (opportunity);
+		// console.log ('++ publish notification data', data);
+		if (firstTime)   Notifications.notifyObject ('not-add-opportunity'             , data);
+		else if (isToBePublished) {
+			Notifications.notifyObject ('not-update-'+opportunity.code, data);
+			Notifications.notifyObject ('not-updateany-opportunity', data);
+		}
+		// if (!isToBePublished) Notifications.notifyObject ('not-unpublish-'+opportunity.code , data);
+		// else if (firstTime)   Notifications.notifyObject ('not-add-opportunity'             , data);
+		// else                  Notifications.notifyObject ('not-republish-'+opportunity.code , data);
+		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+	})
+	.catch (function (err) {
+		return res.status(422).send({
+			message: errorHandler.getErrorMessage(err)
+		});
+	});
+}
+exports.publish = function (req, res) { return pub (req, res, true); }
+exports.unpublish = function (req, res) { return pub (req, res, false); }
+
 
 // -------------------------------------------------------------------------
 //

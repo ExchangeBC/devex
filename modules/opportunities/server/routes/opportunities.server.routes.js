@@ -38,6 +38,10 @@ module.exports = function(app) {
   app.route('/api/opportunities/requests/:opportunityId')
     .all(opportunitiesPolicy.isAllowed)
     .get(opportunities.listRequests);
+  app.route('/api/opportunities/publish/:opportunityId')
+    .all(opportunitiesPolicy.isAllowed)
+    .get(opportunities.publish)
+    .delete(opportunities.unpublish);
 
   //
   // modify users

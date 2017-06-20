@@ -1,1 +1,1 @@
-Opportunity {{ data.earn_format_money }} has been updated
+Opportunity {{ data.name }} has been updated

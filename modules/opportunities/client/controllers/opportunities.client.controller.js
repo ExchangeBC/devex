@@ -44,7 +44,7 @@
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.hasEmail                = isUser && Authentication.user.email != '';
+		vm.hasEmail                = isUser && Authentication.user.email !== '';
 		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
@@ -95,8 +95,8 @@
 			var promise = Promise.resolve ();
 			if (state) {
 				var question = opportunity.wasPublished ?
-					'You are re-publishing this opportunity. This will notify all subscribed users. Do you wish to continue?' :
-					'You are publishing this opportunity. This will notify all subscribed users. Do you wish to continue?';
+					'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?' :
+					'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
 				promise = ask.yesNo (question).then (function (result) {
 					savemeSeymour = result;
 				});
@@ -104,7 +104,9 @@
 				promise.then(function() {
 					if (savemeSeymour) {
 						opportunity.isPublished = state;
-						return opportunity.createOrUpdate();
+						if (state) return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
+						else return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
+						// return opportunity.createOrUpdate();
 					}
 					else return Promise.reject ({data:{message:'Publish Cancelled'}});
 				})
@@ -112,8 +114,9 @@
 					//
 					// success, notify
 					//
+					var m = state ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
 					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> Opportunity '+t+' Successfully!'
+						message : '<i class="glyphicon glyphicon-ok"></i> '+m
 					});
 				})
 				.catch (function (res) {

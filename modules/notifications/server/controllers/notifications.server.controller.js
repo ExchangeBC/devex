@@ -423,9 +423,11 @@ exports.unsubscribeUserAll = function (user) {
 // 	});
 // };
 exports.notifyObject = function (notificationidOrObject, data) {
+	// console.log ('in notifyObject', data);
+
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		console.log ('++ Notifications: notifyObject '+notification.code, data);
+		// console.log ('++ Notifications: notifyObject '+notification.code);
 		//
 		// for internal use, message is
 		// {
@@ -438,7 +440,7 @@ exports.notifyObject = function (notificationidOrObject, data) {
 		//
 		return getSubscriptionsForNotification (notification.code)
 		.then (function (subscriptions) {
-			console.log ('subscriptions to '+notification.code, subscriptions);
+			// console.log ('subscriptions to '+notification.code, subscriptions);
 			return getTemplatesMerge (subscriptions, notification, data);
 		})
 		.then (function (emails) {
@@ -569,10 +571,10 @@ exports.forUser = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.unsubscribeExternal = function (req, res) {
-	var message = '<h4>You have been successfully removed from the mailing list for '+req.subscription.notification.name+'</h4>';
-	message += '<p>To view and manage other subscriptions from the BC Developer\'s Exchange, please go to:';
-	message += '<a href=\'https://bcdevexchange.org/settings/notifications\'>My Notifications</a></p>';
-	message += '<p>Thanks for using the Developer\'s Exchange!</p>';
+	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"/><h4>You are no longer following '+req.subscription.notification.name+'</h4>';
+	message += '<p>To view and manage other subscriptions please visit';
+	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a>, sign in, and edit your profile.</p>';
+	message += '<p>Thanks for using the BCDevExchange!</p>';
 	exports.unsubscribe (req.subscription)
 	.then (function (result) {
 		res.send (message);
@@ -583,10 +585,10 @@ exports.unsubscribeExternal = function (req, res) {
 };
 
 exports.subscribeExternal = function (req, res) {
-	var message = '<h4>You have been successfully added to the mailing list for '+req.notification.name+'</h4>';
-	message += '<p>To view and manage other subscriptions from the BC Developer\'s Exchange, please go to:';
-	message += '<a href=\'https://bcdevexchange.org/settings/notifications\'>My Notifications</a></p>';
-	message += '<p>Thanks for using the Developer\'s Exchange!</p>';
+	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"/><h4>You\'re now following '+req.notification.name+'</h4>';
+	message += '<p>To view and manage other subscriptions please visit';
+	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a>, sign in, and edit your profile.</p>';
+	message += '<p>Thanks for using the BCDevExchange!</p>';
 
 	exports.subscribe (req.notification, req.subscription.user)
 	.then (function (result) {
