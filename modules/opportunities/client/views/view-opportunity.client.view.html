@@ -2,20 +2,25 @@
 
 	<div class="container">
 	<div class="row" ng-if="!vm.loggedIn">
-		Interested in being notified of updates to this opportunity?
+		<p>
+		Want to get updates about this opportunity? &nbsp;
 		<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
 		or
 		<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+		</p>
 	</div>
 	<div class="row" ng-if="vm.loggedIn">
 		<div ng-if="vm.notifyMe">
-			<button ng-click="vm.subscribe(false)">Un-Subscribe me from notifications about this opportunity</button>
+			<button ng-click="vm.subscribe(true)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button>
+			<button ng-click="vm.subscribe(false)">Unfollow</button>
+			<p style="font-size: 12px;">You’re receiving updates because you’re following this opportunity.</p>
 		</div>
 		<div ng-if="!vm.notifyMe && !vm.hasEmail">
-			<a href class="btn" ui-sref="settings.profile">Enter your email address to subscribe to notifications about this opportunity</a>
+			<p>Want to get updates about this opportunity? <a href class="btn" ui-sref="settings.profile">Add your email address</a></p>
 		</div>
 		<div ng-if="!vm.notifyMe && vm.hasEmail">
-			<button ng-click="vm.subscribe(true)">Subscribe me to notifications about this opportunity</button>
+			<button ng-click="vm.subscribe(true)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-up"></i> Follow</button>
+			<p style="font-size: 12px;">Get updates on this opportunity.</p>
 		</div>
 	</div>
 		<div class="row">
