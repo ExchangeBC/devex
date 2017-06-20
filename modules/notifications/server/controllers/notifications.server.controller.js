@@ -580,7 +580,7 @@ exports.unsubscribeExternal = function (req, res) {
 		res.send (message);
 	})
 	.catch (function (err) {
-		res.status(422).send (err);
+		res.send (message);
 	});
 };
 
@@ -595,7 +595,7 @@ exports.subscribeExternal = function (req, res) {
 		res.send (message);
 	})
 	.catch (function (err) {
-		res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+		res.send (message);
 	});
 };
 /**
