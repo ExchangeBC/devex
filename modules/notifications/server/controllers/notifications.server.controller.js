@@ -49,6 +49,7 @@ var sendmail = function (opts) {
 		});
 	});
 };
+exports.send = sendmail;
 // // -------------------------------------------------------------------------
 // //
 // // this is a throwback to the older way of doing things

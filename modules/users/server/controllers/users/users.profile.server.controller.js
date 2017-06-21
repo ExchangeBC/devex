@@ -69,7 +69,7 @@ exports.update = function (req, res) {
 		subscriptionHandler(user, prevState)
 		.then(function() {
 			return user.save(function (err) {
-				if (err) {
+				ifif (err) {
 					return res.status(422).send({
 						message: errorHandler.getErrorMessage(err)
 					});
