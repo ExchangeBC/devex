@@ -5,7 +5,7 @@
 
 An opportunity you followed, {{ data.name }} has been unpublished by its creator. If it is republished, we'll notify you again.
 
----
+-------
 
 **Want to stop receiving these emails?**
 
