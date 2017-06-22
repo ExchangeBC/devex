@@ -6,7 +6,7 @@
 We've just posted a new *Code With Us* opportunity:
 
 - Posted: **{{ data.deadline_format_date }}**
-- Value: **{{ data.earn_format_money }}**
+- Value: **{{ data.earn }}**
 - Required Skills: **{{ data.skills }}**
 - Closes on: **{{ data.deadline_format_date }}**
 

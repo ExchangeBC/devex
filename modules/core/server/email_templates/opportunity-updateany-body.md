@@ -1,7 +1,7 @@
 {{#markdown this}}
 Good day!
 
-Just wanted to alert you to a new {{ data.earn_format_money }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
+Just wanted to alert you to a new {{ data.earn }} Code With Us opportunity on the BCDevExchange. It is open for proposals until {{ data.deadline_format_date }}:
 
    [{{ data.name }}]({{ data.link }})
 
