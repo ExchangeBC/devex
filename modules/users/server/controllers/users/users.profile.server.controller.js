@@ -309,8 +309,9 @@ exports.removeSelf = function (req, res) {
 				// oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
 				Notifications.unsubscribeUserAll (user)
 				.then(function() {
-					res.json (user);
-  					// res.location('/');
+					// res.json (user);
+  					req.logout();
+  					res.redirect('/');
 				});
 			// }
 			// else {

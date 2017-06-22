@@ -259,6 +259,12 @@
 				vm.opportunity.project = vm.projectId;
 				vm.opportunity.program = vm.programId;
 			}
+			//
+			// if not editing, set some conveinient default dates
+			//
+			vm.opportunity.deadline   = new Date ();
+			vm.opportunity.assignment = new Date ();
+			vm.opportunity.start      = new Date ();
 		}
 		//
 		// if there are no available projects then post a warning and kick the user back to
@@ -280,12 +286,6 @@
 			vm.programTitle        = vm.projects[0].program.title;
 			vm.opportunity.program = vm.programId;
 		}
-		//
-		// if not editing, set some conveinient default dates
-		//
-		vm.opportunity.deadline   = new Date ();
-		vm.opportunity.assignment = new Date ();
-		vm.opportunity.start      = new Date ();
 
 		vm.tinymceOptions = {
 			resize      : true,

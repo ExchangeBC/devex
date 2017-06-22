@@ -167,13 +167,13 @@ var setNotificationData = function (opportunity) {
 		description          : opportunity.description,
 		earn_format_mnoney   : helpers.formatMoney (opportunity.earn, 2),
 		earn                 : helpers.formatMoney (opportunity.earn, 2),
-		dateDeadline         : helpers.formatDate (opportunity.deadline),
-		timeDeadline         : helpers.formatTime (opportunity.deadline),
-		dateAssignment       : helpers.formatDate (opportunity.assignment),
-		dateStart            : helpers.formatDate (opportunity.start),
-		datePublished        : helpers.formatDate (opportunity.lastPublished),
-		deadline_format_date : helpers.formatDate (opportunity.deadline),
-		deadline_format_time : helpers.formatTime (opportunity.deadline),
+		dateDeadline         : helpers.formatDate (new Date(opportunity.deadline)),
+		timeDeadline         : helpers.formatTime (new Date(opportunity.deadline)),
+		dateAssignment       : helpers.formatDate (new Date(opportunity.assignment)),
+		dateStart            : helpers.formatDate (new Date(opportunity.start)),
+		datePublished        : helpers.formatDate (new Date(opportunity.lastPublished)),
+		deadline_format_date : helpers.formatDate (new Date(opportunity.deadline)),
+		deadline_format_time : helpers.formatTime (new Date(opportunity.deadline)),
 		updatenotification   : 'not-update-'+opportunity.code,
 		code                 : opportunity.code,
 		skills               : opportunity.skills.join (', ')
@@ -375,7 +375,9 @@ exports.update = function (req, res) {
 	//
 	// set the audit fields so we know who did what when
 	//
-	helpers.applyAudit (opportunity, req.user)
+	helpers.applyAudit (opportunity, req.user);
+	console.log ('got here with opp', req.opportunity);
+
 	//
 	// save
 	//

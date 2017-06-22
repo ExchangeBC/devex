@@ -131,7 +131,7 @@ exports.formatDate = function (d) {
     'August', 'September', 'October',
     'November', 'December'
   ];
-
+  console.log ('date', d);
   var day = d.getDate();
   var monthIndex = d.getMonth();
   var year = d.getFullYear();

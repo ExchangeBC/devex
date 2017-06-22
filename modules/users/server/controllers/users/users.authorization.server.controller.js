@@ -12,6 +12,7 @@ var _ = require('lodash'),
  */
 exports.userByID = function (req, res, next, id) {
   if (!mongoose.Types.ObjectId.isValid(id)) {
+    console.error ('invalid id');
     return res.status(400).send({
       message: 'User is invalid'
     });

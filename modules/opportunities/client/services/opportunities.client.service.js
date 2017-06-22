@@ -13,7 +13,24 @@
       opportunityId: '@_id'
     }, {
       update: {
-        method: 'PUT'
+        method: 'PUT',
+        transformResponse: function (data) {
+          data            = angular.fromJson(data);
+          data.deadline   = new Date(data.deadline);
+          data.assignment = new Date(data.assignment);
+          data.start      = new Date(data.start);
+          return data;
+        }
+      },
+      save: {
+        method: 'POST',
+        transformResponse: function (data) {
+          data            = angular.fromJson(data);
+          data.deadline   = new Date(data.deadline);
+          data.assignment = new Date(data.assignment);
+          data.start      = new Date(data.start);
+          return data;
+        }
       },
       forProject: {
         method: 'GET',
