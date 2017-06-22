@@ -3,15 +3,15 @@
 
 ### Hi {{data.username}},
 
-An opportunity you followed, {{ data.name }} has been updated.
+An opportunity you followed has been updated:
+
+### {{ data.name }}
 
 ### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
-
-[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) to stop receiving alerts.
 
 ---
 
 **Want to stop receiving these emails?**
 
-[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
+[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) from notifications of changes to this opportunity or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
 {{/markdown}}

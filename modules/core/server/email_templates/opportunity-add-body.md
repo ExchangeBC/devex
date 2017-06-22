@@ -5,6 +5,8 @@
 
 We've just posted a new *Code With Us* opportunity:
 
+### {{ data.name }}
+
 - Posted: **{{ data.deadline_format_date }}**
 - Value: **{{ data.earn }}**
 - Required Skills: **{{ data.skills }}**
@@ -12,9 +14,6 @@ We've just posted a new *Code With Us* opportunity:
 
 ### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
 
-**{{ data.name }}**
-
-{{data.short}}
 
 [Follow this opportunity]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }}) to get alerts.
 
@@ -28,5 +27,5 @@ Contribute to this government open source project in GitHub. Get paid a fixed fe
 
 **Want to stop receiving these emails?**
 
-[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
+[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) from notifications of new opportunities or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
 {{/markdown}}
