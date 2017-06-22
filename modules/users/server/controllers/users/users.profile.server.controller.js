@@ -294,30 +294,11 @@ exports.count = function (req, res) {
 };
 
 exports.removeSelf = function (req, res) {
-	var user = req.user;
 	if (req.user) {
-		// req.logout();
-		// User.find({_id: req.user._id}, function (err, user))
-		user.remove(function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			}
-
-			// if (user.subscribeOpportunitiesId !== null) {
-				// oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
-				Notifications.unsubscribeUserAll (user)
-				.then(function() {
-					// res.json (user);
-  					req.logout();
-  					res.redirect('/');
-				});
-			// }
-			// else {
-				// res.json (user);
-				// res.location('/');
-			// }
+		var id = req.user._id;
+		req.logout();
+		res.redirect('/');
+		User.remove({_id: id}, function (err, user) {
 		});
 
 	}
