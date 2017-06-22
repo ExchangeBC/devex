@@ -7,8 +7,10 @@ var _ = require('lodash'),
   chalk = require('chalk'),
   glob = require('glob'),
   fs = require('fs'),
+  // mongoose = require ('mongoose'),
   path = require('path');
 
+// mongoose.Promise = Promise;
 /**
  * Get files by glob patterns
  */

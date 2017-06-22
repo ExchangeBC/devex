@@ -36,6 +36,7 @@ module.exports.connect = function (cb) {
       if (cb) cb(db);
     }
   });
+  mongoose.Promise = Promise;
 };
 
 module.exports.disconnect = function (cb) {

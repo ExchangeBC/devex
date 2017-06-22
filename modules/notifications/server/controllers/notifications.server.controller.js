@@ -572,7 +572,12 @@ exports.forUser = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.unsubscribeExternal = function (req, res) {
-	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are no longer following '+req.subscription.notification.name+'</h4>';
+	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>This action has already been performed.</h4>';
+	message += '<p>To view and manage other subscriptions please visit';
+	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a>, sign in, and edit your profile.</p>';
+	message += '<p>Thanks for using the BCDevExchange!</p>';
+	if (!req.subscription) return res.send (message);
+	message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are no longer following '+req.subscription.notification.name+'</h4>';
 	message += '<p>To view and manage other subscriptions please visit';
 	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a>, sign in, and edit your profile.</p>';
 	message += '<p>Thanks for using the BCDevExchange!</p>';
@@ -590,7 +595,7 @@ exports.subscribeExternal = function (req, res) {
 	message += '<p>To view and manage other subscriptions please visit';
 	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a>, sign in, and edit your profile.</p>';
 	message += '<p>Thanks for using the BCDevExchange!</p>';
-
+	if (!req.subscription) return res.send (message);
 	exports.subscribe (req.notification, req.subscription.user)
 	.then (function (result) {
 		res.send (message);
@@ -848,11 +853,8 @@ exports.externalSubscriptionById = function (req, res, next, id) {
 		next();
 	})
 	.catch (function (err) {
-		if (err.empty) {
-			return res.status(404).send (err);
-		} else {
-			return next (err);
-		}
+		req.subscription = null;
+		next();
 	});
 };
 
