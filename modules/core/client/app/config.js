@@ -34,6 +34,10 @@
 
 
 
+
+
+
+
   // Angular-ui-notification configuration
   angular.module('ui-notification').config(function(NotificationProvider) {
     NotificationProvider.setOptions({
