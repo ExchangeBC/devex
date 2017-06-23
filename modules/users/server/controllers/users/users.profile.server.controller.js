@@ -49,7 +49,7 @@ exports.update = function (req, res) {
 	var prevState = _.cloneDeep(req.user);
 	if (user) {
 		// Update whitelisted fields only
-		console.log ('req.user', req.user);
+		console.log ('req.user asdasd', req.user);
 
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
