@@ -45,14 +45,16 @@ var whitelistedFields = [
  */
 exports.update = function (req, res) {
 	// Init Variables
+	console.log ('updaint guser');
 	var user = req.user;
 	var prevState = _.cloneDeep(req.user);
 	if (user) {
 		// Update whitelisted fields only
-		console.log ('req.user asdasd', req.user);
+		console.log ('old user', req.user);
 
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
+		console.log ('new user', user);
 		// Previous state of user
 		var oldUser = User.find({_id: user._id});
 		//
@@ -100,18 +102,14 @@ function subscriptionHandler(user, oldUser) {
 	console.log ('++subscriptionHandler');
 	var promise = Promise.resolve();
 	if (user.email == null || user.email === '') {
+		console.log ('user email is either null or blank, cannot subscribe');
 		return promise;
 	}
-	var notifyOppChanged = user.notifyOpportunities !== oldUser.notifyOpportunities;
-	var emailChanged = user.email !== oldUser.email;
-	// user is subscribed before record save so that we can save the subscription
-	// id to use when unsubscribing.
-	// if (notifyOppChanged && user.notifyOpportunities && user.subscribeOpportunitiesId === null) {
-	if (notifyOppChanged && user.notifyOpportunities) {
+	if (user.notifyOpportunities) {
 		// promise = oppEmailNotifier.subscribe(user.email)
 		promise = Notifications.subscribe ('not-add-opportunity', user)
 			.then(function(json) {
-				console.log ('subscrive json:', json);
+				console.log ('subscribe json:', json);
 				// we save the id for the subscription so that was can unsubscribe at
 				// a later point.
 				user.subscribeOpportunitiesId = json.id;
@@ -137,7 +135,7 @@ function subscriptionHandler(user, oldUser) {
 	// 				'service:' + err);
 	// 		});
 	// }
-	else if (notifyOppChanged && !user.notifyOpportunities ) {
+	else if (!user.notifyOpportunities ) {
 		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
 		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
 			.then(function() {
