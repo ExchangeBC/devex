@@ -1,3 +1,28 @@
+# June 26, 2017
+
+### Added
+
+* **Instant email notifications about new opportunities:** New and existing users can subscribe/unsubscribe to a global email notification about new opportunities. Subscribers receive instant email notification as soon as a new opportunity is published for the first time.
+
+* **Opportunity update notifications:** Users can follow/unfollow individual opportunities to receive instant alerts if the opportunity is modified, updated, or deleted.
+
+* **Unsaved changes warnings:** Users are warned about unsaved changes when navigating away from a page.
+
+* **Users counter:** In admin view, we can see instantly how many signed up users we have.
+
+* **Opportunity views counter:** A counter of number of page views now appears on opportunity detail pages.
+
+* **Unpublished labels:** Added pronounced ‘Unpublished’ labels to ensure content creators/administrators clearly see when their content is unpublished.
+
+* **Roadmap:** Added a new static content page about the Roadmap for the BCDevExchange linked to from the footer.
+
+* **Additional metadata on opportunity cards:** Added tags to show the **location** of the opportunity and **whether or not in-person work is required**, to help users more quickly scan which opportunities are of interest. 
+
+### Changed
+
+* Minor styling changes to remove boxes on detail pages and make pills smaller.
+
+
 # March 15, 2017
 
 ### Added
