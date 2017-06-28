@@ -1,5 +1,5 @@
 {{#markdown this}}
-![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png)
+![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
 ### Hi {{data.username}}!
 
