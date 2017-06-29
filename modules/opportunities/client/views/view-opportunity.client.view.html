@@ -1,73 +1,51 @@
 <section class="detail">
 
-<div class="row" style="padding-top: 5px; margin-top: -20px; background-color: #ffefcc;">
 	<div class="container">
-
-<!-- // User is NOT signed in // -->
-		<div class="row" ng-if="!vm.loggedIn">
-			<div class="well-transparent text-center">
-				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? &nbsp;
-				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
-				</p>	
-			</div>
+	<div class="row" ng-if="!vm.loggedIn">
+		<p>
+		Want to get updates about this opportunity? &nbsp;
+		<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+		or
+		<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+		</p>
+	</div>
+	<div class="row" ng-if="vm.loggedIn">
+		<div ng-if="vm.notifyMe">
+			<button ng-click="vm.subscribe(false)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button>
+			<p style="font-size: 12px;">You’re receiving updates because you’re following this opportunity.</p>
 		</div>
-
-<!-- // User IS signed in, and ... // -->
-		<div class="row" ng-if="vm.loggedIn">
-			
-<!-- // User doesn't have an email address in their profile // -->
-			<div class="well-transparent text-center" ng-if="!vm.notifyMe && !vm.hasEmail">
-				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? <a href ui-sref="settings.profile">  Add your email address.</a></p>
-			</div>
-
-<!-- // User is NOT following the opportunity // -->
-			<div class="well-transparent text-center" ng-if="!vm.notifyMe && vm.hasEmail">
-				<p><button type="button" class="btn btn-default" ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button><span class="hidden-xs">&nbsp; &nbsp;
-				Get notified if this opportunity changes.</span></p>
-			</div>
-
-<!-- // User IS following the opportunity // --> 
-			<div class="well-transparent text-center" ng-if="vm.notifyMe">
-				<p><span style="font-weight: 800; color: green;"><i class="glyphicon glyphicon-ok-sign"></i> Following</span>
-				&nbsp; &nbsp;
-				<button type="button" class="btn btn-default" ng-click="vm.subscribe(false)""><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button></p>
-				<p class="hidden-xs">You’re receiving email notifications because you're following this opportunity.</p>
-			</div>
-
+		<div ng-if="!vm.notifyMe && !vm.hasEmail">
+			<p>Want to get updates about this opportunity? <a href class="btn" ui-sref="settings.profile">Add your email address</a></p>
+		</div>
+		<div ng-if="!vm.notifyMe && vm.hasEmail">
+			<button ng-click="vm.subscribe(true)" class="btn btn-default" style="text-transform: none;"><i class="glyphicon glyphicon-volume-up"></i> Follow</button>
+			<p style="font-size: 12px;">Get updates on this opportunity.</p>
 		</div>
 	</div>
-</div>
-
-<!-- // Admin view // -->
-
-<!-- // Opportunity is NOT published // -->
-	<div class="container">
-		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-			<div class="well-yellow text-center">
-				<label class="label-danger">
-				<i class="fa fa-exclamation-triangle"></i> UNPUBLISHED
-				</label><span>No one will see this opportunity until you publish it.</span>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div>
+					<label class="label-danger" ng-if="vm.canEdit && !vm.opportunity.isPublished" uib-tooltip="No one can see this page until you publish it.">
+					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+					</label>
+				</div>
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
+					<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
+					<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+					</a>
+					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
+					<i class="glyphicon glyphicon-check"></i> Publish
+					</a>
+				</div>
 			</div>
-		</div>
-
-		<div class="row text-right" style="margin-right: 0px;">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
-				<i class="glyphicon glyphicon-edit"></i> Edit
-				</button>
-				<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
-				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
-				</a>
-				<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
-				<i class="glyphicon glyphicon-check"></i> Publish
-				</a>
-			</div>
-		</div>
 
 		<div class="row" style="padding-top: 0px; margin-top: 0px;">
 			<div class="col-xs-12 text-center" style="margin-top: 0px; padding-top: 0px;">
-				<label class="label-counter" ng-if="vm.canEdit" uib-tooltip="This opportunity has been viewed {{vm.pageViews}} times">
-				<i class="glyphicon glyphicon-eye-open"></i> {{vm.pageViews}}
+				<label class="label-counter" uib-tooltip="This opportunity has been viewed {{vm.pageViews}} times">
+				<i class="glyphicon glyphicon-heart-empty"></i> {{vm.pageViews}}
 				</label>
 				<h1>{{vm.opportunity.name}}</h1>
 				<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.opportunity.short"></span></p>
@@ -77,123 +55,124 @@
 
 
 	<!--<div class="panel panel-default panel-flat card-panel">-->
-<div class="container">
-	<div class="card card-flat">
-		<div class="card-header">
-			<div class="row">
-				<div class="col-sm-5">
-					<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
-					<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
-					<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker">&nbsp;</i>Location</h4>
-	          <h4 ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
-	          <h4 ng-if="vm.opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
-	          <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
-				</div>
 
-				<div class="col-sm-7">
-					<dl class="dl-horizontal">
-					<dt>Posted by:</dt>
-					<dd>
-						<i class="fa fa-user-circle-o"></i>
-						<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-						<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+<div class="card card-flat">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-sm-5">
+				<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
+				<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
+				<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker">&nbsp;</i>Location</h4>
+          <h4 ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
+          <h4 ng-if="vm.opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
+          <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
+			</div>
+
+			<div class="col-sm-7">
+				<dl class="dl-horizontal">
+				<dt>Posted by:</dt>
+				<dd>
+					<i class="fa fa-user-circle-o"></i>
+					<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+					<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+				</dd>
+				<dt>Program:</dt>
+				<dd>
+					<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+					<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
+				</dd>
+				<dt>Project:</dt>
+				<dd>
+					<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+					<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
+				</dd>
+				<!-- github link -->
+				<dt>Code:</dt>
+				<dd>
+				<a ng-if="vm.opportunity.github && vm.opportunity.github.length > 0"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> View Issue on Github</a>
+				<!--<dt>Assigned to:</dt>
+				<dd>
+					<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
+					<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
+				</dl>
+			</div>
+			<div class="col-sm-12"
+				<dl ng-if="vm.opportunity.skills.length">
+					<!--<dt>Required Skills:</dt>-->
+					<dd class="label-list">
+					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
 					</dd>
-					<dt>Program:</dt>
-					<dd>
-						<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
-						<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
-					</dd>
-					<dt>Project:</dt>
-					<dd>
-						<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
-						<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
-					</dd>
-					<!-- github link -->
-					<dt>Code:</dt>
-					<dd>
-					<a ng-if="vm.opportunity.github && vm.opportunity.github.length > 0"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> View Issue on Github</a>
-					<!--<dt>Assigned to:</dt>
-					<dd>
-						<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
-						<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
-					</dl>
-				</div>
-				<div class="col-sm-12"
-					<dl ng-if="vm.opportunity.skills.length">
-						<!--<dt>Required Skills:</dt>-->
-						<dd class="label-list">
-						<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
-						</dd>
-					</dl>
-				</div>
+				</dl>
 			</div>
 		</div>
-
-		<div class="panel-body" style="background-color: #e6e6e6;">
-			<p style="font-size: 16px; color: black; padding-top: 10px;">
-			This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <i><a href="/codewithus">Code With Us</a></i>.
-			</p>
-		</div>
-
-		<div class="panel-body">
-			<p ng-bind-html="vm.display.description"></p>
-		</div>
-
-		<div class="panel-body" style="background-color: #f2f2f2">
-			<h5>Acceptance Criteria</h5>
-			<p ng-bind-html="vm.display.criteria"></p>
-		</div>
-
-	<!--
-		<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
-		<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
-	-->
-
-		<div class="panel-body style">
-			<h5>How to Apply</h5>
-			<p>Please send a proposal to <b>{{vm.opportunity.proposalEmail}}</b> by <b>{{vm.deadline}}</b>.</p>
-			<p>With your email, to indicate your acceptance of the <i>Code With Us</i> terms, you must attach a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> with the required information asked for in the "Acceptance" section of the document.</p>
-			<p>If we are satisfied with the proposals we receive, we will assign this opportunity by <b>{{vm.assignment}}</b> with work proposed to start on <b>{{vm.start}}</b>.</p>
-			<br>
-			<h5>Proposal Evaluation Criteria</h5>
-			<p ng-bind-html="vm.display.evaluation"></p>
-			<br>
-		</div>
-
-		<div class="panel-body" style="background-color: #f2f2f2; text-align: center;">
-			<h5><i class="fa fa-comments fa-2x"></i>&nbsp; Questions?</h5>
-			<p style="font-size: 16px; font-weight: 500">
-			<a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
-			</p>
-		</div>
-
-	<!--
-			<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ng-click="vm.signInAndApply()" title="Apply">
-				<i class="fa fa-sign-in"></i> Sign up or log in to apply
-			</button>
-			<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
-				<i class="fa fa-sign-in"></i> Apply Now
-			</button>
-	-->
-
-
-		<div class="panel-footer" style="background-color: #f2f2f2">
-			<em class="small text-muted">
-				Created on
-				<span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
-				by
-				<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-				<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
-			</em><br/>
-			<em class="small text-muted">
-				Updated on
-				<span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
-				by
-				<span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
-				<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
-			</em><br>
-		</div>
 	</div>
+
+	<div class="panel-body" style="background-color: #e6e6e6;">
+		<p style="font-size: 16px; color: black; padding-top: 10px;">
+		This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <i><a href="/codewithus">Code With Us</a></i>.
+		</p>
+	</div>
+
+	<div class="panel-body">
+		<p ng-bind-html="vm.display.description"></p>
+	</div>
+
+	<div class="panel-body" style="background-color: #f2f2f2">
+		<h5>Acceptance Criteria</h5>
+		<p ng-bind-html="vm.display.criteria"></p>
+	</div>
+
+<!--
+	<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
+	<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
+-->
+
+	<div class="panel-body style">
+		<h5>How to Apply</h5>
+		<p>Please send a proposal to <b>{{vm.opportunity.proposalEmail}}</b> by <b>{{vm.deadline}}</b>.</p>
+		<p>With your email, to indicate your acceptance of the <i>Code With Us</i> terms, you must attach a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> with the required information asked for in the "Acceptance" section of the document.</p>
+		<p>If we are satisfied with the proposals we receive, we will assign this opportunity by <b>{{vm.assignment}}</b> with work proposed to start on <b>{{vm.start}}</b>.</p>
+		<br>
+		<h5>Proposal Evaluation Criteria</h5>
+		<p ng-bind-html="vm.display.evaluation"></p>
+		<br>
+	</div>
+
+	<div class="panel-body" style="background-color: #f2f2f2; text-align: center;">
+		<h5><i class="fa fa-comments fa-2x"></i>&nbsp; Questions?</h5>
+		<p style="font-size: 16px; font-weight: 500">
+		<a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
+		</p>
+	</div>
+
+<!--
+		<button ng-if="!vm.loggedIn" class="btn btn-solo btn-success btn-lg" ng-click="vm.signInAndApply()" title="Apply">
+			<i class="fa fa-sign-in"></i> Sign up or log in to apply
+		</button>
+		<button ng-if="vm.canApply" class="btn btn-solo btn-success btn-lg" href="javascript:void(0);" ng-click="vm.request()" title="Apply">
+			<i class="fa fa-sign-in"></i> Apply Now
+		</button>
+-->
+
+
+	<div class="panel-footer" style="background-color: #f2f2f2">
+		<em class="small text-muted">
+			Created on
+			<span ng-bind="vm.opportunity.created | date:'mediumDate'"></span>
+			by
+			<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+			<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+		</em><br/>
+		<em class="small text-muted">
+			Updated on
+			<span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
+			by
+			<span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
+			<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
+		</em><br>
+	</div>
+
+</div>
 
 
 	<div class="col-xs-12 text-right">
@@ -213,6 +192,6 @@
 			</a>
 		</div>
 	</div>
-</div>
 
+</div>
 </section>
