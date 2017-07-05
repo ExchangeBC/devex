@@ -1,15 +1,17 @@
-<section class="static-page"><div class="container" role="main">
+<section class="static"><div class="container" role="main">
 <div class="row">
 	<!-- <div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4"> -->
 
-	<div class="col-xs-2 col-sm-2" style="text-align: center;">
-   		<img width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
-	</div>
+	<!--<div class="col-xs-2 col-sm-2" style="text-align: center;">
+   		<img class="img-circle" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
+	</div>-->
 
 
 	<div class="col-xs-12 col-sm-6">
 		<form name="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
-
+			<hr>
+			<h3>Public Profile</h3>
+			<div class="alert alert-info" style="font-size: 11px;">Your public profile will be visible to anyone if you choose to identify yourself as a member of a program or project, or if you are assigned to an opportunity.</div>
 			<fieldset>
 				<div class="form-group" show-errors>
 					<label for="email">Email</label>
@@ -46,21 +48,30 @@
 						<p class="help-block error-text" ng-message="required">Username is required.</p>
 					</div>
 				</div>
-				<br>
-				<h4>Do any of these sound like you?</h4>
-				<div ng-show='vm.user.email === "" || vm.user.email == null' role="alert">
+				<hr>
+				<h3>Notifications</h3>
+				<div class="alert alert-danger" style="font-size: 12px;" ng-show='vm.user.email === "" || vm.user.email == null' role="alert">
 					<p>
-					Email address required for these fields.
+					We need your email address for these.
 					</p>
 				</div>
 				<div class="form-group">
 					<label>
-					<input ng-if="!vm.goveditable" type="checkbox"  ng-model="vm.isgov" disabled>
-					<input ng-if="vm.goveditable" type="checkbox"  ng-model="vm.isgov" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-					I work in the BC Public Sector &nbsp; &nbsp;
+					<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+					Notify me when new opportunities are posted
 					</label>
 				</div>
-
+				<hr>
+				<h3>Are you B.C. public sector employee?</h3>
+				<div class="alert alert-info" style="font-size: 11px;">If you work for a public sector organization in B.C., you can publish information about your program and projects, and post Code With Us opportunities.</div>
+				<div class="form-group">
+					<label>
+					<input ng-if="!vm.goveditable" type="checkbox"  ng-model="vm.isgov" disabled>
+					<input ng-if="vm.goveditable" type="checkbox"  ng-model="vm.isgov" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+					Please verify me as a B.C. public sector employee so I can publish content on the BCDevExchange
+					</label>
+				</div>
+				<hr>
 				<div class="form-group" ng-if="0">>
 					<label ng-disabled="vm.isgov" >
 						<input ng-disabled="vm.isgov" type="checkbox" ng-model="vm.user.isDeveloper">
@@ -75,13 +86,6 @@
 					<div ng-messages="vm.userForm.government.$error" role="alert">
 						<p class="help-block error-text" ng-message="required">Organization Name is required.</p>
 					</div>
-				</div>
-
-				<div class="form-group">
-					<label>
-					<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-					Notify me when new Opportunities are posted &nbsp; &nbsp;
-					</label>
 				</div>
 
 				<div class="form-group" ng-if="0">
@@ -99,12 +103,12 @@
 				</div>-->
 				<br>
 				<div class="form-group">
-					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="submit" class="btn btn-lg btn-solo btn-warning">Save</button>
 				</div>
 				<br>
-				<div class="panel" style="padding: 12px; background-color: #f2f2f2;">
-				<p style="font-size: 11px; padding: 0px;"><b>Collection Notice</b></p>
-				<p style="font-size: 11px"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
+				<div class="alert alert-info">
+					<p style="font-size: 11px"><b>Collection Notice</b></p>
+					<p style="font-size: 11px"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
 				</div>
 				<br>
 			</fieldset>
