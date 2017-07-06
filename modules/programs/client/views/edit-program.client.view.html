@@ -10,15 +10,12 @@
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
 	<div class="btn-group">
-	  <button class="btn btn-primary" type="submit" uib-tooltip="Save your work anytime. You can always come back later.">
-		<i class="glyphicon glyphicon-save"></i> Save
-	  </button>
-				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-		<i class="glyphicon glyphicon-trash"></i> Remove
-	  </a>
+	  	<a class="btn btn-primary" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save">
+			<i class="glyphicon glyphicon-save"></i> Save</a>
+		<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
+			<i class="glyphicon glyphicon-fast-backward"></i> Cancel</a>
+		<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+			<i class="glyphicon glyphicon-trash"></i> Remove</a>
 	</div>
 	</div>
 	</div>
