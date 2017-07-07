@@ -17,7 +17,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService) {
 		var vm                    = this;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
@@ -25,6 +25,7 @@
 		var notificationCode = 'not-update-'+opportunity.code;
 		vm.notifyMe = subscriptions.map (function (s) {return (s.notificationCode === notificationCode);}).reduce (function (a, c) {return (a || c);}, false);
 
+		vm.myproposal             = myproposal;
 		vm.projectId              = $stateParams.projectId;
 		vm.opportunity            = opportunity;
 		vm.pageViews              = opportunity.views;

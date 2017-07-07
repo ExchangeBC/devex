@@ -61,12 +61,17 @@
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: function ($stateParams, OpportunitiesService) {
-					return OpportunitiesService.get({
+					return OpportunitiesService.get ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
 				subscriptions: function (NotificationsService) {
 					return NotificationsService.subscriptions().$promise;
+				},
+				myproposal: function ($stateParams, ProposalsService) {
+					return ProposalsService.myopp ({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
 				}
 			},
 			data: {

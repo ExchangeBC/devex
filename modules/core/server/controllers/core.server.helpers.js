@@ -10,7 +10,7 @@ exports.generateCode = function (s) {
 
 exports.applyAudit = function (model, user) {
 	model.updated   = Date.now ();
-	model.updatedBy = (user) ? user : null;
+	model.updatedBy = (user && user._id) ? user._id : null;
 	if (!model.created) {
 		model.created   = model.updated;
 		model.createdBy = model.updatedBy;

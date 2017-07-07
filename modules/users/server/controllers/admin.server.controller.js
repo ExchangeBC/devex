@@ -29,24 +29,29 @@ exports.update = function (req, res) {
   var prevState = _.cloneDeep(req.model);
   // CC: USERFIELDS
   // For security purposes only merge these parameters
-  user.firstName           = req.body.firstName;
-  user.lastName            = req.body.lastName;
-  user.displayName         = user.firstName + ' ' + user.lastName;
-  user.roles               = req.body.roles;
-  user.government          = req.body.government;
-  user.userTitle           = req.body.userTitle;
-  user.notifyOpportunities = req.body.notifyOpportunities;
-  user.notifyEvents        = req.body.notifyEvents;
-  user.notifyBlogs         = req.body.notifyBlogs;
-  user.isDisplayEmail      = req.body.isDisplayEmail;
-  user.isDeveloper         = req.body.isDeveloper;
-  user.paymentMethod       = req.body.paymentMethod;
-  user.businessName        = req.body.businessName;
-  user.businessAddress     = req.body.businessAddress;
-  user.businessAddress2    = req.body.businessAddress2;
-  user.businessCity        = req.body.businessCity;
-  user.businessProvince    = req.body.businessProvince;
-  user.businessCode        = req.body.businessCode;
+  user.phone                = req.user.phone;
+  user.address              = req.user.address;
+  user.businessContactName  = req.user.businessContactName;
+  user.businessContactEmail = req.user.businessContactEmail;
+  user.businessContactPhone = req.user.businessContactPhone;
+  user.firstName            = req.body.firstName;
+  user.lastName             = req.body.lastName;
+  user.displayName          = user.firstName + ' ' + user.lastName;
+  user.roles                = req.body.roles;
+  user.government           = req.body.government;
+  user.userTitle            = req.body.userTitle;
+  user.notifyOpportunities  = req.body.notifyOpportunities;
+  user.notifyEvents         = req.body.notifyEvents;
+  user.notifyBlogs          = req.body.notifyBlogs;
+  user.isDisplayEmail       = req.body.isDisplayEmail;
+  user.isDeveloper          = req.body.isDeveloper;
+  user.paymentMethod        = req.body.paymentMethod;
+  user.businessName         = req.body.businessName;
+  user.businessAddress      = req.body.businessAddress;
+  user.businessAddress2     = req.body.businessAddress2;
+  user.businessCity         = req.body.businessCity;
+  user.businessProvince     = req.body.businessProvince;
+  user.businessCode         = req.body.businessCode;
   userController.subscriptionHandler(user,prevState)
   .then(function() {
     user.save(function (err) {

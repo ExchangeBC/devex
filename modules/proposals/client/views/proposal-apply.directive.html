@@ -1,0 +1,16 @@
+<div ng-switch on="qaz.case">
+
+<button ng-switch-when="canadd" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" title="Apply">
+	<i class="fa fa-sign-in"></i> Create Proposal
+</button>
+
+<button ng-switch-when="canedit" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" title="Update Application">
+	<i class="fa fa-sign-in"></i> Edit Proposal
+</button>
+
+<button ng-switch-when="guest" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+	<i class="fa fa-sign-in"></i> Sign up or log in to submit a proposal
+</button>
+
+<div ng-switch-default></div>
+</div>

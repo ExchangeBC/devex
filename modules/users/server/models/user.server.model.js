@@ -97,6 +97,11 @@ var UserSchema = new Schema({
   businessCity     : {type: String, default: ''},
   businessProvince : {type: String, default: 'BC', enum: ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']},
   businessCode     : {type: String, default: ''},
+  businessContactName     : {type: String, default: ''},
+  businessContactEmail     : {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
+  businessContactPhone     : {type: String, default: ''},
+  address  : {type: String, default: ''},
+  phone  : {type: String, default: ''},
   //
   // notifications based upon events
   //

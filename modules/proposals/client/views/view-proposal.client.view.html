@@ -1,0 +1,107 @@
+<form id="proposalform" name="vm.form.proposalform" warn-on-exit class="form" ng-submit="vm.save(vm.form.proposalform.$valid)" novalidate>
+<div class="modal-header">
+	<h3>view a proposal</h3>
+</div>
+<div class="modal-body">
+	<!-- <section class="static-page"><div class="container" role="main"> -->
+	<uib-tabset active>
+		<uib-tab index="0">
+			<uib-tab-heading>
+				<i class="fa fa-user"></i> Proponent
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+				<div class="form-group">
+					<h4>Your Information</h4>
+					<div class="form-group" show-errors>
+					<label>
+						I am applying as a Company &nbsp; &nbsp;
+						<input type="checkbox"  ng-model="vm.proposal.isCompany" autofocus>
+<!-- 						I am applying as
+						<label class="radio-inline">
+							<input type="radio" ng-model="vm.proposal.isCompany" value={{true}}>a Company
+						</label>
+						<label class="radio-inline">
+							<input type="radio" ng-model="vm.proposal.isCompany" value={{false}}>an Individual
+						</label>
+ -->
+ 					</label>
+ 					</div>
+					<div class="form-group" show-errors>
+						<label for="firstName">First Name</label>
+						<input required type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.user.firstName" placeholder="First Name">
+					</div>
+					<div class="form-group" show-errors>
+						<label for="lastName">Last Name</label>
+						<input required type="text" id="lastName" name="lastName" class="form-control" ng-model="vm.user.lastName" placeholder="Last Name">
+					</div>
+					<div class="form-group" show-errors>
+						<label for="email">Email</label>
+						<input required type="email" id="email" name="email" class="form-control" ng-model="vm.user.email" placeholder="Email" lowercase>
+						<div ng-messages="vm.userForm.email.$error" role="alert">
+							<p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+						</div>
+					</div>
+					<div class="form-group" show-errors ng-if="!vm.proposal.isCompany">
+						<label for="address">Address</label>
+						<input required type="text" id="address" name="address" class="form-control" ng-model="vm.user.address" placeholder="Address">
+					</div>
+					<div class="form-group" show-errors ng-if="!vm.proposal.isCompany">
+						<label for="phone">Phone</label>
+						<input required type="text" id="phone" name="phone" class="form-control" ng-model="vm.user.phone" placeholder="Phone">
+					</div>
+				</div>
+			</div>
+		</uib-tab>
+		<uib-tab index="1" disable="!vm.proposal.isCompany">
+			<uib-tab-heading>
+				<i class="fa fa-group"></i> Company
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+				<h4>Company Information</h4>
+				<div class="form-group" show-errors>
+					<label for="businessName">Legal Name of Company</label>
+					<input required type="text" id="businessName" name="businessName" class="form-control" ng-model="vm.user.businessName" placeholder="Legal Name">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessAddress">Company Address</label>
+					<input required type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="vm.user.businessAddress" placeholder="Company Address">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactName">Contact Name</label>
+					<input required type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="vm.user.businessContactName" placeholder="Contact Name">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactPhone">Contact Phone</label>
+					<input required type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="vm.user.businessContactPhone" placeholder="Contact Phone">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactEmail">Contact Email</label>
+					<input required type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="vm.user.businessContactEmail" placeholder="Contact Email" lowercase>
+					<div ng-messages="vm.userForm.businessContactEmail.$error" role="alert">
+						<p class="help-block error-text" ng-message="businessContactEmail">Email address is invalid.</p>
+					</div>
+				</div>
+			</div>
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>
+				<i class="fa fa-pencil"></i> Proposal
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+			</div>
+		</uib-tab>
+		<uib-tab index="3" ng-enable="vm.yesy">
+			<uib-tab-heading>
+				<i class="fa fa-file"></i> Attachments
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+			</div>
+		</uib-tab>
+	</uib-tabset>
+	<!-- </div></section> -->
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn" data-ng-click="vm.close()">Cancel</button>
+	<button type="submit" class="btn btn-primary">Save</button>
+</div>
+</form>
