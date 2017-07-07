@@ -234,7 +234,7 @@ exports.update = function (req, res) {
 	var proposal = _.assign (req.proposal, req.body);
 	//
 	// set the audit fields so we know who did what when
-	//˚
+	//
 	helpers.applyAudit (proposal, req.user);
 	//
 	// save
