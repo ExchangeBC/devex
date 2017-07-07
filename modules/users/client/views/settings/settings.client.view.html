@@ -1,34 +1,38 @@
-<section class="static-page"><div class="container" role="main">
-  <div class="page-header">
-    <h1>My Profile</h1>
-  </div>
-  <div class="row">
-    <nav class="col-xs-8 col-sm-3" style="margin: 25px 0px 15px 0px;">
-      <ul class="nav nav-pills nav-stacked">
-        <li ui-sref-active="active">
-          <a ui-sref="settings.profile">Edit Profile</a>
-        </li>
-        <li ui-sref-active="active" ng-if="vm.user.isDeveloper">
-          <a ui-sref="settings.payment">Edit Payment Details</a>
-        </li>
-        <li ui-sref-active="active">
-          <a ui-sref="settings.picture">Change Profile Picture</a>
-        </li>
-        <li ui-sref-active="active" ng-show="vm.user.provider === 'local'">
-          <a ui-sref="settings.password">Change Password</a>
-        </li>
-        <li ng-if="0" ui-sref-active="active">
-          <a ui-sref="settings.accounts">Manage Social Accounts</a>
-        </li>
-        <li ui-sref-active="active">
-        <a href="javascript:void(0);" ng-click="vm.delete()" title="Remove Me" uib-tooltip="Remove Me">
-          Remove me from the Developer's Exchange
-        </a>
-        </li>
-      </ul>
-    </nav>
-    <div class="col-sm-9 col-md-8 settings-view">
-      <div ui-view></div>
+<section class="static">
+  <div class="container" role="main">
+    <div class="row">
+      <div class="col-xs-12">
+        <h1><img class="img-circle" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>&nbsp; {{::vm.user.firstName}} {{::vm.user.lastName}}</h1>
+      </div>
+    </div>
+    <div class="row">
+      <nav class="col-xs-12 col-sm-3">
+        <ul class="nav nav-pills nav-stacked">
+          <li ui-sref-active="active">
+            <a ui-sref="settings.profile">Edit Profile</a>
+          </li>
+          <li ui-sref-active="active" ng-if="vm.user.isDeveloper">
+            <a ui-sref="settings.payment">Edit Payment Details</a>
+          </li>
+          <li ui-sref-active="active">
+            <a ui-sref="settings.picture">Change Profile Picture</a>
+          </li>
+          <li ui-sref-active="active" ng-show="vm.user.provider === 'local'">
+            <a ui-sref="settings.password">Change Password</a>
+          </li>
+          <li ng-if="0" ui-sref-active="active">
+            <a ui-sref="settings.accounts">Manage Social Accounts</a>
+          </li>
+          <li ui-sref-active="active">
+          <a href="javascript:void(0);" ng-click="vm.delete()" title="Remove Me" uib-tooltip="Remove Me">
+            Delete My Profile
+          </a>
+          </li>
+        </ul>
+      </nav>
+      <div class="col-sm-9 col-md-8 settings-view">
+        <div ui-view></div>
+      </div>
     </div>
   </div>
-</div></section>
+</section>

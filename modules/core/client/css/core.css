@@ -209,7 +209,6 @@ section.detail h2 {
 section.detail h3 {
 	font-family: Lato;
 	font-size: 18px;
-	text-transform: uppercase;
 }
 section.detail h4 {
 	padding-top: 15px;
@@ -253,7 +252,7 @@ section.signup {
   overflow-y: hidden;
   background: url('/modules/core/client/img/headers/signup-darkened.jpg') no-repeat center;
   background-size: cover;
-  margin-top: 0px;
+  margin-top: -20px;
   padding-top: 20px;
   padding-bottom: 40px;
   color: #fff;
@@ -273,7 +272,6 @@ section.signup h5 {
 	padding-bottom: 30px;
 	color: #fff;
 }
-
 section.static {
 	padding-top: 10px;
 	padding-bottom: 40px;
@@ -281,10 +279,10 @@ section.static {
 }
 section.static h1 {
 	font-family: Lato;
-	text-transform: uppercase;
+	font-weight: 800;
 	padding-top: 0px;
 	padding-bottom: 20px;
-	font-size: 26px;
+	font-size: 30px;
 }
 section.static h2,h3,h4,h5 {
 	font-weight: 600;
@@ -298,8 +296,8 @@ section.static h2 {
 	color: #0a4d8d;
 }
 section.static h3 {
-	font-size: 23px;
-	color: #0a4d8d;
+	font-size: 20px;
+	color: black;
 }
 section.static p {
 	font-weight: 500;
@@ -311,7 +309,6 @@ section.static li {
 	font-weight: 500;
 	font-size: 16px;
 	line-height: 1.8em;
-	padding-bottom: 10px;
 }
 section.static ul {
 	line-height: 1.8em;
