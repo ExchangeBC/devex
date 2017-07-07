@@ -1,0 +1,32 @@
+<div class="row" style="padding-top: 15px; background-color: #ffefcc;" ng-if="qaz.case !== 'nothing'">
+	<div class="container">
+
+		<div class="row" ng-if="qaz.case === 'guest'">
+			<div class="well-transparent text-center">
+				<p>Want <span class="hidden-sm hidden-xs">to </span>apply<span class="hidden-sm hidden-xs"> for this opportunity</span>? &nbsp;
+				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+				</p>
+			</div>
+		</div>
+
+
+		<div class="row" ng-if="qaz.case === 'canadd'">
+			<div class="well-transparent text-center">
+				<p><a ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-default">
+				<i class="glyphicon glyphicon-pencil"></i>  &nbsp;  Apply
+				</a><span class="hidden-xs">&nbsp; &nbsp; Create a proposal for this opportunity.</span></p>
+			</div>
+		</div>
+
+		<div class="row" ng-if="qaz.case === 'canedit'">
+			<div class="well-transparent text-center">
+				<p>
+				<span style="font-weight: 800; color: green;"><i class="glyphicon glyphicon-ok-sign"></i> Applied</span> &nbsp; &nbsp;
+				<a ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default">
+				<i class="glyphicon glyphicon-pencil"></i>  &nbsp;  Edit Application
+				</a><span class="hidden-xs">&nbsp; &nbsp; Update your {{qaz.proposal.status}} proposal.</span></p>
+			</div>
+		</div>
+
+	</div>
+</div>

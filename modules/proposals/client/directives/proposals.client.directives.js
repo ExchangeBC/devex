@@ -10,7 +10,7 @@
 		return {
 			restrict     : 'E',
 			controllerAs : 'qaz',
-			templateUrl  : '/modules/proposals/client/views/proposal-apply.directive.html',
+			templateUrl  : '/modules/proposals/client/views/proposal-apply.directive2.html',
 			scope        : {
 				opportunity: '=',
 				proposal: '='

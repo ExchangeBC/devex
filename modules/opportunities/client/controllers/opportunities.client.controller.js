@@ -45,6 +45,7 @@
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.isGov = isGov;
 		vm.hasEmail                = isUser && Authentication.user.email !== '';
 		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
 		vm.loggedIn                = isUser;

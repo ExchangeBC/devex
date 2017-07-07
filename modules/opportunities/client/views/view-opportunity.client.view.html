@@ -8,13 +8,13 @@
 			<div class="well-transparent text-center">
 				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? &nbsp;
 				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
-				</p>	
+				</p>
 			</div>
 		</div>
 
 <!-- // User IS signed in, and ... // -->
 		<div class="row" ng-if="vm.loggedIn">
-			
+
 <!-- // User doesn't have an email address in their profile // -->
 			<div class="well-transparent text-center" ng-if="!vm.notifyMe && !vm.hasEmail">
 				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? <a href ui-sref="settings.profile">  Add your email address.</a></p>
@@ -26,7 +26,7 @@
 				Get notified if this opportunity changes.</span></p>
 			</div>
 
-<!-- // User IS following the opportunity // --> 
+<!-- // User IS following the opportunity // -->
 			<div class="well-transparent text-center" ng-if="vm.notifyMe">
 				<p><span style="font-weight: 800; color: green;"><i class="glyphicon glyphicon-ok-sign"></i> Following</span>
 				&nbsp; &nbsp;
@@ -37,6 +37,8 @@
 		</div>
 	</div>
 </div>
+	<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+
 
 <!-- // Admin view // -->
 
