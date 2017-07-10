@@ -86,7 +86,7 @@ s
 				<div class="col-sm-5">
 					<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
 					<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
-					<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker">&nbsp;</i>Location: <span style="font-size: 18px; font-weight: 800;"> {{vm.location}}</span></h4>
+					<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker">&nbsp;</i>Location: <span style="font-size: 18px; font-weight: 800;"> {{vm.opportunity.location}}</span></h4>
 	          <h4 ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
 	          <h4 ng-if="vm.opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
 	          <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
