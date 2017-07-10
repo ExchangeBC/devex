@@ -26,6 +26,8 @@ var path = require('path'),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
 	_ = require('lodash'),
+	multer = require('multer'),
+	config = require(path.resolve('./config/config')),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
 
@@ -174,6 +176,19 @@ exports.requests = function (proposal, cb) {
 	mongoose.model ('User').find ({roles: requestRole(proposal)}).select ('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle').exec (cb);
 };
 
+var saveProposal = function (proposal) {
+	return new Promise (function (resolve, reject) {
+		proposal.save(function (err, doc) {
+			if (err) reject (err);
+			else resolve (doc);
+		});
+	});
+};
+var saveProposalRequest = function (req, res, proposal) {
+	return saveProposal (proposal)
+	.then (function (p) { res.json (proposal); })
+	.catch (function (e) { res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+};
 /**
  * Create a Proposal
  */
@@ -184,7 +199,6 @@ exports.requests = function (proposal, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-	console.log ('Creating a new proposal');
 	var proposal = new Proposal(req.body);
 	proposal.status = 'Draft';
 	proposal.user = req.user._id;
@@ -192,23 +206,10 @@ exports.create = function(req, res) {
 	// set the audit fields so we know who did what when
 	//
 	helpers.applyAudit (proposal, req.user);
-	console.log ('proposal', proposal);
 	//
 	// save and return
 	//
-	proposal.save(function (err, doc) {
-		console.log ('after proposal save, ', err, doc);
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			//
-			// TBD: subscribe user to updates of opportunity
-			//
-			res.json (proposal);
-		}
-	});
+	saveProposalRequest (req, res, proposal);
 };
 
 // -------------------------------------------------------------------------
@@ -239,20 +240,7 @@ exports.update = function (req, res) {
 	//
 	// save
 	//
-	console.log ('proposal', proposal);
-	proposal.save(function (err, doc) {
-		console.log ('after proposal save, ', err, doc);
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			//
-			// TBD: subscribe user to updates of opportunity
-			//
-			res.json (proposal);
-		}
-	});
+	saveProposalRequest (req, res, proposal);
 };
 exports.submit = function (req, res) {
 	req.body.status = 'Submitted';
@@ -471,4 +459,44 @@ exports.unPublishProposals = function (programId) {
 			return proposal.save ();
 		}));
 	});
+};
+var addAttachment = function (req, res, proposal, name, path, type) {
+	proposal.attachments.push ({
+		name : name,
+		path : path,
+		type : type
+	});
+	return saveProposalRequest (req, res, proposal);
+}
+// -------------------------------------------------------------------------
+//
+// uploda an attachment to a proposal
+//
+// -------------------------------------------------------------------------
+exports.uploaddoc = function (req, res) {
+	var proposal = req.proposal;
+	if (proposal) {
+		var storage = multer.diskStorage (config.uploads.diskStorage);
+		var upload = multer({storage: storage}).single('file');
+		var fileUploadFileFilter = require(path.resolve('./config/lib/multer')).fileUploadFileFilter;
+		upload.fileFilter = fileUploadFileFilter;
+		upload (req, res, function (uploadError) {
+			if (uploadError) {
+				res.status(422).send(uploadError);
+			} else {
+				var storedname = config.uploads.fileUpload.dest ;
+				var originalname = req.file.originalname;
+				addAttachment (req, res, proposal, originalname, storedname, req.file.mimetype)
+			}
+		});
+	}
+	else {
+		res.status(401).send({
+			message: 'No proposal provided'
+		});
+	}
+};
+exports.removedoc = function (req, res) {
+	req.proposal.attachments.id(req.params.documentId).remove();
+	saveProposalRequest (req, res, req.proposal);
 };

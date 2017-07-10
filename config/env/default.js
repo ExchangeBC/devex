@@ -1,5 +1,7 @@
 'use strict';
 
+
+var path = require('path');
 module.exports = {
   app: {
     title: 'BCDevExchange - The BC Developer\'s Exchange',
@@ -49,7 +51,7 @@ module.exports = {
   uploads: {
     diskStorage: {
       destination: function (req, file, cb) {
-        cb (null, 'public/uploads/')
+        cb (null, path.resolve('public/uploads/'))
       },
       filename: function (req, file, cb) {
         var datetimestamp = Date.now();
@@ -66,7 +68,7 @@ module.exports = {
       }
     },
     fileUpload: {
-      dest: 'public/uploads/', // File upload destination path
+      dest: path.resolve('public/uploads/'), // File upload destination path
       display: 'uploads/',
       limits: {
         fileSize: 3 * 1024 * 1024 // Max file size in bytes (3 MB)

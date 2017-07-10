@@ -24,6 +24,10 @@
         url: '/api/proposals/for/opportunity/:opportunityId',
         isArray: true
       },
+      removeDoc: {
+        method: 'GET',
+        url: '/api/proposal/:proposalId/remove/doc/:documentId'
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/proposal/:proposalId'

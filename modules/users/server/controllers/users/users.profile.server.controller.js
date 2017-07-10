@@ -192,7 +192,7 @@ exports.changeProfilePicture = function (req, res) {
 
 			upload(req, res, function (uploadError) {
 				if (uploadError) {
-					// console.log ('error uploading');
+					console.log ('error uploading',uploadError);
 					reject(errorHandler.getErrorMessage(uploadError));
 				} else {
 					// console.log ('uploaded');

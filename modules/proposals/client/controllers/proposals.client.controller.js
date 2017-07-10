@@ -32,7 +32,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification) {
+	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService) {
 		var ppp           = this;
 		// $scope.vm        = ppp;
 		ppp.title         = editing ? 'Edit' : 'Create' ;
@@ -119,6 +119,7 @@
 					function (response) {
 						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Edit Proposal successful'});
 						ppp.proposal = response;
+						ppp.subscribe (true);
 						resolve ();
 					},
 					function (error) {
@@ -163,6 +164,7 @@
 					ppp.proposal.$remove (
 						function (response) {
 							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							ppp.subscribe (false);
 							$uibModalInstance.dismiss('cancel');
 						},
 						function (error) {
@@ -217,9 +219,80 @@
 					}
 				);
 			});
-
-
 		}
+		// -------------------------------------------------------------------------
+		//
+		// upload documents
+		//
+		// -------------------------------------------------------------------------
+		ppp.upload = function (file) {
+			// console.log ('name = ', name);
+			console.log ('uploading!', file);
+			Upload.upload({
+				url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
+				data: {
+					file: file
+				}
+			})
+			.then(
+				function (response) {
+					console.log ('response', response);
+					ppp.proposal = response.data;
+					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
+				},
+				function (response) {
+					console.log (response.data);
+					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
+				},
+				function (evt) {
+					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+			});
+
+		};
+		ppp.deletefile = function (fileid) {
+			console.log ('fileid', fileid);
+			ProposalsService.removeDoc ({
+				proposalId: ppp.proposal._id,
+				documentId: fileid
+			}).$promise
+			.then (function (doc) {
+				console.log ('doc', doc);
+				ppp.proposal = doc;
+				$scope.$apply();
+			});
+		};
+		ppp.subscribe = function (state) {
+			var notificationCode = 'not-update-'+ppp.opportunity.code;
+			if (state) {
+				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
+				.then (function () {
+					ppp.notifyMe = true;
+				}).catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
+					});
+				});
+			}
+			else {
+				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
+				.then (function () {
+					ppp.notifyMe = false;
+				}).catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
+					});
+				});
+			}
+		};
+		ppp.type = function (type) {
+			if (type.indexOf ('pdf') > -1) return 'pdf';
+			else if (type.indexOf ('image') > -1) return 'image';
+			else if (type.indexOf ('word') > -1) return 'word';
+			else if (type.indexOf ('excel') > -1) return 'excel';
+			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
+		};
 	})
 	;
 }());

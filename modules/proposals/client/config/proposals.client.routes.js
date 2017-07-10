@@ -90,13 +90,10 @@
 		//
 		// -------------------------------------------------------------------------
 		.state ('proposaladmin.edit', {
-			url: '/:proposalId/edit',
+			url: '/:proposalId/edit/:opportunityId',
 			data: {
 				roles: ['user'],
 				notroles: ['gov']
-			},
-			params: {
-				opportunityId: null
 			},
 			onEnter: function ($uibModal, $state, $stateParams, ProposalsService) {
 				//
@@ -137,10 +134,7 @@
 		//
 		// -------------------------------------------------------------------------
 		.state ('proposaladmin.create', {
-			url: '/create',
-			params: {
-				opportunityId: null
-			},
+			url: '/create/:opportunityId',
 			data: {
 				roles: ['user'],
 				notroles: ['gov']

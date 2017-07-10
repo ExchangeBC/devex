@@ -32,6 +32,13 @@ module.exports = function(app) {
     .get(proposals.myopp);
 
 
+    app.route ('/api/proposal/:proposalId/upload/doc')
+      // .all (proposalsPolicy.isAllowed)
+      .post (proposals.uploaddoc);
+    app.route ('/api/proposal/:proposalId/remove/doc/:documentId')
+      // .all (proposalsPolicy.isAllowed)
+      .get (proposals.removedoc);
+
   //
   // get lists of users
   //

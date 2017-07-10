@@ -128,7 +128,29 @@
 			<uib-tab-heading>
 				<i class="fa fa-file"></i> Attachments
 			</uib-tab-heading>
-			<div class="proposal-form-container">
+			<div class="proposal-form-container text-right">
+				<div class="row">
+					<a href class="button" ngf-select="ppp.upload($file)">+ Upload File</a><br/>&nbsp;
+				</div>
+				<table class="table table-striped">
+					<tr ng-repeat="file in ppp.proposal.attachments">
+						<td class=" text-right">
+							<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+						</td>
+						<td class="text-left">
+							{{file.name}}
+						</td>
+						<td class=" text-left">
+							<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+						</td>
+					</tr>
+				</table>
+				<!-- <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
+				Drop File:
+				<div ngf-drop="uploadFiles($files)" class="drop-box"
+				ngf-drag-over-class="'dragover'" ngf-multiple="true"
+				ngf-pattern="'image/*,application/pdf'">Drop Images or PDFs files here</div>
+				<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> -->
 			</div>
 		</uib-tab>
 	</uib-tabset>

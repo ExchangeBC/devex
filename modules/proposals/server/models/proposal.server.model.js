@@ -6,10 +6,15 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
+var AttachmentSchema = new Schema ({
+	name : {type: String},
+	path : {type: String},
+	type : {type: String}
+})
 /**
  * Proposal Schema
  */
-var ProposalSchema = new Schema({
+var ProposalSchema = new Schema ({
 	summary              : {type: String},
 	detail               : {type: String},
 	opportunity          : {type: Schema.ObjectId, ref: 'Opportunity', required: 'Please select a program', index: true},
@@ -24,7 +29,8 @@ var ProposalSchema = new Schema({
 	created              : {type: Date, default: null},
 	createdBy            : {type: 'ObjectId', ref: 'User', default: null },
 	updated              : {type: Date, default: null },
-	updatedBy            : {type: 'ObjectId', ref: 'User', default: null }
+	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
+	attachments          : [AttachmentSchema]
 });
 
 
