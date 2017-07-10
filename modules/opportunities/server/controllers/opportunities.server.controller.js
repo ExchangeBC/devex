@@ -34,6 +34,7 @@ var path = require('path'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
 
+
 // var oppEmailNotifier = notifier('opportunities', 'email');
 
 // Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
@@ -181,6 +182,61 @@ var setNotificationData = function (opportunity) {
 };
 // -------------------------------------------------------------------------
 //
+// create an issue in the opportunity repo using the secret from our repos or
+// from the users'
+//
+// -------------------------------------------------------------------------
+var createIssue = function (opportunity, user) {
+	return new Promise (function (resolve, reject) {
+
+		var callbackf = function (err, status, body, headers) {
+			console.log ('err', err);
+			console.log ('status', status);
+			console.log ('body', body);
+			console.log ('headers', headers);
+			resolve ({
+				err: err,
+				status: status,
+				body: body,
+				headers: headers
+			});
+		};
+		var github = require('octonode');
+		console.log ('octonode', github);
+		var accessToken = user.providerData.accessToken;
+		var login = user.providerData.login;
+
+		var client = github.client (accessToken);
+		var ghme = client.me();
+		var repo = 'BCDevExchange-app';
+		var ghrepo = client.repo('BCDevExchange/BCDevExchange-app');
+
+
+		console.log ('ghrepo', ghrepo);
+
+		ghme.orgs (callbackf);
+
+		// ghrepo.issues (callbackf);
+
+		// ghrepo.issue({
+		// 'title': 'Test Auto Issue',
+		// 'body': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+		// 'assignee': login,
+		// 'labels': ['Label1', 'Label2']
+		// }, callbackf);
+
+	});
+
+};
+exports.ttt = function (req, res) {
+	createIssue (req.opportunity, req.user)
+	.then (function (r) {
+		res.json (r);
+	});
+
+}
+// -------------------------------------------------------------------------
+//
 // get a list of all my opportunities, but only ones I have access to as a normal
 // member or admin, just not as request
 //
@@ -295,7 +351,7 @@ GITHUB related stuff
 	var github = require('octonode');
 	var config = require('/config/config.js');
 
-	// curl -u "dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
+	// curl -u 'dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb' https://api.github.com/user/repos -d '{'name':''helloGit''}'
 
 	var url = 'https://api.github.com/user/repos';
 	var user = config.github.clientID;  // 'dewolfe001';

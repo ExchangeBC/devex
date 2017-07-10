@@ -21,12 +21,11 @@
 		<div class="row" ng-if="qaz.case === 'canedit'">
 			<div class="well-transparent text-center">
 				<p>
-				<span style="font-weight: 800; color: green;"><i class="glyphicon glyphicon-ok-sign"></i> Applied</span> &nbsp; &nbsp;
+				<span style="font-weight: 800; color: green;" ng-if="qaz.proposal.status === 'Submitted'"><i class="glyphicon glyphicon-ok-sign"></i> Applied &nbsp; &nbsp; </span>
 				<a ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default">
 				<i class="glyphicon glyphicon-pencil"></i>  &nbsp;  Edit Application
 				</a><span class="hidden-xs">&nbsp; &nbsp; Update your {{qaz.proposal.status}} proposal.</span></p>
 			</div>
 		</div>
-
 	</div>
 </div>

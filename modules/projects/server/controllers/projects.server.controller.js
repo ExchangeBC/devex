@@ -216,51 +216,6 @@ exports.create = function(req, res) {
 		});
 	});
 
-/*
-
-GITHUB related stuff
-
-	var project = new Project(req.body);
-	project.user = req.user;
-
-	var http = require('http');
-	var github = require('octonode');
-	var config = require('/config/config.js');
-
-	// curl -u "[github account]:[secret]" https://api.github.com/user/repos -d '{"name":"'helloGit'"}'
-
-	var url = 'https://api.github.com/user/repos';
-	var user = config.github.clientID;  // tested with 'dewolfe001';
-	var secret = config.github.clientSecret; // tested  with '39c1cffc1008ed43189ecd27448bd903a75778eb' (since revoked);
-
-	var client = github.client({
-	id: user,
-		secret: secret
-	});
-
- //  project.github = client.repo({
-	// 'name': project.name,
-	// 'description' : project.description
-	// },  function (err, data) {
-	// 	if (err) {
-	// 		return console.error(err);
-	// 	}
-	// 	else {
-	// 		return data.html_url;
-	// 	}
-	// }
-	// );
-
-	project.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(project);
-		}
-	});
-	*/
 };
 
 // -------------------------------------------------------------------------

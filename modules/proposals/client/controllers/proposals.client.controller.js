@@ -138,7 +138,6 @@
 				$scope.$broadcast('show-errors-check-validity', 'ppp.form.proposalform');
 				return false;
 			}
-			console.log ('saving!!!!!');
 			saveuser().then (saveproposal);
 
 			// $uibModalInstance.close('ok');
@@ -171,7 +170,15 @@
 						}
 					);
 				}
-			})
+			});
+		};
+		var performwithdrawal = function (q) {
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+					ppp.proposal.status = 'Draft';
+					saveuser().then (saveproposal);
+				}
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -179,7 +186,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.delete = function () {
-			performdelete ('Are you sure you wish to delete this draft proposal?');
+			performdelete ('Are you sure you wish to delete this proposal?');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -187,7 +194,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.withdraw = function () {
-			performdelete ('Are you sure you wish to withdraw and delete this proposal?');
+			performwithdrawal ('Are you sure you wish to withdraw this proposal?');
 		};
 		// -------------------------------------------------------------------------
 		//

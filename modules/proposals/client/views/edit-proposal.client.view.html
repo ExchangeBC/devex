@@ -2,6 +2,7 @@
 <div class="modal-header">
 	<h3>Proposal for {{ppp.opportunity.name}}</h3>
 	<h4><span class="label {{ppp.statusColour(ppp.proposal.status)}}">{{ppp.proposal.status}}</span></h4>
+	<span ng-if="ppp.proposal.status === 'Submitted'">You may edit this submission at any time up to the closing date</span>
 </div>
 <div class="modal-body">
 	<!-- <section class="static-page"><div class="container" role="main"> -->
@@ -135,7 +136,7 @@
 </div>
 <div class="modal-footer">
 	<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-danger" data-ng-click="ppp.withdraw()" ">Withdraw</button>
-	<button ng-if="ppp.proposal.status === 'Draft'" type="button" class="btn btn-danger" data-ng-click="ppp.delete()" ">Delete</button>
+	<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-danger" data-ng-click="ppp.delete()" ">Delete</button>
 	<span ng-if="ppp.proposal.status === 'Submitted' || ppp.proposal.status === 'Draft'"> &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; </span>
 	<button type="submit" class="btn btn-primary" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'">Save</button>
 	<button type="button" class="btn btn-success" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft'">Submit</button>
