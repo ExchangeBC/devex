@@ -22,15 +22,15 @@
 
 <!-- // User is NOT following the opportunity // -->
 			<div class="well-transparent text-center" ng-if="!vm.notifyMe && vm.hasEmail">
-				<p><button type="button" class="btn btn-default" ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button><span class="hidden-xs">&nbsp; &nbsp;
+				<p><button type="button" class="btn btn-default btn-md" ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button><span class="hidden-xs">&nbsp; &nbsp;
 				Get notified if this opportunity changes.</span></p>
 			</div>
 
 <!-- // User IS following the opportunity // -->
 			<div class="well-transparent text-center" ng-if="vm.notifyMe">
-				<p><span style="font-weight: 800; color: green;"><i class="glyphicon glyphicon-ok-sign"></i> Following</span>
+				<p><span style="font-weight: 800;"><i class="glyphicon glyphicon-ok-sign"></i> Following</span>
 				&nbsp; &nbsp;
-				<button type="button" class="btn btn-default" ng-click="vm.subscribe(false)""><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button></p>
+				<button type="button" class="btn btn-default btn-md" ng-click="vm.subscribe(false)""><i class="glyphicon glyphicon-volume-off"></i> Unfollow</button></p>
 				<p class="hidden-xs">You’re receiving email notifications because you're following this opportunity.</p>
 			</div>
 
@@ -39,7 +39,7 @@
 </div>
 	<proposal-apply ng-if="vm.closing !== 'CLOSED'" opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 
-s
+
 <!-- // Admin view // -->
 
 <!-- // Opportunity is NOT published // -->
