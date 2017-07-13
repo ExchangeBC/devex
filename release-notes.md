@@ -1,3 +1,10 @@
+# July 13, 2017
+
+### Changed
+
+* **UI styling changes:** Cleaned up the user profile layout. Added color to the follow/unfollow prompts on opportunities.
+
+
 # June 26, 2017
 
 ### Added
