@@ -188,7 +188,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.delete = function () {
-			performdelete ('Are you sure you wish to delete this proposal?');
+			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -196,7 +196,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.withdraw = function () {
-			performwithdrawal ('Are you sure you wish to withdraw this proposal?');
+			performwithdrawal ('Are you sure you want to withdraw this proposal?');
 		};
 		// -------------------------------------------------------------------------
 		//

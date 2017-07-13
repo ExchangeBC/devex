@@ -1,3 +1,4 @@
+
 <section class="static"><div class="container" role="main">
 <div class="row">
 	<!-- <div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4"> -->
@@ -7,7 +8,7 @@
 	</div>-->
 
 
-	<div class="col-xs-12 col-sm-6">
+	<div class="col-xs-12 col-sm-7">
 		<form name="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
 			<fieldset>
 				<div class="form-group" show-errors>
@@ -30,7 +31,6 @@
 						<p class="help-block error-text" ng-message="required">Username is required.</p>
 					</div>
 				</div>
-				<hr>
 				<br>
 				<div class="form-group" show-errors>
 					<label for="email">Email</label>
@@ -45,7 +45,6 @@
 					Allow my email to be displayed on the site
 					</label>
 				</div>
-				<hr>
 				<br>
 				<div class="form-group">
 					<label>
@@ -56,7 +55,6 @@
 				<div ng-show='vm.user.email === "" || vm.user.email == null' role="alert">
 					<p style="font-family: Lato; font-size: 14px; color: red; margin-top: -15px; margin-left: 16px;"><i class="fa fa-exclamation-triangle"></i>&nbsp; We need your email address for this</p>
 				</div>
-				<hr>
 				<br>
 				<div class="form-group">
 					<label>
@@ -68,7 +66,6 @@
 				<div ng-show='vm.user.email === "" || vm.user.email == null' role="alert">
 					<p style="font-family: Lato; font-size: 14px; color: red; margin-top: -15px; margin-left: 16px;"><i class="fa fa-exclamation-triangle"></i>&nbsp; We need your email address for this</p>
 				</div>
-				<hr>
 				<div class="form-group" ng-if="0">>
 					<label ng-disabled="vm.isgov" >
 						<input ng-disabled="vm.isgov" type="checkbox" ng-model="vm.user.isDeveloper">
@@ -103,7 +100,7 @@
 					<button type="submit" class="btn btn-lg btn-solo btn-warning">Save</button>
 				</div>
 				<br>
-				<div class="alert alert-sm alert-grey">
+				<div class="alert alert-grey">
 					<p style="font-size: 11px;"><b>Collection Notice</b></p>
 					<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
 				</div>

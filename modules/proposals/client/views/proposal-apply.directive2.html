@@ -12,19 +12,24 @@
 
 		<div class="row" ng-if="qaz.case === 'canadd'">
 			<div class="well-transparent text-center">
-				<p><a ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-default">
-				<i class="glyphicon glyphicon-pencil"></i>  &nbsp;  Apply
-				</a><span class="hidden-xs">&nbsp; &nbsp; Create a proposal for this opportunity.</span></p>
+				<p><a ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-lg btn-warning">
+				<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Apply
+				</a><span class="hidden-xs" style="font-weight: 200; vertical-align: text-top;">&nbsp; &nbsp; Submit a proposal to work on this opportunity.</span></p>
 			</div>
 		</div>
 
 		<div class="row" ng-if="qaz.case === 'canedit'">
 			<div class="well-transparent text-center">
 				<p>
-				<span style="font-weight: 800; color: green;" ng-if="qaz.proposal.status === 'Submitted'"><i class="glyphicon glyphicon-ok-sign"></i> Applied &nbsp; &nbsp; </span>
-				<a ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default">
-				<i class="glyphicon glyphicon-pencil"></i>  &nbsp;  Edit Application
-				</a><span class="hidden-xs">&nbsp; &nbsp; Update your {{qaz.proposal.status}} proposal.</span></p>
+					<span style="font-weight: 600;" ng-if="qaz.proposal.status === 'Submitted'">	<i class="glyphicon glyphicon-ok-sign"></i> Proposal Submitted &nbsp; &nbsp;<span class="hidden-xs" style="font-weight: 200;">Make updates until opportunity deadline.</span>
+					</span>
+					<span style="font-weight: 600;" ng-if="qaz.proposal.status === 'Draft'">		<i class="glyphicon glyphicon-file"></i> Draft Proposal Created &nbsp;<span class="hidden-xs" style="font-weight: 200;">&nbsp;Submit before opportunity deadline!&nbsp;</span>
+					</span>
+					&nbsp;
+					<a ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default btn-md">
+					<i class="glyphicon glyphicon-pencil"></i>&nbsp; Update Proposal
+					</a>
+				</p>
 			</div>
 		</div>
 	</div>
