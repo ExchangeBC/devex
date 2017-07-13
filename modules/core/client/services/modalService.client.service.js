@@ -83,7 +83,7 @@
 				question: question,
 				cancel: 'No',
 				ok: 'Yes',
-				headerText, title
+				headerText: title
 			});
 		};
 	}])
