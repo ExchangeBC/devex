@@ -69,6 +69,12 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/proposals/:proposalId',
       permissions: '*'
     }]
+  }, {
+    roles: ['guest'],
+    allows: [{
+      resources: '/api/myopp/proposal/:opportunityId',
+      permissions: ['get']
+    }]
   }
   ]);
 };

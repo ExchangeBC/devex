@@ -139,6 +139,7 @@ exports.my = function (req, res) {
 	});
 };
 exports.myopp = function (req, res) {
+	if (!req.user) return res.json ({});
 	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	// var search = me.isAdmin ? {} : { code: { $in: me.proposals.admin } };
 	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})

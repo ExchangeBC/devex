@@ -68,7 +68,8 @@
 				subscriptions: function (NotificationsService) {
 					return NotificationsService.subscriptions().$promise;
 				},
-				myproposal: function ($stateParams, ProposalsService) {
+				myproposal: function ($stateParams, ProposalsService, Authentication) {
+					if (!Authentication.user) return {};
 					return ProposalsService.myopp ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
