@@ -5,13 +5,13 @@
 <div class="modal-header" style="background-color: #ffefcc;">
 	<div ng-if="ppp.proposal.status === 'Submitted'">
 		<h4 style="color: #5cb85c;"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label></h4>
-		<p>You can make updates until <b>closing time</b>.</p>
+		<p>You can make updates until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
 	<!--<h4><span class="label {{ppp.statusColour(ppp.proposal.status)}}">{{ppp.proposal.status}}</span></h4>
 	<span ng-if="ppp.proposal.status === 'Submitted'">Your proposal has been submitted! It won't be reviewed until <b>closing time</b>, and you can update it as much as you want until then!</span>-->
 	</div>
 	<div ng-if="ppp.proposal.status === 'Draft'">
 		<h4 style="color: #d9534f;"><i class="fa fa-exclamation-triangle"></i> Your proposal is in DRAFT</h4>
-		<p>Submit before <b>closing time</b>!</p>
+		<p>Submit before <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>!</p>
 	</div>
 </div>
 
@@ -103,7 +103,7 @@
 			<div class="proposal-form-container">
 				<h4>Evaluation Criteria &nbsp; <a href ng-click="ppp.showEvaluation = !ppp.showEvaluation"><i class="fa fa-angle-double-up" ng-if="ppp.showEvaluation"></i><i class="fa fa-angle-double-down" ng-if="!ppp.showEvaluation"></i></a></h4>
 				<div class="alert alert-info" ng-show="ppp.showEvaluation"><p ng-bind-html="ppp.display.evaluation"></p></div>
-				<div class="form-group">
+				<div class="form-group" ng-if="0">
 					<label class="control-label" for="summary">Summary</label>
 					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="ppp.helpsummary=!ppp.helpsummary"></i>
 					<div class="input-help alert alert-info" data-field="summary" ng-show="ppp.helpsummary">
