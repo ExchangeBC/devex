@@ -70,18 +70,20 @@
 				);
 			});
 		};
-		this.okCancel = function (question) {
+		this.okCancel = function (question, title) {
 			return this.me ({
 				question: question,
 				cancel: 'Cancel',
-				ok: 'OK'
+				ok: 'OK',
+				headerText: title
 			});
 		};
-		this.yesNo = function (question) {
+		this.yesNo = function (question, title) {
 			return this.me ({
 				question: question,
 				cancel: 'No',
-				ok: 'Yes'
+				ok: 'Yes',
+				headerText, title
 			});
 		};
 	}])

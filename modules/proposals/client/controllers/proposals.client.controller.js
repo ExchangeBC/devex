@@ -120,19 +120,19 @@
 		// save the proposal - promise
 		//
 		// -------------------------------------------------------------------------
-		var saveproposal = function () {
+		var saveproposal = function (goodmessage, badmessage) {
 			copyuser ();
 			return new Promise (function (resolve, reject) {
 				ppp.proposal.createOrUpdate ()
 				.then (
 					function (response) {
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Edit Proposal successful'});
+						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
 						ppp.proposal = response;
 						ppp.subscribe (true);
 						resolve ();
 					},
 					function (error) {
-						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
+						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
 						 reject ();
 					}
 				);
@@ -160,6 +160,21 @@
 		ppp.close = function (result) {
 			console.log ('closing!!!!!');
 			$uibModalInstance.dismiss('cancel');
+
+			// var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+			// 		// console.log ('started stateChangeStart');
+			// 		if ($scope.parentForm.$dirty) {
+			// 			if ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
+			// 				// console.log ('stateChangeStart please don\'t leave!!!!!!');
+			// 				// cancel to not allow.
+			// 				event.preventDefault();
+			// 				// console.log (event);
+			// 				return false;
+			// 			}
+			// 		}
+			// 	});
+
+
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -184,12 +199,12 @@
 			});
 		};
 		var performwithdrawal = function (q) {
-			ask.yesNo (q).then (function (r) {
-				if (r) {
+			// ask.yesNo (q).then (function (r) {
+			// 	if (r) {
 					ppp.proposal.status = 'Draft';
-					saveuser().then (saveproposal);
-				}
-			});
+					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
+			// 	}
+			// });
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -197,7 +212,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
+			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!', 'Delete my proposal');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -221,7 +236,7 @@
 					function (response) {
 						console.log ('response = ', response);
 						ppp.proposal = response;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Submitted'});
+						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
 					},
 					function (error) {
 						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
