@@ -73,6 +73,11 @@
 					return ProposalsService.myopp ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
+				},
+				proposals: function ($stateParams, ProposalsService) {
+					return ProposalsService.forOpportunity ({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
 				}
 			},
 			data: {

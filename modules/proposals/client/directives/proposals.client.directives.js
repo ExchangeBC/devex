@@ -57,35 +57,37 @@
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
-				program: '=',
+				opportunity: '=',
+				proposals: '=',
 				title: '@',
 				context: '@'
 			},
 			templateUrl  : '/modules/proposals/client/views/list.proposals.directive.html',
 			controller   : function ($scope, ProposalsService, Authentication, Notification) {
 				var vm     = this;
-				vm.program = $scope.program;
+				vm.opportunity = $scope.opportunity;
+				vm.proposals = $scope.proposals;
 				vm.context = $scope.context;
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				if (vm.context === 'program') {
-					vm.programId = vm.program._id;
-					vm.programTitle = vm.program.title;
+				if (vm.context === 'opportunity') {
+					vm.programId = vm.opportunity._id;
+					vm.programTitle = vm.opportunity.title;
 				} else {
 					vm.programId = null;
 					vm.programTitle = null;
 				}
 				//
-				// if a program is supplied, then only list proposals under it
+				// if a opportunity is supplied, then only list proposals under it
 				// also allow adding a new proposal (because it has context)
 				//
-				if ($scope.program) {
-					vm.title      = 'Proposals for '+$scope.program.title;
-					vm.programId  = $scope.program._id;
-					vm.userCanAdd = $scope.program.userIs.admin || vm.isAdmin;
+				if ($scope.opportunity) {
+					vm.title      = 'Proposals for '+$scope.opportunity.title;
+					vm.programId  = $scope.opportunity._id;
+					vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
 					vm.proposals   = ProposalsService.forProgram ({
-						programId: $scope.program._id
+						programId: $scope.opportunity._id
 					});
 					vm.columnCount = 1;
 				} else {
