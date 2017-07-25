@@ -37,7 +37,7 @@ Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }
 // -------------------------------------------------------------------------
 var sendmail = function (opts) {
 	opts.from = config.mailer.from;
-	console.log ('Sending mail to '+opts.to+' : '+opts.subject);
+	// console.log ('Sending mail to '+opts.to+' : '+opts.subject);
 	return new Promise (function (resolve, reject) {
 		smtpTransport.sendMail (opts, function (err) {
 			if (err) {
@@ -117,7 +117,7 @@ var getDomain = function () {
 			domain = 'http://' + d;
 		}
 	}
-	console.log (chalk.green('domain is '+domain, process.env.DOMAIN));
+	// console.log (chalk.green('domain is '+domain, process.env.DOMAIN));
 	return domain;
 }
 var getTemplates = function (notification, data) {
@@ -445,7 +445,7 @@ exports.notifyObject = function (notificationidOrObject, data) {
 			return getTemplatesMerge (subscriptions, notification, data);
 		})
 		.then (function (emails) {
-			console.log ('++ Notifications: notifyObject '+notification.code+' sending to '+emails.length+' people');
+	// console.log ('++ Notifications: notifyObject '+notification.code+' sending to '+emails.length+' people');
 			return Promise.all (emails.map (function (message) {
 				// return notifier (notification.code, 'email').notify (message);
 				return sendmail (message);
@@ -630,10 +630,10 @@ exports.saveNotification = function (notification) {
 	return new Promise (function (resolve, reject) {
 		notification.save (function (err) {
 			if (err) {
-				console.log ('Error saving notification: '+notification.code, err);
+	// console.log ('Error saving notification: '+notification.code, err);
 				reject (err);
 			} else {
-				console.log ('notification saved: '+notification.code);
+	// console.log ('notification saved: '+notification.code);
 				resolve (notification);
 			}
 		});

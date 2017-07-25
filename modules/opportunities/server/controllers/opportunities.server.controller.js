@@ -190,10 +190,10 @@ var createIssue = function (opportunity, user) {
 	return new Promise (function (resolve, reject) {
 
 		var callbackf = function (err, status, body, headers) {
-			console.log ('err', err);
-			console.log ('status', status);
-			console.log ('body', body);
-			console.log ('headers', headers);
+	// console.log ('err', err);
+	// console.log ('status', status);
+	// console.log ('body', body);
+	// console.log ('headers', headers);
 			resolve ({
 				err: err,
 				status: status,
@@ -202,7 +202,7 @@ var createIssue = function (opportunity, user) {
 			});
 		};
 		var github = require('octonode');
-		console.log ('octonode', github);
+	// console.log ('octonode', github);
 		var accessToken = user.providerData.accessToken;
 		var login = user.providerData.login;
 
@@ -212,7 +212,7 @@ var createIssue = function (opportunity, user) {
 		var ghrepo = client.repo('BCDevExchange/BCDevExchange-app');
 
 
-		console.log ('ghrepo', ghrepo);
+	// console.log ('ghrepo', ghrepo);
 
 		ghme.orgs (callbackf);
 
@@ -420,7 +420,7 @@ exports.update = function (req, res) {
 	// if we dont have permission to do this just return as a no-op
 	//
 	if (!ensureAdmin (req.opportunity, req.user, res)) {
-		console.log ('NOT ALLOWED');
+	// console.log ('NOT ALLOWED');
 		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 	}
 	//
@@ -432,7 +432,7 @@ exports.update = function (req, res) {
 	// set the audit fields so we know who did what when
 	//
 	helpers.applyAudit (opportunity, req.user);
-	console.log ('got here with opp', req.opportunity);
+	// console.log ('got here with opp', req.opportunity);
 
 	//
 	// save
@@ -464,7 +464,7 @@ var pub = function (req, res, isToBePublished) {
 	// if no change or we dont have permission to do this just return as a no-op
 	//
 	if (req.opportunity.isPublished === isToBePublished || !ensureAdmin (req.opportunity, req.user, res)) {
-		console.log ('NOT ALLOWED');
+	// console.log ('NOT ALLOWED');
 		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 	}
 	//

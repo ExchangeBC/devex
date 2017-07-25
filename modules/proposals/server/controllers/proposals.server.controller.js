@@ -33,7 +33,7 @@ var path = require('path'),
 
 var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail';
 var streamFile = function (res, file, name, mime) {
-	console.log ('stream file ',file, name, mime);
+	// console.log ('stream file ',file, name, mime);
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
 		if (!yes) {
@@ -46,7 +46,7 @@ var streamFile = function (res, file, name, mime) {
 			res.setHeader ('Content-Type', 'application/octet-stream');
 			res.setHeader ('Content-Description', 'File Transfer');
 			res.setHeader ('Content-Transfer-Encoding', 'binary');
-			res.setHeader ("Content-Disposition", 'attachment; inline=false; filename="'+name+'"');
+			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+name+'"');
 			fs.createReadStream (file).pipe (res);
 		}
 	});
@@ -223,8 +223,7 @@ exports.list = function (req, res) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (decorateList (proposals, req.user ? req.user.roles : []));
-			// res.json(proposals);
+			res.json(proposals);
 		}
 	});
 };
@@ -236,7 +235,7 @@ exports.list = function (req, res) {
 // -------------------------------------------------------------------------
 exports.forOpportunity = function (req, res) {
 	if (!ensureAdmin (req.opportunity, req.user, res)) {
-		console.log ('NOT ALLOWED');
+	// console.log ('NOT ALLOWED');
 		return res.json ([]);
 	}
 	Proposal.find({opportunity:req.opportunity._id}).sort('created')
@@ -321,7 +320,7 @@ exports.uploaddoc = function (req, res) {
 				res.status(422).send(uploadError);
 			} else {
 				var storedname = req.file.path ;
-				console.log ('req.file:', req.file);
+	// console.log ('req.file:', req.file);
 				var originalname = req.file.originalname;
 				addAttachment (req, res, proposal, originalname, storedname, req.file.mimetype)
 			}

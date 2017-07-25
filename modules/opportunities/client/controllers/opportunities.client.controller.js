@@ -338,7 +338,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
-			console.log (vm);
+	// console.log (vm);
 			vm.form.opportunityForm.$setPristine ();
 			// console.log ('saving form', vm.opportunity);
 			if (!isValid) {
@@ -393,7 +393,7 @@
 				//
 	      		promise.then(function() {
 					if (savemeSeymour) {
-						console.log ('saving');
+	// console.log ('saving');
 						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 						// vm.opportunity.start      = new Date (vm.opportunity.start);
@@ -405,7 +405,7 @@
 				// success, notify and return to list
 				//
 				.then (function (res) {
-					console.log ('saved');
+	// console.log ('saved');
 					vm.form.opportunityForm.$setPristine ();
 					// console.log ('now saved the new opportunity, redirect user');
 					Notification.success ({
@@ -422,7 +422,7 @@
 				// fail, notify and stay put
 				//
 				.catch (function (res) {
-					console.log ('caught');
+	// console.log ('caught');
 					Notification.error ({
 						message : res.data.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
