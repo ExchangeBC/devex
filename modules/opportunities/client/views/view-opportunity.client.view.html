@@ -217,7 +217,7 @@
 </div>
 <div class="container">
 
-	<proposal-list context="opportunity" opportunity="vm.opportunity" title="Opportunity Proposals"></proposal-list>
+	<proposal-list ng-if="vm.canEdit" context="opportunity" opportunity="vm.opportunity" title="Opportunity Proposals"></proposal-list>
 </div>
 
 </section>
