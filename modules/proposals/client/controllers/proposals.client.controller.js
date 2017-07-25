@@ -17,14 +17,20 @@
 	// =========================================================================
 	.controller ('ProposalViewController', function ($scope, $uibModalInstance, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification) {
 		var ppp           = this;
-
-		ppp.save = function (result) {
-			console.log ('view saving!!!!!');
-			$uibModalInstance.close(result);
-		};
+		ppp.proposal      = angular.copy (proposal);
+		ppp.user          = ppp.proposal.user;
+		ppp.opportunity   = ppp.proposal.opportunity;
+		ppp.detail    = $sce.trustAsHtml(ppp.proposal.detail);
 		ppp.close = function (result) {
 			console.log ('closing!!!!!');
 			$uibModalInstance.dismiss('cancel');
+		};
+		ppp.type = function (type) {
+			if (type.indexOf ('pdf') > -1) return 'pdf';
+			else if (type.indexOf ('image') > -1) return 'image';
+			else if (type.indexOf ('word') > -1) return 'word';
+			else if (type.indexOf ('excel') > -1) return 'excel';
+			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
 	})
 	// =========================================================================

@@ -58,7 +58,6 @@
 			controllerAs : 'vm',
 			scope        : {
 				opportunity: '=',
-				proposals: '=',
 				title: '@',
 				context: '@'
 			},
@@ -66,16 +65,16 @@
 			controller   : function ($scope, ProposalsService, Authentication, Notification) {
 				var vm     = this;
 				vm.opportunity = $scope.opportunity;
-				vm.proposals = $scope.proposals;
 				vm.context = $scope.context;
+				vm.proposals = [];
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				if (vm.context === 'opportunity') {
-					vm.programId = vm.opportunity._id;
+					vm.opportunityId = vm.opportunity._id;
 					vm.programTitle = vm.opportunity.title;
 				} else {
-					vm.programId = null;
+					vm.opportunityId = null;
 					vm.programTitle = null;
 				}
 				//
@@ -84,15 +83,15 @@
 				//
 				if ($scope.opportunity) {
 					vm.title      = 'Proposals for '+$scope.opportunity.title;
-					vm.programId  = $scope.opportunity._id;
+					vm.opportunityId  = $scope.opportunity._id;
 					vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
-					vm.proposals   = ProposalsService.forProgram ({
-						programId: $scope.opportunity._id
+					vm.proposals   = ProposalsService.forOpportunity ({
+						opportunityId: $scope.opportunity._id
 					});
 					vm.columnCount = 1;
 				} else {
 					vm.title      = 'All Proposals';
-					vm.programId  = null;
+					vm.opportunityId  = null;
 					vm.userCanAdd = (vm.isAdmin || vm.isGov);
 					vm.proposals   = ProposalsService.query ();
 					vm.columnCount = 1;

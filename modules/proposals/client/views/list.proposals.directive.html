@@ -10,18 +10,17 @@
 			<span class="text-muted">No members found.</span>
 		</div>
 	</div>
-	<div class="col-sm-6" ng-repeat="column in vm.columns">
-		<div class="card card-block" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
+		<div class="row" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
+			<div class="col-md-3">
 			<div class="card-img">
 				<img class="card-img-left" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
 			</div>
-			<div>
+			</div>
+			<div class="col-md-9">
 				<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{proposal.user.firstName}} {{proposal.user.lastName}}</h4>
-				<p class="card-subtitle">{{proposal.user.userTitle}}<br/>
 				<p>Attachments: {{proposal.attachments.length}}</p>
-				<a ui-sref="proposals.view({ proposalId: proposal.code })" ng-bind="proposal.name">View Proposal</a><br/>
+				<a ui-sref="proposals.view({ proposalId: proposal._id })">View Proposal</a><br/>
 				<a ng-if="proposal.user.email" href="mailto:{{proposal.user.email}}">Email</a></p>
 			</div>
 		</div>
-	</div>
 </div>

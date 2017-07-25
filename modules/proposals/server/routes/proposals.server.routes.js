@@ -23,6 +23,7 @@ module.exports = function(app) {
   // proposals for opportunity
   //
   app.route('/api/proposals/for/opportunity/:opportunityId')
+    // .all (proposalsPolicy.isAllowed)
     .get(proposals.forOpportunity);
 
 
@@ -39,32 +40,11 @@ module.exports = function(app) {
       // .all (proposalsPolicy.isAllowed)
       .get (proposals.removedoc);
 
-  //
-  // get lists of users
-  //
-  app.route('/api/proposals/members/:proposalId')
-    // .all(proposalsPolicy.isAllowed)
-    .get(proposals.listMembers);
-  app.route('/api/proposals/requests/:proposalId')
-    .all(proposalsPolicy.isAllowed)
-    .get(proposals.listRequests);
-
-  //
-  // modify users
-  //
-  app.route('/api/proposals/requests/confirm/:proposalId/:userId')
-    .all(proposalsPolicy.isAllowed)
-    .get(proposals.confirmMember);
-  app.route('/api/proposals/requests/deny/:proposalId/:userId')
-    .all(proposalsPolicy.isAllowed)
-    .get(proposals.denyMember);
 
   app.route('/api/new/proposal')
     // .all(proposalsPolicy.isAllowed)
     .get(proposals.new);
 
-  app.route('/api/request/proposal/:proposalId')
-    .get(proposals.request)
 
   // Finish by binding the Proposal middleware
   app.param('proposalId', proposals.proposalByID);

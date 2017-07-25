@@ -73,12 +73,15 @@
 					return ProposalsService.myopp ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				proposals: function ($stateParams, ProposalsService) {
-					return ProposalsService.forOpportunity ({
-						opportunityId: $stateParams.opportunityId
-					}).$promise;
 				}
+				// ,
+				// proposals: function ($stateParams, ProposalsService, Authentication) {
+				// 	if (!Authentication.user) return [];
+				// 	console.log ('get proposals');
+				// 	return ProposalsService.forOpportunity ({
+				// 		opportunityId: $stateParams.opportunityId
+				// 	}).$promise;
+				// }
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'
