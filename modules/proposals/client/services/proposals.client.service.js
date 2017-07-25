@@ -28,6 +28,10 @@
         method: 'GET',
         url: '/api/proposal/:proposalId/remove/doc/:documentId'
       },
+      downloadDoc: {
+        method: 'GET',
+        url: '/api/proposal/:proposalId/download/doc/:documentId'
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/proposal/:proposalId'

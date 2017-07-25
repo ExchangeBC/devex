@@ -32,6 +32,25 @@ var path = require('path'),
 	;
 
 var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail';
+var streamFile = function (res, file, name, mime) {
+	console.log ('stream file ',file, name, mime);
+	var fs = require ('fs');
+	fs.exists (file, function (yes) {
+		if (!yes) {
+			return res.status(404).send ({
+				message: 'Not Found'
+			});
+		}
+		else {
+			res.setHeader ('Content-Type', mime);
+			res.setHeader ('Content-Type', 'application/octet-stream');
+			res.setHeader ('Content-Description', 'File Transfer');
+			res.setHeader ('Content-Transfer-Encoding', 'binary');
+			res.setHeader ("Content-Disposition", 'attachment; inline=false; filename="'+name+'"');
+			fs.createReadStream (file).pipe (res);
+		}
+	});
+};
 // -------------------------------------------------------------------------
 //
 // set a proposal role on a user
@@ -301,7 +320,8 @@ exports.uploaddoc = function (req, res) {
 			if (uploadError) {
 				res.status(422).send(uploadError);
 			} else {
-				var storedname = config.uploads.fileUpload.dest ;
+				var storedname = req.file.path ;
+				console.log ('req.file:', req.file);
 				var originalname = req.file.originalname;
 				addAttachment (req, res, proposal, originalname, storedname, req.file.mimetype)
 			}
@@ -317,3 +337,7 @@ exports.removedoc = function (req, res) {
 	req.proposal.attachments.id(req.params.documentId).remove();
 	saveProposalRequest (req, res, req.proposal);
 };
+exports.downloaddoc = function (req, res) {
+	var fileobj = req.proposal.attachments.id(req.params.documentId);
+	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
+}

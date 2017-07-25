@@ -32,6 +32,13 @@
 			else if (type.indexOf ('excel') > -1) return 'excel';
 			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
+		ppp.downloadfile = function (fileid) {
+			console.log ('fileid', fileid);
+			ProposalsService.downloadDoc ({
+				proposalId: ppp.proposal._id,
+				documentId: fileid
+			});
+		};
 	})
 	// =========================================================================
 	//

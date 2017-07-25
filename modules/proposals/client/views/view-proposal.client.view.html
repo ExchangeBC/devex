@@ -105,7 +105,7 @@
 							{{file.name}}
 						</td>
 						<td class=" text-left">
-							<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+							<a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
 						</td>
 					</tr>
 				</table>
