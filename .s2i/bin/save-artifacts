@@ -7,6 +7,6 @@ pushd ${HOME}>/dev/null
 
 if [ -d node_modules ]; then
     # all deps contents to tar stream
-    tar cf - ./node_modules ./public/lib ./bower-cache
+    tar cf - ./node_modules ./public/lib
 fi
 popd >/dev/null
