@@ -28,9 +28,10 @@
         method: 'GET',
         url: '/api/proposal/:proposalId/remove/doc/:documentId'
       },
-      downloadDoc: {
+      getStats: {
         method: 'GET',
-        url: '/api/proposal/:proposalId/download/doc/:documentId'
+        url: '/api/proposals/stats/opportunity/:opportunityId',
+        isArray:false
       },
       makeRequest: {
         method: 'GET',

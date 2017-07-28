@@ -882,5 +882,13 @@ exports.reApplySubscriptions = function (req, res) {
 	else {
 		res.status(404).json({ok:false});
 	}
-}
-
+};
+exports.countFollowingOpportunity = function (oppcode) {
+	var notcode = 'not-update-'+oppcode;
+	return new Promise (function (resolve, reject) {
+		Notification.count ({code:notcode} , function (err, result) {
+			if (err) reject (err);
+			else resolve (result);
+		});
+	});
+};

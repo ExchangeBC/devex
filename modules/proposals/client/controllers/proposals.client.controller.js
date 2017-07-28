@@ -305,10 +305,10 @@
 				.then (function () {
 					ppp.notifyMe = true;
 				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
-					});
+					// Notification.error ({
+					// 	message : res.data.message,
+					// 	title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
+					// });
 				});
 			}
 			else {
@@ -316,10 +316,10 @@
 				.then (function () {
 					ppp.notifyMe = false;
 				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
-					});
+					// Notification.error ({
+					// 	message : res.data.message,
+					// 	title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
+					// });
 				});
 			}
 		};

@@ -76,6 +76,55 @@ var ensureAdmin = function (opportunity, user, res) {
 		return true;
 	}
 };
+var countStatus = function (id) {
+	return new Promise (function (resolve, reject) {
+		Proposal.aggregate ([
+			{
+				$match: {
+					opportunity: id
+				}
+			},
+			{
+				$group: {
+					_id: '$status',
+					count: {$sum: 1}
+				}
+			}
+		], function (err, result) {
+			if (err) reject (err);
+			else resolve (result);
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// stats
+//
+// -------------------------------------------------------------------------
+exports.stats = function (req, res) {
+	var op = req.opportunity;
+	var ret = {
+		following: 0
+	};
+	Notifications.countFollowingOpportunity (op.code)
+	.then (function (result) {
+		ret.following = result;
+		return countStatus (op._id);
+	})
+	.then (function (result) {
+		for (var i=0; i<result.length; i++) {
+			ret[result[i]._id.toLowerCase()] = result[i].count;
+		}
+	})
+	.then (function () {
+		res.json (ret);
+	})
+	.catch (function (err) {
+		res.status(422).send ({
+			message: errorHandler.getErrorMessage(err)
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // get a list of all my proposals, but only ones I have access to as a normal
@@ -230,7 +279,7 @@ exports.list = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
-// get proposals under opportunity
+// get proposals under opportunity, but only submitted ones
 //
 // -------------------------------------------------------------------------
 exports.forOpportunity = function (req, res) {
@@ -238,7 +287,7 @@ exports.forOpportunity = function (req, res) {
 	// console.log ('NOT ALLOWED');
 		return res.json ([]);
 	}
-	Proposal.find({opportunity:req.opportunity._id}).sort('created')
+	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity', 'code name')

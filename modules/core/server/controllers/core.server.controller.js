@@ -46,7 +46,8 @@ exports.renderIndex = function (req, res) {
 
   res.render('modules/core/server/views/index', {
     user: JSON.stringify(safeUserObject),
-    sharedConfig: JSON.stringify(config.shared)
+    sharedConfig: JSON.stringify(config.shared),
+    feature_hide: config.feature_hide
   });
 };
 

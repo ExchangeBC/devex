@@ -58,6 +58,7 @@
 			controllerAs : 'vm',
 			scope        : {
 				opportunity: '=',
+				isclosed: '=',
 				title: '@',
 				context: '@'
 			},
@@ -67,6 +68,8 @@
 				vm.opportunity = $scope.opportunity;
 				vm.context = $scope.context;
 				vm.proposals = [];
+				vm.stats = {};
+				vm.isclosed = $scope.isclosed;
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
@@ -96,6 +99,9 @@
 					vm.proposals   = ProposalsService.query ();
 					vm.columnCount = 1;
 				}
+				vm.stats = ProposalsService.getStats ({
+					opportunityId: $scope.opportunity._id
+				});
 				if ($scope.title) vm.title = $scope.title;
 				vm.publish = function (proposal, state) {
 					var publishedState = proposal.isPublished;

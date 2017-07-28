@@ -75,7 +75,9 @@
 			</div>
 		</div>
 	</div>
+	<div class="container">
 
+	</div>
 
 	<!--<div class="panel panel-default panel-flat card-panel">-->
 <div class="container">
@@ -128,6 +130,13 @@
 					</dl>
 				</div>
 			</div>
+		</div>
+
+		<div class="panel-body">
+		<proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
+		</div>
+		<div class="panel-body" style="background-color: #e6e6e6;">
+			&nbsp;
 		</div>
 
 		<div class="panel-body" style="background-color: #e6e6e6;">
@@ -217,7 +226,6 @@
 </div>
 <div class="container">
 
-	<proposal-list ng-if="vm.canEdit" context="opportunity" opportunity="vm.opportunity" title="Opportunity Proposals"></proposal-list>
 </div>
 
 </section>

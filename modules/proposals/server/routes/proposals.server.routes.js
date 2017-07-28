@@ -8,30 +8,33 @@ var proposalsPolicy = require('../policies/proposals.server.policy'),
 
 module.exports = function(app) {
   // Proposals Routes
-  app.route('/api/proposals').all(proposalsPolicy.isAllowed)
-    .get(proposals.list)
-    .post(proposals.create);
+    app.route('/api/proposals').all(proposalsPolicy.isAllowed)
+      .get(proposals.list)
+      .post(proposals.create);
 
-  app.route('/api/proposals/:proposalId').all(proposalsPolicy.isAllowed)
-    .get(proposals.read)
-    .put(proposals.update)
-    .delete(proposals.delete);
+    app.route('/api/proposals/:proposalId').all(proposalsPolicy.isAllowed)
+      .get(proposals.read)
+      .put(proposals.update)
+      .delete(proposals.delete);
 
-  app.route('/api/submit/proposal/:proposalId').all(proposalsPolicy.isAllowed)
-    .put(proposals.submit);
-  //
-  // proposals for opportunity
-  //
-  app.route('/api/proposals/for/opportunity/:opportunityId')
-    // .all (proposalsPolicy.isAllowed)
-    .get(proposals.forOpportunity);
+    app.route('/api/submit/proposal/:proposalId').all(proposalsPolicy.isAllowed)
+      .put(proposals.submit);
+    //
+    // proposals for opportunity
+    //
+    app.route('/api/proposals/for/opportunity/:opportunityId')
+      // .all (proposalsPolicy.isAllowed)
+      .get(proposals.forOpportunity);
 
 
-  app.route('/api/my/proposals').all(proposalsPolicy.isAllowed)
-    .get(proposals.my);
-  app.route('/api/myopp/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
-    .get(proposals.myopp);
+    app.route('/api/my/proposals').all(proposalsPolicy.isAllowed)
+      .get(proposals.my);
+    app.route('/api/myopp/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
+      .get(proposals.myopp);
 
+    app.route ('/api/proposals/stats/opportunity/:opportunityId')
+      // .all (proposalsPolicy.isAllowed)
+      .get (proposals.stats);
 
     app.route ('/api/proposal/:proposalId/upload/doc')
       // .all (proposalsPolicy.isAllowed)
