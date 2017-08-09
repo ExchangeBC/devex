@@ -419,8 +419,7 @@ exports.update = function (req, res) {
 				title  : opportunity.name,
 				body   : oppBody (opportunity),
 				repo   : opportunity.github,
-				number : opportunity.issueNumber,
-				token  : 'd0242f8ebdf265a146bdba5ee8542c5f4b80ec9b'
+				number : opportunity.issueNumber
 			})
 			.then (function (result) {
 				opportunity.issueUrl    = result.url;
