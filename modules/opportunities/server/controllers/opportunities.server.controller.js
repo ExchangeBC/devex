@@ -283,7 +283,12 @@ exports.requests = function (opportunity, cb) {
 
 var oppBody = function (opp) {
 	var div = '<br/><p><hr/></p><br/>';
-	return opp.description + div + opp.evaluation + div + opp.criteria;
+	var ret = opp.description;
+	ret += '<h2>Acceptance Criteria</h2>';
+	ret += opp.criteria;
+	ret += '<h2>Proposal Evaluation Criteria</h2>';
+	ret += opp.evaluation;
+	return ret;
 };
 /**
  * Create a Opportunity
