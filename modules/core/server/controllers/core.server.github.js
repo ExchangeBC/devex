@@ -8,6 +8,7 @@ var fetch  = require('node-fetch');
 var githubAPI   = 'https://api.github.com';
 var githubRepos = githubAPI+'/repos/';
 var accessToken = config.github.accessToken;
+console.log ('access token = ', accessToken);
 var headers = {
 	'Content-Type' : 'application/json',
 	'Accept'       : 'application/vnd.github.v3.full+json'
