@@ -8,6 +8,12 @@
 				<div class="col-sm-4 text-center">Drafts : {{vm.stats.draft}}</div>
 				<div class="col-sm-4 text-center">Submitted : {{vm.stats.submitted}}</div>
 </div>
+<br/>
+<div class="row list-head" style="margin-left:20px; margin-right:20px" ng-if="!vm.isclosed">
+	<div class="alert alert-info">
+		<i>Submitted proposals will be available for review once the opportunity closes.</i>
+	</div>
+</div>
 <div class="row list-head" ng-if="vm.isclosed">
 	<div class="col-sm-7">
 		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
@@ -19,13 +25,17 @@
 			<span class="text-muted">No Submitted Proposals Found.</span>
 		</div>
 	</div>
-		<div class="row" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
-			<div class="col-md-3">
+		<div class="card card-block" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
+			<div class="card-img">
+				<img class="card-img-left" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
+			</div>
+<!-- 			<div class="col-md-3">
 			<div >
 				<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
 			</div>
 			</div>
-			<div class="col-md-5">
+ -->
+ 			<div class="col-md-5">
 				<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{proposal.user.firstName}} {{proposal.user.lastName}}</h4>
 				<p>Attachments: {{proposal.attachments.length}}</p>
 			</div>

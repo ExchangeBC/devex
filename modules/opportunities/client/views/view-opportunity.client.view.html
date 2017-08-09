@@ -86,7 +86,8 @@
 			<div class="row">
 				<div class="col-sm-5">
 					<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
-					<h4 ng-if="vm.opportunity.isPublished" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
+					<h4 ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;">Closing in:  <span style="font-size: 18px; font-weight: 800;"> {{vm.closing}}</span></h4>
+					<h4 ng-if="vm.opportunity.status === 'Assigned'" style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"> <span style="font-size: 18px; font-weight: 800; color:#5cb85c"> ASSIGNED</span></h4>
 					<h4 style="padding-top: 0; margin-top: 0px; margin-bottom: 10px;"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</h4>
 	          <h4 ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
 	          <h4 ng-if="vm.opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
@@ -121,7 +122,7 @@
 						<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
 					</dl>
 				</div>
-				<div class="col-sm-12"
+				<div class="col-sm-12">
 					<dl ng-if="vm.opportunity.skills.length">
 						<!--<dt>Required Skills:</dt>-->
 						<dd class="label-list">
@@ -134,28 +135,29 @@
 
 		<div class="panel-body">
 		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
-		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
-					<h4>Opportunity Assigned to</h4>
-				<div class="row">
-					<div class="col-md-3">
+		<div  ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+				<h4>Opportunity Assigned to</h4>
+				<div class="card card-block">
+					<div class="card-img">
+						<img class="card-img-left" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
+					</div>
+<!-- 					<div class="col-md-3">
 					<div >
 						<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
 					</div>
 					</div>
-					<div class="col-md-5">
+ -->
+ 					<div class="col-md-5">
 						<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{vm.opportunity.proposal.user.firstName}} {{vm.opportunity.proposal.user.lastName}}</h4>
 						<p>Attachments: {{vm.opportunity.proposal.attachments.length}}</p>
 					</div>
 					<div class="col-md-2">
 						&nbsp;
 					</div>
-					<div class="col-md-2" ng-if="vm.canEdit">
+					<div class="col-md-2" ng-if="vm.canEdit || vm.isMember">
 						<a ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
 					</div>
 				</div>
-		</div>
-		<div class="panel-body" style="background-color: #e6e6e6;">
-			&nbsp;
 		</div>
 
 		<div class="panel-body" style="background-color: #e6e6e6;">

@@ -52,6 +52,7 @@
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canApply                = isUser && !isAdmin && !isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
+		vm.isMember                = opportunity.userIs.member;
 		var rightNow               = new Date ();
 		vm.closing = 'CLOSED';
 		var d                      = vm.opportunity.deadline - rightNow;
