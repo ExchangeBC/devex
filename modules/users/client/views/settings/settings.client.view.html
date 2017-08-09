@@ -3,7 +3,7 @@
   <div class="container" role="main">
     <div class="row">
       <div class="col-xs-12">
-        <h1><img class="img-circle" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>&nbsp; {{::vm.user.firstName}} {{::vm.user.lastName}}</h1>
+        <h1><img class="img-rounded" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>&nbsp; {{::vm.user.firstName}} {{::vm.user.lastName}}</h1>
       </div>
     </div>
     <div class="row">
