@@ -2,7 +2,6 @@
 
 var path   = require('path');
 var config = require(path.resolve('./config/config'));
-var github = require('octonode');
 var fetch  = require('node-fetch');
 
 var githubAPI   = 'https://api.github.com';

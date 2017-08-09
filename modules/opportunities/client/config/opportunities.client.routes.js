@@ -75,9 +75,9 @@
 					}).$promise;
 				}
 				// ,
-				// proposals: function ($stateParams, ProposalsService, Authentication) {
+				// proposal: function ($stateParams, ProposalsService, Authentication) {
 				// 	if (!Authentication.user) return [];
-				// 	console.log ('get proposals');
+				// 	console.log ('get proposal');
 				// 	return ProposalsService.forOpportunity ({
 				// 		opportunityId: $stateParams.opportunityId
 				// 	}).$promise;

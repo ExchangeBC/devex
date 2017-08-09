@@ -181,59 +181,59 @@ var setNotificationData = function (opportunity) {
 		skills               : opportunity.skills.join (', ')
 	};
 };
-// -------------------------------------------------------------------------
-//
-// create an issue in the opportunity repo using the secret from our repos or
-// from the users'
-//
-// -------------------------------------------------------------------------
-var createIssue = function (opportunity, user) {
-	return new Promise (function (resolve, reject) {
+// // -------------------------------------------------------------------------
+// //
+// // create an issue in the opportunity repo using the secret from our repos or
+// // from the users'
+// //
+// // -------------------------------------------------------------------------
+// var createIssue = function (opportunity, user) {
+// 	return new Promise (function (resolve, reject) {
 
-		var callbackf = function (err, status, body, headers) {
-	// console.log ('err', err);
-	// console.log ('status', status);
-	// console.log ('body', body);
-	// console.log ('headers', headers);
-			resolve ({
-				err: err,
-				status: status,
-				body: body,
-				headers: headers
-			});
-		};
-		var github = require ('octonode');
-	// console.log ('octonode', github);
-		var accessToken = user.providerData.accessToken;
-		var login = user.providerData.login;
+// 		var callbackf = function (err, status, body, headers) {
+// 	// console.log ('err', err);
+// 	// console.log ('status', status);
+// 	// console.log ('body', body);
+// 	// console.log ('headers', headers);
+// 			resolve ({
+// 				err: err,
+// 				status: status,
+// 				body: body,
+// 				headers: headers
+// 			});
+// 		};
+// 		var github = require ('octonode');
+// 	// console.log ('octonode', github);
+// 		var accessToken = user.providerData.accessToken;
+// 		var login = user.providerData.login;
 
-		var client = github.client (accessToken);
-		var ghme = client.me();
-		var repo = 'BCDevExchange-app';
-		var ghrepo = client.repo ('BCDevExchange/BCDevExchange-app');
+// 		var client = github.client (accessToken);
+// 		var ghme = client.me();
+// 		var repo = 'BCDevExchange-app';
+// 		var ghrepo = client.repo ('BCDevExchange/BCDevExchange-app');
 
-	// console.log ('ghrepo', ghrepo);
+// 	// console.log ('ghrepo', ghrepo);
 
-		ghme.orgs (callbackf);
+// 		ghme.orgs (callbackf);
 
-		// ghrepo.issues (callbackf);
+// 		// ghrepo.issues (callbackf);
 
-		// ghrepo.issue({
-		// 'title': 'Test Auto Issue',
-		// 'body': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-		// 'assignee': login,
-		// 'labels': ['Label1', 'Label2']
-		// }, callbackf);
+// 		// ghrepo.issue({
+// 		// 'title': 'Test Auto Issue',
+// 		// 'body': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+// 		// 'assignee': login,
+// 		// 'labels': ['Label1', 'Label2']
+// 		// }, callbackf);
 
-	});
+// 	});
 
-};
-exports.ttt = function (req, res) {
-	createIssue (req.opportunity, req.user)
-	.then (function (r) {
-		res.json (r);
-	});
-};
+// };
+// exports.ttt = function (req, res) {
+// 	createIssue (req.opportunity, req.user)
+// 	.then (function (r) {
+// 		res.json (r);
+// 	});
+// };
 // -------------------------------------------------------------------------
 //
 // get a list of all my opportunities, but only ones I have access to as a normal
@@ -322,20 +322,6 @@ exports.create = function(req, res) {
 			} else {
 				setOpportunityAdmin (opportunity, req.user);
 				req.user.save ();
-				// github.createIssue ({
-				// 	title : opportunity.name,
-				// 	body  : oppBody (opportunity),
-				// 	repo  : opportunity.github,
-				// 	token : 'd0242f8ebdf265a146bdba5ee8542c5f4b80ec9b'
-				// })
-				// .then (function (result) {
-				// 	opportunity.issueUrl    = result.url;
-				// 	opportunity.issueNumber = result.number;
-				// 	opportunity.save ();
-				// })
-				// .catch (function (err) {
-				// 	console.log (err);
-				// });
 				Notifications.addNotification ({
 					code: 'not-update-'+opportunity.code,
 					name: 'Update of Opportunity '+opportunity.name,
@@ -626,6 +612,8 @@ var unassignMember = function (opportunity, user) {
 		user.save ().then (resolve, reject);
 	});
 };
+exports.assignMember = assignMember;
+exports.unassignMember = unassignMember;
 exports.confirmMember = function (req, res) {
 	var user = req.model;
 	// console.log ('++++ confirm member ', user.username, user._id);
@@ -761,6 +749,15 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
+		.populate({
+			path: 'proposal',
+			model: 'Proposal',
+			populate : {
+				path: 'user',
+				model: 'User'
+			}
+		})
+		// .populate({path:'proposal.user', model:'User'}) //'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail')
 		.exec(function (err, opportunity) {
 			if (err) {
 				return next(err);

@@ -19,6 +19,10 @@
         method: 'PUT',
         url: '/api/submit/proposal/:proposalId'
       },
+      assign: {
+        method: 'PUT',
+        url: '/api/assign/proposal/:proposalId'
+      },
       forOpportunity: {
         method: 'GET',
         url: '/api/proposals/for/opportunity/:opportunityId',

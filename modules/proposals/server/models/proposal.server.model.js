@@ -19,7 +19,7 @@ var ProposalSchema = new Schema ({
 	detail               : {type: String},
 	opportunity          : {type: Schema.ObjectId, ref: 'Opportunity', required: 'Please select a program', index: true},
 	user                 : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true},
-	status               : {type: String, default: 'New', enum:['New', 'Draft', 'Submitted', 'Reviewed', 'Selected']},
+	status               : {type: String, default: 'New', enum:['New', 'Draft', 'Submitted', 'Reviewed', 'Assigned']},
 	isCompany            : {type: Boolean, default: false},
 	businessName         : {type: String, default: ''},
 	businessAddress      : {type: String, default: ''},

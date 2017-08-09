@@ -133,7 +133,26 @@
 		</div>
 
 		<div class="panel-body">
-		<proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
+		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
+		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+					<h4>Opportunity Assigned to</h4>
+				<div class="row">
+					<div class="col-md-3">
+					<div >
+						<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
+					</div>
+					</div>
+					<div class="col-md-5">
+						<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{vm.opportunity.proposal.user.firstName}} {{vm.opportunity.proposal.user.lastName}}</h4>
+						<p>Attachments: {{vm.opportunity.proposal.attachments.length}}</p>
+					</div>
+					<div class="col-md-2">
+						&nbsp;
+					</div>
+					<div class="col-md-2" ng-if="vm.canEdit">
+						<a ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
+					</div>
+				</div>
 		</div>
 		<div class="panel-body" style="background-color: #e6e6e6;">
 			&nbsp;

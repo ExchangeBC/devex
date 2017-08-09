@@ -19,6 +19,8 @@ module.exports = function(app) {
 
     app.route('/api/submit/proposal/:proposalId').all(proposalsPolicy.isAllowed)
       .put(proposals.submit);
+    app.route('/api/assign/proposal/:proposalId').all(proposalsPolicy.isAllowed)
+      .put(proposals.assign);
     //
     // proposals for opportunity
     //

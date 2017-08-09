@@ -39,7 +39,8 @@ var OpportunitySchema = new Schema({
 	updated       : {type: Date, default: null },
 	updatedBy     : {type: 'ObjectId', ref: 'User', default: null },
 	issueUrl      : {type: 'String', default: ''},
-	issueNumber   : {type: 'String', default: ''}
+	issueNumber   : {type: 'String', default: ''},
+	proposal      : {type:'ObjectId', ref: 'Proposal', default: null}
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

@@ -15,7 +15,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function ($scope, $uibModalInstance, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification) {
+	.controller ('ProposalViewController', function ($scope, $uibModalInstance, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask) {
 		var ppp           = this;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
@@ -37,6 +37,24 @@
 			ProposalsService.downloadDoc ({
 				proposalId: ppp.proposal._id,
 				documentId: fileid
+			});
+		};
+		ppp.assign = function () {
+			var q = 'Are you sure you want to assign this opportunity to this proponent?';
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+					ProposalsService.assign (ppp.proposal).$promise
+					.then (
+						function (response) {
+							ppp.proposal = response;
+							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
+							$uibModalInstance.dismiss('cancel');
+						},
+						function (error) {
+							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+						}
+					);
+				}
 			});
 		};
 	})

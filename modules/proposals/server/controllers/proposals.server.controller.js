@@ -22,16 +22,19 @@ request : <code>-request
 var path = require('path'),
 	mongoose = require('mongoose'),
 	Proposal = mongoose.model('Proposal'),
+	User = mongoose.model('User'),
+	Opportunity = mongoose.model('Opportunity'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
 	_ = require('lodash'),
 	multer = require('multer'),
 	config = require(path.resolve('./config/config')),
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
-var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail';
+var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
 var streamFile = function (res, file, name, mime) {
 	// console.log ('stream file ',file, name, mime);
 	var fs = require ('fs');
@@ -231,10 +234,71 @@ exports.update = function (req, res) {
 	//
 	saveProposalRequest (req, res, proposal);
 };
+// -------------------------------------------------------------------------
+//
+// updatyes a proposal into submitted status
+//
+// -------------------------------------------------------------------------
 exports.submit = function (req, res) {
 	req.body.status = 'Submitted';
 	return exports.update (req, res);
-}
+};
+var updateUserRole = function (userid, oppcode) {
+	return new Promise (function (resolve, reject) {
+		User.findByIdAndUpdate (userid,
+		    { '$push': { 'roles':  oppcode} },
+		    { 'new': true, 'upsert': true },
+		    function (err, m) {
+		        if (err) reject (err);
+		        else resolve (m);
+		    }
+		);
+	});
+};
+var updateOpportunityStatus = function (oppid, proposalid) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.findByIdAndUpdate (oppid,
+		    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
+		    function (err, m) {
+		        if (err) reject (err);
+		        else resolve (m);
+		    }
+		);
+	});
+};
+// -------------------------------------------------------------------------
+//
+// assigns a proposal to the opportunity
+//
+// -------------------------------------------------------------------------
+exports.assign = function (req, res) {
+	console.log ('assigning');
+	req.body.status = 'Assigned';
+	var proposal = _.assign (req.proposal, req.body);
+	helpers.applyAudit (proposal, req.user);
+	saveProposal (proposal)
+	.then (function (p) {
+		console.log ('saved now setting user as member', p);
+		proposal = p;
+		return updateUserRole (proposal.user._id, proposal.opportunity.code);
+		// return Opportunities.assignMember (proposal.opportunity, proposal.user);
+	})
+	.then (function () {
+		github.lockIssue ({
+			repo   : proposal.opportunity.github,
+			number : proposal.opportunity.issueNumber
+		})
+	})
+	.then (function () {
+		return updateOpportunityStatus (proposal.opportunity._id, proposal._id);
+	})
+	.then (function () {
+		res.json (proposal);
+	})
+	.catch (function (e) {
+		res.status(422).send ({ message: errorHandler.getErrorMessage(e) });
+	});
+};
 // -------------------------------------------------------------------------
 //
 // delete the proposal
@@ -329,7 +393,7 @@ exports.proposalByID = function (req, res, next, id) {
 	Proposal.findById(id)
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('opportunity', 'code name')
+	.populate('opportunity', 'code name issueNumber github')
 	.populate('user', userfields)
 	.exec(function (err, proposal) {
 		if (err) {
