@@ -422,15 +422,19 @@ exports.update = function (req, res) {
 				number : opportunity.issueNumber
 			})
 			.then (function (result) {
-				opportunity.issueUrl    = result.url;
+				opportunity.issueUrl    = result.html_url;
 				opportunity.issueNumber = result.number;
 				opportunity.save ();
+				res.json (decorate (opportunity, req.user ? req.user.roles : []));
 			})
 			.catch (function (err) {
 				console.log (err);
+				res.status(422).send({
+					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+				});
 			});
 		}
-		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		else res.json (decorate (opportunity, req.user ? req.user.roles : []));
 	})
 	.catch (function (err) {
 		return res.status(422).send({
