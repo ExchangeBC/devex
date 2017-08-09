@@ -31,7 +31,8 @@ var path = require('path'),
 	// // HandlebarsIntl = require('handlebars-intl'),
 	// Handlebars = require('handlebars'),
 	// htmlToText = require('html-to-text')
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
 
@@ -201,7 +202,7 @@ var createIssue = function (opportunity, user) {
 				headers: headers
 			});
 		};
-		var github = require('octonode');
+		var github = require ('octonode');
 	// console.log ('octonode', github);
 		var accessToken = user.providerData.accessToken;
 		var login = user.providerData.login;
@@ -209,8 +210,7 @@ var createIssue = function (opportunity, user) {
 		var client = github.client (accessToken);
 		var ghme = client.me();
 		var repo = 'BCDevExchange-app';
-		var ghrepo = client.repo('BCDevExchange/BCDevExchange-app');
-
+		var ghrepo = client.repo ('BCDevExchange/BCDevExchange-app');
 
 	// console.log ('ghrepo', ghrepo);
 
@@ -233,8 +233,7 @@ exports.ttt = function (req, res) {
 	.then (function (r) {
 		res.json (r);
 	});
-
-}
+};
 // -------------------------------------------------------------------------
 //
 // get a list of all my opportunities, but only ones I have access to as a normal
@@ -282,6 +281,10 @@ exports.requests = function (opportunity, cb) {
 	.exec (cb);
 };
 
+var oppBody = function (opp) {
+	var div = '<br/><p><hr/></p><br/>';
+	return opp.description + div + opp.evaluation + div + opp.criteria;
+};
 /**
  * Create a Opportunity
  */
@@ -314,6 +317,20 @@ exports.create = function(req, res) {
 			} else {
 				setOpportunityAdmin (opportunity, req.user);
 				req.user.save ();
+				// github.createIssue ({
+				// 	title : opportunity.name,
+				// 	body  : oppBody (opportunity),
+				// 	repo  : opportunity.github,
+				// 	token : 'd0242f8ebdf265a146bdba5ee8542c5f4b80ec9b'
+				// })
+				// .then (function (result) {
+				// 	opportunity.issueUrl    = result.url;
+				// 	opportunity.issueNumber = result.number;
+				// 	opportunity.save ();
+				// })
+				// .catch (function (err) {
+				// 	console.log (err);
+				// });
 				Notifications.addNotification ({
 					code: 'not-update-'+opportunity.code,
 					name: 'Update of Opportunity '+opportunity.name,
@@ -339,52 +356,6 @@ exports.create = function(req, res) {
 			}
 		});
 	});
-
-/*
-
-GITHUB related stuff
-
-	var opportunity = new Opportunity(req.body);
-	opportunity.user = req.user;
-
-	var http = require('http');
-	var github = require('octonode');
-	var config = require('/config/config.js');
-
-	// curl -u 'dewolfe001:39c1cffc1008ed43189ecd27448bd903a75778eb' https://api.github.com/user/repos -d '{'name':''helloGit''}'
-
-	var url = 'https://api.github.com/user/repos';
-	var user = config.github.clientID;  // 'dewolfe001';
-	var secret = config.github.clientSecret; // '39c1cffc1008ed43189ecd27448bd903a75778eb';
-
-	var client = github.client({
-	id: user,
-		secret: secret
-	});
-
- //  opportunity.github = client.repo({
-	// 'name': opportunity.name,
-	// 'description' : opportunity.description
-	// },  function (err, data) {
-	// 	if (err) {
-	// 		return console.error(err);
-	// 	}
-	// 	else {
-	// 		return data.html_url;
-	// 	}
-	// }
-	// );
-
-	opportunity.save(function(err) {
-		if (err) {
-			return res.status(400).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.jsonp(opportunity);
-		}
-	});
-	*/
 };
 
 // -------------------------------------------------------------------------
@@ -444,6 +415,21 @@ exports.update = function (req, res) {
 		if (opportunity.isPublished) {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
+			github.createOrUpdateIssue ({
+				title  : opportunity.name,
+				body   : oppBody (opportunity),
+				repo   : opportunity.github,
+				number : opportunity.issueNumber,
+				token  : 'd0242f8ebdf265a146bdba5ee8542c5f4b80ec9b'
+			})
+			.then (function (result) {
+				opportunity.issueUrl    = result.url;
+				opportunity.issueNumber = result.number;
+				opportunity.save ();
+			})
+			.catch (function (err) {
+				console.log (err);
+			});
 		}
 		res.json (decorate (opportunity, req.user ? req.user.roles : []));
 	})
