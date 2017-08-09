@@ -109,7 +109,7 @@
         }
     },
     "spec": {
-        "host": "sonarqube-gwells-tools.pathfinder.gov.bc.ca",
+        "host": "sonarqube-devex-platform-tools.pathfinder.gov.bc.ca",
         "to": {
             "kind": "Service",
             "name": "sonarqube",
@@ -123,7 +123,7 @@
     "status": {
         "ingress": [
             {
-                "host": "sonarqube-gwells-tools.pathfinder.gov.bc.ca",
+                "host": "sonarqube-devex-platform-tools.pathfinder.gov.bc.ca",
                 "routerName": "router",
                 "conditions": [
                     {
@@ -212,7 +212,7 @@
 	   "status": {
         "loadBalancer": {}
       }
-    },	
+    },
 	{
 		"kind": "DeploymentConfig",
 		"apiVersion": "v1",
@@ -222,7 +222,7 @@
 			"creationTimestamp": null,
 			"labels": {
 						"app": "${DATABASE_SERVICE_NAME}"
-			},			
+			},
 			"annotations": {
 				"description": "Defines how to deploy the database",
 				"openshift.io/container.postgresql.image.entrypoint": "[\"container-entrypoint\",\"run-postgresql\"]"
@@ -230,7 +230,7 @@
 		},
 		"spec": {
 			"strategy": {
-				"type": "Recreate"				
+				"type": "Recreate"
 			},
 			"triggers": [
 				{
@@ -247,7 +247,7 @@
 							"kind": "ImageStreamTag",
 							"namespace":  "openshift",
 							"name": "postgres:9.4"
-						}						
+						}
 					}
 				}
 			],
@@ -257,7 +257,7 @@
 				"app": "${DATABASE_SERVICE_NAME}",
 				"deploymentconfig": "${DATABASE_SERVICE_NAME}"
 			},
-				
+
 			"template": {
 				"metadata": {
 					"creationTimestamp": null,
@@ -300,7 +300,7 @@
                                         "name" : "sonarqube-secrets",
                                         "key" : "database-password"
 										}
-                                    }                        
+                                    }
 								},
 								{
 									"name": "POSTGRESQL_ADMIN_PASSWORD",
@@ -309,7 +309,7 @@
                                         "name" : "sonarqube-secrets",
                                         "key" : "database-admin-password"
 										}
-                                    }                        
+                                    }
 								},
 								{
 									"name": "POSTGRESQL_USER",
@@ -318,14 +318,14 @@
                                         "name" : "sonarqube-secrets",
                                         "key" : "database-user"
 										}
-                                    }                        
+                                    }
 								}
 							],
 							"readinessProbe": {
 								"timeoutSeconds": 1,
 							  "initialDelaySeconds": 15,
 							  "exec": {
-								"command": [ "/bin/sh", "-i", "-c", "psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c 'SELECT 1'"]                    
+								"command": [ "/bin/sh", "-i", "-c", "psql -h 127.0.0.1 -U $POSTGRESQL_USER -q -d $POSTGRESQL_DATABASE -c 'SELECT 1'"]
 							  }
 							},
 							"livenessProbe": {
@@ -355,8 +355,8 @@
                 }
             },
 			"restartPolicy": "Always",
-            "dnsPolicy": "ClusterFirst"			
-		},		
+            "dnsPolicy": "ClusterFirst"
+		},
 		"status": {}
 	    }
     },
@@ -469,7 +469,7 @@
                                         "name" : "sonarqube-secrets",
                                         "key" : "sonar-admin-password"
                                     }
-                                }    
+                                }
                             }
                         ],
                         "resources": {
@@ -557,7 +557,7 @@
             "template": "devex-pipeline"
         }
     },
-    "spec": {        
+    "spec": {
         "runPolicy": "Parallel",
         "source": {
             "type": "Git",

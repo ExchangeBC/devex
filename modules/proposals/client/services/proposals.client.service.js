@@ -28,6 +28,11 @@
         method: 'GET',
         url: '/api/proposal/:proposalId/remove/doc/:documentId'
       },
+      getStats: {
+        method: 'GET',
+        url: '/api/proposals/stats/opportunity/:opportunityId',
+        isArray:false
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/proposal/:proposalId'

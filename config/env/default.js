@@ -10,6 +10,7 @@ module.exports = {
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID',
     domain: process.env.DOMAIN || 'http://localhost:3030'
   },
+  feature_hide: process.env.FEATURE_HIDE || false,
   port: process.env.PORT || 3000,
   host: process.env.HOST || '0.0.0.0',
   // DOMAIN config should be set to the fully qualified application accessible

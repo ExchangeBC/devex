@@ -275,7 +275,7 @@ exports.update = function (req, res) {
 					return Notifications.notifyObject (code, program);
 				}))
 				.catch (function (err) {
-					console.log (err);
+	// console.log (err);
 				})
 				.then (function () {
 					res.json (decorate (program, req.user ? req.user.roles : []));

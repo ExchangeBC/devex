@@ -57,44 +57,51 @@
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
-				program: '=',
+				opportunity: '=',
+				isclosed: '=',
 				title: '@',
 				context: '@'
 			},
 			templateUrl  : '/modules/proposals/client/views/list.proposals.directive.html',
 			controller   : function ($scope, ProposalsService, Authentication, Notification) {
 				var vm     = this;
-				vm.program = $scope.program;
+				vm.opportunity = $scope.opportunity;
 				vm.context = $scope.context;
+				vm.proposals = [];
+				vm.stats = {};
+				vm.isclosed = $scope.isclosed;
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				if (vm.context === 'program') {
-					vm.programId = vm.program._id;
-					vm.programTitle = vm.program.title;
+				if (vm.context === 'opportunity') {
+					vm.opportunityId = vm.opportunity._id;
+					vm.programTitle = vm.opportunity.title;
 				} else {
-					vm.programId = null;
+					vm.opportunityId = null;
 					vm.programTitle = null;
 				}
 				//
-				// if a program is supplied, then only list proposals under it
+				// if a opportunity is supplied, then only list proposals under it
 				// also allow adding a new proposal (because it has context)
 				//
-				if ($scope.program) {
-					vm.title      = 'Proposals for '+$scope.program.title;
-					vm.programId  = $scope.program._id;
-					vm.userCanAdd = $scope.program.userIs.admin || vm.isAdmin;
-					vm.proposals   = ProposalsService.forProgram ({
-						programId: $scope.program._id
+				if ($scope.opportunity) {
+					vm.title      = 'Proposals for '+$scope.opportunity.title;
+					vm.opportunityId  = $scope.opportunity._id;
+					vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
+					vm.proposals   = ProposalsService.forOpportunity ({
+						opportunityId: $scope.opportunity._id
 					});
 					vm.columnCount = 1;
 				} else {
 					vm.title      = 'All Proposals';
-					vm.programId  = null;
+					vm.opportunityId  = null;
 					vm.userCanAdd = (vm.isAdmin || vm.isGov);
 					vm.proposals   = ProposalsService.query ();
 					vm.columnCount = 1;
 				}
+				vm.stats = ProposalsService.getStats ({
+					opportunityId: $scope.opportunity._id
+				});
 				if ($scope.title) vm.title = $scope.title;
 				vm.publish = function (proposal, state) {
 					var publishedState = proposal.isPublished;

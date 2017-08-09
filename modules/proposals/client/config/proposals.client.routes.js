@@ -54,21 +54,43 @@
 				roles: ['user']
 			},
 			onEnter: function ($uibModal, $state, $stateParams, ProposalsService) {
+				//
+				// CC: there is a weird bug here where $stateparams is available correctly here
+				// but NOT insidethe resolves. ??????
+				//
+				var proid = $stateParams.proposalId;
+				// console.log ('go get proposal:', proid);
+				// console.log ('go get opp:', oppid);
 				$uibModal.open ({
 					size: 'lg',
 					templateUrl: '/modules/proposals/client/views/view-proposal.client.view.html',
 					controller: 'ProposalViewController',
+					controllerAs: 'ppp',
+					bindToController: true,
 					resolve: {
 						proposal: function ($stateParams, ProposalsService) {
-							return {};
-							// return ProposalsService.get ({
-							// 	proposalId: $stateParams.proposalId
-							// }).$promise;
+							return ProposalsService.get ({
+								proposalId: proid
+							}).$promise;
 						}
 					}
 				}).result.finally (function () {
 					$state.go ($state.previous.state, $state.previous.params);
 				});
+				// $uibModal.open ({
+				// 	size: 'lg',
+				// 	templateUrl: '/modules/proposals/client/views/view-proposal.client.view.html',
+				// 	controller: 'ProposalViewController',
+				// 	resolve: {
+				// 		proposal: function ($stateParams, ProposalsService) {
+				// 			return ProposalsService.get ({
+				// 				proposalId: $stateParams.proposalId
+				// 			}).$promise;
+				// 		}
+				// 	}
+				// }).result.finally (function () {
+				// 	$state.go ($state.previous.state, $state.previous.params);
+				// });
 			}
 		})
 		// -------------------------------------------------------------------------
