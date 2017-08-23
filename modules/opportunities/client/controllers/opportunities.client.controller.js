@@ -17,7 +17,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService, ProposalsService) {
 		var vm                    = this;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
@@ -146,6 +146,30 @@
 					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
 				};
             });
+		};
+		// -------------------------------------------------------------------------
+		//
+		// unassign an opportunitu
+		//
+		// -------------------------------------------------------------------------
+		vm.unassign = function () {
+			var opportunity = vm.opportunity;
+			var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+					console.log ('opportunityId:opportunity._id',opportunity._id);
+					OpportunitiesService.unassign ({opportunityId:opportunity._id}).$promise
+					.then (
+						function (response) {
+							vm.opportunity = response;
+							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Un-Assignment successful!'});
+						},
+						function (error) {
+							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Un-Assignment failed!' });
+						}
+					);
+				}
+			});
 		};
 		// -------------------------------------------------------------------------
 		//

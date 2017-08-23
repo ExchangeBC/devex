@@ -55,6 +55,11 @@
         method: 'DELETE',
         url :'/api/opportunities/publish/:opportunityId'
       },
+      unassign: {
+        method: 'PUT',
+        url: '/api/opportunities/unassign/:opportunityId',
+        params: {opportunityId:'@opportunityId'}
+      },
       makeRequest: {
         method: 'GET',
         url :'/api/request/opportunity/:opportunityId'

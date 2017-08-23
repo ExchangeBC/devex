@@ -7,7 +7,7 @@ var fetch  = require('node-fetch');
 var githubAPI   = 'https://api.github.com';
 var githubRepos = githubAPI+'/repos/';
 var accessToken = config.github.accessToken;
-console.log ('access token = ', accessToken);
+// console.log ('access token = ', accessToken);
 var headers = {
 	'Content-Type' : 'application/json',
 	'Accept'       : 'application/vnd.github.v3.full+json'
@@ -20,7 +20,7 @@ var getrepo = function (url) {
 		var a = b[1].split ('/');
 		return a[0] + '/' + a[1];
 	}
-	return url;
+	return url.replace(/^\s+|\s+$/g, '');
 }
 
 var funcs = {
@@ -138,73 +138,59 @@ var funcs = {
 				resolve (true);
 			});
 		});
+	},
+	unlockIssue: function (opts) {
+		// console.log ('lock an issue', opts);
+		opts.token = opts.token ? opts.token : accessToken;
+		opts.repo = getrepo (opts.repo);
+		return new Promise (function (resolve, reject) {
+			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token;
+			console.log ('github ', url);
+			return fetch (url, {
+				method  : 'delete',
+				body    : '',
+				headers : {
+					'Content-Type': 'application/json',
+					'Content-Length': '0',
+					'Accept': 'application/vnd.github.v3.full+json'
+				}
+			})
+			.then (function () {
+				resolve (true);
+			});
+		});
+	},
+	// -------------------------------------------------------------------------
+	//
+	// add a comment to an issue
+	//
+	// -------------------------------------------------------------------------
+	addCommentToIssue: function (opts) {
+		// console.log ('add comment to issue');
+		opts.token = opts.token ? opts.token : accessToken;
+		opts.repo = getrepo (opts.repo);
+		return new Promise (function (resolve, reject) {
+			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/comments?access_token='+opts.token;
+			var payload = {
+				method  : 'post',
+				body    : JSON.stringify ({
+					body   : opts.comment
+				}),
+				headers : {
+					'Content-Type': 'application/json',
+					'Accept': 'application/vnd.github.v3.full+json'
+				}
+			};
+			// console.log ('github :', url);
+			// console.log ('payload:', payload);
+			return fetch (url, payload)
+			.then (function (r) {
+				// console.log ('r:',r);
+				resolve (true);
+			});
+		});
 	}
 };
 
 module.exports = funcs;
 
-// var lIssue = function (owner, repo, title, body, token) {
-// 	// 248864713
-// 	var url = 'https://api.github.com/repos/'+owner+'/'+repo+'/issues/3/lock?access_token='+token
-// 	console.log ('fetching ', url);
-// 	return fetch (url, {
-// 		method: 'put',
-// 		body: '',
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			'Content-Length': '0',
-// 			'Accept': 'application/vnd.github.v3.full+json'
-// 		}
-// 	})
-// 	.then(function(res) {
-// 		return res.json();
-// 	})
-// 	.then (function (json) {
-// 		console.log (json);
-// 	});
-// }
-// var cIssue = function (owner, repo, title, body, token) {
-// 	var url = 'https://api.github.com/repos/'+owner+'/'+repo+'/issues?access_token='+token
-// 	console.log ('fetching ', url);
-// 	return fetch (url, {
-// 		method: 'post',
-// 		body: JSON.stringify ({
-// 			title  : title,
-// 			body   : body,
-// 			labels : ['Opportunity']
-// 		}),
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			'Accept': 'application/vnd.github.v3.full+json'
-// 		}
-// 	})
-// 	.then(function(res) {
-// 		return res.json();
-// 	})
-// 	.then (function (json) {
-// 		console.log (json);
-// 	});
-// }
-// var uIssue = function (owner, repo, title, body, token) {
-// 	// 248864713
-// 	var url = 'https://api.github.com/repos/'+owner+'/'+repo+'/issues/3?access_token='+token
-// 	console.log ('fetching ', url);
-// 	return fetch (url, {
-// 		method: 'patch',
-// 		body: JSON.stringify ({
-// 			title  : title,
-// 			body   : 'different text',
-// 			labels : ['Opportunity']
-// 		}),
-// 		headers: {
-// 			'Content-Type': 'application/json',
-// 			'Accept': 'application/vnd.github.v3.full+json'
-// 		}
-// 	})
-// 	.then(function(res) {
-// 		return res.json();
-// 	})
-// 	.then (function (json) {
-// 		console.log (json);
-// 	});
-// }

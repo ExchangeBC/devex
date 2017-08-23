@@ -32,6 +32,7 @@ var path = require('path'),
 	// Handlebars = require('handlebars'),
 	// htmlToText = require('html-to-text')
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
@@ -489,7 +490,100 @@ var pub = function (req, res, isToBePublished) {
 exports.publish = function (req, res) { return pub (req, res, true); }
 exports.unpublish = function (req, res) { return pub (req, res, false); }
 
-
+// -------------------------------------------------------------------------
+//
+// unasasign the assigned proposal
+//
+// -------------------------------------------------------------------------
+exports.unassign = function (req, res) {
+	var opportunity;
+	//
+	// unassign the proposal
+	//
+	Proposals.unassign (req.opportunity.proposal, req.user)
+	//
+	// update the opportunity into pending status with no proposal
+	//
+	.then (function () {
+		req.opportunity.status = 'Pending';
+		req.opportunity.proposal = null;
+		return updateSave (req.opportunity);
+	})
+	//
+	// notify of changes
+	// update the issue on github
+	//
+	.then (function (opp) {
+		opportunity = opp;
+		var data = setNotificationData (opportunity);
+		Notifications.notifyObject ('not-updateany-opportunity', data);
+		Notifications.notifyObject ('not-update-'+opportunity.code, data);
+		return github.unlockIssue ({
+			repo   : opportunity.github,
+			number : opportunity.issueNumber
+		})
+		.then (function () {
+			return github.addCommentToIssue ({
+				comment : 'This opportunity has been un-assigned',
+				repo    : opportunity.github,
+				number  : opportunity.issueNumber
+			});
+		});
+	})
+	//
+	// return the new opportunity or fail
+	//
+	.then (function (result) {res.json (decorate (opportunity, req.user ? req.user.roles : [])); })
+	.catch (function (err) {res.status(422).send ({message: errorHandler.getErrorMessage(err)}); });
+};
+// -------------------------------------------------------------------------
+//
+// assign the passed in proposal
+//
+// -------------------------------------------------------------------------
+exports.assign = function (opportunityId, proposalId, proposalUser) {
+	// console.log ('opp asasign', opportunityId, proposalId, proposalUser);
+	return new Promise (function (resolve, reject) {
+		Opportunity.findById (opportunityId)
+		.exec (function (err, opportunity) {
+			if (err) {
+				reject (err);
+			}
+			else if (!opportunity) {
+				reject (new Error ({
+					message: 'No opportunity with that identifier has been found'
+				}));
+			}
+			else {
+				opportunity.status = 'Assigned';
+				opportunity.proposal = proposalId;
+				updateSave (opportunity)
+				.then (function (opp) {
+					opportunity = opp;
+					var data = setNotificationData (opportunity);
+					Notifications.notifyObject ('not-updateany-opportunity', data);
+					Notifications.notifyObject ('not-update-'+opportunity.code, data);
+					data.username = proposalUser.displayName;
+					data.useremail = proposalUser.email;
+					data.filename = 'cwuterms.pdf';
+					Notifications.notifyUserAdHoc ('assignopp', data);
+					return github.addCommentToIssue ({
+						comment : 'This opportunity has been assigned',
+						repo    : opportunity.github,
+						number  : opportunity.issueNumber
+					})
+					.then (function () {
+						return github.lockIssue ({
+							repo   : opportunity.github,
+							number : opportunity.issueNumber
+						});
+					});
+				})
+				.then (resolve, reject);
+			}
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // delete the opportunity
@@ -782,6 +876,14 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
+		.populate({
+			path: 'proposal',
+			model: 'Proposal',
+			populate : {
+				path: 'user',
+				model: 'User'
+			}
+		})
 		.exec(function (err, opportunity) {
 			if (err) {
 				return next(err);

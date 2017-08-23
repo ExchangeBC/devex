@@ -36,6 +36,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/opportunities/publish/:opportunityId',
       permissions: ['*']
     }, {
+      resources: '/api/opportunities/unassign/:opportunityId',
+      permissions: ['*']
+    }, {
       resources: '/api/opportunities/:opportunityId',
       permissions: '*'
     }]

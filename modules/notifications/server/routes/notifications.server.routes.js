@@ -8,10 +8,13 @@ var notificationsPolicy = require('../policies/notifications.server.policy'),
 
 module.exports = function(app) {
 	// Notifications Routes
+	//
+	// these should change and be focussed on templates more when we change to
+	// database stored templates and notification meta data properly
+	//
 	app.route('/api/notifications').all(notificationsPolicy.isAllowed)
 		.get(notifications.list)
 		.post(notifications.create);
-
 	app.route('/api/notifications/:notificationId').all(notificationsPolicy.isAllowed)
 		.get(notifications.read)
 		.put(notifications.update)
@@ -25,6 +28,11 @@ module.exports = function(app) {
 		.get(notifications.readSubscription)
 		.delete(notifications.myDelete);
 
+	//
+	// these are used for subscribing and unsubscribing, currently to updates on
+	// a particular opportunity
+	// TBD: user proile should change to use these as well
+	//
 	app.route('/api/my/notification/:notificationId').all(notificationsPolicy.isAllowed)
 		.delete(notifications.unsubscribeMe)
 		.get(notifications.subscribeMe);
@@ -48,7 +56,7 @@ module.exports = function(app) {
 
 	app.route ('/api/fix/subscriptions').get (notifications.reApplySubscriptions);
 
-	// app.route('/api/cc/tryme').get(notifications.tryme);
+	app.route('/api/cc/tryme').get(notifications.tryme);
 	// app.route('/api/cc/tryme2').get(notifications.tryme2);
 
 	// Finish by binding the Notification middleware

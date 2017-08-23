@@ -33,6 +33,17 @@ Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }
 // -------------------------------------------------------------------------
 //
 // this does the actual work
+// opts: {
+// 	to:
+// 	from:
+// 	subject:
+// 	html:
+// 	text:
+// 	attachments: [{
+// 		filename: 'blah.pdf',
+// 		path: '/path/to/blah.pdf'
+// 	}]
+// }
 //
 // -------------------------------------------------------------------------
 var sendmail = function (opts) {
@@ -50,44 +61,6 @@ var sendmail = function (opts) {
 	});
 };
 exports.send = sendmail;
-// // -------------------------------------------------------------------------
-// //
-// // this is a throwback to the older way of doing things
-// //
-// // -------------------------------------------------------------------------
-// var notifier = function (notificationCode, type) {
-// 	return {
-// 		//
-// 		// since notify bc keeps its own subscription id, we just pass one back
-// 		//
-// 		subscribe : function (emailAddress) {
-// 			// console.log ('subscribe ',emailAddress, notificationCode);
-// 			var p = new Subscription ();
-// 			return Promise.resolve ({id: p._id.toString ()});
-// 		},
-// 		//
-// 		// updating is a no-op, we already updated the user record somewhere
-// 		//
-// 		subscribeUpdate : function (subscriptionId, emailAddress) {
-// 			// console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
-// 			return Promise.resolve ();
-// 		},
-// 		//
-// 		// unsubscribe is also a no-op, as this is handled already in the caller
-// 		//
-// 		unsubscribe : function (subscriptionId) {
-// 			// console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
-// 			return Promise.resolve ();
-// 		},
-// 		//
-// 		// notify is more fun, we have to get all the users and BCC them
-// 		//
-// 		notify : function (messageObj) {
-// 			// console.log ('notify ',messageObj, notificationCode);
-// 			return sendmail (messageObj);
-// 		}
-// 	}
-// };
 
 // -------------------------------------------------------------------------
 //
@@ -128,9 +101,12 @@ var getTemplates = function (notification, data) {
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
 		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-subject.md'), 'utf8')
 	});
-	template.subject  = template.subjectTemplate ({data: data});
-	template.htmlBody = template.bodyTemplate ({data: data});
-	template.textBody = htmlToText.fromString (template.htmlBody, { wordwrap: 130 });
+
+	var attachment      = path.resolve('./modules/core/server/email_templates/'+fname+'-attachment.pdf');
+	template.attachment = (fs.existsSync (attachment)) ? attachment : '';
+	template.subject    = template.subjectTemplate ({data: data});
+	template.htmlBody   = template.bodyTemplate ({data: data});
+	template.textBody   = htmlToText.fromString (template.htmlBody, { wordwrap: 130 });
 	return template;
 };
 //
@@ -142,8 +118,11 @@ var getTemplatesMerge = function (subscriptions, notification, data) {
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
 		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-body.md'), 'utf8'),
-		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-subject.md'), 'utf8')
+		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+fname+'-subject.md'), 'utf8'),
+		attachment : path.resolve('./modules/core/server/email_templates/'+fname+'-attachment.pdf')
 	});
+	var attachment = path.resolve('./modules/core/server/email_templates/'+fname+'-attachment.pdf');
+	template.attachment = (fs.existsSync (attachment)) ? attachment : '';
 	return subscriptions.map (function (sub) {
 		data.username = sub.user.displayName;
 		data.subscriptionId = sub.subscriptionId;
@@ -441,17 +420,48 @@ exports.notifyObject = function (notificationidOrObject, data) {
 		//
 		return getSubscriptionsForNotification (notification.code)
 		.then (function (subscriptions) {
-			// console.log ('subscriptions to '+notification.code, subscriptions);
 			return getTemplatesMerge (subscriptions, notification, data);
 		})
 		.then (function (emails) {
-	// console.log ('++ Notifications: notifyObject '+notification.code+' sending to '+emails.length+' people');
 			return Promise.all (emails.map (function (message) {
-				// return notifier (notification.code, 'email').notify (message);
 				return sendmail (message);
 			}));
 		});
 	});
+};
+// -------------------------------------------------------------------------
+//
+// send a notification ad hoc, just needs to match up with a template
+// data will be the data object we are binding. it should also contain:
+// username : user name as wanted in template
+// useremail: the email to send to
+// filename: if there is an attachment, the real name of it
+//
+// -------------------------------------------------------------------------
+exports.notifyUserAdHoc = function (templatename, data) {
+	data.domain = getDomain ();
+	var template  =  compileTemplates ({
+		body    : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+templatename+'-body.md'), 'utf8'),
+		subject : fs.readFileSync(path.resolve('./modules/core/server/email_templates/'+templatename+'-subject.md'), 'utf8')
+	});
+	var attachment = path.resolve('./modules/core/server/email_templates/'+data.filename);
+	if (fs.existsSync (attachment)) template.attachment = attachment ;
+	var htmlbody = template.bodyTemplate ({data: data});
+	var textbody = htmlToText.fromString (htmlbody, { wordwrap: 130 });
+	var mailopts = {
+		to      : data.useremail,
+		subject : template.subjectTemplate ({data: data}),
+		html    : htmlbody,
+		text    : textbody
+	};
+	if (template.attachment) {
+		mailopts.attachments = [{
+			filename: data.filename,
+			path: template.attachment
+		}];
+	}
+	// console.log ('mail opts', mailopts);
+	return sendmail (mailopts);
 };
 
 // -------------------------------------------------------------------------
@@ -890,5 +900,10 @@ exports.countFollowingOpportunity = function (oppcode) {
 			if (err) reject (err);
 			else resolve (result);
 		});
+
 	});
+};
+exports.tryme = function (req, res) {
+	getTemplates ({target:'program', event:'add'}, {});
+	res.json({ok:true});
 };

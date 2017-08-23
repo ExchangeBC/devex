@@ -42,6 +42,12 @@ module.exports = function(app) {
     .all(opportunitiesPolicy.isAllowed)
     .get(opportunities.publish)
     .delete(opportunities.unpublish);
+  //
+  // unassign the assigned proposal
+  //
+  app.route('/api/opportunities/unassign/:opportunityId')
+    .all(opportunitiesPolicy.isAllowed)
+    .put(opportunities.unassign);
 
   //
   // modify users

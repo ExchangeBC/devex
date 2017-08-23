@@ -152,7 +152,7 @@
 						<p>Attachments: {{vm.opportunity.proposal.attachments.length}}</p>
 					</div>
 					<div class="col-md-2">
-						&nbsp;
+						<button class="btn btn-warning" ng-if="vm.canEdit" ng-click="vm.unassign()">UNASSIGN</button>
 					</div>
 					<div class="col-md-2" ng-if="vm.canEdit || vm.isMember">
 						<a ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>

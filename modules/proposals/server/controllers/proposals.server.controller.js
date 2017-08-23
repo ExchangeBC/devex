@@ -255,10 +255,11 @@ var updateUserRole = function (userid, oppcode) {
 		);
 	});
 };
-var updateOpportunityStatus = function (oppid, proposalid) {
+var removeUserRole = function (userid, oppcode) {
 	return new Promise (function (resolve, reject) {
-		Opportunity.findByIdAndUpdate (oppid,
-		    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
+		User.findByIdAndUpdate (userid,
+		    { '$pop': { 'roles':  oppcode} },
+		    { 'new': true, 'upsert': true },
 		    function (err, m) {
 		        if (err) reject (err);
 		        else resolve (m);
@@ -266,37 +267,60 @@ var updateOpportunityStatus = function (oppid, proposalid) {
 		);
 	});
 };
+var updateOpportunityStatus = function (oppid, proposalid) {
+	return Opportunities.assign (oppid, proposalid);
+	// return new Promise (function (resolve, reject) {
+	// 	Opportunity.findByIdAndUpdate (oppid,
+	// 	    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
+	// 	    function (err, m) {
+	// 	        if (err) reject (err);
+	// 	        else resolve (m);
+	// 	    }
+	// 	);
+	// });
+};
 // -------------------------------------------------------------------------
 //
 // assigns a proposal to the opportunity
 //
 // -------------------------------------------------------------------------
 exports.assign = function (req, res) {
-	console.log ('assigning');
-	req.body.status = 'Assigned';
-	var proposal = _.assign (req.proposal, req.body);
+	// console.log ('assigning');
+	var proposal = req.proposal;
+	proposal.status = 'Assigned';
 	helpers.applyAudit (proposal, req.user);
 	saveProposal (proposal)
 	.then (function (p) {
-		console.log ('saved now setting user as member', p);
+		// console.log ('saved now setting user as member', p);
 		proposal = p;
 		return updateUserRole (proposal.user._id, proposal.opportunity.code);
-		// return Opportunities.assignMember (proposal.opportunity, proposal.user);
 	})
 	.then (function () {
-		github.lockIssue ({
-			repo   : proposal.opportunity.github,
-			number : proposal.opportunity.issueNumber
+		// console.log ('proposal', proposal);
+		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user);
+	})
+	.then (function () {res.json (proposal); })
+	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+};
+// -------------------------------------------------------------------------
+//
+// unassign gets called from the opportunity side, so jusy do the work
+// and return a promise
+//
+// -------------------------------------------------------------------------
+exports.unassign = function (proposal, user) {
+	// console.log ('unassigning');
+	return new Promise (function (resolve, reject) {
+		proposal.status = 'Submitted';
+		helpers.applyAudit (proposal, user);
+		saveProposal (proposal)
+		.then (function (p) {
+			proposal = p;
+			// return updateUserRole (proposal.user._id, proposal.opportunity.code);
+			return removeUserRole (proposal.user._id, proposal.opportunity.code);
+			// return Opportunities.assignMember (proposal.opportunity, proposal.user);
 		})
-	})
-	.then (function () {
-		return updateOpportunityStatus (proposal.opportunity._id, proposal._id);
-	})
-	.then (function () {
-		res.json (proposal);
-	})
-	.catch (function (e) {
-		res.status(422).send ({ message: errorHandler.getErrorMessage(e) });
+		.then (resolve, reject);
 	});
 };
 // -------------------------------------------------------------------------
