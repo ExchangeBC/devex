@@ -54,7 +54,8 @@ module.exports = function(app) {
 	app.route('/api/subscribe/:externalSubscriptionId/:notificationId')
 		.get(notifications.subscribeExternal);
 
-	app.route ('/api/fix/subscriptions').get (notifications.reApplySubscriptions);
+	app.route ('/api/fix/subscriptions').all(notificationsPolicy.isAllowed).get(notifications.reApplySubscriptions);
+	app.route ('/api/check/subscriptions').all(notificationsPolicy.isAllowed).get(notifications.checkSubscriptions);
 
 	app.route('/api/cc/tryme').get(notifications.tryme);
 	// app.route('/api/cc/tryme2').get(notifications.tryme2);

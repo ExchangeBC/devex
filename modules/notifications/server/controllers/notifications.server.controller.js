@@ -420,6 +420,13 @@ exports.notifyObject = function (notificationidOrObject, data) {
 		//
 		return getSubscriptionsForNotification (notification.code)
 		.then (function (subscriptions) {
+			var subs = [];
+			subscriptions.map (function (s) {
+				if (s.user && s.user.email) subs.push (s);
+			});
+			return subs;
+		})
+		.then (function (subscriptions) {
 			return getTemplatesMerge (subscriptions, notification, data);
 		})
 		.then (function (emails) {
@@ -871,6 +878,29 @@ exports.externalSubscriptionById = function (req, res, next, id) {
 
 
 exports.reApplySubscriptions = function (req, res) {
+	if (!!~req.user.roles.indexOf ('admin')) {
+	    var User = mongoose.model ('User');
+		User.find ({notifyOpportunities:true}, function (err, users) {
+			users.map (function (u) {
+				return exports.subscribe ('not-add-opportunity', u);
+			});
+			res.json ({ok:true});
+			// Promise.all (users.map (function (u) {
+			// 	return exports.subscribe ('not-add-opportunity', u);
+			// }))
+			// .then (function () {
+			// 	res.json ({ok:true});
+			// })
+			// .catch (function (err) {
+			// 	res.status(404).json ({ok:err});
+			// });
+		});
+	}
+	else {
+		res.status(404).json({ok:false});
+	}
+};
+exports.checkSubscriptions = function (req, res) {
 	if (!!~req.user.roles.indexOf ('admin')) {
 	    var User = mongoose.model ('User');
 		User.find ({notifyOpportunities:true}, function (err, users) {

@@ -41,6 +41,9 @@ exports.invokeRolesPolicies = function () {
 		}, {
 			resources: '/api/fix/subscriptions',
 			permissions: '*'
+		}, {
+			resources: '/api/check/subscriptions',
+			permissions: '*'
 		}
 		]
 	}, {
