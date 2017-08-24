@@ -44,7 +44,7 @@ environments {
 //
 // phantomJs --> “./gradlew phantomJsTest”   (headless)
 // chrome    --> "./gradlew chromeTest"
-baseUrl = "https://bcdevexchange.org"
+baseUrl = "http://platform-dev.pathfinder.gov.bc.ca"
 
 baseNavigatorWaiting = true
 
