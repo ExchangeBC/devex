@@ -36,11 +36,21 @@ node('maven') {
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
              returnStdout: true
               ).trim()
+			  
 			TEST_PASSWORD = sh (
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
              returnStdout: true
-              ).trim() 
-            sh './gradlew --debug --stacktrace phantomJsTest -DTEST_USERNAME="${TEST_USERNAME}" -DTEST_PASSWORD="{$TEST_PASSWORD}"'
+              ).trim()
+			  
+			echo "TEST_USERNAME: ${TEST_USERNAME}"
+			echo "TEST_PASSWORD: ${TEST_PASSWORD}"
+			
+			environment {
+				TEST_USERNAME = "${TEST_USERNAME}"
+				TEST_PASSWORD = "${TEST_PASSWORD}"
+			}
+
+            sh './gradlew --debug --stacktrace phantomJsTest'
       }
    }
 }
