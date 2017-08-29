@@ -90,6 +90,7 @@ var funcs = {
 				method  : 'patch',
 				headers : headers,
 				body    : JSON.stringify ({
+					title  : opts.title,
 					body   : opts.body
 				})
 			})
