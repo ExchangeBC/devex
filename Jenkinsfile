@@ -23,6 +23,7 @@ node('maven') {
             sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
         }
     }
+	
 	stage('build') {
 	 echo "Building..."
 	 openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
@@ -44,13 +45,8 @@ node('maven') {
 			  
 			echo "TEST_USERNAME: ${TEST_USERNAME}"
 			echo "TEST_PASSWORD: ${TEST_PASSWORD}"
-			
-			environment {
-				TEST_USERNAME = "${TEST_USERNAME}"
-				TEST_PASSWORD = "${TEST_PASSWORD}"
-			}
 
-            sh './gradlew --debug --stacktrace phantomJsTest'
+            sh "TEST_USERNAME=${TEST_USERNAME}\nTEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
       }
    }
 }
