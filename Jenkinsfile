@@ -23,7 +23,7 @@ node('maven') {
 			echo "TEST_USERNAME: ${TEST_USERNAME}"
 			echo "TEST_PASSWORD: ${TEST_PASSWORD}"
 
-            sh "./gradlew --debug --stacktrace phantomJsTest -DTEST_USERNAME=${TEST_USERNAME} -DTEST_PASSWORD=${TEST_PASSWORD}"
+            sh "TEST_USERNAME=${TEST_USERNAME}\nTEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
       }
    }
 }
