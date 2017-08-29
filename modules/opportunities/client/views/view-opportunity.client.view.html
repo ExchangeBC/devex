@@ -51,17 +51,19 @@
 			</div>
 		</div>
 
-		<div class="row text-right" style="margin-right: 0px;">
-			<div class="btn-group">
-				<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
-				<i class="glyphicon glyphicon-edit"></i> Edit
-				</button>
-				<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
-				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
-				</a>
-				<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
-				<i class="glyphicon glyphicon-check"></i> Publish
-				</a>
+		<div class="row">	
+			<div class="col-xs-12 text-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
+					<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
+					<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+					</a>
+					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
+					<i class="glyphicon glyphicon-check"></i> Publish
+					</a>
+				</div>
 			</div>
 		</div>
 
@@ -81,8 +83,8 @@
 
 	<!--<div class="panel panel-default panel-flat card-panel">-->
 <div class="container">
-	<div class="card card-flat">
-		<div class="card-header">
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<div class="row">
 				<div class="col-sm-5">
 					<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
@@ -115,13 +117,15 @@
 					<!-- github link -->
 					<dt>Code:</dt>
 					<dd>
-					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0"><a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> View Issue on Github</a>
+					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0"><a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
 					<!--<dt>Assigned to:</dt>
 					<dd>
 						<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
 						<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
 					</dl>
 				</div>
+
+				<!-- skills list -->
 				<div class="col-sm-12">
 					<dl ng-if="vm.opportunity.skills.length">
 						<!--<dt>Required Skills:</dt>-->
@@ -130,12 +134,14 @@
 						</dd>
 					</dl>
 				</div>
+
 			</div>
 		</div>
 
 		<div class="panel-body">
-		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
-		<div  ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+			<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
+		
+			<div  ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
 				<h4>Opportunity Assigned to</h4>
 				<div class="card card-block">
 					<div class="card-img">
@@ -158,9 +164,10 @@
 						<a ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
 					</div>
 				</div>
+			</div>
 		</div>
 
-		<div class="panel-body" style="background-color: #e6e6e6;">
+		<div class="panel-heading">
 			<p style="font-size: 16px; color: black; padding-top: 10px;">
 			This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <i><a href="/codewithus">Code With Us</a></i>.
 			</p>
@@ -170,8 +177,9 @@
 			<p ng-bind-html="vm.display.description"></p>
 		</div>
 
-		<div class="panel-body" style="background-color: #f2f2f2">
+		<div class="panel-body">
 			<h5>Acceptance Criteria</h5>
+			<p>To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
 			<p ng-bind-html="vm.display.criteria"></p>
 		</div>
 
@@ -182,16 +190,17 @@
 
 		<div class="panel-body style">
 			<h5>How to Apply</h5>
-			<p>Please send a proposal to <b>{{vm.opportunity.proposalEmail}}</b> by <b>{{vm.deadline}}</b>.</p>
-			<p>With your email, to indicate your acceptance of the <i>Code With Us</i> terms, you must attach a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> with the required information asked for in the "Acceptance" section of the document.</p>
-			<p>If we are satisfied with the proposals we receive, we will assign this opportunity by <b>{{vm.assignment}}</b> with work proposed to start on <b>{{vm.start}}</b>.</p>
+			<p>Click the Apply button above and submit your proposal by <b>{{vm.deadline}}</b>.</p>
+			<p>If we are satisfied with the proposals we receive, we plan to assign this opportunity by <b>{{vm.assignment}}</b> with work to start on <b>{{vm.start}}</b>.</p>
+			<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>
 			<br>
 			<h5>Proposal Evaluation Criteria</h5>
+			<p>We will score proposals by the following criteria:</p>
 			<p ng-bind-html="vm.display.evaluation"></p>
 			<br>
 		</div>
 
-		<div class="panel-body" style="background-color: #f2f2f2; text-align: center;">
+		<div class="panel-footer" style="text-align: center;">
 			<h5><i class="fa fa-comments fa-2x"></i>&nbsp; Questions?</h5>
 			<p style="font-size: 16px; font-weight: 500">
 			<a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
@@ -228,10 +237,8 @@
 
 
 	<div class="col-xs-12 text-right">
-		<div style="text-align: right;">
 			<label class="label-danger" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" uib-tooltip="No one can see this page until you publish it."><i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
 			</label>
-		</div>
 		<div class="btn-group">
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
 				<i class="glyphicon glyphicon-edit"></i> Edit
