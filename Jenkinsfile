@@ -32,7 +32,15 @@ node('maven') {
 	
 	stage('validation') {
           dir('functional-tests'){
-                 sh './gradlew --debug --stacktrace phantomJsTest'
+			TEST_USERNAME = sh (
+             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
+             returnStdout: true
+              ).trim()
+			TEST_PASSWORD = sh (
+             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
+             returnStdout: true
+              ).trim() 
+            sh './gradlew --debug --stacktrace phantomJsTest -DTEST_USERNAME="${TEST_USERNAME}" -DTEST_PASSWORD="{$TEST_PASSWORD}"'
       }
    }
 }
