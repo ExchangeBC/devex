@@ -6,7 +6,7 @@ var fetch  = require('node-fetch');
 
 var githubAPI   = 'https://api.github.com';
 var githubRepos = githubAPI+'/repos/';
-var accessToken = config.github.accessToken;
+var accessToken = config.github.personalAccessToken;
 // console.log ('access token = ', accessToken);
 var headers = {
 	'Content-Type' : 'application/json',
