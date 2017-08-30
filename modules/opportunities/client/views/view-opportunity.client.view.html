@@ -117,7 +117,7 @@
 					<!-- github link -->
 					<dt>Code:</dt>
 					<dd>
-					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0"><a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
+					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
 					<!--<dt>Assigned to:</dt>
 					<dd>
 						<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
@@ -203,7 +203,7 @@
 		<div class="panel-footer" style="text-align: center;">
 			<h5><i class="fa fa-comments fa-2x"></i>&nbsp; Questions?</h5>
 			<p style="font-size: 16px; font-weight: 500">
-			<a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
+			<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.
 			</p>
 		</div>
 
