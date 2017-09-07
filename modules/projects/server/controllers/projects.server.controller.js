@@ -331,7 +331,7 @@ exports.delete = function (req, res) {
 exports.list = function (req, res) {
 	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
-	Project.find(searchTerm (req)).sort('name')
+	Project.find(searchTerm (req)).sort('activity name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('program', 'code title logo isPublished')

@@ -89,6 +89,10 @@
 					</div>
 					<input type="text" name="taglist" ng-model="vm.project.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 				</div>
+				<div class="form-group" ng-if="vm.isAdmin">
+					<label class="control-label" for="activity">Activity Level Indicator</label>
+					<input type="text" name="activity" ng-model="vm.project.activity" id="activity" class="form-control" placeholder="Tag List"></input>
+				</div>
 			</fieldset>
 	</div>
 	</div>

@@ -63,6 +63,7 @@ var ProjectSchema = new Schema({
     type: Schema.ObjectId,
     ref: 'User'
   },
+  activity: {type: Number, default:1},
   tags: [String]
 });
 
