@@ -20,9 +20,13 @@
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
-		ppp.detail    = $sce.trustAsHtml(ppp.proposal.detail);
+		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
+		// -------------------------------------------------------------------------
+		//
+		// close the window
+		//
+		// -------------------------------------------------------------------------
 		ppp.close = function (result) {
-	// console.log ('closing!!!!!');
 			$uibModalInstance.dismiss('cancel');
 		};
 		ppp.type = function (type) {
@@ -63,7 +67,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService) {
+	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService) {
 		var ppp           = this;
 		// $scope.vm        = ppp;
 		ppp.title         = editing ? 'Edit' : 'Create' ;
@@ -104,6 +108,44 @@
 			else if (status === 'Draft') return 'Submit';
 			else if (status === 'Submitted') return 'label-success';
 		}
+		// -------------------------------------------------------------------------
+		//
+		// things to do with leaving the form without saving
+		//
+		// -------------------------------------------------------------------------
+		var saveChangesModalOpt = {
+			closeButtonText: 'Return To Proposal',
+			actionButtonText: 'Continue',
+			headerText: 'Unsaved Changes!',
+			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
+		};
+		var pristineProposal = angular.toJson (ppp.proposal);
+		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+			console.log ('checking for changes');
+			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+				console.log ('found changes');
+				if (toState.retryInProgress) {
+					toState.retryInProgress = false;
+					return;
+				}
+				modalService.showModal ({}, saveChangesModalOpt)
+				.then(function continueStateChange (result) {
+					toState.retryInProgress = true;
+					$state.go(toState, toParams);
+				}, function () {
+				});
+				event.preventDefault();
+			}
+		});
+		window.onbeforeunload = function() {
+			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
+			}
+		};
+		$scope.$on('$destroy', function () {
+			window.onbeforeunload = null;
+			$locationChangeStartUnbind ();
+		});
 		// -------------------------------------------------------------------------
 		//
 		// save the user - promise
@@ -190,7 +232,15 @@
 		// -------------------------------------------------------------------------
 		ppp.close = function (result) {
 	// console.log ('closing!!!!!');
-			$uibModalInstance.dismiss('cancel');
+			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+				modalService.showModal ({}, saveChangesModalOpt)
+				.then(function continueStateChange (result) {
+					window.onbeforeunload = null;
+					$locationChangeStartUnbind ();
+					$uibModalInstance.dismiss('cancel');
+				}, function () {
+				});
+			}
 
 			// var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 			// 		// console.log ('started stateChangeStart');

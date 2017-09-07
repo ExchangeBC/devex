@@ -51,7 +51,7 @@
 			</div>
 		</div>
 
-		<div class="row">	
+		<div class="row">
 			<div class="col-xs-12 text-right">
 				<div class="btn-group">
 					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})" uib-tooltip="Edit this page">
@@ -60,7 +60,7 @@
 					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
 					<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
 					</a>
-					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
+					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
 					<i class="glyphicon glyphicon-check"></i> Publish
 					</a>
 				</div>
@@ -85,6 +85,12 @@
 <div class="container">
 	<div class="panel panel-default">
 		<div class="panel-heading">
+			<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+				<div class="alert alert-info" role="alert">
+					You cannot publish this opportunity until all fields have been properly filled out, when you are ready to publish
+					please edit the opportunity and complete the field entry.
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-sm-5">
 					<h5 class="card-title" style="font-family: sans-serif; font-size: 20px;"><b>{{vm.opportunity.earn|currency}}</b></h5>
@@ -140,7 +146,7 @@
 
 		<div class="panel-body">
 			<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Submitted Proposals"></proposal-list>
-		
+
 			<div  ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
 				<h4>Opportunity Assigned to</h4>
 				<div class="card card-block">
@@ -190,8 +196,8 @@
 
 		<div class="panel-body style">
 			<h5>How to Apply</h5>
-			<p>Click the Apply button above and submit your proposal by <b>{{vm.deadline}}</b>.</p>
-			<p>If we are satisfied with the proposals we receive, we plan to assign this opportunity by <b>{{vm.assignment}}</b> with work to start on <b>{{vm.start}}</b>.</p>
+			<p>Click the Apply button above and submit your proposal before <b>{{vm.deadline}}</b>.</p>
+			<p>We plan to assign this opportunity by <b>{{vm.assignment}}</b> with work to start on <b>{{vm.start}}</b>.</p>
 			<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>
 			<br>
 			<h5>Proposal Evaluation Criteria</h5>
@@ -246,7 +252,7 @@
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Right now, this opportunity is live and anyone can view it. You can unpublish it here.">
 				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
 			</a>
-			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
+			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-default" ng-click="vm.publish(vm.opportunity, true)" uib-tooltip="Ready to publish this opportunity to the world?">
 				<i class="glyphicon glyphicon-check"></i> Publish
 			</a>
 		</div>

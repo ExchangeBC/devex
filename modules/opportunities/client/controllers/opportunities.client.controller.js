@@ -70,9 +70,19 @@
 		var dt = vm.opportunity.deadline;
 		vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.assignment;
-		vm.assignment = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+		vm.assignment = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.start;
 		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+		// -------------------------------------------------------------------------
+		//
+		// can this be published?
+		//
+		// -------------------------------------------------------------------------
+		var o = vm.opportunity;
+
+		vm.canPublish = (o.name && o.short && o.description && o.github && o.location && o.criteria && o.earn && o.evaluation && o.proposalEmail && o.deadline && o.assignment && o.start);
+		console.log (o.name , o.short , o.description , o.github , o.location , o.criteria , o.earn , o.evaluation , o.proposalEmail , o.deadline , o.assignment , o.start);
+		console.log (vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -363,12 +373,23 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+
 	// console.log (vm);
-			vm.form.opportunityForm.$setPristine ();
+			// vm.opportunityForm.$setPristine ();
 			// console.log ('saving form', vm.opportunity);
+			if (!vm.opportunity.name) {
+				Notification.error ({
+					message : 'You must enter a title for your opportunity',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
 			if (!isValid) {
-				// console.log ('form is not valid');
-				$scope.$broadcast('show-errors-check-validity', 'vm.form.opportunityForm');
+				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
+				Notification.error ({
+					message : 'There are errors on the page, please review your work and re-save',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
 				return false;
 			}
 			// vm.opportunity.tags   = vm.opportunity.taglist.split(/ *, */);
@@ -418,7 +439,7 @@
 				//
 	      		promise.then(function() {
 					if (savemeSeymour) {
-	// console.log ('saving');
+	console.log ('saving', vm.opportunity);
 						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 						// vm.opportunity.start      = new Date (vm.opportunity.start);
@@ -431,7 +452,7 @@
 				//
 				.then (function (res) {
 	// console.log ('saved');
-					vm.form.opportunityForm.$setPristine ();
+					vm.opportunityForm.$setPristine ();
 					// console.log ('now saved the new opportunity, redirect user');
 					Notification.success ({
 						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'

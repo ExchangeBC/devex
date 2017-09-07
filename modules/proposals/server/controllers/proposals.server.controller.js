@@ -267,18 +267,18 @@ var removeUserRole = function (userid, oppcode) {
 		);
 	});
 };
-var updateOpportunityStatus = function (oppid, proposalid) {
-	return Opportunities.assign (oppid, proposalid);
-	// return new Promise (function (resolve, reject) {
-	// 	Opportunity.findByIdAndUpdate (oppid,
-	// 	    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
-	// 	    function (err, m) {
-	// 	        if (err) reject (err);
-	// 	        else resolve (m);
-	// 	    }
-	// 	);
-	// });
-};
+// var updateOpportunityStatus = function (oppid, proposalid) {
+// 	return Opportunities.assign (oppid, proposalid);
+// 	// return new Promise (function (resolve, reject) {
+// 	// 	Opportunity.findByIdAndUpdate (oppid,
+// 	// 	    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
+// 	// 	    function (err, m) {
+// 	// 	        if (err) reject (err);
+// 	// 	        else resolve (m);
+// 	// 	    }
+// 	// 	);
+// 	// });
+// };
 // -------------------------------------------------------------------------
 //
 // assigns a proposal to the opportunity
@@ -297,7 +297,7 @@ exports.assign = function (req, res) {
 	})
 	.then (function () {
 		// console.log ('proposal', proposal);
-		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user);
+		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user, req.user);
 	})
 	.then (function () {res.json (proposal); })
 	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });

@@ -283,10 +283,33 @@ exports.requests = function (opportunity, cb) {
 };
 
 var oppBody = function (opp) {
+	var dt = opp.deadline;
+	var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	var deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+	dt = opp.assignment;
+	var assignment = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+	dt = opp.start;
+	var start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+	var earn = helpers.formatMoney (opp.earn, 2);
+	var locs = {
+		offsite : 'In-person work NOT required',
+		onsite  : 'In-person work required',
+		mixed   : 'Some in-person work required'
+	}
 	var div = '<br/><p><hr/></p><br/>';
-	var ret = opp.description;
+	var ret = '';
+	ret += 'Value: '+earn;
+	ret += 'Closes: '+deadline;
+	ret += 'Location: '+opp.location+' '+locs[opp.onsite];
+	ret += '<h2>Opportunity Description</h2>';
+	ret += opp.description;
 	ret += '<h2>Acceptance Criteria</h2>';
 	ret += opp.criteria;
+	ret += '<h2>How to Apply</h2>';
+	ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
+	ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
+	ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
 	ret += '<h2>Proposal Evaluation Criteria</h2>';
 	ret += opp.evaluation;
 	return ret;
@@ -541,7 +564,7 @@ exports.unassign = function (req, res) {
 // assign the passed in proposal
 //
 // -------------------------------------------------------------------------
-exports.assign = function (opportunityId, proposalId, proposalUser) {
+exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 	// console.log ('opp asasign', opportunityId, proposalId, proposalUser);
 	return new Promise (function (resolve, reject) {
 		Opportunity.findById (opportunityId)
@@ -566,6 +589,8 @@ exports.assign = function (opportunityId, proposalId, proposalUser) {
 					data.username = proposalUser.displayName;
 					data.useremail = proposalUser.email;
 					data.filename = 'cwuterms.pdf';
+					data.assignor = user.displayName;
+					data.assignoremail = opportunity.proposalEmail;
 					Notifications.notifyUserAdHoc ('assignopp', data);
 					return github.addCommentToIssue ({
 						comment : 'This opportunity has been assigned',
