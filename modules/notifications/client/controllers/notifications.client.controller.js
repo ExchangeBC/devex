@@ -76,7 +76,6 @@
 		};
 		vm.save = function (isValid) {
 			vm.form.notificationForm.$setPristine ();
-			// console.log ('saving form', vm.notification);
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.notificationForm');
 				return false;
@@ -90,7 +89,6 @@
 			//
 			.then (function (res) {
 				vm.form.notificationForm.$setPristine ();
-				// console.log ('now saved the new notification, redirect user');
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> notification saved successfully!'
 				});

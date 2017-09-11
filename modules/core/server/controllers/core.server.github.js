@@ -7,7 +7,6 @@ var fetch  = require('node-fetch');
 var githubAPI   = 'https://api.github.com';
 var githubRepos = githubAPI+'/repos/';
 var accessToken = config.github.personalAccessToken;
-// console.log ('access token = ', accessToken);
 var headers = {
 	'Content-Type' : 'application/json',
 	'Accept'       : 'application/vnd.github.v3.full+json'
@@ -39,12 +38,10 @@ var funcs = {
 	//
 	// -------------------------------------------------------------------------
 	createIssue: function (opts) {
-		// console.log ('create an issue', opts);
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
 			var url = githubRepos+opts.repo+'/issues?access_token='+opts.token
-			// console.log ('fetching ', url);
 			return fetch (url, {
 				method  : 'post',
 				headers : headers,
@@ -58,7 +55,6 @@ var funcs = {
 				return res.json();
 			})
 			.then (function (json) {
-				// console.log (json);
 				if (!json.number) reject (json);
 				else resolve (json);
 			})
@@ -80,12 +76,10 @@ var funcs = {
 	//
 	// -------------------------------------------------------------------------
 	editIssue: function (opts) {
-		// console.log ('edit an issue', opts);
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'?access_token='+opts.token
-			// console.log ('fetching ', url);
 			return fetch (url, {
 				method  : 'patch',
 				headers : headers,
@@ -98,7 +92,6 @@ var funcs = {
 				return res.json();
 			})
 			.then (function (json) {
-				// console.log (json);
 				if (!json.number) reject (json);
 				else resolve (json);
 			})
@@ -120,12 +113,10 @@ var funcs = {
 	//
 	// -------------------------------------------------------------------------
 	lockIssue: function (opts) {
-		// console.log ('lock an issue', opts);
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token
-			// console.log ('fetching ', url);
 			return fetch (url, {
 				method  : 'put',
 				body    : '',
@@ -141,12 +132,10 @@ var funcs = {
 		});
 	},
 	unlockIssue: function (opts) {
-		// console.log ('lock an issue', opts);
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token;
-			// console.log ('github ', url);
 			return fetch (url, {
 				method  : 'delete',
 				body    : '',
@@ -167,7 +156,6 @@ var funcs = {
 	//
 	// -------------------------------------------------------------------------
 	addCommentToIssue: function (opts) {
-		// console.log ('add comment to issue');
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
@@ -182,11 +170,8 @@ var funcs = {
 					'Accept': 'application/vnd.github.v3.full+json'
 				}
 			};
-			// console.log ('github :', url);
-			// console.log ('payload:', payload);
 			return fetch (url, payload)
 			.then (function (r) {
-				// console.log ('r:',r);
 				resolve (true);
 			});
 		});

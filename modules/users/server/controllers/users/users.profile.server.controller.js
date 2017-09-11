@@ -50,16 +50,13 @@ var whitelistedFields = [
  */
 exports.update = function (req, res) {
 	// Init Variables
-	// console.log ('updaint guser');
 	var user = req.user;
 	var prevState = _.cloneDeep(req.user);
 	if (user) {
 		// Update whitelisted fields only
-	// console.log ('old user', req.user);
 
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
-	// console.log ('new user', user);
 		// Previous state of user
 		var oldUser = User.find({_id: user._id});
 		//
@@ -104,17 +101,14 @@ exports.update = function (req, res) {
 
 
 function subscriptionHandler(user, oldUser) {
-	// console.log ('++subscriptionHandler');
 	var promise = Promise.resolve();
 	if (user.email == null || user.email === '') {
-	// console.log ('user email is either null or blank, cannot subscribe');
 		return promise;
 	}
 	if (user.notifyOpportunities) {
 		// promise = oppEmailNotifier.subscribe(user.email)
 		promise = Notifications.subscribe ('not-add-opportunity', user)
 			.then(function(json) {
-	// console.log ('subscribe json:', json);
 				// we save the id for the subscription so that was can unsubscribe at
 				// a later point.
 				user.subscribeOpportunitiesId = json.id;
@@ -192,10 +186,8 @@ exports.changeProfilePicture = function (req, res) {
 
 			upload(req, res, function (uploadError) {
 				if (uploadError) {
-	// console.log ('error uploading',uploadError);
 					reject(errorHandler.getErrorMessage(uploadError));
 				} else {
-					// console.log ('uploaded');
 					resolve();
 				}
 			});
@@ -204,11 +196,8 @@ exports.changeProfilePicture = function (req, res) {
 
 	function updateUser () {
 		return new Promise(function (resolve, reject) {
-			// console.log ('req.file.filename', req.file);
 			user.profileImageURL = '/'+config.uploads.profileUpload.display + req.file.filename;
-			// console.log ('new profile = ', user.profileImageURL);
 			user.save(function (err, theuser) {
-				// console.log ('the user', theuser);
 				if (err) {
 					reject(err);
 				} else {
@@ -223,7 +212,6 @@ exports.changeProfilePicture = function (req, res) {
 			if (existingImageUrl !== User.schema.path('profileImageURL').defaultValue) {
 				fs.unlink(existingImageUrl, function (unlinkError) {
 					if (unlinkError) {
-						// console.log(unlinkError);
 						reject({
 							message: 'Error occurred while deleting old profile picture'
 						});

@@ -31,7 +31,6 @@
 					queryObject = {};
 					queryObject[$scope.idstring] = $scope.model._id;
 					modelService.getMembers (queryObject).$promise.then (function (result) {
-					// console.log ('resetting member list', result);
 						vm.members = result;
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
@@ -47,7 +46,6 @@
 					var adminMessage = 'Are you sure you want to remove this member?';
 					var userMessage = 'Are you sure you want to remove yourself from this membership list?';
 					var message = (type === 'admin') ? adminMessage : userMessage;
-					// console.log ('delete user ', username, userid);
 					if (confirm (message)) {
 						queryObject.userId = userid;
 						modelService.denyMember (queryObject).$promise.then (function () {
@@ -56,7 +54,6 @@
 					}
 				};
 				$rootScope.$on('updateMembers', function (event, message) {
-					// console.log ('received broadcast');
 					reset ();
 				});
 				reset ();
@@ -90,7 +87,6 @@
 					queryObject = {};
 					queryObject[$scope.idstring] = $scope.model._id;
 					modelService.getRequests (queryObject).$promise.then (function (result) {
-						// console.log ('resetting member request list', result);
 						vm.members = result;
 						var columnLength = Math.floor (result.length / 2) + (result.length % 2);
 						vm.columns = [{
@@ -103,21 +99,18 @@
 					});
 				}
 				vm.confirm = function (userid, username) {
-					// console.log ('confirm user ', username, userid);
 					queryObject.userId = userid;
 					modelService.confirmMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
 					});
 				};
 				vm.deny = function (userid, username) {
-					// console.log ('deny user ', username, userid);
 					queryObject.userId = userid;
 					modelService.denyMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
 					});
 				};
 				$rootScope.$on('updateMembers', function (event, message) {
-					// console.log ('received broadcast');
 					reset ();
 				});
 				reset ();

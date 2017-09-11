@@ -96,12 +96,10 @@
 					}
 				};
 				var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event) {
-					if ($scope.parentForm.$dirty) {
-						if ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
-							// cancel to not allow.
+					if ( ($scope.parentForm.$dirty)  && ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') )  ) {							// cancel to not allow.
 							event.preventDefault();
 							return false;
-						}
+
 					}
 				});
 				$scope.$on('destroy', function () {

@@ -48,7 +48,6 @@ Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false }
 // -------------------------------------------------------------------------
 var sendmail = function (opts) {
 	opts.from = config.mailer.from;
-	// console.log ('Sending mail to '+opts.to+' : '+opts.subject);
 	return new Promise (function (resolve, reject) {
 		smtpTransport.sendMail (opts, function (err) {
 			if (err) {
@@ -90,11 +89,9 @@ var getDomain = function () {
 			domain = 'http://' + d;
 		}
 	}
-	// console.log (chalk.green('domain is '+domain, process.env.DOMAIN));
 	return domain;
 }
 var getTemplates = function (notification, data) {
-	// console.log ('getTemplates');
 	data.domain = getDomain ();
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
@@ -113,7 +110,6 @@ var getTemplates = function (notification, data) {
 // this is for internal use where we do the merge
 //
 var getTemplatesMerge = function (subscriptions, notification, data) {
-	// console.log ('getTemplates');
 	data.domain = getDomain ();
 	var fname     = notification.target.toLowerCase()+'-'+notification.event.toLowerCase();
 	var template  =  compileTemplates ({
@@ -128,7 +124,6 @@ var getTemplatesMerge = function (subscriptions, notification, data) {
 		data.subscriptionId = sub.subscriptionId;
 		var htmlbody = template.bodyTemplate ({data: data});
 		var textbody = htmlToText.fromString (htmlbody, { wordwrap: 130 });
-		// console.log (textbody);
 		return {
 			to      : sub.user.email,
 			subject : template.subjectTemplate ({data: data}),
@@ -143,7 +138,6 @@ var getTemplatesMerge = function (subscriptions, notification, data) {
 //
 // -------------------------------------------------------------------------
 var getNotificationByID = function (id) {
-	// console.log ('getNotificationByID:', id);
 	return new Promise (function (resolve, reject) {
 		if (id.substr && id.substr (0, 3) === 'not' ) {
 			Notification.findOne({code:id}).exec(function (err, notification) {
@@ -178,7 +172,6 @@ var getNotificationByID = function (id) {
 	});
 };
 var resolveNotification = function (notification) {
-	// console.log ('resolveNotification:', notification);
 	if (typeof (notification) === 'object' && notification._id) {
 		return Promise.resolve (notification);
 	} else {
@@ -403,11 +396,9 @@ exports.unsubscribeUserAll = function (user) {
 // 	});
 // };
 exports.notifyObject = function (notificationidOrObject, data) {
-	// console.log ('in notifyObject', data);
 
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
-		// console.log ('++ Notifications: notifyObject '+notification.code);
 		//
 		// for internal use, message is
 		// {
@@ -467,7 +458,6 @@ exports.notifyUserAdHoc = function (templatename, data) {
 			path: template.attachment
 		}];
 	}
-	// console.log ('mail opts', mailopts);
 	return sendmail (mailopts);
 };
 
@@ -647,10 +637,8 @@ exports.saveNotification = function (notification) {
 	return new Promise (function (resolve, reject) {
 		notification.save (function (err) {
 			if (err) {
-	// console.log ('Error saving notification: '+notification.code, err);
 				reject (err);
 			} else {
-	// console.log ('notification saved: '+notification.code);
 				resolve (notification);
 			}
 		});
@@ -682,8 +670,6 @@ exports.create = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.addNotification = function (obj) {
-	// console.log ('++ Programatically adding a new notification:');
-	// console.log (obj);
 	return exports.createNotification ({
 		code   : obj.code,
 		name   : obj.name,
@@ -769,7 +755,6 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-	// console.log ('get a new notification set up and return it');
 	var p = new Notification ();
 	res.json(p);
 };

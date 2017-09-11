@@ -62,18 +62,15 @@ var unsetOpportunityAdmin = function (opportunity, user) {
 	user.removeRoles ([memberRole(opportunity), adminRole(opportunity)]);
 };
 var unsetOpportunityRequest = function (opportunity, user) {
-	// console.log ('remove role ', requestRole(opportunity));
 	user.removeRoles ([requestRole(opportunity)]);
 };
 var ensureAdmin = function (opportunity, user, res) {
 	if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
-		// console.log ('NOT admin');
 		res.status(422).send({
 			message: 'User Not Authorized'
 		});
 		return false;
 	} else {
-		// console.log ('Is admin');
 		return true;
 	}
 };
@@ -83,8 +80,6 @@ var searchTerm = function (req, opts) {
 	if (!me.isAdmin) {
 		opts['$or'] = [{isPublished:true}, {code: {$in: me.opportunities.admin}}];
 	}
-	// console.log ('me = ', me);
-	// console.log ('opts = ', opts);
 	return opts;
 };
 // -------------------------------------------------------------------------
@@ -259,7 +254,6 @@ var oppBody = function (opp) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-	// console.log ('Creating a new opportunity');
 	var opportunity = new Opportunity(req.body);
 	//
 	// set the code, this is used setting roles and other stuff
@@ -327,7 +321,6 @@ exports.update = function (req, res) {
 	// if we dont have permission to do this just return as a no-op
 	//
 	if (!ensureAdmin (req.opportunity, req.user, res)) {
-	// console.log ('NOT ALLOWED');
 		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 	}
 	//
@@ -339,7 +332,6 @@ exports.update = function (req, res) {
 	// set the audit fields so we know who did what when
 	//
 	helpers.applyAudit (opportunity, req.user);
-	// console.log ('got here with opp', req.opportunity);
 
 	//
 	// save
@@ -347,7 +339,6 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		// console.log ('++ update notification data', data);
 		if (opportunity.isPublished) {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
@@ -364,7 +355,6 @@ exports.update = function (req, res) {
 				res.json (decorate (opportunity, req.user ? req.user.roles : []));
 			})
 			.catch (function (err) {
-				// console.log (err);
 				res.status(422).send({
 					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
 				});
@@ -389,7 +379,6 @@ var pub = function (req, res, isToBePublished) {
 	// if no change or we dont have permission to do this just return as a no-op
 	//
 	if (req.opportunity.isPublished === isToBePublished || !ensureAdmin (req.opportunity, req.user, res)) {
-	// console.log ('NOT ALLOWED');
 		return res.json (decorate (req.opportunity, req.user ? req.user.roles : []));
 	}
 	//
@@ -404,9 +393,6 @@ var pub = function (req, res, isToBePublished) {
 		opportunity.lastPublished = new Date ();
 		opportunity.wasPublished = true;
 	}
-	// console.log ('opportunity.ispublished', opportunity.isPublished);
-	// console.log ('firstTime', firstTime);
-	// console.log ('isToBePublished', isToBePublished);
 
 	//
 	// save and notify
@@ -414,7 +400,6 @@ var pub = function (req, res, isToBePublished) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		// console.log ('++ publish notification data', data);
 		if (firstTime)   Notifications.notifyObject ('not-add-opportunity'             , data);
 		else if (isToBePublished) {
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
@@ -486,7 +471,6 @@ exports.unassign = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.assign = function (opportunityId, proposalId, proposalUser, user) {
-	// console.log ('opp asasign', opportunityId, proposalId, proposalUser);
 	return new Promise (function (resolve, reject) {
 		Opportunity.findById (opportunityId)
 		.exec (function (err, opportunity) {
@@ -536,9 +520,7 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-	// console.log ('Deleting');
 	if (ensureAdmin (req.opportunity, req.user, res)) {
-		// console.log ('Deleting');
 
 		var opportunity = req.opportunity;
 		opportunity.remove(function (err) {
@@ -656,7 +638,6 @@ exports.assignMember = assignMember;
 exports.unassignMember = unassignMember;
 exports.confirmMember = function (req, res) {
 	var user = req.model;
-	// console.log ('++++ confirm member ', user.username, user._id);
 	var assignedMember;
 	//
 	// assign the member
@@ -695,7 +676,6 @@ exports.confirmMember = function (req, res) {
 };
 exports.denyMember = function (req, res) {
 	var user = req.model;
-	// console.log ('++++ deny member ', user.username, user._id);
 	unassignMember (req.opportunity, user)
 	.then (function (result) {
 		res.json (result);
@@ -772,7 +752,6 @@ exports.forProgram = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-	// console.log ('get a new opportunity set up and return it');
 	var p = new Opportunity ();
 	res.json(p);
 };

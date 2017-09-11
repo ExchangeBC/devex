@@ -37,7 +37,6 @@
 			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
 		ppp.downloadfile = function (fileid) {
-	// console.log ('fileid', fileid);
 			ProposalsService.downloadDoc ({
 				proposalId: ppp.proposal._id,
 				documentId: fileid
@@ -71,9 +70,7 @@
 		var ppp           = this;
 		// $scope.vm        = ppp;
 		ppp.title         = editing ? 'Edit' : 'Create' ;
-	// console.log ('prop', proposal);
 		ppp.proposal      = angular.copy (proposal);
-	// console.log ('ppp.proposal', ppp.proposal);
 		ppp.user          = angular.copy (Authentication.user);
 		var pristineUser = angular.toJson(Authentication.user);
 		ppp.tinymceOptions = {
@@ -97,7 +94,6 @@
 		if (!editing) {
 			ppp.proposal.status = 'New';
 		}
-	// console.log ('ppp.user', ppp.user);
 		ppp.statusColour = function (status) {
 			if (status === 'New') return 'label-default';
 			else if (status === 'Draft') return 'label-primary';
@@ -121,9 +117,7 @@
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
 		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-			// console.log ('checking for changes');
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				// console.log ('found changes');
 				if (toState.retryInProgress) {
 					toState.retryInProgress = false;
 					return;
@@ -154,9 +148,7 @@
 		var saveuser = function () {
 			return new Promise (function (resolve, reject) {
 				if (pristineUser !== angular.toJson(ppp.user)) {
-	// console.log ('ppp.user._id', ppp.user._id);
 					// var nu = new UsersService.$update (ppp.user);
-					// console.log ('nu._id', nu);
 					// nu.$update (
 					UsersService.update (ppp.user).$promise
 					.then (
@@ -231,7 +223,6 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.close = function (result) {
-	// console.log ('closing!!!!!');
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
 				modalService.showModal ({}, saveChangesModalOpt)
 				.then(function continueStateChange (result) {
@@ -309,13 +300,11 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
-	// console.log ('submitting!!!!!');
 			saveuser().then (function () {
 				copyuser ();
 				ProposalsService.submit (ppp.proposal).$promise
 				.then (
 					function (response) {
-	// console.log ('response = ', response);
 						ppp.proposal = response;
 						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
 					},
@@ -331,8 +320,6 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.upload = function (file) {
-			// console.log ('name = ', name);
-	// console.log ('uploading!', file);
 			Upload.upload({
 				url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
 				data: {
@@ -341,12 +328,10 @@
 			})
 			.then(
 				function (response) {
-	// console.log ('response', response);
 					ppp.proposal = response.data;
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
 				},
 				function (response) {
-	// console.log (response.data);
 					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
 				},
 				function (evt) {
@@ -355,13 +340,11 @@
 
 		};
 		ppp.deletefile = function (fileid) {
-	// console.log ('fileid', fileid);
 			ProposalsService.removeDoc ({
 				proposalId: ppp.proposal._id,
 				documentId: fileid
 			}).$promise
 			.then (function (doc) {
-	// console.log ('doc', doc);
 				ppp.proposal = doc;
 				$scope.$apply();
 			});

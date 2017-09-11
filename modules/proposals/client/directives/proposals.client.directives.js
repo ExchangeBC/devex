@@ -18,7 +18,6 @@
 			bindToController: true,
 			controller   : function ($scope, ProposalsService, Authentication, Notification) {
 				var qaz = this;
-				// console.log ('qaz.proposal', qaz.proposal);
 				//
 				// we need to determine which of several possibilities we have
 				//

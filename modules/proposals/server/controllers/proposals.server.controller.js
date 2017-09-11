@@ -36,7 +36,6 @@ var path = require('path'),
 
 var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
 var streamFile = function (res, file, name, mime) {
-	// console.log ('stream file ',file, name, mime);
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
 		if (!yes) {
@@ -75,7 +74,6 @@ var ensureAdmin = function (opportunity, user, res) {
 		// });
 		return false;
 	} else {
-		// console.log ('Is admin');
 		return true;
 	}
 };
@@ -285,18 +283,15 @@ var removeUserRole = function (userid, oppcode) {
 //
 // -------------------------------------------------------------------------
 exports.assign = function (req, res) {
-	// console.log ('assigning');
 	var proposal = req.proposal;
 	proposal.status = 'Assigned';
 	helpers.applyAudit (proposal, req.user);
 	saveProposal (proposal)
 	.then (function (p) {
-		// console.log ('saved now setting user as member', p);
 		proposal = p;
 		return updateUserRole (proposal.user._id, proposal.opportunity.code);
 	})
 	.then (function () {
-		// console.log ('proposal', proposal);
 		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user, req.user);
 	})
 	.then (function () {res.json (proposal); })
@@ -309,7 +304,6 @@ exports.assign = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.unassign = function (proposal, user) {
-	// console.log ('unassigning');
 	return new Promise (function (resolve, reject) {
 		proposal.status = 'Submitted';
 		helpers.applyAudit (proposal, user);
@@ -372,7 +366,6 @@ exports.list = function (req, res) {
 // -------------------------------------------------------------------------
 exports.forOpportunity = function (req, res) {
 	if (!ensureAdmin (req.opportunity, req.user, res)) {
-	// console.log ('NOT ALLOWED');
 		return res.json ([]);
 	}
 	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
@@ -397,7 +390,6 @@ exports.forOpportunity = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-	// console.log ('get a new proposal set up and return it');
 	var p = new Proposal ();
 	res.json(p);
 };
@@ -457,7 +449,6 @@ exports.uploaddoc = function (req, res) {
 				res.status(422).send(uploadError);
 			} else {
 				var storedname = req.file.path ;
-	// console.log ('req.file:', req.file);
 				var originalname = req.file.originalname;
 				addAttachment (req, res, proposal, originalname, storedname, req.file.mimetype)
 			}

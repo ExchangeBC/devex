@@ -35,7 +35,6 @@
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || project.userIs.admin;
-		// console.log ('vm = ', vm);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -170,7 +169,6 @@
 		};
 		vm.save = function (isValid) {
 			vm.form.projectForm.$setPristine ();
-			// console.log ('saving form', vm.project);
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.projectForm');
 				return false;
@@ -196,7 +194,6 @@
 			//
 			.then (function (res) {
 				vm.form.projectForm.$setPristine ();
-				// console.log ('now saved the new project, redirect user');
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'
 				});

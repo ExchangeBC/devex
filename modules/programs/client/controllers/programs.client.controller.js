@@ -89,7 +89,6 @@
 		vm.picFile = null;
 
 		vm.previousState = previousState;
-		// console.log ('program',program);
 		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.editing        = editing;
@@ -134,7 +133,6 @@
 		};
 		vm.save = function (isValid) {
 			vm.form.programForm.$setPristine ();
-			// console.log ('saving form');
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
 				return false;
@@ -157,7 +155,6 @@
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> program saved successfully!'
 				});
-				// console.log ('now saved the new program, redirect user');
 				//
 				// saved the record, now we can upload the logo if it was changed at all
 				//
@@ -187,7 +184,6 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.upload = function (url, name, programId) {
-			// console.log ('name = ', name);
 			return new Promise (function (resolve, reject) {
 				Upload.upload ({
 					url: '/api/upload/logo/program/'+programId,

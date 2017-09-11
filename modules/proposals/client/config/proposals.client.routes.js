@@ -59,8 +59,6 @@
 				// but NOT insidethe resolves. ??????
 				//
 				var proid = $stateParams.proposalId;
-				// console.log ('go get proposal:', proid);
-				// console.log ('go get opp:', oppid);
 				$uibModal.open ({
 					size: 'lg',
 					templateUrl: '/modules/proposals/client/views/view-proposal.client.view.html',
@@ -124,8 +122,6 @@
 				//
 				var proid = $stateParams.proposalId;
 				var oppid = $stateParams.opportunityId;
-				// console.log ('go get proposal:', proid);
-				// console.log ('go get opp:', oppid);
 				$uibModal.open ({
 					size: 'lg',
 					templateUrl: '/modules/proposals/client/views/edit-proposal.client.view.html',

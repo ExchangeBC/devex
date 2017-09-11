@@ -65,18 +65,15 @@ var unsetProgramAdmin = function (program, user) {
 	user.removeRoles ([memberRole(program), adminRole(program)]);
 };
 var unsetProgramRequest = function (program, user) {
-	// console.log ('remove role ', requestRole(program));
 	user.removeRoles ([requestRole(program)]);
 };
 var ensureAdmin = function (program, user, res) {
 	if (!~user.roles.indexOf (adminRole(program)) && !~user.roles.indexOf ('admin')) {
-		// console.log ('NOT admin');
 		res.status(422).send({
 			message: 'User Not Authorized'
 		});
 		return false;
 	} else {
-		// console.log ('Is admin');
 		return true;
 	}
 };
@@ -169,7 +166,6 @@ exports.requests = function (program, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function (req, res) {
-	// console.log ('Creating a new program');
 	var program = new Program(req.body);
 	//
 	// set the code, this is used for setting roles and other stuff
@@ -275,7 +271,6 @@ exports.update = function (req, res) {
 					return Notifications.notifyObject (code, program);
 				}))
 				.catch (function (err) {
-	// console.log (err);
 				})
 				.then (function () {
 					res.json (decorate (program, req.user ? req.user.roles : []));
@@ -293,9 +288,7 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-	// console.log ('Deleting');
 	if (ensureAdmin (req.program, req.user, res)) {
-		// console.log ('Deleting');
 
 		var program = req.program;
 		program.remove(function (err) {
@@ -385,7 +378,6 @@ exports.request = function (req, res) {
 // -------------------------------------------------------------------------
 exports.confirmMember = function (req, res) {
 	var user = req.model;
-	// console.log ('++++ confirm member ', user.username, user._id);
 	unsetProgramRequest (req.program, user);
 	setProgramMember (req.program, user);
 	user.save (function (err, result) {
@@ -394,14 +386,12 @@ exports.confirmMember = function (req, res) {
 				message: errorHandler.getErrorMessage (err)
 			});
 		} else {
-			// console.log ('---- member roles ', result.roles);
 			res.json (result);
 		}
 	});
 };
 exports.denyMember = function (req, res) {
 	var user = req.model;
-	// console.log ('++++ deny member ', user.username, user._id);
 	unsetProgramRequest (req.program, user);
 	unsetProgramMember (req.program, user);
 	user.save (function (err, result) {
@@ -410,7 +400,6 @@ exports.denyMember = function (req, res) {
 				message: errorHandler.getErrorMessage (err)
 			});
 		} else {
-			// console.log ('---- member roles ', result.roles);
 			res.json (result);
 		}
 	});
@@ -422,7 +411,6 @@ exports.denyMember = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.new = function (req, res) {
-	// console.log ('get a new program set up and return it');
 	var p = new Program ();
 	res.json(p);
 };
@@ -491,7 +479,6 @@ exports.logo = function (req, res) {
 		.then (up.updateDocument)
 		.then (up.deleteOldImage)
 		.then (function () {
-			// console.log ('program', program);
 			res.json (program);
 		})
 		.catch (function (err) {

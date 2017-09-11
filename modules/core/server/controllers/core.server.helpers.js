@@ -86,7 +86,7 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 					if (err) {
 						reject(err);
 					} else {
-						resolve();
+						resolve(result);
 					}
 				});
 			});
@@ -94,16 +94,8 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 		deleteOldImage : function () {
 			return new Promise(function (resolve, reject) {
 				if (existingImageUrl !== Model.schema.path(field).defaultValue) {
-					fs.unlink(existingImageUrl, function (unlinkError) {
+					fs.unlink(existingImageUrl, function () {
 						resolve ();
-						// if (unlinkError) {
-						// 	console.log(unlinkError);
-						// 	resolve({
-						// 		message: 'Error occurred while deleting old profile picture'
-						// 	});
-						// } else {
-						// 	resolve();
-						// }
 					});
 				} else {
 					resolve();
@@ -113,10 +105,10 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 
 	}
 }
-exports.formatMoney = function(n, c, d, t){
-var c = isNaN(c = Math.abs(c)) ? 2 : c,
-    d = d === undefined ? '.' : d,
-    t = t === undefined ? ',' : t,
+exports.formatMoney = function(n, ic, id, iit){
+var c = isNaN(c = Math.abs(ic)) ? 2 : c,
+    d = id === undefined ? '.' : id,
+    t = iit === undefined ? ',' : iit,
     s = n < 0 ? '-' : '',
     i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
     var j = i.length;
@@ -131,7 +123,6 @@ exports.formatDate = function (d) {
     'August', 'September', 'October',
     'November', 'December'
   ];
- // console.log ('date', d);
   var day = d.getDate();
   var monthIndex = d.getMonth();
   var year = d.getFullYear();

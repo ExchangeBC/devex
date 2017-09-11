@@ -81,8 +81,6 @@
 		var o = vm.opportunity;
 
 		vm.canPublish = (o.name && o.short && o.description && o.github && o.location && o.criteria && o.earn && o.evaluation && o.proposalEmail && o.deadline && o.assignment && o.start);
-		// console.log (o.name , o.short , o.description , o.github , o.location , o.criteria , o.earn , o.evaluation , o.proposalEmail , o.deadline , o.assignment , o.start);
-		// console.log (vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -107,9 +105,7 @@
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
 			if (state) {
-				var question = opportunity.wasPublished ?
-					'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?' :
-					'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+				var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
 				promise = ask.yesNo (question).then (function (result) {
 					savemeSeymour = result;
 				});
@@ -117,13 +113,15 @@
 				promise.then(function() {
 					if (savemeSeymour) {
 						opportunity.isPublished = state;
-						if (state) return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
-						else return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
+						if (state)
+							return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
+						else
+							return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
 						// return opportunity.createOrUpdate();
 					}
 					else return Promise.reject ({data:{message:'Publish Cancelled'}});
 				})
-				.then (function (res) {
+				.then (function () {
 					//
 					// success, notify
 					//
@@ -167,7 +165,6 @@
 			var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
 			ask.yesNo (q).then (function (r) {
 				if (r) {
-					// console.log ('opportunityId:opportunity._id',opportunity._id);
 					OpportunitiesService.unassign ({opportunityId:opportunity._id}).$promise
 					.then (
 						function (response) {
@@ -223,7 +220,6 @@
 	//
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask) {
-		var rightNow                          = new Date();
 		var vm                                = this;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
@@ -234,8 +230,6 @@
 		vm.isAdmin                            = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                              = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.projects                           = projects;
-		// console.log ('projects             = ', projects);
-		// console.log ('stateParams          = ', $stateParams);
 		vm.editing                            = editing;
 		vm.opportunity                        = opportunity;
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
@@ -266,12 +260,6 @@
 		//
 		// if editing, set from existing
 		//
-		// console.log ('editing', vm.editing);
-		// console.log ('programId', vm.programId);
-		// console.log ('programTitle', vm.programTitle);
-		// console.log ('projectId', vm.projectId);
-		// console.log ('projectTitle', vm.projectTitle);
-		// console.log ('context', vm.context);
 		if (vm.editing) {
 			vm.programId    = opportunity.program._id;
 			vm.programTitle = opportunity.program.title;
@@ -285,11 +273,11 @@
 			else if (vm.context === 'program') {
 				vm.projectLink         = false;
 				vm.opportunity.program = vm.programId;
-				var projects           = [];
+				var lprojects           = [];
 				vm.projects.forEach (function (o) {
-					if (o.program._id === vm.programId) projects.push (o);
+					if (o.program._id === vm.programId) lprojects.push (o);
 				});
-				vm.projects = projects;
+				vm.projects = lprojects;
 			}
 			else if (vm.context === 'project') {
 				vm.projectLink         = true;
@@ -339,8 +327,7 @@
 		// select box
 		//
 		// -------------------------------------------------------------------------
-		vm.updateProgramProject = function (selected) {
-			// console.log ('selected', vm.projectobj);
+		vm.updateProgramProject = function () {
 			vm.projectId    = vm.projectobj._id;
 			vm.projectTitle = vm.projectobj.name;
 			vm.programId    = vm.projectobj.program._id;
@@ -374,9 +361,7 @@
 		};
 		vm.save = function (isValid) {
 
-	// console.log (vm);
 			// vm.opportunityForm.$setPristine ();
-			// console.log ('saving form', vm.opportunity);
 			if (!vm.opportunity.name) {
 				Notification.error ({
 					message : 'You must enter a title for your opportunity',
@@ -439,7 +424,6 @@
 				//
 	      		promise.then(function() {
 					if (savemeSeymour) {
-	// console.log ('saving', vm.opportunity);
 						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 						// vm.opportunity.start      = new Date (vm.opportunity.start);
@@ -450,25 +434,18 @@
 				//
 				// success, notify and return to list
 				//
-				.then (function (res) {
-	// console.log ('saved');
+				.then (function () {
 					vm.opportunityForm.$setPristine ();
-					// console.log ('now saved the new opportunity, redirect user');
 					Notification.success ({
 						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 					});
-					if (editing) {
-						$state.go('opportunities.view', {opportunityId:opportunity.code});
-					} else {
-						$state.go('opportunities.view', {opportunityId:opportunity.code});
-						// $state.go('opportunities.list');
-					}
+
+					$state.go('opportunities.view', {opportunityId:opportunity.code});
 				})
 				//
 				// fail, notify and stay put
 				//
 				.catch (function (res) {
-	// console.log ('caught');
 					Notification.error ({
 						message : res.data.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'

@@ -40,7 +40,6 @@ var sendmail = function (opts) {
 	});
 };
 var getNotificationByID = function (id) {
-	// console.log ('getNotificationByID:', id);
 	return new Promise (function (resolve, reject) {
 		if (id.substr && id.substr (0, 3) === 'not' ) {
 			Notification.findOne({code:id}).exec(function (err, notification) {
@@ -143,7 +142,6 @@ exports.notifier = function (notificationCode, type) {
 		// since notify bc keeps its own subscription id, we just pass one back
 		//
 		subscribe : function (emailAddress) {
-			// console.log ('subscribe ',emailAddress, notificationCode);
 			var p = new Subscription ();
 			return Promise.resolve ({id: p._id.toString ()});
 		},
@@ -151,21 +149,18 @@ exports.notifier = function (notificationCode, type) {
 		// updating is a no-op, we already updated the user record somewhere
 		//
 		subscribeUpdate : function (subscriptionId, emailAddress) {
-			// console.log ('subscribeUpdate ',subscriptionId, emailAddress, notificationCode, subscriptionId);
 			return Promise.resolve ();
 		},
 		//
 		// unsubscribe is also a no-op, as this is handled already in the caller
 		//
 		unsubscribe : function (subscriptionId) {
-			// console.log ('unsubscribe ',subscriptionId, notificationCode, subscriptionId);
 			return Promise.resolve ();
 		},
 		//
 		// notify is more fun, we have to get all the users and BCC them
 		//
 		notify : function (messageObj) {
-			// console.log ('notify ',messageObj, notificationCode);
 			return sendmail (messageObj);
 		}
 	}
