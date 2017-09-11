@@ -26,8 +26,7 @@ exports.signup = function (req, res) {
   var user = new User(req.body);
   user.provider = 'local';
   user.displayName = user.firstName + ' ' + user.lastName;
-if (user.government)
-  user.roles = ['gov-request','user'];
+  if (user.government) user.roles = ['gov-request','user'];
 
   // Then save the user
   user.save(function (err) {
@@ -215,7 +214,7 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
 /**
  * Remove OAuth provider
  */
-exports.removeOAuthProvider = function (req, res, next) {
+exports.removeOAuthProvider = function (req, res) {
   var user = req.user;
   var provider = req.query.provider;
 

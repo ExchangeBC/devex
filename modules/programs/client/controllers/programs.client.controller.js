@@ -58,7 +58,7 @@
 			//
 			// success, notify and return to list
 			//
-			.then (function (res) {
+			.then (function () {
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Program '+t+' Successfully!'
 				});
@@ -137,12 +137,6 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.programForm');
 				return false;
 			}
-			// vm.program.tags = vm.program.taglist.split(/ *, */);
-			// if (vm.program.taglist !== '') {
-			// 	vm.program.tags = vm.program.taglist.split(/ *, */);
-			// } else {
-			// 	vm.program.tags = [];
-			// }
 			//
 			// Create a new program, or update the current instance
 			//
@@ -150,7 +144,7 @@
 			//
 			// success, notify and return to list
 			//
-			.then (function (res) {
+			.then (function () {
 				vm.form.programForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> program saved successfully!'
@@ -160,12 +154,7 @@
 				//
 				((vm.fileSelected) ? vm.upload (vm.croppedDataUrl, vm.picFile, vm.program._id) : Promise.resolve ())
 				.then (function () {
-					if (editing) {
 						$state.go('programs.view', {programId:program.code});
-					} else {
-						$state.go('programs.view', {programId:program.code});
-						// $state.go('programs.list');
-					}
 				});
 			})
 			//
@@ -192,7 +181,7 @@
 					}
 				})
 				.then (
-					function (response) {
+					function () {
 						$timeout (function () {
 							Notification.success ({ message: '<i class="glyphicon glyphicon-ok"></i> Update of logo successful!' });
 							vm.fileSelected = false;

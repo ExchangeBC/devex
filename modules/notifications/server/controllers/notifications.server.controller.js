@@ -19,7 +19,6 @@ var path             = require('path'),
 	Handlebars       = require('handlebars'),
 	htmlToText       = require('html-to-text'),
 	config           = require(path.resolve('./config/config')),
-	nodemailer       = require('nodemailer'),
 	chalk            = require('chalk'),
 	_                = require('lodash');
 var nodemailer   = require('nodemailer');

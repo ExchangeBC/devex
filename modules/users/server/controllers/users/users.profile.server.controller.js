@@ -43,7 +43,6 @@ var whitelistedFields = [
 	'businessProvince' ,
 	'businessCode'
 ];
-// var oppEmailNotifier = notifier('opportunities', 'email');
 
 /**
  * Update user details
@@ -58,7 +57,6 @@ exports.update = function (req, res) {
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
 
 		// Previous state of user
-		var oldUser = User.find({_id: user._id});
 		//
 		// this deals with marking the user as government or not
 		//
@@ -100,7 +98,7 @@ exports.update = function (req, res) {
 };
 
 
-function subscriptionHandler(user, oldUser) {
+function subscriptionHandler(user) {
 	var promise = Promise.resolve();
 	if (user.email == null || user.email === '') {
 		return promise;
@@ -140,7 +138,7 @@ function subscriptionHandler(user, oldUser) {
 			.then(function() {
 				user.subscribeOpportunitiesId = null;
 			})
-			.catch(function(err) {
+			.catch(function() {
 				// if there was an error, reset the notifyOpportunites flag
 			})
 	}
@@ -156,7 +154,6 @@ exports.changeProfilePicture = function (req, res) {
 	var user = req.user;
 	var storage = multer.diskStorage (config.uploads.diskStorage);
 	var upload = multer({storage: storage}).single('newProfilePicture');
-	// var upload = multer(config.uploads.profileUpload).single('newProfilePicture');
 	var profileUploadFileFilter = require(path.resolve('./config/lib/multer')).profileUploadFileFilter;
 	var existingImageUrl;
 
@@ -197,7 +194,7 @@ exports.changeProfilePicture = function (req, res) {
 	function updateUser () {
 		return new Promise(function (resolve, reject) {
 			user.profileImageURL = '/'+config.uploads.profileUpload.display + req.file.filename;
-			user.save(function (err, theuser) {
+			user.save(function (err) {
 				if (err) {
 					reject(err);
 				} else {
@@ -295,8 +292,7 @@ exports.removeSelf = function (req, res) {
 		var id = req.user._id;
 		req.logout();
 		res.redirect('/');
-		User.remove({_id: id}, function (err, user) {
-		});
+		User.remove({_id: id}, function () {});
 
 	}
 };

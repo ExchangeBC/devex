@@ -8,7 +8,7 @@
 	// =========================================================================
 	.controller('NotificationsListController', function (notifications) {
 		var vm      = this;
-		vm.notifications = notifications; // NotificationsService.query();
+		vm.notifications = notifications;
 	})
 	// =========================================================================
 	//
@@ -87,17 +87,12 @@
 			//
 			// success, notify and return to list
 			//
-			.then (function (res) {
+			.then (function () {
 				vm.form.notificationForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> notification saved successfully!'
 				});
-				if (editing) {
-					$state.go('notifications.view', {notificationId:notification.code});
-				} else {
-					// $state.go('notifications.list');
-					$state.go('notifications.view', {notificationId:notification.code});
-				}
+				$state.go('notifications.view', {notificationId:notification.code});
 			})
 			//
 			// fail, notify and stay put

@@ -340,7 +340,7 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.forOpportunity = function (req, res) {
-	if (!ensureAdmin (req.opportunity, req.user, res)) {
+	if (!ensureAdmin (req.opportunity, req.user)) {
 		return res.json ([]);
 	}
 	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
