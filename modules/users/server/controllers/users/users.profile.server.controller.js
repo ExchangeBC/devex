@@ -50,7 +50,6 @@ var whitelistedFields = [
 exports.update = function (req, res) {
 	// Init Variables
 	var user = req.user;
-	var prevState = _.cloneDeep(req.user);
 	if (user) {
 		// Update whitelisted fields only
 
@@ -70,7 +69,7 @@ exports.update = function (req, res) {
 		user.updated = Date.now();
 		user.displayName = user.firstName + ' ' + user.lastName;
 
-		subscriptionHandler(user, prevState)
+		subscriptionHandler(user)
 		.then(function() {
 			return user.save(function (err) {
 				if (err) {
@@ -118,20 +117,6 @@ function subscriptionHandler(user) {
 				user.notifyOpportunites = false;
 			});
 	}
-	// else if (emailChanged && user.notifyOpportunities && user.subscribeOpportunitiesId !== null ) {
-	//
-	// CC: depricated as we are no longer maintaining a seperate database
-	//
-	// else if (emailChanged && user.notifyOpportunities) {
-	// 	// we need to update the subscription
-	// 	// promise = oppEmailNotifier.subscribeUpdate(user.subscribeOpportunitiesId, user.email)
-	// 	promise = Notifications.subscribeUpdateUserNotification ('not-add-opportunity', user)
-	// 		.catch(function(err) {
-	// 			// if there was an error, reset the notifyOpportunites flag
-	// 			console.error('Could not update subscription for user due to error from notification ' +
-	// 				'service:' + err);
-	// 		});
-	// }
 	else if (!user.notifyOpportunities ) {
 		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
 		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)

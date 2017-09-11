@@ -17,7 +17,6 @@
     return directive;
 
     function link(scope, element, attrs, ngModel) {
-      var status = true;
       scope.$watch(function () {
         var combined;
         if (scope.passwordVerify || ngModel) {

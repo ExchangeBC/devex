@@ -241,7 +241,7 @@ var resolveSubscription = function (subscription) {
 };
 var getSubscribedUsers = function (notificationCode) {
 	return new Promise (function (resolve, reject) {
-		getNotificationByID (notificationCode).then (function (notification) {
+		getNotificationByID (notificationCode).then (function () {
 			Subscription.find ({notificationCode:notificationCode})
 			.populate ('user', 'email displayName')
 			.exec (function (err, subs) {
@@ -314,7 +314,6 @@ var createSubscription = function (model) {
 //
 // -------------------------------------------------------------------------
 exports.subscribe = function (notificationidOrObject, user) {
-	var notificationDoc;
 	return resolveNotification (notificationidOrObject)
 	.then (function (notification) {
 		var p = new Subscription ();
@@ -326,43 +325,7 @@ exports.subscribe = function (notificationidOrObject, user) {
 		});
 	});
 };
-// exports.subscribe = function (notificationidOrObject, user) {
-// 	var notificationDoc;
-// 	return resolveNotification (notificationidOrObject)
-// 	.then (function (notification) {
-// 		notificationDoc = notification;
-// 		// console.log ('++ Notifications: subscribe'+notification.code+' '+user.email);
-// 		return notifier (notification.code, 'email').subscribe (user.email);
-// 	})
-// 	.then (function (result) {
-// 		// console.log ('subscribe result', result);
-// 		return createSubscription ({
-// 			subscriptionId   : result.id,
-// 			notification     : notificationDoc._id,
-// 			notificationCode : notificationDoc.code,
-// 			user             : user._id
-// 		});
-// 	});
-// };
-//
-// exports.subscribeUpdate = function (subscriptionIdOrObject, user) {
-// 	return resolveSubscription (subscriptionIdOrObject)
-// 	.then (function (subscription) {
-// 		// console.log ('++ Notifications: subscribeUpdate '+subscription.notificationCode+' '+subscription.subscriptionId, user.email);
-// 		return notifier (subscription.notificationCode, 'email').subscribeUpdate (subscription.subscriptionId, user.email);
-// 	});
-// };
-// exports.subscribeUpdateUserNotification = function (notificationidOrObject, user) {
-// 	return resolveNotification (notificationidOrObject)
-// 	.then (function (notification) {
-// 		return getSubscriptionByUserNotification (notification, user);
-// 	})
-// 	.then (function (subscription) {
-// 		return exports.subscribeUpdate (subscription, user);
-// 	});
-// };
 exports.unsubscribe = function (subscriptionIdOrObject) {
-	var subscriptionDoc;
 	return resolveSubscription (subscriptionIdOrObject)
 	.then (function (subscription) {
 		return removeSubscription (subscription);
@@ -386,14 +349,6 @@ exports.unsubscribeUserAll = function (user) {
 		return exports.unsubscribe (subscription, user);
 	});
 };
-// exports.notify = function (notificationidOrObject, message) {
-// 	return resolveNotification (notificationidOrObject)
-// 	.then (function (notification) {
-// 		// console.log ('++ Notifications: notify '+notification.code+' '+message);
-// 		// return notifier (notification.code, 'email').notify (message);
-// 		return sendmail (message);
-// 	});
-// };
 exports.notifyObject = function (notificationidOrObject, data) {
 
 	return resolveNotification (notificationidOrObject)
