@@ -146,7 +146,7 @@ var funcs = {
 		opts.repo = getrepo (opts.repo);
 		return new Promise (function (resolve, reject) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token;
-			console.log ('github ', url);
+			// console.log ('github ', url);
 			return fetch (url, {
 				method  : 'delete',
 				body    : '',

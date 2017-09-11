@@ -81,8 +81,8 @@
 		var o = vm.opportunity;
 
 		vm.canPublish = (o.name && o.short && o.description && o.github && o.location && o.criteria && o.earn && o.evaluation && o.proposalEmail && o.deadline && o.assignment && o.start);
-		console.log (o.name , o.short , o.description , o.github , o.location , o.criteria , o.earn , o.evaluation , o.proposalEmail , o.deadline , o.assignment , o.start);
-		console.log (vm.canPublish);
+		// console.log (o.name , o.short , o.description , o.github , o.location , o.criteria , o.earn , o.evaluation , o.proposalEmail , o.deadline , o.assignment , o.start);
+		// console.log (vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -167,7 +167,7 @@
 			var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
 			ask.yesNo (q).then (function (r) {
 				if (r) {
-					console.log ('opportunityId:opportunity._id',opportunity._id);
+					// console.log ('opportunityId:opportunity._id',opportunity._id);
 					OpportunitiesService.unassign ({opportunityId:opportunity._id}).$promise
 					.then (
 						function (response) {
@@ -439,7 +439,7 @@
 				//
 	      		promise.then(function() {
 					if (savemeSeymour) {
-	console.log ('saving', vm.opportunity);
+	// console.log ('saving', vm.opportunity);
 						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 						// vm.opportunity.start      = new Date (vm.opportunity.start);

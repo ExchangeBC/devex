@@ -121,9 +121,9 @@
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
 		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-			console.log ('checking for changes');
+			// console.log ('checking for changes');
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				console.log ('found changes');
+				// console.log ('found changes');
 				if (toState.retryInProgress) {
 					toState.retryInProgress = false;
 					return;
