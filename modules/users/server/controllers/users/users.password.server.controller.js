@@ -203,7 +203,7 @@ exports.reset = function (req, res, next) {
 /**
  * Change Password
  */
-exports.changePassword = function (req, res, next) {
+exports.changePassword = function (req, res) {
   // Init Variables
   var passwordDetails = req.body;
 

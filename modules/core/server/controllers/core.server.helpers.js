@@ -106,7 +106,7 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 	}
 }
 exports.formatMoney = function(n, ic, id, iit){
-var c = isNaN(c = Math.abs(ic)) ? 2 : c,
+var c = isNaN(ic = Math.abs(ic)) ? 2 : ic,
     d = id === undefined ? '.' : id,
     t = iit === undefined ? ',' : iit,
     s = n < 0 ? '-' : '',
