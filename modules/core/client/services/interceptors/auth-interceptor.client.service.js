@@ -35,6 +35,8 @@
             var Notification = $injector.get('Notification');
             Notification.error({ message: 'No response received from server. Please try again later.', title: 'Error processing request!', delay: 5000 });
             break;
+          default:
+            break;
         }
       }
       // otherwise, default behaviour

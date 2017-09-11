@@ -19,10 +19,8 @@
     return directive;
 
     function compile(elem, attrs) {
-      if (attrs.showErrors.indexOf('skipFormGroupCheck') === -1) {
-        if (!(elem.hasClass('form-group') || elem.hasClass('input-group'))) {
-          throw new Error('show-errors element does not have the \'form-group\' or \'input-group\' class');
-        }
+      if ( (attrs.showErrors.indexOf('skipFormGroupCheck') === -1) && (!(elem.hasClass('form-group') || elem.hasClass('input-group'))) ) {
+        throw new Error('show-errors element does not have the \'form-group\' or \'input-group\' class');
       }
 
       return linkFn;
@@ -33,7 +31,6 @@
           inputNgEl,
           options,
           showSuccess,
-          initCheck = false,
           showValidationMessages = false;
 
         options = scope.$eval(attrs.showErrors) || {};
@@ -55,7 +52,6 @@
 
         function checkValidity(event, name) {
           if (angular.isUndefined(name) || formCtrl.$name === name) {
-            initCheck = true;
             showValidationMessages = true;
 
             return toggleClasses(formCtrl[inputName].$invalid);

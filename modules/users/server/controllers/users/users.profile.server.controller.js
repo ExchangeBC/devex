@@ -255,7 +255,6 @@ exports.changeProfilePicture = function (req, res) {
  */
 exports.me = function (req, res) {
 	// Sanitize the user - short term solution. Copied from core.server.controller.js
-	// TODO create proper passport mock: See https://gist.github.com/mweibel/5219403
 	 // CC:  USERFIELDS
 	var safeUserObject = null;
 	if (req.user) {
