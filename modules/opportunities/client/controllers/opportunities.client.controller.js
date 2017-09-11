@@ -6,7 +6,7 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitiesListController', function (OpportunitiesService, Authentication, subscriptions) {
+	.controller('OpportunitiesListController', function (OpportunitiesService, Authentication) {
 		var vm      = this;
 		vm.opportunities = OpportunitiesService.query();
 		var isUser = Authentication.user;
@@ -17,7 +17,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService, ProposalsService) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService) {
 		var vm                    = this;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state

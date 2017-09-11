@@ -25,24 +25,12 @@ var path = require('path'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
-	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier,
-	// fs = require('fs'),
-	// markdown = require('helper-markdown'),
-	// // HandlebarsIntl = require('handlebars-intl'),
-	// Handlebars = require('handlebars'),
-	// htmlToText = require('html-to-text')
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
 
-// var oppEmailNotifier = notifier('opportunities', 'email');
-
-// Handlebars.registerHelper('markdown', markdown({ breaks: true, xhtmlOut: false}));
-// // HandlebarsIntl.registerWith(Handlebars);
-// var emailBodyTemplateHtml = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/message_body.hbs.md'), 'utf8'));
-// var emailSubjectTemplate = Handlebars.compile(fs.readFileSync(path.resolve('./modules/opportunities/server/email_templates/subject.hbs.md'), 'utf8'));
 
 // -------------------------------------------------------------------------
 //
@@ -182,59 +170,6 @@ var setNotificationData = function (opportunity) {
 		skills               : opportunity.skills.join (', ')
 	};
 };
-// // -------------------------------------------------------------------------
-// //
-// // create an issue in the opportunity repo using the secret from our repos or
-// // from the users'
-// //
-// // -------------------------------------------------------------------------
-// var createIssue = function (opportunity, user) {
-// 	return new Promise (function (resolve, reject) {
-
-// 		var callbackf = function (err, status, body, headers) {
-// 	// console.log ('err', err);
-// 	// console.log ('status', status);
-// 	// console.log ('body', body);
-// 	// console.log ('headers', headers);
-// 			resolve ({
-// 				err: err,
-// 				status: status,
-// 				body: body,
-// 				headers: headers
-// 			});
-// 		};
-// 		var github = require ('octonode');
-// 	// console.log ('octonode', github);
-// 		var accessToken = user.providerData.accessToken;
-// 		var login = user.providerData.login;
-
-// 		var client = github.client (accessToken);
-// 		var ghme = client.me();
-// 		var repo = 'BCDevExchange-app';
-// 		var ghrepo = client.repo ('BCDevExchange/BCDevExchange-app');
-
-// 	// console.log ('ghrepo', ghrepo);
-
-// 		ghme.orgs (callbackf);
-
-// 		// ghrepo.issues (callbackf);
-
-// 		// ghrepo.issue({
-// 		// 'title': 'Test Auto Issue',
-// 		// 'body': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-// 		// 'assignee': login,
-// 		// 'labels': ['Label1', 'Label2']
-// 		// }, callbackf);
-
-// 	});
-
-// };
-// exports.ttt = function (req, res) {
-// 	createIssue (req.opportunity, req.user)
-// 	.then (function (r) {
-// 		res.json (r);
-// 	});
-// };
 // -------------------------------------------------------------------------
 //
 // get a list of all my opportunities, but only ones I have access to as a normal
@@ -353,20 +288,6 @@ exports.create = function(req, res) {
 					target: 'Opportunity',
 					event: 'Update'
 				});
-				// Notifications.addNotification ({
-				// 	code: 'not-unpublish-'+opportunity.code,
-				// 	name: 'Suspension of Opportunity '+opportunity.name,
-				// 	// description: 'Update of Opportunity '+opportunity.name,
-				// 	target: 'Opportunity',
-				// 	event: 'unpublish'
-				// });
-				// Notifications.addNotification ({
-				// 	code: 'not-republish-'+opportunity.code,
-				// 	name: 'Re-Posting of Opportunity '+opportunity.name,
-				// 	// description: 'Update of Opportunity '+opportunity.name,
-				// 	target: 'Opportunity',
-				// 	event: 'republish'
-				// });
 				res.json(opportunity);
 			}
 		});
