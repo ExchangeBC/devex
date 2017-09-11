@@ -477,3 +477,11 @@ exports.downloaddoc = function (req, res) {
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
 	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
 }
+// -------------------------------------------------------------------------
+//
+// create the archive format and stream it back to the user
+//
+// -------------------------------------------------------------------------
+exports.downloadArchive = function (req, res) {
+
+}
