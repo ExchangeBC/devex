@@ -68,7 +68,7 @@
 			}
 
 			// Handle successful response
-			function onSuccess(notification) {
+			function onSuccess() {
 				// Any required internal processing from inside the service, goes here.
 			}
 

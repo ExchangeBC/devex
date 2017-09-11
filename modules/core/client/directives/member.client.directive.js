@@ -43,7 +43,7 @@
 					});
 				}
 				vm.delete = function (userid, username, type) {
-					var adminMessage = 'Are you sure you want to remove this member?';
+					var adminMessage = 'Are you sure you want to remove '+username+' (this member)?';
 					var userMessage = 'Are you sure you want to remove yourself from this membership list?';
 					var message = (type === 'admin') ? adminMessage : userMessage;
 					if (confirm (message)) {
@@ -53,7 +53,7 @@
 						});
 					}
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateMembers', function () {
 					reset ();
 				});
 				reset ();
@@ -98,19 +98,19 @@
 						}];
 					});
 				}
-				vm.confirm = function (userid, username) {
+				vm.confirm = function (userid) {
 					queryObject.userId = userid;
 					modelService.confirmMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
 					});
 				};
-				vm.deny = function (userid, username) {
+				vm.deny = function (userid) {
 					queryObject.userId = userid;
 					modelService.denyMember (queryObject).$promise.then (function () {
 						$rootScope.$broadcast('updateMembers', 'done');
 					});
 				};
-				$rootScope.$on('updateMembers', function (event, message) {
+				$rootScope.$on('updateMembers', function () {
 					reset ();
 				});
 				reset ();

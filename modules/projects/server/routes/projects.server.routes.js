@@ -33,7 +33,6 @@ module.exports = function(app) {
   // get lists of users
   //
   app.route('/api/projects/members/:projectId')
-    // .all(projectsPolicy.isAllowed)
     .get(projects.listMembers);
   app.route('/api/projects/requests/:projectId')
     .all(projectsPolicy.isAllowed)
@@ -50,7 +49,6 @@ module.exports = function(app) {
     .get(projects.denyMember);
 
   app.route('/api/new/project')
-    // .all(projectsPolicy.isAllowed)
     .get(projects.new);
 
   app.route('/api/request/project/:projectId')

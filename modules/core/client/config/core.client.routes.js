@@ -20,7 +20,7 @@
     });
 
     // Redirect to 404 when route not found
-    $urlRouterProvider.otherwise(function ($injector, $location) {
+    $urlRouterProvider.otherwise(function ($injector) {
       $injector.get('$state').transitionTo('not-found', null, {
         location: false
       });

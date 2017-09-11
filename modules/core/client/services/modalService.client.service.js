@@ -41,7 +41,7 @@
 					$scope.modalOptions.ok = function (result) {
 							$uibModalInstance.close(result);
 					};
-					$scope.modalOptions.close = function (result) {
+					$scope.modalOptions.close = function () {
 							$uibModalInstance.dismiss('cancel');
 					};
 				};
@@ -53,7 +53,7 @@
 	}])
 	.service ('ask', ['modalService', function (modalService) {
 		this.me = function (opts) {
-			return new Promise (function (resolve, reject) {
+			return new Promise (function (resolve) {
 				modalService.showModal ({}, {
 			        closeButtonText: opts.cancel || 'Cancel',
 			        actionButtonText: opts.ok || 'OK',

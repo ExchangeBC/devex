@@ -27,7 +27,6 @@ module.exports = function (app) {
   // get lists of users
   //
   app.route('/api/programs/members/:programId')
-    // .all(programsPolicy.isAllowed)
     .get(programs.listMembers);
   app.route('/api/programs/requests/:programId')
     .all(programsPolicy.isAllowed)
@@ -44,7 +43,6 @@ module.exports = function (app) {
     .get(programs.denyMember);
 
   app.route('/api/new/program')
-    // .all(programsPolicy.isAllowed)
     .get(programs.new);
 
   app.route('/api/request/program/:programId')

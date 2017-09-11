@@ -41,7 +41,6 @@
 $window.location.href = '/authentication/government?role=gov';
     }
     function signup(isValid) {
-// alert($location.search().role);
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 

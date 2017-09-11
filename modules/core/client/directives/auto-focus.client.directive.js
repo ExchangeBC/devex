@@ -17,7 +17,7 @@
 
     return directive;
 
-    function link(scope, element, attrs) {
+    function link(scope, element) {
       if ($window.innerWidth >= 800) {
         $timeout(function() {
           element[0].focus();

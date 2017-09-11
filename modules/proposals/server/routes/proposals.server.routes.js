@@ -25,7 +25,6 @@ module.exports = function(app) {
     // proposals for opportunity
     //
     app.route('/api/proposals/for/opportunity/:opportunityId')
-      // .all (proposalsPolicy.isAllowed)
       .get(proposals.forOpportunity);
 
 
@@ -35,17 +34,13 @@ module.exports = function(app) {
       .get(proposals.myopp);
 
     app.route ('/api/proposals/stats/opportunity/:opportunityId')
-      // .all (proposalsPolicy.isAllowed)
       .get (proposals.stats);
 
     app.route ('/api/proposal/:proposalId/upload/doc')
-      // .all (proposalsPolicy.isAllowed)
       .post (proposals.uploaddoc);
     app.route ('/api/proposal/:proposalId/remove/doc/:documentId')
-      // .all (proposalsPolicy.isAllowed)
       .get (proposals.removedoc);
     app.route ('/api/proposal/:proposalId/download/doc/:documentId')
-      // .all (proposalsPolicy.isAllowed)
       .get (proposals.downloaddoc);
 
 

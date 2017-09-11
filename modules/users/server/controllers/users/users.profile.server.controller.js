@@ -103,7 +103,6 @@ function subscriptionHandler(user) {
 		return promise;
 	}
 	if (user.notifyOpportunities) {
-		// promise = oppEmailNotifier.subscribe(user.email)
 		promise = Notifications.subscribe ('not-add-opportunity', user)
 			.then(function(json) {
 				// we save the id for the subscription so that was can unsubscribe at

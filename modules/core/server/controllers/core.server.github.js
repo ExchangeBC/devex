@@ -115,7 +115,7 @@ var funcs = {
 	lockIssue: function (opts) {
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
-		return new Promise (function (resolve, reject) {
+		return new Promise (function (resolve) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token
 			return fetch (url, {
 				method  : 'put',
@@ -134,7 +134,7 @@ var funcs = {
 	unlockIssue: function (opts) {
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
-		return new Promise (function (resolve, reject) {
+		return new Promise (function (resolve) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/lock?access_token='+opts.token;
 			return fetch (url, {
 				method  : 'delete',
@@ -158,7 +158,7 @@ var funcs = {
 	addCommentToIssue: function (opts) {
 		opts.token = opts.token ? opts.token : accessToken;
 		opts.repo = getrepo (opts.repo);
-		return new Promise (function (resolve, reject) {
+		return new Promise (function (resolve) {
 			var url = githubRepos+opts.repo+'/issues/'+opts.number+'/comments?access_token='+opts.token;
 			var payload = {
 				method  : 'post',
@@ -171,7 +171,7 @@ var funcs = {
 				}
 			};
 			return fetch (url, payload)
-			.then (function (r) {
+			.then (function () {
 				resolve (true);
 			});
 		});
