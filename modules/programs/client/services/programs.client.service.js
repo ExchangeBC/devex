@@ -65,7 +65,7 @@
       }
 
       // Handle successful response
-      function onSuccess(program) {
+      function onSuccess() {
         // Any required internal processing from inside the service, goes here.
       }
 

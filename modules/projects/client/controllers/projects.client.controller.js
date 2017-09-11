@@ -60,7 +60,7 @@
 			//
 			// success, notify and return to list
 			//
-			.then (function (res) {
+			.then (function () {
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Project '+t+' Successfully!'
 				});
@@ -192,7 +192,7 @@
 			//
 			// success, notify and return to list
 			//
-			.then (function (res) {
+			.then (function () {
 				vm.form.projectForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'

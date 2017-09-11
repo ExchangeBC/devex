@@ -100,7 +100,7 @@
       }
 
       // Handle successful response
-      function onSuccess(opportunity) {
+      function onSuccess() {
         // Any required internal processing from inside the service, goes here.
       }
 
