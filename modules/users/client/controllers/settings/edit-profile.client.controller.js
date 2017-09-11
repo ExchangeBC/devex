@@ -40,14 +40,14 @@
         bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
     };
 
-    var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+    var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams) {
       if (pristineUser !== angular.toJson(vm.user)) {
         if (toState.retryInProgress) {
           toState.retryInProgress = false;
           return;
         }
         modalService.showModal({}, saveChangesModalOpt)
-          .then(function continueStateChange (result) {
+          .then(function () {
             toState.retryInProgress = true;
             $state.go(toState, toParams);
           }, function() {

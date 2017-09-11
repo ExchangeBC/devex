@@ -68,15 +68,13 @@
 					var savemeSeymour = true;
 					var promise = Promise.resolve ();
 					if (state) {
-						var question = opportunity.wasPublished ?
-							'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?' :
-							'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+						var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
 						promise = ask.yesNo (question).then (function (result) {
 							savemeSeymour = result;
 						});
 					}
 
-						promise.then(function(r) {
+						promise.then(function() {
 							if (savemeSeymour) {
 								opportunity.isPublished = state;
 								if (state) return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
@@ -84,7 +82,7 @@
 							}
 							else return Promise.reject ({data:{message:'Publish Cancelled'}});
 						})
-						.then (function (res) {
+						.then (function () {
 
 
 							//
@@ -127,7 +125,6 @@
 						var dd = Math.floor(d / 86400000); // days
 						var dh = Math.floor((d % 86400000) / 3600000); // hours
 						var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
-						ret = dm+' minutes';
 						if (dd > 0) ret = dd+' days '+dh+' hours '+dm+' minutes';
 						else if (dh > 0) ret = dh+' hours '+dm+' minutes';
 						else ret = dm+' minutes';

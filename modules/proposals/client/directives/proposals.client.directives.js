@@ -16,7 +16,7 @@
 				proposal: '='
 			},
 			bindToController: true,
-			controller   : function ($scope, ProposalsService, Authentication, Notification) {
+			controller   : function ($scope, ProposalsService, Authentication) {
 				var qaz = this;
 				//
 				// we need to determine which of several possibilities we have
@@ -31,18 +31,12 @@
 				var isUser            = Authentication.user;
 				var isAdmin           = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				var isGov             = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				var isOppAdmin        = isUser && qaz.opportunity.userIs.admin;
 				var isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
 				var isProposal        = qaz.proposal && qaz.proposal._id;
-				// var isOppAdmin        = isUser && $scope.opportunity.userIs.admin;
-				// var isMemberOrWaiting = isUser && ($scope.opportunity.userIs.member || $scope.opportunity.userIs.request);
-				// var isProposal        = $scope.proposal && $scope.proposal._id;
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
 				qaz.case               = 'nothing';
 				if (!isUser) qaz.case = 'guest';
 				else if (canedit) qaz.case = isProposal ? 'canedit' : 'canadd';
-				// qaz.opportunity = $scope.opportunity;
-				// qaz.proposal    = $scope.proposal;
 			}
 		};
 	})
@@ -110,7 +104,7 @@
 					//
 					// success, notify and return to list
 					//
-					.then (function (res) {
+					.then (function () {
 						Notification.success ({
 							message : '<i class="glyphicon glyphicon-ok"></i> Proposal '+t+' Successfully!'
 						});

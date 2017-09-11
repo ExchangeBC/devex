@@ -67,15 +67,8 @@ var memberRole = function (opportunity) {
 var requestRole = function (opportunity) {
 	return opportunity.code+'-request';
 };
-var ensureAdmin = function (opportunity, user, res) {
-	if (!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin')) {
-		// res.status(422).send({
-		// 	message: 'User Not Authorized'
-		// });
-		return false;
-	} else {
-		return true;
-	}
+var ensureAdmin = function (opportunity, user) {
+	return !(!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin'));
 };
 var countStatus = function (id) {
 	return new Promise (function (resolve, reject) {
@@ -149,8 +142,6 @@ exports.my = function (req, res) {
 };
 exports.myopp = function (req, res) {
 	if (!req.user) return res.json ({});
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : { code: { $in: me.proposals.admin } };
 	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
@@ -176,7 +167,7 @@ var saveProposal = function (proposal) {
 };
 var saveProposalRequest = function (req, res, proposal) {
 	return saveProposal (proposal)
-	.then (function (p) { res.json (proposal); })
+	.then (function () { res.json (proposal); })
 	.catch (function (e) { res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
 };
 /**
@@ -265,18 +256,6 @@ var removeUserRole = function (userid, oppcode) {
 		);
 	});
 };
-// var updateOpportunityStatus = function (oppid, proposalid) {
-// 	return Opportunities.assign (oppid, proposalid);
-// 	// return new Promise (function (resolve, reject) {
-// 	// 	Opportunity.findByIdAndUpdate (oppid,
-// 	// 	    { '$set': { 'status':  'Assigned', 'proposal': proposalid} },
-// 	// 	    function (err, m) {
-// 	// 	        if (err) reject (err);
-// 	// 	        else resolve (m);
-// 	// 	    }
-// 	// 	);
-// 	// });
-// };
 // -------------------------------------------------------------------------
 //
 // assigns a proposal to the opportunity
@@ -310,9 +289,7 @@ exports.unassign = function (proposal, user) {
 		saveProposal (proposal)
 		.then (function (p) {
 			proposal = p;
-			// return updateUserRole (proposal.user._id, proposal.opportunity.code);
 			return removeUserRole (proposal.user._id, proposal.opportunity.code);
-			// return Opportunities.assignMember (proposal.opportunity, proposal.user);
 		})
 		.then (resolve, reject);
 	});
@@ -341,8 +318,6 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.proposals.admin}}]}
 	Proposal.find({}).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
@@ -474,5 +449,5 @@ exports.downloaddoc = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.downloadArchive = function (req, res) {
-
+	return res.json ({sent:req.body});
 };

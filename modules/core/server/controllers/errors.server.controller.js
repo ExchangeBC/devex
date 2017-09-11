@@ -13,7 +13,7 @@ var getUniqueErrorMessage = function (err) {
   var output;
 
   try {
-    var begin = 0;
+    var begin;
     if (err.errmsg.lastIndexOf('.$') !== -1) {
       // support mongodb <= 3.0 (default: MMapv1 engine)
       // "errmsg" : "E11000 duplicate key error index: mean-dev.users.$email_1 dup key: { : \"test@user.com\" }"

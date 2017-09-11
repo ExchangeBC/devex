@@ -172,8 +172,6 @@ var setNotificationData = function (opportunity) {
 //
 // -------------------------------------------------------------------------
 exports.my = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : { code: { $in: me.opportunities.member } };
 	Opportunity.find (searchTerm (req))
 	.select ('code name short')
 	.exec (function (err, opportunities) {
@@ -227,7 +225,6 @@ var oppBody = function (opp) {
 		onsite  : 'In-person work required',
 		mixed   : 'Some in-person work required'
 	}
-	var div = '<br/><p><hr/></p><br/>';
 	var ret = '';
 	ret += 'Value: '+earn;
 	ret += 'Closes: '+deadline;
@@ -354,7 +351,7 @@ exports.update = function (req, res) {
 				opportunity.save ();
 				res.json (decorate (opportunity, req.user ? req.user.roles : []));
 			})
-			.catch (function (err) {
+			.catch (function () {
 				res.status(422).send({
 					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
 				});
@@ -400,14 +397,11 @@ var pub = function (req, res, isToBePublished) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		if (firstTime)   Notifications.notifyObject ('not-add-opportunity'             , data);
+		if (firstTime) Notifications.notifyObject ('not-add-opportunity', data);
 		else if (isToBePublished) {
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 		}
-		// if (!isToBePublished) Notifications.notifyObject ('not-unpublish-'+opportunity.code , data);
-		// else if (firstTime)   Notifications.notifyObject ('not-add-opportunity'             , data);
-		// else                  Notifications.notifyObject ('not-republish-'+opportunity.code , data);
 		res.json (decorate (opportunity, req.user ? req.user.roles : []));
 	})
 	.catch (function (err) {
@@ -462,7 +456,7 @@ exports.unassign = function (req, res) {
 	//
 	// return the new opportunity or fail
 	//
-	.then (function (result) {res.json (decorate (opportunity, req.user ? req.user.roles : [])); })
+	.then (function () {res.json (decorate (opportunity, req.user ? req.user.roles : [])); })
 	.catch (function (err) {res.status(422).send ({message: errorHandler.getErrorMessage(err)}); });
 };
 // -------------------------------------------------------------------------
@@ -549,22 +543,6 @@ exports.list = function (req, res) {
 			res.json (opportunities);
 		}
 	});
-	// Opportunity.find (searchTerm (req))
-	// .sort([['deadline', -1],['name', 1]])
-	// .populate('createdBy', 'displayName')
-	// .populate('updatedBy', 'displayName')
-	// .populate('project', 'code name _id isPublished')
-	// .populate('program', 'code title _id logo isPublished')
-	// .exec(function (err, opportunities) {
-	// 	if (err) {
-	// 		return res.status(422).send({
-	// 			message: errorHandler.getErrorMessage(err)
-	// 		});
-	// 	} else {
-	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-	// 		// res.json(opportunities);
-	// 	}
-	// });
 };
 
 // -------------------------------------------------------------------------
@@ -702,19 +680,6 @@ exports.forProject = function (req, res) {
 			res.json (opportunities);
 		}
 	});
-	// Opportunity.find(searchTerm (req, {project:req.project._id})).sort('name')
-	// .populate('createdBy', 'displayName')
-	// .populate('updatedBy', 'displayName')
-	// .exec(function (err, opportunities) {
-	// 	if (err) {
-	// 		return res.status(422).send({
-	// 			message: errorHandler.getErrorMessage(err)
-	// 		});
-	// 	} else {
-	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-	// 		// res.json(opportunities);
-	// 	}
-	// });
 };
 // -------------------------------------------------------------------------
 //
@@ -731,19 +696,6 @@ exports.forProgram = function (req, res) {
 			res.json (opportunities);
 		}
 	});
-	// Opportunity.find(searchTerm (req, {program:req.program._id})).sort('name')
-	// .populate('createdBy', 'displayName')
-	// .populate('updatedBy', 'displayName')
-	// .exec(function (err, opportunities) {
-	// 	if (err) {
-	// 		return res.status(422).send({
-	// 			message: errorHandler.getErrorMessage(err)
-	// 		});
-	// 	} else {
-	// 		res.json (decorateList (opportunities, req.user ? req.user.roles : []));
-	// 		// res.json(opportunities);
-	// 	}
-	// });
 };
 
 // -------------------------------------------------------------------------

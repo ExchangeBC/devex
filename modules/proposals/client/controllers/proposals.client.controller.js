@@ -26,7 +26,7 @@
 		// close the window
 		//
 		// -------------------------------------------------------------------------
-		ppp.close = function (result) {
+		ppp.close = function () {
 			$uibModalInstance.dismiss('cancel');
 		};
 		ppp.type = function (type) {
@@ -68,7 +68,6 @@
 	// =========================================================================
 	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService) {
 		var ppp           = this;
-		// $scope.vm        = ppp;
 		ppp.title         = editing ? 'Edit' : 'Create' ;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = angular.copy (Authentication.user);
@@ -116,14 +115,14 @@
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
-		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
 				if (toState.retryInProgress) {
 					toState.retryInProgress = false;
 					return;
 				}
 				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function continueStateChange (result) {
+				.then(function  () {
 					toState.retryInProgress = true;
 					$state.go(toState, toParams);
 				}, function () {
@@ -148,12 +147,9 @@
 		var saveuser = function () {
 			return new Promise (function (resolve, reject) {
 				if (pristineUser !== angular.toJson(ppp.user)) {
-					// var nu = new UsersService.$update (ppp.user);
-					// nu.$update (
 					UsersService.update (ppp.user).$promise
 					.then (
 						function (response) {
-							// Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Edit profile successful'});
 							Authentication.user = response;
 							ppp.user = angular.copy(Authentication.user);
 							pristineUser = angular.toJson(Authentication.user);
@@ -214,39 +210,22 @@
 				return false;
 			}
 			saveuser().then (saveproposal);
-
-			// $uibModalInstance.close('ok');
 		};
 		// -------------------------------------------------------------------------
 		//
 		// leave without saving any work
 		//
 		// -------------------------------------------------------------------------
-		ppp.close = function (result) {
+		ppp.close = function () {
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
 				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function continueStateChange (result) {
+				.then(function () {
 					window.onbeforeunload = null;
 					$locationChangeStartUnbind ();
 					$uibModalInstance.dismiss('cancel');
 				}, function () {
 				});
 			}
-
-			// var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-			// 		// console.log ('started stateChangeStart');
-			// 		if ($scope.parentForm.$dirty) {
-			// 			if ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
-			// 				// console.log ('stateChangeStart please don\'t leave!!!!!!');
-			// 				// cancel to not allow.
-			// 				event.preventDefault();
-			// 				// console.log (event);
-			// 				return false;
-			// 			}
-			// 		}
-			// 	});
-
-
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -258,7 +237,7 @@
 			ask.yesNo (q).then (function (r) {
 				if (r) {
 					ppp.proposal.$remove (
-						function (response) {
+						function () {
 							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
 							ppp.subscribe (false);
 							$uibModalInstance.dismiss('cancel');
@@ -271,12 +250,8 @@
 			});
 		};
 		var performwithdrawal = function (q) {
-			// ask.yesNo (q).then (function (r) {
-			// 	if (r) {
 					ppp.proposal.status = 'Draft';
 					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
-			// 	}
-			// });
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -284,7 +259,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!', 'Delete my proposal');
+			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -355,22 +330,14 @@
 				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
 				.then (function () {
 					ppp.notifyMe = true;
-				}).catch (function (res) {
-					// Notification.error ({
-					// 	message : res.data.message,
-					// 	title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
-					// });
+				}).catch (function () {
 				});
 			}
 			else {
 				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
 				.then (function () {
 					ppp.notifyMe = false;
-				}).catch (function (res) {
-					// Notification.error ({
-					// 	message : res.data.message,
-					// 	title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
-					// });
+				}).catch (function () {
 				});
 			}
 		};
