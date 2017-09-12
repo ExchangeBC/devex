@@ -28,7 +28,7 @@
 					//
 					// success, notify and return to list
 					//
-					.then (function (res) {
+					.then (function () {
 						Notification.success ({
 							message : '<i class="glyphicon glyphicon-ok"></i> Program '+t+' Successfully!'
 						});

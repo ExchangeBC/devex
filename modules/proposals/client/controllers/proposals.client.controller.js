@@ -225,6 +225,8 @@
 					$uibModalInstance.dismiss('cancel');
 				}, function () {
 				});
+			} else {
+				$uibModalInstance.dismiss('cancel');
 			}
 		};
 		// -------------------------------------------------------------------------

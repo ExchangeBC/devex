@@ -452,7 +452,7 @@ exports.myDelete = function (req, res) {
 	//
 	if (!!~req.user.roles.indexOf ('admin') || req.subscription.user === req.user._id) {
 		exports.unsubscribe (req.subscription)
-		.then (function (result) {
+		.then (function () {
 			res.json (req.subscription);
 		})
 		.catch (function (err) {
@@ -469,7 +469,7 @@ exports.subscribeMe = function (req, res) {
 		message: 'You do not appear to be logged in, sorry I can\'t help you right now.'
 	});
 	exports.subscribe (req.notification, req.user)
-		.then (function (result) {
+		.then (function () {
 			res.json (req.notification);
 		})
 		.catch (function (err) {
@@ -481,7 +481,7 @@ exports.unsubscribeMe = function (req, res) {
 		message: 'You do not appear to be logged in, sorry I can\'t help you right now.'
 	});
 	exports.unsubscribeUserNotification (req.notification, req.user)
-		.then (function (result) {
+		.then (function () {
 			res.json (req.notification);
 		})
 		.catch (function (err) {
@@ -543,10 +543,10 @@ exports.unsubscribeExternal = function (req, res) {
 	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> to manage your notifications.</p>';
 	message += '<p>Thanks for using the BCDevExchange!</p>';
 	exports.unsubscribe (req.subscription)
-	.then (function (result) {
+	.then (function () {
 		res.send (message);
 	})
-	.catch (function (err) {
+	.catch (function () {
 		res.send (message);
 	});
 };
@@ -558,10 +558,10 @@ exports.subscribeExternal = function (req, res) {
 	message += '<p>Thanks for using the BCDevExchange!</p>';
 	if (!req.subscription) return res.send (message);
 	exports.subscribe (req.notification, req.subscription.user)
-	.then (function (result) {
+	.then (function () {
 		res.send (message);
 	})
-	.catch (function (err) {
+	.catch (function () {
 		res.send (message);
 	});
 };
@@ -580,7 +580,7 @@ var addNotificationCode = function (notification) {
 	if (notification.code && notification.code.substr (0, 4) === 'not-') {
 		return Promise.resolve (notification);
 	}
-	else return new Promise (function (resolve, reject) {
+	else return new Promise (function (resolve) {
 		Notification.findUniqueCode (notification.name, null, function (newcode) {
 			notification.code = newcode;
 			resolve (notification);
@@ -687,8 +687,6 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.notifications.admin}}]}
 	Notification.find({}).sort('name')
 	.exec(function (err, notifications) {
 		if (err) {
@@ -732,39 +730,6 @@ exports.notificationByID = function (req, res, next, id) {
 			return next (err);
 		}
 	});
-	// if (id.substr (0, 3) === 'not' ) {
-	// 	Notification.findOne({code:id})
-	// 	.exec(function (err, notification) {
-	// 		if (err) {
-	// 			return next(err);
-	// 		} else if (!notification) {
-	// 			return res.status(404).send({
-	// 				message: 'No notification with that identifier has been found'
-	// 			});
-	// 		}
-	// 		req.notification = notification;
-	// 		next();
-	// 	});
-
-	// } else {
-	// 	if (!mongoose.Types.ObjectId.isValid(id)) {
-	// 		return res.status(400).send({
-	// 			message: 'Notification is invalid'
-	// 		});
-	// 	}
-	// 	Notification.findById(id)
-	// 	.exec(function (err, notification) {
-	// 		if (err) {
-	// 			return next(err);
-	// 		} else if (!notification) {
-	// 			return res.status(404).send({
-	// 				message: 'No notification with that identifier has been found'
-	// 			});
-	// 		}
-	// 		req.notification = notification;
-	// 		next();
-	// 	});
-	// }
 };
 // -------------------------------------------------------------------------
 //
@@ -784,23 +749,6 @@ exports.subscriptionById = function (req, res, next, id) {
 			return next (err);
 		}
 	});
-	// if (!mongoose.Types.ObjectId.isValid(id)) {
-	// 	return res.status(400).send({
-	// 		message: 'Subscription is invalid'
-	// 	});
-	// }
-	// Subscription.findById(id)
-	// .exec(function (err, subscription) {
-	// 	if (err) {
-	// 		return next(err);
-	// 	} else if (!subscription) {
-	// 		return res.status(404).send({
-	// 			message: 'No Subscription with that identifier has been found'
-	// 		});
-	// 	}
-	// 	req.subscription = subscription;
-	// 	next();
-	// });
 };
 exports.externalSubscriptionById = function (req, res, next, id) {
 	getSubscriptionByExternalID (id)
@@ -824,15 +772,6 @@ exports.reApplySubscriptions = function (req, res) {
 				return exports.subscribe ('not-add-opportunity', u);
 			});
 			res.json ({ok:true});
-			// Promise.all (users.map (function (u) {
-			// 	return exports.subscribe ('not-add-opportunity', u);
-			// }))
-			// .then (function () {
-			// 	res.json ({ok:true});
-			// })
-			// .catch (function (err) {
-			// 	res.status(404).json ({ok:err});
-			// });
 		});
 	}
 	else {
@@ -847,15 +786,6 @@ exports.checkSubscriptions = function (req, res) {
 				return exports.subscribe ('not-add-opportunity', u);
 			});
 			res.json ({ok:true});
-			// Promise.all (users.map (function (u) {
-			// 	return exports.subscribe ('not-add-opportunity', u);
-			// }))
-			// .then (function () {
-			// 	res.json ({ok:true});
-			// })
-			// .catch (function (err) {
-			// 	res.status(404).json ({ok:err});
-			// });
 		});
 	}
 	else {

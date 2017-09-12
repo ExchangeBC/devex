@@ -144,7 +144,6 @@
 			else if (vm.context === 'program') {
 				vm.project.program = vm.programId;
 			}
-			// vm.form.projectForm.$setPristine ();
 		}
 		// -------------------------------------------------------------------------
 		//

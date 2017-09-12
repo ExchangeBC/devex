@@ -117,7 +117,6 @@
 							return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
 						else
 							return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
-						// return opportunity.createOrUpdate();
 					}
 					else return Promise.reject ({data:{message:'Publish Cancelled'}});
 				})
@@ -361,7 +360,6 @@
 		};
 		vm.save = function (isValid) {
 
-			// vm.opportunityForm.$setPristine ();
 			if (!vm.opportunity.name) {
 				Notification.error ({
 					message : 'You must enter a title for your opportunity',
@@ -377,8 +375,6 @@
 				});
 				return false;
 			}
-			// vm.opportunity.tags   = vm.opportunity.taglist.split(/ *, */);
-			// vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
 			if (vm.opportunity.taglist !== '') {
 				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
 			} else {
@@ -424,9 +420,6 @@
 				//
 	      		promise.then(function() {
 					if (savemeSeymour) {
-						// vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
-						// vm.opportunity.assignment = new Date (vm.opportunity.assignment);
-						// vm.opportunity.start      = new Date (vm.opportunity.start);
 						return vm.opportunity.createOrUpdate();
 					}
 					else return Promise.reject ({data:{message:'Publish Cancelled'}});

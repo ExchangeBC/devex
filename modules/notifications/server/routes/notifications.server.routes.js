@@ -45,7 +45,6 @@ module.exports = function(app) {
 		.get(notifications.forUser);
 
 	app.route('/api/new/notification')
-		// .all(notificationsPolicy.isAllowed)
 		.get(notifications.new);
 
 	app.route('/api/unsubscribe/:externalSubscriptionId')
@@ -58,7 +57,6 @@ module.exports = function(app) {
 	app.route ('/api/check/subscriptions').all(notificationsPolicy.isAllowed).get(notifications.checkSubscriptions);
 
 	app.route('/api/cc/tryme').get(notifications.tryme);
-	// app.route('/api/cc/tryme2').get(notifications.tryme2);
 
 	// Finish by binding the Notification middleware
 	app.param('notificationId', notifications.notificationByID);

@@ -270,13 +270,11 @@ exports.update = function (req, res) {
 				Promise.all (notificationCodes.map (function (code) {
 					return Notifications.notifyObject (code, program);
 				}))
-				.catch (function (err) {
+				.catch (function () {
 				})
 				.then (function () {
 					res.json (decorate (program, req.user ? req.user.roles : []));
 				});
-				// // res.json(program);
-				// res.json (decorate (program, req.user ? req.user.roles : []));
 			}
 		});
 	}
@@ -321,7 +319,6 @@ exports.list = function (req, res) {
 			});
 		} else {
 			res.json (decorateList (programs, req.user ? req.user.roles : []));
-			// res.json(programs);
 		}
 	});
 };

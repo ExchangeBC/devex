@@ -74,14 +74,6 @@
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				}
-				// ,
-				// proposal: function ($stateParams, ProposalsService, Authentication) {
-				// 	if (!Authentication.user) return [];
-				// 	console.log ('get proposal');
-				// 	return ProposalsService.forOpportunity ({
-				// 		opportunityId: $stateParams.opportunityId
-				// 	}).$promise;
-				// }
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'

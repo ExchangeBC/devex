@@ -132,8 +132,6 @@ exports.my = function (req, res) {
 	});
 };
 exports.myadmin = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : { code: { $in: me.projects.admin } };
 	Project.find (searchTerm (req))
 	.populate ('program', 'code title short logo')
 	.select ('code name short program')
@@ -201,7 +199,6 @@ exports.create = function(req, res) {
 				Notifications.addNotification ({
 					code: 'not-update-'+project.code,
 					name: 'Update of Project '+project.name,
-					// description: 'Update of Project '+project.name,
 					target: 'Project',
 					event: 'Update'
 				});
@@ -281,13 +278,11 @@ exports.update = function (req, res) {
 				Promise.all (notificationCodes.map (function (code) {
 					return Notifications.notifyObject (code, project);
 				}))
-				.catch (function (err) {
+				.catch (function () {
 				})
 				.then (function () {
 					res.json (decorate (project, req.user ? req.user.roles : []));
 				});
-				// // res.json(project);
-				// res.json (decorate (project, req.user ? req.user.roles : []));
 			}
 		});
 	}
@@ -320,8 +315,6 @@ exports.delete = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	// var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	// var search = me.isAdmin ? {} : {$or: [{isPublished:true}, {code: {$in: me.projects.admin}}]}
 	Project.find(searchTerm (req)).sort('activity name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
