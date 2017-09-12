@@ -251,7 +251,7 @@
 				}
 			});
 		};
-		var performwithdrawal = function () {
+		var performwithdrawal = function (txt) {
 					ppp.proposal.status = 'Draft';
 					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
 		};
@@ -269,7 +269,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.withdraw = function () {
-			performwithdrawal ('Are you sure you want to withdraw this proposal?');
+			performwithdrawal ();
 		};
 		// -------------------------------------------------------------------------
 		//
