@@ -30,13 +30,10 @@
     function governmentSelected() {
       return ($location.search().role === 'non_gov');
     }
-    function governmentSelected1() {
-      return ($location.search().role === 'non_gov');
-    }
-	function non_gov(isValid) {
+	function non_gov() {
       $window.location.href = '/authentication/government?role=non_gov';
     }
-    	function gov(isValid) {
+    	function gov() {
 
 $window.location.href = '/authentication/government?role=gov';
     }

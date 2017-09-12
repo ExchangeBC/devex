@@ -28,7 +28,7 @@
         .catch(onChangePasswordError);
     }
 
-    function onChangePasswordSuccess(response) {
+    function onChangePasswordSuccess() {
       // If successful show success message and clear form
       Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Password Changed Successfully' });
       vm.passwordDetails = null;

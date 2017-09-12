@@ -158,7 +158,7 @@ User.findOne({
 // lists of emails and names for notifications
 //
 // -------------------------------------------------------------------------
-exports.notifyOpportunities = function (req, res, next) {
+exports.notifyOpportunities = function (req, res) {
     User.find ({notifyOpportunities:true}).select ('firstName lastName email')
     .exec (function (err, users) {
       if (err) {
@@ -169,7 +169,7 @@ exports.notifyOpportunities = function (req, res, next) {
       else return res.json (users);
     });
 };
-exports.notifyMeetings = function (req, res, next) {
+exports.notifyMeetings = function (req, res) {
     User.find ({notifyEvents:true}).select ('firstName lastName email')
     .exec (function (err, users) {
       if (err) {

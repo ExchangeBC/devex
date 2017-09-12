@@ -326,7 +326,6 @@ exports.list = function (req, res) {
 			});
 		} else {
 			res.json (decorateList (projects, req.user ? req.user.roles : []));
-			// res.json(projects);
 		}
 	});
 };
@@ -426,7 +425,6 @@ exports.forProgram = function (req, res) {
 			});
 		} else {
 			res.json (decorateList (projects, req.user ? req.user.roles : []));
-			// res.json(projects);
 		}
 	});
 };

@@ -756,7 +756,7 @@ exports.externalSubscriptionById = function (req, res, next, id) {
 		req.subscription = subscription;
 		next();
 	})
-	.catch (function (err) {
+	.catch (function () {
 		req.subscription = null;
 		next();
 	});

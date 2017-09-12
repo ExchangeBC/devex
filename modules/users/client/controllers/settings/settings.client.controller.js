@@ -7,7 +7,7 @@
 
   SettingsController.$inject = ['$scope', 'Authentication'];
 
-  function SettingsController($scope, Authentication, UsersService, $location) {
+  function SettingsController($scope, Authentication) {
     var vm = this;
 
     vm.delete = function () {

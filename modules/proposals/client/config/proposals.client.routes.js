@@ -75,20 +75,6 @@
 				}).result.finally (function () {
 					$state.go ($state.previous.state, $state.previous.params);
 				});
-				// $uibModal.open ({
-				// 	size: 'lg',
-				// 	templateUrl: '/modules/proposals/client/views/view-proposal.client.view.html',
-				// 	controller: 'ProposalViewController',
-				// 	resolve: {
-				// 		proposal: function ($stateParams, ProposalsService) {
-				// 			return ProposalsService.get ({
-				// 				proposalId: $stateParams.proposalId
-				// 			}).$promise;
-				// 		}
-				// 	}
-				// }).result.finally (function () {
-				// 	$state.go ($state.previous.state, $state.previous.params);
-				// });
 			}
 		})
 		// -------------------------------------------------------------------------

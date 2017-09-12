@@ -467,7 +467,6 @@ exports.logo = function (req, res) {
 	var program       = req.program;
 	var storage = multer.diskStorage (config.uploads.diskStorage);
 	var upload = multer({storage: storage}).single('logo');
-	// var upload        = multer (config.uploads.fileUpload).single ('logo');
 	upload.fileFilter = require(path.resolve('./config/lib/multer')).profileUploadFileFilter;
 	var up            = helpers.fileUploadFunctions (program, Program, 'logo', req, res, upload, program.logo);
 

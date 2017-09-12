@@ -28,16 +28,8 @@
     function figureOutItemsToDisplay() {
       vm.filteredItems = $filter('filter')(vm.users, {
         $: vm.search,
-		roles:'!gov-request'
+        roles:'!gov-request'
       });
-      /* var filtered = [];
-    for (var i = 0; i < vm.filteredItems.length; i++) {
-      var item = vm.filteredItems[i];
-      if (item.roles == 'user' || item.roles == 'gov' || item.roles == 'admin') {
-        filtered.push(item);
-      }
-    }
-    vm.filteredItems=filtered;*/
       vm.filterLength = vm.filteredItems.length;
       var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
       var end = begin + vm.itemsPerPage;
