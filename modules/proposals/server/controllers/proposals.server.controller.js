@@ -449,5 +449,79 @@ exports.downloaddoc = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.downloadArchive = function (req, res) {
-	return res.json ({sent:req.body});
+	// require ('jszip');
+	var zip = new require ('jszip') ();
+	var fs  = require('fs');
+	console.log ('JZIP VERSION:', zip.version);
+	//
+	// make sure we are allowed to do this at all
+	//
+	if (!ensureAdmin (req.opportunity, req.user)) {
+		return res.json ([]);
+	}
+	//
+	// make the zip name from the opportunity name
+	//
+	var opportunityName = req.opportunity.name.replace(/\W/g,'-').replace(/-+/,'-');
+	var proponentName;
+	var email;
+	var files;
+	var links;
+	var proposalHtml;
+	var header;
+	var footer;
+	var content;
+	//
+	// start the zip file;
+	//
+	zip.folder (opportunityName);
+	//
+	// get all submitted and assigned proposals
+	//
+	Proposal.find({opportunity:req.opportunity._id, status:{$in:['Submitted','Assigned']}}).sort('status created')
+	.populate('user', userfields)
+	.exec(function (err, proposals) {
+		if (err) {
+			return res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			proposals.forEach (function (proposal) {
+				proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
+				if (proposal.status == 'Assigned') proponentName += '-ASSIGNED';
+				files = proposal.attachments;
+				email = proposal.user.email;
+				proposalHtml = proposal.detail;
+				//
+				// go through the files and build the internal links (reset links first)
+				// also build the index.html content
+				//
+				links = [];
+				files.forEach (function (file) {
+					links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
+				});
+				header = footer = '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>'+email+'<h2>Documents</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
+				content = '<html><body>'+header+'<h2>Proposal</h2>'+proposalHtml+'</body></html>';
+				//
+				// add the directory, content and documents for this proposal
+				//
+				zip.folder (opportunityName).folder (proponentName);
+				zip.folder (opportunityName).folder (proponentName).file ('index.html', content);
+				files.forEach (function (file) {
+					zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
+				});
+			});
+			// var data = zip.generate({base64:false, compression:'DEFLATE'});
+			// fs.writeFileSync(opportunityName+'.zip', data, 'binary');
+
+			res.setHeader ('Content-Type', 'application/zip');
+			res.setHeader ('Content-Type', 'application/octet-stream');
+			res.setHeader ('Content-Description', 'File Transfer');
+			res.setHeader ('Content-Transfer-Encoding', 'binary');
+			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+opportunityName+'.zip'+'"');
+
+			zip.generateNodeStream({base64:false, compression:'DEFLATE',streamFiles:true}).pipe (res);
+		}
+	});
+
 };

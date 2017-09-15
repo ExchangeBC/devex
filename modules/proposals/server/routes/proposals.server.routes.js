@@ -43,6 +43,8 @@ module.exports = function(app) {
     app.route ('/api/proposal/:proposalId/download/doc/:documentId')
       .get (proposals.downloaddoc);
 
+    app.route ('/api/proposals/archive/opportunity/:opportunityId')
+      .get (proposals.downloadArchive);
 
   app.route('/api/new/proposal')
     // .all(proposalsPolicy.isAllowed)

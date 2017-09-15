@@ -135,3 +135,9 @@ exports.formatDate = function (d) {
 exports.formatTime = function (d) {
   return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
 }
+
+
+
+
+
+
