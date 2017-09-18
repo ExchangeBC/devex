@@ -449,10 +449,8 @@ exports.downloaddoc = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.downloadArchive = function (req, res) {
-	// require ('jszip');
-	var zip = new require ('jszip') ();
+	var zip = new (require ('jszip')) ();
 	var fs  = require('fs');
-	console.log ('JZIP VERSION:', zip.version);
 	//
 	// make sure we are allowed to do this at all
 	//
@@ -469,7 +467,6 @@ exports.downloadArchive = function (req, res) {
 	var links;
 	var proposalHtml;
 	var header;
-	var footer;
 	var content;
 	//
 	// start the zip file;
@@ -488,7 +485,7 @@ exports.downloadArchive = function (req, res) {
 		} else {
 			proposals.forEach (function (proposal) {
 				proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
-				if (proposal.status == 'Assigned') proponentName += '-ASSIGNED';
+				if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
 				files = proposal.attachments;
 				email = proposal.user.email;
 				proposalHtml = proposal.detail;
@@ -500,7 +497,22 @@ exports.downloadArchive = function (req, res) {
 				files.forEach (function (file) {
 					links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
 				});
-				header = footer = '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>'+email+'<h2>Documents</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
+				header = '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>';
+				header += email+'<br/>';
+				if (!proposal.isCompany) {
+					header += proposal.user.address+'<br/>';
+					header += proposal.user.phone+'<br/>';
+				}
+				else {
+					header += '<b><i>Company:</i></b>'+'<br/>';
+					header += proposal.user.businessName+'<br/>';
+					header += proposal.user.businessAddress+'<br/>';
+					header += '<b><i>Contact:</i></b>'+'<br/>';
+					header += proposal.user.businessContactName+'<br/>';
+					header += proposal.user.businessContactPhone+'<br/>';
+					header += proposal.user.businessContactEmail+'<br/>';
+				}
+				header += '<h2>Documents</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
 				content = '<html><body>'+header+'<h2>Proposal</h2>'+proposalHtml+'</body></html>';
 				//
 				// add the directory, content and documents for this proposal
@@ -511,8 +523,6 @@ exports.downloadArchive = function (req, res) {
 					zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
 				});
 			});
-			// var data = zip.generate({base64:false, compression:'DEFLATE'});
-			// fs.writeFileSync(opportunityName+'.zip', data, 'binary');
 
 			res.setHeader ('Content-Type', 'application/zip');
 			res.setHeader ('Content-Type', 'application/octet-stream');

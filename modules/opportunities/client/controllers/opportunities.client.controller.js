@@ -399,6 +399,10 @@
 				}
 			}
 			//
+			// ensure that there is a trailing '/' on the github field
+			//
+			if (vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
+			//
 			// set the time on the 2 dates that care about it
 			//
 			vm.opportunity.deadline.setHours(16);
