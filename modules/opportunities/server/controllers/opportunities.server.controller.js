@@ -487,7 +487,9 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 					Notifications.notifyObject ('not-update-'+opportunity.code, data);
 					data.username = proposalUser.displayName;
 					data.useremail = proposalUser.email;
-					data.filename = 'cwuterms.pdf';
+					//
+					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
+					//
 					data.assignor = user.displayName;
 					data.assignoremail = opportunity.proposalEmail;
 					Notifications.notifyUserAdHoc ('assignopp', data);
