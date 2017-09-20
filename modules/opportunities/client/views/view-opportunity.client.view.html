@@ -145,7 +145,7 @@
 		</div>
 
 		<div class="panel-body">
-			<div class=" text-left" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+			<div class=" text-left" ng-if="vm.closing === 'CLOSED'">
 				<a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
 			</div>
 
