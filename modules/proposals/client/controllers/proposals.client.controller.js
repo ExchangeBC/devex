@@ -162,7 +162,7 @@
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
 		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
 				if (toState.retryInProgress) {
 					toState.retryInProgress = false;
 					return;
@@ -375,7 +375,7 @@
 		};
 		ppp.subscribe = function (state) {
 			var notificationCode = 'not-update-'+ppp.opportunity.code;
-			if (state) {
+			if (!editing && !ppp.proposal._id && state) {
 				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
 				.then (function () {
 					ppp.notifyMe = true;
@@ -448,7 +448,7 @@
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
 		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
 				if (toState.retryInProgress) {
 					toState.retryInProgress = false;
 					return;
@@ -521,6 +521,7 @@
 					function (response) {
 						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
 						ppp.proposal = response;
+						pristineProposal = angular.toJson (ppp.proposal);
 						ppp.subscribe (true);
 						resolve ();
 					},
