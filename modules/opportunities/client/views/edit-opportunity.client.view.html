@@ -112,7 +112,7 @@
 			</div>
 
 			<br><br>
-			<div class="form-group" ng-if="vm.isAdmin|| vm.opportunity.userIs.admin" show-errors>
+			<div class="form-group" ng-if="vm.isAdmin|| (!vm.editing && vm.isGov) ||vm.opportunity.userIs.admin" show-errors>
 				<label class="control-label" for="github">Github Repository</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
 				<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
