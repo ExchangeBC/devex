@@ -6,7 +6,7 @@
 	//
 	.directive('avatarDisplay', function() {
 		return {
-			// replace: true,
+			replace: true,
 			// transclude: true,
 			scope: {
 				url: '=url'

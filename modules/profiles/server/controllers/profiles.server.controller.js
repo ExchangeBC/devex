@@ -97,10 +97,6 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-	console.log (req.profile.user);
-	console.log (req.user._id);
-	console.log (req.profile.user._id);
-
 	if (req.profile.user && req.user._id.toString() === req.profile.user._id.toString()) {
 		//
 		// copy over everything passed in. This will overwrite the

@@ -36,13 +36,10 @@
 	//
 	// =========================================================================
 	.controller('ProfileEditController', function ($scope, $state, $sce, $window, $timeout, Upload, profile, editing, Authentication, Notification, previousState, dataService) {
-		console.log ('controller loaded');
 		var vm            = this;
 		vm.form           = {};
-		console.log ('profile:', editing, profile);
 		vm.profile        = profile;
 		if (editing && (!vm.profile || !vm.profile._id)) {
-			console.log ('go to create');
 			return $state.go('profileadmin.create');
 		}
 		vm.user           = Authentication.user;
@@ -88,11 +85,9 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.saveme = function () {
-			console.log ('saving');
 			this.save (true);
 		};
 		vm.save = function (isValid) {
-			console.log ('saving');
 			vm.form.profileForm.$setPristine ();
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.profileForm');
@@ -129,7 +124,6 @@
 				});
 			});
 		};
-		console.log ('vm', vm);
 	})
 	;
 }());
