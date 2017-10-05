@@ -18,6 +18,7 @@ var _ = require('lodash'),
 
  // CC:  USERFIELDS
 var whitelistedFields = [
+	'_id',
 	'firstName',
 	'lastName',
 	'email',

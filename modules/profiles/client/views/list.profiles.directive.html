@@ -1,0 +1,52 @@
+<div class="row list-head">
+	<div class="col-sm-7">
+		<h2 class="list-page-hide">Government Partners</h2>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+		<button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="profileadmin.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> New Profile
+		</button>
+	</div>
+</div>
+
+
+<div class="card card-flat" ng-class="{'card-greyed': !profile.isPublished}" ng-repeat="profile in vm.profiles">
+
+	<div class="card-header" ng-if="vm.isAdmin || profile.userIs.admin" style="text-align: right">
+		<span ng-if="vm.isAdmin || profile.userIs.admin" class="label label-primary">Admin</span>
+		&nbsp;
+		<span ng-if="profile.userIs.member && !profile.userIs.admin" class="label label-primary">Member</span>
+		&nbsp;
+		<span ng-if="profile.userIs.request" class="label label-primary" uib-tooltip="Your membership request is pending approval">Pending Member</span>
+		&nbsp;
+		<span ng-if="!profile.isPublished" class="label-danger" ><i class="fa fa-exclamation-triangle"></i> UNPUBLISHED</span>
+		&nbsp;
+		<a ng-if="(vm.isAdmin || profile.userIs.admin) && profile.isPublished" href="javascript:void(0);" ng-click="vm.publish(profile, false)" ng-click="$event.stopPropagation()" uib-tooltip="Unpublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
+		&nbsp;
+		<a ng-if="(vm.isAdmin || profile.userIs.admin) && !profile.isPublished" href="javascript:void(0);" ng-click="vm.publish(profile, true)" ng-click="$event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-check"></i></a>
+		&nbsp;
+		<a ng-if="vm.isGov && !profile.userIs.member && !profile.userIs.request" href="javascript:void(0);" ng-click="vm.request(profile)" ng-click="$event.stopPropagation()" uib-tooltip="Request Membership"><i class="glyphicon glyphicon-user"></i></a>
+		&nbsp;
+		<a ng-if="vm.isAdmin || profile.userIs.admin" href="javascript:void(0);" ui-sref="profileadmin.edit({ profileId: profile.code })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+	</div>
+
+	<div class="card-block" style="padding: 10px;">
+		<div class="row">
+			<div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
+				<div avatar-display url="profile.user.profileImageURL"></div>
+			</div>
+			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
+				<h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
+					<a ui-sref="profiles.view({ profileId: profile._id })" ng-bind="profile.user.displayName"></a>
+				</h3>
+			</div>
+		</div>
+		<!--<div class="row">
+			<div class="label-list">
+				<span class="label label-info" ng-repeat="code in profile.tags">{{code}}</span>
+			</div>
+		</div>-->
+	</div>
+
+</div>
+

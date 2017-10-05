@@ -1,0 +1,125 @@
+
+<section class="static-page">
+<div class="container" role="main">
+  <!-- <div ncy-breadcrumb></div> -->
+  <form id="profileForm" warn-on-exit name="vm.form.profileForm" class="form" ng-submit="vm.save()" novalidate>
+	<div class="row form-head">
+	<div class="col-sm-7">
+		<h2 ng-if="vm.editing">Editing: {{::vm.profile.user.displayName}}</h2>
+		<h2 ng-if="!vm.editing">New Profile</h2>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+	<div class="btn-group">
+	  	<a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
+			<i class="glyphicon glyphicon-save"></i> Save Me</a>
+		<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
+			<i class="glyphicon glyphicon-fast-backward"></i> Cancel</a>
+		<a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+			<i class="glyphicon glyphicon-trash"></i> Remove</a>
+	</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class="col-sm-12">
+			<fieldset>
+				<div class="form-group" show-errors>
+					<label class="control-label" for="title">Title</label>
+
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="stitle = !stitle"></i>
+					<div class="input-help alert alert-info" ng-show="stitle">
+						Help Text
+					</div>
+
+					<input name="title" type="text" ng-model="vm.profile.title" id="title" class="form-control" placeholder="Title" >
+					<div ng-messages="vm.form.profileForm.title.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Profile title is required.</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="organization">Organization</label>
+					<input name="organization" type="text" ng-model="vm.profile.organization" id="organization" class="form-control" placeholder="Organization" >
+				</div>
+				<div class="form-group" show-errors>
+					<label class="control-label" for="location">Location</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('location')"></i>
+					<div class="input-help alert alert-info" data-field="location" ng-show="vm.displayHelp.location">
+						<p>Where is your office?</p>
+					</div>
+					<select name="location" ng-model="vm.profile.location" id="location" class="form-control"  ng-options="v as v for v in vm.cities">
+						<option value="">Select Location</option>
+					</select>
+					<div ng-messages="vm.profileForm.location.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Location is required.</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="description">Describe Yourself</label>
+
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sdesc = !sdesc"></i>
+					<div class="input-help alert alert-info" ng-show="sdesc">
+						Help Text
+					</div>
+					<textarea
+						name="description"
+						id="description"
+						class="form-control input-sm"
+						ui-tinymce="vm.tinymceOptions"
+						placeholder="A full description of the profile"
+						ng-model="vm.profile.description">
+					</textarea>
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="website">Website</label>
+
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="swebsite = !swebsite"></i>
+					<div class="input-help alert alert-info" ng-show="swebsite">
+						Help Text
+					</div>
+
+					<input name="website" type="text" ng-model="vm.profile.website" id="website" class="form-control" placeholder="Website" >
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="github">Github</label>
+					<input name="github" type="text" ng-model="vm.profile.github" id="github" class="form-control" placeholder="Github profile url" >
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="stackExchange">Stack Exchange</label>
+					<input name="stackExchange" type="text" ng-model="vm.profile.stackExchange" id="stackExchange" class="form-control" placeholder="Stack Exchange profile url" >
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="stackOverflow">Stack Overflow</label>
+					<input name="stackOverflow" type="text" ng-model="vm.profile.stackOverflow" id="stackOverflow" class="form-control" placeholder="Stack Overflow profile url" >
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="linkedIn">LinkedIn</label>
+					<input name="linkedIn" type="text" ng-model="vm.profile.linkedIn" id="linkedIn" class="form-control" placeholder="LinkedIn profile url" >
+				</div>
+				<div class="form-group">
+					<label class="control-label" for="skillist">Skills (comma delimited list)</label>
+					<input type="text" name="skillist" ng-model="vm.profile.skillist" id="skillist" class="form-control" placeholder="Tag List"></input>
+				</div>
+			</fieldset>
+	</div>
+	</div>
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+	<div class="btn-group">
+	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
+		<i class="glyphicon glyphicon-save"></i> Save
+	  </a>
+	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="profiles.view({profileId:vm.profile.code})" title="Cancel">
+		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+	  </a>
+	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="profiles.list" title="Cancel">
+		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
+	  </a>
+	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
+		<i class="glyphicon glyphicon-trash"></i> Remove
+	  </a>
+	</div>
+	</div>
+	</div>
+  </form>
+</div>
+</section>
+
