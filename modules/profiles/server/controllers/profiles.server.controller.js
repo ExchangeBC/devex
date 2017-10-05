@@ -122,7 +122,7 @@ exports.update = function (req, res) {
 	}
 	else {
 		return res.status(422).send({
-			message: "Not Authorized"
+			message: 'Not Authorized'
 		});
 
 	}
