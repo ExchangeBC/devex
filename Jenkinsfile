@@ -52,9 +52,9 @@ node('maven') {
 }
 
 
-stage('deploy-test') {
+stage('deploy-test') {	
   timeout(time: 5, unit: 'DAYS') {
-	  input "Deploy to test?"
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
   }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
@@ -63,7 +63,7 @@ stage('deploy-test') {
 
 stage('deploy-prod') {
   timeout(time: 5, units: 'DAYS') {
-	  input "Deploy to prod?"
+	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
   }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
