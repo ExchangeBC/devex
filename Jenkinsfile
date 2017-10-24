@@ -53,15 +53,18 @@ node('maven') {
 
 
 stage('deploy-test') {
-  input "Deploy to test?"
-  
+  timeout(time: 5, unit: 'DAYS') {
+	  input "Deploy to test?"
+  }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
   }
 }
 
 stage('deploy-prod') {
-  input "Deploy to prod?"
+  timeout(time: 5, units: 'DAYS') {
+	  input "Deploy to prod?"
+  }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
   }
