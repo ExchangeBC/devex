@@ -52,18 +52,23 @@ node('maven') {
 }
 
 
-stage('deploy-test') {
-  input "Deploy to test?"
-  
+stage('deploy-test') {	
+  timeout(time: 5, unit: 'DAYS') {
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+  }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
+     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", body: "See ${env.BUILD_URL} for details. ");
   }
 }
 
 stage('deploy-prod') {
-  input "Deploy to prod?"
+  timeout(time: 5, units: 'DAYS') {
+	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+  }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
+     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production", body: "See ${env.BUILD_URL} for details. ");
   }
   
 }
