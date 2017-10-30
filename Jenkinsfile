@@ -24,31 +24,35 @@ node('maven') {
         }
     }
 	
-	stage('build') {
+    stage('build') {
 	 echo "Building..."
 	 openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: 'latest'
     }
 	
+    try {
 	stage('validation') {
           dir('functional-tests'){
-			TEST_USERNAME = sh (
+		TEST_USERNAME = sh (
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
              returnStdout: true
               ).trim()
 			  
-			TEST_PASSWORD = sh (
+		TEST_PASSWORD = sh (
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
              returnStdout: true
               ).trim()
 			  
-			echo "TEST_USERNAME: ${TEST_USERNAME}"
-			echo "TEST_PASSWORD: ${TEST_PASSWORD}"
+	//		echo "TEST_USERNAME: ${TEST_USERNAME}"
+	//		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
 
             sh "TEST_USERNAME=${TEST_USERNAME}\nTEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
-      }
-   }
+          }
+	}
+    } finally {
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
+    }
 }
 
 
@@ -62,14 +66,14 @@ stage('deploy-test') {
   }
 }
 
-stage('deploy-prod') {
-  timeout(time: 5, units: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
-  }
-  node('master'){
-     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
-     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production", body: "See ${env.BUILD_URL} for details. ");
-  }
+//stage('deploy-prod') {
+//  timeout(time: 5, units: 'DAYS') {
+//	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+//  }
+//  node('master'){
+//     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
+//     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production", body: "See ${env.BUILD_URL} for details. ");
+//  }
   
 }
 
