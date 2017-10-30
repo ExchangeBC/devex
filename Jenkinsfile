@@ -1,3 +1,25 @@
+//define functions
+
+def getChangeString() {
+  MAX_MSG_LEN = 512
+  def changeString = ""
+  def changeLogSets = currentBuild.changeSets
+  for (int i = 0; i < changeLogSets.size(); i++) {
+     def entries = changeLogSets[i].items
+     for (int j = 0; j < entries.length; j++) {
+         def entry = entries[j]
+         truncated_msg = entry.msg.take(MAX_MSG_LEN)
+         changeString += " - ${truncated_msg} [${entry.author}]\n"
+     }
+  }
+  if (!changeString) {
+     changeString = "No changes"
+  }
+  return changeString
+}
+
+// pipeline
+
 node('maven') {
 
     stage('checkout') {
@@ -62,7 +84,9 @@ stage('deploy-test') {
   }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
-     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", body: "See ${env.BUILD_URL} for details. ");
+     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
+           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
   }
 }
 
@@ -72,7 +96,9 @@ stage('deploy-test') {
 //  }
 //  node('master'){
 //     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
-//     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production", body: "See ${env.BUILD_URL} for details. ");
+//     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+//           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production",
+//           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
 //  }
   
 }
