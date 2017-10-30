@@ -11,7 +11,7 @@ node('maven') {
              script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
              returnStdout: true
               ).trim()
-           echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
+           //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
 
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
@@ -47,7 +47,7 @@ node('maven') {
 	//		echo "TEST_USERNAME: ${TEST_USERNAME}"
 	//		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
 
-            sh "TEST_USERNAME=${TEST_USERNAME}\nTEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
+            sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
           }
 	}
     } finally {
