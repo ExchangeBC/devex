@@ -1,3 +1,26 @@
+//define functions
+
+@NonCPS
+def getChangeString() {
+  MAX_MSG_LEN = 512
+  def changeString = ""
+  def changeLogSets = currentBuild.changeSets
+  for (int i = 0; i < changeLogSets.size(); i++) {
+     def entries = changeLogSets[i].items
+     for (int j = 0; j < entries.length; j++) {
+         def entry = entries[j]
+         truncated_msg = entry.msg.take(MAX_MSG_LEN)
+         changeString += " - ${truncated_msg} [${entry.author}]\n"
+     }
+  }
+  if (!changeString) {
+     changeString = "No changes"
+  }
+  return changeString
+}
+
+// pipeline
+
 node('maven') {
 
     stage('checkout') {
@@ -11,7 +34,7 @@ node('maven') {
              script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
              returnStdout: true
               ).trim()
-           echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
+           //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
 
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
@@ -24,31 +47,39 @@ node('maven') {
         }
     }
 	
-	stage('build') {
+    stage('build') {
 	 echo "Building..."
 	 openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
+         openshiftVerifyBuild bldCfg: 'devxp', checkForTriggeredDeployments: 'false', namespace: 'devex-platform-tools', verbose: 'false'
+         echo '>>>> Build Complete'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: 'latest'
+         openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
+         echo '>>>> Deployment Complete'
+         openshiftVerifyService apiURL: 'http://platform-dev.pathfinder.gov.bc.ca/', namespace: 'devex-platform-dev', svcName: 'platform-dev', verbose: 'false'
+         echo '>>>> Service Verification Complete'
     }
-	
 	stage('validation') {
           dir('functional-tests'){
-			TEST_USERNAME = sh (
+		TEST_USERNAME = sh (
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
              returnStdout: true
               ).trim()
 			  
-			TEST_PASSWORD = sh (
+		TEST_PASSWORD = sh (
              script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
              returnStdout: true
               ).trim()
 			  
-			echo "TEST_USERNAME: ${TEST_USERNAME}"
-			echo "TEST_PASSWORD: ${TEST_PASSWORD}"
+	//		echo "TEST_USERNAME: ${TEST_USERNAME}"
+	//		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
 
-            sh "TEST_USERNAME=${TEST_USERNAME}\nTEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
-      }
-   }
+            sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
+          }
+	}
+    } finally {
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
+    }
 }
 
 
@@ -58,18 +89,26 @@ stage('deploy-test') {
   }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
-     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", body: "See ${env.BUILD_URL} for details. ");
+     openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
+     echo '>>>> Deployment Complete'
+     openshiftVerifyService apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test', svcName: 'platform-test', verbose: 'false'
+     echo '>>>> Service Verification Complete'
+     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
+           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
   }
 }
 
-stage('deploy-prod') {
-  timeout(time: 5, units: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
-  }
-  node('master'){
-     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
-     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca', subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production", body: "See ${env.BUILD_URL} for details. ");
-  }
+//stage('deploy-prod') {
+//  timeout(time: 5, units: 'DAYS') {
+//	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+//  }
+//  node('master'){
+//     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
+//     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+//           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production",
+//           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
+//  }
   
 }
 
