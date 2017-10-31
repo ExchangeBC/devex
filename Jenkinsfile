@@ -30,7 +30,7 @@ node('maven') {
     }
 
     stage('code quality check') {
-            SONARQUBE_PWD = sh (
+           SONARQUBE_PWD = sh (
              script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
              returnStdout: true
               ).trim()
@@ -44,7 +44,7 @@ node('maven') {
 
            dir('sonar-runner') {
             sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
-        }
+           }
     }
 	
     stage('build') {
@@ -82,7 +82,6 @@ node('maven') {
     } finally {
 	    archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
     }
-}
 
 
 stage('deploy-test') {	
