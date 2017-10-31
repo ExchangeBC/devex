@@ -56,7 +56,7 @@ node('maven') {
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: 'latest'
          openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	 echo ">>>> Deployment Complete"
-         openshiftVerifyService apiURL: 'http://platform-dev.pathfinder.gov.bc.ca/', namespace: 'devex-platform-dev', svcName: 'platform-dev', verbose: 'false'
+         openshiftVerifyService svcName: 'platform-dev', apiURL: 'http://platform-dev.pathfinder.gov.bc.ca/', namespace: 'devex-platform-dev', verbose: 'false'
 	 echo ">>>> Service Verification Complete"
     }
 	stage('validation') {
@@ -91,7 +91,7 @@ stage('deploy-test') {
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
      openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
      echo ">>>> Deployment Complete"
-     openshiftVerifyService apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test', svcName: 'platform-test', verbose: 'false'
+     openshiftVerifyService svcName: 'platform-test', apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test', verbose: 'false'
      echo ">>>> Service Verification Complete"
      mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
