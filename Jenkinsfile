@@ -1,5 +1,6 @@
 //define functions
 
+@NonCPS
 def getChangeString() {
   MAX_MSG_LEN = 512
   def changeString = ""
@@ -49,11 +50,15 @@ node('maven') {
     stage('build') {
 	 echo "Building..."
 	 openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
+         openshiftVerifyBuild bldCfg: 'devxp', checkForTriggeredDeployments: 'false', namespace: 'devex-platform-tools', verbose: 'false'
+         echo '>>>> Build Complete'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
 	 openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: 'latest'
+         openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
+         echo '>>>> Deployment Complete'
+         openshiftVerifyService apiURL: 'http://platform-dev.pathfinder.gov.bc.ca/', namespace: 'devex-platform-dev', svcName: 'platform-dev', verbose: 'false'
+         echo '>>>> Service Verification Complete'
     }
-	
-    try {
 	stage('validation') {
           dir('functional-tests'){
 		TEST_USERNAME = sh (
