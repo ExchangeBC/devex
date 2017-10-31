@@ -59,6 +59,8 @@ node('maven') {
 	    openshiftVerifyService svcName: 'platform-dev', apiURL: 'http://platform-dev.pathfinder.gov.bc.ca/', namespace: 'devex-platform-dev'
 	    echo ">>>> Service Verification Complete"
     }
+ 
+    try {
 	stage('validation') {
           dir('functional-tests'){
 		TEST_USERNAME = sh (
@@ -78,7 +80,7 @@ node('maven') {
           }
 	}
     } finally {
-      archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
+	    archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
     }
 }
 
