@@ -89,6 +89,10 @@ stage('deploy-test') {
   }
   node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
+     openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
+     echo '>>>> Deployment Complete'
+     openshiftVerifyService apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test', svcName: 'platform-test', verbose: 'false'
+     echo '>>>> Service Verification Complete'
      mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
