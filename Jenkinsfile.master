@@ -76,24 +76,24 @@ node('maven') {
     //		echo "TEST_USERNAME: ${TEST_USERNAME}"
     //		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
 
-    //          sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
-     //    }
-     //	 }
-     //} finally {
-     //  archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
-     //}
-
+    //          sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"     
+    //    }
+    //	 }
+    //} finally {
+    //  archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
+    //}
+}
 
 stage('deploy-test') {	
-  //timeout(time: 5, unit: 'DAYS') {
-  //	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
-  //}
+  timeout(time: 1, unit: 'DAYS') {
+  	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+  }
   node('master'){
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
 	  openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
-	  openshiftVerifyService svcName: 'platform-test', apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test'
-	  echo ">>>> Service Verification Complete"
+	  //openshiftVerifyService svcName: 'platform-test', apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test'
+	  //echo ">>>> Service Verification Complete"
 	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
@@ -101,7 +101,7 @@ stage('deploy-test') {
 }
 
 stage('deploy-prod') {
-    timeout(time: 5, units: 'DAYS') {
+    timeout(time: 1, units: 'DAYS') {
 	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
     }
     node('master'){
@@ -115,4 +115,3 @@ stage('deploy-prod') {
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
     }
 }
-
