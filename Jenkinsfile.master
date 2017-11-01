@@ -32,16 +32,12 @@ node('maven') {
     stage('code quality check') {
            SONARQUBE_PWD = sh (
              script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
-             returnStdout: true
-              ).trim()
+             returnStdout: true).trim()
            //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
-
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
-               returnStdout: true
-                  ).trim()
+               returnStdout: true).trim()
            echo "SONARQUBE_URL: ${SONARQUBE_URL}"
-
            dir('sonar-runner') {
             sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
            }
@@ -65,29 +61,24 @@ node('maven') {
     //    dir('functional-tests'){
     //		TEST_USERNAME = sh (
     //            script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
-    //           returnStdout: true
-    //           ).trim()
-    //			  
+    //            returnStdout: true).trim()
     //		TEST_PASSWORD = sh (
     //            script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
-    //           returnStdout: true
-    //           ).trim()
-			  
+    //            returnStdout: true).trim()
     //		echo "TEST_USERNAME: ${TEST_USERNAME}"
     //		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
-
     //          sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
      //    }
      //	 }
      //} finally {
      //  archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
      //}
-
+}
 
 stage('deploy-test') {	
-  //timeout(time: 5, unit: 'DAYS') {
-  //	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
-  //}
+  timeout(time: 1, unit: 'DAYS') {
+  	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+  }
   node('master'){
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
 	  openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
@@ -101,7 +92,7 @@ stage('deploy-test') {
 }
 
 stage('deploy-prod') {
-    timeout(time: 5, units: 'DAYS') {
+    timeout(time: 1, units: 'DAYS') {
 	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
     }
     node('master'){
