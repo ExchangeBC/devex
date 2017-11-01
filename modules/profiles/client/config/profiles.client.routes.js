@@ -7,7 +7,7 @@
 	'use strict';
 
 	angular.module('profiles.routes').config(['$stateProvider', function ($stateProvider) {
-		$stateProvider
+		if (window.features.swu) $stateProvider
 		// -------------------------------------------------------------------------
 		//
 		// this is the top level, abstract route for all profile routes, it only

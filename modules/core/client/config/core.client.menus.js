@@ -24,9 +24,9 @@
       state: 'settings.profile'
     });
 
-    menuService.addSubMenuItem('account', 'settings', {
-      title: 'Edit Profile Picture',
-      state: 'settings.picture'
+    if (window.features.swu) menuService.addSubMenuItem('account', 'settings', {
+      title: 'Messages',
+      state: 'settings.messages'
     });
 
   }

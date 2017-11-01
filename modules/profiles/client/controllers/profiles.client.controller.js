@@ -22,6 +22,7 @@
 		vm.authentication  = Authentication;
 		vm.ProfilesService = ProfilesService;
 		vm.idString        = 'profileId';
+		console.log ('vm.profile.capabilities', vm.profile.capabilities);
 		//
 		// what can the user do here?
 		//
@@ -50,6 +51,21 @@
 		vm.authentication = Authentication;
 		vm.cities         = dataService.cities;
 		vm.profile.skillist = vm.profile.skills ? vm.profile.skills.join (', ') : '';
+		vm.capabilities = [
+		{id:'cap1', text:'Agile Coach'},
+		{id:'cap2', text:'Backend Web Developer'},
+		{id:'cap3', text:'Business Analyst'},
+		{id:'cap4', text:'Delivery Manager'},
+		{id:'cap5', text:'DevOps Engineer'},
+		{id:'cap6', text:'Digital Performance Analyst'},
+		{id:'cap7', text:'Frontend Web Developer'},
+		{id:'cap8', text:'Interaction Designer / User Researcher / Usability Tester'},
+		{id:'cap9', text:'Product Manager'},
+		{id:'cap10', text:'Security Engineer'},
+		{id:'cap11', text:'Technical Architect'},
+		{id:'cap12', text:'Visual Designer'},
+		{id:'cap13', text:'Writer / Content Designer / Content Strategist'}
+		];
 		if (!editing) {
 			vm.profile.user = Authentication.user;
 		}
@@ -88,6 +104,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
+			console.log ('profile', vm.profile.capabilities);
 			vm.form.profileForm.$setPristine ();
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.profileForm');

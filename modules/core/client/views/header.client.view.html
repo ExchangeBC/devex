@@ -17,7 +17,7 @@
       <li class="dropdown" uib-dropdown>
         <a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
           <img ng-src="{{vm.authentication.user.profileImageURL}}" class="header-profile-image" />
-          <span ng-bind="vm.authentication.user.displayName"></span> <b class="caret"></b>
+          <span ng-bind="vm.authentication.user.displayName"></span><b class="caret"></b>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">

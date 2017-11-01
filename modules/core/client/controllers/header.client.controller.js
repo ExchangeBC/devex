@@ -7,9 +7,8 @@
 
   HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService'];
 
-  function HeaderController($scope, $state, $location, Authentication, menuService) {
+  function HeaderController($scope, $state, $location, Authentication, menuService, flags) {
     var vm = this;
-
     vm.accountMenu = menuService.getMenu('account').items[0];
     vm.authentication = Authentication;
     vm.isCollapsed = false;

@@ -7,7 +7,7 @@ var validator = require('validator'),
 /**
  * Render the main application page
  */
- // CC:  USERFIELDS
+ // CC:USERFIELDS
 exports.renderIndex = function (req, res) {
   var safeUserObject = null;
   if (req.user) {
@@ -41,14 +41,37 @@ exports.renderIndex = function (req, res) {
       businessAddress2        : validator.escape(req.user.businessAddress2),
       businessCity            : validator.escape(req.user.businessCity),
       businessProvince        : req.user.businessProvince,
-      businessCode            : validator.escape(req.user.businessCode)
+      businessCode            : validator.escape(req.user.businessCode),
+      location                : req.user.location,
+      description             : validator.escape(req.user.description),
+      website                 : req.user.website,
+      skills                  : req.user.skills,
+      badges                  : req.user.badges,
+      capabilities            : req.user.capabilities,
+      endorsements            : req.user.endorsements,
+      github                  : req.user.github,
+      stackOverflow           : req.user.stackOverflow,
+      stackExchange           : req.user.stackExchange,
+      linkedIn                : req.user.linkedIn,
+      isPublicProfile         : req.user.isPublicProfile,
+      isAutoAdd               : req.user.isAutoAdd
     };
   }
 
   res.render('modules/core/server/views/index', {
     user: JSON.stringify(safeUserObject),
     sharedConfig: JSON.stringify(config.shared),
-    feature_hide: config.feature_hide
+    //
+    // CC:FEATURES
+    //
+    // in prod, config.feature_hide will be true. in dev and test false
+    // use this fact to hide and show features in the front end
+    //
+    // feature_hide: config.feature_hide
+    features: JSON.stringify({
+      people : !config.feature_hide,
+      swu    : !config.feature_hide
+    })
   });
 };
 
@@ -82,4 +105,10 @@ exports.renderNotFound = function (req, res) {
       res.send('Path not found');
     }
   });
+};
+
+exports.getFlags = function () {
+  return {
+    featureHide: config.feature_hide
+  };
 };

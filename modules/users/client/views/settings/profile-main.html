@@ -1,0 +1,116 @@
+
+<section>
+	<!-- <div class="col-xs-offset-1 col-xs-10 col-md-offset-4 col-md-4"> -->
+
+	<!--<div class="col-xs-2 col-sm-2" style="text-align: center;">
+   		<img class="img-rounded" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>
+	</div>-->
+
+	<form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
+		<div class="row">
+			<div class="col-sm-6">
+				<fieldset>
+					<form-input
+						ng-model="vm.user.firstName"
+						class="col-sm-12"
+						x-form="vm.userForm"
+						x-options='{
+							"title":"First Name",
+							"id":"firstName",
+							"name":"firstName",
+							"placeholder":"First Name",
+							"required":"First Name is required"
+						}'>
+					</form-input>
+					<form-input
+						ng-model="vm.user.lastName"
+						class="col-sm-12"
+						x-form="vm.userForm"
+						x-options='{
+							"title":"Last Name",
+							"id":"lastName",
+							"name":"lastName",
+							"placeholder":"Last Name",
+							"required":"Last Name is required"
+						}'>
+					</form-input>
+					<form-input
+						ng-model="vm.user.email"
+						class="col-sm-12"
+						x-form="vm.userForm"
+						x-options='{
+							"title":"Email Address",
+							"id":"email",
+							"name":"email",
+							"placeholder":"Email Address",
+							"required":"Email Address is required"
+						}'>
+					</form-input>
+					<form-input
+						ng-model="vm.user.userTitle"
+						class="col-sm-12"
+						x-form="vm.userForm"
+						x-options='{
+							"title":"Title",
+							"id":"userTitle",
+							"name":"userTitle",
+							"placeholder":"Title"
+						}'>
+					</form-input>
+					<form-display
+						class="col-sm-12"
+						x-options='{
+							"title":"Location",
+							"id":"location",
+							"name":"location"
+						}'>
+						<select name="location" ng-model="vm.user.location" id="location" class="form-control"  ng-options="v as v for v in vm.cities">
+							<option value="">Select Location</option>
+						</select>
+					</form-display>
+
+				</fieldset>
+			</div>
+			<div class="col-sm-6">
+				<h3><avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="70"></avatar-display></h3>
+				<div><edit-profile-image></edit-profile-image></div>
+				<br/>
+				<div class="checkbox">
+					<label>
+					<input ng-if="!vm.goveditable" type="checkbox"  ng-model="vm.isgov" disabled>
+					<input ng-if="vm.goveditable" type="checkbox"  ng-model="vm.isgov" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+					Verify me as a B.C. public sector employee so I can publish content on the BCDevExchange
+					</label>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12" ng-if="window.features.swu">
+				<form-display
+					class="col-sm-12"
+					x-options='{
+						"title":"A little Bit About You",
+						"id":"description",
+						"name":"description"
+					}'>
+					<textarea
+						name="description"
+						id="description"
+						class="form-control input-sm"
+						ui-tinymce="vm.tinymceOptions"
+						placeholder="A full description of the profile"
+						ng-model="vm.user.description">
+					</textarea>
+				</form-display>
+			</div>
+		</div>
+		<br/>
+		<div class="row text-center">
+			<div class="form-group">
+				<button class="btn btn-danger" ng-click="vm.delete()">Delete</button>
+				&nbsp; &nbsp; &nbsp;
+				<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+			</div>
+		</div>
+	</form>
+</section>

@@ -26,6 +26,7 @@
     $logProvider.debugEnabled(app.applicationEnvironment !== 'production');
 
     $uiViewScrollProvider.useAnchorScroll();
+
   }
 
 

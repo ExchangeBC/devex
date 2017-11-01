@@ -1,24 +1,99 @@
 ﻿(function () {
-  'use strict';
+	'use strict';
+	angular.module ('users')
+	// -------------------------------------------------------------------------
+	//
+	// force lowercase input
+	//
+	// -------------------------------------------------------------------------
+	.directive ('lowercase', function () {
+		return {
+			require: 'ngModel',
+			link: function (scope, element, attrs, modelCtrl) {
+				modelCtrl.$parsers.push (function (input) {
+					return input ? input.toLowerCase() : '';
+				});
+				element.css ('text-transform', 'lowercase');
+			}
+		};
+	})
+	// -------------------------------------------------------------------------
+	//
+	// directive, modal edit profile pic
+	//
+	// -------------------------------------------------------------------------
+	.directive ('editProfileImage', function () {
+		return {
+			require: 'ngModel',
+			scope: {
+				ngModel: '=',
+				options: '='
+			},
+			controllerAs: 'wsx',
+			bindToController: true,
+			restrict: 'EAC',
+			// replace: true,
+			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">edit profile image</button>',
+			controller: function ($scope, $uibModal, $timeout, Authentication, Upload, Notification) {
+				var wsx = this;
+				wsx.edit = function () {
+					console.log ('what');
+					$uibModal.open ({
+						size: 'lg',
+						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',
+						controllerAs: 'qqq',
+						bindToController: true,
+						controller: function ($timeout, Authentication, $uibModalInstance, Upload, Notification) {
+							var qqq = this;
+							qqq.user = Authentication.user;
+							qqq.fileSelected = false;
 
-  // Users directive used to force lowercase input
-  angular
-    .module('users')
-    .directive('lowercase', lowercase);
+							qqq.upload = function (dataUrl, name) {
+								Upload.upload({
+									url: '/api/users/picture',
+									data: {
+										newProfilePicture: Upload.dataUrltoBlob(dataUrl, name)
+									}
+								}).then(function (response) {
+									$uibModalInstance.dismiss('cancel');
+									$timeout(function () {
+										onSuccessItem(response.data);
+									});
+								}, function (response) {
+									if (response.status > 0) onErrorItem(response.data);
+								}, function (evt) {
+									qqq.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+								});
+							};
 
-  function lowercase() {
-    var directive = {
-      require: 'ngModel',
-      link: link
-    };
+							// Called after the user has successfully uploaded a new picture
+							function onSuccessItem(response) {
+								// Show success message
+								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
+								// Populate user object
+								qqq.user = Authentication.user = response;
+								// Reset form
+								qqq.fileSelected = false;
+								qqq.progress = 0;
+							}
 
-    return directive;
+							// Called after the user has failed to uploaded a new picture
+							function onErrorItem(response) {
+								qqq.fileSelected = false;
+								// Show error message
+								Notification.error({ message: response.message, title: '<i class="glyphicon glyphicon-remove"></i> Change profile picture failed!' });
+							}
 
-    function link(scope, element, attrs, modelCtrl) {
-      modelCtrl.$parsers.push(function (input) {
-        return input ? input.toLowerCase() : '';
-      });
-      element.css('text-transform', 'lowercase');
-    }
-  }
+							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }
+						}
+					})
+					// .result.finally (function () {
+					// 	$state.go ($state.previous.state, $state.previous.params);
+					// });
+					;
+				}
+			}
+		};
+	})
+	;
 }());

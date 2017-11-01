@@ -138,5 +138,33 @@
 			}
 		}
 	})
+	// -------------------------------------------------------------------------
+	//
+	// directive for listing company proposals
+	//
+	// -------------------------------------------------------------------------
+	.directive ('companyProposals', function () {
+		return {
+			restrict     : 'E',
+			controllerAs : 'vm',
+			scope        : {
+				org: '=',
+				title: '@',
+				context: '@'
+			},
+			templateUrl  : '/modules/proposals/client/views/company-proposals-directive.html',
+			controller   : function ($scope, TeamsService, Authentication, Notification) {
+				var vm     = this;
+				vm.program = $scope.program;
+				vm.context = $scope.context;
+				var isUser = Authentication.user;
+				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
+				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
+				vm.userCanAdd = true || vm.isAdmin;
+				console.log ('user can add', vm.userCanAdd);
+				if ($scope.title) vm.title = $scope.title;
+			}
+		}
+	})
 	;
 }());

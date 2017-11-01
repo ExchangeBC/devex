@@ -1,0 +1,56 @@
+<section class="detail">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.edit({orgId:vm.org._id})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this org? Click here to send a request to the org admin.">
+						<i class="glyphicon glyphicon-user"></i> Request Membership
+					</button>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 text-center" style="padding-top: 0;">
+				<div class="row">
+					<div class="col-xs-2 vcenter">
+						<img class="img-rounded" style="max-height: 40px;" src="/{{vm.org.orgImageURL}}"/>
+					</div>
+					<div class="col-xs-10 vcenter">
+						<h1 style="color: text-transform: none; margin-bottom: 10px;" ng-bind="vm.org.name"></h1>
+					</div>
+					<div class="panel-body">
+						<p style="font-size: 16px; padding-bottom: 10px;" ng-bind="vm.org.short"></p>
+						<p ng-if="vm.org.website"><a href="{{vm.org.website}}" rel="nofollow"><i class="fa fa-external-link"></i> org website</a></p>
+						<p ng-bind-html="vm.description" style="margin-top: 20px; text-align: left;"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<!-- <core-member-list model="vm.org" idstring="vm.idString" service="vm.orgsService" title="Company Members"></core-member-list> -->
+		<!-- <core-member-requests model="vm.org" idstring="vm.idString" service="vm.orgsService" ng-if="vm.canEdit"></core-member-requests> -->
+		<team-list org="vm.org" title="Teams" context="org"></team-list>
+		<company-proposals org="vm.org" context="org" title="Company Proposals"></company-proposals>
+	</div>
+
+<div class="container">
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.edit({orgId:vm.org._id})" uib-tooltip="Edit this page">
+				<i class="glyphicon glyphicon-edit"></i> Edit
+			</button>
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this org? Click here to send a request to the org admin.">
+				<i class="glyphicon glyphicon-user"></i> Request Membership
+			</button>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+</section>
