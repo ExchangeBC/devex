@@ -21,6 +21,12 @@ def getChangeString() {
 
 // pipeline
 
+// Note: openshiftVerifyDeploy requires policy to be added:
+// oc policy add-role-to-user view -z system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-dev
+// oc policy add-role-to-user view -z system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-test
+// oc policy add-role-to-user view -z system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-prod
+
+
 node('maven') {
 
     stage('checkout') {
@@ -85,10 +91,10 @@ node('maven') {
 
 
 stage('deploy-test') {	
-  timeout(time: 5, unit: 'DAYS') {
+  timeout(time: 1, unit: 'DAYS') {
 	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
   }
-  node('master'){
+  node('master') {
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
 	  openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
@@ -101,7 +107,7 @@ stage('deploy-test') {
 }
 
 //stage('deploy-prod') {
-//  timeout(time: 5, units: 'DAYS') {
+//  timeout(time: 1, units: 'DAYS') {
 //	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
 //  }
 //  node('master'){
@@ -112,4 +118,3 @@ stage('deploy-test') {
 //  }
   
 }
-
