@@ -25,7 +25,7 @@
 	<div class="col-sm-12">
 			<fieldset>
 				<div class="form-group" ng-if="vm.programLink" >
-					<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
+					<a  id="programs.view" ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				</div>
 				<div class="form-group" ng-if="!vm.programLink" >
 					<label class="control-label" for="program">Program</label>
@@ -102,13 +102,13 @@
 	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="teams.view({teamId:vm.team.code})" title="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default"  id="teams.view" ui-sref="teams.view({teamId:vm.team.code})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="!vm.editing && !vm.programId" class="btn btn-default" ui-sref="teams.list" title="Cancel">
+	  <a ng-if="!vm.editing && !vm.programId" class="btn btn-default"  id="teams.list" ui-sref="teams.list" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="!vm.editing && vm.programId" class="btn btn-default" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
+	  <a ng-if="!vm.editing && vm.programId" class="btn btn-default"  id="programs.view" ui-sref="programs.view({programId:vm.programId})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
 	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">

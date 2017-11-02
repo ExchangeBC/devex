@@ -34,12 +34,12 @@
 	<div class="col-sm-12">
 		<fieldset>
 			<!--<div class="form-group">
-				<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
+				<a  id="programs.view" ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				<span ng-if="!vm.programId">To choose a program, please select a Project.</span>
 			</div>-->
 
 			<div class="form-group" ng-if="vm.projectLink" >
-				<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
+				<a  id="projects.view" ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 			</div>
 			<div class="form-group" >
 				<label class="control-label" for="project">Project</label>
@@ -350,13 +350,13 @@
 					<i class="glyphicon glyphicon-save"></i> Save
 				</button>
 
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" title="Cancel">
+				<a ng-if="vm.editing" class="btn btn-default"  id="opportunities.view" ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && !vm.projectId" class="btn btn-default" ui-sref="opportunities.list" title="Cancel">
+				<a ng-if="!vm.editing && !vm.projectId" class="btn btn-default"  id="opportunities.list" ui-sref="opportunities.list" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
-				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
+				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default"  id="projects.view" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
 					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 				</a>
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">

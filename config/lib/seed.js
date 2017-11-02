@@ -10,6 +10,9 @@ var _ = require('lodash'),
 // global seed options object
 var seedOptions = {};
 
+var isProduction  = config.feature_hide;
+var isDevelopment = !isProduction;
+
 function removeUser (user) {
   return new Promise(function (resolve, reject) {
     var User = mongoose.model('User');
@@ -194,10 +197,28 @@ module.exports.start = function start(options) {
 
     var adminAccount = new User(seedOptions.seedAdmin);
     var userAccount = new User(seedOptions.seedUser);
+    var devAccount = new User ({
+      username: 'dev',
+      provider: 'local',
+      email: 'dev@localhost.com',
+      firstName: 'Test',
+      lastName: 'Developer',
+      displayName: 'Test Developer',
+      roles: ['user']
+    });
+    var govAccount = new User ({
+      username: 'gov',
+      provider: 'local',
+      email: 'gov@localhost.com',
+      firstName: 'Test',
+      lastName: 'Government',
+      displayName: 'Test Government',
+      roles: ['user', 'gov']
+    });
 
     seedNotifications ().then (function () {
       // If production only seed admin if it does not exist
-      if (process.env.NODE_ENV === 'production') {
+      if (isProduction) {
         User.generateRandomPassphrase()
           .then(function (random) {
             var passed = process.env.ADMINPW;
@@ -210,21 +231,39 @@ module.exports.start = function start(options) {
           .catch(reportError(reject));
       } else {
         // Add both Admin and User account
-
-        User.generateRandomPassphrase()
-          .then(function () { return 'useruser'; })
-          .then(seedTheUser(userAccount))
-          .then(User.generateRandomPassphrase)
-          .then(function (random) {
-            var passed = process.env.ADMINPW;
-            console.log (passed);
-            return passed || 'adminadmin';
-          })
-          .then(seedTheUser(adminAccount))
-          .then(function () {
-            resolve();
-          })
-          .catch(reportError(reject));
+        Promise.resolve ()
+        //
+        // dev account
+        //
+        .then(function () { return 'devdev'; })
+        .then(seedTheUser(devAccount))
+        //
+        // gov account
+        //
+        .then(function () { return 'govgov'; })
+        .then(seedTheUser(govAccount))
+        //
+        // admin account
+        //
+        .then (User.generateRandomPassphrase())
+        .then(function (random) {
+          var passed = process.env.ADMINPW;
+          console.log (passed);
+          return passed || 'adminadmin';
+        })
+        .then(seedTheUser(adminAccount))
+        //
+        // general user account
+        //
+        .then(function () { return 'useruser'; })
+        .then(seedTheUser(userAccount))
+        //
+        // done
+        //
+        .then(function () {
+          resolve();
+        })
+        .catch(reportError(reject));
       }
 
     })

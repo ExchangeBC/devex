@@ -17,7 +17,7 @@
 <div class="card card-flat" ng-class="{'card-greyed': !notification.isPublished}" ng-repeat="notification in vm.notifications | slice:column.start:column.end">
 
 	<div class="card-header" style="text-align: right">
-		<a href="javascript:void(0);" ui-sref="notificationadmin.edit({ notificationId: notification.code, programId: notification.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
+		<a href="javascript:void(0);"  id="notificationadmin.edit" ui-sref="notificationadmin.edit({ notificationId: notification.code, programId: notification.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
 		<i class="glyphicon glyphicon-edit"></i>
 		</a>
 	</div>
@@ -35,7 +35,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12">
 				<h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;">
-					<a ui-sref="notifications.view({notificationId:notification._id})" ng-bind="notification.name"></a>
+					<a  id="notifications.view" ui-sref="notifications.view({notificationId:notification._id})" ng-bind="notification.name"></a>
 				</h3>
 			</div>
 		</div>

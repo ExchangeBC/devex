@@ -26,7 +26,7 @@
     <span ng-if="!proposal.isPublished" class="label-danger">
           <i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
     &nbsp;
-    <a ng-if="vm.isAdmin || proposal.userIs.admin" href="javascript:void(0);" ui-sref="proposaladmin.edit({ proposalId: proposal._id, programId: proposal.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
+    <a ng-if="vm.isAdmin || proposal.userIs.admin" href="javascript:void(0);"  id="proposaladmin.edit" ui-sref="proposaladmin.edit({ proposalId: proposal._id, programId: proposal.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
     <i class="glyphicon glyphicon-edit"></i>
     </a>
     &nbsp;
@@ -55,11 +55,11 @@
   <div class="card-block" style="padding-bottom: 0px; padding-top: 0;">
     <div class="row">
       <div class="col-xs-12 col-sm-12">
-        <h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a ui-sref="proposals.view({ proposalId: proposal._id, programId: proposal.program.code })" ng-bind="proposal.name"></a>
+        <h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a  id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id, programId: proposal.program.code })" ng-bind="proposal.name"></a>
         </h3>
         <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="proposal.short"></p>
         <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;" ng-if="!vm.program && proposal.program">
-        <!--<a ui-sref="programs.view({programId:proposal.program.code})">--><i class="fa fa-university"></i> {{proposal.program.title}}</p>
+        <!--<a  id="programs.view" ui-sref="programs.view({programId:proposal.program.code})">--><i class="fa fa-university"></i> {{proposal.program.title}}</p>
         </h5>
       </div>
     </div>

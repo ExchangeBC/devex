@@ -187,10 +187,10 @@
 	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="orgs.view({orgId:vm.org.code})" title="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default"  id="orgs.view" ui-sref="orgs.view({orgId:vm.org.code})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="orgs.list" title="Cancel">
+	  <a ng-if="!vm.editing" class="btn btn-default"  id="orgs.list" ui-sref="orgs.list" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
 	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">

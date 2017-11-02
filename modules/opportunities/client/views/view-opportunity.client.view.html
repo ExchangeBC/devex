@@ -7,7 +7,7 @@
 		<div class="row" ng-if="!vm.loggedIn">
 			<div class="well-transparent text-center">
 				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? &nbsp;
-				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
 				</p>
 			</div>
 		</div>
@@ -17,7 +17,7 @@
 
 <!-- // User doesn't have an email address in their profile // -->
 			<div class="well-transparent text-center" ng-if="!vm.notifyMe && !vm.hasEmail">
-				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? <a href ui-sref="settings.profile">  Add your email address.</a></p>
+				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
 			</div>
 
 <!-- // User is NOT following the opportunity // -->
@@ -112,12 +112,12 @@
 					</dd>
 					<dt>Program:</dt>
 					<dd>
-						<a ng-if="vm.opportunity.program" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+						<a ng-if="vm.opportunity.program"  id="programs.view" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
 						<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
 					</dd>
 					<dt>Project:</dt>
 					<dd>
-						<a ng-if="vm.opportunity.project" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+						<a ng-if="vm.opportunity.project"  id="projects.view" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
 						<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
 					</dd>
 					<!-- github link -->
@@ -171,7 +171,7 @@
 						<button class="btn btn-warning" ng-if="vm.canEdit" ng-click="vm.unassign()">UNASSIGN</button>
 					</div>
 					<div class="col-md-2" ng-if="vm.canEdit || vm.isMember">
-						<a ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
+						<a  id="proposals.view" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
 					</div>
 				</div>
 			</div>

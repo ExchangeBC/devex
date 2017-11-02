@@ -17,7 +17,7 @@
 		&nbsp;
 		<span ng-if="org.userIs.member && !org.userIs.admin" class="label label-primary">Member</span>
 		&nbsp;
-		<a ng-if="vm.isAdmin || org.userIs.admin" href="javascript:void(0);" ui-sref="orgadmin.edit({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+		<a ng-if="vm.isAdmin || org.userIs.admin" href="javascript:void(0);"  id="orgadmin.edit" ui-sref="orgadmin.edit({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
 	</div>
 
 	<div class="card-block" style="padding: 10px;">
@@ -29,7 +29,7 @@
 			</div>
 			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
 				<h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
-					<a ui-sref="orgs.view({ orgId: org._id })" ng-bind="org.name"></a>
+					<a  id="orgs.view" ui-sref="orgs.view({ orgId: org._id })" ng-bind="org.name"></a>
 				</h3>
 				<p ng-bind-html="vm.trust(org.description)"></p>
 			</div>

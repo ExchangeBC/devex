@@ -5,16 +5,16 @@
 			<nav class="col-xs-12">
 				<ul class="nav nav-pills">
 					<li ui-sref-active="active">
-						<a ui-sref="settings.profile">Edit Profile</a>
+						<a  id="settings.profile" ui-sref="settings.profile">Edit Profile</a>
 					</li>
 					<li ui-sref-active="active">
-						<a ui-sref="settings.privacy">Privacy</a>
+						<a  id="settings.privacy" ui-sref="settings.privacy">Privacy</a>
 					</li>
 					<li ui-sref-active="active" ng-if="window.features.swu">
-						<a ui-sref="settings.skills">Skills</a>
+						<a  id="settings.skills" ui-sref="settings.skills">Skills</a>
 					</li>
 					<li ui-sref-active="active" ng-if="window.features.swu">
-						<a ui-sref="settings.messages">Messages <span class="badge">42</span></a>
+						<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
 					</li>
 				</ul>
 			</nav>

@@ -27,7 +27,7 @@
     &nbsp;
     <a ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" uib-tooltip="Request Membership"><i class="glyphicon glyphicon-user"></i></a>
     &nbsp;
-    <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+    <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);"  id="programadmin.edit" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
   </div>
 
   <div class="card-block" style="padding: 10px;">
@@ -39,7 +39,7 @@
       </div>
       <div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
         <h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
-          <a ui-sref="programs.view({ programId: program.code })" ng-bind="program.title"></a>
+          <a  id="programs.view" ui-sref="programs.view({ programId: program.code })" ng-bind="program.title"></a>
         </h3>
         <p ng-bind="program.short"></p>
       </div>

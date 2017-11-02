@@ -212,10 +212,10 @@
 	  <a class="btn btn-primary" ng-click="vm.saveme()" title="Save">
 		<i class="glyphicon glyphicon-save"></i> Save
 	  </a>
-	  <a ng-if="vm.editing" class="btn btn-default" ui-sref="profiles.view({profileId:vm.profile.code})" title="Cancel">
+	  <a ng-if="vm.editing" class="btn btn-default"  id="profiles.view" ui-sref="profiles.view({profileId:vm.profile.code})" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
-	  <a ng-if="!vm.editing" class="btn btn-default" ui-sref="profiles.list" title="Cancel">
+	  <a ng-if="!vm.editing" class="btn btn-default"  id="profiles.list" ui-sref="profiles.list" title="Cancel">
 		<i class="glyphicon glyphicon-fast-backward"></i> Cancel
 	  </a>
 	  <a ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">

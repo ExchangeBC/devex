@@ -4,7 +4,7 @@
 		<div class="row" ng-if="qaz.case === 'guest'">
 			<div class="well-transparent text-center">
 				<p>Want <span class="hidden-sm hidden-xs">to </span>apply<span class="hidden-sm hidden-xs"> for this opportunity</span>? &nbsp;
-				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+				<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
 				</p>
 			</div>
 		</div>
@@ -12,7 +12,7 @@
 
 		<div class="row" ng-if="qaz.case === 'canadd'">
 			<div class="well-transparent text-center">
-				<p><a ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-lg btn-warning">
+				<p><a  id="proposaladmin.create" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-lg btn-warning">
 				<i class="glyphicon glyphicon-user"></i>&nbsp;&nbsp;Apply
 				</a><span class="hidden-xs" style="font-weight: 200; vertical-align: text-top;">&nbsp; &nbsp; Submit a proposal to work on this opportunity.</span></p>
 			</div>
@@ -26,7 +26,7 @@
 					<span style="font-weight: 600;" ng-if="qaz.proposal.status === 'Draft'">		<i class="glyphicon glyphicon-file"></i> Draft Proposal Created &nbsp;<span class="hidden-xs" style="font-weight: 200;">&nbsp;Submit before <span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>!&nbsp;</span>
 					</span>
 					&nbsp;
-					<a ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default btn-md">
+					<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default btn-md">
 					<i class="glyphicon glyphicon-pencil"></i>&nbsp; Update Proposal
 					</a>
 				</p>

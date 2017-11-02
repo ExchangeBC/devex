@@ -31,7 +31,7 @@
         <a ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-check"></i>
         </a>
         &nbsp;
-        <a ng-if="vm.isAdmin || opportunity.userIs.admin" href="javascript:void(0);" ui-sref="opportunityadmin.edit({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+        <a ng-if="vm.isAdmin || opportunity.userIs.admin" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.edit({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
        <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
     </div>
 
@@ -67,7 +67,7 @@
     </div>
 
     <div class="card-block" style="padding-bottom: 0px;">
-      <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
+      <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a  id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
       </h3>
       <p ng-bind="opportunity.short" style="font-size: 14px;"></p>
       <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></p>
