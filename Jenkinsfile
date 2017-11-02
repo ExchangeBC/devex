@@ -88,7 +88,7 @@ node('maven') {
     } finally {
 	    archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
     }
-
+}
 
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
@@ -116,5 +116,3 @@ stage('deploy-test') {
 //           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production",
 //           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
 //  }
-  
-}
