@@ -2,11 +2,11 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 ext {
     // The drivers we want to use
-    drivers = ["firefox", "chrome", "phantomJs"]
+    drivers = ["firefox", "chrome", "phantomJs", "ie"]
 
     ext {
         groovyVersion = '2.4.12'
-        gebVersion = '1.1.1'
+        gebVersion = '2.0'
         seleniumVersion = '2.53.0'
         chromeDriverVersion = '2.30'
         phantomJsVersion = '2.1.1'
@@ -32,9 +32,13 @@ dependencies {
     // If using JUnit, need to depend on geb-junit (3 or 4)
     testCompile "org.gebish:geb-junit4:$gebVersion"
 
+    //Select Dependency
+    testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
+
     // Drivers
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
+    testCompile "org.seleniumhq.selenium:selenium-ie-driver:$seleniumVersion"
     // using a custom version of phantomjs driver for now as the original one does not support WebDriver > 2.43.1
     testCompile("com.codeborne:phantomjsdriver:1.3.0") {
         // phantomjs driver pulls in a different selenium version
@@ -69,8 +73,15 @@ chromeTest {
 phantomJsTest {
     dependsOn unzipPhantomJs
 
-    def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "phantomjs.exe" : "bin/phantomjs"
+    def phantomJsFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "bin/phantomjs.exe" : "bin/phantomjs"
     systemProperty "phantomjs.binary.path", new File(unzipPhantomJs.outputs.files.singleFile, phantomJsFilename).absolutePath
+}
+
+ieTest {
+    dependsOn unzipIeDriver
+
+    def iedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "IEDriverServer.exe" : "IEDriverServer"
+    systemProperty "webdriver.ie.driver", new File(unzipIeDriver.outputs.files.singleFile, iedriverFilename).absolutePath
 }
 
 test {
