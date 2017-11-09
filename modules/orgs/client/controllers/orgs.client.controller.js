@@ -31,10 +31,53 @@
 	})
 	// =========================================================================
 	//
-	// Controller the view of the org page
+	// create a new org
 	//
 	// =========================================================================
-	.controller('OrgEditController', function ($scope, $state, $sce, $window, $timeout, Upload, org, editing, Authentication, Notification, previousState, dataService) {
+	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+		var vm = this;
+		vm.features = window.features;
+		vm.org = org;
+		// vm.orgaddForm = {};
+		var isUser           = Authentication.user;
+		vm.add = function (isValid) {
+			if (!isValid) {
+				$scope.$broadcast('show-errors-check-validity', 'vm.orgaddForm');
+				return false;
+			}
+			vm.org.createOrUpdate ()
+			.then (function () {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Company saved successfully!'
+				})
+			})
+			.then (function () {
+				$state.go ('orgadmin.profile', {orgId:vm.org._id});
+			})
+			.catch (function (res) {
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Company save error!'
+				});
+			});
+		}
+		vm.delete = function () {
+			$state.go('orgs.list');
+		}
+	})
+	// =========================================================================
+	//
+	// top level of the edit
+	//
+	// =========================================================================
+	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	})
+	// =========================================================================
+	//
+	// edit the tonbstone info for an org
+	//
+	// =========================================================================
+	.controller('OrgProfileController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -43,14 +86,14 @@
 		vm.org        = org;
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
-		vm.previousState  = previousState;
-		vm.editing        = editing;
+		// vm.previousState  = previousState;
+		// vm.editing        = editing;
 		vm.cities         = dataService.cities;
 		vm.capabilities   = dataService.capabilities;
 
-		if (editing && (!vm.org || !vm.org._id)) {
-			return $state.go('orgadmin.create');
-		}
+		// if (editing && (!vm.org || !vm.org._id)) {
+		// 	return $state.go('orgadmin.create');
+		// }
 
 		vm.form           = {};
 		vm.tinymceOptions = {
@@ -120,6 +163,20 @@
 				});
 			});
 		};
+	})
+	// =========================================================================
+	//
+	// edit org skill list
+	//
+	// =========================================================================
+	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	})
+	// =========================================================================
+	//
+	// edit org skill list
+	//
+	// =========================================================================
+	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 	})
 	;
 }());

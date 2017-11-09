@@ -57,6 +57,11 @@ exports.renderIndex = function (req, res) {
       isAutoAdd               : req.user.isAutoAdd
     };
   }
+  var features = config.features.split ('-');
+  var featureObject = {};
+  features.forEach (function (el) {
+    featureObject[el] = true;
+  });
 
   res.render('modules/core/server/views/index', {
     user: JSON.stringify(safeUserObject),
@@ -68,10 +73,7 @@ exports.renderIndex = function (req, res) {
     // use this fact to hide and show features in the front end
     //
     // feature_hide: config.feature_hide
-    features: JSON.stringify({
-      people : !config.feature_hide,
-      swu    : !config.feature_hide
-    })
+    features: JSON.stringify (featureObject)
   });
 };
 

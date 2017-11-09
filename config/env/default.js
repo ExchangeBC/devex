@@ -11,6 +11,7 @@ module.exports = {
     domain: process.env.DOMAIN || 'http://localhost:3030'
   },
   feature_hide: process.env.FEATURE_HIDE || false,
+  features: process.env.FEATURES || 'none',
   port: process.env.PORT || 3000,
   host: process.env.HOST || '0.0.0.0',
   // DOMAIN config should be set to the fully qualified application accessible

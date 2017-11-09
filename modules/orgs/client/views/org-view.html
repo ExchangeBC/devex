@@ -5,7 +5,7 @@
 			<div class="col-xs-12 text-right">
 
 				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.edit({orgId:vm.org._id})" uib-tooltip="Edit this page">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit this page">
 						<i class="glyphicon glyphicon-edit"></i> Edit
 					</button>
 					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this org? Click here to send a request to the org admin.">
@@ -42,7 +42,7 @@
 	<div class="row form-foot">
 	<div class="col-sm-12 col-form-buttons text-right">
 		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.edit({orgId:vm.org._id})" uib-tooltip="Edit this page">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit this page">
 				<i class="glyphicon glyphicon-edit"></i> Edit
 			</button>
 			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this org? Click here to send a request to the org admin.">

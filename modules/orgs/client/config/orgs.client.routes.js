@@ -21,6 +21,22 @@
 		})
 		// -------------------------------------------------------------------------
 		//
+		// create a new org
+		//
+		// -------------------------------------------------------------------------
+		.state ('orgs.create', {
+			url: '/create',
+			templateUrl: '/modules/orgs/client/views/org-add.html',
+			controller: 'OrgCreateController',
+			controllerAs: 'vm',
+			resolve: {
+				org: function (OrgsService) {
+					return new OrgsService();
+				}
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
 		// org listing. Resolve to all orgs in the system and place that in
 		// the scope. listing itself is done through a directive
 		//
@@ -67,59 +83,74 @@
 		// -------------------------------------------------------------------------
 		.state('orgadmin', {
 			abstract: true,
-			url: '/orgadmin',
-			template: '<ui-view/>'
-		})
-		// -------------------------------------------------------------------------
-		//
-		// edit a org
-		//
-		// -------------------------------------------------------------------------
-		.state('orgadmin.edit', {
-			url: '/:orgId/edit',
-			templateUrl: '/modules/orgs/client/views/edit-org.client.view.html',
-			controller: 'OrgEditController',
+			url: '/orgadmin/:orgId',
+			templateUrl: '/modules/orgs/client/views/org-edit.html',
+			controller: 'OrgAdminController',
 			controllerAs: 'vm',
 			resolve: {
 				org: function ($stateParams, OrgsService) {
 					return OrgsService.get({
 						orgId: $stateParams.orgId
 					}).$promise;
-				},
-				editing: function () { return true; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
 				}
+			},
+			data: {
+				roles: ['user', 'admin']
 			}
 		})
-		// -------------------------------------------------------------------------
-		//
-		// create a new org and edit it
-		//
-		// -------------------------------------------------------------------------
-		.state('orgadmin.create', {
-			url: '/create',
-			templateUrl: '/modules/orgs/client/views/edit-org.client.view.html',
-			controller: 'OrgEditController',
+		.state('orgadmin.profile', {
+			url: '/main',
+			templateUrl: '/modules/orgs/client/views/org-main.html',
+			controller: 'OrgProfileController',
 			controllerAs: 'vm',
-			resolve: {
-				org: function (OrgsService) {
-					return new OrgsService();
-				},
-				editing: function () { return false; },
-				previousState: function ($state) {
-				  return {
-					name: $state.current.name,
-					params: $state.params,
-					url: $state.href($state.current.name, $state.params)
-				  };
-				}
+			data: {
+				pageTitle: 'Company Settings'
 			}
 		})
+		.state ('orgadmin.skills', {
+			url: '/skills',
+			templateUrl: '/modules/orgs/client/views/org-skills.html',
+			controller: 'OrgSkillsController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Skills'
+			}
+		})
+		.state ('orgadmin.teams', {
+			url: '/skills',
+			templateUrl: '/modules/orgs/client/views/org-teams.html',
+			controller: 'OrgTeamsController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Teams'
+			}
+		})
+		// // -------------------------------------------------------------------------
+		// //
+		// // edit a org
+		// //
+		// // -------------------------------------------------------------------------
+		// .state('orgadmin.profile', {
+		// 	url: '/:orgId/edit',
+		// 	templateUrl: '/modules/orgs/client/views/edit-org.client.view.html',
+		// 	controller: 'OrgEditController',
+		// 	controllerAs: 'vm',
+		// 	resolve: {
+		// 		org: function ($stateParams, OrgsService) {
+		// 			return OrgsService.get({
+		// 				orgId: $stateParams.orgId
+		// 			}).$promise;
+		// 		},
+		// 		editing: function () { return true; },
+		// 		previousState: function ($state) {
+		// 			return {
+		// 				name: $state.current.name,
+		// 				params: $state.params,
+		// 				url: $state.href($state.current.name, $state.params)
+		// 			};
+		// 		}
+		// 	}
+		// })
 		;
 	}]);
 }());

@@ -10,6 +10,7 @@
 	// -------------------------------------------------------------------------
 	.controller('SettingsController', function ($scope, Authentication) {
 		var vm = this;
+		vm.features = window.features;
 		vm.user = Authentication.user;
 	})
 	// -------------------------------------------------------------------------
@@ -22,6 +23,7 @@
 		vm.user = angular.copy(Authentication.user);
 		var pristineUser = angular.toJson (Authentication.user);
 		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
+		vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
 			console.log ('runing');
 			if (!isValid) {
@@ -57,6 +59,7 @@
 	// -------------------------------------------------------------------------
 	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService) {
 		var vm = this;
+		vm.features = window.features;
 		vm.user = angular.copy(Authentication.user);
 		var pristineUser = angular.toJson (Authentication.user);
 		vm.capabilities     = dataService.capabilities;

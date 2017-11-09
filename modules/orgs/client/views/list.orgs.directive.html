@@ -3,7 +3,7 @@
 		<h2 class="list-page-hide">Government Partners</h2>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
-		<button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="orgadmin.create()" title="New">
+		<button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="orgs.create()" title="New">
 			<i class="glyphicon glyphicon-plus"></i> New Compamny
 		</button>
 	</div>
@@ -17,7 +17,7 @@
 		&nbsp;
 		<span ng-if="org.userIs.member && !org.userIs.admin" class="label label-primary">Member</span>
 		&nbsp;
-		<a ng-if="vm.isAdmin || org.userIs.admin" href="javascript:void(0);"  id="orgadmin.edit" ui-sref="orgadmin.edit({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+		<a ng-if="vm.isAdmin || org.userIs.admin" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
 	</div>
 
 	<div class="card-block" style="padding: 10px;">

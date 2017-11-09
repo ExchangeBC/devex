@@ -22,7 +22,7 @@
 						<i class="small">When new opportunites are posted you will recieve an email notification with a link to the opportunity. You can unsubscribe at any time or simply return here and uncheck this option</i>
 					</div>
 					<br/>
-					<div class="checkbox" ng-if="window.features.swu">
+					<div class="checkbox" ng-if="vm.features.swu">
 						<label>
 						<input type="checkbox" ng-model="vm.user.isPublicProfile" ng-disabled='vm.user.email === "" || vm.user.email == null'>
 						Make my profile public
@@ -31,7 +31,7 @@
 						<i class="small">This allows non-registered users to view your profile information. You will still be discoverable for purposes of becoming part of organizations and teams, but not visible to general users.</i>
 					</div>
 					<br/>
-					<div class="checkbox" ng-if="window.features.swu">>
+					<div class="checkbox" ng-if="vm.features.swu">
 						<label>
 						<input type="checkbox" ng-model="vm.user.isAutoAdd" ng-disabled='vm.user.email === "" || vm.user.email == null'>
 						Allow myself to be added to teams under my organizations without having to consent
