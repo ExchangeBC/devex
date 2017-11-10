@@ -30,7 +30,7 @@ var OrgSchema = new Schema ({
 	contactPhone : {type: String, default: ''},
 	description  : {type: String, default: ''},
 	website      : {type: String, default: ''},
-	orgImageURL  : {type: String, default: ''},
+	orgImageURL  : {type: String, default: 'img/default.png'},
 	skills       : [String],
 	badges       : [String],
 	capabilities : [String],
