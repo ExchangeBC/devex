@@ -1,6 +1,6 @@
 
 <section>
-	<form name="vm.orgForm" id="vm.orgForm" ng-submit="vm.updateUserProfile(vm.orgForm.$valid)" class="signin" novalidate autocomplete="off">
+	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
 		<div class="row">
 			<div class="col-sm-6">
 				<fieldset>
@@ -106,8 +106,8 @@
 			</div>
 			<div class="col-sm-6">
 				<fieldset>
-				<h3><avatar-display url="vm.org.profileImageURL" text="vm.org.displayName" size="70"></avatar-display></h3>
-				<div><edit-profile-image></edit-profile-image></div>
+				<h3><avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="70"></avatar-display></h3>
+				<div><edit-org-image org="vm.org"></edit-org-image></div>
 				<br/>
 				<form-input
 					class="col-sm-12"
@@ -170,7 +170,9 @@
 		<br/>
 		<div class="row text-center">
 			<div class="form-group">
-				<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+				<button class="btn btn-danger" ng-click="vm.remove()">Delete</button>
+				&nbsp; &nbsp; &nbsp;
+				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
 			</div>
 		</div>
 	</form>

@@ -3,6 +3,95 @@
 	angular.module ('teams')
 	// -------------------------------------------------------------------------
 	//
+	// add or update a team
+	//
+	// -------------------------------------------------------------------------
+	.directive ('editTeam', function () {
+		return {
+			scope: {
+				org: '=',
+				team: '='
+			},
+			controllerAs: 'wsx',
+			bindToController: true,
+			restrict: 'EAC',
+			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Edit Team</button>',
+			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
+				var wsx = this;
+				wsx.edit = function () {
+					$uibModal.open ({
+						size: 'lg',
+						templateUrl: '/modules/teams/client/views/edit-team.client.view.html',
+						controllerAs: 'qqq',
+						bindToController: true,
+						controller: 'TeamEditController',
+						resolve: {
+							org: function () {
+								return wsx.org;
+							},
+							team: function (TeamsService) {
+								return wsx.team;
+							},
+							allusers: function (UsersService) {
+								return UsersService.query ().$promise;
+							}
+						}
+					})
+					.result.finally (function (r) {
+						console.log (r);
+						$rootScope.$broadcast('updateTeams', 'done');
+					})
+					;
+				}
+			}
+		};
+
+	})
+	.directive ('addTeam', function (TeamsService) {
+		return {
+			scope: {
+				org: '='
+			},
+			controllerAs: 'wsx',
+			bindToController: true,
+			restrict: 'EAC',
+			// replace: true,
+			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">Add Team</button>',
+			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
+				var wsx = this;
+				console.log ('wsx add team:', wsx);
+				var pteam = wsx.team;
+				wsx.edit = function () {
+					$uibModal.open ({
+						size: 'lg',
+						templateUrl: '/modules/teams/client/views/edit-team.client.view.html',
+						controllerAs: 'qqq',
+						bindToController: true,
+						controller: 'TeamEditController',
+						resolve: {
+							org: function () {
+								return wsx.org;
+							},
+							team: function (TeamsService) {
+								return new TeamsService ();
+							},
+							allusers: function (UsersService) {
+								return UsersService.query ().$promise;
+							}
+						}
+					})
+					.result.finally (function (r) {
+						console.log (r);
+						$rootScope.$broadcast('updateTeams', 'done');
+					})
+					;
+				}
+			}
+		};
+
+	})
+	// -------------------------------------------------------------------------
+	//
 	// directive for listing teams
 	//
 	// -------------------------------------------------------------------------
@@ -11,86 +100,25 @@
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
-				program: '=',
+				org: '=',
 				title: '@',
 				context: '@'
 			},
 			templateUrl  : '/modules/teams/client/views/list.teams.directive.html',
-			controller   : function ($scope, TeamsService, Authentication, Notification) {
+			controller   : function ($rootScope, $scope, TeamsService, Authentication, Notification) {
 				var vm     = this;
-				vm.program = $scope.program;
+				vm.org = $scope.org;
 				vm.context = $scope.context;
-				var isUser = Authentication.user;
-				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
-				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				if (vm.context === 'program') {
-					vm.programId = vm.program._id;
-					vm.programTitle = vm.program.title;
-				} else {
-					vm.programId = null;
-					vm.programTitle = null;
-				}
-				//
-				// if a program is supplied, then only list teams under it
-				// also allow adding a new team (because it has context)
-				//
-				if ($scope.program) {
-					vm.title      = 'Teams for '+$scope.program.title;
-					vm.programId  = $scope.program._id;
-					vm.userCanAdd = $scope.program.userIs.admin || vm.isAdmin;
-					vm.teams   = TeamsService.forProgram ({
-						programId: $scope.program._id
-					});
-					vm.columnCount = 1;
-				} else {
-					vm.title      = 'All Teams';
-					vm.programId  = null;
-					vm.userCanAdd = (vm.isAdmin || vm.isGov);
-					vm.teams   = TeamsService.query ();
-					vm.columnCount = 1;
-				}
+				vm.teams = TeamsService.forOrg({orgId:vm.org._id});
 				if ($scope.title) vm.title = $scope.title;
-				vm.publish = function (team, state) {
-					var publishedState = team.isPublished;
-					var t = state ? 'Published' : 'Un-Published'
-					team.isPublished = state;
-					team.createOrUpdate ()
-					//
-					// success, notify and return to list
-					//
-					.then (function () {
-						Notification.success ({
-							message : '<i class="glyphicon glyphicon-ok"></i> Team '+t+' Successfully!'
-						});
-					})
-					//
-					// fail, notify and stay put
-					//
-					.catch (function (res) {
-						team.isPublished = publishedState;
-						Notification.error ({
-							message : res.data.message,
-							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Team '+t+' Error!'
-						});
-					});
-				};
-				vm.request = function (team) {
-					TeamsService.makeRequest ({
-						teamId: team._id
-					}).$promise
-					.then (function () {
-						team.userIs.request = true;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
-					})
-					.catch (function (res) {
-						Notification.error ({
-							message : res.data.message,
-							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Membership Request Error!'
-						});
-					});
-				};
+				vm.columnCount = 1;
+				console.log ('teams', vm.teams, vm.context);
+				$rootScope.$on('updateTeams', function () {
+					vm.teams = TeamsService.forOrg({orgId:vm.org._id});
+				});
 			}
 		}
 	})
 	;
 }());
+

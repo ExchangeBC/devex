@@ -26,8 +26,8 @@ module.exports = function(app) {
   //
   // teams for program
   //
-  app.route('/api/teams/for/program/:programId')
-    .get(teams.forProgram);
+  app.route('/api/teams/for/org/:orgId')
+    .get(teams.forOrg);
 
   //
   // get lists of users

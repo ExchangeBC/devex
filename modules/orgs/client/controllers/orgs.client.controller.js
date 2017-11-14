@@ -23,6 +23,7 @@
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.isOwner = false;
 		vm.canEdit = vm.isAdmin || vm.isOwner;
+		vm.trust = $sce.trustAsHtml;
 
 		vm.description     = $sce.trustAsHtml(vm.org.description);
 		//
@@ -49,6 +50,7 @@
 			vm.orgForm.$setPristine ();
 			vm.org.createOrUpdate ()
 			.then (function (result) {
+				vm.orgForm.$setPristine ();
 				newId = result._id;
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Company saved successfully!'
@@ -80,7 +82,7 @@
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProfileController', function ($rootScope, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -109,6 +111,11 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+		$rootScope.$on('orgImageUpdated', function (evt, data) {
+			console.log ('event data = ', data);
+			vm.org.orgImageURL = data;
+
+		});
 		// -------------------------------------------------------------------------
 		//
 		// remove the program with some confirmation
@@ -116,6 +123,7 @@
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
+				console.log ('deleting');
 				vm.org.$remove(function() {
 					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
@@ -127,9 +135,6 @@
 		// save the org, could be added or edited (post or put)
 		//
 		// -------------------------------------------------------------------------
-		vm.saveme = function () {
-			this.save (true);
-		};
 		vm.save = function (isValid) {
 			console.log ('org', vm.org.capabilities);
 			vm.orgForm.$setPristine ();
@@ -197,7 +202,6 @@
 				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
 				Authentication.user = response;
 				vm.user = angular.copy(Authentication.user);
-				pristineUser = angular.toJson(Authentication.user);
 			}, function (response) {
 				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
 			});
@@ -209,6 +213,8 @@
 	//
 	// =========================================================================
 	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+		var vm = this;
+		vm.org = org;
 	})
 	// =========================================================================
 	//
@@ -216,6 +222,17 @@
 	//
 	// =========================================================================
 	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+		var vm = this;
+		vm.org = org;
+	})
+	// =========================================================================
+	//
+	// edit org skill list
+	//
+	// =========================================================================
+	.controller('OrgProposalsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+		var vm = this;
+		vm.org = org;
 	})
 	;
 }());

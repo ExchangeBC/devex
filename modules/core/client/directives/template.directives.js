@@ -9,24 +9,31 @@
 			replace: true,
 			// transclude: true,
 			scope: {
-				url: '=url',
-				size: '=size',
-				text: '=text'
+				url: '=',
+				size: '=',
+				text: '='
 			},
-			template: '<span><img class="img-circle" width="{{ avat.size }}" height="{{ avat.size }}" src="{{ avat.url }}"> &nbsp; {{ avat.text }}</img></span>',
+			template: '<span><img class="img-circle" width="{{ avat.size }}" height="{{ avat.size }}" src="{{ avat.fullurl }}"> &nbsp; {{ avat.text }}</img></span>',
 			controller: function ($scope) {
 				var avat = this;
-				var url = this.url;
-				avat.size = this.size || 40;
-				avat.text = this.text || '';
-				var fullPath;
-				if (!url) fullPath = '';
-				else fullPath = ((url.substr(0,1) === '/' || url.substr(0,4) === 'http') ? '' : '/') + url;
-				console.log ('full path', fullPath);
-				avat.url = fullPath;
+				var seturl = function () {
+					var url = $scope.url;
+					var fullPath;
+					if (!url) fullPath = '';
+					else fullPath = ((url.substr(0,1) === '/' || url.substr(0,4) === 'http') ? '' : '/') + url;
+					console.log ('full path', fullPath);
+					avat.fullurl = fullPath;
+				};
+				avat.size = $scope.size || 40;
+				seturl ();
+				$scope.$watch('url', function (newValue, oldValue) {
+					console.log ('CHANGE CHANGE');
+					if (newValue) {
+						seturl ();
+					}
+				});
 			},
 			controllerAs: 'avat',
-			bindToController: true,
 			restrict: 'EAC'
 		};
 	})

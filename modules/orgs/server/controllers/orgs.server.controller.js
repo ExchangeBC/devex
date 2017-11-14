@@ -28,6 +28,7 @@ var path = require('path'),
 	Org = mongoose.model('Org'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	multer = require('multer'),
 	_ = require('lodash')
 	;
 
@@ -104,7 +105,6 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-	if (req.org.user && req.user._id.toString() === req.org.user._id.toString()) {
 		var org = req.org;
 		org.remove(function (err) {
 			if (err) {
@@ -115,7 +115,6 @@ exports.delete = function (req, res) {
 				res.json (org);
 			}
 		});
-	}
 };
 
 // -------------------------------------------------------------------------
@@ -171,4 +170,32 @@ exports.orgByID = function (req, res, next, id) {
 		req.org = org;
 		next();
 	});
+};
+// -------------------------------------------------------------------------
+//
+// Logo upload
+//
+// -------------------------------------------------------------------------
+exports.logo = function (req, res) {
+	var org       = req.org;
+	var storage = multer.diskStorage (config.uploads.diskStorage);
+	var upload = multer({storage: storage}).single('orgImageURL');
+	upload.fileFilter = require(path.resolve('./config/lib/multer')).profileUploadFileFilter;
+	var up            = helpers.fileUploadFunctions (org, Org, 'orgImageURL', req, res, upload, org.orgImageURL);
+
+	if (org) {
+		up.uploadImage ()
+		.then (up.updateDocument)
+		.then (up.deleteOldImage)
+		.then (function () {
+			res.json (org);
+		})
+		.catch (function (err) {
+			res.status(422).send(err);
+		});
+	} else {
+		res.status(401).send({
+			message: 'invalid org or org not supplied'
+		});
+	}
 };

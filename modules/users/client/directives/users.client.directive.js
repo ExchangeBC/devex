@@ -27,7 +27,8 @@
 			require: 'ngModel',
 			scope: {
 				ngModel: '=',
-				options: '='
+				options: '=',
+				org: '='
 			},
 			controllerAs: 'wsx',
 			bindToController: true,
@@ -36,6 +37,11 @@
 			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">edit profile image</button>',
 			controller: function ($scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
+				var uploadurl = '/api/users/picture';
+				console.log ('org:', $scope.org);
+				if ($scope.org) {
+					uploadurl = '/api/upload/logo/org/'+$scope.org._id
+				}
 				wsx.edit = function () {
 					console.log ('what');
 					$uibModal.open ({
@@ -50,7 +56,7 @@
 
 							qqq.upload = function (dataUrl, name) {
 								Upload.upload({
-									url: '/api/users/picture',
+									url: uploadurl,
 									data: {
 										newProfilePicture: Upload.dataUrltoBlob(dataUrl, name)
 									}

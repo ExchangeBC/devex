@@ -17,13 +17,13 @@
 	// =========================================================================
 	.controller('TeamViewController', function ($scope, $state, $sce, $stateParams, team, Authentication, TeamsService, Notification) {
 		var vm                 = this;
-		vm.programId           = team.program ? team.program._id : $stateParams.programId;
-		vm.team             = team;
-		vm.display             = {};
-		vm.display.description = $sce.trustAsHtml(vm.team.description);
-		vm.authentication      = Authentication;
-		vm.TeamsService     = TeamsService;
-		vm.idString            = 'teamId';
+		qqq.programId           = team.program ? team.program._id : $stateParams.programId;
+		qqq.team             = team;
+		qqq.display             = {};
+		qqq.display.description = $sce.trustAsHtml(qqq.team.description);
+		qqq.authentication      = Authentication;
+		qqq.TeamsService     = TeamsService;
+		qqq.idString            = 'teamId';
 		//
 		// what can the user do here?
 		//
@@ -31,16 +31,16 @@
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var isMemberOrWaiting      = team.userIs.member || team.userIs.request;
-		vm.isAdmin                 = isAdmin;
-		vm.loggedIn                = isUser;
-		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
-		vm.canEdit                 = isAdmin || team.userIs.admin;
+		qqq.isAdmin                 = isAdmin;
+		qqq.loggedIn                = isUser;
+		qqq.canRequestMembership    = isGov && !isMemberOrWaiting;
+		qqq.canEdit                 = isAdmin || team.userIs.admin;
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
 		//
 		// -------------------------------------------------------------------------
-		vm.request = function () {
+		qqq.request = function () {
 			TeamsService.makeRequest({
 				teamId: team._id
 			}).$promise.then (function () {
@@ -52,7 +52,7 @@
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		vm.publish = function (state) {
+		qqq.publish = function (state) {
 			var publishedState = team.isPublished;
 			var t = state ? 'Published' : 'Un-Published'
 			team.isPublished = state;
@@ -82,77 +82,60 @@
 	// Controller the view of the team page
 	//
 	// =========================================================================
-	.controller('TeamEditController', function ($scope, $state, $sce, $stateParams, $window, team, editing, programs, Authentication, Notification, previousState) {
-		var vm             = this;
-		vm.previousState   = previousState;
-		vm.isAdmin         = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov           = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isTeamAdmin  = (vm.editing) ? team.userIs.admin : true;
-		vm.team         = team;
-		vm.authentication  = Authentication;
-		//
-		// if the user doesn't have the right access then kick them out
-		//
-		if (editing && !vm.isAdmin && !team.userIs.admin) $state.go('forbidden');
-		vm.form            = {};
-		vm.team.taglist = vm.team.tags? vm.team.tags.join (', ') : '';
-		vm.editing         = editing;
-		vm.context         = $stateParams.context;
-		vm.programs        = programs;
-		vm.tinymceOptions  = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     :'',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+	.controller('TeamEditController', function ($scope, $uibModalInstance, team, org, allusers, Authentication, Notification) {
+		var qqq             = this;
+		qqq.team         = team;
+		if (!qqq.team.org) qqq.team.org = org._id;
+		console.log (team);
+		qqq.teamForm = {};
+		if (!qqq.team.members) qqq.team.members = [];
+		qqq.removals = [];
+		qqq.additions = [];
+		qqq.allusers = [];
+		var availableusers = [];
+		var pristine = angular.copy (qqq.team);
+		qqq.people = [];
+		var memberHash = qqq.team.members.reduce (function (accum, current) {accum[current._id] = current;return accum;}, {});
+		var peopleHash = allusers.reduce (function (accum, current) {
+			accum[current._id] = current;
+			if (!memberHash[current._id]) qqq.allusers.push (current);
+			return accum;
+		}, {});
+		console.log ('member hash', memberHash);
+		console.log ('people hash', peopleHash);
+		console.log ('allusers', qqq.allusers);
+		console.log ('allusers', allusers);
+		var removeElements = function (a, idlist) {
+			var idx = idlist.reduce (function (accum, curr) {accum[curr] = true; return accum;}, {});
+			return a.reduce (function (accum, curr) {
+				if (!idx[curr._id]) accum.push (curr);
+				return accum;
+			}, [])
+			.sort (function (a, b) {
+				if (a.displayName < b.displayName) return -1;
+				if (a.displayName > b.displayName) return 1;
+				return 0;
+			});
 		};
-		if (vm.programs.length === 0) {
-			alert ('You do not have a program for which you are able to create a team. Please browse to or create a program to put the new team under.');
-			$state.go (previousState.name, previousState.params);
-		}
-		//
-		// if adding we care about the context
-		// if editing, the program field is locked (and is just a link)
-		// if adding then the user is restricted to add under a program they have
-		// admin over. If adding wihin the context of a program then restrict to
-		// that program only
-		//
-		//
-		// defaults
-		//
-		vm.programLink  = true;
-		vm.programId    = $stateParams.programId;
-		vm.programTitle = $stateParams.programTitle;
-		//
-		// if editing, set from existing
-		//
-		if (vm.editing) {
-			vm.programId    = team.program._id;
-			vm.programTitle = team.program.title;
-		} else {
-			//
-			// if adding with no program context display select box
-			//
-			if (vm.context === 'allteams') {
-				vm.programLink = false;
-			}
-			//
-			// if adding with program context set the program on the record
-			//
-			else if (vm.context === 'program') {
-				vm.team.program = vm.programId;
-			}
-		}
+		var addElements = function (a, idlist, pool) {
+			return idlist.reduce (function (accum, curr) {
+				accum.push (pool[curr]);
+				return accum;
+			}, a)
+			.sort (function (a, b) {
+				if (a.displayName < b.displayName) return -1;
+				if (a.displayName > b.displayName) return 1;
+				return 0;
+			});
+		};
 		// -------------------------------------------------------------------------
 		//
 		// remove the team with some confirmation
 		//
 		// -------------------------------------------------------------------------
-		vm.remove = function () {
+		qqq.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
-				vm.team.$remove(function() {
+				qqq.team.$remove(function() {
 					$state.go('teams.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> team deleted successfully!' });
 				});
@@ -160,43 +143,50 @@
 		};
 		// -------------------------------------------------------------------------
 		//
+		// add or remove members
+		//
+		// -------------------------------------------------------------------------
+		qqq.addPerson = function () {
+			console.log ('add Person');
+			if (qqq.additions.length) {
+				qqq.team.members = addElements (qqq.team.members, qqq.additions, peopleHash);
+				qqq.allusers = removeElements (qqq.allusers, qqq.additions);
+				qqq.additions = [];
+			}
+		};
+		qqq.remPerson = function () {
+			console.log ('remove person');
+			if (qqq.removals.length) {
+				qqq.allusers = addElements (qqq.allusers, qqq.removals, peopleHash);
+				qqq.team.members = removeElements (qqq.team.members, qqq.removals);
+				qqq.removals = [];
+			}
+		};
+		// -------------------------------------------------------------------------
+		//
 		// save the team, could be added or edited (post or put)
 		//
 		// -------------------------------------------------------------------------
-		vm.saveme = function () {
-			this.save (true);
-		};
-		vm.save = function (isValid) {
-			vm.form.teamForm.$setPristine ();
+		qqq.savenow = function (isValid) {
+			qqq.teamForm.$setPristine ();
 			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.form.teamForm');
+				$scope.$broadcast('show-errors-check-validity', 'qqq.teamForm');
 				return false;
-			}
-			if (vm.team.taglist !== '') {
-				vm.team.tags = vm.team.taglist.split(/ *, */);
-			} else {
-				vm.team.tags = [];
-			}
-			//
-			// if we were adding, then set the selected programId, unless it was adding inside
-			// a program context already, then just use the one that is already set
-			//
-			if (!editing && vm.context === 'allteams') {
-				vm.team.program = vm.programId;
 			}
 			//
 			// Create a new team, or update the current instance
 			//
-			vm.team.createOrUpdate ()
+			console.log ('qqq.team', qqq.team);
+			qqq.team.createOrUpdate ()
 			//
 			// success, notify and return to list
 			//
-			.then (function () {
-				vm.form.teamForm.$setPristine ();
+			.then (function (result) {
+				qqq.teamForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> team saved successfully!'
 				});
-				$state.go('teams.view', {teamId:team.code});
+				$uibModalInstance.close (qqq.team);
 			})
 			//
 			// fail, notify and stay put
@@ -207,6 +197,15 @@
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> team save error!'
 				});
 			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// leave and set back to normal
+		//
+		// -------------------------------------------------------------------------
+		qqq.quitnow = function () {
+			team = pristine;
+			$uibModalInstance.dismiss('cancel');
 		};
 	})
 	;

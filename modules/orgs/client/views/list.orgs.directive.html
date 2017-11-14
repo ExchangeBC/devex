@@ -4,7 +4,7 @@
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right">
 		<button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="orgs.create()" title="New">
-			<i class="glyphicon glyphicon-plus"></i> New Compamny
+			<i class="glyphicon glyphicon-plus"></i> New Company
 		</button>
 	</div>
 </div>
@@ -23,9 +23,7 @@
 	<div class="card-block" style="padding: 10px;">
 		<div class="row">
 			<div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
-				<div class="card-img">
-					<img class="img-rounded" style="height: 60px;" src="/{{org.logo}}"/>
-				</div>
+				<avatar-display url="org.orgImageURL" size="100"></avatar-display>
 			</div>
 			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
 				<h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">

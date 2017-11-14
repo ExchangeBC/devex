@@ -33,6 +33,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/my/orgs',
       permissions: ['*']
     }, {
+      resources: '/api/upload/logo/org/:orgId',
+      permissions: ['*']
+    }, {
       resources: '/api/orgs/:orgId',
       permissions: ['*']
     }]

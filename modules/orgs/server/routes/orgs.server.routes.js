@@ -18,6 +18,10 @@ module.exports = function (app) {
 		.put(orgs.update)
 		.delete(orgs.delete);
 
+	app.route('/api/upload/logo/org/:orgId')
+		.all (orgsPolicy.isAllowed)
+		.post (orgs.logo);
+
 
 	// Finish by binding the org middleware
 	app.param('orgId', orgs.orgByID);

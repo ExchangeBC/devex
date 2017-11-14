@@ -65,7 +65,7 @@
 		// -------------------------------------------------------------------------
 		.state('orgs.view', {
 			url: '/:orgId',
-			templateUrl: '/modules/orgs/client/views/view-org.client.view.html',
+			templateUrl: '/modules/orgs/client/views/org-view.html',
 			controller: 'OrgViewController',
 			controllerAs: 'vm',
 			resolve: {
@@ -117,12 +117,21 @@
 			}
 		})
 		.state ('orgadmin.teams', {
-			url: '/skills',
+			url: '/teams',
 			templateUrl: '/modules/orgs/client/views/org-teams.html',
 			controller: 'OrgTeamsController',
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Teams'
+			}
+		})
+		.state ('orgadmin.proposals', {
+			url: '/proposals',
+			templateUrl: '/modules/orgs/client/views/org-proposals.html',
+			controller: 'OrgProposalsController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Proposals'
 			}
 		})
 		// // -------------------------------------------------------------------------

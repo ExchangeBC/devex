@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	if (window.features.swu) angular.module('teams').run(['menuService', function (menuService) {
+	if (window.features.teams) angular.module('teams').run(['menuService', function (menuService) {
 		menuService.addMenuItem ('topbar', {
 			title: 'Teams',
 			state: 'teams.list',

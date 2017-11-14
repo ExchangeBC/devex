@@ -19,6 +19,7 @@ var validateLocalStrategyEmail = function (email) {
 // -------------------------------------------------------------------------
 var OrgSchema = new Schema ({
 	name         : {type: String, default: '', required: 'Name cannot be blank'},
+	dba          : {type: String, default: ''},
 	address      : {type: String, default: ''},
 	address2     : {type: String, default: ''},
 	city         : {type: String, default: ''},

@@ -15,9 +15,9 @@
       update: {
         method: 'PUT'
       },
-      forProgram: {
+      forOrg: {
         method: 'GET',
-        url: '/api/teams/for/program/:programId',
+        url: '/api/teams/for/org/:orgId',
         isArray: true
       },
       makeRequest: {

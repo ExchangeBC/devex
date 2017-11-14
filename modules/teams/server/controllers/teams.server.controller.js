@@ -71,9 +71,9 @@ var ensureAdmin = function (team, user, res) {
 		return true;
 	}
 };
-var forProgram = function (id) {
+var forOrg = function (id) {
 	return new Promise (function (resolve, reject) {
-		Team.find ({program:id}).exec ().then (resolve, reject);
+		Team.find ({org:id}).exec ().then (resolve, reject);
 	});
 };
 var searchTerm = function (req, opts) {
@@ -175,16 +175,13 @@ exports.requests = function (team, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
+	console.log (req.body);
 	var team = new Team(req.body);
 	//
 	// set the code, this is used for setting roles and other stuff
 	//
 	Team.findUniqueCode (team.name, null, function (newcode) {
 		team.code = newcode;
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (team, req.user)
 		//
 		// save and return
 		//
@@ -194,14 +191,8 @@ exports.create = function(req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				setTeamAdmin (team, req.user);
-				req.user.save ();
-				Notifications.addNotification ({
-					code: 'not-update-'+team.code,
-					name: 'Update of Team '+team.name,
-					target: 'Team',
-					event: 'Update'
-				});
+				// setTeamAdmin (team, req.user);
+				// req.user.save ();
 				res.json(team);
 			}
 		});
@@ -225,46 +216,12 @@ exports.read = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-	if (ensureAdmin (req.team, req.user, res)) {
-		var wasPublished = req.team.isPublished;
-		var isPublished = req.body.isPublished;
-		if (!wasPublished && isPublished) {
-			Opportunities.rePublishOpportunities (req.team.program._id, req.team._id);
-		}
-		else if (wasPublished && !isPublished) {
-			Opportunities.unPublishOpportunities (req.team.program._id, req.team._id);
-		}
+	// if (ensureAdmin (req.team, req.user, res)) {
 		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step
 		//
 		var team = _.assign (req.team, req.body);
-		//
-		// determine what notify actions we want to send out, if any
-		// if not published, then we send nothing
-		//
-		var notificationCodes = [];
-		var doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
-		if (isPublished && !doNotNotify) {
-			if (wasPublished) {
-				//
-				// this is an update, we send both specific and general
-				//
-				notificationCodes = ['not-updateany-team', 'not-update-'+team.code];
-			} else {
-				//
-				// this is an add as it is the first time being published
-				//
-				notificationCodes = ['not-add-team'];
-			}
-		}
-
-		team.wasPublished = (team.isPublished || team.wasPublished);
-
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (team, req.user)
 		//
 		// save
 		//
@@ -274,18 +231,10 @@ exports.update = function (req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				team.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/teams/'+team.code;
-				Promise.all (notificationCodes.map (function (code) {
-					return Notifications.notifyObject (code, team);
-				}))
-				.catch (function () {
-				})
-				.then (function () {
-					res.json (decorate (team, req.user ? req.user.roles : []));
-				});
+				res.json (team);
 			}
 		});
-	}
+	// }
 };
 
 // -------------------------------------------------------------------------
@@ -316,9 +265,7 @@ exports.delete = function (req, res) {
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
 	Team.find(searchTerm (req)).sort('activity name')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('program', 'code title logo isPublished')
+	.populate('members', 'displayName')
 	.exec(function (err, teams) {
 		if (err) {
 			return res.status(422).send({
@@ -414,10 +361,9 @@ exports.denyMember = function (req, res) {
 // get teams under program
 //
 // -------------------------------------------------------------------------
-exports.forProgram = function (req, res) {
-	Team.find(searchTerm (req, {program:req.program._id})).sort('name')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
+exports.forOrg = function (req, res) {
+	Team.find({org:req.org._id}).sort('name')
+	.populate('members', 'displayName')
 	.exec(function (err, teams) {
 		if (err) {
 			return res.status(422).send({
@@ -447,9 +393,7 @@ exports.new = function (req, res) {
 exports.teamByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'prj' ) {
 		Team.findOne({code:id})
-		.populate('createdBy', 'displayName')
-		.populate('updatedBy', 'displayName')
-		.populate('program', 'code title logo isPublished')
+		.populate('members', 'displayName')
 		.exec(function (err, team) {
 			if (err) {
 				return next(err);
@@ -470,9 +414,7 @@ exports.teamByID = function (req, res, next, id) {
 		}
 
 		Team.findById(id)
-		.populate('createdBy', 'displayName')
-		.populate('updatedBy', 'displayName')
-		.populate('program', 'code title logo isPublished')
+		.populate('members', 'displayName')
 		.exec(function (err, team) {
 			if (err) {
 				return next(err);
@@ -493,7 +435,7 @@ exports.teamByID = function (req, res, next, id) {
 //
 // -------------------------------------------------------------------------
 exports.rePublishTeams = function (programId) {
-	return forProgram (programId)
+	return forOrg (programId)
 	.then (function (teams) {
 		return Promise.all (teams.map (function (team) {
 			team.isPublished = team.wasPublished;
@@ -502,7 +444,7 @@ exports.rePublishTeams = function (programId) {
 	});
 };
 exports.unPublishTeams = function (programId) {
-	return forProgram (programId)
+	return forOrg (programId)
 	.then (function (teams) {
 		return Promise.all (teams.map (function (team) {
 			team.wasPublished = team.isPublished;
