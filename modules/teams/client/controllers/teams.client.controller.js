@@ -17,13 +17,13 @@
 	// =========================================================================
 	.controller('TeamViewController', function ($scope, $state, $sce, $stateParams, team, Authentication, TeamsService, Notification) {
 		var vm                 = this;
-		qqq.programId           = team.program ? team.program._id : $stateParams.programId;
-		qqq.team             = team;
-		qqq.display             = {};
-		qqq.display.description = $sce.trustAsHtml(qqq.team.description);
-		qqq.authentication      = Authentication;
-		qqq.TeamsService     = TeamsService;
-		qqq.idString            = 'teamId';
+		vm.programId           = team.program ? team.program._id : $stateParams.programId;
+		vm.team             = team;
+		vm.display             = {};
+		vm.display.description = $sce.trustAsHtml(vm.team.description);
+		vm.authentication      = Authentication;
+		vm.TeamsService     = TeamsService;
+		vm.idString            = 'teamId';
 		//
 		// what can the user do here?
 		//
@@ -31,16 +31,16 @@
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var isMemberOrWaiting      = team.userIs.member || team.userIs.request;
-		qqq.isAdmin                 = isAdmin;
-		qqq.loggedIn                = isUser;
-		qqq.canRequestMembership    = isGov && !isMemberOrWaiting;
-		qqq.canEdit                 = isAdmin || team.userIs.admin;
+		vm.isAdmin                 = isAdmin;
+		vm.loggedIn                = isUser;
+		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+		vm.canEdit                 = isAdmin || team.userIs.admin;
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
 		//
 		// -------------------------------------------------------------------------
-		qqq.request = function () {
+		vm.request = function () {
 			TeamsService.makeRequest({
 				teamId: team._id
 			}).$promise.then (function () {
@@ -52,7 +52,7 @@
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		qqq.publish = function (state) {
+		vm.publish = function (state) {
 			var publishedState = team.isPublished;
 			var t = state ? 'Published' : 'Un-Published'
 			team.isPublished = state;
@@ -82,7 +82,7 @@
 	// Controller the view of the team page
 	//
 	// =========================================================================
-	.controller('TeamEditController', function ($scope, $uibModalInstance, team, org, allusers, Authentication, Notification) {
+	.controller('TeamEditController', function ($scope, $window, $state, $uibModalInstance, team, org, allusers, Authentication, Notification) {
 		var qqq             = this;
 		qqq.team         = team;
 		if (!qqq.team.org) qqq.team.org = org._id;
