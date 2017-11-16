@@ -3,9 +3,9 @@
   <div class="col-sm-7">
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
   </div>
-  <div class="col-sm-5 col-form-buttons text-right">
-  <button ng-if="vm.userCanAdd" class="btn " ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
-    <i class="glyphicon glyphicon-plus"></i> New Project
+  <div class="col-sm-12 col-form-buttons text-left">
+  <button ng-if="vm.userCanAdd" class="btn btn-default" ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
+    <i class="glyphicon glyphicon-plus"></i> List a new project
   </button>
   </div>
 </div>
@@ -43,26 +43,13 @@
     </a>
   </div>
 
-  <div class="card-header" style="background-color: #f2f2f2; padding-top: 0px;">
-    <div class="container">
-        <div class="label-list" style="margin-left: -18px;">
-          <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
-        </div>
-      </div>
-  </div>
-
-
-  <div class="card-block" style="padding-bottom: 0px; padding-top: 0;">
-    <div class="row">
-      <div class="col-xs-12 col-sm-12">
-        <h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a  id="projects.view" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })" ng-bind="project.name"></a>
-        </h3>
-        <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="project.short"></p>
-        <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;" ng-if="!vm.program && project.program">
-        <!--<a  id="programs.view" ui-sref="programs.view({programId:project.program.code})">--><i class="fa fa-university"></i> {{project.program.title}}</p>
-        </h5>
-      </div>
+  <div class="card-block" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })">
+    <div class="label-list">
+        <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
     </div>
+    <div class="card-title" ng-bind="project.name"></div>
+    <p" ng-bind="project.short"></p>
+    <p ng-if="!vm.program && project.program"><!--<a  id="programs.view" ui-sref="programs.view({programId:project.program.code})">--><i class="fa fa-university"></i>{{project.program.title}}</p>
   </div>
 
 </div>
