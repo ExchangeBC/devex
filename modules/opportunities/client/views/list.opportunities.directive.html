@@ -1,4 +1,3 @@
-
 <div class="row list-head">
   <div class="col-sm-7">
     <h3 ng-bind="vm.title" class="list-page-hide"></h3>
@@ -45,32 +44,22 @@
     </div>
     -->
 
-    <div class="card-header" style="padding-top: 0; padding-bottom: 0;">
-        <div class="col-xs-12 col-sm-2" style="padding: 0px; margin: 0px;">
-          <h4><span style="font-family: sans-serif; font-size: 18px; font-weight: 600;">{{opportunity.earn|currency}}</span>
-        </div></h4>
-        <div class="col-xs-12 col-sm-3" style="padding: 0px; margin: 0px;">
-          <h4>Closing in:  <span style="font-weight: 800;">{{vm.closing(opportunity)}}</span></h4>
-        </div>
-        <div class="col-xs-12 col-sm-2" style="padding: 0px; margin: 0px;">
-          <h4><i class="fa fa-map-marker"></i>&nbsp;{{opportunity.location}}</h4>
-        </div>
-        <div class="col-xs-12 col-sm-5" style="padding: 0px; margin: 0px;">
-          <h4 ng-if="opportunity.onsite == 'offsite'"><i class="fa fa-user">&nbsp;</i><i class="fa fa-cloud">&nbsp;</i>In-person work NOT required &nbsp; &nbsp;</h4>
-          <h4 ng-if="opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
-          <h4 ng-if="opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>
-        </div>
-
-        <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
+    <div class="card-block" id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })">
+      
+      <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
+          <span class="label label-price">{{opportunity.earn|currency}}</span>
+          <span class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing(opportunity)}}</span>
+          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{opportunity.location}}</span>
+          <span class="label label-colocation" ng-if="opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
+          <span class="label label-colocation" ng-if="opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
+          <span class="label label-colocation" ng-if="opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
           <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
-        </div>
-    </div>
+      </div>
 
-    <div class="card-block" style="padding-bottom: 0px;">
-      <h3 style="font-size: 18px; margin-top: 0px; font-family: Lato;"><a  id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-bind="opportunity.name"></a>
-      </h3>
-      <p ng-bind="opportunity.short" style="font-size: 14px;"></p>
-      <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></p>
+      <div class="card-title" ng-bind="opportunity.name"></div>
+      <p ng-bind="opportunity.short"></p>
+      <div class="project-label"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></div>
+    
     </div>
 
   </div>
