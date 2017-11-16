@@ -99,25 +99,17 @@ section.audience {
 	color: black;
 }
 
-section.audience p {
-  font-size: 15px;
-  line-height: 1.5em;
-  font-weight: 500;
-  padding-bottom: 10px;
-}
 section.audience h3 {
 	color: black;
 	line-height: 1.6em;
 }
 section.audience h4 {
   	color: black;
-  	font-family: Lato;
   	font-size: 16px;
   	text-transform: uppercase;
 }
 section.audience h5 {
 	color: black;
-  	font-family: Lato;
   	font-weight: 300;
   	font-size: 20px;
   	text-transform: uppercase;
@@ -261,20 +253,7 @@ section.signup h5 {
 	padding-bottom: 30px;
 	color: #fff;
 }
-section.static {
-	padding-top: 10px;
-	padding-bottom: 40px;
-	margin-top: 10px;
-}
 
-
-section.static li {
-	font-weight: 500;
-	line-height: 1.8em;
-}
-section.static ul {
-	line-height: 1.8em;
-}
 @media (max-width: 767px) {
 	.img-responsive {
 		max-width: 70px;
