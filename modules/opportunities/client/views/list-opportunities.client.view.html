@@ -1,26 +1,30 @@
 <section class="detail">
+	
+	<!-- // Original // -->
+	<!--
+	<div class="container" ng-if="!vm.isUser">
+	  <div class="row">
+	    <div class="col-xs-12" style="text-align: center; line-height: 1.5em;">
+	      <h3 style="padding-bottom: 30px;">Want to get notified when new opportunities are posted?<br><br><a  id="authentication.gov" ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a>
+	    </div>
+	  </div>
+	</div>-->
 
-<!-- // Original // -->
-<!--
-<div class="container" ng-if="!vm.isUser">
-  <div class="row">
-    <div class="col-xs-12" style="text-align: center; line-height: 1.5em;">
-      <h3 style="padding-bottom: 30px;">Want to get notified when new opportunities are posted?<br><br><a  id="authentication.gov" ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a>
-    </div>
-  </div>
-</div>-->
-
-<!-- // To match the new alerts on Opportunity detail pages // -->
-<div class="row" style="padding-top: 5px; margin-top: -20px; background-color: #ffefcc;" ng-if="!vm.isUser">
-	<div class="well-transparent text-center">
-		<p>Want to get notified<span class="hidden-sm hidden-xs"> when new opportunities are posted</span>? &nbsp;
-		<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
-		</p>
+	<!-- // To match the new alerts on Opportunity detail pages // -->
+	<div class="row" style="padding-top: 15px; margin-top: -20px; background-color: #ffefcc;">
+		<div class="container">
+			<div class="row" ng-if="!vmisUser">
+				<div class="well-transparent text-center">
+					<p><i class="fa fa-lg fa-envelope-o"></i>&nbsp;&nbsp;Want to get notified<span class="hidden-sm hidden-xs"> when new opportunities are posted</span>? &nbsp;
+					<a href ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a> or	&nbsp;<a href  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+					</p>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 
+	<div class="container" role="main">
+			<opportunity-list context="allopportunities"></opportunity-list>
+	</div>
 
-<div class="container" role="main">
-		<opportunity-list context="allopportunities"></opportunity-list>
-</div>
 </section>
