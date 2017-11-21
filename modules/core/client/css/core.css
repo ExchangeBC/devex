@@ -166,16 +166,6 @@ section.footer {
 	padding-bottom: 20px;
 }
 
-section.form-page {
-	color: #052748;
-}
-section.form-page h4 {
-	padding-top: 0;
-	padding-bottom: 15px;
-}
-section.form-page .well {
-	background-color: #ffffff;
-}
 section.detail {
 	padding: 0;
 }
