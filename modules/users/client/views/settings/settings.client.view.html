@@ -1,17 +1,16 @@
 
-<section class="static">
 	<div class="container" role="main">
 		<div class="row">
 			<nav class="col-xs-12">
 				<ul class="nav nav-pills">
 					<li ui-sref-active="active">
-						<a  id="settings.profile" ui-sref="settings.profile">Edit Profile</a>
+						<a  id="settings.profile" ui-sref="settings.profile">Public Profile</a>
 					</li>
 					<li ui-sref-active="active">
-						<a  id="settings.privacy" ui-sref="settings.privacy">Privacy</a>
+						<a  id="settings.privacy" ui-sref="settings.privacy">Privacy & Notifications</a>
 					</li>
 					<li ui-sref-active="active" ng-if="vm.features.swu">
-						<a  id="settings.skills" ui-sref="settings.skills">Skills</a>
+						<a  id="settings.skills" ui-sref="settings.skills">Capabilities</a>
 					</li>
 					<li ui-sref-active="active" ng-if="vm.features.swu">
 						<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
@@ -24,9 +23,8 @@
 				<div ui-view></div>
 			</div>
 		</div>
-		<div class="alert alert-grey">
-			<p style="font-size: 11px;"><b>Collection Notice</b></p>
-			<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
+		<div class="well well-gray">
+			<p class="small"><b>Collection Notice</b></p>
+			<p class="small">This personal information is collected by the Ministry of Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Citizens’ Services, 250-514-2739.</p>
 		</div>
 	</div>
-</section>
