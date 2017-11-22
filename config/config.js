@@ -1,5 +1,5 @@
 'use strict';
-
+// CC: small change to provoke a build for testing openshift
 /**
  * Module dependencies.
  */
