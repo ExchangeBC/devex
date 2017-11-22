@@ -50,9 +50,9 @@
           <span class="label label-price">{{opportunity.earn|currency}}</span>
           <span class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing(opportunity)}}</span>
           <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{opportunity.location}}</span>
-          <span class="label label-colocation" ng-if="opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
-          <span class="label label-colocation" ng-if="opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
-          <span class="label label-colocation" ng-if="opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
+          <span class="label label-location" ng-if="opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
+          <span class="label label-location" ng-if="opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
+          <span class="label label-location" ng-if="opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
           <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
       </div>
 
