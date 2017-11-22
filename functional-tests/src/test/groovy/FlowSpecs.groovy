@@ -26,12 +26,12 @@ class FlowSpecs extends GebReportingSpec {
 
     }
 
-    def "3 (b) Applying for an opportunity - not signed in" () {
-        given:
-            to OpportunityDetail
-        expect:
-            assert $('div','class':'well.well-info')[0].displayed  == true
-    }
 
+  //  def "3 (b) Applying for an opportunity - not signed in" () {
+  //    given:
+  //      to OpportunityDetail
+  //    expect:
+  //        assert $('div','class':'well.well-info')[0].displayed  == true
+  //  }
 
 }
