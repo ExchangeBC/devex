@@ -21,10 +21,10 @@
 		
 	<!-- // Admin view, draft opportunity is missing stuff // -->
 	<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-		<div class="col-xs-12 text-center">
+		<div class="col-xs-12 text-right">
 			<div class="well well-sm well-danger">
 				<span>
-					<label class="label-danger"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been properly filled out.
+					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been properly filled out.
 				</span>
 				<div class="btn-group">
 					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
@@ -35,9 +35,9 @@
 
 	<!-- // Admin view, opportunity is unpublished // -->
 	<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-		<div class="col-xs-12 text-center">
+		<div class="col-xs-12 text-right">
 			<span>
-				<label class="label-danger">
+				<label class="label label-lg label-danger-o">
 				<i class="fa fa-exclamation-triangle"></i> UNPUBLISHED
 				</label>No one can see this opportunity until you publish it.
 			</span> 
@@ -50,6 +50,12 @@
 	<!-- // Admin view, opportunity is published // -->
 	<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
 		<div class="col-xs-12 text-right">
+			<span>
+				<label class="label label-lg label-success-o">
+				<i class="glyphicon glyphicon-ok-sign"></i> PUBLISHED
+				</label>
+			</span> 
+			 &nbsp;
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-danger" ng-click="vm.publish(vm.opportunity, false)">Unpublish</a>
 		</div>
@@ -83,7 +89,7 @@
 	          <span class="label label-price">{{vm.opportunity.earn|currency}}</span>
 	          <span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing}}</span>
 	          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
-	          <span class="label label-colocation" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
+	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 	          <span class="label label-colocation" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
 	          <span class="label label-colocation" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
 	          <span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
@@ -197,14 +203,13 @@
 
 	<!-- // Admin view, opportunity is unpublished // -->
 	<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-		<div class="col-xs-12 text-center">
+		<div class="col-xs-12 text-right">
 			<span>
-				<label class="label-danger">
+				<label class="label label-lg label-danger-o">
 				<i class="fa fa-exclamation-triangle"></i> UNPUBLISHED
 				</label>No one can see this opportunity until you publish it.
 			</span> 
 			 &nbsp;
-
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
 			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-success" ng-click="vm.publish(vm.opportunity, true)">Publish</a>
 		</div>
@@ -213,6 +218,12 @@
 	<!-- // Admin view, opportunity is published // -->
 	<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
 		<div class="col-xs-12 text-right">
+			<span>
+				<label class="label label-lg label-success-o">
+				<i class="glyphicon glyphicon-ok-sign"></i> PUBLISHED
+				</label>
+			</span> 
+			 &nbsp;
 			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-danger" ng-click="vm.publish(vm.opportunity, false)">Unpublish</a>
 		</div>
