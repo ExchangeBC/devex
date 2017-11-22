@@ -287,27 +287,3 @@ section.signup h5 {
     vertical-align: middle;
     float: none;
 }
-.label-primary {
-	padding: 5px 8px 5px 8px;
-	margin-top: 9px;
-	font-size: 11px;
-	font-weight: 600;	
-}
-.label-danger {
-	background-color: transparent;
-	border-style: none;
-	padding: 7px 11px;
-	margin-top: 9px;
-    font-weight: 800;
-    color: #ff0000;
-    font-size: 14px;	
-}
-.label-counter {
-	background-color: transparent;
-	border-style: none;
-	padding: 0px;
-	margin: 0px;
-    font-weight: 800;
-    color: #595959;
-    font-size: 18px;	
-}
