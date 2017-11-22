@@ -3,8 +3,8 @@
 <!-- // Well if proposal is Submitted // -->
 	<div class="row" ng-if="ppp.proposal.status === 'Submitted'">
 		<div class="col-xs-12 text-center">
-			<div class="well well-info">
-				<p><label><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label> You can make updates until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
+			<div class="well well-success">
+				<p><label class="label label-lg label-success-o"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label> You can make updates until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
 			</div>
 		</div>
 	</div>
@@ -16,8 +16,8 @@
 <!-- // Well if proposal is in Draft // -->
 <div class="row" ng-if="ppp.proposal.status === 'Draft'">
 	<div class="col-xs-12 text-center">
-		<div class="well well-sm well-info">
-			<p><label class="label label-danger"><i class="fa fa-exclamation-triangle"></i> Your proposal is in DRAFT</label>Submit before <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></b> to be considered for this opportunity!</p>
+		<div class="well well-danger">
+			<p><label class="label label-lg label-danger-o"><i class="glyphicon glyphicon-file"></i> Your proposal is in DRAFT</label>Submit before <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></b> to be considered for this opportunity!</p>
 		</div>	
 	</div>
 </div>
@@ -204,7 +204,7 @@
 <div class="modal-footer">
 	<div class="col-xs-12 col-sm-4 text-left">
 		<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'">Save changes</button>
-		<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'Submitted'">Update Proposal</button>
+		<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'Submitted'">Save changes</button>
 	</div>
 	<div class="col-xs-12 col-sm-8 text-right">
 		<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-danger" data-ng-click="ppp.delete()" ">Delete my proposal</button>
