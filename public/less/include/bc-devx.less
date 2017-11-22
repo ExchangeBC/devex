@@ -516,12 +516,15 @@ section {
 }
 
 .btn-danger {
-  background-color: @theme-danger;
-  border-color: darken(@theme-danger, 8%);
+  color: @theme-danger;
+  background-color: none;
+  border-color: @theme-danger;
   &:hover,&:active:hover {
+    color: #fff;
     background-color: lighten(@theme-danger, 10%);
   }
   &:active,&:focus {
+    color: #fff;
     background-color: darken(@theme-danger, 8%);
   }
 }
@@ -779,9 +782,12 @@ section {
   letter-spacing: 0.025em;
   border-radius: 4px;
   padding: 6px;
+  margin: 4px 2px;
 }
 .label-lg {
   font-size: 15px;
+  font-weight: 500;
+  margin: 6px;
 }
 
 .label-primary {
@@ -822,7 +828,18 @@ section {
 }
 
 .label-danger {
-  background-color: lighten(@theme-danger, 5%);
+  background-color: @theme-danger;
+}
+.label-danger-o {
+  color: @theme-danger;
+  background color: none;
+}
+.label-success {
+  background-color: @theme-success, 5%;
+}
+.label-success-o {
+  color: @theme-success;
+  background-color: none;
 }
 
 .label-list .label {
@@ -1223,6 +1240,7 @@ section {
   p {
     margin: 0;
     text-align: center;
+    border-radius: 1px;
   }
 }
 
