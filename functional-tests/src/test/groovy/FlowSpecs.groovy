@@ -30,7 +30,7 @@ class FlowSpecs extends GebReportingSpec {
         given:
             to OpportunityDetail
         expect:
-            assert $('div','class':'well-transparent')[0].displayed  == true
+            assert $('div','class':'well.well-info')[0].displayed  == true
     }
 
 
