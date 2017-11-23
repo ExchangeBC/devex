@@ -1234,15 +1234,53 @@ section {
 }
 
 
-
 // Wells
+// --------------------------------------------------
+
+
+// Base class
+.well {
+  max-width: 1040px;
+  padding: 5px;
+  margin-bottom: 20px;
+  border: 2px solid;
+  border-radius: 1px;
+}
+
 .well {
   p {
-    margin: 0;
-    text-align: center;
-    border-radius: 1px;
+  text-align: center;
+  margin: 5px;
   }
 }
+
+// Sizes
+.well-lg {
+  padding: 15px;
+}
+
+// Colors
+.well-info {
+  background: #feefcd;
+  border-color: @theme-yellow;
+}
+.well-gray {
+  background: @gray-lighter;
+  border-color: @gray-light;
+}
+.well-danger {
+  background: #feefcd;
+  border-color: @theme-danger;
+}
+.well-success {
+  background: #feefcd;
+  border-color: @theme-success;
+}
+.well-primary {
+  background: #feefcd;
+  border-color: @theme-primary;
+}
+
 
 // Carousel
 .carousel-control {
