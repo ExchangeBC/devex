@@ -1,0 +1,89 @@
+<div class="modal-header">
+	<h3>Team</h3>
+</div>
+<div class="modal-body">
+	<form name="qqq.teamForm" id="qqq.teamForm" novalidate autocomplete="off">
+	<div class="row">
+	<div class="col-sm-12">
+		<fieldset>
+			<form-input
+				class="col-sm-12"
+				ng-model="qqq.team.name"
+				x-form="qqq.teamForm"
+				x-options='{
+					"title":"Team Name",
+					"id":"name",
+					"name":"name",
+					"placeholder":"name",
+					"required":"Must supply a team name"
+				}'>
+			</form-input>
+			<form-display
+				class="col-sm-12"
+				x-options='{
+					"title":"Team Description",
+					"id":"description",
+					"name":"description"
+				}'>
+				<textarea
+					name="description"
+					id="description"
+					class="form-control"
+					placeholder="A brief description of the team"
+					ng-model="qqq.team.description">
+				</textarea>
+			</form-display>
+		</fieldset>
+	</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-5">
+			<select-list
+				ng-model="qqq.removals"
+				class="col-sm-12"
+				x-type="arrayOfObjects"
+				x-values="qqq.team.members"
+				x-form="qqq.teamForm"
+				x-options='{
+					"objectKeyAttribute":"_id",
+					"objectDisplayAttribute":"item.displayName",
+					"title":"Team Members",
+					"id":"members",
+					"name":"members",
+					"primary":false,
+					"single":false,
+					"leaveOpen": true
+				}'>
+			</select-list>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-default" ng-click="qqq.addPerson()"><i class="fa fa-arrow-left"></i></button>
+			<br/>
+			<button class="btn btn-default" ng-click="qqq.remPerson()"><i class="fa fa-arrow-right"></i></button>
+		</div>
+		<div class="col-sm-5">
+			<select-list
+				ng-model="qqq.additions"
+				class="col-sm-12"
+				x-type="arrayOfObjects"
+				x-values="qqq.allusers"
+				x-form="qqq.teamForm"
+				x-options='{
+					"objectKeyAttribute":"_id",
+					"objectDisplayAttribute":"item.displayName",
+					"title":"Available Users",
+					"id":"available",
+					"name":"available",
+					"primary":false,
+					"single":false,
+					"leaveOpen": true
+				}'>
+			</select-list>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-danger" ng-click="qqq.quitnow()">Cancel</button>
+	<button class="btn btn-primary" ng-click="qqq.savenow(qqq.teamForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
+</div>

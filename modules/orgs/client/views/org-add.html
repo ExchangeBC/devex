@@ -1,0 +1,119 @@
+<section class="static">
+	<div class="container" role="main">
+		<div class="row">
+			<nav class="col-xs-12">
+				<ul class="nav nav-pills">
+					<li ui-sref-active="active">
+						<a id="orgs.create" ui-sref="orgs.create">New Company</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="panel">
+			<div class="panel-body">
+
+
+
+
+
+<section class="static">
+	<div class="container" role="main">
+		<div class="panel">
+			<div class="panel-body">
+			<section>
+				<form name="vm.orgForm" id="vm.orgForm" warn-on-exit ng-submit="vm.add(vm.orgForm.$valid)" class="signin" novalidate autocomplete="off">
+					<div class="row">
+						<div class="col-sm-6">
+							<fieldset>
+				<form-input
+					ng-model="vm.org.name"
+					class="col-sm-12"
+					x-form="orgForm"
+					x-options='{
+						"title":"Legal Name",
+						"id":"companyname",
+						"name":"companyname",
+						"placeholder":"Enter your company name",
+						"required":"A name is required"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.dba"
+					x-form="orgForm"
+					x-options='{
+						"title":"DBA",
+						"id":"dba",
+						"name":"dba",
+						"placeholder":"DBA"
+					}'>
+				</form-input>
+
+							</fieldset>
+						</div>
+						<div class="col-sm-6">
+							<fieldset>
+								<form-input
+									class="col-sm-12"
+									ng-model="vm.org.contactName"
+									x-form="orgForm"
+									x-options='{
+										"title":"contactName",
+										"id":"contactName",
+										"name":"contactName",
+										"placeholder":"contactName"
+									}'>
+								</form-input>
+
+								<form-input
+									class="col-sm-12"
+									ng-model="vm.org.contactPhone"
+									x-form="orgForm"
+									x-options='{
+										"title":"contactPhone",
+										"id":"contactPhone",
+										"name":"contactPhone",
+										"placeholder":"contactPhone"
+									}'>
+								</form-input>
+
+								<form-input
+									class="col-sm-12"
+									ng-model="vm.org.contactEmail"
+									x-form="orgForm"
+									x-options='{
+										"title":"contactEmail",
+										"id":"contactEmail",
+										"name":"contactEmail",
+										"placeholder":"contactEmail"
+									}'>
+								</form-input>
+
+							</fieldset>
+						</div>
+					</div>
+					<br/>
+					<div class="row text-center">
+						<div class="form-group">
+							<button class="btn btn-danger" ng-click="vm.delete()">Cancel</button>
+							&nbsp; &nbsp; &nbsp;
+							<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+						</div>
+					</div>
+				</form>
+			</section>
+			</div>
+		</div>
+	</div>
+</section>
+
+			</div>
+		</div>
+		<div class="alert alert-grey">
+			<p style="font-size: 11px;"><b>Collection Notice</b></p>
+			<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
+		</div>
+	</div>
+</section>
+

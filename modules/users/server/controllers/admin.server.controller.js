@@ -25,7 +25,7 @@ exports.read = function (req, res) {
 exports.update = function (req, res) {
   var user = req.model;
   var prevState = _.cloneDeep(req.model);
-  // CC: USERFIELDS
+  // CC:USERFIELDS
   // For security purposes only merge these parameters
   user.phone                = req.user.phone;
   user.address              = req.user.address;
@@ -50,6 +50,26 @@ exports.update = function (req, res) {
   user.businessCity         = req.body.businessCity;
   user.businessProvince     = req.body.businessProvince;
   user.businessCode         = req.body.businessCode;
+  user.location       = req.body.location;
+  user.description    = req.body.description;
+  user.website        = req.body.website;
+  user.skills         = req.body.skills;
+  user.badges         = req.body.badges;
+  user.capabilities   = req.body.capabilities;
+  user.endorsements   = req.body.endorsements;
+  user.github         = req.body.github;
+  user.stackOverflow  = req.body.stackOverflow;
+  user.stackExchange  = req.body.stackExchange;
+  user.linkedIn       = req.body.linkedIn;
+  user.isPublicProfile = req.user.isPublicProfile;
+  user.isAutoAdd = req.user.isAutoAdd;
+
+
+
+
+
+
+
   userController.subscriptionHandler(user,prevState)
   .then(function() {
     user.save(function (err) {

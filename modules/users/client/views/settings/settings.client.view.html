@@ -1,42 +1,30 @@
 
-<section class="static">
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-xs-12">
-        <h1><img class="img-rounded" width="70" height="70" style="margin: 10px 5px 10px 5px;" src="{{((vm.user.profileImageURL.substr(0,1) == '/' || vm.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.user.profileImageURL}}"/>&nbsp; {{::vm.user.firstName}} {{::vm.user.lastName}}</h1>
-      </div>
-    </div>
-    <div class="row">
-      <nav class="col-xs-12 col-sm-5">
-        <ul class="nav nav-pills nav-stacked">
-          <li ui-sref-active="active">
-            <a ui-sref="settings.profile">Edit Profile</a>
-          </li>
-          <li ui-sref-active="active" ng-if="vm.user.isDeveloper">
-            <a ui-sref="settings.payment">Edit Payment Details</a>
-          </li>
-          <li ui-sref-active="active">
-            <a ui-sref="settings.picture">Change Profile Picture</a>
-          </li>
-          <li ng-if="0" ui-sref-active="active" ng-show="vm.user.provider === 'local'">
-            <a ui-sref="settings.password">Change Password</a>
-          </li>
-          <li ng-if="0" ui-sref-active="active">
-            <a ui-sref="settings.accounts">Manage Social Accounts</a>
-          </li>
-          <li ui-sref-active="active">
-          <a href="javascript:void(0);" ng-click="vm.delete()" title="Remove Me" uib-tooltip="Remove Me">
-            Delete My Profile
-          </a>
-          </li>
-          <li ui-sref-active="active">
-            <a ui-sref="profileadmin.edit({profileId:vm.user._id})">Edit My Extended Profile</a>
-          </li>
-        </ul>
-      </nav>
-      <div class="col-xs-12 col-sm-7 settings-view">
-        <div ui-view></div>
-      </div>
-    </div>
-  </div>
-</section>
+	<div class="container" role="main">
+		<div class="row">
+			<nav class="col-xs-12">
+				<ul class="nav nav-pills">
+					<li ui-sref-active="active">
+						<a  id="settings.profile" ui-sref="settings.profile">Public Profile</a>
+					</li>
+					<li ui-sref-active="active">
+						<a  id="settings.privacy" ui-sref="settings.privacy">Privacy & Notifications</a>
+					</li>
+					<li ui-sref-active="active" ng-if="vm.features.swu">
+						<a  id="settings.skills" ui-sref="settings.skills">Capabilities</a>
+					</li>
+					<li ui-sref-active="active" ng-if="vm.features.swu">
+						<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="panel">
+			<div class="panel-body">
+				<div ui-view></div>
+			</div>
+		</div>
+		<div class="well well-gray">
+			<p class="small"><b>Collection Notice</b></p>
+			<p class="small">This personal information is collected by the Ministry of Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Citizens’ Services, 250-514-2739.</p>
+		</div>
+	</div>

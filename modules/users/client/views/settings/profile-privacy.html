@@ -1,0 +1,53 @@
+<section>
+
+	<form name="vm.userForm" id="vm.userForm" novalidate autocomplete="off">
+		<div class="row">
+			<div class="col-cm-offset-1 col-sm-11">
+				<fieldset>
+					<div class="checkbox">
+						<label>
+							<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+							Allow my email to be displayed on the site
+						</label>
+						<br/>
+						<i class="small">Various sections of the site may publish who authored content, or your name and potentially email address.  Click this to allow others to see you email</i>
+					</div>
+					<br/>
+					<div class="checkbox">
+						<label>
+						<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+						Notify me when new opportunities are posted
+						</label>
+						<br/>
+						<i class="small">When new opportunites are posted you will recieve an email notification with a link to the opportunity. You can unsubscribe at any time or simply return here and uncheck this option</i>
+					</div>
+					<br/>
+					<div class="checkbox" ng-if="vm.features.swu">
+						<label>
+						<input type="checkbox" ng-model="vm.user.isPublicProfile" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+						Make my profile public
+						</label>
+						<br/>
+						<i class="small">This allows non-registered users to view your profile information. You will still be discoverable for purposes of becoming part of organizations and teams, but not visible to general users.</i>
+					</div>
+					<br/>
+					<div class="checkbox" ng-if="vm.features.swu">
+						<label>
+						<input type="checkbox" ng-model="vm.user.isAutoAdd" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+						Allow myself to be added to teams under my organizations without having to consent
+						</label>
+						<br/>
+						<i class="small">For organizations to which you belong, those organizations can add you to teams without first getting your approval.  Your consent will always be required for organizations to which you do not belong, and also to be added to an organization.</i>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+		<br/>
+		<div class="row">
+			<div class="col-xs-12">
+				<button ng-click="vm.savePrivacy(vm.userForm.$valid)" class="btn btn-success">Update settings</button>
+			</div>
+		</div>
+	</form>
+
+</section>

@@ -99,25 +99,17 @@ section.audience {
 	color: black;
 }
 
-section.audience p {
-  font-size: 15px;
-  line-height: 1.5em;
-  font-weight: 500;
-  padding-bottom: 10px;
-}
 section.audience h3 {
 	color: black;
 	line-height: 1.6em;
 }
 section.audience h4 {
   	color: black;
-  	font-family: Lato;
   	font-size: 16px;
   	text-transform: uppercase;
 }
 section.audience h5 {
 	color: black;
-  	font-family: Lato;
   	font-weight: 300;
   	font-size: 20px;
   	text-transform: uppercase;
@@ -174,32 +166,13 @@ section.footer {
 	padding-bottom: 20px;
 }
 
-section.form-page {
-	color: #052748;
-}
-section.form-page h4 {
-	padding-top: 0;
-	padding-bottom: 15px;
-}
-section.form-page .well {
-	background-color: #ffffff;
-}
 section.detail {
-	padding-top: 0px;
-	padding-bottom: 40px;
-	color: #595959;
+	padding: 0;
 }
 p.warning {
-	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
-    font-weight: 800;
+    font-weight: 500;
     color: #ff0000;
     font-size: 14px;
-}
-section.detail h1 {
-	margin-top: 20px;
-	padding-top: 0px;
-	padding-bottom: 10px;
-	font-size: 24px;
 }
 
 section.detail h2 {
@@ -207,7 +180,6 @@ section.detail h2 {
 	color: #0a4d8d;
 }
 section.detail h3 {
-	font-family: Lato;
 	font-size: 18px;
 }
 section.detail h4 {
@@ -224,8 +196,8 @@ section.detail p {
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 1.6em;
-	padding-bottom: 0px;
-	padding-top: 0px;
+	padding-bottom: 10px;
+	padding-top: 10px;
 }
 section.detail li {
 	font-weight: 400;
@@ -252,12 +224,11 @@ section.signup {
   overflow-y: hidden;
   background-color: #0a4d8d;
   background-size: cover;
-  margin-top: -20px;
   padding-top: 20px;
   padding-bottom: 40px;
   color: #fff;
 }
-seciton.signup p {
+section.signup p {
 	font-size: 14px;
 }
 section.signup h2 {
@@ -272,47 +243,7 @@ section.signup h5 {
 	padding-bottom: 30px;
 	color: #fff;
 }
-section.static {
-	padding-top: 10px;
-	padding-bottom: 40px;
-	color: black;
-}
-section.static h1 {
-	font-family: Lato;
-	font-weight: 800;
-	padding-top: 0px;
-	padding-bottom: 20px;
-	font-size: 30px;
-}
-section.static h2,h3,h4,h5 {
-	font-weight: 600;
-	font-family: Lato;
-	padding-top: 25px;
-	margin-bottom: 15px;
-	color: #0a4d8d;
-}
-section.static h2 {
-	font-size: 23px;
-	color: #0a4d8d;
-}
-section.static h3 {
-	font-size: 20px;
-	color: black;
-}
-section.static p {
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 1.8em;
-	padding-bottom: 10px;
-}
-section.static li {
-	font-weight: 500;
-	font-size: 16px;
-	line-height: 1.8em;
-}
-section.static ul {
-	line-height: 1.8em;
-}
+
 @media (max-width: 767px) {
 	.img-responsive {
 		max-width: 70px;
@@ -325,11 +256,11 @@ section.static ul {
 	}
 }
 .card-header {
+	background-color: #fff;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 .card-header h1, h2, h3, h4, h5 {
-	color: #595959;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
@@ -344,7 +275,6 @@ section.static ul {
 	font-weight: 100;
 }
 .card-header h3 {
-	color: #0a4d8d;
 	font-size: 22px;
 }
 
@@ -356,54 +286,4 @@ section.static ul {
 	display: inline-block;
     vertical-align: middle;
     float: none;
-}
-.label-primary {
-	padding: 5px 8px 5px 8px;
-	margin-top: 9px;
-	font-size: 11px;
-	font-weight: 600;	
-}
-.label-info {
-	background-color: #595959;
-	color: white;
-	padding: 5px 8px 5px 8px;
-	margin-top: 9px;
-	font-size: 11px;
-	font-weight: 600;
-}
-.label-price {
-	background-color: black;
-	color: white;
-	padding: 5px 8px 5px 8px;
-	margin-top: 9px;
-	font-size: 15px;
-	font-weight: 600;
-}
-.label-warning {
-	background-color: #f26925; 
-	color: white;
-	padding: 5px 8px 5px 8px;
-	margin-top: 9px;
-	font-size: 11px;
-	font-weight: 600;
-}
-.label-danger {
-	background-color: transparent;
-	border-style: none;
-	padding: 7px 11px;
-	margin-top: 9px;
-	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
-    font-weight: 800;
-    color: #ff0000;
-    font-size: 14px;	
-}
-.label-counter {
-	background-color: transparent;
-	border-style: none;
-	padding: 0px;
-	margin: 0px;
-	font-family: 'Lato', 'Helvetica', 'Arial', 'sans-serif';
-    font-weight: 800;
-    color: #595959;
-    font-size: 18px;	
 }

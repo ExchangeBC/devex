@@ -1,0 +1,179 @@
+
+<section>
+	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
+		<div class="row">
+			<div class="col-sm-6">
+				<fieldset>
+				<form-input
+					ng-model="vm.org.name"
+					class="col-sm-12"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Legal Name",
+						"id":"companyname",
+						"name":"companyname",
+						"placeholder":"Enter your compamny name",
+						"required":"A name is required"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.dba"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"DBA",
+						"id":"dba",
+						"name":"dba",
+						"placeholder":"DBA"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.address"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Legal Address",
+						"id":"address",
+						"name":"address",
+						"placeholder":"Address"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.address2"
+					x-form="vm.orgForm"
+					x-options='{
+						"id":"address2",
+						"name":"address2",
+						"placeholder":"Address 2"
+					}'>
+				</form-input>
+
+				<form-display
+					class="col-sm-12"
+					x-options='{
+						"title":"City",
+						"id":"city",
+						"name":"city"
+					}'>
+					<select name="city" ng-model="vm.org.city" id="city" class="form-control"  ng-options="v as v for v in vm.cities">
+						<option value="">Select Location</option>
+					</select>
+				</form-display>
+
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.province"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Province",
+						"id":"province",
+						"name":"province",
+						"placeholder":"BC",
+						"disabled":"true"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.postalcode"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Postal Code",
+						"id":"postalcode",
+						"name":"postalcode",
+						"placeholder":"Postal Code"
+					}'>
+				</form-input>
+
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.website"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Website",
+						"id":"website",
+						"name":"website",
+						"placeholder":"website"
+					}'>
+				</form-input>
+
+				</fieldset>
+			</div>
+			<div class="col-sm-6">
+				<fieldset>
+				<h3><avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="70"></avatar-display></h3>
+				<div><edit-org-image org="vm.org"></edit-org-image></div>
+				<br/>
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.contactName"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"contactName",
+						"id":"contactName",
+						"name":"contactName",
+						"placeholder":"contactName"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.contactPhone"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"contactPhone",
+						"id":"contactPhone",
+						"name":"contactPhone",
+						"placeholder":"contactPhone"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-12"
+					ng-model="vm.org.contactEmail"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"contactEmail",
+						"id":"contactEmail",
+						"name":"contactEmail",
+						"placeholder":"contactEmail"
+					}'>
+				</form-input>
+				</fieldset>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<form-display
+					class="col-sm-12"
+					x-options='{
+						"title":"A little Bit About Your Company",
+						"id":"description",
+						"name":"description"
+					}'>
+					<textarea
+						name="description"
+						id="description"
+						class="form-control input-sm"
+						ui-tinymce="vm.tinymceOptions"
+						placeholder="A full description of the profile"
+						ng-model="vm.org.description">
+					</textarea>
+				</form-display>
+			</div>
+		</div>
+		<br/>
+		<div class="row text-center">
+			<div class="form-group">
+				<button class="btn btn-danger" ng-click="vm.remove()">Delete</button>
+				&nbsp; &nbsp; &nbsp;
+				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+			</div>
+		</div>
+	</form>
+</section>

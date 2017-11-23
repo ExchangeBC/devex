@@ -1,0 +1,114 @@
+<section class="detail">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div>
+					<label class="label-danger" ng-if="vm.team.program.isPublished && vm.canEdit && !vm.team.isPublished" uib-tooltip="No one can see this page until you publish it.">
+					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+					</label>
+				</div>
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="teamadmin.edit({teamId:vm.team.code})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this team? Click here to send a request to the team admin.">
+						<i class="glyphicon glyphicon-user"></i> Request Membership
+					</button>
+					<a href="javascript:void(0);" ng-if="vm.team.program.isPublished && vm.canEdit && vm.team.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now this team is published and anyone can view it. You can unpublish it here.">
+						<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+					</a>
+					<a href="javascript:void(0);" ng-if="vm.team.program.isPublished && vm.canEdit && !vm.team.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this team to the world?">
+						<i class="glyphicon glyphicon-check"></i> Publish
+					</a>
+				</div>
+				<div class="col-xs-12 col-sm-12 text-center">
+					<h1><i class="fa fa-pie-chart"></i> &nbsp; {{vm.team.name}}</h1>
+					<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.team.short"></span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div class="container">
+<div class="card card-flat">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-sm-5">
+				<p class="label-list" ng-if="vm.team.tags">
+				<span class="label label-info" ng-repeat="code in vm.team.tags">{{code}}</span></p>
+			</div>
+			<div class="col-sm-7">
+				<dl class="dl-horizontal">
+				<dt>Program:</dt>
+				<dd>
+				<a ng-if="vm.team.program"  id="programs.view" ui-sref="programs.view({programId:vm.team.program.code})"><i class="fa fa-university"></i> {{vm.team.program.title}}</a>
+				<span ng-if="!vm.team.program" class="text-muted">No program</span>
+				</dd>
+				<!-- github link -->
+				<dt>Code:</dt>
+				<dd>
+				<a ng-if="vm.team.github"><a href="{{vm.team.github}}" rel="nofollow"><i class="fa fa-github"></i> View Code Repository on GitHub</a>
+				</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-body">
+		<p ng-bind-html="vm.display.description"></p>
+	</div>
+
+	<div class="panel-footer" style="background-color: #f2f2f2">
+		<em class="small text-muted">
+		Created on
+		<span ng-bind="vm.team.created | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.team.createdBy" ng-bind="vm.team.createdBy.displayName"></span>
+		<span ng-if="!vm.team.createdBy">Deleted User</span>
+		</em>
+			<br/>
+		<em class="small text-muted">
+		Last updated on
+		<span ng-bind="vm.team.updated | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.team.updatedBy" ng-bind="vm.team.updatedBy.displayName"></span>
+		<span ng-if="!vm.team.updatedBy">Deleted User</span>
+		</em>
+	</div>
+</div>
+</div>
+
+<div class="container">
+	<core-member-list model="vm.team" idstring="vm.idString" service="vm.TeamsService" title="Team Members"></core-member-list>
+	<core-member-requests ng-if="vm.canEdit" model="vm.team" idstring="vm.idString" service="vm.TeamsService"></core-member-requests>
+	<opportunity-list team="vm.team" program="vm.team.program" context="team" title="Team Opportunities"></opportunity-list>
+</div>
+
+<div class="container">
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+		<div>
+			<label class="label-danger" ng-if="vm.team.program.isPublished && vm.canEdit && !vm.team.isPublished" uib-tooltip="No one can see this page until you publish it.">
+			<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+			</label>
+		</div>
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="teamadmin.edit({teamId:vm.team.code})" uib-tooltip="Edit this page">
+				<i class="glyphicon glyphicon-edit"></i> Edit
+			</button>
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this team? Click here to send a request to the team admin.">
+				<i class="glyphicon glyphicon-user"></i> Request Membership
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.team.program.isPublished && vm.canEdit && vm.team.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this team is published and anyone can view it. You can unpublish it here.">
+				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.team.program.isPublished && vm.canEdit && !vm.team.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this team to the world?">
+				<i class="glyphicon glyphicon-check"></i> Publish
+			</a>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+</section>

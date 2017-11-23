@@ -45,6 +45,7 @@ var ProfileSchema = new Schema ({
 	website       : {type: String, default: ''},
 	skills        : [String],
 	badges        : [String],
+	capabilities  : [String],
 	endorsements  : [Endorsement],
 	github        : {type: String, default: ''},
 	stackOverflow : {type: String, default: ''},

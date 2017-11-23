@@ -8,6 +8,7 @@ body {
 body {
     .body-font;
     padding-bottom: 30px;
+    font-size: 15px;
 }
 
 a {
@@ -30,7 +31,6 @@ a.secondary {
 }
 
 hr {
-    max-width: 100px;
     margin: 25px auto 0;
     border-width: 1px;
     border-color: fade(@gray-darker, 10%);
@@ -48,10 +48,11 @@ h5,
 h6 {
     .heading-font;
     padding: 0;
-    margin-bottom: 0.75em;
+    margin-bottom: 0.25em;
 }
 .page-header h1 {
-	margin-bottom: 10px;
+	margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 // Container
@@ -104,8 +105,7 @@ h6 {
 .nav {
   > li {
     > a {
-      .alt-font;
-      font-size: 12px;
+      font-size: 15px;
     }
   }
 }
@@ -132,8 +132,7 @@ h6 {
 .navbar-nav {
   > li {
     .dropdown-menu {
-      .alt-font;
-      font-size: 10px;
+      font-size: 15px;
       padding: 20px 10px;
       margin-bottom: @line-height-computed;
       border: 1px solid @panel-default-border;
@@ -143,9 +142,6 @@ h6 {
       > li {
         display: block;
         padding: 3px 0;
-      }
-      @media (min-width: 768px) {
-        font-size: 12px;
       }
     }
   }
@@ -196,8 +192,7 @@ h6 {
     .nav {
         > li {
             > a {
-                .alt-font(@font-weight: 600);
-                font-size: 12px;
+                font-size: 15px;
                 &:hover {
                   background-color: transparent;
                 }
@@ -362,7 +357,7 @@ section {
 // Button Styles
 
 .btn {
-  .alt-font(@letter-spacing: 0.025em);
+  letter-spacing: 0.025em;
   white-space: nowrap;
   background: white;
   border-radius: 3px;
@@ -427,7 +422,7 @@ section {
 
 .btn-default {
   color: @gray-light;
-  border-color: #999;
+  border-color: @gray-light;
   #gradient > .vertical(@start-color: #fff; @end-color: #eef3f6; @start-percent: 50%; @end-percent: 110%);
   text-shadow: 0 1px 0 #fff;
   .input-group-btn & {
@@ -482,6 +477,11 @@ section {
   }
 }
 
+.btn-text-only {
+  background-color: none;
+  border-color: none;
+}
+
 .btn-success {
   background-color: @theme-success;
   border-color: darken(@theme-success, 8%);
@@ -516,18 +516,21 @@ section {
 }
 
 .btn-danger {
-  background-color: @theme-danger;
-  border-color: darken(@theme-danger, 8%);
+  color: @theme-danger;
+  background-color: none;
+  border-color: @theme-danger;
   &:hover,&:active:hover {
+    color: #fff;
     background-color: lighten(@theme-danger, 10%);
   }
   &:active,&:focus {
+    color: #fff;
     background-color: darken(@theme-danger, 8%);
   }
 }
 
 .btn-link {
-  color: rgb(0,164,227);
+  color: @theme-primary;
   background: none;
 }
 
@@ -733,12 +736,6 @@ section {
 
 // Wells
 
-.well {
-  #gradient > .vertical(@start-color: darken(@well-bg, 5%); @end-color: @well-bg);
-  border-color: darken(@well-bg, 10%);
-  @shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
-  .box-shadow(@shadow);
-}
 
 
 // Form header
@@ -780,10 +777,17 @@ section {
 // Labels
 .label {
   .body-font;
-  font-weight: 300;
-  letter-spacing: 1px;
-  border-radius: 500px;
-  padding: 3px 12px 4px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  border-radius: 4px;
+  padding: 6px;
+  margin: 4px 2px;
+}
+.label-lg {
+  font-size: 15px;
+  font-weight: 500;
+  margin: 6px;
 }
 
 .label-primary {
@@ -795,15 +799,47 @@ section {
 }
 
 .label-info {
-  background-color: #0a4d8d;
+  background-color: @gray-light;
 }
 
+.label-price {
+  background-color: @theme-dark-green;
+}
+
+.label-deadline {
+  background-color: @theme-dark-blue;
+}
+
+.label-location {
+  background-color: transparent;
+  color: @gray-darker;
+}
+
+.label-colocation {
+  background-color: @theme-yellow;
+  color: @gray-darker;
+}
 .label-warning {
   background-color: @theme-warning;
 }
 
+.label-skills {
+  background-color: @theme-orange;
+}
+
 .label-danger {
-  background-color: lighten(@theme-danger, 5%);
+  background-color: @theme-danger;
+}
+.label-danger-o {
+  color: @theme-danger;
+  background color: none;
+}
+.label-success {
+  background-color: @theme-success, 5%;
+}
+.label-success-o {
+  color: @theme-success;
+  background-color: none;
 }
 
 .label-list .label {
@@ -879,7 +915,21 @@ section {
 }
 .card-block {
   &:extend(.clearfix all);
-  padding: @panel-body-padding;
+  padding: 10px 15px;
+  > p {
+    font-weight: 300;
+  }
+  project-label {
+    margin: 0px;
+    font-size: 15px;
+    color: @gray
+  }
+}
+
+.card-block {
+  &:hover {
+    background-color: @gray-lighter;
+  }
 }
 
 .card-rise {
@@ -892,15 +942,12 @@ section {
 }
 
 .card-title {
-  margin-top: 0;
-  margin-bottom: .5em;
-  > a {
-  	display: block;
-  }
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .card-subtitle {
-  font-weight: 100;
+  font-weight: 300;
   margin-top: 0;
   margin-bottom: 0;
 }
@@ -1187,13 +1234,53 @@ section {
 }
 
 
-
 // Wells
+// --------------------------------------------------
+
+
+// Base class
+.well {
+  max-width: 1040px;
+  padding: 5px;
+  margin-bottom: 20px;
+  border: 2px solid;
+  border-radius: 1px;
+}
+
 .well {
   p {
-    margin: 0;
+  text-align: center;
+  margin: 5px;
   }
 }
+
+// Sizes
+.well-lg {
+  padding: 15px;
+}
+
+// Colors
+.well-info {
+  background: #feefcd;
+  border-color: @theme-yellow;
+}
+.well-gray {
+  background: @gray-lighter;
+  border-color: @gray-light;
+}
+.well-danger {
+  background: #feefcd;
+  border-color: @theme-danger;
+}
+.well-success {
+  background: #feefcd;
+  border-color: @theme-success;
+}
+.well-primary {
+  background: #feefcd;
+  border-color: @theme-primary;
+}
+
 
 // Carousel
 .carousel-control {

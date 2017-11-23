@@ -1,6 +1,17 @@
 <section class="form-page">
 <div class="container" role="main">
 	<!-- <div ncy-breadcrumb></div> -->
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="well well-lg well-info">
+		      <h4>Managing a Code With Us opportunity</h4>
+		      <p style="text-align: left;">By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, Code With Us. Make sure you are familiar with the process and understand your responsibilities for managing an opportunity.</p>
+		      <br>
+		      <a class="btn btn-default" href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a>
+			</div>
+		</div>
+	</div>
+
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 	<div class="row form-head">
 		<div class="col-md-6">
@@ -8,38 +19,25 @@
 			<h2 ng-if="!vm.editing">New Opportunity</h2>
 		</div>
 		<div class="col-md-6 col-form-buttons text-right">
-			<div class="btn-group">
-				<button type="submit" href="javascript:void(0);" uib-tooltip="Save your work anytime. You can always come back later." class="btn btn-primary">
-					<i class="glyphicon glyphicon-save"></i> Save
-				</button>
- 				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-					<i class="glyphicon glyphicon-trash"></i> Remove
-				</a>
-			</div>
+				
+				<button type="submit" href="javascript:void(0);" class="btn btn-success" title="Save changes">Save changes</button>
+ 				
+				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Delete opportunity">Delete opportunity</a>
+
+ 				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="alert alert-info">
-		      <h4>Define what you need. Evaluate proposals. Select a developer.</h4>
-		      <p>Paid opportunities posted on the BCDevExchange are governed by the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf">terms</a> of our lightweight procurement model, Code With Us.</p>
-		      <p><a href="/codewithusps">Read more</a> to understand your responsibilities for managing an opportunity.</p>
-			</div>
-		</div>
-	</div>
+	
 	<div class="row">
 	<div class="col-sm-12">
 		<fieldset>
 			<!--<div class="form-group">
-				<a ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
+				<a  id="programs.view" ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i> {{vm.programTitle}}</a>
 				<span ng-if="!vm.programId">To choose a program, please select a Project.</span>
 			</div>-->
 
 			<div class="form-group" ng-if="vm.projectLink" >
-				<a ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
+				<a  id="projects.view" ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 			</div>
 			<div class="form-group" >
 				<label class="control-label" for="project">Project</label>
@@ -339,32 +337,20 @@
 	</div>
 	</div>
 	<div class="row form-foot">
-	<div class="col-sm-12 col-form-buttons foot text-right">
-			<div class="btn-group">
-<!--
-				<a href="javascript:void(0);" uib-tooltip="Save your work anytime. You can always come back later." class="btn btn-primary" ng-click="vm.saveme()">
-					<i class="glyphicon glyphicon-save"></i> Save
-				</a>
- -->
- 				<button type="submit" href="javascript:void(0);" uib-tooltip="Save your work anytime. You can always come back later." class="btn btn-primary">
-					<i class="glyphicon glyphicon-save"></i> Save
-				</button>
+		<div class="col-sm-12 col-form-buttons foot text-right">
+			<!--
+			<a href="javascript:void(0);" uib-tooltip="Save your work anytime. You can always come back later." class="btn btn-primary" ng-click="vm.saveme()"><i class="glyphicon glyphicon-save"></i> Save
+			</a>-->
+ 				
+			<button type="submit" href="javascript:void(0);" class="btn btn-success">Save changes</button>
+			
+			<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Remove">Delete opportunity</a>
 
-				<a ng-if="vm.editing" class="btn btn-default" ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && !vm.projectId" class="btn btn-default" ui-sref="opportunities.list" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a ng-if="!vm.editing && vm.projectId" class="btn btn-default" ui-sref="projects.view({projectId:vm.projectId})" title="Cancel">
-					<i class="glyphicon glyphicon-fast-backward"></i> Cancel
-				</a>
-				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default" ng-click="vm.remove()" title="Remove">
-					<i class="glyphicon glyphicon-trash"></i> Remove
-				</a>
-			</div>
+			<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>
+
 		</div>
 	</div>
+
 	</div>
 </section>
 

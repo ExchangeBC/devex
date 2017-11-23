@@ -1,0 +1,42 @@
+<section class="static">
+	<div class="container" role="main">
+		<div class="panel">
+			<div class="panel-body">
+<section class="detail">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+
+				<div class="btn-group">
+					<button type="button" class="btn btn-success btn-sm"  ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit company profile">
+						<i class="glyphicon glyphicon-edit"></i> Update Profile
+					</button>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-12 text-center" style="padding-top: 0;">
+				<div class="row">
+					<div class="col-xs-12">
+						<h1>
+							<avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="100"></avatar-display>
+						</h1>
+					</div>
+					<div class="panel-body">
+						<p ng-if="vm.org.website"><a href="{{vm.org.website}}" target="_blank" rel="nofollow"><i class="fa fa-external-link"></i> company website</a></p>
+						<p ng-bind-html="vm.trust(vm.org.description)"></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<team-list org="vm.org" title="Teams" context="orgview"></team-list>
+	</div>
+
+</div>
+</section>
+
+</div>
+</div>
+</div>
+</section>

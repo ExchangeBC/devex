@@ -1,0 +1,36 @@
+
+<section>
+
+	<form name="vm.orgForm" id="vm.orgForm" ng-submit="vm.updateUserProfile(vm.orgForm.$valid)" novalidate autocomplete="off">
+		<div class="row">
+			<div class="col-cm-offset-1 col-sm-11">
+			<fieldset>
+				<select-list
+					ng-model="vm.org.capabilities"
+					class="col-sm-6"
+					x-type="arrayOfObjects"
+					x-values="vm.capabilities"
+					x-form="vm.orgForm"
+					x-options='{
+						"objectKeyAttribute":"id",
+						"objectDisplayAttribute":"item.text",
+						"title":"Capabilities",
+						"id":"capabilities",
+						"name":"capabilities",
+						"primary":false,
+						"single":false,
+						"leaveOpen": true
+					}'>
+				</select-list>
+			</fieldset>
+			</div>
+		</div>
+		<br/>
+		<div class="row text-center">
+			<div class="form-group">
+				<button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+			</div>
+		</div>
+	</form>
+
+</section>

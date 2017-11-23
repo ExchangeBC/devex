@@ -42,7 +42,21 @@ var whitelistedFields = [
 	'businessAddress2' ,
 	'businessCity'     ,
 	'businessProvince' ,
-	'businessCode'
+	'businessCode',
+	'location',
+	'description',
+	'website',
+	'skills',
+	'badges',
+	'capabilities',
+	'endorsements',
+	'github',
+	'stackOverflow',
+	'stackExchange',
+	'linkedIn',
+	'isPublicProfile',
+	'isAutoAdd'
+
 ];
 
 /**
@@ -257,7 +271,20 @@ exports.me = function (req, res) {
 			businessAddress2        : validator.escape(req.user.businessAddress2),
 			businessCity            : validator.escape(req.user.businessCity),
 			businessProvince        : req.user.businessProvince,
-			businessCode            : validator.escape(req.user.businessCode)
+			businessCode            : validator.escape(req.user.businessCode),
+			location                : req.user.location,
+			description             : validator.escape(req.user.description),
+			website                 : req.user.website,
+			skills                  : req.user.skills,
+			badges                  : req.user.badges,
+			capabilities            : req.user.capabilities,
+			endorsements            : req.user.endorsements,
+			github                  : req.user.github,
+			stackOverflow           : req.user.stackOverflow,
+			stackExchange           : req.user.stackExchange,
+			linkedIn                : req.user.linkedIn,
+			isPublicProfile         : req.user.isPublicProfile,
+			isAutoAdd               : req.user.isAutoAdd
 
 		};
 	}

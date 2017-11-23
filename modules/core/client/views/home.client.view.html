@@ -5,7 +5,7 @@
 				<br><br>
 				<h2>We’re building better ways for government and developers to work together.</h2>
 				<h5 style="color: #bbe4f7;">Meaningful opportunity for tech talent lives here. Join us!</h5>
-				<h5 style="font-family: Lato;"><a ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a><a href="/about">Learn More</a></h5>
+				<a ng-if="!vm.isUser" id="authentication.gov" ui-sref="authentication.gov" class="btn btn-lg btn-default">Sign Up</a>
 			</div>
 		</div>
 	</div>
@@ -22,7 +22,11 @@
 			<div class="col-sm-6" style="text-align: center; padding-right: 40px;">
 				<h3 style="color: #262626">Work  directly in GitHub and get paid a fixed fee for code that meets the acceptance criteria.</h3>
 				<br>
-				<h5 style="font-family: Lato; text-transform: none;"><a href="/opportunities" class="btn btn-lg btn-solo btn-warning">Find Work</a><a href="/codewithus">Learn More</a></h5><br><br><br><br>
+				<div class="btn-group-lg">
+					<a href="/opportunities" class="btn btn-lg btn-warning">Find work</a>
+					<a href="/codewithus" class="btn btn-lg btn-link">Learn more</a><br>
+					<br><br><br>
+				</div>
 			</div>
 			<div class="col-sm-6">
 				<div class="row">
@@ -40,7 +44,7 @@
 						<footer><em>Wayne</em> | <span style="font-weight: 500;">Developer</span>, Vancouver</footer>
 					</blockquote>
 					</div>
-				</div>	
+				</div>
 			</div>
 		</div>
 	</div>
@@ -62,7 +66,7 @@
 					<img class="card-img-top" src="/modules/core/client/img/photos/epic.jpg" title="Flickr image by feral rogue used under licence (CC BY-ND 2.0)"alt="EPIC Project" style="width:100%">
 					<div class="card-block">
 						<p class="card-text">The Environmental Assessment Office's Project Information & Collaboration system makes it easier for the public and stakeholders to find important information and comment on environmental reviews. It has been released as a beta application – a fully-functional starting point upon which to build continuous improvements.</p>
-						<a href="https://bcdevexchange.org/projects/589d72e509b2ba001d06289c" class="btn btn-default">View Project</a>
+						<a href="https://bcdevexchange.org/projects/589d72e509b2ba001d06289c" class="btn btn-block">View Project</a>
 					</div>
 				</div>
 			</div>
@@ -71,7 +75,7 @@
 					<img class="card-img-top" src="/modules/core/client/img/photos/schoolbus.jpg" alt="Transportation Fuels Reporting System Project" title="Flickr image by dhendirx72 used under licence (CC BY-ND 2.0)" style="width:100%;">
 					<div class="card-block">
 						<p class="card-text">The Ministry of Transportation and Infrastructure is modernizing the way vehicle inspectors conduct and track school bus inspections by decommissioning the existing mainframe application and replacing it with an Open Source solution that will help ensure the continued safety of the 3000+ school buses that are in operation in British Columbia today.</p>
-						<a href="https://bcdevexchange.org/projects/prj-school-bus-inspection-system-replacement-project" class="btn btn-default">View Project</a>
+						<a href="https://bcdevexchange.org/projects/prj-school-bus-inspection-system-replacement-project" class="btn btn-block">View Project</a>
 					</div>
 				</div>
 			</div>
@@ -80,7 +84,7 @@
 					<img class="card-img-top" src="/modules/core/client/img/photos/datavis.jpg" title="Flickr image by yashima used under licence (CC BY-SA 2.0)" alt="Major Mines Transparency Initiative Project" style="width: 100%;">
 					<div class="card-block">
 						<p class="card-text">B.C. innovators and data visualization experts are creating prototoypes to demonstrate the value of government and other sources of data. In this example, the challenge is being applied to B.C. Housing market data.</p>
-						<a href="https://bcdevexchange.org/projects/589a5c3f178691001cddb9ca" class="btn btn-default">View Project</a>
+						<a href="https://bcdevexchange.org/projects/589a5c3f178691001cddb9ca" class="btn btn-block">View Project</a>
 					</div>
 				</div>
 			</div>
@@ -96,7 +100,7 @@
 			</div>
 		</div>
 		<br>
-		
+
 		<div class="row">
   			<div class="col-xs-10 col-sm-6 col-centered">
     			<div class="panel panel-default panel-body text-center">
@@ -108,7 +112,7 @@
 		<div class="container" ng-if="!vm.isUser">
 		  <div class="row">
 		    <div class="col-xs-12" style="text-align: center; line-height: 1.5em;">
-		      <h3 style="color: white; padding-bottom: 30px;">Want to hear about meetups and events?<br><br><a ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a>
+		      <h3 style="color: white; padding-bottom: 30px;">Want to hear about meetups and events?<br><br><a  id="authentication.gov" ui-sref="authentication.gov" class="btn btn-lg btn-solo btn-warning">Sign Up</a>
 		    </div>
 		  </div>
 		</div>
@@ -119,7 +123,7 @@
 					<h2 style="color: #fdb917;">Vancouver Startup Week</h2>
 					<p style="color: #d2edf9">Bringing together entrepreneurs, investors, community leaders, and friends for one engaging week, celebrating Greater Vancouver’s innovation and technology communities. See you there!</p><br>
 					<a href="http://vanstartupweek.ca/" class="btn btn-default">LEARN MORE</a>
-					<br><br><br><br> 
+					<br><br><br><br>
 			</div>
 			<div class="col-sm-2"></div>
 			<div class="col-sm-5">

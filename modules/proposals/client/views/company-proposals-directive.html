@@ -1,0 +1,68 @@
+
+<div class="row list-head">
+  <div class="col-sm-7">
+  <h3 ng-bind="vm.title" class="list-page-hide"></h3>
+  </div>
+  <div class="col-sm-5 col-form-buttons text-right">
+  <button ng-if="vm.userCanAdd" class="btn " ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="proposaladmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
+    <i class="glyphicon glyphicon-plus"></i> New Proposal
+  </button>
+  </div>
+</div>
+
+<div class="row">
+<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.proposals | columnRanges:vm.columnCount">
+
+
+<div class="card card-flat" ng-class="{'card-greyed': !proposal.isPublished}" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
+
+  <div class="card-header" ng-if="vm.isAdmin || proposal.userIs.admin" style="text-align: right">
+    <span ng-if="vm.isAdmin || proposal.userIs.admin"   class="label label-primary">Admin</span>
+    &nbsp;
+    <span ng-if="proposal.userIs.member && !proposal.userIs.admin"  class="label label-primary">Member</span>
+    &nbsp;
+    <span ng-if="proposal.userIs.request" class="label label-primary">Pending Member</span>
+    &nbsp;
+    <span ng-if="!proposal.isPublished" class="label-danger">
+          <i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
+    &nbsp;
+    <a ng-if="vm.isAdmin || proposal.userIs.admin" href="javascript:void(0);"  id="proposaladmin.edit" ui-sref="proposaladmin.edit({ proposalId: proposal._id, programId: proposal.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
+    <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    &nbsp;
+    <a ng-if="proposal.program.isPublished && (vm.isAdmin || proposal.userIs.admin) && proposal.isPublished" href="javascript:void(0);" ng-click="vm.publish(proposal, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="Unpublish">
+    <i class="glyphicon glyphicon-ban-circle"></i>
+    </a>
+    &nbsp;
+    <a ng-if="proposal.program.isPublished && (vm.isAdmin || proposal.userIs.admin) && !proposal.isPublished" href="javascript:void(0);" ng-click="vm.publish(proposal, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
+    <i class="glyphicon glyphicon-check"></i>
+    </a>
+    &nbsp;
+    <a ng-cloak ng-if="vm.isGov && !proposal.userIs.member && !proposal.userIs.request" href="javascript:void(0);" ng-click="vm.request(proposal)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
+    <i class="glyphicon glyphicon-user"></i>
+    </a>
+  </div>
+
+  <div class="card-header" style="background-color: #f2f2f2; padding-top: 0px;">
+    <div class="container">
+        <div class="label-list" style="margin-left: -18px;">
+          <span class="label label-info" ng-repeat="code in proposal.tags">{{code}}</span>
+        </div>
+      </div>
+  </div>
+
+
+  <div class="card-block" style="padding-bottom: 0px; padding-top: 0;">
+    <div class="row">
+      <div class="col-xs-12 col-sm-12">
+        <h3 style="font-size: 18px; margin-top: 10px; font-family: Lato;"><i class="fa fa-pie-chart"></i> &nbsp; <a  id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id, programId: proposal.program.code })" ng-bind="proposal.name"></a>
+        </h3>
+        <p style="font-size: 14px; margin-bottom: 20px;" ng-bind="proposal.short"></p>
+        <p style="padding: 20px 0px 0px 0px; font-weight: 300; color: #595959;" ng-if="!vm.program && proposal.program">
+        <!--<a  id="programs.view" ui-sref="programs.view({programId:proposal.program.code})">--><i class="fa fa-university"></i> {{proposal.program.title}}</p>
+        </h5>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,27 +1,27 @@
 <nav id="mainNav" class="navbar navbar-default" ng-controller="HeaderController as vm" ng-class="{'navbar-intro': isHomePage()}">
 <div class="container">
-  <a ng-if='0' ui-sref="proposals.view({proposalId:987236})"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Test Proposals</a>
+  <a ng-if='0'  id="proposals.view" ui-sref="proposals.view({proposalId:987236})"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Test Proposals</a>
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
     <ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
       <li ui-sref-active="active">
-        <!-- <a ui-sref="signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a> -->
-        <a ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+        <!-- <a  id="signup" ui-sref="signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a> -->
+        <a  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
       </li>
       <li class="divider-vertical"></li>
       <li ui-sref-active="active">
-        <a ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+        <a  id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
       <li class="dropdown" uib-dropdown>
         <a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
           <img ng-src="{{vm.authentication.user.profileImageURL}}" class="header-profile-image" />
-          <span ng-bind="vm.authentication.user.displayName"></span> <b class="caret"></b>
+          <span ng-bind="vm.authentication.user.displayName"></span><b class="caret"></b>
         </a>
         <ul class="dropdown-menu" role="menu">
           <li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">
-            <a ui-sref="{{item.state}}" ng-bind="item.title"></a>
+            <a id="{{item.state}}" ui-sref="{{item.state}}" ng-bind="item.title"></a>
           </li>
           <li class="divider"></li>
           <li>
@@ -30,7 +30,7 @@
         </ul>
       </li>
     </ul>
-        <a class="navbar-brand" ui-sref="home" href="/">
+        <a class="navbar-brand"  id="home" ui-sref="home" href="/">
           <img height="50" src="/modules/core/client/img/logo/new-logo.png" alt="BCDevExchange">
         </a>
     </div>
@@ -41,10 +41,10 @@
         <a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
         <ul ng-switch-when="dropdown" class="dropdown-menu">
           <li ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
-            <a ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
+            <a id="{{subitem.state}}" ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
           </li>
         </ul>
-        <a ng-switch-default ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
+        <a ng-switch-default id="{{item.state}}" ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
       </li>
     </ul>
   </nav>

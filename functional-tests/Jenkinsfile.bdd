@@ -1,0 +1,29 @@
+node('maven') {
+    try {
+	stage('validation') {
+
+          echo "checking out source"
+	  echo "Build: ${BUILD_ID}"
+	  checkout scm
+	
+          dir('functional-tests'){
+			TEST_USERNAME = sh (
+             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
+             returnStdout: true
+              ).trim()
+			  
+			TEST_PASSWORD = sh (
+             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
+             returnStdout: true
+              ).trim()
+			  
+	     // echo "TEST_USERNAME: ${TEST_USERNAME}"
+	     // echo "TEST_PASSWORD: ${TEST_PASSWORD}"
+
+            sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
+          }
+       }
+    } finally {
+      archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
+    }
+}

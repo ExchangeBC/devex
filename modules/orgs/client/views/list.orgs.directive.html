@@ -1,0 +1,38 @@
+<div class="row list-head">
+	<div class="col-sm-7">
+		<h2 class="list-page-hide">Government Partners</h2>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right">
+		<button ng-if="vm.userCanAdd" class="btn btn-default " ui-sref="orgs.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> New Company
+		</button>
+	</div>
+</div>
+
+
+<div class="card card-flat" ng-repeat="org in vm.orgs">
+
+	<div class="card-header" ng-if="vm.isAdmin || org.userIs.admin" style="text-align: right">
+		<span ng-if="vm.isAdmin || org.userIs.admin" class="label label-primary">Admin</span>
+		&nbsp;
+		<span ng-if="org.userIs.member && !org.userIs.admin" class="label label-primary">Member</span>
+		&nbsp;
+		<a ng-if="vm.isAdmin || org.userIs.admin" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+	</div>
+
+	<div class="card-block" style="padding: 10px;">
+		<div class="row">
+			<div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
+				<avatar-display url="org.orgImageURL" size="100"></avatar-display>
+			</div>
+			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
+				<h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
+					<a  id="orgs.view" ui-sref="orgs.view({ orgId: org._id })" ng-bind="org.name"></a>
+				</h3>
+				<p ng-bind-html="vm.trust(org.description)"></p>
+			</div>
+		</div>
+	</div>
+
+</div>
+

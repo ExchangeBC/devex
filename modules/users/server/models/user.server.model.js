@@ -15,6 +15,21 @@ var mongoose = require('mongoose'),
 
 owasp.config(config.shared.owasp);
 
+// -------------------------------------------------------------------------
+//
+// endorsement
+//
+// -------------------------------------------------------------------------
+var Endorsement = new Schema ({
+  content     : {type: String, default: ''},
+  link        : {type: String, default: ''},
+  projectName : {type: String, default: ''},
+  created     : {type: Date, default: null},
+  createdBy   : {type: 'ObjectId', ref: 'User', default: null },
+  updated     : {type: Date, default: null },
+  updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
+});
+
 
 /**
  * A Validation function for local strategy properties
@@ -107,7 +122,20 @@ var UserSchema = new Schema({
   //
   notifications: {
     update : { type: Schema.ObjectId, ref: 'Notification' }
-  }
+  },
+  location      : {type: String, default: ''},
+  description   : {type: String, default: ''},
+  website       : {type: String, default: ''},
+  skills        : [String],
+  badges        : [String],
+  capabilities  : [String],
+  endorsements  : [Endorsement],
+  github        : {type: String, default: ''},
+  stackOverflow : {type: String, default: ''},
+  stackExchange : {type: String, default: ''},
+  linkedIn      : {type: String, default: ''},
+  isPublicProfile : {type: Boolean, default:false},
+  isAutoAdd : {type: Boolean, default:true}
 });
 
 /**

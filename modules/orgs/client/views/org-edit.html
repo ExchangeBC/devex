@@ -1,0 +1,34 @@
+<section class="static">
+	<div class="container" role="main">
+		<div class="row">
+			<nav class="col-xs-12">
+				<ul class="nav nav-pills">
+					<li ui-sref-active="active">
+						<a id="orgadmin.profile" ui-sref="orgadmin.profile">Profile</a>
+					</li>
+					<li ui-sref-active="active">
+						<a id="orgadmin.skills" ui-sref="orgadmin.skills">Skills</a>
+					</li>
+					<li ui-sref-active="active">
+						<a id="orgadmin.teams" ui-sref="orgadmin.teams">Teams</a>
+					</li>
+					<li ui-sref-active="active">
+						<a id="orgadmin.proposals" ui-sref="orgadmin.proposals">Proposals</a>
+					</li>
+					<li>
+						<a ui-sref="orgs.view({ orgId: vm.org._id })">View Company</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="panel">
+			<div class="panel-body">
+				<div ui-view></div>
+			</div>
+		</div>
+		<div class="alert alert-grey">
+			<p style="font-size: 11px;"><b>Collection Notice</b></p>
+			<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
+		</div>
+	</div>
+</section>
