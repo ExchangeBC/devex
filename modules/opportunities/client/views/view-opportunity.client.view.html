@@ -10,7 +10,7 @@
 			</div>
 
 <!-- // User is NOT following the opportunity // -->
-			<button ng-if="!vm.notifyMe && vm.hasEmail" type="button" class="btn btn-default" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button>
+			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-default" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button>
 
 <!-- // User IS following the opportunity // -->
 			<button ng-if="vm.notifyMe" type="button" class="btn btn-primary" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="glyphicon glyphicon-ok-sign"></i> Following</button>			
@@ -18,13 +18,12 @@
 		</div>
 	</div>
 		
-		
 	<!-- // Admin view, draft opportunity is missing stuff // -->
 	<div class="row" ng-if="!vm.canPublish && vm.canEdit">
 		<div class="col-xs-12 text-right">
 			<div class="well well-sm well-danger">
 				<span>
-					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been properly filled out.
+					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been filled out.
 				</span>
 				<div class="btn-group">
 					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
