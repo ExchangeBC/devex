@@ -81,6 +81,38 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 				return false;
 			}
+
+			vm.user.c01_flag = (vm.user.c01_experience !== '');
+			vm.user.c02_flag = (vm.user.c02_experience !== '');
+			vm.user.c03_flag = (vm.user.c03_experience !== '');
+			vm.user.c04_flag = (vm.user.c04_experience !== '');
+			vm.user.c05_flag = (vm.user.c05_experience !== '');
+			vm.user.c06_flag = (vm.user.c06_experience !== '');
+			vm.user.c07_flag = (vm.user.c07_experience !== '');
+			vm.user.c08_flag = (vm.user.c08_experience !== '');
+			vm.user.c09_flag = (vm.user.c09_experience !== '');
+			vm.user.c10_flag = (vm.user.c10_experience !== '');
+			vm.user.c11_flag = (vm.user.c11_experience !== '');
+			vm.user.c12_flag = (vm.user.c12_experience !== '');
+			vm.user.c13_flag = (vm.user.c13_experience !== '');
+
+			vm.user.capabilities = [];
+
+			if (vm.user.c01_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c01'].id); }
+			if (vm.user.c02_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c02'].id); }
+			if (vm.user.c03_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c03'].id); }
+			if (vm.user.c04_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c04'].id); }
+			if (vm.user.c05_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c05'].id); }
+			if (vm.user.c06_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c06'].id); }
+			if (vm.user.c07_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c07'].id); }
+			if (vm.user.c08_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c08'].id); }
+			if (vm.user.c09_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c09'].id); }
+			if (vm.user.c10_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c10'].id); }
+			if (vm.user.c11_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c11'].id); }
+			if (vm.user.c12_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c12'].id); }
+			if (vm.user.c13_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c13'].id); }
+
+
 			var successMessage = '<h4>Edit skills successful</h4>';
 			var user = new UsersService(vm.user);
 			user.$update(function (response) {
