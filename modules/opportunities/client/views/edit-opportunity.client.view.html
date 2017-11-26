@@ -19,15 +19,15 @@
 			<h2 ng-if="!vm.editing">New Opportunity</h2>
 		</div>
 		<div class="col-md-6 col-form-buttons text-right">
-				
+
 				<button type="submit" href="javascript:void(0);" class="btn btn-success" title="Save changes">Save changes</button>
- 				
+
 				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Delete opportunity">Delete opportunity</a>
 
  				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>
 		</div>
 	</div>
-	
+
 	<div class="row">
 	<div class="col-sm-12">
 		<fieldset>
@@ -36,10 +36,26 @@
 				<span ng-if="!vm.programId">To choose a program, please select a Project.</span>
 			</div>-->
 
+			<div class="form-group text-center" ng-if="vm.features.swu">
+				<div class="radio">
+					<label>
+						<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="code-with-us">
+						I am looking for an <em>Individual</em>
+					<!-- </label> -->
+					&nbsp; &nbsp; &nbsp;
+<!-- 				</div>
+				<div class="radio">
+ -->					<label>
+						<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="sprint-with-us">
+						I am looking for a <em>Team</em>
+					</label>
+				</div>
+			</div>
+
 			<div class="form-group" ng-if="vm.projectLink" >
 				<a  id="projects.view" ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
 			</div>
-			<div class="form-group" >
+			<div class="form-group" ng-if="!vm.projectLink && (vm.context === 'program' || vm.context === 'allopportunities')" >
 				<label class="control-label" for="project">Project</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
 				<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
@@ -64,7 +80,6 @@
 				</select>
 			</div>
 
-			<br><br>
 			<div class="form-group" show-errors>
 				<label class="control-label" for="title">Title</label>
 				<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('title')"></i>
@@ -107,6 +122,41 @@
 				<div ng-messages="vm.opportunityForm.description.$error" role="alert">
 					<p class="help-block error-text" ng-message="required">Opportunity description is required.</p>
 				</div>
+			</div>
+			<div class="col-sm-12">
+			<select-list
+				ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'"
+				ng-model="vm.opportunity.capabilities"
+				class="col-sm-6"
+				x-type="arrayOfObjects"
+				x-values="vm.capabilities"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"objectKeyAttribute":"id",
+					"objectDisplayAttribute":"item.text",
+					"title":"Select the capabilities you are looking for in a team",
+					"id":"capabilities",
+					"name":"capabilities",
+					"primary":false,
+					"single":false,
+					"leaveOpen": true
+				}'>
+			</select-list>
+			</div>
+
+			<div class="col-sm-12">
+				<ul class="list-unstyled">
+					<li>
+						<div class="well" style="margin:0">
+						Content1
+						</div>
+					</li>
+					<li>
+						<div class="well" style="margin:0">
+						Content1
+						</div>
+					</li>
+				</ul>
 			</div>
 
 			<br><br>
@@ -198,7 +248,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
 				<div class="col-sm-4 col-md-3">
 					<div class="form-group" show-errors>
 						<label class="control-label" for="earn">Fixed-Price Reward</label>
@@ -212,6 +262,22 @@
 						</select>
 						<div ng-messages="vm.opportunityForm.earn.$error" role="alert">
 							<p class="help-block error-text" ng-message="required">Fixed-Price Reward is required.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+				<div class="col-sm-6 col-md-6">
+					<div class="form-group" show-errors>
+						<label class="control-label" for="earn">Target Budget (Cannot exceed 2,000,000)</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
+						<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
+							<p>To the best of your ability, estimate a fair price for the amount of work you think it should take a qualified team to meet the acceptance criteria. It's best to over-estimate.</p>
+							<p>Sprint With Us opportunities may be offered to a maximum of $2,000,000.</p>
+						</div>
+						<input input-number type="text" ng-model="vm.opportunity.earn" id="earn" name="earn" class="form-control" ng-required="true" required ></input>
+						<div ng-messages="vm.opportunityForm.earn.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Target Budget is required.</p>
 						</div>
 					</div>
 				</div>
@@ -251,9 +317,8 @@
 					<p class="help-block error-text" ng-message="required">Proposal email is required.</p>
 				</div>
 			</div>
-
-			<div class="row">
-
+			<br/>
+			<div class="row" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
 				<div class="col-sm-4">
 					<div class="form-group" show-errors>
 						<label class="control-label" for="deadline">Proposal Deadline</label>
@@ -301,37 +366,71 @@
 						</div>
 					</div>
 				</div>
-<!--
+ 			</div>
+			<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 				<div class="col-sm-3">
 					<div class="form-group" show-errors>
-						<label class="control-label" for="deadline_date">Proposal Deadline - Date</label>
-						<input type="date" format="ddMMyy"/>
+						<label class="control-label" for="deadline">Proposal Deadline</label>
 						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
 						<div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
-							Choose a deadline for receiving proposals. The longer lead time, the more proposals you are likely to get.
-							A deadline that's at least 5 days after you publish is a good guideline. A
-							lso, it's possible that you may have to field questions that come in at the last minute - so choose a time of day when you'll be able to respond.
+	              			<p>Choose a <b>cutoff date</b> for receiving proposals. (Time of day is fixed at 16:00 Pacific Time.)</p>
+	              			<p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
+							<p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>
 						</div>
-						<div class="input-group">
-							<input type="text" class="form-control" name="deadline_date" id="deadline_date" uib-datepicker-popup="yyyy-MM-dd" ng-model="vm.opportunity.deadline_date" is-open="vm.showdate" required close-text="Close" placeholder="Date"/>
-							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" ng-click="vm.showdate=1"><i class="glyphicon glyphicon-calendar"></i></button>
-							</span>
+						<div>
+						<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
+						</div>
+						<div ng-messages="vm.opportunityForm.deadline.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Proposal Deadline is required.</p>
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-3">
 					<div class="form-group" show-errors>
-						<label class="control-label" for="deadline_time">Proposal Deadline - Time</label>
-						<div class="input-group">
-							<input type="text" class="form-control" name="deadline_time" id="deadline_time" ng-model="vm.opportunity.deadline_time" required placeholder="Time" />
-							<span class="input-group-addon">
-								PST
-							</span>
+						<label class="control-label" for="assignment">Assignment Date</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('assignment')"></i>
+						<div class="input-help alert alert-info" data-field="assignment" ng-show="vm.displayHelp.assignment">
+							Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time of day is fixed at 16:00 Pacific Time.)
+						</div>
+						<div>
+						<input type="date" name="assignment" required ng-model="vm.opportunity.assignment"/>
+						</div>
+						<div ng-messages="vm.opportunityForm.assignment.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Assignment Date is required.</p>
 						</div>
 					</div>
 				</div>
- -->
+				<div class="col-sm-3">
+					<div class="form-group" show-errors>
+						<label class="control-label" for="start">Proposed Start Date</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('start')"></i>
+						<div class="input-help alert alert-info" data-field="start" ng-show="vm.displayHelp.start">
+							When do you want the person to begin working?
+						</div>
+						<div>
+						<input type="date" name="start" ng-model="vm.opportunity.start"/>
+						</div>
+						<div ng-messages="vm.opportunityForm.start.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Proposed Start Date is required.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-3">
+					<div class="form-group" show-errors>
+						<label class="control-label" for="endDate">Proposed End Date</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('endDate')"></i>
+						<div class="input-help alert alert-info" data-field="endDate" ng-show="vm.displayHelp.endDate">
+							When do you expect the opportunity to be completed?
+						</div>
+						<div>
+						<input type="date" name="endDate" ng-model="vm.opportunity.endDate"/>
+						</div>
+						<div ng-messages="vm.opportunityForm.endDate.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Proposed End Date is required.</p>
+						</div>
+					</div>
+				</div>
  			</div>
 		</fieldset>
 	</div>
@@ -341,9 +440,9 @@
 			<!--
 			<a href="javascript:void(0);" uib-tooltip="Save your work anytime. You can always come back later." class="btn btn-primary" ng-click="vm.saveme()"><i class="glyphicon glyphicon-save"></i> Save
 			</a>-->
- 				
+
 			<button type="submit" href="javascript:void(0);" class="btn btn-success">Save changes</button>
-			
+
 			<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Remove">Delete opportunity</a>
 
 			<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>

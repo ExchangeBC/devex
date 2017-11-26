@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
  */
 var OpportunitySchema = new Schema({
 	code          : {type: String, default: ''},
+	opportunityTypeCd : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
 	name          : {type: String, default: '', required: 'Name cannot be blank'},
 	short         : {type: String, default: '', required: 'Short description cannot be blank'},
 	description   : {type: String, default: ''},
@@ -22,6 +23,7 @@ var OpportunitySchema = new Schema({
 	program       : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project       : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
 	skills        : [String],
+	capabilities        : [String],
 	earn          : {type: Number, default: 0, required: 'Please provide a reward amount'},
 	tags          : [String],
 	status        : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
@@ -33,6 +35,7 @@ var OpportunitySchema = new Schema({
 	deadline      : {type: Date, default: null},
 	assignment    : {type: Date, default: null},
 	start         : {type: Date, default: null},
+	endDate       : {type: Date, default: null},
 	assignedTo    : {type: 'ObjectId', ref: 'User', default: null },
 	created       : {type: Date, default: null},
 	createdBy     : {type: 'ObjectId', ref: 'User', default: null },

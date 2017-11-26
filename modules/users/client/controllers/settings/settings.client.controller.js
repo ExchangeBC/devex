@@ -63,7 +63,9 @@
 		vm.user = angular.copy(Authentication.user);
 		var pristineUser = angular.toJson (Authentication.user);
 		vm.capabilities     = dataService.capabilities;
+		console.log ('capabilities:', vm.capabilities);
 		if (!vm.user.capabilities) vm.user.capabilities = [];
+		vm.c01_selfrating = "0";
 		vm.tinymceOptions = {
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string

@@ -19,6 +19,7 @@
 	// =========================================================================
 	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService) {
 		var vm                    = this;
+		vm.features = window.features;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -220,6 +221,8 @@
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask) {
 		var vm                                = this;
+		vm.features = window.features;
+		vm.capabilities     = dataService.capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -234,10 +237,12 @@
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
+		vm.opportunity.endDate                  = new Date (vm.opportunity.endDate)		;
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
 		// if the user doesn't have the right access then kick them out
 		//
