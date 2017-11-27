@@ -39,7 +39,20 @@ var OrgSchema = new Schema ({
 	created      : {type: Date, default: null},
 	createdBy    : {type: 'ObjectId', ref: 'User', default: null },
 	updated      : {type: Date, default: null },
-	updatedBy    : {type: 'ObjectId', ref: 'User', default: null }
+	updatedBy    : {type: 'ObjectId', ref: 'User', default: null },
+	c01_flag : { type: Boolean, default:false },
+	c02_flag : { type: Boolean, default:false },
+	c03_flag : { type: Boolean, default:false },
+	c04_flag : { type: Boolean, default:false },
+	c05_flag : { type: Boolean, default:false },
+	c06_flag : { type: Boolean, default:false },
+	c07_flag : { type: Boolean, default:false },
+	c08_flag : { type: Boolean, default:false },
+	c09_flag : { type: Boolean, default:false },
+	c10_flag : { type: Boolean, default:false },
+	c11_flag : { type: Boolean, default:false },
+	c12_flag : { type: Boolean, default:false },
+	c13_flag : { type: Boolean, default:false }
 });
 
 

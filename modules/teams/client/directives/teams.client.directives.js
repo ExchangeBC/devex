@@ -116,7 +116,7 @@
 								return rfv.org;
 							},
 							team: function (TeamsService) {
-								return TeamsService.forOrg({orgId:vm.org._id}).$promise;
+								return TeamsService.forOrg({orgId:rfv.org._id}).$promise;
 							}
 						}
 					})
