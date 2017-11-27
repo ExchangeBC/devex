@@ -43,7 +43,20 @@ var OpportunitySchema = new Schema({
 	updatedBy     : {type: 'ObjectId', ref: 'User', default: null },
 	issueUrl      : {type: 'String', default: ''},
 	issueNumber   : {type: 'String', default: ''},
-	proposal      : {type:'ObjectId', ref: 'Proposal', default: null}
+	proposal      : {type:'ObjectId', ref: 'Proposal', default: null},
+	c01_flag : { type: Boolean, default:false },
+	c02_flag : { type: Boolean, default:false },
+	c03_flag : { type: Boolean, default:false },
+	c04_flag : { type: Boolean, default:false },
+	c05_flag : { type: Boolean, default:false },
+	c06_flag : { type: Boolean, default:false },
+	c07_flag : { type: Boolean, default:false },
+	c08_flag : { type: Boolean, default:false },
+	c09_flag : { type: Boolean, default:false },
+	c10_flag : { type: Boolean, default:false },
+	c11_flag : { type: Boolean, default:false },
+	c12_flag : { type: Boolean, default:false },
+	c13_flag : { type: Boolean, default:false }
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
