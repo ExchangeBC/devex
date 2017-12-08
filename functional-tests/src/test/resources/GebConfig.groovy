@@ -1,75 +1,93 @@
 /*
 	This is the Geb configuration file.
-
+	
 	See: http://www.gebish.org/manual/current/#configuration
 */
+
 import org.openqa.selenium.Dimension
 import org.openqa.selenium.chrome.ChromeDriver
+import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.firefox.FirefoxDriver
+import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.ie.InternetExplorerDriver
-import org.openqa.selenium.phantomjs.PhantomJSDriver
+import org.openqa.selenium.edge.EdgeDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
 waiting {
-	timeout = 15
+	timeout = 20
 	retryInterval = 1
 }
 
 atCheckWaiting = [20, 1]
 
 environments {
-
+	
 	// run via “./gradlew chromeTest”
-	// See: http://code.google.com/p/selenium/wiki/ChromeDriver
+	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chrome {
-		driver = { def d = new ChromeDriver(new DesiredCapabilities());
-			//d.manage().window().size = new Dimension(1920, 1080);
-			d.manage().window().maximize();
-			return d
-		}
+		driver = { new ChromeDriver() }
 	}
 
+	// run via “./gradlew chromeHeadlessTest”
+	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
+	chromeHeadless {
+		driver = {
+			ChromeOptions o = new ChromeOptions()
+			o.addArguments('headless')
+			o.addArguments('disable-gpu') 
+			o.addArguments('no-sandbox')
+			new ChromeDriver(o)
+		}
+	}
+	
 	// run via “./gradlew firefoxTest”
-	// See: http://code.google.com/p/selenium/wiki/FirefoxDriver
+	// See: https://github.com/SeleniumHQ/selenium/wiki/FirefoxDriver
 	firefox {
 		driver = { new FirefoxDriver() }
 	}
-
+	
+	firefoxHeadless {
+		driver = {
+			FirefoxOptions o = new FirefoxOptions()
+			o.addArguments("-headless")
+			new FirefoxDriver(o)
+		}
+	}
+	
+	// run via “./gradlew ieTest”
+	// See: https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver
 	ie {
-		//driver = { new InternetExplorerDriver() }
-/*		driver = { def d = new InternetExplorerDriver(new DesiredCapabilities());
-			//d.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
-			//d.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,true);
-			d.setCapability(InternetExplorerDriver.NATIVE_EVENTS,true);
-			return d*/
-			def d = new DesiredCapabilities();
-			d.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
-			d.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,true);
-			d.setCapability(InternetExplorerDriver.NATIVE_EVENTS,false);
-			d.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS,true);
+		def d = new DesiredCapabilities();
+		d.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
+		d.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING,true);
+		d.setCapability(InternetExplorerDriver.NATIVE_EVENTS,false);
+		d.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS,true);
 		
 		driver = { new InternetExplorerDriver(d) }	
 	}
 
-	    phantomJs {
-		driver = { def d = new PhantomJSDriver(new DesiredCapabilities());
-			d.manage().window().size = new Dimension(1280, 1024);
-			return d
-		}
-    }
+	// run via “./gradlew edgeTest”
+	// See: https://github.com/SeleniumHQ/selenium/wiki
+	edge {
+		driver = { new EdgeDriver() }
+	}
 }
 
-// To run the tests with all browsers just run:
-//
-// phantomJs --> “./gradlew phantomJsTest”   (headless)
-// chrome    --> "./gradlew chromeTest"
-baseUrl = "http://platform-dev.pathfinder.gov.bc.ca/"
+// To run the tests with all browsers just run “./gradlew test”
 
 baseNavigatorWaiting = true
 
+// Allows for setting you baseurl in an environment variable.
+// This is particularly handy for development and the pipeline
+def env = System.getenv()
+baseUrl = env['BASEURL']
+if (!baseUrl) {
+	baseUrl = "http://platform-dev.pathfinder.gov.bc.ca/"
+}
+
 println "BaseURL: ${baseUrl}"
 println "--------------------------"
-reportsDir = "gebReports"
 
 cacheDriverPerThread = true
 quitCachedDriverOnShutdown = true
+

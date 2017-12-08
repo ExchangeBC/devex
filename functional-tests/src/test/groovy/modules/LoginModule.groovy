@@ -35,28 +35,17 @@ class LoginModule extends Module {
         waitFor { adminLoginInput }
         adminLoginInput.value( userName ) //admin
         passwordInput.value( passWord ) //adminadmin
+        js.exec('window.scrollTo(0, document.body.scrollHeight);')
         commitButton.click()
         waitFor { userDisplayName != "" }
         if ( userDisplayName == fullUserName ) //"ADMIN LOCAL"*/
             return true
         else
-            return false   */ 
+            return false
     }
 
     Boolean adminLogout(){
         $('li.dropdown.open > ul.dropdown-menu > li:nth-of-type(4) > a').click()
-        return true
-    }
-
-    Boolean userLogin(String userName, String passWord, String fullUserName){
-        signIn.click()
-        waitFor { gitHubLink }
-        gitHubLink.click()
-        loginInput.value( userName ) //"testdevtest"
-        passwordInput.value( passWord ) //"testtest123"
-        commitButton.click()
-        waitFor { userDisplayName != "" }
-        assert { userDisplayName != "" }
         return true
     }
 }

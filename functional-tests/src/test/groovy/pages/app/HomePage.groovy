@@ -1,10 +1,11 @@
 package pages.app
 import geb.Page
 import modules.LoginModule
+import extensions.AngularJSAware
 
-class HomePage extends Page {
+class HomePage extends Page implements AngularJSAware {
     
-    static at = { title == "BCDevExchange"}
+	static at = { angularReady && title == "BCDevExchange" }
     static url = ""
     static content = {
         login { module LoginModule  }
@@ -23,6 +24,7 @@ class HomePage extends Page {
 		ProgramsLink { PositionAndClick("a","programs.list") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SignUpMidPageLink { PositionAndClick("a","authentication.gov",1) }
+		OrgsList { PositionAndClick("a","orgs.list") }
 		
 // Folowing links are not yet operational
 		LearnMoreLink { $("a", href:"/codewithus") }
@@ -46,5 +48,9 @@ class HomePage extends Page {
     		js.exec('document.getElementById("' + elementId + '").scrollIntoView(true);')
 			$("$elementType", id:"$elementId")[index].click()
 			return true
+    }
+ 	//Use as InjectLibrary('https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js') to inject dependencies
+    void InjectLibrary( String library ){
+       def ok = browser.driver.executeScript("document.body.appendChild(document.createElement(\'script\')).src=\'$library\'")
     }
 }
