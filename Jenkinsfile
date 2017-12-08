@@ -26,7 +26,6 @@ def getChangeString() {
 // oc policy add-role-to-user view -z system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-test
 // oc policy add-role-to-user view -z system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-prod
 
-
 node('maven') {
 
     stage('checkout') {
@@ -65,31 +64,26 @@ node('maven') {
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
     }
- 
-    try {
-	stage('validation') {
-          dir('functional-tests'){
-		TEST_USERNAME = sh (
-             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_USERNAME/{print $2}\'',
-             returnStdout: true
-              ).trim()
-			  
-		TEST_PASSWORD = sh (
-             script: 'oc env bc/devxp --list | awk  -F  "=" \'/TEST_PASSWORD/{print $2}\'',
-             returnStdout: true
-              ).trim()
-			  
-	//		echo "TEST_USERNAME: ${TEST_USERNAME}"
-	//		echo "TEST_PASSWORD: ${TEST_PASSWORD}"
-
-            sh "export TEST_USERNAME=${TEST_USERNAME}\nexport TEST_PASSWORD=${TEST_PASSWORD}\n./gradlew --debug --stacktrace phantomJsTest"
-          }
-	}
-    } finally {
-	    archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-tests/build/reports/**/*'
-    }
 }
 
+node('bddstack') {
+	stage('Functional Test') {
+	//the checkout is mandatory, otherwise functional test would fail
+        echo "checking out source"
+        echo "Build: ${BUILD_ID}"
+        checkout scm
+        dir('functional-tests') {
+			try {
+				sh './gradlew --debug --stacktrace chromeHeadlessTest'
+			} finally { 
+				archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+                                archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+                                junit 'build/test-results/**/*.xml'
+			}
+        }
+    }
+}
+	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
 	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
@@ -116,3 +110,4 @@ stage('deploy-test') {
 //           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production",
 //           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
 //  }
+–
