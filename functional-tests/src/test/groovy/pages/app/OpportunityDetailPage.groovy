@@ -5,9 +5,9 @@ import extensions.AngularJSAware
 
 class OpportunityDetailPage extends Page implements AngularJSAware {
 	static at = { angularReady && title.startsWith("BCDevExchange - Opportunity:") }
-    //static at = { title.startsWith("BCDevExchange - Opportunity:") }
+    
     static content = {
     	unPublished { $("label.label-danger")[0].contains("UNPUBLISHED") }
-    	oppDetailTitle { $("h1").text() }
+    	oppDetailTitle { $("h2").text() }
     }
 }

@@ -17,6 +17,7 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     //static at = { title == "BCDevExchange - New Opportunity" }
 	static url = "opportunityadmin/create"
 	static content = {
+            opportunityTypeCd { $("input", name:"opportunityTypeCd").module(RadioButtons) }
             desciFrame(page: FrameDescribingPage) { $("iframe", id: startsWith("ui-tinymce-"), 0) }
             desciText { $("textarea", 1).module(Textarea) }
             aciFrame(page: FrameDescribingPage) { $("iframe", id: startsWith("ui-tinymce-"), 1) }
@@ -30,14 +31,18 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
             oppEmail { $("input", id:"proposalEmail") }
             oppGithub { $("input",id:"github") }
             oppSkills { $("input", id:"skilllist") }
+            oppRole { waitFor { angularReady } 
+                    $("input", "ng-model":"vm.opportunity.c01_flag").module(Checkbox) 
+                    }
             selectEarn { $("#opportunityForm") }
             selectLocation { $("#opportunityForm") }
             selectOnsite { $("#opportunityForm") }
             textArea { $("#ui-tinymce-7") }
-            upperSaveButton { $("#opportunityForm > div.row.form-head > div.col-md-6.col-form-buttons.text-right > div > button") }
+            upperSaveButton { $("button", type:"submit", 0) }
         }
 
     void "Add Description"(String desc){
+            waitFor { angularReady }
             withFrame( waitFor { desciFrame } ) {
               mceBody << desc
           }
@@ -45,6 +50,7 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     }
     
     void "Add Acceptance Criteria"(String desc){
+            waitFor { angularReady }
             withFrame( waitFor { aciFrame } ) {
               mceBody << desc
           }
@@ -52,6 +58,7 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     }
 
     void "Add Proposal Criteria"(String desc){
+            waitFor { angularReady }
             withFrame( waitFor { propiFrame } ) {
               mceBody << desc
           }
@@ -75,15 +82,18 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     }
 
     void "Set Deadline Date"(String dDate){
-        $("input", name:"deadline").value(dDate)
+        waitFor { angularReady }
+        $("input", type:"date", name:"deadline").jquery.val(dDate)
     }
 
     void "Set Assignment Date"(String dDate){
-        $("input", name:"assignment").value(dDate)
+        waitFor { angularReady }
+        $("input", type:"date", name:"assignment").jquery.val(dDate)
     }
 
     void "Set Start Date"(String dDate){
-        $("input", name:"start").value(dDate)
+        waitFor { angularReady }
+        $("input", type:"date", name:"start").jquery.val(dDate)
         }
 
 	 //Hard wait function, sometimes useful to sync up the application when you cannot use waitFor.
