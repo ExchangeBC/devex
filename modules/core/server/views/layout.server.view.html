@@ -36,16 +36,46 @@
   <!-- Custom Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Yantramanav:300,400,500,700" rel="stylesheet">
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-  ga('create', 'UA-91547471-1', 'auto');
-  ga('send', 'pageview');
+    ga('create', 'UA-91547471-1', 'auto');
+    ga('send', 'pageview');
 
-</script>
+  </script>
+  <script>
+    // This code is for testing support
+    window.MYAPP = window.MYAPP || {};
+    window.MYAPP.waitForAngular = function() {
+        window.MYAPP.APP_READY = false;
+        function done(err) {
+            if (err) {
+                console.error('Waiting for Angular:', err);
+                return;
+            }
+            window.MYAPP.APP_READY = true;
+        }
+        var el = document.querySelector('html');
+        try {
+            if (!window.angular) {
+                throw new Error('Angular could not be found on the window');
+            }
+            if (angular.getTestability) {
+                angular.getTestability(el).whenStable(done);
+            } else {
+                if (!angular.element(el).injector()) {
+                    throw new Error('Root element (html) has no injector. This may mean it is not inside ng-app.');
+                }
+                angular.element(el).injector().get('$browser').notifyWhenNoOutstandingRequests(done);
+            }
+        } catch (err) {
+            done(err.message);
+        }
+    };
+  </script>
 </head>
 
 <body class="ng-cloak" id="page-top" >
