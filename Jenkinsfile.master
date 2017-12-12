@@ -92,7 +92,7 @@ stage('deploy-test') {
 }
 
 stage('deploy-prod') {
-    timeout(time: 1, units: 'DAYS') {
+    timeout(time: 3, units: 'DAYS') {
 	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
     }
     node('master'){

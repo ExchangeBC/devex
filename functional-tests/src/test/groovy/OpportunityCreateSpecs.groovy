@@ -11,13 +11,17 @@ import org.openqa.selenium.Keys
 import extensions.AngularJSAware
 
 import spock.lang.Unroll
+import spock.lang.Narrative
 
 
-/*  1.  When  
-  all information on the proposal page has been saved to the relevant database locations 
-  and that the proposal is in the unpublished state and that a confirmation modal is displayed 
-  and that this routine works in all major browsers.*/
-
+@Narrative(""")
+  1.  When the save button is selected, all information on the proposal page has been saved to the relevant database locations and 
+  that the proposal is in the unpublished state and that a confirmation modal is displayed and that this routine works in all major browsers.
+  2.  That upon selecting the publish button, an email containing all relevant opportunity information has been sent to all users 
+  (who have signed up to the Developers' Exchange) and that the opportunity is in the published state and 
+  that the apply button will appear (and function) on the opportunity page and that a confirmation modal is displayed and 
+  that this routine works in all major browsers.
+""")
 class OpportunityCreateSpecs extends GebReportingSpec {
     @Unroll
     def "Publish Opportunity: '#Title'" () {
@@ -69,14 +73,17 @@ class OpportunityCreateSpecs extends GebReportingSpec {
             waitFor { at OpportunityDetailPage }
 
         and: "the proposal is in the unpublished state"
+            assert oppDetailTitle == Title
             assert { unPublished }
-        and: "a confirmation modal is displayed"
-            //Modal Check
-            assert oppDetailTitle == Title 
-            
+        and: "publish and a confirmation modal is displayed"
+            //$("a", text:"Publish").click()
+            oppPublishclick
+            waitFor { page.angularReady && oppubYesclick }
+            assert { published }
+
             waitFor { to OpportunitiesPage }
             
-           // Click the Edit opportunity link
+           // Click the Edit opportunity link to find the opportunity for deletion
             waitFor { $("a", href: endsWith("$RandomID/edit")) << Keys.chord(Keys.ENTER) }
             waitFor { at OpportunitiesAdminEditPage }
 
