@@ -75,7 +75,7 @@
 							{{vm.capabilities.bykey['c01'].text}}
 							&nbsp; &nbsp;
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc01open, 'glyphicon-chevron-right': !isc01open}"></i> -->
-							<span class="pull-right" uib-rating ng-model="vm.user.c01_selfrating" max="10" read-only="true" ng-if="vm.user.c01_experience!==''" state-off="blank">&nbsp; &nbsp; </span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c01_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c01_experience!==''" state-off="blank">&nbsp; &nbsp; </span>
 								</small>
 							</uib-accordion-heading>
 								<form-display
@@ -109,7 +109,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc01"
 									}'>
-									<span uib-rating ng-model="vm.user.c01_selfrating" max="10" on-hover="c01overstar=value;c01percent=100*(value/10)" on-leave="c01overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c01_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c01overstar=value;c01percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c01overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c01percent<30, 'label-info': c01percent>=30 && c01percent<70, 'label-success': c01percent>=70}" ng-show="c01overstar">{{c01percent}}%</span>
 								</form-display>
 							</div>
@@ -123,7 +123,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c02'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c02_selfrating" max="10" read-only="true" ng-if="vm.user.c02_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c02_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c02_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc02open, 'glyphicon-chevron-right': !isc02open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -158,7 +158,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc02"
 									}'>
-									<span uib-rating ng-model="vm.user.c02_selfrating" max="10" on-hover="c02overstar=value;c02percent=100*(value/10)" on-leave="c02overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c02_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c02overstar=value;c02percent=value==1?'Junior':value==2?'Intermediate':'Senior'" on-leave="c02overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c02percent<30, 'label-info': c02percent>=30 && c02percent<70, 'label-success': c02percent>=70}" ng-show="c02overstar">{{c02percent}}%</span>
 								</form-display>
 							</div>
@@ -172,7 +172,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c03'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c03_selfrating" max="10" read-only="true" ng-if="vm.user.c03_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c03_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c03_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc03open, 'glyphicon-chevron-right': !isc03open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -207,7 +207,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc03"
 									}'>
-									<span uib-rating ng-model="vm.user.c03_selfrating" max="10" on-hover="c03overstar=value;c03percent=100*(value/10)" on-leave="c03overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c03_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c03overstar=value;c03percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c03overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c03percent<30, 'label-info': c03percent>=30 && c03percent<70, 'label-success': c03percent>=70}" ng-show="c03overstar">{{c03percent}}%</span>
 								</form-display>
 							</div>
@@ -221,7 +221,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c04'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c04_selfrating" max="10" read-only="true" ng-if="vm.user.c04_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c04_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c04_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc04open, 'glyphicon-chevron-right': !isc04open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -256,7 +256,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc04"
 									}'>
-									<span uib-rating ng-model="vm.user.c04_selfrating" max="10" on-hover="c04overstar=value;c04percent=100*(value/10)" on-leave="c04overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c04_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c04overstar=value;c04percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c04overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c04percent<30, 'label-info': c04percent>=30 && c04percent<70, 'label-success': c04percent>=70}" ng-show="c04overstar">{{c04percent}}%</span>
 								</form-display>
 							</div>
@@ -270,7 +270,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c05'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c05_selfrating" max="10" read-only="true" ng-if="vm.user.c05_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c05_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c05_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc05open, 'glyphicon-chevron-right': !isc05open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -305,7 +305,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc05"
 									}'>
-									<span uib-rating ng-model="vm.user.c05_selfrating" max="10" on-hover="c05overstar=value;c05percent=100*(value/10)" on-leave="c05overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c05_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c05overstar=value;c05percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c05overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c05percent<30, 'label-info': c05percent>=30 && c05percent<70, 'label-success': c05percent>=70}" ng-show="c05overstar">{{c05percent}}%</span>
 								</form-display>
 							</div>
@@ -319,7 +319,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c06'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c06_selfrating" max="10" read-only="true" ng-if="vm.user.c06_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c06_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c06_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc06open, 'glyphicon-chevron-right': !isc06open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -354,7 +354,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc06"
 									}'>
-									<span uib-rating ng-model="vm.user.c06_selfrating" max="10" on-hover="c06overstar=value;c06percent=100*(value/10)" on-leave="c06overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c06_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c06overstar=value;c06percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c06overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c06percent<30, 'label-info': c06percent>=30 && c06percent<70, 'label-success': c06percent>=70}" ng-show="c06overstar">{{c06percent}}%</span>
 								</form-display>
 							</div>
@@ -368,7 +368,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c07'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c07_selfrating" max="10" read-only="true" ng-if="vm.user.c07_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c07_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c07_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc07open, 'glyphicon-chevron-right': !isc07open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -403,7 +403,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc07"
 									}'>
-									<span uib-rating ng-model="vm.user.c07_selfrating" max="10" on-hover="c07overstar=value;c07percent=100*(value/10)" on-leave="c07overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c07_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c07overstar=value;c07percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c07overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c07percent<30, 'label-info': c07percent>=30 && c07percent<70, 'label-success': c07percent>=70}" ng-show="c07overstar">{{c07percent}}%</span>
 								</form-display>
 							</div>
@@ -417,7 +417,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c08'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c08_selfrating" max="10" read-only="true" ng-if="vm.user.c08_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c08_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c08_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc08open, 'glyphicon-chevron-right': !isc08open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -452,7 +452,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc08"
 									}'>
-									<span uib-rating ng-model="vm.user.c08_selfrating" max="10" on-hover="c08overstar=value;c08percent=100*(value/10)" on-leave="c08overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c08_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c08overstar=value;c08percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c08overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c08percent<30, 'label-info': c08percent>=30 && c08percent<70, 'label-success': c08percent>=70}" ng-show="c08overstar">{{c08percent}}%</span>
 								</form-display>
 							</div>
@@ -466,7 +466,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c09'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c09_selfrating" max="10" read-only="true" ng-if="vm.user.c09_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c09_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c09_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc09open, 'glyphicon-chevron-right': !isc09open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -501,7 +501,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc09"
 									}'>
-									<span uib-rating ng-model="vm.user.c09_selfrating" max="10" on-hover="c09overstar=value;c09percent=100*(value/10)" on-leave="c09overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c09_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c09overstar=value;c09percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c09overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c09percent<30, 'label-info': c09percent>=30 && c09percent<70, 'label-success': c09percent>=70}" ng-show="c09overstar">{{c09percent}}%</span>
 								</form-display>
 							</div>
@@ -515,7 +515,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c10'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c10_selfrating" max="10" read-only="true" ng-if="vm.user.c10_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c10_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c10_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc10open, 'glyphicon-chevron-right': !isc10open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -550,7 +550,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc10"
 									}'>
-									<span uib-rating ng-model="vm.user.c10_selfrating" max="10" on-hover="c10overstar=value;c10percent=100*(value/10)" on-leave="c10overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c10_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c10overstar=value;c10percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c10overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c10percent<30, 'label-info': c10percent>=30 && c10percent<70, 'label-success': c10percent>=70}" ng-show="c10overstar">{{c10percent}}%</span>
 								</form-display>
 							</div>
@@ -564,7 +564,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c11'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c11_selfrating" max="10" read-only="true" ng-if="vm.user.c11_experience!==''" state-off="blank"> &nbsp; </span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c11_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c11_experience!==''" state-off="blank"> &nbsp; </span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc11open, 'glyphicon-chevron-right': !isc11open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -599,7 +599,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc11"
 									}'>
-									<span uib-rating ng-model="vm.user.c11_selfrating" max="10" on-hover="c11overstar=value;c11percent=100*(value/10)" on-leave="c11overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c11_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c11overstar=value;c11percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c11overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c11percent<30, 'label-info': c11percent>=30 && c11percent<70, 'label-success': c11percent>=70}" ng-show="c11overstar">{{c11percent}}%</span>
 								</form-display>
 							</div>
@@ -613,7 +613,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c12'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c12_selfrating" max="10" read-only="true" ng-if="vm.user.c12_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c12_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c12_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc12open, 'glyphicon-chevron-right': !isc12open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -648,7 +648,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc12"
 									}'>
-									<span uib-rating ng-model="vm.user.c12_selfrating" max="10" on-hover="c12overstar=value;c12percent=100*(value/10)" on-leave="c12overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c12_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c12overstar=value;c12percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c12overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c12percent<30, 'label-info': c12percent>=30 && c12percent<70, 'label-success': c12percent>=70}" ng-show="c12overstar">{{c12percent}}%</span>
 								</form-display>
 							</div>
@@ -662,7 +662,7 @@
 							&nbsp; &nbsp;
 							{{vm.capabilities.bykey['c13'].text}}
 							&nbsp; &nbsp;
-							<span class="pull-right" uib-rating ng-model="vm.user.c13_selfrating" max="10" read-only="true" ng-if="vm.user.c13_experience!==''" state-off="blank"></span>
+							<span class="pull-right" uib-rating ng-model="vm.user.c13_selfrating" max="3" titles="['Junior','Intermediate','Senior']" read-only="true" ng-if="vm.user.c13_experience!==''" state-off="blank"></span>
 							<!-- <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isc13open, 'glyphicon-chevron-right': !isc13open}"></i> -->
 								</small>
 							</uib-accordion-heading>
@@ -697,7 +697,7 @@
 										"title":"Self Rating",
 										"name":"selfratingc13"
 									}'>
-									<span uib-rating ng-model="vm.user.c13_selfrating" max="10" on-hover="c13overstar=value;c13percent=100*(value/10)" on-leave="c13overstar=null"></span>
+									<span uib-rating ng-model="vm.user.c13_selfrating" max="3" titles="['Junior','Intermediate','Senior']" on-hover="c13overstar=value;c13percent=(value==1?'Junior':(value==2?'Intermediate':'Senior'))" on-leave="c13overstar=null"></span>
     								<span class="label" ng-class="{'label-warning': c13percent<30, 'label-info': c13percent>=30 && c13percent<70, 'label-success': c13percent>=70}" ng-show="c13overstar">{{c13percent}}%</span>
 								</form-display>
 							</div>

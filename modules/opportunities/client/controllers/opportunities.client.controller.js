@@ -240,7 +240,7 @@
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
-		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)		;
+		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
