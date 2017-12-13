@@ -11,6 +11,7 @@ import org.openqa.selenium.firefox.FirefoxDriver
 import org.openqa.selenium.firefox.FirefoxOptions
 import org.openqa.selenium.ie.InternetExplorerDriver
 import org.openqa.selenium.edge.EdgeDriver
+import org.openqa.selenium.safari.SafariDriver
 import org.openqa.selenium.remote.DesiredCapabilities
 
 waiting {
@@ -45,7 +46,7 @@ environments {
 	firefox {
 		driver = { new FirefoxDriver() }
 	}
-	
+		
 	firefoxHeadless {
 		driver = {
 			FirefoxOptions o = new FirefoxOptions()
@@ -70,6 +71,12 @@ environments {
 	// See: https://github.com/SeleniumHQ/selenium/wiki
 	edge {
 		driver = { new EdgeDriver() }
+	}
+
+	// run via “./gradlew safariTest”
+	// See: https://github.com/SeleniumHQ/selenium/wiki
+	safari {
+		driver = { new SafariDriver() }
 	}
 }
 

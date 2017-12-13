@@ -9,7 +9,7 @@ plugins {
 
 ext {
     // The drivers we want to use
-    drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge"]
+    drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
 
     ext {
         groovyVersion = '2.4.12'
@@ -19,6 +19,7 @@ ext {
         geckoDriverVersion = '0.18.0'
         ieDriverVersion = '3.6'
         edgeDriverVersion = seleniumVersion
+        safariDriverVersion = seleniumVersion
     }
 }
 
@@ -43,6 +44,7 @@ dependencies {
     testCompile "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
 
     // Drivers
+    testCompile "org.seleniumhq.selenium:selenium-safari-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
     testCompile "org.seleniumhq.selenium:selenium-ie-driver:$seleniumVersion"
