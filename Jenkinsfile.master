@@ -48,7 +48,7 @@ node('maven') {
 	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
 	    openshiftVerifyBuild bldCfg: 'devxp', checkForTriggeredDeployments: 'false', namespace: 'devex-platform-tools', verbose: 'false'
 	    echo ">>>> Build Complete"
-	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
+	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'M.$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
 	    //openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: 'latest'
 	    //openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    //echo ">>>> Deployment Complete"
@@ -80,7 +80,7 @@ stage('deploy-test') {
   	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view'
   }
   node('master'){
-	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
+	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'
 	  openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
 	  //openshiftVerifyService svcName: 'platform-test', apiURL: 'http://platform-test.pathfinder.gov.bc.ca/', namespace: 'devex-platform-test'
@@ -93,10 +93,10 @@ stage('deploy-test') {
 
 stage('deploy-prod') {
     timeout(time: 3, units: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view'
+	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin'
     }
     node('master'){
-     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: '$BUILD_ID'
+     openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'
      openshiftVerifyDeployment depCfg: 'platform-prod', namespace: 'devex-platform-prod', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
      echo ">>>> Deployment Complete"
      //openshiftVerifyService svcName: 'platform-prod', apiURL: 'https://www.bcdevexchange.org/', namespace: 'devex-platform-prod'
