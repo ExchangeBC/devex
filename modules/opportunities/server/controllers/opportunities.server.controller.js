@@ -336,7 +336,10 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		if (opportunity.isPublished) {
+		//
+		// CC: TBD:SWU once sprint with us is active we can remove this restriction
+		//
+		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-Us') {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({

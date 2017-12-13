@@ -17,8 +17,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
 		var vm                    = this;
+		vm.features = window.features;
+		vm.capabilities     = dataService.capabilities;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -32,6 +34,7 @@
 		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
+		vm.opportunity.endDate      = new Date (vm.opportunity.endDate);
 		vm.authentication         = Authentication;
 		vm.OpportunitiesService   = OpportunitiesService;
 		vm.idString               = 'opportunityId';
@@ -39,6 +42,7 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
+		console.log (vm.opportunity);
 		//
 		// what can the user do here?
 		//
@@ -220,6 +224,8 @@
 	// =========================================================================
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask) {
 		var vm                                = this;
+		vm.features = window.features;
+		vm.capabilities     = dataService.capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -234,10 +240,13 @@
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
+		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
+		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
 		// if the user doesn't have the right access then kick them out
 		//
@@ -289,6 +298,7 @@
 			vm.opportunity.deadline   = new Date ();
 			vm.opportunity.assignment = new Date ();
 			vm.opportunity.start      = new Date ();
+			vm.opportunity.endDate    = new Date ();
 		}
 		//
 		// if there are no available projects then post a warning and kick the user back to
@@ -408,6 +418,21 @@
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
 
+			vm.opportunity.capabilities = [];
+
+			if (vm.opportunity.c01_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c01'].id); }
+			if (vm.opportunity.c02_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c02'].id); }
+			if (vm.opportunity.c03_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c03'].id); }
+			if (vm.opportunity.c04_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c04'].id); }
+			if (vm.opportunity.c05_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c05'].id); }
+			if (vm.opportunity.c06_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c06'].id); }
+			if (vm.opportunity.c07_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c07'].id); }
+			if (vm.opportunity.c08_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c08'].id); }
+			if (vm.opportunity.c09_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c09'].id); }
+			if (vm.opportunity.c10_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c10'].id); }
+			if (vm.opportunity.c11_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c11'].id); }
+			if (vm.opportunity.c12_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c12'].id); }
+			if (vm.opportunity.c13_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c13'].id); }
 	    	//
 	    	// confirm save only if the user is also publishing
 	    	//

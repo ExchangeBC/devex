@@ -90,6 +90,46 @@
 		};
 
 	})
+	.directive ('pickTeam', function (TeamsService) {
+		return {
+			scope: {
+				org: '='
+			},
+			controllerAs: 'rfv',
+			bindToController: true,
+			restrict: 'EAC',
+			// replace: true,
+			template : '<button class="btn btn-sm btn-success" ng-click="rfv.edit()">Choose Team</button>',
+			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
+				var rfv = this;
+				console.log ('rfv add team:', rfv);
+				var pteam = rfv.team;
+				rfv.edit = function () {
+					$uibModal.open ({
+						size: 'lg',
+						templateUrl: '/modules/teams/client/views/pick-team.client.view.html',
+						controllerAs: 'lll',
+						bindToController: true,
+						controller: 'TeamPickController',
+						resolve: {
+							org: function () {
+								return rfv.org;
+							},
+							team: function (TeamsService) {
+								return TeamsService.forOrg({orgId:rfv.org._id}).$promise;
+							}
+						}
+					})
+					.result.finally (function (r) {
+						console.log (r);
+						$rootScope.$broadcast('updateTeams', 'done');
+					})
+					;
+				}
+			}
+		};
+
+	})
 	// -------------------------------------------------------------------------
 	//
 	// directive for listing teams

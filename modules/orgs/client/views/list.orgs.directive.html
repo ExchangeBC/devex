@@ -11,7 +11,6 @@
 
 
 <div class="card card-flat" ng-repeat="org in vm.orgs">
-
 	<div class="card-header" ng-if="vm.isAdmin || org.userIs.admin" style="text-align: right">
 		<span ng-if="vm.isAdmin || org.userIs.admin" class="label label-primary">Admin</span>
 		&nbsp;
@@ -33,6 +32,5 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 

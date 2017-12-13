@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
  */
 var OpportunitySchema = new Schema({
 	code          : {type: String, default: ''},
+	opportunityTypeCd : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
 	name          : {type: String, default: '', required: 'Name cannot be blank'},
 	short         : {type: String, default: '', required: 'Short description cannot be blank'},
 	description   : {type: String, default: ''},
@@ -22,6 +23,7 @@ var OpportunitySchema = new Schema({
 	program       : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project       : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
 	skills        : [String],
+	capabilities        : [String],
 	earn          : {type: Number, default: 0, required: 'Please provide a reward amount'},
 	tags          : [String],
 	status        : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
@@ -33,6 +35,7 @@ var OpportunitySchema = new Schema({
 	deadline      : {type: Date, default: null},
 	assignment    : {type: Date, default: null},
 	start         : {type: Date, default: null},
+	endDate       : {type: Date, default: null},
 	assignedTo    : {type: 'ObjectId', ref: 'User', default: null },
 	created       : {type: Date, default: null},
 	createdBy     : {type: 'ObjectId', ref: 'User', default: null },
@@ -40,7 +43,20 @@ var OpportunitySchema = new Schema({
 	updatedBy     : {type: 'ObjectId', ref: 'User', default: null },
 	issueUrl      : {type: 'String', default: ''},
 	issueNumber   : {type: 'String', default: ''},
-	proposal      : {type:'ObjectId', ref: 'Proposal', default: null}
+	proposal      : {type:'ObjectId', ref: 'Proposal', default: null},
+	c01_flag : { type: Boolean, default:false },
+	c02_flag : { type: Boolean, default:false },
+	c03_flag : { type: Boolean, default:false },
+	c04_flag : { type: Boolean, default:false },
+	c05_flag : { type: Boolean, default:false },
+	c06_flag : { type: Boolean, default:false },
+	c07_flag : { type: Boolean, default:false },
+	c08_flag : { type: Boolean, default:false },
+	c09_flag : { type: Boolean, default:false },
+	c10_flag : { type: Boolean, default:false },
+	c11_flag : { type: Boolean, default:false },
+	c12_flag : { type: Boolean, default:false },
+	c13_flag : { type: Boolean, default:false }
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
