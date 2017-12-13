@@ -48,7 +48,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
             oppTeaser.text = Teaser //teaser
             "Add Description"(Description)
 
-            oppRole.jquery.click()
+            //oppRole.jquery.click()
 
             oppGithub.value(Github) //Github location
             selectLocation.location = Location //Location
