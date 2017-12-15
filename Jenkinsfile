@@ -51,7 +51,7 @@ node('maven') {
     stage('build') {
 	    echo "Building..."
 	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true', verbose: 'true'
-	    openshiftVerifyBuild bldCfg: 'devxp' verbose: 'true'
+	    openshiftVerifyBuild bldCfg: 'devxp', verbose: 'true'
             def IMAGE_HASH = sh(script: 'IMAGE_ID = $(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"; echo ${imageid##*/}', returnStdout: true)
             sh 'env'
             echo ">>> ImageHash=$IMAGE_HASH"
