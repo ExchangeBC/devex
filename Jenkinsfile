@@ -53,13 +53,16 @@ node('maven') {
 	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
 	    openshiftVerifyBuild bldCfg: 'devxp'
             echo ">>> Get Image Hash"
-            sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
-	    sh 'echo ">>> ImageSha: $IMAGE_SHA"'
+            IMAGE_HASH = sh (
+               script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\''
+	       returnStdout: true).trim()
+	    echo "IMAGE_HASH: ${IMAGE_HASH}"
+	    sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
+	    echo ">>> ImageSha: ${IMAGE_SHA} ImageHash: ${IMAGE_HASH}"
 	    sh 'env'
-	    echo ">>> ImageHash=$IMAGE_SHA"
 	    echo ">>>> Build Complete"
-	    //openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
- 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_SHA'
+	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
+ 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$BUILD_ID'
 	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
