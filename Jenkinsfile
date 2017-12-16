@@ -57,9 +57,9 @@ node('maven') {
                script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'',
 	       returnStdout: true).trim()
 	    echo "IMAGE_HASH: ${IMAGE_HASH}"
-	    sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
-	    echo ">>> ImageSha: ${IMAGE_SHA} ImageHash: ${IMAGE_HASH}"
-	    sh 'env'
+	    //sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
+	    //echo ">>> ImageSha: ${IMAGE_SHA} ImageHash: ${IMAGE_HASH}"
+	    //sh 'env'
 	    echo ">>>> Build Complete"
 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
  	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$BUILD_ID'
