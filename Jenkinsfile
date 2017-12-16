@@ -55,14 +55,12 @@ node('maven') {
             echo ">>> Get Image Hash"
             IMAGE_HASH = sh (script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'',
                              returnStdout: true).trim() 
-	    sh 'export $IMAGE_HASH'
-	    sh 'env|grep IMAGE'
-            sh 'env|grep BUILD'
-	    sh 'env|grep GIT'
-	    echo ">>> ImageHash=$IMAGE_HASH"
+	    sh 'export IMAGE_SHA=${IMAGE_HASH}'
+	    sh 'env'
+	    echo ">>> ImageHash=$IMAGE_SHA"
 	    echo ">>>> Build Complete"
 	    //openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
- 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_HASH'
+ 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_SHA'
 	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
