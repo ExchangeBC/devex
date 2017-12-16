@@ -54,7 +54,7 @@ node('maven') {
 	    openshiftVerifyBuild bldCfg: 'devxp'
             echo ">>> Get Image Hash"
             IMAGE_HASH = sh (
-               script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\''
+               script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'',
 	       returnStdout: true).trim()
 	    echo "IMAGE_HASH: ${IMAGE_HASH}"
 	    sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
