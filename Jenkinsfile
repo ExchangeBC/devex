@@ -53,9 +53,9 @@ node('maven') {
 	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
 	    openshiftVerifyBuild bldCfg: 'devxp'
             echo ">>> Get Image Hash"
-            def IMAGE_HASH = sh(script: 'IMAGE_ID=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"); echo ${imageid##*/}', returnStdout: true)
-            sh 'env'
-            echo ">>> ImageHash=$IMAGE_HASH"
+            IMAGE_HASH = sh (script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'
+                             returnStdout: true).trim() 
+	    echo ">>> ImageHash=$IMAGE_HASH"
 	    echo ">>>> Build Complete"
 	    //openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_HASH'
