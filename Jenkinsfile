@@ -58,7 +58,9 @@ node('maven') {
 	    echo ">>> ImageHash=$IMAGE_HASH"
 	    echo ">>>> Build Complete"
 	    //openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
-	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_HASH'
+            withEnv(['IMAGE_SHA=$IMAGE_HASH']) {
+ 	      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$IMAGE_SHA'
+	    }
 	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
