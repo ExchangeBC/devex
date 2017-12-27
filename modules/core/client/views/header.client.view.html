@@ -1,41 +1,66 @@
-<nav id="mainNav" class="navbar navbar-default" ng-controller="HeaderController as vm" ng-class="{'navbar-intro': isHomePage()}">
-<div class="container">
-  <a ng-if='0'  id="proposals.view" ui-sref="proposals.view({proposalId:987236})"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Test Proposals</a>
+<nav id="mainNav" class="navbar-inverse" ng-controller="HeaderController as vm" ng-class="{'navbar-intro': isHomePage()}">
+  <div class="container">
+
+    <!--hiding this, not sure what it's for -->
+    <!--<a ng-if='0'  id="proposals.view" ui-sref="proposals.view({proposalId:987236})"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Test Proposals</a>-->
+
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-    <ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
-      <li ui-sref-active="active">
-        <!-- <a  id="signup" ui-sref="signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a> -->
-        <a  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
-      </li>
-      <li class="divider-vertical"></li>
-      <li ui-sref-active="active">
-        <a  id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
-      </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
-      <li class="dropdown" uib-dropdown>
-        <a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
-          <img ng-src="{{vm.authentication.user.profileImageURL}}" class="header-profile-image" />
-          <span ng-bind="vm.authentication.user.displayName"></span><b class="caret"></b>
-        </a>
-        <ul class="dropdown-menu" role="menu">
-          <li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">
-            <a id="{{item.state}}" ui-sref="{{item.state}}" ng-bind="item.title"></a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a href="/api/auth/signout" target="_self"><i class="fa fa-sign-out" aria-hidden="true"></i> Signout</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-        <a class="navbar-brand"  id="home" ui-sref="home" href="/">
-          <img height="50" src="/modules/core/client/img/logo/new-logo.png" alt="BCDevExchange">
-        </a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand"  id="home" ui-sref="home" href="/">
+        <img height="45" src="/modules/core/client/img/logo/new-logo-white.svg" alt="BCDevExchange">
+      </a>
+    
     </div>
 
-  <nav class="navbar-main" role="navigation">
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="/orgs">Companies</a></li>
+        <li><a href="/programs">Programs</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/opportunities">Opportunities</a></li>
+      </ul>
+
+    <!-- Sign in and Sign up if user isn't signed in, top right -->
+      <ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
+        <li ui-sref-active="active">
+          <!-- <a  id="signup" ui-sref="signup"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a> -->
+          <a  id="authentication.gov" ui-sref="authentication.gov"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign Up</a>
+        </li>
+        <li class="divider-vertical"></li>
+        <li ui-sref-active="active">
+          <a  id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-sign-in" aria-hidden="true"></i> Sign In</a>
+        </li>
+      </ul>
+      
+      <!-- Dropdown user menu if user is signed in -->
+      <ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
+        <li uib-dropdown>
+          <a class="user-header-dropdown-toggle" uib-dropdown-toggle role="button">
+            <img ng-src="{{vm.authentication.user.profileImageURL}}" class="header-profile-image" />
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">
+              <a id="{{item.state}}" ui-sref="{{item.state}}" ng-bind="item.title"></a>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="/api/auth/signout" target="_self">Sign out</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+  <!--<nav class="navbar-main" role="navigation">
     <ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
       <li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown', active: isActiveMenu(item)}" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
         <a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
@@ -47,5 +72,8 @@
         <a ng-switch-default id="{{item.state}}" ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
       </li>
     </ul>
-  </nav>
-</div>
+  </nav>-->
+
+  </div>
+</nav>
+
