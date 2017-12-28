@@ -6,7 +6,7 @@
 			title: 'Companies',
 			state: 'orgs.list',
 			roles: ['*'],
-			icon: 'fa fa-user',
+			icon: 'none',
 			position: 1
 		});
 	}]);

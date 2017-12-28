@@ -6,7 +6,7 @@
 			title: 'People',
 			state: 'profiles.list',
 			roles: ['*'],
-			icon: 'fa fa-user',
+			icon: 'none',
 			position: 1
 		});
 	}]);

@@ -6,7 +6,7 @@
 			title: 'Projects',
 			state: 'projects.list',
 			roles: ['*'],
-			icon: 'fa fa-pie-chart',
+			icon: 'none',
 			position: 2
 		});
 	}]);
