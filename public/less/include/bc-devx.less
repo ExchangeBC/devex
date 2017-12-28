@@ -84,14 +84,17 @@ h6 {
 }
 
 .navbar-brand {
-  padding: 0 10px;
-  height: 45px;
-  @media (min-width: 768px) {
-    padding-left: 2px;
-  }
+  padding: 3px 15px 3px 0px;
+  margin-left: 5px;
+  height: 50px;
 }
 
 .navbar-nav {
+  > li > a {
+    padding-top: 17.5px;
+    padding-bottom: 17.5px;
+    line-height: 16px;
+  }
   > li {
     .dropdown-menu {
       font-size: 13px;
@@ -413,6 +416,10 @@ section {
   font-weight: bold;
 }
 
+.dropdown-toggle {
+  height: 45px;
+}
+
 
 // Alerts
 
@@ -594,12 +601,6 @@ section {
 	margin-right: auto;
   max-height: 100%;
 	max-width: 100%;
-}
-
-.user-header-dropdown-toggle {
-  height: 45px;
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 
 .header-profile-image {
