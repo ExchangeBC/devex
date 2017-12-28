@@ -95,15 +95,14 @@ h6 {
   > li {
     .dropdown-menu {
       font-size: 13px;
-      padding: 6px 12px;
-      margin-bottom: @line-height-computed;
-      border: 1px solid @panel-default-border;
-      border-radius: @border-radius-base;
-      background-color: white;
+      padding: 4px 0px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 0px;
+      background-color: @gray-lighter;
       box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
       > li {
         display: block;
-        padding: 3px 0;
       }
     }
   }
@@ -208,7 +207,6 @@ section {
   border-radius: 3px;
   font-size: 14px;
   text-decoration: none;
-  .transition-all(0.15s);
 }
 
 .btn-solo {
@@ -397,17 +395,21 @@ section {
 
 .dropdown-menu > li {
   font-size: 14px;
-  padding: 3px 10px;
 }
 
-.dropdown-menu > hr {
+.dropdown-menu > li.divider {
   margin: 0px;
 }
 
 .dropdown-menu > li > a {
-  padding: 3px;
+  padding: 7px 15px;
 }
 
+.dropdown-menu > li.menu-heading {
+  margin: 7px 15px;
+  font-size: 13px;
+  font-weight: bold;
+}
 
 
 // Alerts
