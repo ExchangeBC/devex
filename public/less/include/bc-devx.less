@@ -81,11 +81,7 @@ h6 {
 
 .navbar-header {
   float: none;
-  @media (min-width: 768px) {
-    margin-top: 8px;
-  }
 }
-
 
 .navbar-brand {
   padding: 0 10px;
@@ -606,7 +602,6 @@ section {
   border-radius: 50%;
   height: 34px;
   width: 34px;
-  margin: 0;
   opacity: none;
 }
 
@@ -1231,6 +1226,7 @@ section {
 .footer-distributed {
     > a {
       color: @navbar-inverse-link-color;
+      display: inline-block;
 
       &:hover,
       &:focus {
