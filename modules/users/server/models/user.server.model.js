@@ -80,6 +80,9 @@ var UserSchema = new Schema({
     lowercase: true,
     trim: true
   },
+  orgsAdmin                : [{type:Schema.ObjectId, ref:'Org'}],
+  orgsMember               : [{type:Schema.ObjectId, ref:'Org'}],
+  orgsPending              : [{type:Schema.ObjectId, ref:'Org'}],
   password                 : {type: String, default: ''},
   salt                     : {type: String },
   profileImageURL          : {type: String, default: 'img/default.png'},
@@ -167,19 +170,19 @@ var UserSchema = new Schema({
   c11_experience : { type: String, default:'' },
   c12_experience : { type: String, default:'' },
   c13_experience : { type: String, default:'' },
-  c01_selfrating : { type: Number, default:0 },
-  c02_selfrating : { type: Number, default:0 },
-  c03_selfrating : { type: Number, default:0 },
-  c04_selfrating : { type: Number, default:0 },
-  c05_selfrating : { type: Number, default:0 },
-  c06_selfrating : { type: Number, default:0 },
-  c07_selfrating : { type: Number, default:0 },
-  c08_selfrating : { type: Number, default:0 },
-  c09_selfrating : { type: Number, default:0 },
-  c10_selfrating : { type: Number, default:0 },
-  c11_selfrating : { type: Number, default:0 },
-  c12_selfrating : { type: Number, default:0 },
-  c13_selfrating : { type: Number, default:0 }
+  c01_years : { type: Number, default:0 },
+  c02_years : { type: Number, default:0 },
+  c03_years : { type: Number, default:0 },
+  c04_years : { type: Number, default:0 },
+  c05_years : { type: Number, default:0 },
+  c06_years : { type: Number, default:0 },
+  c07_years : { type: Number, default:0 },
+  c08_years : { type: Number, default:0 },
+  c09_years : { type: Number, default:0 },
+  c10_years : { type: Number, default:0 },
+  c11_years : { type: Number, default:0 },
+  c12_years : { type: Number, default:0 },
+  c13_years : { type: Number, default:0 }
 
 });
 

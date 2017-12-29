@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
  */
 var TeamSchema = new Schema({
 	org         : {type:Schema.ObjectId, ref:'Org', required:'Organization is required'},
+	team         : {type:Schema.ObjectId, ref:'Team', default:null},
 	code        : {type: String, default: ''},
 	name        : {type: String, required:'Team Name Is Required'},
 	description : {type: String, default: ''},

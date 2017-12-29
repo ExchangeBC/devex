@@ -34,7 +34,6 @@ var OrgSchema = new Schema ({
 	orgImageURL  : {type: String, default: 'img/default.png'},
 	skills       : [String],
 	badges       : [String],
-	capabilities : [String],
 	owner        : {type: 'ObjectId', ref: 'User', default: null },
 	created      : {type: Date, default: null},
 	createdBy    : {type: 'ObjectId', ref: 'User', default: null },
@@ -52,7 +51,9 @@ var OrgSchema = new Schema ({
 	c10_flag : { type: Boolean, default:false },
 	c11_flag : { type: Boolean, default:false },
 	c12_flag : { type: Boolean, default:false },
-	c13_flag : { type: Boolean, default:false }
+	c13_flag : { type: Boolean, default:false },
+	members  : [{type: 'ObjectId', ref: 'User'}],
+	admins   : [{type: 'ObjectId', ref: 'User'}]
 });
 
 

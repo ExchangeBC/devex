@@ -102,8 +102,8 @@
 			template : '<button class="btn btn-sm btn-success" ng-click="rfv.edit()">Choose Team</button>',
 			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
 				var rfv = this;
-				console.log ('rfv add team:', rfv);
-				var pteam = rfv.team;
+				console.log ('rfv choose team:', rfv);
+				var inputOrg = rfv.org;
 				rfv.edit = function () {
 					$uibModal.open ({
 						size: 'lg',
@@ -113,10 +113,10 @@
 						controller: 'TeamPickController',
 						resolve: {
 							org: function () {
-								return rfv.org;
+								return inputOrg;
 							},
 							team: function (TeamsService) {
-								return TeamsService.forOrg({orgId:rfv.org._id}).$promise;
+								return TeamsService.forOrg({orgId:inputOrg}).$promise;
 							}
 						}
 					})

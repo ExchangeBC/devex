@@ -18,6 +18,11 @@
         method: 'GET',
         url: '/api/my/orgs',
         isArray: true
+      },
+      removeUser: {
+        method: 'GET',
+        url: '/api/orgs/:orgId/user/:userId/remove',
+        isArray: false
       }
     });
 

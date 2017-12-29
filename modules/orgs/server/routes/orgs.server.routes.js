@@ -22,6 +22,9 @@ module.exports = function (app) {
 		.all (orgsPolicy.isAllowed)
 		.post (orgs.logo);
 
+	app.route ('/api/orgs/:orgId/user/:userId/remove')
+		.all (orgsPolicy.isAllowed)
+		.get (orgs.removeUserFromMemberList);
 
 	// Finish by binding the org middleware
 	app.param('orgId', orgs.orgByID);

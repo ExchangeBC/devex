@@ -133,7 +133,12 @@
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
-				editing: function () { return true; }
+				editing: function () { return true; },
+				org: function (Authentication, OrgsService) {
+					var org = Authentication.user.org || null;
+					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				}
 			}
 		})
 		.state ('proposaladmin.editmodal', {
@@ -196,6 +201,11 @@
 					return OpportunitiesService.get({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
+				},
+				org: function (Authentication, OrgsService) {
+					var org = Authentication.user.org || null;
+					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
 				},
 				editing: function () { return false; }
 			}

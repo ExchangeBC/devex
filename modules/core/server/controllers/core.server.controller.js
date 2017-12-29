@@ -13,6 +13,9 @@ exports.renderIndex = function (req, res) {
   if (req.user) {
     safeUserObject = {
       _id                     : req.user._id,
+      orgsAdmin                     : req.user.orgsAdmin,
+      orgsMember                     : req.user.orgsMember,
+      orgsPending                     : req.user.orgsPending,
       displayName             : validator.escape(req.user.displayName),
       provider                : validator.escape(req.user.provider),
       username                : validator.escape(req.user.username),
@@ -82,19 +85,19 @@ exports.renderIndex = function (req, res) {
       c11_experience : req.user.c11_experience,
       c12_experience : req.user.c12_experience,
       c13_experience : req.user.c13_experience,
-      c01_selfrating : req.user.c01_selfrating,
-      c02_selfrating : req.user.c02_selfrating,
-      c03_selfrating : req.user.c03_selfrating,
-      c04_selfrating : req.user.c04_selfrating,
-      c05_selfrating : req.user.c05_selfrating,
-      c06_selfrating : req.user.c06_selfrating,
-      c07_selfrating : req.user.c07_selfrating,
-      c08_selfrating : req.user.c08_selfrating,
-      c09_selfrating : req.user.c09_selfrating,
-      c10_selfrating : req.user.c10_selfrating,
-      c11_selfrating : req.user.c11_selfrating,
-      c12_selfrating : req.user.c12_selfrating,
-      c13_selfrating : req.user.c13_selfrating
+      c01_years : req.user.c01_years,
+      c02_years : req.user.c02_years,
+      c03_years : req.user.c03_years,
+      c04_years : req.user.c04_years,
+      c05_years : req.user.c05_years,
+      c06_years : req.user.c06_years,
+      c07_years : req.user.c07_years,
+      c08_years : req.user.c08_years,
+      c09_years : req.user.c09_years,
+      c10_years : req.user.c10_years,
+      c11_years : req.user.c11_years,
+      c12_years : req.user.c12_years,
+      c13_years : req.user.c13_years
     };
   }
   var features = config.features.split ('-');

@@ -27,6 +27,9 @@ exports.update = function (req, res) {
   var prevState = _.cloneDeep(req.model);
   // CC:USERFIELDS
   // For security purposes only merge these parameters
+  user.orgsAdmin                = req.user.orgsAdmin;
+  user.orgsMember                = req.user.orgsMember;
+  user.orgsPending                = req.user.orgsPending;
   user.phone                = req.user.phone;
   user.address              = req.user.address;
   user.businessContactName  = req.user.businessContactName;
@@ -90,19 +93,19 @@ exports.update = function (req, res) {
       user.c11_experience = req.body.c11_experience;
       user.c12_experience = req.body.c12_experience;
       user.c13_experience = req.body.c13_experience;
-      user.c01_selfrating = req.body.c01_selfrating;
-      user.c02_selfrating = req.body.c02_selfrating;
-      user.c03_selfrating = req.body.c03_selfrating;
-      user.c04_selfrating = req.body.c04_selfrating;
-      user.c05_selfrating = req.body.c05_selfrating;
-      user.c06_selfrating = req.body.c06_selfrating;
-      user.c07_selfrating = req.body.c07_selfrating;
-      user.c08_selfrating = req.body.c08_selfrating;
-      user.c09_selfrating = req.body.c09_selfrating;
-      user.c10_selfrating = req.body.c10_selfrating;
-      user.c11_selfrating = req.body.c11_selfrating;
-      user.c12_selfrating = req.body.c12_selfrating;
-      user.c13_selfrating = req.body.c13_selfrating;
+      user.c01_years = req.body.c01_years;
+      user.c02_years = req.body.c02_years;
+      user.c03_years = req.body.c03_years;
+      user.c04_years = req.body.c04_years;
+      user.c05_years = req.body.c05_years;
+      user.c06_years = req.body.c06_years;
+      user.c07_years = req.body.c07_years;
+      user.c08_years = req.body.c08_years;
+      user.c09_years = req.body.c09_years;
+      user.c10_years = req.body.c10_years;
+      user.c11_years = req.body.c11_years;
+      user.c12_years = req.body.c12_years;
+      user.c13_years = req.body.c13_years;
 
 
 

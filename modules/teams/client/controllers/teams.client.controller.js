@@ -208,5 +208,7 @@
 			$uibModalInstance.dismiss('cancel');
 		};
 	})
+	.controller('TeamPickController', function ($scope, $window, $state, $uibModalInstance, team, org, allusers, Authentication, Notification) {
+	})
 	;
 }());

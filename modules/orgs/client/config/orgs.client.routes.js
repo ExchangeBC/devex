@@ -52,7 +52,7 @@
 			},
 			resolve: {
 				orgs: function ($stateParams, OrgsService) {
-					return OrgsService.query ();
+					return OrgsService.query ().$promise;
 				}
 			},
 			controller: 'OrgsListController',
@@ -93,6 +93,10 @@
 						orgId: $stateParams.orgId
 					}).$promise;
 				}
+				// },
+				// allusers: function (UsersService) {
+				// 	return UsersService.query ().$promise;
+				// }
 			},
 			data: {
 				roles: ['user', 'admin']
@@ -114,6 +118,15 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Skills'
+			}
+		})
+		.state ('orgadmin.members', {
+			url: '/members',
+			templateUrl: '/modules/orgs/client/views/org-members.html',
+			controller: 'OrgMembersController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Members'
 			}
 		})
 		.state ('orgadmin.teams', {

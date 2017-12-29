@@ -25,6 +25,7 @@
 					avat.fullurl = fullPath;
 				};
 				avat.size = $scope.size || 40;
+				avat.text = $scope.text || '';
 				seturl ();
 				$scope.$watch('url', function (newValue, oldValue) {
 					console.log ('CHANGE CHANGE');

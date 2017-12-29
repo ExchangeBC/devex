@@ -17,6 +17,7 @@
 	// =========================================================================
 	.controller ('ProposalViewController', function ($scope, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask) {
 		var ppp           = this;
+		ppp.features = window.features;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
@@ -63,6 +64,7 @@
 	})
 	.controller ('ProposalViewControllerModal', function ($scope, $uibModalInstance, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask) {
 		var ppp           = this;
+		ppp.features = window.features;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
@@ -112,12 +114,20 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService) {
-		var ppp           = this;
-		ppp.title         = editing ? 'Edit' : 'Create' ;
-		ppp.proposal      = angular.copy (proposal);
-		ppp.user          = angular.copy (Authentication.user);
-		var pristineUser = angular.toJson(Authentication.user);
+	.controller ('ProposalEditController', function (editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, org) {
+		var ppp                                   = this;
+		ppp.features                              = window.features;
+		ppp.org                                   = org;
+		ppp.members                              = org.members;
+		ppp.title                                 = editing ? 'Edit' : 'Create' ;
+		ppp.proposal                              = angular.copy (proposal);
+		if (!ppp.proposal.team) ppp.proposal.team = null;
+		ppp.user                                  = angular.copy (Authentication.user);
+		ppp.org                                   = ppp.user.org ? ppp.user.org : null;
+		console.log ('org                         = ', ppp.org);
+		console.log ('swu                         = ', ppp.features.swu);
+		var pristineUser                          = angular.toJson(Authentication.user);
+		ppp.capabilities     = dataService.capabilities;
 		ppp.tinymceOptions = {
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string
@@ -185,6 +195,17 @@
 			window.onbeforeunload = null;
 			$locationChangeStartUnbind ();
 		});
+		// -------------------------------------------------------------------------
+		//
+		// team score
+		//
+		// -------------------------------------------------------------------------
+		ppp.teamScore = function (team) {
+			return 50;
+		};
+		ppp.memberScore = function (member) {
+			return 100;
+		};
 		// -------------------------------------------------------------------------
 		//
 		// save the user - promise
@@ -400,6 +421,7 @@
 	})
 	.controller ('ProposalEditControllerModal', function (editing, $scope, $sce, ask, Upload, $uibModalInstance, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService) {
 		var ppp           = this;
+		ppp.features = window.features;
 		ppp.title         = editing ? 'Edit' : 'Create' ;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = angular.copy (Authentication.user);

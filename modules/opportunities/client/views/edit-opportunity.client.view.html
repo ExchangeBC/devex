@@ -127,6 +127,48 @@
 
 					<uib-accordion close-others="true">
 
+						<div uib-accordion-group ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']" class="panel-default">
+							<uib-accordion-heading>
+								<small>
+							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity['{{idnum}}'+'_flag']===true, 'glyphicon-unchecked':vm.opportunity['{{idnum}}'+'_flag']===false}"></i>
+							&nbsp; &nbsp;
+							<!-- {{vm.capabilities.bykey[idnum].text}}  -->
+							yup {{idnum}}
+							&nbsp; &nbsp;
+								</small>
+							</uib-accordion-heading>
+							Hey
+<!-- 								<form-display
+									class="col-sm-12"
+									x-options='{
+										"title":"At least one team member must have minimum years experience of (1 to 5+)",
+										"name":{{'selfratingc01'+idnum}}
+									}'>
+									<span uib-rating ng-model="vm.opportunity.{{idnum}}_years" max="5" titles="['one', 'two', 'three', 'four', 'five plus']" on-hover="{{idnum}}overstar=value;{{idnum}}percent=value" on-leave="{{idnum}}overstar=null"></span>
+									<span class="label" ng-class="{'label-warning': {{idnum}}percent<30, 'label-info': {{idnum}}percent>=30 && {{idnum}}percent<70, 'label-success': {{idnum}}percent>=70}" ng-show="{{idnum}}overstar">{{{{idnum}}percent}}</span>
+								</form-display>
+								<div class="checkbox">
+									<label>
+									<input type="checkbox" ng-model="vm.opportunity.{{idnum}}_flag">
+										This capability is required for this opportunity
+									</label>
+								</div>
+								<form-display
+									class="col-sm-12"
+									x-options='{
+										"title":"Capability Description",
+										"name":"exp{{idnum}}"
+									}'>
+									{{vm.capabilities.bykey[idnum].description}}
+								</form-display>
+							<br/>
+							<div class="row">
+							<div class="col-sm-12 form-group">
+							</div>
+							</div>
+ -->						</div>
+
+
 						<div uib-accordion-group class="panel-default" is-open="isc01open">
 							<uib-accordion-heading>
 								<small>
@@ -136,6 +178,15 @@
 							&nbsp; &nbsp;
 								</small>
 							</uib-accordion-heading>
+								<form-display
+									class="col-sm-12"
+									x-options='{
+										"title":"At least one team member must have minimum years experience of (1 to 5+)",
+										"name":"selfratingc01"
+									}'>
+									<span uib-rating ng-model="vm.opportunity.c01_years" max="5" titles="['one', 'two', 'three', 'four', 'five plus']" on-hover="c01overstar=value;c01percent=value" on-leave="c01overstar=null"></span>
+									<span class="label" ng-class="{'label-warning': c01percent<30, 'label-info': c01percent>=30 && c01percent<70, 'label-success': c01percent>=70}" ng-show="c01overstar">{{c01percent}}</span>
+								</form-display>
 								<div class="checkbox">
 									<label>
 									<input type="checkbox" ng-model="vm.opportunity.c01_flag">
