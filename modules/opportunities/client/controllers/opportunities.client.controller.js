@@ -42,7 +42,16 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
-		console.log (vm.opportunity);
+		//
+		// what capabilities are required ?
+		//
+		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
+		vm.clist = [];
+		allclist.forEach (function (id) {
+			if (vm.opportunity[id+'_minimumYears']>0) {
+				vm.clist.push (id);
+			}
+		});
 		//
 		// what can the user do here?
 		//
@@ -222,7 +231,8 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig) {
+		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.features = window.features;
 		vm.capabilities     = dataService.capabilities;
@@ -329,6 +339,17 @@
 			elementpath : false,
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+		};
+		// -------------------------------------------------------------------------
+		//
+		// these do things to balance the years required and desired when clicked
+		//
+		// -------------------------------------------------------------------------
+		vm.smin = function (mfield, dfield, value) {
+			if (vm.opportunity[dfield] < value) vm.opportunity[dfield] = value;
+		};
+		vm.sdes = function (dfield, mfield, value) {
+			if (vm.opportunity[mfield] > value) vm.opportunity[mfield] = value;
 		};
 		// -------------------------------------------------------------------------
 		//

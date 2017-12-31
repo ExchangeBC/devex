@@ -70,7 +70,6 @@
 						<div uib-accordion-group class="panel-default" ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']" >
 							{{experienceField=idnum+'_experience';""}}
 							{{ratingField=idnum+'_years';""}}
-							{{valueField=idnum+'_hover';""}}
 							<uib-accordion-heading>
 								<small>
 									<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.user[ratingField]>0, 'glyphicon-unchecked':vm.user[ratingField]===0}"></i>
@@ -105,8 +104,6 @@
 											<label class="btn btn-success" ng-model="vm.user[ratingField]" uib-btn-radio="4">Four</label>
 											<label class="btn btn-success" ng-model="vm.user[ratingField]" uib-btn-radio="5">Five or More</label>
 										</div>
-										<!-- <span uib-rating ng-model="vm.user[ratingField]" max="5" titles="['one', 'two', 'three', 'four', 'five plus']" on-hover="valueField=value" on-leave="valueField=null"></span> -->
-										<!-- <span class="label" ng-class="{'label-warning': valueField<2, 'label-info': valueField>=2 && valueField<4, 'label-success': valueField>=4}" ng-show="valueField">{{valueField}}</span> -->
 									</form-display>
 									<form-display
 										class="col-sm-12"

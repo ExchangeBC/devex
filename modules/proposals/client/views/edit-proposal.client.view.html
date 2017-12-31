@@ -207,27 +207,42 @@
 			</uib-tab-heading>
 			<div class="proposal-form-container">
 			<div class="form-group col-sm-12">
-				<table>
+				<table class="table table-condensed table-striped">
 					<thead>
 						<td></td>
-<!-- 						<td ng-repeat="person in ppp.members">
-							{{person.displayName}}
+						<td class="text-center">Minimum</td>
+						<td class="text-center">Desired</td>
+						<td class="text-center" ng-repeat="person in ppp.winners">
+							<button type="button" class="btn btn-success" ng-model="person.selected" uib-btn-checkbox ng-click="ppp.calculateScores()">
+								{{person.displayName}}
+							</button>
 						</td>
- -->					</thead>
+						<td class="text-center">Meets Minimum?</td>
+						<td class="text-center">Meets Desired?</td>
+					</thead>
 					<tbody>
-						<tr ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']">
-							{{minimumYearsField=idnum+'_minimumYears';""}}
-							{{desiredYearsField=idnum+'_desiredYears';""}}
-							{{minimumYears=ppp.opportunity[minimumYearsField];""}}
-							{{desiredYears=ppp.opportunity[desiredYearsField];""}}
-							{{userYearsField=idnum+'_years';""}}
+						<tr ng-repeat="row in ppp.clist">
 							<td>
-								{{ppp.capabilities.bykey[idnum].text}}
+								{{minimumYearsField=idnum+'_minimumYears';""}}
+								{{desiredYearsField=idnum+'_desiredYears';""}}
+								{{ppp.capabilities.bykey[row.id].text}}
 							</td>
-<!-- 							<td ng-repeat="person in ppp.members">
-								{{person[userYearsField]}}
+							<td class="text-center">
+								{{row.minYears}}
 							</td>
- -->						</tr>
+							<td class="text-center">
+								{{row.desYears}}
+							</td>
+							<td class="text-center" ng-repeat="person in ppp.winners" ng-class="{'cbg-light-steel-blue':person.selected}">
+								{{person[row.userYearsField]}}
+							</td>
+							<td class="text-center">
+								<i class="fa fa-check-circle" ng-if="row.minMet"></i>
+							</td>
+							<td class="text-center">
+								<i class="fa fa-check-circle" ng-if="row.desMet"></i>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>

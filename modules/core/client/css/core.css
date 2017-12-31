@@ -154,7 +154,7 @@ section.events h5 {
 	font-family: Lato;
 	font-size: 18px;
 	font-weight: 600;
-	margin: 2px 0px; 
+	margin: 2px 0px;
 }
 section.events .panel-default, .panel-body {
 	background-color: transparent;
@@ -286,4 +286,10 @@ section.signup h5 {
 	display: inline-block;
     vertical-align: middle;
     float: none;
+}
+.custombuttonbackground {
+	background-color: teal;
+}
+.cbg-light-steel-blue {
+	background-color: #b0c4de;
 }

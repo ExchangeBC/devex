@@ -106,7 +106,8 @@
 				},
 				editing: function () { return true; },
 				org: function (Authentication, OrgsService) {
-					var org = Authentication.user.org || null;
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
 					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
 					else return null;
 				}
@@ -137,7 +138,8 @@
 					}).$promise;
 				},
 				org: function (Authentication, OrgsService) {
-					var org = Authentication.user.org || null;
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
 					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
 					else return null;
 				},
