@@ -129,7 +129,7 @@
 	//
 	// =========================================================================
 	.controller ('ProposalEditController', function (uibButtonConfig, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, org) {
-		var isInArray = function (a,el) {return a.map (function(al){return (el==al);}).reduce(function(a,c){return (a||c);},false); };
+		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
 		ppp.org                                   = org;

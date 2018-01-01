@@ -25,9 +25,9 @@
 				vm.userCanAdd = (isAdmin || !isGov);
 				vm.trust = $sce.trustAsHtml;
 				$scope.orgs.forEach (function (org) {
-					org.isOrgAdmin      = org.admins.map (function (u) { return (uid == u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgMember     = org.members.map (function (u) { return (uid == u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgOwner      = (uid == org.owner._id);
+					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+					org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+					org.isOrgOwner      = (uid === org.owner._id);
 					org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
 					console.log ('org', org.name);
 					console.log ('uid', uid);
