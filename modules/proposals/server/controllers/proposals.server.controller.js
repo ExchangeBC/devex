@@ -145,7 +145,7 @@ exports.myopp = function (req, res) {
 	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('opportunity', 'code name')
+	.populate('opportunity')
 	.populate('user', userfields)
 	.exec (function (err, proposals) {
 		if (err) {
@@ -321,7 +321,7 @@ exports.list = function (req, res) {
 	Proposal.find({}).sort('name')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('opportunity', 'code name')
+	.populate('opportunity')
 	.populate('user', userfields)
 	.exec(function (err, proposals) {
 		if (err) {
@@ -346,7 +346,8 @@ exports.forOpportunity = function (req, res) {
 	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('opportunity', 'code name')
+	.populate('opportunity')
+	.populate('team')
 	.populate('user', userfields)
 	.exec(function (err, proposals) {
 		if (err) {
@@ -384,8 +385,9 @@ exports.proposalByID = function (req, res, next, id) {
 	Proposal.findById(id)
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
-	.populate('opportunity', 'code name issueNumber github')
+	.populate('opportunity')
 	.populate('user', userfields)
+	.populate('team')
 	.exec(function (err, proposal) {
 		if (err) {
 			return next(err);

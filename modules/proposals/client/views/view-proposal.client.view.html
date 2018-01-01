@@ -7,6 +7,7 @@
 </div>
 <div class="modal-body">
 	<!-- <section class="static-page"><div class="container" role="main"> -->
+	<div class="row" ng-if="!ppp.isSprintWithUs">
 	<uib-tabset active>
 		<uib-tab index="0">
 			<uib-tab-heading>
@@ -19,14 +20,6 @@
 					<label>
 						I am applying as a Company &nbsp; &nbsp;
 						<input disabled="true" type="checkbox" name="isCompany" ng-model="ppp.proposal.isCompany" autofocus>
-<!-- 						I am applying as
-						<label class="radio-inline">
-							<input type="radio" ng-model="ppp.proposal.isCompany" value={{true}}>a Company
-						</label>
-						<label class="radio-inline">
-							<input type="radio" ng-model="ppp.proposal.isCompany" value={{false}}>an Individual
-						</label>
- -->
  					</label>
  					</div>
 					<div class="form-group" show-errors>
@@ -63,26 +56,23 @@
 				<h4>Company Information</h4>
 				<div class="form-group" show-errors>
 					<label for="businessName">Legal Name of Company</label>
-					<input  disabled="true" type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.user.businessName" placeholder="Legal Name">
+					<input  disabled="true" type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.proposal.businessName" placeholder="Legal Name">
 				</div>
 				<div class="form-group" show-errors>
 					<label for="businessAddress">Company Mailing Address</label>
-					<input  disabled="true" type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="ppp.user.businessAddress" placeholder="Company Mailing Address">
+					<input  disabled="true" type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="ppp.proposal.businessAddress" placeholder="Company Mailing Address">
 				</div>
 				<div class="form-group" show-errors>
 					<label for="businessContactName">Contact Name</label>
-					<input  disabled="true" type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="ppp.user.businessContactName" placeholder="Contact Name">
+					<input  disabled="true" type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="ppp.proposal.businessContactName" placeholder="Contact Name">
 				</div>
 				<div class="form-group" show-errors>
 					<label for="businessContactPhone">Contact Phone</label>
-					<input disabled="true"  type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="ppp.user.businessContactPhone" placeholder="Contact Phone">
+					<input disabled="true"  type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="ppp.proposal.businessContactPhone" placeholder="Contact Phone">
 				</div>
 				<div class="form-group" show-errors>
 					<label for="businessContactEmail">Contact Email</label>
-					<input  disabled="true" type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="ppp.user.businessContactEmail" placeholder="Contact Email" lowercase>
-					<div ng-messages="ppp.userForm.businessContactEmail.$error" role="alert">
-						<p class="help-block error-text" ng-message="businessContactEmail">Email address is invalid.</p>
-					</div>
+					<input  disabled="true" type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="ppp.proposal.businessContactEmail" placeholder="Contact Email" lowercase>
 				</div>
 			</div>
 		</uib-tab>
@@ -112,16 +102,133 @@
 						</td>
 					</tr>
 				</table>
-				<!-- <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
-				Drop File:
-				<div ngf-drop="uploadFiles($files)" class="drop-box"
-				ngf-drag-over-class="'dragover'" ngf-multiple="true"
-				ngf-pattern="'image/*,application/pdf'">Drop Images or PDFs files here</div>
-				<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> -->
 			</div>
 		</uib-tab>
 	</uib-tabset>
-	<!-- </div></section> -->
+	</div>
+	<div class="row" ng-if="ppp.isSprintWithUs">
+	<uib-tabset active>
+		<uib-tab index="0">
+			<uib-tab-heading>
+				<i class="fa fa-group"></i> Company
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+				<h4>Company Information</h4>
+				<div class="form-group" show-errors>
+					<label for="businessName">Legal Name of Company</label>
+					<input  disabled="true" type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.proposal.businessName" placeholder="Legal Name">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessAddress">Company Mailing Address</label>
+					<input  disabled="true" type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="ppp.proposal.businessAddress" placeholder="Company Mailing Address">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactName">Contact Name</label>
+					<input  disabled="true" type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="ppp.proposal.businessContactName" placeholder="Contact Name">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactPhone">Contact Phone</label>
+					<input disabled="true"  type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="ppp.proposal.businessContactPhone" placeholder="Contact Phone">
+				</div>
+				<div class="form-group" show-errors>
+					<label for="businessContactEmail">Contact Email</label>
+					<input  disabled="true" type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="ppp.proposal.businessContactEmail" placeholder="Contact Email" lowercase>
+				</div>
+			</div>
+		</uib-tab>
+
+		<uib-tab index="1">
+			<uib-tab-heading>
+				<i class="fa fa-people"></i> Team
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+				<div class="form-group col-sm-12">
+					<table class="table table-condensed table-striped">
+						<thead>
+							<td></td>
+							<td class="text-center" ng-repeat="person in ppp.proposal.team">
+								{{person.displayName}}
+							</td>
+							<td class="text-center">Total<sup>1</sup></td>
+							<td class="text-center" colspan="2">Minimum<sup>2</sup></td>
+							<td class="text-center" colspan="2">Desired<sup>3</sup></td>
+							<td class="text-center">Score<sup>4</sup></td>
+						</thead>
+						<tbody>
+							<tr ng-repeat="row in ppp.clist">
+								<td>
+									{{ppp.capabilities.bykey[row.id].text}}
+								</td>
+								<td class="text-center cbg-light-steel-blue" ng-repeat="tyear in row.teamYears">
+									{{tyear.years}}
+								</td>
+								<td class="text-center cbg-powder-blue">
+									{{row.totalYears}}
+								</td>
+								<td class="text-center">
+									{{row.minYears}}
+								</td>
+								<td class="text-center">
+									<i class="fa fa-check-circle ctc-green" ng-if="row.minMet"></i>
+								</td>
+								<td class="text-center">
+									{{row.desYears}}
+								</td>
+								<td class="text-center">
+									<i class="fa fa-check-circle ctc-green" ng-if="row.desMet"></i>
+								</td>
+								<td class="text-center cbg-light-blue">
+									{{row.score}}%
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="col-sm-12">
+					<dl>
+						<dt>1. Total</dt>
+						<dd>The total years experience accross the entire team</dd>
+						<dt>2. Mimimum</dt>
+						<dd>At least one team member MUST have this many years experience with this capability</dd>
+						<dt>3. Desired</dt>
+						<dd>It is desirable that the combined years experience of the teram in regards to this capability meets or exceeds this many years</dd>
+						<dt>4. Score</dt>
+						<dd>Iff the mimimum<sup>2</sup> has been met, then the score is equal to ((Total<sup>1</sup> / Desired<sup>3</sup>) * 100) to a maximum of 100%</dd>
+					</dl>
+				</div>
+			</div>
+		</uib-tab>
+		<uib-tab index="2">
+			<uib-tab-heading>
+				<i class="fa fa-pencil"></i> Proposal
+			</uib-tab-heading>
+			<div class="proposal-form-container">
+				<div><p ng-bind-html="ppp.detail"></p></div>
+			</div>
+		</uib-tab>
+		<uib-tab index="3" disable="!ppp.proposal._id">
+			<uib-tab-heading>
+				<i class="fa fa-file"></i> Attachments
+			</uib-tab-heading>
+			<div class="proposal-form-container text-right">
+				<table class="table table-striped">
+					<tr ng-repeat="file in ppp.proposal.attachments">
+						<td class=" text-right">
+							<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+						</td>
+						<td class="text-left">
+							{{file.name}}
+						</td>
+						<td class=" text-left">
+							<a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</uib-tab>
+	</uib-tabset>
+	</div>
+
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-success" data-ng-click="ppp.assign()">Assign</button>
