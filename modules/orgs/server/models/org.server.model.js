@@ -25,6 +25,7 @@ var OrgSchema = new Schema ({
 	city         : {type: String, default: ''},
 	province     : {type: String, default: 'BC', enum: ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']},
 	postalcode   : {type: String, default: ''},
+	fullAddress  : {type: String, default: ''},
 	contactName  : {type: String, default: ''},
 	// contactEmail : {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
 	contactEmail : {type: String, default: '', trim:true, lowercase:true},
@@ -54,6 +55,11 @@ var OrgSchema = new Schema ({
 	c13_flag : { type: Boolean, default:false },
 	members  : [{type: 'ObjectId', ref: 'User'}],
 	admins   : [{type: 'ObjectId', ref: 'User'}]
+});
+
+OrgSchema.pre ('save', function (next) {
+	this.fullAddress = this.address + (this.address?', '+this.address:'') + ', ' + this.city + ', ' + this.province+ ', ' + this.postalcode
+	next();
 });
 
 

@@ -72,11 +72,11 @@
 		var ppp                                   = this;
 		ppp.features                              = window.features;
 		ppp.org                                   = org;
+		ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode
 		ppp.members                               = org.members.concat (org.admins);
 		ppp.title                                 = editing ? 'Edit' : 'Create' ;
 		if (!proposal.team) proposal.team = [];
 		ppp.proposal                              = angular.copy (proposal);
-		if (!ppp.proposal.team) ppp.proposal.team = null;
 		ppp.user                                  = angular.copy (Authentication.user);
 		console.log ('org                         = ', ppp.org);
 		console.log ('swu                         = ', ppp.features.swu);
@@ -99,16 +99,32 @@
 			console.error ('no opportunity was provided!');
 		}
 		ppp.opportunity   = opportunity;
-		ppp.showEvaluation = true;
+		//
+		// set up the html display stuff
+		//
 		ppp.display = {};
 		ppp.display.description    = $sce.trustAsHtml(ppp.opportunity.description);
 		ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
 		ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
+		//
+		// ensure status set accordingly
+		//
 		if (!editing) {
 			ppp.proposal.status = 'New';
 		}
 		//
+		// what type of opportunity is this? this will determine what tabs get shown
+		//
+		ppp.isSprintWithUs = false;
+		if (opportunity.opportunityTypeCd === 'sprint-with-us') {
+			ppp.isSprintWithUs = true;
+			ppp.proposal.isCompany = true;
+
+		}
+		//
 		// what capabilities are required ?
+		//
+		//
 		//
 		uibButtonConfig.activeClass = 'cbg-light-steel-blue';
 		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
@@ -166,6 +182,7 @@
 		// -------------------------------------------------------------------------
 		//
 		// run through and figure out how the team stacks up
+		// this gets run on load as well, the call immediately follows the definition
 		//
 		// -------------------------------------------------------------------------
 		ppp.calculateScores = function () {
@@ -195,6 +212,11 @@
 			});
 		};
 		ppp.calculateScores ();
+		// -------------------------------------------------------------------------
+		//
+		// these are helpers for setting ui colours and text
+		//
+		// -------------------------------------------------------------------------
 		ppp.statusColour = function (status) {
 			if (status === 'New') return 'label-default';
 			else if (status === 'Draft') return 'label-primary';
@@ -283,11 +305,19 @@
 		// -------------------------------------------------------------------------
 		var copyuser = function () {
 			ppp.proposal.opportunity          = ppp.opportunity;
-			ppp.proposal.businessName         = ppp.user.businessName;
-			ppp.proposal.businessAddress      = ppp.user.businessAddress;
-			ppp.proposal.businessContactName  = ppp.user.businessContactName;
-			ppp.proposal.businessContactEmail = ppp.user.businessContactEmail;
-			ppp.proposal.businessContactPhone = ppp.user.businessContactPhone;
+			if (ppp.isSprintWithUs) {
+				ppp.proposal.businessName         = ppp.user.businessName;
+				ppp.proposal.businessAddress      = ppp.user.businessAddress;
+				ppp.proposal.businessContactName  = ppp.user.businessContactName;
+				ppp.proposal.businessContactEmail = ppp.user.businessContactEmail;
+				ppp.proposal.businessContactPhone = ppp.user.businessContactPhone;
+			} else {
+				ppp.proposal.businessName         = ppp.org.name;
+				ppp.proposal.businessAddress      = ppp.org.fullAddress;
+				ppp.proposal.businessContactName  = ppp.org.contactName;
+				ppp.proposal.businessContactEmail = ppp.org.contactEmail;
+				ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			}
 		};
 		// -------------------------------------------------------------------------
 		//
