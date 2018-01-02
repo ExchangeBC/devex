@@ -62,202 +62,53 @@ h6 {
 
 
 // Navigation
+.navbar {
+  border: none;
+}
 
 
-// Default navbar
+.navbar-inverse {
+  background-color: @gray-dark;
+}
+
+
 .navbar-default {
-  #gradient > .vertical(@start-color: lighten(@navbar-default-bg, 10%); @end-color: @navbar-default-bg);
-  .reset-filter(); // Remove gradient in IE<10 to fix bug where dropdowns don't get triggered
-  border-radius: @navbar-border-radius;
-  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 5px rgba(0,0,0,.075);
-  .box-shadow(@shadow);
-
-  .navbar-nav > .open > a,
-  .navbar-nav > .active > a {
-    #gradient > .vertical(@start-color: darken(@navbar-default-link-active-bg, 5%); @end-color: darken(@navbar-default-link-active-bg, 2%));
-    .box-shadow(inset 0 3px 9px rgba(0,0,0,.075));
-  }
-}
-.navbar-brand,
-.navbar-nav > li > a {
-  text-shadow: 0 1px 0 rgba(255,255,255,.25);
+  margin-bottom: 20px;
+  background-color: @gray-darker;
+  border: none;
 }
 
-// Undo rounded corners in static and fixed navbars
-.navbar-static-top,
-.navbar-fixed-top,
-.navbar-fixed-bottom {
-  border-radius: 0;
-}
-
-// Fix active state of dropdown items in collapsed mode
-@media (max-width: @grid-float-breakpoint-max) {
-  .navbar .navbar-nav .open .dropdown-menu > .active > a {
-    &,
-    &:hover,
-    &:focus {
-      color: #fff;
-      #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
-    }
-  }
-}
-
-.nav {
-  > li {
-    > a {
-      font-size: 15px;
-    }
-  }
-}
 
 .navbar-header {
   float: none;
-  @media (min-width: 768px) {
-    margin-top: 8px;
-  }
-}
-
-.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
-	margin-left: 0;
 }
 
 .navbar-brand {
-  padding: 0 10px;
-  width: 240px;
-  @media (min-width: 768px) {
-    padding-left: 2px;
-  }
+  padding: 3px 15px 3px 0px;
+  margin-left: 5px;
+  height: 50px;
 }
 
 .navbar-nav {
+  > li > a {
+    padding-top: 17.5px;
+    padding-bottom: 17.5px;
+    line-height: 16px;
+  }
   > li {
     .dropdown-menu {
-      font-size: 15px;
-      padding: 20px 10px;
-      margin-bottom: @line-height-computed;
-      border: 1px solid @panel-default-border;
-      border-radius: @border-radius-base;
-      background-color: white;
+      font-size: 13px;
+      padding: 4px 0px;
+      margin-top: 8px;
+      border: none;
+      border-radius: 0px;
+      background-color: @gray-lighter;
       box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
       > li {
         display: block;
-        padding: 3px 0;
       }
     }
   }
-}
-
-.navbar .nav > li > .dropdown-menu::before {
-  position: absolute;
-  top: -7px;
-  left: 69px;
-  display: inline-block;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #CCC;
-  border-left: 7px solid transparent;
-  border-bottom-color: rgba(0, 0, 0, 0.2);
-  content: '';
-}
-
-.navbar .nav > li > .dropdown-menu::after {
-  position: absolute;
-  top: -6px;
-  left: 70px;
-  display: inline-block;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
-  border-left: 6px solid transparent;
-  content: '';
-}
-
-.navbar-transparent {
-    background-color: white;
-    border-color: fade(@gray-darker, 5%);
-    margin-bottom: 0;
-    .transition-all;
-    .heading-font;
-    .navbar-header .navbar-brand {
-        .heading-font;
-        color: @theme-primary;
-        &:hover,
-        &:focus {
-            color: darken(@theme-primary, 10%);
-        }
-    }
-    .navbar-header .navbar-toggle {
-        font-size: 12px;
-        color: @gray-darker;
-        padding: 8px 10px;
-    }
-    .nav {
-        > li {
-            > a {
-                font-size: 15px;
-                &:hover {
-                  background-color: transparent;
-                }
-                &.dropdown-toggle {
-                  background-color: transparent;
-                }
-            }
-            > a,
-            > a:focus {
-                color: @gray-darker;
-                &:hover {
-                    color: @theme-primary;
-                }
-            }
-            &.active {
-                > a,
-                > a:focus {
-                    color: @theme-primary !important;
-                    background-color: transparent;
-                    &:hover {
-                        background-color: transparent;
-                    }
-                }
-            }
-        }
-    }
-    @media (min-width: 768px) {
-        background-color: transparent;
-        border-color: transparent;
-        height: 110px;
-        margin-bottom: -110px;
-        z-index: 5;
-        .navbar-header .navbar-brand {
-            color: fade(white, 70%);
-            &:hover,
-            &:focus {
-                color: white;
-            }
-        }
-        .nav > li > a,
-        .nav > li > a:focus {
-            color: fade(white, 80%);
-            &:hover {
-                color: white;
-            }
-        }
-        &.affix {
-            background-color: white;
-            border-color: fade(@gray-darker, 10%);
-            .navbar-header .navbar-brand {
-                color: @gray-darker;
-                &:hover,
-                &:focus {
-                    color: @theme-primary;
-                }
-            }
-            .nav > li > a,
-            .nav > li > a:focus {
-                color: @gray-darker;
-                &:hover {
-                    color: @theme-primary;
-                }
-            }
-        }
-    }
 }
 
 .nav-icon {
@@ -278,6 +129,7 @@ h6 {
 	.navbar-main {
 		display: table;
 		width: 100%;
+    margin: 0;
 	}
 	.navbar-main > ul {
 		display: table-row;
@@ -295,10 +147,6 @@ h6 {
 		font-size: 32px;
 		display: block;
 	}
-}
-
-.navbar-intro {
-	margin-bottom: 0;
 }
 
 @media (min-width: 768px) {
@@ -359,11 +207,11 @@ section {
 .btn {
   letter-spacing: 0.025em;
   white-space: nowrap;
-  background: white;
   border-radius: 3px;
   font-size: 14px;
-  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   .transition-all(0.15s);
+  text-decoration: none;
 }
 
 .btn-solo {
@@ -387,7 +235,13 @@ section {
 }
 
 .btn-sm {
-  font-size: 10px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  border-radius: 4px;
+  padding: 6px;
+  margin: 4px 2px;
+  line-height: 1;
 }
 
 .btn-xs {
@@ -396,35 +250,11 @@ section {
   line-height: 16px;
 }
 
-.btn-default,
-.btn-primary,
-.btn-success,
-.btn-info,
-.btn-warning,
-.btn-danger {
-  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
-  @shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 1px 1px rgba(0,0,0,.075);
-  .box-shadow(@shadow);
-  // Reset the shadow
-  &:active,
-  &.active {
-    .box-shadow(inset 0 3px 5px rgba(0,0,0,.125));
-  }
-  &.disabled,
-  &[disabled],
-  fieldset[disabled] & {
-    .box-shadow(none);
-  }
-  .badge {
-    text-shadow: none;
-  }
-}
 
 .btn-default {
-  color: @gray-light;
-  border-color: @gray-light;
-  #gradient > .vertical(@start-color: #fff; @end-color: #eef3f6; @start-percent: 50%; @end-percent: 110%);
-  text-shadow: 0 1px 0 #fff;
+  color: @theme-primary;
+  background-color: none;
+  border-color: @theme-primary;
   .input-group-btn & {
     border-color: @input-border;
   }
@@ -442,10 +272,11 @@ section {
     background: @state-danger-bg;
   }
   &:hover {
-  	color: @theme-primary;
-	#gradient > .vertical(@start-color: #eee; @end-color: #e0e3f0; @start-percent: 50%; @end-percent: 110%);
+  	color: darken(@theme-primary, 8%);
+    border-color: darken(@theme-primary, 8%);
   }
   &:hover,&:focus {
+    color: darken(@theme-primary, 10%);
     border-color: darken(@theme-primary, 10%);
   }
   &:active,
@@ -453,43 +284,63 @@ section {
     background-image: none;
   }
   &.btn-default-primary {
-    color: @theme-primary;
+    color: darken(@theme-primary, 8%);
     border-color: darken(@theme-primary, 8%);
   }
   &.btn-default-success {
     color: @theme-success;
-    border-color: darken(@theme-success, 8%);
+    border-color: @theme-success;
   }
   &.btn-default-danger {
     color: @theme-danger;
-    border-color: darken(@theme-danger, 8%);
+    border-color: @theme-danger;
+  }
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: @gray;
+  border-color: @gray;
+  &:hover,&:active:hover {
+    background-color: darken(@gray, 8%);
+    border-color: darken(@gray, 8%);
+  }
+  &:active,&:focus {
+    background-color: darken(@gray, 10%);
+    border-color: darken(@gray, 10%);  
   }
 }
 
 .btn-primary {
+  color: white;
   background-color: @theme-primary;
-  border-color: darken(@theme-primary, 8%);
+  border-color: @theme-primary;
   &:hover,&:active:hover {
-    background-color: lighten(@theme-primary, 10%);
+    background-color: darken(@theme-primary, 8%);
+    border-color: darken(@theme-primary, 8%);
   }
   &:active,&:focus {
     background-color: darken(@theme-primary, 10%);
+    border-color: darken(@theme-primary, 10%);  
   }
 }
 
 .btn-text-only {
+  text-decoration: none;
   background-color: none;
   border-color: none;
 }
 
 .btn-success {
   background-color: @theme-success;
-  border-color: darken(@theme-success, 8%);
+  border-color: @theme-success;
   &:hover,&:active:hover {
     background-color: lighten(@theme-success, 8%);
+    border-color: lighten(@theme-success, 8%);
   }
   &:active,&:focus {
     background-color: darken(@theme-success, 10%);
+    border-color: darken(@theme-success, 10%);
   }
 }
 
@@ -506,26 +357,30 @@ section {
 
 .btn-warning {
   background-color: @theme-warning;
-  border-color: darken(@theme-warning, 10%);
+  border-color: @theme-warning;
   &:hover,&:active:hover {
     background-color: lighten(@theme-warning, 10%);
+    border-color: lighten(@theme-warning, 10%);
   }
   &:active,&:focus {
     background-color: darken(@theme-warning, 8%);
+    border-color: darken(@theme-warning, 8%);
   }
 }
 
 .btn-danger {
   color: @theme-danger;
-  background-color: none;
+  background-color: #fff;
   border-color: @theme-danger;
   &:hover,&:active:hover {
     color: #fff;
-    background-color: lighten(@theme-danger, 10%);
+    background-color: @theme-danger;
+    border-color: @theme-danger;
   }
   &:active,&:focus {
     color: #fff;
-    background-color: darken(@theme-danger, 8%);
+    background-color: @theme-danger;
+    border-color: @theme-danger;
   }
 }
 
@@ -539,17 +394,32 @@ section {
 // Dropdowns
 // --------------------------------------------------
 
-.dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus {
-  #gradient > .vertical(@start-color: @dropdown-link-hover-bg; @end-color: darken(@dropdown-link-hover-bg, 5%));
-  background-color: darken(@dropdown-link-hover-bg, 5%);
+.dropdown-menu > ul {
+  width: 180px;
 }
-.dropdown-menu > .active > a,
-.dropdown-menu > .active > a:hover,
-.dropdown-menu > .active > a:focus {
-  #gradient > .vertical(@start-color: @dropdown-link-active-bg; @end-color: darken(@dropdown-link-active-bg, 5%));
-  background-color: darken(@dropdown-link-active-bg, 5%);
+
+.dropdown-menu > li {
+  font-size: 14px;
 }
+
+.dropdown-menu > li.divider {
+  margin: 0px;
+}
+
+.dropdown-menu > li > a {
+  padding: 7px 15px;
+}
+
+.dropdown-menu > li.menu-heading {
+  margin: 7px 15px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.dropdown-toggle {
+  height: 45px;
+}
+
 
 // Alerts
 
@@ -733,10 +603,13 @@ section {
 	max-width: 100%;
 }
 
-
-// Wells
-
-
+.header-profile-image {
+  border-radius: 50%;
+  height: 34px;
+  width: 34px;
+  margin: -11px;
+  opacity: none;
+}
 
 // Form header
 
@@ -779,13 +652,18 @@ section {
   .body-font;
   font-size: 13px;
   font-weight: 400;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.04em;
   border-radius: 4px;
   padding: 6px;
   margin: 4px 2px;
 }
 .label-lg {
   font-size: 15px;
+  font-weight: 500;
+  margin: 6px;
+}
+.label-xl {
+  font-size: 17px;
   font-weight: 500;
   margin: 6px;
 }
@@ -803,21 +681,24 @@ section {
 }
 
 .label-price {
+  padding: 10px;
   background-color: @theme-dark-green;
 }
 
 .label-deadline {
-  background-color: @theme-dark-blue;
+  color: @gray-dark;
+  background-color: none;
+  border: none;
 }
 
 .label-location {
-  background-color: transparent;
+  background-color: @theme-yellow;
   color: @gray-darker;
 }
 
 .label-colocation {
-  background-color: @theme-yellow;
-  color: @gray-darker;
+  background-color: @theme-light-blue;
+  color: #fff;
 }
 .label-warning {
   background-color: @theme-warning;
@@ -928,7 +809,9 @@ section {
 
 .card-block {
   &:hover {
-    background-color: @gray-lighter;
+    background-color: @gray-lightest;
+    transition: .5s;
+    cursor: pointer;
   }
 }
 
@@ -938,6 +821,7 @@ section {
     -webkit-transform: translateY(-1px);
     transform: translateY(-1px);
     box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08);
+
   }
 }
 
@@ -1273,11 +1157,11 @@ section {
 // Colors
 .well-info {
   background: #feefcd;
-  border-color: @theme-yellow;
+  border-color: #feefcd;
 }
 .well-gray {
   background: @gray-lighter;
-  border-color: @gray-light;
+  border-color: @gray-lighter;
 }
 .well-danger {
   background: #feefcd;
@@ -1290,6 +1174,33 @@ section {
 .well-primary {
   background: #feefcd;
   border-color: @theme-primary;
+}
+
+
+// Banners
+
+.banner {
+  padding: 15px;
+  margin: 0px;
+  text-align: center;
+}
+
+.banner p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.banner-info {
+  background-color: @theme-info;
+}
+
+.banner-important {
+  background-color: @theme-important;
+}
+
+// Offset the bottom margin of navbar-default
+.banner-under-nav {
+  margin-top: -20px;
 }
 
 
@@ -1310,54 +1221,51 @@ section {
 }
 
 // Footer
-.footer-distributed {
+.footer {
 	width: 100%;
   min-height: 200px;
 	text-align: left;
   padding-top: 40px;
-  border-top: 1px solid fade(@gray-light, 30%);
-  background-color: #f2f2f2;
-}
-
-.footer-distributed .footer-left p {
-	font-size: 14px;
-	margin: 0;
-}
-
-.footer-distributed .footer-logo {
-  height: 200px;
+  padding-bottom: 40px;
+  background-color: @gray-dark;
 }
 
 /* Footer links */
+.footer-distributed {
+    > a {
+      color: @navbar-inverse-link-color;
+      display: inline-block;
 
-.footer-distributed p.footer-links{
-	margin: 0 0 10px;
-	padding: 0;
+      &:hover,
+      &:focus {
+        color: @navbar-inverse-link-hover-color;
+        background-color: @navbar-inverse-link-hover-bg;
+      }
+    }
+    > .active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @navbar-inverse-link-active-color;
+        background-color: @navbar-inverse-link-active-bg;
+      }
+    }
+    > .disabled > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @navbar-inverse-link-disabled-color;
+        background-color: @navbar-inverse-link-disabled-bg;
+      }
+    }
+  }
+
+.footer-distributed p {
+	color: @gray-light;
+  font-size: 14px;
 }
 
-.footer-distributed p.footer-links a{
-	display:inline-block;
-	line-height: 1.8;
-	text-decoration: none;
-}
 
-.footer-distributed .footer-right{
-	float: right;
-	margin-top: 6px;
-	max-width: 300px;
-}
-
-.footer-distributed .footer-right a{
-	display: inline-block;
-	width: 35px;
-	height: 35px;
-	border-radius: 2px;
-
-	text-align: center;
-	line-height: 35px;
-
-	margin-left: 3px;
-}
 
 /* If you don't want the footer to be responsive, remove these media queries */
 

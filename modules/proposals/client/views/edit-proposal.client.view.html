@@ -1,17 +1,12 @@
-<div class="container" role="main">
 
 <!-- // Well if proposal is Submitted // -->
-	<div class="row" ng-if="ppp.proposal.status === 'Submitted'">
-		<div class="col-xs-12 text-center">
-			<div class="well well-success">
-				<p><label class="label label-lg label-success-o"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label> You can make updates until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
-			</div>
+<div class="banner banner-info" ng-if="ppp.proposal.status === 'Submitted'">
+	<div class="row">
+		<div class="col-xs-12">
+			<p><i class="fa fa-lg fa-check-circle-o"></i>&nbsp;&nbsp;<strong>Your proposal has been submitted!</strong> You can update it until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
 		</div>
 	</div>
-
-<!-- // Old well for if proposal is Submitted // -->
-<!--<h4><span class="label {{ppp.statusColour(ppp.proposal.status)}}">{{ppp.proposal.status}}</span></h4>
-<span ng-if="ppp.proposal.status === 'Submitted'">Your proposal has been submitted! It won't be reviewed until <b>closing time</b>, and you can update it as much as you want until then!</span>-->
+</div>
 
 <!-- // Well if proposal is in Draft // -->
 <div class="row" ng-if="ppp.proposal.status === 'Draft'">
@@ -22,16 +17,38 @@
 	</div>
 </div>
 
+<section style="background-color: #333; margin-bottom: -20px;">
 
 <div class="row">
 	<div class="col-xs-12">
 		<h4><span style="font-weight: 300; color: #777;">My proposal to work on:</span> {{ppp.opportunity.name}}</h4>
 	</div>
+	<div class="col-xs-1 text-right">
+		<i class="fa fa-2x fa-times" data-ng-click="ppp.close()" style="cursor: pointer;"></i>
+	</div>
 </div>
 
+<div class="row">
+	<div class="col-xs-12">
 
+		<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
 
-<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
+			<div class="modal-body">
+				<!-- <section class="static-page"><div class="container" role="main"> -->
+				<uib-tabset active>
+					<uib-tab index="0">
+						<uib-tab-heading>
+							<i class="fa fa-user"></i> Applicant
+						</uib-tab-heading>
+						<div class="proposal-form-container">
+							<div class="form-group">
+								<div class="well well-info">
+									<p style="text-align: left">Enter contact and billing information for the person who is proposing to do the work.</p> 
+									<p>If you want payment to be made to a company, please check the box below and complete the Company tab.</p>
+									<br>
+									<label>
+									<input type="checkbox" name="isCompany" ng-model="ppp.proposal.isCompany" autofocus>&nbsp;
+									Payment can be made to a company 
 
 <section>
 	<div class="row" ng-if="!ppp.isSprintWithUs">
@@ -123,23 +140,44 @@
 								<br>
 								<p ng-bind-html="ppp.display.evaluation"></p>
 							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<a href class="btn btn-sm btn-default" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i>&nbsp;Upload a file</a>	
+								</div>
+							</div>
+							<table class="table table-striped">
+								<tr ng-repeat="file in ppp.proposal.attachments">
+									<td class=" text-right">
+										<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+									</td>
+									<td class="text-left">
+										{{file.name}}
+									</td>
+									<td class=" text-left">
+										<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+									</td>
+								</tr>
+							</table>
+							<!-- <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
+							Drop File:
+							<div ngf-drop="uploadFiles($files)" class="drop-box"
+							ngf-drag-over-class="'dragover'" ngf-multiple="true"
+							ngf-pattern="'image/*,application/pdf'">Drop Images or PDFs files here</div>
+							<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> -->
 						</div>
-					</div>
-				</div>
+					</uib-tab>
+				</uib-tabset>
+				<!-- </div></section> -->
 			</div>
 
-			<br>
-
-			<div class="form-group">
-				<label class="control-label" for="detail">My Proposal</label>
-				<textarea
-					name="detail"
-					id="detail"
-					class="form-control input-sm"
-					ui-tinymce="ppp.tinymceOptions"
-					placeholder="Proposal Detail"
-					ng-model="ppp.proposal.detail">
-				</textarea>
+			<div class="modal-footer">
+				<div class="col-xs-10 text-left">
+					<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-floppy-o"></i>&nbsp;Save changes</button>
+					<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-floppy-o"></i>&nbsp;Save updates</button>
+					<button type="button" class="btn btn-warning" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft'"><i class="fa fa-paper-plane-o"></i>&nbsp;Submit</button>
+					<button ng-if="ppp.proposal.status === 'Draft'" type="button" class="btn btn-danger" data-ng-click="ppp.delete()"><i class="fa fa-trash-o"></i>&nbsp;Delete</button>
+					<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-default" data-ng-click="ppp.withdraw()" "><i class="fa fa-undo"></i>&nbsp;Withdraw my proposal</button>
+				</div>	
 			</div>
 		</uib-tab>
 
@@ -375,6 +413,6 @@
 <!-- </div> -->
 </section>
 
-</form>
-
 </div>
+
+</section>

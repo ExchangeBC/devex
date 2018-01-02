@@ -1,37 +1,18 @@
-<div class="row" ng-if="qaz.case !== 'nothing'">
-	<div class="container">
-
-		<!-- // Hiding this well because it's duplicated in view-opportunity.client.view.html -->
-		<!--
-		<div class="row" ng-if="qaz.case === 'guest'">
-			<div class="well well-info">
-				<p>Want <span class="hidden-sm hidden-xs">to </span>apply<span class="hidden-sm hidden-xs"> for this opportunity</span>? &nbsp;
-				<a href ui-sref="authentication.signin"> Sign In</a> or	&nbsp;<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a>
-				</p>
-			</div>
-		</div>
-		-->
-
-		<hr>
-		<br>
-		<div class="row" ng-if="qaz.case === 'canadd'">
-			<div class="col-xs-12 text-center">
-				<button  id="proposaladmin.create" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-lg btn-warning">Submit a proposal</button>
-			</div>
-		</div>
-
-		<div class="row" ng-if="qaz.case === 'canedit'">
-			<div class="col-xs-12 text-center">
-				<p>
-					<span ng-if="qaz.proposal.status === 'Submitted'"><label class="label label-lg label-success-o"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label> &nbsp;You can make updates until <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b>.</span>
-					<span ng-if="qaz.proposal.status === 'Draft'"><label class="label label-lg label-danger-o"><i class="glyphicon glyphicon-file"></i> You have a proposal in DRAFT!</label> &nbsp;Submit before <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b>!</span>
-
-					&nbsp;
-					<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" class="btn btn-default">
-					<i class="glyphicon glyphicon-pencil"></i>&nbsp; Update my proposal
-					</a>
-				</p>
-			</div>
+<!-- // If user is signed in but hasn't started a proposal yet // -->
+<div class="banner banner-info" ng-if="qaz.case === 'canadd'">
+	<div class="row">
+		<div class="col-xs-12">
+			<button  id="proposaladmin.create" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-warning">Submit a proposal</button>
 		</div>
 	</div>
+</div>
+
+<!-- // If user has started a proposal // -->
+<div class="banner banner-info" ng-if="qaz.case === 'canedit'">
+	<div class="row">
+		<div class="col-xs-12">
+			<p ng-if="qaz.proposal.status === 'Submitted'"><strong><i class="fa fa-lg fa-check-circle-o"></i>&nbsp; Your proposal has been submitted!</strong>&nbsp;&nbsp; You can make updates until <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b>.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
+			<p ng-if="qaz.proposal.status === 'Draft'"><span style="color: #cc3300"><i class="glyphicon glyphicon-file"></i>&nbsp; You have a proposal in DRAFT!</span> &nbsp; Submit before <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
+		</div>
+	</div>	
 </div>
