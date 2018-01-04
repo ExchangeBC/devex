@@ -21,7 +21,7 @@ class LoginModule extends Module {
 
       signinButton { $("#authentication.gov") }
       loginInput { $("input", id:"login_field") }
-      userDisplayName { $("span", "ng-bind":"vm.authentication.user.displayName").text() }
+      userDisplayPicture { $("img", class:"header-profile-image") }
       gitHubLink { $("a", "ng-click":"vm.callOauthProvider('/api/auth/github')")[0] }
     }
     
@@ -37,8 +37,8 @@ class LoginModule extends Module {
         passwordInput.value( passWord ) //adminadmin
         js.exec('window.scrollTo(0, document.body.scrollHeight);')
         commitButton.click()
-        waitFor { userDisplayName != "" }
-        if ( userDisplayName == fullUserName ) //"ADMIN LOCAL"*/
+        waitFor { userDisplayPicture.displayed }
+        if ( userDisplayPicture.displayed ) //"ADMIN LOCAL"*/
             return true
         else
             return false
