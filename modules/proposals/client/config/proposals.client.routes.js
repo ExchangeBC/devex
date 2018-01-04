@@ -17,7 +17,12 @@
 		.state ('proposals', {
 			abstract: true,
 			url: '/proposals',
-			template: '<ui-view/>'
+			template: '<ui-view/>',
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ();
+				}
+			}
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -76,6 +81,11 @@
 			template: '<ui-view/>',
 			data: {
 				notroles: ['gov', 'guest']
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ();
+				}
 			}
 		})
 		// -------------------------------------------------------------------------

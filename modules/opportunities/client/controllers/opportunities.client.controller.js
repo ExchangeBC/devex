@@ -17,10 +17,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
 		var vm                    = this;
 		vm.features = window.features;
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -231,11 +231,11 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig) {
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.features = window.features;
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -441,19 +441,19 @@
 
 			vm.opportunity.capabilities = [];
 
-			if (vm.opportunity.c01_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c01'].id); }
-			if (vm.opportunity.c02_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c02'].id); }
-			if (vm.opportunity.c03_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c03'].id); }
-			if (vm.opportunity.c04_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c04'].id); }
-			if (vm.opportunity.c05_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c05'].id); }
-			if (vm.opportunity.c06_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c06'].id); }
-			if (vm.opportunity.c07_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c07'].id); }
-			if (vm.opportunity.c08_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c08'].id); }
-			if (vm.opportunity.c09_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c09'].id); }
-			if (vm.opportunity.c10_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c10'].id); }
-			if (vm.opportunity.c11_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c11'].id); }
-			if (vm.opportunity.c12_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c12'].id); }
-			if (vm.opportunity.c13_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c13'].id); }
+			if (vm.opportunity.c01_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c01'].code); }
+			if (vm.opportunity.c02_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c02'].code); }
+			if (vm.opportunity.c03_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c03'].code); }
+			if (vm.opportunity.c04_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c04'].code); }
+			if (vm.opportunity.c05_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c05'].code); }
+			if (vm.opportunity.c06_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c06'].code); }
+			if (vm.opportunity.c07_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c07'].code); }
+			if (vm.opportunity.c08_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c08'].code); }
+			if (vm.opportunity.c09_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c09'].code); }
+			if (vm.opportunity.c10_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c10'].code); }
+			if (vm.opportunity.c11_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c11'].code); }
+			if (vm.opportunity.c12_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c12'].code); }
+			if (vm.opportunity.c13_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c13'].code); }
 	    	//
 	    	// confirm save only if the user is also publishing
 	    	//

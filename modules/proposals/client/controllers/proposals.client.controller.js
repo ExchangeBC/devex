@@ -15,7 +15,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function ($scope, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
 		ppp.features = window.features;
 		ppp.proposal      = angular.copy (proposal);
@@ -23,7 +23,7 @@
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
 		console.log (ppp.proposal);
-		ppp.capabilities                          = dataService.capabilities;
+		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
@@ -128,7 +128,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, org) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, org) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -142,7 +142,7 @@
 		console.log ('org                         = ', ppp.org);
 		console.log ('swu                         = ', ppp.features.swu);
 		var pristineUser                          = angular.toJson(Authentication.user);
-		ppp.capabilities                          = dataService.capabilities;
+		ppp.capabilities                          = capabilities;
 		ppp.totals = {};
 		ppp.tinymceOptions = {
 			resize      : true,
@@ -266,7 +266,7 @@
 							accum[1] + elem[1]
 						];
 					}, [false, 0]);
-					console.log (row.id, scores);
+					// console.log (row.code, scores);
 					row.minMet = scores[0];
 					row.desMet = scores[1] >= row.desYears;
 			console.log (row);

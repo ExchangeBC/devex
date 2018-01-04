@@ -73,6 +73,9 @@
 					return OrgsService.get({
 						orgId: $stateParams.orgId
 					}).$promise;
+				},
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
 				}
 			}
 		})
@@ -92,11 +95,10 @@
 					return OrgsService.get({
 						orgId: $stateParams.orgId
 					}).$promise;
+				},
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
 				}
-				// },
-				// allusers: function (UsersService) {
-				// 	return UsersService.query ().$promise;
-				// }
 			},
 			data: {
 				roles: ['user', 'admin']
@@ -109,6 +111,13 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Settings'
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.get ({
+						skillId: '5a4d61b48234aa0a9f521337'
+					}).$promise;
+				}
 			}
 		})
 		.state ('orgadmin.skills', {
@@ -118,6 +127,11 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Skills'
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
+				}
 			}
 		})
 		.state ('orgadmin.members', {

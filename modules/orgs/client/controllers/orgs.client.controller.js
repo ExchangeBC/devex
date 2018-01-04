@@ -85,7 +85,7 @@
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -98,7 +98,7 @@
 		// vm.previousState  = previousState;
 		// vm.editing        = editing;
 		vm.cities         = dataService.cities;
-		vm.capabilities   = dataService.capabilities;
+		vm.capabilities   = capabilities;
 
 		// if (editing && (!vm.org || !vm.org._id)) {
 		// 	return $state.go('orgadmin.create');
@@ -176,11 +176,11 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('OrgSkillsController', function ($scope, $sce, Notification, org, dataService, Authentication, UsersService) {
+	.controller('OrgSkillsController', function ($scope, capabilities, $sce, Notification, org, dataService, Authentication, UsersService) {
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		vm.updateUserProfile = function (isValid) {
 			vm.orgForm.$setPristine ();
 			if (!isValid) {
