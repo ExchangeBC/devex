@@ -14,11 +14,12 @@ class HomePage extends Page implements AngularJSAware {
         login { module LoginModule  }
         
         //Links
-        HomeLink { PositionAndClick("a","home") }
+        //HomeLink { PositionAndClick("a","home") }
+		HomeLink { $("img", class:"navbar-brand" ) }
 		AboutLink { PositionAndClick("a","about") }
 		AccessibilityLink { PositionAndClick("a","accessibility") }
 		CodewithusLink { PositionAndClick("a","codewithus") }
-		CopyrightLink { PositionAndClick("a","copyright") }
+		//CopyrightLink { PositionAndClick("a","copyright") } Link was removed
 		DisclaimerLink { PositionAndClick("a","disclaimer") }
 		PrivacyLink { PositionAndClick("a","privacy") }
 		RoadmapLink { PositionAndClick("a","roadmap") }
@@ -32,19 +33,6 @@ class HomePage extends Page implements AngularJSAware {
 		CompaniesNavbar { PositionAndClick("a","orgs.list") }
 		FindWorkButton { $("a.btn.btn-lg.btn-warning").click() }
 		learnMoreLink(to: CodewithusPage) { $("a.btn.btn-lg.btn-link").click() }
-		
-// Folowing links are not yet operational
-		AboutMidPageLink { $("a", text:"Learn More") }
-		AdminGovsLink { $() } //Admin
-		AdminNotifymeetsLink { $() } //Admin
-		AdminNotifyoppsLink { $() } //Admin
-		AdminUsersLink { $() } //Admin
-		ApiAuthSignoutLink { $() }
-		NotificationsLink { $() } //Admin
-		ProfilesLink { PositionAndClick("a","profiles.list") }
-		ProposalsLink { $("a", "ui-sref":"proposals.list({})") }
-		SettingsPictureLink { $() } //Admin
-		SettingsProfileLink { $() } //Admin
     }
 
     // Since webdriver does not want to click on non-visible links,
