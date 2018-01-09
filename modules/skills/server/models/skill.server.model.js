@@ -10,6 +10,7 @@ var mongoose = require('mongoose'),
  * Skill Schema
  */
 var SkillSchema = new Schema({
+	required    : {type: Boolean, default: true},
 	key         : {type: String, default: ''},
 	code        : {type: String, default: ''},
 	text        : {type: String, default: ''},

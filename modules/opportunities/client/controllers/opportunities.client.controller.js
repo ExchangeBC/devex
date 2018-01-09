@@ -231,7 +231,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig) {
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, SkillsService) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.features = window.features;
@@ -256,6 +256,7 @@
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
+		console.log ('opp', vm.opportunity);
 		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
 		// if the user doesn't have the right access then kick them out
@@ -339,6 +340,23 @@
 			elementpath : false,
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+		};
+		// -------------------------------------------------------------------------
+		//
+		// add a new skill under a capability
+		//
+		// -------------------------------------------------------------------------
+		vm.addSkill = function (capability, field, tag, newfield) {
+			console.log ('newskill:', tag);
+			//
+			// add the new tag to the capability
+			// add the new tag to the opportunity capability tags
+			// clear the add field
+			//
+			capability.tags.push (tag);
+			vm.opportunity[field].push (tag);
+			vm[newfield] = '';
+			capability.createOrUpdate();
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -441,19 +459,6 @@
 
 			vm.opportunity.capabilities = [];
 
-			if (vm.opportunity.c01_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c01'].code); }
-			if (vm.opportunity.c02_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c02'].code); }
-			if (vm.opportunity.c03_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c03'].code); }
-			if (vm.opportunity.c04_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c04'].code); }
-			if (vm.opportunity.c05_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c05'].code); }
-			if (vm.opportunity.c06_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c06'].code); }
-			if (vm.opportunity.c07_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c07'].code); }
-			if (vm.opportunity.c08_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c08'].code); }
-			if (vm.opportunity.c09_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c09'].code); }
-			if (vm.opportunity.c10_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c10'].code); }
-			if (vm.opportunity.c11_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c11'].code); }
-			if (vm.opportunity.c12_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c12'].code); }
-			if (vm.opportunity.c13_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c13'].code); }
 	    	//
 	    	// confirm save only if the user is also publishing
 	    	//

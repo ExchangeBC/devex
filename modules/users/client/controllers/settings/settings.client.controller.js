@@ -75,6 +75,15 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+		// //
+		// // set up the capability structure to have variables for the tags that we can bind to
+		// //
+		// vm.capabilities.bykey.forEach (function (c, key) {
+		// 	console.log ('bykey key=',key,'obj=',c);
+		// 	c.tagvars = c.tags.reduce (function (accum, curr) {
+		// 		accum[curr] = false;
+		// 	}, {});
+		// });
 		vm.updateUserProfile = function (isValid) {
 			console.log ('saviong');
 			if (!isValid) {

@@ -127,16 +127,20 @@
 
 					<uib-accordion close-others="true">
 
-						<div uib-accordion-group class="panel-default" ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']" >
+						<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities" >
+						<!-- <div uib-accordion-group class="panel-default" ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']" > -->
+							{{idnum=capability.key;""}}
 							{{minimumYearsField=idnum+'_minimumYears';""}}
 							{{desiredYearsField=idnum+'_desiredYears';""}}
+							{{tagField=idnum+'_tags';""}}
 							{{experienceField=idnum+'_experience';""}}
 							{{ratingField=idnum+'_years';""}}
+							{{newskillfield=idnum+'_newskill';""}}
 							<uib-accordion-heading>
 								<small>
 									<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity[minimumYearsField]>0, 'glyphicon-unchecked':vm.opportunity[minimumYearsField]===0}"></i>
 									&nbsp; &nbsp;
-									{{vm.capabilities.bykey[idnum].text}}
+									{{capability.text}}
 									&nbsp; &nbsp;
 									<span class="pull-right" ng-if="vm.opportunity[minimumYearsField]>0">
 										<b>{{vm.opportunity[minimumYearsField]}}</b>{{vm.opportunity[minimumYearsField]>4?'+ years':' years'}} minimum &nbsp; | &nbsp;
@@ -149,7 +153,7 @@
 								x-options='{
 									"title":"Capability Description"
 								}'>
-								{{vm.capabilities.bykey[idnum].description}}
+								{{capability.description}}
 							</form-display>
 							<br/>
 							<div class="row">
@@ -199,6 +203,28 @@
 											<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 20)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="20">20 or more</label>
 										</div>
 									</form-display>
+									<select-list
+										ng-model="vm.opportunity[tagField]"
+										class="col-sm-12"
+										x-type="arrayOfStrings"
+										x-values="capability.tags"
+										x-form="vm.opportunityForm"
+										x-options='{
+											"title":"Specific Skills",
+											"id":"lkjasd",
+											"name":"lkjasd",
+											"single":false,
+											"listStyle":"list-inline"
+										}'>
+									</select-list>
+									<div class="col-sm-6">
+										<div class="input-group">
+											<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="vm[newskillfield]"\>
+											<span class="input-group-btn">
+												<button class="btn btn-default" type="button" ng-click="vm.addSkill(capability, tagField, vm[newskillfield], newskillfield)">Add</button>
+											</span>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

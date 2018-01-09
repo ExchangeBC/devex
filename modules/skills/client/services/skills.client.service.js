@@ -16,16 +16,16 @@
 			}
 		});
 		console.log ('skill service:', Skill);
-		// angular.extend (Skill.prototype, {
-		// 	createOrUpdate: function () {
-		// 		var skill = this;
-		// 		if (skill._id) {
-		// 			return skill.$update (function () {}, function (e) {$log.error(e.data);});
-		// 		} else {
-		// 			return skill.$save (function () {}, function (e) {$log.error(e.data);});
-		// 		}
-		// 	}
-		// });
+		angular.extend (Skill.prototype, {
+			createOrUpdate: function () {
+				var skill = this;
+				if (skill._id) {
+					return skill.$update (function () {}, function (e) {$log.error(e.data);});
+				} else {
+					return skill.$save (function () {}, function (e) {$log.error(e.data);});
+				}
+			}
+		});
 		return Skill;
 	});
 }());

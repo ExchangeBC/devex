@@ -99,7 +99,7 @@
 			template: '<ui-view/>',
 			resolve: {
 				capabilities: function (SkillsService) {
-					return SkillsService.list ();
+					return SkillsService.query ();
 				}
 			}
 		})

@@ -114,9 +114,7 @@
 			},
 			resolve: {
 				capabilities: function (SkillsService) {
-					return SkillsService.get ({
-						skillId: '5a4d61b48234aa0a9f521337'
-					}).$promise;
+					return SkillsService.query ().$promise;
 				}
 			}
 		})

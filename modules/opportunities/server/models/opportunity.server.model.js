@@ -69,7 +69,20 @@ var OpportunitySchema = new Schema({
 	c10_desiredYears : { type: Number, default:0 },
 	c11_desiredYears : { type: Number, default:0 },
 	c12_desiredYears : { type: Number, default:0 },
-	c13_desiredYears : { type: Number, default:0 }
+	c13_desiredYears : { type: Number, default:0 },
+	c01_tags : { type:[String], default:[] },
+	c02_tags : { type:[String], default:[] },
+	c03_tags : { type:[String], default:[] },
+	c04_tags : { type:[String], default:[] },
+	c05_tags : { type:[String], default:[] },
+	c06_tags : { type:[String], default:[] },
+	c07_tags : { type:[String], default:[] },
+	c08_tags : { type:[String], default:[] },
+	c09_tags : { type:[String], default:[] },
+	c10_tags : { type:[String], default:[] },
+	c11_tags : { type:[String], default:[] },
+	c12_tags : { type:[String], default:[] },
+	c13_tags : { type:[String], default:[] }
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

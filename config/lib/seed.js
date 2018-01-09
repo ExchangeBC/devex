@@ -179,8 +179,9 @@ function seedCapabilities () {
 		{tags:[], key:'c13', code:'writer-content-designer-content-strategist',             text:'Writer / Content Designer / Content Strategist',            description:'Experience developing the strategy and execution of content across digital channels.'}
 	];
 	return new Promise (function (resolve, reject) {
-		Skill.collection.remove ({}, function (err) {
+		Skill.find ({}, function (err, skills) {
 			if (err) reject (err);
+			if (skills.length > 0) resolve (skills);
 			else {
 				Skill.collection.insert (capabilities, function (err, docs) {
 					if (err) reject (err);
