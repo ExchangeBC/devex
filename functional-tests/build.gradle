@@ -101,6 +101,8 @@ tasks.withType(Test) {
         exceptionFormat = 'full'
     }
     systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
+    systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
+    systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
 }
 
 tasks.withType(GroovyCompile) {
