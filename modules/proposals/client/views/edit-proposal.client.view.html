@@ -234,7 +234,7 @@
 								</button>
 							</td>
 							<td class="text-center" colspan="2">Minimum<sup>1</sup></td>
-							<td class="text-center" colspan="2">Desired<sup>2</sup></td>
+							<td ng-if="0" class="text-center" colspan="2">Desired<sup>2</sup></td>
 						</thead>
 						<tbody>
 							<tr ng-repeat="row in ppp.clist">
@@ -252,10 +252,10 @@
 								<td class="text-center">
 									<i class="fa fa-check-circle ctc-green" ng-if="row.minMet"></i>
 								</td>
-								<td class="text-center">
+								<td class="text-center" ng-if="0">
 									{{row.desYears}}
 								</td>
-								<td class="text-center">
+								<td class="text-center" ng-if="0">
 									<i class="fa fa-check-circle ctc-green" ng-if="row.desMet"></i>
 								</td>
 							</tr>
@@ -266,8 +266,8 @@
 					<dl>
 						<dt>1. Mimimum</dt>
 						<dd>At least one team member MUST have this many years experience with this capability</dd>
-						<dt>2. Desired</dt>
-						<dd>It is desirable that the combined years experience of the teram in regards to this capability meets or exceeds this many years</dd>
+						<dt ng-if="0">2. Desired</dt>
+						<dd ng-if="0">It is desirable that the combined years experience of the teram in regards to this capability meets or exceeds this many years</dd>
 					</dl>
 				</div>
 			</div>
@@ -358,7 +358,7 @@
 
 <!-- <div class="modal-footer"> -->
 <!-- <div class="section"> -->
-<section>
+<section ng-if="ppp.proposal.isAcceptedTerms">
 	<div class="row">
 	<div class="col-xs-12 col-sm-4 text-left">
 		<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'">Save changes</button>
@@ -372,7 +372,37 @@
 		<button type="button" class="btn" data-ng-click="ppp.close()">Close</button>
 	</div>
 	</div>
-<!-- </div> -->
+</section>
+
+<section ng-if="ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
+	<div class="well well-lg well-info well-left-align">
+		<h4>Sprint With Us Terms and Conditions</h4>
+		<p>
+			By clicking below you accept the terms etc etc
+		</p>
+		<p>
+			<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Sprint With Us Terms and Conditions</a>
+		</p>
+		<label class="checkbox-inline">
+			<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I accept the terms and conditions
+		</label>
+		<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+	</div>
+</section>
+<section ng-if="!ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
+	<div class="well well-lg well-info well-left-align">
+		<h4>Code With Us Terms and Conditions</h4>
+		<p>
+			By clicking below you accept the terms etc etc
+		</p>
+		<p>
+			<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Code With Us Terms and Conditions</a>
+		</p>
+		<label class="checkbox-inline">
+			<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I accept the terms and conditions
+		</label>
+		<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+	</div>
 </section>
 
 </form>

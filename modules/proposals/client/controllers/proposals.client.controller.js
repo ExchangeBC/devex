@@ -180,7 +180,6 @@
 		if (opportunity.opportunityTypeCd === 'sprint-with-us') {
 			ppp.isSprintWithUs = true;
 			ppp.proposal.isCompany = true;
-
 		}
 		//
 		// what capabilities are required ?

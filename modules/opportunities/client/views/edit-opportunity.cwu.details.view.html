@@ -1,0 +1,121 @@
+
+<div class="col-sm-12">
+	<fieldset>
+		<div class="row">
+
+			<form-display
+				class="col-sm-12"
+				x-options='{
+					"title":"On Site Requirements",
+					"name":"onsite",
+					"help":"<p>State whether you are OK NOT to work with the developer in-person, or if you need them to work with you in-person some, or most of the time.</p>"
+				}'>
+				<label class="radio-inline">
+					<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">In-person work NOT required
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="mixed">Some in-person work required
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">In-person work required
+				</label>
+			</form-display>
+
+			<form-display
+				class="col-sm-6"
+				x-options='{
+					"title":"Location",
+					"name":"location",
+					"help":"Where is your office?"
+				}'>
+				<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" required ng-options="v as v for v in vm.cities">
+					<option value="">Select Location</option>
+				</select>
+			</form-display>
+
+			<form-display
+				class="col-sm-6"
+				x-options='{
+					"title":"Fixed-Price Reward",
+					"name":"reward",
+					"help":"<p>To the best of your ability, estimate a fair price for the amount of work you think it should take a qualified developer to meet the acceptance criteria. It is best to over-estimate.</p> <p>Right now, Code With Us opportunities may be offered to a maximum of $10,000.</p>"
+				}'>
+				<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" ng-required="true" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,10500,11000,11500,12000,12500,13000,13500,14000,14500,15000,15500,16000,16500,17000,17500,18000,18500,19000,19500,20000,20500,21000,21500,22000,22500,23000,23500,24000,24500,25000,25500,26000,26500,27000,27500,28000,28500,29000,29500,30000]">
+					<option value="">Select reward amount</option>
+				</select>
+				<div ng-messages="vm.opportunityForm.earn.$error" role="alert">
+					<p class="help-block error-text" ng-message="required">Fixed-Price Reward is required.</p>
+				</div>
+			</form-display>
+
+			<form-input
+				class="col-sm-12"
+				ng-model="vm.opportunity.proposalEmail"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"title":"Email to Receive Acceptance of Terms and Contract",
+					"help":"Enter the email address where you would like the assigned applicant to send their acceptance of the Code With Us Terms and Contract for this opportunity.",
+					"id":"proposalEmail",
+					"name":"proposalEmail",
+					"placeholder":"Enter email address"
+				}'>
+			</form-input>
+<!--
+			<form-date-input
+				class="col-sm-4"
+				ng-model="vm.opportunity.deadline"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"title":"Proposal Deadline",
+					"help":"<p>Choose a <b>cutoff date</b> for receiving proposals. (Time of day is fixed at 16:00 Pacific Time.)</p> <p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p> <p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>",
+					"id":"deadline",
+					"name":"deadline",
+					"required":"Deadline is required",
+					"format":"MMMM dd, yyyy"
+				}'>
+			</form-date-input>
+ -->
+			<form-input
+				class="col-sm-4"
+				ng-model="vm.opportunity.deadline"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"title":"Proposal Deadline",
+					"help":"<p>Choose a <b>cutoff date</b> for receiving proposals. (Time of day is fixed at 16:00 Pacific Time.)</p> <p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p> <p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>",
+					"id":"deadline",
+					"name":"deadline",
+					"format":"MMMM dd, yyyy",
+					"type":"date"
+				}'>
+			</form-input>
+
+			<form-input
+				class="col-sm-4"
+				ng-model="vm.opportunity.assignment"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"title":"Assignment Date",
+					"help":"Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time of day is fixed at 16:00 Pacific Time.)",
+					"id":"assignment",
+					"name":"assignment",
+					"format":"MMMM dd, yyyy",
+					"type":"date"
+				}'>
+			</form-input>
+
+			<form-input
+				class="col-sm-4"
+				ng-model="vm.opportunity.start"
+				x-form="vm.opportunityForm"
+				x-options='{
+					"title":"Proposed Start Date",
+					"help":"When do you want the person to begin working?",
+					"id":"start",
+					"name":"start",
+					"format":"MMMM dd, yyyy",
+					"type":"date"
+				}'>
+			</form-input>
+		</div>
+	</fieldset>
+</div>

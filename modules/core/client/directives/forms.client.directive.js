@@ -1,6 +1,198 @@
 (function () {
 	'use strict';
 
+	var templateClass = {
+		options: null,
+		tmpl: '',
+		isRequired: false,
+		requiredText: '',
+		name: '',
+		title: '',
+		isTitle: '',
+		id: '',
+		help: '',
+		titleTransclude: false,
+		// -------------------------------------------------------------------------
+		//
+		// this generates the standard first bit of all form displays
+		//
+		// -------------------------------------------------------------------------
+		new: function (options) {
+			this.options         = options;
+			this.help            = (options.hasOwnProperty('help')) ? options.help : null;
+			this.tmpl            = (options.hasOwnProperty('tmpl')) ? options.tmpl : '';
+			this.isTitle         = (options.hasOwnProperty('title'));
+			this.title           = (this.isTitle) ? options.title : '';
+			this.name            = options.name;
+			this.titleTransclude = (options.hasOwnProperty('titleTransclude') && options.titleTransclude);
+			this.isRequired      = (options.hasOwnProperty('required'));
+			this.required        = (this.isRequired && typeof (options.required) === 'string') ? options.required : (this.isTitle ? this.title+' is required' : 'This field is required');
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// start and end the div
+		//
+		// -------------------------------------------------------------------------
+		open: function () {
+			this.tmpl += '<div ';
+			if (!this.options.horizontal) {
+				this.tmpl += 'class="form-group "';
+			}
+			if (this.isRequired) {
+				this.tmpl += 'show-errors ng-class="{\'has-error\': (parentForm.$submitted && parentForm.' + this.name + '.$error)}" ';
+			}
+			this.tmpl += '>';
+			return this;
+		},
+		close: function () {
+			this.tmpl += '</div>';
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// make a label
+		//
+		// -------------------------------------------------------------------------
+		label: function () {
+			if (this.isTitle) {
+				var fieldtoggle = 'fieldtoggle'+this.name;
+				this.tmpl += '<label class="" for="' + this.name + '">' + this.title + '</label>';
+				if (this.isRequired) {
+					this.tmpl += ' <span class="text-muted" title="This field is required">*</span>';
+				}
+				if (this.help) {
+					this.tmpl += ' &nbsp; <i class="glyphicon glyphicon-question-sign input-help-source" ng-click="$scope.'+fieldtoggle+' = !$scope.'+fieldtoggle+'"></i>';
+					this.tmpl += '<div class="input-help alert alert-info" data-field="'+this.name+'" ng-show="$scope.'+fieldtoggle+'">';
+					this.tmpl += '<p>'+this.help+'</p>';
+					this.tmpl += '</div>';
+				}
+			}
+			if (this.titleTransclude) {
+				this.tmpl += '<label class="" for="' + this.name + '" ng-transclude></label>';
+			}
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// this generates the required message
+		//
+		// -------------------------------------------------------------------------
+		error: function () {
+			if (this.isRequired) {
+				this.tmpl += '<div ng-messages="parentForm.$submitted && parentForm.' + this.name + '.$error" role="alert">';
+				this.tmpl += '<p class="help-block error-text" ng-message="required">' + this.required + '</p>';
+				this.tmpl += '</div>';
+			}
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// make an input box
+		//
+		// -------------------------------------------------------------------------
+		inputControl: function (attrs) {
+			this.tmpl += '<input ';
+			// ----------------------------------------------------------------------------------
+			if ( this.options.hasOwnProperty('type') ) {
+				this.tmpl += ' type="' + this.options.type + '"';
+			} else {
+				this.tmpl += ' type="text"';
+			}
+			// ----------------------------------------------------------------------------------
+			this.tmpl += ' id="' + this.options.id + '" name="' + this.options.name + '" class="form-control ';
+			// ----------------------------------------------------------------------------------
+			// Format as number
+			if ( this.options.hasOwnProperty('number') ) {
+				this.tmpl += ' format-as-number text-right';
+			}
+			// ----------------------------------------------------------------------------------
+			this.tmpl += '" ng-model="ngModel"';
+			// ----------------------------------------------------------------------------------
+			// Placeholder
+			if ( this.options.hasOwnProperty('placeholder') ) {
+				this.tmpl += ' placeholder="' + this.options.placeholder + '"';
+			}
+			// Validator
+			if ( attrs.hasOwnProperty('validate') ) {
+				this.tmpl += ' ng-change="processValidator()"';
+			} else if ( attrs.hasOwnProperty('validateOf') ) {
+				this.tmpl += ' ng-change="callValidator(\'' + attrs.validateOf + '\')"';
+			}
+			if (attrs.hasOwnProperty ('onchange')) {
+				this.tmpl += ' ng-change="'+attrs.onchange+'()"';
+				console.log (this.tmpl);
+			}
+			// ----------------------------------------------------------------------------------
+			if ( this.options.hasOwnProperty('required') ) {
+				this.tmpl += ' required';
+			}
+			if ( this.options.hasOwnProperty('disabled') ) {
+				this.tmpl += ' disabled';
+			}
+			this.tmpl += '/>';
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// make a date control
+		//
+		// -------------------------------------------------------------------------
+		dateControl: function () {
+			var dateformat = (this.options.hasOwnProperty('format')) ? this.options.format : 'dd-MMMM-yyyy';
+			this.tmpl += '<div class="input-group">'
+			this.tmpl += '<input uib-datepicker-popup="'+dateformat+'" type="text" is-open="popupDate.opened" datepicker-options="dateOptions" show-button-bar="false"';
+			this.tmpl += ' id="' + this.options.id + '" name="' + this.name + '" class="form-control " ng-model="ngModel"';
+			if ( this.options.hasOwnProperty('placeholder') ) {
+				this.tmpl += ' placeholder="' + this.options.placeholder + '"';
+			}
+			if (this.isRequired) {
+				this.tmpl += ' required';
+			}
+			this.tmpl += '/>';
+			this.tmpl += '<span class="input-group-btn">';
+			this.tmpl += '<button type="button" class="btn btn-default" ng-click="openPopupDate()"><i class="glyphicon glyphicon-calendar"></i></button>';
+			this.tmpl += '</span>';
+			this.tmpl += '</div>';
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// just pass through contents
+		//
+		// -------------------------------------------------------------------------
+		transcludeControl: function () {
+			this.tmpl += '<p class="form-control-static" ng-transclude></p>';
+			return this;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// just return the template
+		//
+		// -------------------------------------------------------------------------
+		template: function () {
+			return this.tmpl;
+		},
+		// -------------------------------------------------------------------------
+		//
+		// methods for actualy doing the different types
+		//
+		// -------------------------------------------------------------------------
+		date: function (attrs) {
+			return this.new (JSON.parse(attrs.options)).open().label().dateControl().error().close().template();
+		},
+		input: function (attrs) {
+			return this.new (JSON.parse(attrs.options)).open().label().inputControl(attrs).error().close().template();
+		},
+		transclude: function (attrs) {
+			return this.new (JSON.parse(attrs.options)).open().label().transcludeControl().error().close().template();
+		}
+	};
+	// -------------------------------------------------------------------------
+	//
+	// for-input makes an input control
+	//
+	// -------------------------------------------------------------------------
 	angular.module('core')
 	.directive('formInput', function() {
 		return {
@@ -14,74 +206,14 @@
 				parentForm: '=form',
 				validate: '=',
 				validateOf: '=',
+				onchange: '@',
 				options: '='
 			},
 			template: function(elem, attrs) {
-				// if draw equates to true
 				if (attrs.hasOwnProperty('draw') && !attrs.draw ) {
 					return '';
 				}
-				var options = JSON.parse(attrs.options);
-				var tmpl = '<div ';
-				// if the label is included with the configuration, add the form-group class, otherwise the
-				// label is external and the form-group class should be too.
-				if ( !options.horizontal) {
-					tmpl += ' show-errors class="form-group "';
-				}
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += 'ng-class="{\'has-error\': (parentForm.$submitted && parentForm.' + options.name + '.$invalid)}"';
-				}
-				tmpl += '>';
-				if ( options.hasOwnProperty('title') ) {
-					tmpl += '<label class="" for="' + options.name + '">' + options.title;
-					if ( options.hasOwnProperty('required') ) {
-						tmpl += ' <span class="text-muted" title="This field is required">*</span>';
-					}
-					tmpl += '</label>';
-				}
-				if ( options.hasOwnProperty('titleTransclude') && options.titleTransclude ) {
-					tmpl += '<label class="" for="' + options.name + '" ng-transclude></label>';
-				}
-				tmpl += '<input ';
-				// ----------------------------------------------------------------------------------
-				if ( options.hasOwnProperty('type') ) {
-					tmpl += ' type="' + options.type + '"';
-				} else {
-					tmpl += ' type="text"';
-				}
-				// ----------------------------------------------------------------------------------
-				tmpl += ' id="' + options.id + '" name="' + options.name + '" class="form-control ';
-				// ----------------------------------------------------------------------------------
-				// Format as number
-				if ( options.hasOwnProperty('number') ) {
-					tmpl += ' format-as-number text-right';
-				}
-				// ----------------------------------------------------------------------------------
-				tmpl += '" ng-model="ngModel"';
-				// ----------------------------------------------------------------------------------
-				// Placeholder
-				if ( options.hasOwnProperty('placeholder') ) {
-					tmpl += ' placeholder="' + options.placeholder + '"';
-				}
-				// Validator
-				if ( attrs.hasOwnProperty('validate') ) {
-					tmpl += ' ng-change="processValidator()"';
-				} else if ( attrs.hasOwnProperty('validateOf') ) {
-					tmpl += ' ng-change="callValidator(\'' + attrs.validateOf + '\')"';
-				}
-				// ----------------------------------------------------------------------------------
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += ' required';
-				}
-				tmpl += '/>';
-				// ----------------------------------------------------------------------------------
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += '<div ng-messages="parentForm.$submitted && parentForm.' + options.name + '.$invalid" role="alert">';
-					tmpl += '<p class="help-block error-text" ng-message="required">' + options.required + '</p>';
-					tmpl += '</div>';
-				}
-				tmpl += '</div>';
-				return tmpl;
+				return templateClass.input (attrs);
 			},
 			restrict: 'E',
 			link: function($scope, elem, attrs, modelCtrl) {
@@ -132,7 +264,11 @@
 			}
 		};
 	})
-
+	// -------------------------------------------------------------------------
+	//
+	// form-date-input makes a date control (uib-date)
+	//
+	// -------------------------------------------------------------------------
 	.directive('formDateInput', function() {
 		return {
 			require: 'ngModel',
@@ -146,50 +282,10 @@
 				options: '='
 			},
 			template: function(elem, attrs) {
-				// if draw equates to true
 				if (attrs.hasOwnProperty('draw') && !attrs.draw ) {
 					return '';
 				}
-				var options = JSON.parse(attrs.options);
-
-				var tmpl = '<div ';
-				// if the label is included with the configuration, add the form-group class, otherwise the
-				// label is external and the form-group class should be too.
-				if ( !options.horizontal) {
-					tmpl += ' show-errors class="form-group "';
-				}
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += 'ng-class="{\'has-error\': (parentForm.$submitted && parentForm.' + options.name + '.$error)}"';
-				}
-				tmpl += '>';
-				if ( options.hasOwnProperty('title') ) {
-					tmpl += '<label class="" for="' + options.name + '">' + options.title + '</label>';
-				}
-				if ( options.hasOwnProperty('titleTransclude') && options.titleTransclude ) {
-					tmpl += '<label class="" for="' + options.name + '" ng-transclude></label>';
-				}
-				tmpl += '<div class="input-group">'
-				tmpl += '<input uib-datepicker-popup="dd-MMMM-yyyy" type="text" is-open="popupDate.opened" datepicker-options="dateOptions" show-button-bar="false"';
-				tmpl += ' id="' + options.id + '" name="' + options.name + '" class="form-control " ng-model="ngModel"';
-				if ( options.hasOwnProperty('placeholder') ) {
-					tmpl += ' placeholder="' + options.placeholder + '"';
-				}
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += ' required';
-				}
-				tmpl += '/>';
-				tmpl += '<span class="input-group-btn">';
-				tmpl += '<button type="button" class="btn btn-default btn-sm" ng-click="openPopupDate()"><i class="glyphicon glyphicon-calendar"></i></button>';
-				tmpl += '</span>';
-
-				if ( options.hasOwnProperty('required') ) {
-					tmpl += '<div ng-messages="parentForm.$submitted && parentForm.' + options.name + '.$error" role="alert">';
-					tmpl += '<p class="help-block error-text" ng-message="required">' + options.required + '</p>';
-					tmpl += '</div>';
-				}
-				tmpl += '</div>';
-				tmpl += '</div>';
-				return tmpl;
+				return templateClass.date (attrs);
 			},
 			restrict: 'E',
 			compile: function(element, attributes){
@@ -222,6 +318,11 @@
 			}
 		};
 	})
+	// -------------------------------------------------------------------------
+	//
+	// form-display wraps whatever control you put here with label and required
+	//
+	// -------------------------------------------------------------------------
 	.directive('formDisplay', function() {
 		return {
 			require: 'ngModel',
@@ -231,17 +332,7 @@
 				options: '='
 			},
 			template: function(elem, attrs) {
-
-				var options = JSON.parse(attrs.options);
-
-				var tmpl = '<div class="form-group ">';
-				if ( options.hasOwnProperty('title') ) {
-					tmpl += '<label class="" for="' + options.name + '">' + options.title + '</label>';
-				}
-				tmpl += '<p class="form-control-static" ng-transclude></p>';
-				tmpl += '</div>';
-
-				return tmpl;
+				return templateClass.transclude (attrs);
 			},
 			restrict: 'E'
 		};

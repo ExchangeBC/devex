@@ -251,6 +251,12 @@
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
+			vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
+			vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
+			vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
+			vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
+			vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
+			vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
@@ -310,6 +316,13 @@
 			vm.opportunity.assignment = new Date ();
 			vm.opportunity.start      = new Date ();
 			vm.opportunity.endDate    = new Date ();
+			vm.opportunity.implementationEndDate   = new Date ();
+			vm.opportunity.implementationStartDate = new Date ();
+			vm.opportunity.inceptionEndDate        = new Date ();
+			vm.opportunity.inceptionStartDate      = new Date ();
+			vm.opportunity.prototypeEndDate        = new Date ();
+			vm.opportunity.prototypeStartDate      = new Date ();
+
 		}
 		//
 		// if there are no available projects then post a warning and kick the user back to
@@ -340,6 +353,41 @@
 			elementpath : false,
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+		};
+
+		vm.cbykey = vm.capabilities.reduce (function (accum, curr) {
+			accum[curr.key] = curr;
+			return accum;
+		}, {});
+		vm.inceptionKeys = ['c04','c03','c08'];
+		vm.prototypeKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
+		vm.implementationKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
+		vm.inceptionCapabilities = vm.inceptionKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+		vm.prototypeCapabilities = vm.prototypeKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+		vm.implementationCapabilities = vm.implementationKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+
+
+
+		// $scope.$watch ('vm.opportunity.inceptionTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		// $scope.$watch ('vm.opportunity.prototypeTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		// $scope.$watch ('vm.opportunity.implementationTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		vm.changeTargets = function () {
+			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
+			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);
+			vm.opportunity.implementationTarget = Number (vm.opportunity.implementationTarget);
+			vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -456,6 +504,13 @@
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
+			vm.opportunity.endDate.setHours(16);
+			vm.opportunity.implementationEndDate.setHours(16);
+			vm.opportunity.implementationStartDate.setHours(16);
+			vm.opportunity.inceptionEndDate.setHours(16);
+			vm.opportunity.inceptionStartDate.setHours(16);
+			vm.opportunity.prototypeEndDate.setHours(16);
+			vm.opportunity.prototypeStartDate.setHours(16);
 
 			vm.opportunity.capabilities = [];
 

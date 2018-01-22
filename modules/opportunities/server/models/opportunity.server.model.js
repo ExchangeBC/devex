@@ -15,6 +15,7 @@ var OpportunitySchema = new Schema({
 	name          : {type: String, default: '', required: 'Name cannot be blank'},
 	short         : {type: String, default: '', required: 'Short description cannot be blank'},
 	description   : {type: String, default: ''},
+	background    : {type: String, default: ''},
 	evaluation    : {type: String, default: ''},
 	criteria      : {type: String, default: ''},
 	github        : {type: String, default: ''},
@@ -82,7 +83,27 @@ var OpportunitySchema = new Schema({
 	c10_tags : { type:[String], default:[] },
 	c11_tags : { type:[String], default:[] },
 	c12_tags : { type:[String], default:[] },
-	c13_tags : { type:[String], default:[] }
+	c13_tags : { type:[String], default:[] },
+	implementationContract    : {type: String, default: ''},
+	implementationEndDate     : {type: Date, default: null},
+	implementationStartDate   : {type: Date, default: null},
+	implementationTarget      : {type: Number, default: 0},
+	inceptionContract         : {type: String, default: ''},
+	inceptionEndDate          : {type: Date, default: null},
+	inceptionStartDate        : {type: Date, default: null},
+	inceptionTarget           : {type: Number, default: 0},
+	prototypeContract         : {type: String, default: ''},
+	prototypeEndDate          : {type: Date, default: null},
+	prototypeStartDate        : {type: Date, default: null},
+	prototypeTarget           : {type: Number, default: 0},
+	isDocConflictOfInterest   : {type: Boolean, default: false},
+	isDocNonDisclosure        : {type: Boolean, default: false},
+	isDocRequestForReferences : {type: Boolean, default: false},
+	isImplementation          : {type: Boolean, default: false},
+	isInception               : {type: Boolean, default: false},
+	isPrototype               : {type: Boolean, default: false},
+	totalTarget               : {type: Number, default: 0},
+	terms                     : {type: String, default: ''}
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

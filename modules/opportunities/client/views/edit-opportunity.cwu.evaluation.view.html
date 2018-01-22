@@ -1,0 +1,38 @@
+
+<div class="col-sm-12">
+	<fieldset>
+
+		<div class="form-group">
+			<label class="control-label" for="skilllist">Required Skills (seperate each skill with a comma)</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
+			<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
+				List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
+			</div>
+			<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="e.g. JavaScript, WordPress, CSS"></input>
+		</div>
+
+
+		<div class="form-group" show-errors>
+			<label class="control-label" for="description">Proposal Evaluation Criteria</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
+			<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
+				In this section, you must explicitly describe the criteria you will use to score the proposals you receive. State the weight or points you will give to each criteria (e.g. "Experience contributing Java code to any public code repositories with more than 5 contributors: (10 points)".<br/>
+				It is at your discretion which mandatory and weighted criteria you wish to use. Refer to the <a target="_blank" href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">Government of B.C.'s information on procurement</a> for guidance.
+			</div>
+			<!-- <textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea> -->
+			<textarea
+				name="evaluation"
+				id="evaluation"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="An explicit definition of the criteria you will use to score proposals..."
+				ng-required="true"
+				ng-model="vm.opportunity.evaluation">
+			</textarea>
+			<div ng-messages="vm.opportunityForm.evaluation.$error" role="alert">
+				<p class="help-block error-text" ng-message="required">Proposal Evaluation Criteria is required.</p>
+			</div>
+		</div>
+
+	</fieldset>
+</div>
