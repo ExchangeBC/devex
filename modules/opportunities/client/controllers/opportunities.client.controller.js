@@ -465,6 +465,7 @@
 				return false;
 			}
 			if (!isValid) {
+				console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -498,7 +499,7 @@
 			//
 			// ensure that there is a trailing '/' on the github field
 			//
-			if (vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
+			if (vm.opportunity.github && vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
 			//
 			// set the time on the 2 dates that care about it
 			//
