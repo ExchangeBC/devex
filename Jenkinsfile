@@ -76,21 +76,29 @@ node('bddstack') {
         echo "checking out source"
         checkout scm
         dir('functional-tests') {
-		try {
-			sh './gradlew --debug --stacktrace chromeHeadlessTest'
-		} finally { 
-			archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-                        archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
-                        junit 'build/test-results/**/*.xml'
-                        publishHTML (target: [
-                            allowMissing: false,
-                            alwaysLinkToLastBuild: false,
-                            keepAll: true,
-                            reportDir: 'build/reports/spock',
-                            reportFiles: 'index.html',
-                            reportName: "BDD Spock Report"
-                        ])
-		}
+            try {
+                sh './gradlew --debug --stacktrace chromeHeadlessTest'
+            } finally { 
+                archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+                            archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+                            junit 'build/test-results/**/*.xml'
+                            publishHTML (target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: 'build/reports/spock',
+                                reportFiles: 'index.html',
+                                reportName: "BDD Spock Report"
+                            ])
+                            publishHTML (target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: 'build/reports/tests/chromeHeadlessTest',
+                                reportFiles: 'index.html',
+                                reportName: "Full Test Report"
+                            ])  
+		        }
         }
     }
 }
