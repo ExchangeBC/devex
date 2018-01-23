@@ -1,5 +1,62 @@
 (function () {
 	'use strict';
+
+	var publishStatus = function (o) {
+		var fields = {
+			common: [
+				[(o.name), 'Title'],
+				[(o.short), 'Teaser'],
+				[(o.description), 'Summary'],
+				[(o.background), 'Background'],
+				[(o.github), 'Github Repository'],
+				[(o.program), 'Program'],
+				[(o.project), 'Project'],
+				[(o.deadline), 'Proposal Deadline'],
+				[(o.assignment), 'Assignment Date'],
+				[(o.location), 'Location']
+			],
+			cwu: [
+				[(o.evaluation), 'Proposal Evaluation Criteria'],
+				[(o.criteria), 'Acceptance Criteria'],
+				[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
+				[(o.skills), 'Required Skills'],
+				[(o.earn), 'Fixed-Price Reward'],
+				[(o.start), 'Proposed Start Date']
+			],
+			swu: [
+				[(o.terms), 'Additional Terms and Conditions'],
+				[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
+				[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
+				[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
+				[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
+				[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
+				[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
+				[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
+				[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
+				[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
+				[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
+				[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
+				[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
+			]
+		}
+		var errorFields = fields.common.reduce (function (accum, elem) {
+			if (!elem[0]) accum.push (elem[1]);
+			return accum;
+		}, []);
+		if (o.opportunityTypeCd === 'code-with-us') {
+			fields.cwu.forEach (function (elem) {
+				if (!elem[0]) errorFields.push (elem[1]);
+			});
+		}
+		else {
+			fields.swu.forEach (function (elem) {
+				if (!elem[0]) errorFields.push (elem[1]);
+			});
+		}
+		return errorFields;
+	};
+
+
 	angular.module('opportunities')
 	// =========================================================================
 	//
@@ -91,9 +148,8 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		var o = vm.opportunity;
-
-		vm.canPublish = (o.name && o.short && o.description && o.github && o.location && o.criteria && o.earn && o.evaluation && o.proposalEmail && o.deadline && o.assignment && o.start);
+		vm.errorFields = publishStatus (vm.opportunity);
+		vm.canPublish = vm.errorFields > 0;
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -165,7 +221,7 @@
 					params: {opportunityId:opportunity.code},
 					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
 				};
-            });
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -251,17 +307,27 @@
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
-			vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
-			vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
-			vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
-			vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
-			vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
-			vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
+		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
+		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
+		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
+		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
+		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
+		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 
+		// -------------------------------------------------------------------------
+		//
+		// can this be published?
+		//
+		// -------------------------------------------------------------------------
+		vm.errorFields = publishStatus (vm.opportunity);
+		vm.canPublish = vm.errorFields > 0;
+		//
+		// set up the dropdown amounts for code with us earnings
+		//
 		var minAmount = 500;
 		var maxAmount = 70000;
 		var step      = 500;
@@ -526,10 +592,10 @@
 
 			vm.opportunity.capabilities = [];
 
-	    	//
-	    	// confirm save only if the user is also publishing
-	    	//
-	    	var savemeSeymour = true;
+			//
+			// confirm save only if the user is also publishing
+			//
+			var savemeSeymour = true;
 			var promise = Promise.resolve ();
 			if (!originalPublishedState && vm.opportunity.isPublished) {
 				var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
@@ -540,7 +606,7 @@
 				//
 				// Create a new opportunity, or update the current instance
 				//
-	      		promise.then(function() {
+				promise.then(function() {
 					if (savemeSeymour) {
 						return vm.opportunity.createOrUpdate();
 					}

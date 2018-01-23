@@ -4,7 +4,7 @@
 		<div class="col-xs-12">
 			<p>To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></p>
 		</div>
-	</div>			
+	</div>
 </div>
 
 <!-- // User doesn't have an email address in their profile // -->
@@ -38,15 +38,16 @@
 
 
 	<!-- // Admin view, draft opportunity is missing stuff // -->
-	<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-		<div class="col-xs-12 text-right">
-			<div class="well well-sm well-danger">
+	<div class="row"  ng-if="!vm.canPublish && vm.canEdit">
+		<div class="col-xs-12 well well-sm well-danger"">
+			<div class="text-center">
 				<span>
-					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been filled out.
+					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i> &nbsp; You may not publish this opportunity until the following fields have been filled out.</label>
 				</span>
-				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
-				</div>
+			</div>
+			<br/>
+			<div class="col-sm-4 col-sm-offset-4">
+				<ul><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 			</div>
 		</div>
 	</div>
@@ -111,8 +112,8 @@
           <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>-->
 
           <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
-	          
-	          
+
+
 	          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
@@ -242,9 +243,9 @@
 	<!--
 		<core-member-list     title="Assignees" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService"></core-member-list>
 		<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
-	-->	
+	-->
 
-	
+
 
 	<!-- // Admin view, draft opportunity is missing stuff // -->
 	<div class="row" ng-if="!vm.canPublish && vm.canEdit">

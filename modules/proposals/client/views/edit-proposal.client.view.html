@@ -18,6 +18,7 @@
 	<div class="col-xs-12 text-center">
 		<div class="well well-danger">
 			<p><label class="label label-lg label-danger-o"><i class="glyphicon glyphicon-file"></i> Your proposal is in DRAFT</label>Submit before <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></b> to be considered for this opportunity!</p>
+			<p ng-if="!ppp.proposal.isAcceptedTerms">To submit a proposal to work on this opportunity you must agree to the Terms.</p>
 		</div>
 	</div>
 </div>
@@ -360,9 +361,36 @@
 </div>
 </section>
 
-<!-- <div class="modal-footer"> -->
-<!-- <div class="section"> -->
-<section ng-if="ppp.proposal.isAcceptedTerms">
+<section ng-if="ppp.isSprintWithUs">
+	<div class="well well-lg well-info well-left-align pre-scrollable">
+		<h4>Sprint With Us Terms and Conditions</h4>
+		<p>To submit a proposal to work on this opportunity you must agree to the Terms.</p>
+		<iframe class="col-sm-12" src="/Code_With_Us_Terms_2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+		<div class="col-sm-12">
+			<br/>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
+			</label>
+			<a class="btn btn-default pull-right" href="/code-with-us-terms-2018-01-23.pdf" target="_blank">Download</a>
+		</div>
+	</div>
+</section>
+<section ng-if="!ppp.isSprintWithUs">
+	<div class="row well well-lg well-info well-left-align">
+		<h4>Code With Us Terms and Conditions</h4>
+		<p>To submit a proposal to work on this opportunity you must agree to the Terms.</p>
+		<iframe class="col-sm-12" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+		<div class="col-sm-12">
+			<br/>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
+			</label>
+			<a class="btn btn-default pull-right" href="/code-with-us-terms-2018-01-23.pdf" target="_blank">Download</a>
+		</div>
+	</div>
+</section>
+
+<section>
 	<div class="row">
 	<div class="col-xs-12 col-sm-4 text-left">
 		<button type="submit" class="btn btn-success" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'">Save changes</button>
@@ -372,36 +400,9 @@
 		<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-danger" data-ng-click="ppp.delete()" ">Delete my proposal</button>
 		<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-default" data-ng-click="ppp.withdraw()" ">Withdraw my proposal</button>
 		<span ng-if="ppp.proposal.status === 'Submitted' || ppp.proposal.status === 'Draft'"> &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp; </span>
-		<button type="button" class="btn btn-primary" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft'">Submit my proposal</button>
+		<button type="button" class="btn btn-primary" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms">Submit my proposal</button>
 		<button type="button" class="btn" data-ng-click="ppp.close()">Close</button>
 	</div>
-	</div>
-</section>
-
-<section ng-if="ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
-	<div class="well well-lg well-info well-left-align pre-scrollable">
-		<h4>Sprint With Us Terms and Conditions</h4>
-		<iframe class="col-sm-12" src="/terms.codewithus.html" width></iframe>
-		<div class="col-sm-12">
-			<br/>
-			<label class="checkbox-inline">
-				<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
-			</label>
-			<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
-		</div>
-	</div>
-</section>
-<section ng-if="!ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
-	<div class="row well well-lg well-info well-left-align">
-		<h4>Code With Us Terms and Conditions</h4>
-		<iframe class="col-sm-12" src="/terms.codewithus.html" width></iframe>
-		<div class="col-sm-12">
-			<br/>
-			<label class="checkbox-inline">
-				<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
-			</label>
-			<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
-		</div>
 	</div>
 </section>
 
