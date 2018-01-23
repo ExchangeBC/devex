@@ -117,6 +117,7 @@
 								"id":"inceptionTarget",
 								"onchange":"vm.changeTargets",
 								"number":true,
+								"type":"number",
 								"name":"inceptionTarget"
 							}'>
 						</form-input>
@@ -155,6 +156,7 @@
 								"id":"prototypeTarget",
 								"onchange":"vm.changeTargets",
 								"number":true,
+								"type":"number",
 								"name":"prototypeTarget"
 							}'>
 						</form-input>
@@ -193,6 +195,7 @@
 								"id":"implementationTarget",
 								"onchange":"vm.changeTargets",
 								"number":true,
+								"type":"number",
 								"name":"implementationTarget"
 							}'>
 						</form-input>
@@ -203,6 +206,7 @@
 					<td></td>
 					<td>Total Costs:</td>
 					<td>
+						<!--
 						<form-input
 							ng-model="vm.opportunity.totalTarget"
 							x-form="vm.opportunityForm"
@@ -213,6 +217,21 @@
 								"disabled":true
 							}'>
 						</form-input>
+						-->
+						<form-display
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"totalTarget",
+								"name":"totalTarget"
+							}'>
+								<input type="text" class="form-control format-as-number text-right col-sm-12" disabled
+							value="{{vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget}}"
+								>
+								<span >
+									{{vm.totalTargets()}}
+							{{vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget}}
+								</span>
+						</form-display>
 					</td>
 				</tr>
 			</table>

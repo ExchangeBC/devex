@@ -1,0 +1,33 @@
+
+<div class="row list-head">
+	<div class="col-sm-7">
+		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.context != 'orgview'">
+		<add-superbasic org="vm.org"></add-superbasic>
+	</div>
+</div>
+
+<div class="row">
+<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.superbasics | columnRanges:vm.columnCount">
+
+
+<div class="card card-flat" ng-repeat="superbasic in vm.superbasics | slice:column.start:column.end">
+
+	<div class="card-header text-right" ng-if="vm.context != 'orgview'">
+		<edit-superbasic org="vm.org" superbasic="superbasic"></edit-superbasic>
+	</div>
+
+	<div class="card-block">
+		<div class="row">
+			<div class="col-xs-6 col-sm-6">
+				<h4>Superbasic {{superbasic.name}}</h4>{{superbasic.description}}
+			</div>
+			<div class="col-xs-6 col-sm-6">
+				<h4>Members</h4>
+				<span ng-repeat="member in superbasic.members">{{member.displayName}}<br/></span>
+			</div>
+		</div>
+	</div>
+
+</div>

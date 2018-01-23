@@ -154,8 +154,10 @@
 					<div class="col-xs-12">
 						<div class="well well-info">
 							<p>You can upload any supporting material here as an attachment.</p>
+							<!--
 							<br>
 							<p><b>Mandatory:</b> To apply on this opportunity, you must agree to the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf" title="Code With Us terms">Code With Us terms</a>. To indicate your acceptance of the terms, download the terms document, and upload it here as an attachment.</p>
+							-->
 						</div>
 					</div>
 				</div>
@@ -319,8 +321,10 @@
 					<div class="col-xs-12">
 						<div class="well well-info">
 							<p>You can upload any supporting material here as an attachment.</p>
+							<!--
 							<br>
 							<p><b>Mandatory:</b> To apply on this opportunity, you must agree to the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf" title="Code With Us terms">Code With Us terms</a>. To indicate your acceptance of the terms, download the terms document, and upload it here as an attachment.</p>
+							-->
 						</div>
 					</div>
 				</div>
@@ -375,33 +379,29 @@
 </section>
 
 <section ng-if="ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
-	<div class="well well-lg well-info well-left-align">
+	<div class="well well-lg well-info well-left-align pre-scrollable">
 		<h4>Sprint With Us Terms and Conditions</h4>
-		<p>
-			By clicking below you accept the terms etc etc
-		</p>
-		<p>
-			<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Sprint With Us Terms and Conditions</a>
-		</p>
-		<label class="checkbox-inline">
-			<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I accept the terms and conditions
-		</label>
-		<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+		<iframe class="col-sm-12" src="/terms.codewithus.html" width></iframe>
+		<div class="col-sm-12">
+			<br/>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
+			</label>
+			<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+		</div>
 	</div>
 </section>
 <section ng-if="!ppp.isSprintWithUs && !ppp.proposal.isAcceptedTerms">
-	<div class="well well-lg well-info well-left-align">
+	<div class="row well well-lg well-info well-left-align">
 		<h4>Code With Us Terms and Conditions</h4>
-		<p>
-			By clicking below you accept the terms etc etc
-		</p>
-		<p>
-			<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Code With Us Terms and Conditions</a>
-		</p>
-		<label class="checkbox-inline">
-			<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I accept the terms and conditions
-		</label>
-		<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+		<iframe class="col-sm-12" src="/terms.codewithus.html" width></iframe>
+		<div class="col-sm-12">
+			<br/>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-model="ppp.proposal.isAcceptedTerms"> I ackowledge that I have read and fully understand and agree to the above terms and conditions.
+			</label>
+			<button type="button" class="btn pull-right" data-ng-click="ppp.close()">Close</button>
+		</div>
 	</div>
 </section>
 

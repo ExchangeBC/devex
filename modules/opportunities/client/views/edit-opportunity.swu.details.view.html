@@ -28,7 +28,7 @@
 					"name":"location",
 					"help":"Where is your office?"
 				}'>
-				<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" required ng-options="v as v for v in vm.cities">
+				<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" ng-options="v as v for v in vm.cities">
 					<option value="">Select Location</option>
 				</select>
 			</form-display>

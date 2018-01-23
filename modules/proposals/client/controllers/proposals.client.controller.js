@@ -167,6 +167,7 @@
 		ppp.display.description    = $sce.trustAsHtml(ppp.opportunity.description);
 		ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
 		ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
+		uibButtonConfig.activeClass = 'cbg-light-steel-blue';
 		//
 		// ensure status set accordingly
 		//
@@ -184,61 +185,60 @@
 		//
 		// what capabilities are required ?
 		//
-		//
-		//
-		uibButtonConfig.activeClass = 'cbg-light-steel-blue';
-		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-		ppp.clist = [];
-		var idlist = [];
+		if (ppp.isSprintWithUs) {
+			var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
+			ppp.clist = [];
+			var idlist = [];
 
-		allclist.forEach (function (id) {
-			//
-			// iff the capability is required
-			//
-			if (ppp.opportunity[id+'_minimumYears']>0) {
-				var minimumYearsField = id+'_minimumYears';
-				var desiredYearsField = id+'_desiredYears';
-				var userYearsField    = id+'_years';
+			allclist.forEach (function (id) {
 				//
-				// put the user field onto a list
+				// iff the capability is required
 				//
-				idlist.push (userYearsField);
-				//
-				// put all the capability stuff into a list of objects
-				//
-				ppp.clist.push ({
-					id: id,
-					minimumYearsField : minimumYearsField,
-					desiredYearsField : desiredYearsField,
-					userYearsField : userYearsField,
-					minYears : ppp.opportunity[minimumYearsField],
-					desYears : ppp.opportunity[desiredYearsField],
-					minMet : false,
-					desMet : false
-				});
-			}
-		});
-		console.log (ppp.clist);
-		//
-		// now gather up ONLY those folks who have at least one of the required capabilities
-		// this should include any current team members
-		//
-		ppp.winners = [];
-		console.log ('team:' , ppp.proposal.team);
-		ppp.members.forEach (function (member) {
-			member.selected = isInArray (ppp.proposal.team.map(function(a){return a._id;}), member._id);
-			console.log (member._id, member.selected);
-			//
-			// add up their scores on all required capabilities, if > 0 include them
-			//
-			var score = idlist.map (function (userfield) {
-				return member[userfield] || 0;
-			}).reduce (function (accum, elem) {
-				return accum + elem;
+				if (ppp.opportunity[id+'_minimumYears']>0) {
+					var minimumYearsField = id+'_minimumYears';
+					var desiredYearsField = id+'_desiredYears';
+					var userYearsField    = id+'_years';
+					//
+					// put the user field onto a list
+					//
+					idlist.push (userYearsField);
+					//
+					// put all the capability stuff into a list of objects
+					//
+					ppp.clist.push ({
+						id: id,
+						minimumYearsField : minimumYearsField,
+						desiredYearsField : desiredYearsField,
+						userYearsField : userYearsField,
+						minYears : ppp.opportunity[minimumYearsField],
+						desYears : ppp.opportunity[desiredYearsField],
+						minMet : false,
+						desMet : false
+					});
+				}
 			});
-			if (score > 0) ppp.winners.push (member);
-		});
-		console.log (ppp.winners);
+			console.log (ppp.clist);
+			//
+			// now gather up ONLY those folks who have at least one of the required capabilities
+			// this should include any current team members
+			//
+			ppp.winners = [];
+			console.log ('team:' , ppp.proposal.team);
+			ppp.members.forEach (function (member) {
+				member.selected = isInArray (ppp.proposal.team.map(function(a){return a._id;}), member._id);
+				console.log (member._id, member.selected);
+				//
+				// add up their scores on all required capabilities, if > 0 include them
+				//
+				var score = idlist.map (function (userfield) {
+					return member[userfield] || 0;
+				}).reduce (function (accum, elem) {
+					return accum + elem;
+				});
+				if (score > 0) ppp.winners.push (member);
+			});
+			console.log (ppp.winners);
+		}
 		// -------------------------------------------------------------------------
 		//
 		// run through and figure out how the team stacks up
@@ -246,6 +246,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.calculateScores = function () {
+			if (!ppp.isSprintWithUs) return;
 			ppp.clist.forEach (function (row) {
 					//
 					// map the winners into an array indicating total
@@ -385,10 +386,12 @@
 		//
 		// -------------------------------------------------------------------------
 		var copyteam = function () {
-			ppp.proposal.team = [];
-			ppp.winners.forEach (function (m) {
-				if (m.selected) ppp.proposal.team.push (m._id);
-			});
+			if (ppp.isSprintWithUs) {
+				ppp.proposal.team = [];
+				ppp.winners.forEach (function (m) {
+					if (m.selected) ppp.proposal.team.push (m._id);
+				});
+			}
 		};
 		// -------------------------------------------------------------------------
 		//
