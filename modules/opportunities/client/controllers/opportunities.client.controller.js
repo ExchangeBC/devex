@@ -149,7 +149,9 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = publishStatus (vm.opportunity);
-		vm.canPublish = vm.errorFields > 0;
+		vm.canPublish = (vm.errorFields.length === 0);
+		console.log ('vm.errorFields', vm.errorFields);
+		console.log ('vm.canPublish', vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
