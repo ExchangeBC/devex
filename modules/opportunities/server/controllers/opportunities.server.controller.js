@@ -336,10 +336,11 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
+		console.log ('updating', opportunity.opportunityTypeCd);
 		//
 		// CC: TBD:SWU once sprint with us is active we can remove this restriction
 		//
-		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-Us') {
+		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-us') {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({
@@ -374,6 +375,7 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
+	console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op
@@ -405,7 +407,24 @@ var pub = function (req, res, isToBePublished) {
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 		}
-		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		github.createOrUpdateIssue ({
+			title  : opportunity.name,
+			body   : oppBody (opportunity),
+			repo   : opportunity.github,
+			number : opportunity.issueNumber
+		})
+		.then (function (result) {
+			opportunity.issueUrl    = result.html_url;
+			opportunity.issueNumber = result.number;
+			opportunity.save ();
+			res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		})
+		.catch (function () {
+			res.status(422).send({
+				message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+			});
+		});
+		// res.json (decorate (opportunity, req.user ? req.user.roles : []));
 	})
 	.catch (function (err) {
 		return res.status(422).send({

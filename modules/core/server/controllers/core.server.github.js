@@ -101,6 +101,7 @@ var funcs = {
 		});
 	},
 	createOrUpdateIssue: function (opts) {
+		console.log ('creating issue', opts);
 		if (opts.number) {
 			return funcs.editIssue (opts);
 		} else {
