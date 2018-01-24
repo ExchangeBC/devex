@@ -133,14 +133,13 @@
 		var ppp                                   = this;
 		ppp.features                              = window.features;
 		ppp.org                                   = org;
-		ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode
-		ppp.members                               = org.members.concat (org.admins);
+		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+		ppp.members = [];
+		if (org) ppp.members                      = org.members.concat (org.admins);
 		ppp.title                                 = editing ? 'Edit' : 'Create' ;
 		if (!proposal.team) proposal.team = [];
 		ppp.proposal                              = angular.copy (proposal);
 		ppp.user                                  = angular.copy (Authentication.user);
-		console.log ('org                         = ', ppp.org);
-		console.log ('swu                         = ', ppp.features.swu);
 		var pristineUser                          = angular.toJson(Authentication.user);
 		ppp.capabilities                          = capabilities;
 		ppp.totals = {};

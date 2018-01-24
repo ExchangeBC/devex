@@ -80,9 +80,9 @@ var UserSchema = new Schema({
     lowercase: true,
     trim: true
   },
-  orgsAdmin                : [{type:Schema.ObjectId, ref:'Org'}],
-  orgsMember               : [{type:Schema.ObjectId, ref:'Org'}],
-  orgsPending              : [{type:Schema.ObjectId, ref:'Org'}],
+  orgsAdmin                : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
+  orgsMember               : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
+  orgsPending              : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
   password                 : {type: String, default: ''},
   salt                     : {type: String },
   profileImageURL          : {type: String, default: 'img/default.png'},

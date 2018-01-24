@@ -118,7 +118,7 @@
 				org: function (Authentication, OrgsService) {
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
-					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
+					if (org) return OrgsService.get ({orgId:org}).$promise;
 					else return null;
 				}
 			}
@@ -150,7 +150,7 @@
 				org: function (Authentication, OrgsService) {
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
-					if (org !== null) return OrgsService.get ({orgId:org}).$promise;
+					if (org) return OrgsService.get ({orgId:org}).$promise;
 					else return null;
 				},
 				editing: function () { return false; }

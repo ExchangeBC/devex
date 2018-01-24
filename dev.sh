@@ -19,7 +19,7 @@ docker run \
 -e "DISABLE_WATCH=${DISABLE_WATCH-}" \
 -e "GITHUB_ID=3d819dee8be7237af9ee" \
 -e "GITHUB_SECRET=e3f26152b2d04e7877e1a57a07ea1d6bab63da18" \
--e "FEATURES=swu-people" \
+-e "FEATURES=localmachine" \
 -ti --rm --link db_devex --name mean_devex mean/devex ${@:-bash}
 
 # after run sh dev.sh
