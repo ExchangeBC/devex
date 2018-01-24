@@ -2,12 +2,15 @@
 	'use strict';
 
 	var publishStatus = function (o) {
+		//
+		// removed background for now
+		//
+		// [(o.background), 'Background'],
 		var fields = {
 			common: [
 				[(o.name), 'Title'],
 				[(o.short), 'Teaser'],
 				[(o.description), 'Summary'],
-				[(o.background), 'Background'],
 				[(o.github), 'Github Repository'],
 				[(o.program), 'Program'],
 				[(o.project), 'Project'],
