@@ -365,7 +365,7 @@
 		// -------------------------------------------------------------------------
 		var copyuser = function () {
 			ppp.proposal.opportunity          = ppp.opportunity;
-			if (ppp.isSprintWithUs) {
+			if (!ppp.isSprintWithUs) {
 				ppp.proposal.businessName         = ppp.user.businessName;
 				ppp.proposal.businessAddress      = ppp.user.businessAddress;
 				ppp.proposal.businessContactName  = ppp.user.businessContactName;

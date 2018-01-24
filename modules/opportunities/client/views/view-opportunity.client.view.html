@@ -93,7 +93,9 @@
 <div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
 	<div class="row">
 		<div class="col-xs-12">
-			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
+			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <b>fixed-price</b> opportunity governed by the
+				<a href="https://github.com/BCDevExchange/code-with-us/blob/master/Code%20With%20Us%20Terms_2018-01-23.pdf">terms</a>
+				of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
 		</div>
 	</div>
 </div>
@@ -305,7 +307,7 @@
 <!-- // Footer showing recent updates // -->
 	<div class="row">
 		<div class="col-xs-12">
-			<p class="small text-muted">Created on <span ng-bind="vm.opportunity.created | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+			<p class="small text-muted">Published on <span ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
 			<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
 		&nbsp; &nbsp; Last updated on
 			<span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
