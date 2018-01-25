@@ -1,9 +1,6 @@
 'use strict';
 
 module.exports = function (app) {
-	app.route ('/terms/codewithus').get (function (req, res) {
-		res.sendFile('modules/core/server/views/terms.codewithus.html');
-	});
 	// Root routing
 	var core = require('../controllers/core.server.controller');
 

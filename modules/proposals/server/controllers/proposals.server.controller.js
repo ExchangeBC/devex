@@ -445,6 +445,12 @@ exports.downloaddoc = function (req, res) {
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
 	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
 };
+exports.downloadTerms = function (req, res) {
+	var version = req.params.version;
+	var fileobj = config.terms[version];
+	if (fileobj) return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
+	else res.status (401).send ({message: 'No terms file found'});
+}
 // -------------------------------------------------------------------------
 //
 // create the archive format and stream it back to the user
