@@ -448,7 +448,8 @@ exports.downloaddoc = function (req, res) {
 exports.downloadTerms = function (req, res) {
 	var version = req.params.version;
 	var fileobj = config.terms[version];
-	if (fileobj) return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
+	var home = config.home;
+	if (fileobj) return streamFile (res, home+'/'+fileobj.path, fileobj.name, fileobj.type);
 	else res.status (401).send ({message: 'No terms file found'});
 }
 // -------------------------------------------------------------------------

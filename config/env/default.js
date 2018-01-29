@@ -28,15 +28,16 @@ module.exports = {
 		// in HTTPS mode.
 		secure: false
 	},
+	home: process.env.PWD || '/opt/mean.js',
 	terms: {
 		'cwu1': {
-			path: '/opt/mean.js/public/code-with-us-terms-2018-01-23.pdf',
+			path: 'public/code-with-us-terms-2018-01-23.pdf',
 			name: 'code-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
 		'swu1': {
-			path: '/opt/mean.js/public/code-with-us-terms-2018-01-23.pdf',
-			name: 'code-with-us-terms.pdf',
+			path: 'public/code-with-us-terms-2018-01-23.pdf',
+			name: 'sprint-with-us-terms.pdf',
 			type: 'application/pdf'
 		}
 	},
