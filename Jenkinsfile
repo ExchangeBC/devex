@@ -130,7 +130,7 @@ node('bddstack') {
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-view'
   }
   node('master') {
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
