@@ -2,7 +2,6 @@
 (function () {
 	'use strict';
 	angular.module ('skills.services').factory('SkillsService', function ($resource, $log) {
-		console.log ('starting service');
 		var Skill = $resource ('/api/skills/:skillId', {
 			skillId: '@_id'
 		}, {
@@ -15,7 +14,6 @@
 				isArray : false
 			}
 		});
-		console.log ('skill service:', Skill);
 		angular.extend (Skill.prototype, {
 			createOrUpdate: function () {
 				var skill = this;
