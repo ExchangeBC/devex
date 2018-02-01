@@ -6,12 +6,10 @@
 	// Controller for the master list of superbasics
 	//
 	// =========================================================================
-	.controller ('SuperbasicsListController', function (SuperbasicsService, superbasics) {
+	.controller ('SuperbasicsListController', function (superbasics, Authentication) {
 		var vm         = this;
 		vm.superbasics = superbasics;
-		var isUser     = vm.isUser  = Authentication.user;
-		var isAdmin    = vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		var isGov      = vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.auth        = Authentication;
 		vm.canAdd      = vm.isAdmin;
 	})
 	// =========================================================================
@@ -19,82 +17,29 @@
 	// Controller the view of the superbasic page
 	//
 	// =========================================================================
-	.controller ('SuperbasicViewController', function ($scope, $state, $sce, $stateParams, superbasic, Authentication, SuperbasicsService, Notification) {
+	.controller ('SuperbasicViewController', function ($sce, superbasic, Authentication, Notification) {
 		var vm                 = this;
 		vm.superbasic          = superbasic;
 		vm.display             = {};
 		vm.display.description = $sce.trustAsHtml (vm.superbasic.description);
 		vm.auth                = Authentication;
 		vm.canEdit             = Authentication.isAdmin;
+	})
 	// =========================================================================
 	//
 	// Controller the view of the superbasic page
 	//
 	// =========================================================================
-	.controller ('SuperbasicEditController', function ($scope, $window, $state, $uibModalInstance, superbasic, org, allusers, Authentication, Notification) {
+	.controller ('SuperbasicEditController', function ($scope, $state, superbasic, previousState, Authentication, Notification) {
 		var qqq             = this;
 		qqq.superbasic         = superbasic;
-		if (!qqq.superbasic.org) qqq.superbasic.org = org._id;
-		console.log (superbasic);
-		qqq.superbasicForm = {};
-		if (!qqq.superbasic.members) qqq.superbasic.members = [];
-		qqq.removals = [];
-		qqq.additions = [];
-		qqq.allusers = [];
-		var availableusers = [];
-		var pristine = angular.copy (qqq.superbasic);
-		qqq.people = [];
-		var memberHash = qqq.superbasic.members.reduce (function (accum, current) {accum[current._id] = current;return accum;}, {});
-		var peopleHash = allusers.reduce (function (accum, current) {
-			accum[current._id] = current;
-			if (!memberHash[current._id]) qqq.allusers.push (current);
-			return accum;
-		}, {});
-		console.log ('member hash', memberHash);
-		console.log ('people hash', peopleHash);
-		console.log ('allusers', qqq.allusers);
-		console.log ('allusers', allusers);
-		// -------------------------------------------------------------------------
-		//
-		// remove the superbasic with some confirmation
-		//
-		// -------------------------------------------------------------------------
-		qqq.remove = function () {
-			if ($window.confirm ('Are you sure you want to delete?')) {
-				qqq.superbasic.$remove (function () {
-					$state.go ('superbasics.list');
-					Notification.success ({ message: '<i class="glyphicon glyphicon-ok"></i> superbasic deleted successfully!' });
-				});
-			}
-		};
-		// -------------------------------------------------------------------------
-		//
-		// add or remove members
-		//
-		// -------------------------------------------------------------------------
-		qqq.addPerson = function () {
-			console.log ('add Person');
-			if (qqq.additions.length) {
-				qqq.superbasic.members = addElements (qqq.superbasic.members, qqq.additions, peopleHash);
-				qqq.allusers = removeElements (qqq.allusers, qqq.additions);
-				qqq.additions = [];
-			}
-		};
-		qqq.remPerson = function () {
-			console.log ('remove person');
-			if (qqq.removals.length) {
-				qqq.allusers = addElements (qqq.allusers, qqq.removals, peopleHash);
-				qqq.superbasic.members = removeElements (qqq.superbasic.members, qqq.removals);
-				qqq.removals = [];
-			}
-		};
+		qqq.auth                = Authentication;
 		// -------------------------------------------------------------------------
 		//
 		// save the superbasic, could be added or edited (post or put)
 		//
 		// -------------------------------------------------------------------------
-		qqq.savenow = function (isValid) {
-			qqq.superbasicForm.$setPristine ();
+		qqq.savenow = function (isValid, leavenow) {
 			if (!isValid) {
 				$scope.$broadcast ('show-errors-check-validity', 'qqq.superbasicForm');
 				return false;
@@ -102,7 +47,6 @@
 			//
 			// Create a new superbasic, or update the current instance
 			//
-			console.log ('qqq.superbasic', qqq.superbasic);
 			qqq.superbasic.createOrUpdate ()
 			//
 			// success, notify and return to list
@@ -112,7 +56,7 @@
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> superbasic saved successfully!'
 				});
-				$uibModalInstance.close (qqq.superbasic);
+				if (leavenow) qqq.quitnow ();
 			})
 			//
 			// fail, notify and stay put
@@ -130,11 +74,8 @@
 		//
 		// -------------------------------------------------------------------------
 		qqq.quitnow = function () {
-			superbasic = pristine;
-			$uibModalInstance.dismiss ('cancel');
+			$state.go (previousState.name, previousState.params);
 		};
-	})
-	.controller ('SuperbasicPickController', function ($scope, $window, $state, $uibModalInstance, superbasic, org, allusers, Authentication, Notification) {
 	})
 	;
 }());
