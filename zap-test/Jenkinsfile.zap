@@ -17,7 +17,7 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
          dir('/zap') {
                 def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
                 publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
-                echo "Return value is: ${retVal}
+                echo "Return value is: ${retVal}"
                 curl -X POST --data-urlencode "payload={\"channel\": \"#ci-cd-release-info\", \"username\": \"webhookbot\", \"text\": \"devex-dev ZAP Baseline Scan.\", \"icon_emoji\": \":ghost:\"}" https://hooks.slack.com/services/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
          }
        }
