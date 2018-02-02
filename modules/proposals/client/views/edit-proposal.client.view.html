@@ -1,28 +1,23 @@
-<div class="container" role="main">
-
-<!-- // Well if proposal is Submitted // -->
-	<div class="row" ng-if="ppp.proposal.status === 'Submitted'">
-		<div class="col-xs-12 text-center">
-			<div class="well well-success">
-				<p><label class="label label-lg label-success-o"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</label> You can make updates until <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></b>.</p>
-			</div>
+<!-- // Banner if proposal is Submitted // -->
+<div class="banner banner-info" ng-if="ppp.proposal.status === 'Submitted'">
+	<div class="row">
+		<div class="col-xs-12">
+			<p><span class="strong success"><i class="glyphicon glyphicon-ok-sign"></i> Your proposal has been submitted!</span> &nbsp;&nbsp; You can make updates until <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span>.</p>
 		</div>
 	</div>
+</div>
 
-<!-- // Old well for if proposal is Submitted // -->
-<!--<h4><span class="label {{ppp.statusColour(ppp.proposal.status)}}">{{ppp.proposal.status}}</span></h4>
-<span ng-if="ppp.proposal.status === 'Submitted'">Your proposal has been submitted! It won't be reviewed until <b>closing time</b>, and you can update it as much as you want until then!</span>-->
-
-<!-- // Well if proposal is in Draft // -->
-<div class="row" ng-if="ppp.proposal.status === 'Draft'">
-	<div class="col-xs-12 text-center">
-		<div class="well well-danger">
-			<p><label class="label label-lg label-danger-o"><i class="glyphicon glyphicon-file"></i> Your proposal is in DRAFT</label>Submit before <b><span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></b> to be considered for this opportunity!</p>
+<!-- // Banner if proposal is in Draft // -->
+<div class="banner banner-info" ng-if="ppp.proposal.status === 'Draft'">
+	<div class="row">
+		<div class="col-xs-12">
+			<p><span class="strong warning"><i class="glyphicon glyphicon-file"></i> Your proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity!</p>
 			<p ng-if="!ppp.proposal.isAcceptedTerms">To submit a proposal to work on this opportunity you must agree to the Terms.</p>
 		</div>
 	</div>
 </div>
 
+<div class="container" role="main">
 
 <div class="row">
 	<div class="col-xs-12">

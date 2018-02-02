@@ -11,8 +11,10 @@
 <div class="banner banner-info" ng-if="qaz.case === 'canedit'">
 	<div class="row">
 		<div class="col-xs-12">
-			<p ng-if="qaz.proposal.status === 'Submitted'"><strong><i class="fa fa-lg fa-check-circle-o"></i>&nbsp; Your proposal has been submitted!</strong>&nbsp;&nbsp; You can make updates until <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b>.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
-			<p ng-if="qaz.proposal.status === 'Draft'"><span style="color: #cc3300"><i class="glyphicon glyphicon-file"></i>&nbsp; You have a proposal in DRAFT!</span> &nbsp; Submit before <b><span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></b> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
+			<!-- If proposal has been SUBMITTED -->
+			<p ng-if="qaz.proposal.status === 'Submitted'"><span class="strong success"><i class="fa fa-lg fa-check-circle-o"></i>&nbsp; Your proposal has been submitted!</span>&nbsp;&nbsp; You can make updates until <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
+			<!-- If proposal is in DRAFT -->
+			<p ng-if="qaz.proposal.status === 'Draft'"><span class="warning strong"><i class="glyphicon glyphicon-file"></i>&nbsp;You have a proposal in DRAFT!</span> &nbsp;&nbsp; Submit before <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
 		</div>
 	</div>	
 </div>
