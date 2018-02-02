@@ -1,22 +1,21 @@
-<section class="form-page">
-<div class="container" role="main">
-
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="well well-lg well-info well-left-align" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
+<div class="banner banner-info" >
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
 				<h4>Managing a Code With Us opportunity</h4>
-				<p style="text-align: left;">By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you are familiar with the process and understand your responsibilities for managing an opportunity.</p>
-				<br>
-				<a class="btn btn-default" href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a>
+				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
 			</div>
-			<div class="well well-lg well-info well-left-align" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 				<h4>Managing a Sprint With Us opportunity</h4>
-				<p style="text-align: left;">By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you are familiar with the process and understand your responsibilities for managing an opportunity.</p>
-				<br>
-				<a class="btn btn-default" href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a>
+				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
 			</div>
 		</div>
-	</div>
+	</div>	
+</div>
+
+<section class="form-page">
+
+<div class="container" role="main">
 
 	<div class="row"  ng-if="false && !vm.canPublish">
 		<div class="col-xs-12 well well-sm well-warning"">
