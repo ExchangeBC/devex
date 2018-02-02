@@ -93,7 +93,7 @@
 <div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
 	<div class="row">
 		<div class="col-xs-12">
-			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <b>fixed-price</b> opportunity governed by the
+			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the
 				<a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a>
 				of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
 		</div>
@@ -179,9 +179,9 @@
 			<p ng-bind-html="vm.display.evaluation"></p>
 			<hr>
 			<h3>How to Apply</h3>
-			<p>Submit your proposal before <b>{{vm.deadline}}</b>.</p>
+			<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 			<!-- <p>With your proposal, you must upload a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">Code With Us terms,</a> to indicate your acceptance of the terms.</p> -->
-			<p>We plan to assign this opportunity by <b>{{vm.assignment}}</b> with work to start on <b>{{vm.start}}</b>.</p>
+			<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
 			<br>
 			<div class="text-center">
 				<div class="well well-important">
