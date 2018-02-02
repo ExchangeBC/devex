@@ -1123,8 +1123,8 @@ section {
   max-width: 1040px;
   padding: 5px;
   margin-bottom: 20px;
-  border: 2px solid;
-  border-radius: 1px;
+  border: 1px solid;
+  border-radius: 4px;
 }
 
 .well {
@@ -1152,9 +1152,14 @@ section {
 
 // Colors
 .well-info {
-  background: #feefcd;
-  border-color: #feefcd;
+  background: @theme-info;
+  border-color: @theme-primary;
 }
+.well-important {
+  background: @theme-important;
+  border-color: @theme-yellow;
+}
+
 .well-gray {
   background: @gray-lighter;
   border-color: @gray-lighter;
