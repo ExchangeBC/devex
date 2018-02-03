@@ -96,8 +96,19 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
      }
    }
 
-node('bddstack') {
-	stage('Functional Test') {
+stage('Functional Test') {
+  def userInput = 'y'
+  try {
+    timeout(time: 1, unit: 'DAYS') {
+      userInput = input(
+                    id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?', 
+	            parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
+                  ])
+    }
+  } catch(err) {}
+  echo ("BDD Test Run: "+userInput)
+  if ( userInput == 'y' ) {
+    node('bddstack') {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
@@ -106,9 +117,9 @@ node('bddstack') {
                 sh './gradlew --debug --stacktrace chromeHeadlessTest'
             } finally { 
                 archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-                            archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
-                            junit 'build/test-results/**/*.xml'
-                            publishHTML (target: [
+                archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+                junit 'build/test-results/**/*.xml'
+                publishHTML (target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
@@ -116,7 +127,7 @@ node('bddstack') {
                                 reportFiles: 'index.html',
                                 reportName: "BDD Spock Report"
                             ])
-                            publishHTML (target: [
+                publishHTML (target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
@@ -124,9 +135,10 @@ node('bddstack') {
                                 reportFiles: 'index.html',
                                 reportName: "Full Test Report"
                             ])  
-		        }
+	    }
         }
     }
+  }
 }
 	
 stage('deploy-test') {	
