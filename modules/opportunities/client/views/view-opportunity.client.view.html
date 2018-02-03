@@ -1,5 +1,5 @@
 <!-- // If user is NOT signed in // -->
-<div class="banner banner-info" ng-if="!vm.loggedIn">
+<div class="banner banner-important" ng-if="!vm.loggedIn">
 	<div class="row">
 		<div class="col-xs-12">
 			<p>To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></p>
@@ -8,13 +8,16 @@
 </div>
 
 <!-- // User doesn't have an email address in their profile // -->
-<div class="banner banner-info" ng-if="vm.notifyMe && !vm.hasEmail">
+<div class="banner banner-important" ng-if="vm.notifyMe && !vm.hasEmail">
 	<div class="row">
 		<div class="col-xs-12">
 			<p>Want <span class="hidden-sm hidden-xs">to get </span>updates about this opportunity? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
 		</div>
 	</div>
 </div>
+
+
+
 
 <div class="row">
 	<div class="col-xs-12">
@@ -27,7 +30,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-xs-12 text-center" style="padding-top: 0; padding-bottom: 10px;">
-			<span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing}}</span>
+			<span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing}}</span>
 			<!-- // User is NOT following the opportunity // -->
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-default" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 
@@ -90,16 +93,6 @@
 	<!--<div class="panel panel-default panel-flat card-panel">-->
 </div>
 
-<div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
-	<div class="row">
-		<div class="col-xs-12">
-			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the
-				<a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a>
-				of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
-		</div>
-	</div>
-</div>
-
 <div class="container">
 	<br>
 	<div class="row">
@@ -113,15 +106,14 @@
           <h4 ng-if="vm.opportunity.onsite == 'onsite'" ><i class="fa fa-user">&nbsp;</i><i class="fa fa-building">&nbsp;</i>In-person work required &nbsp; &nbsp;</h4>
           <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>-->
 
-          <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
-
-
+          	<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
+	      	  <span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>
 	          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
 	          <span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
-			  </div>
+			</div>
 		</div>
 
 		<div class="col-xs-12 col-sm-6">
@@ -170,6 +162,15 @@
 			<h3>Background</h3>
 			<p ng-bind-html="vm.display.description"></p>
 			<hr>
+			<br>
+			<div class="well well-important" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
+				<div class="row">
+					<div class="col-xs-12">
+						<p>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a>
+							of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
+					</div>
+				</div>
+			</div>
 			<h3>Acceptance Criteria</h3>
 			<p>To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
 			<p ng-bind-html="vm.display.criteria"></p>
@@ -183,10 +184,9 @@
 			<!-- <p>With your proposal, you must upload a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">Code With Us terms,</a> to indicate your acceptance of the terms.</p> -->
 			<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
 			<br>
-			<div class="text-center">
+			<div>
 				<div class="well well-important">
-					<h3 style="margin-top: 0px"><i class="fa fa-comments"></i>&nbsp; Questions?</h3>
-					<p><a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
+					<p><span class="strong"><i class="fa fa-comments"></i>&nbsp; Questions?</span>&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
 				</div>
 			</div>
 		</div>
