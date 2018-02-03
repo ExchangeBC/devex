@@ -17,7 +17,7 @@ a {
     &:hover,
     &:focus {
         text-decoration: none;
-        color: lighten(@theme-primary; 10%);
+        color: darken(@theme-primary; 10%);
     }
 }
 
@@ -53,6 +53,10 @@ h6 {
 .page-header h1 {
 	margin-top: 0px;
   margin-bottom: 10px;
+}
+
+.light {
+  font-weight: 300;
 }
 
 .strong {
@@ -666,19 +670,12 @@ section {
   font-size: 13px;
   font-weight: 400;
   letter-spacing: 0.04em;
-  border-radius: 4px;
-  padding: 6px;
+  border-radius: 20px;
+  padding: 6px 7px;
   margin: 4px 2px;
 }
 .label-lg {
-  font-size: 15px;
-  font-weight: 500;
-  margin: 6px;
-}
-.label-xl {
-  font-size: 17px;
-  font-weight: 500;
-  margin: 6px;
+  font-size: 16px;
 }
 
 .label-primary {
@@ -694,18 +691,18 @@ section {
 }
 
 .label-price {
-  padding: 10px;
-  background-color: @theme-dark-green;
+  background-color: @gray-dark;
 }
 
 .label-deadline {
-  color: @gray-dark;
+  color: @theme-warning;
   background-color: none;
   border: none;
+  font-weight: 600;
 }
 
 .label-location {
-  background-color: @theme-yellow;
+  background-color: none;
   color: @gray-darker;
 }
 
@@ -1139,9 +1136,9 @@ section {
 .well {
   max-width: 1040px;
   padding: 5px;
-  margin-bottom: 20px;
   border: 1px solid;
   border-radius: 4px;
+  display: inline-block;
 }
 
 .well {
@@ -1198,7 +1195,7 @@ section {
 // Banners
 
 .banner {
-  padding: 15px;
+  padding: 9px;
   margin: 0px;
   text-align: center;
 }
