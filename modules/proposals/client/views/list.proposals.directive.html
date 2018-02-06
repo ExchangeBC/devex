@@ -1,31 +1,19 @@
 <div class="container">
-	<hr>
 	<br>
 	<div class="row">
-		<div class="col-xs-12 col-sm-7">
-			<div class="well well-info">
-				<dl class="dl-horizontal">
-					<dt><i class="glyphicon glyphicon-eye-open"></i> Views:</dt>
-					<dd>{{vm.pageViews}}</dd>
-					<dt><i class="glyphicon glyphicon-user"></i> Followers:</dt>
-					<dd>{{vm.stats.following}}</dd>
-					<dt><i class="glyphicon glyphicon-file"></i> Proposals started:</dt>
-					<dd>{{vm.stats.draft}}</dd>
-					<dt><i class="glyphicon glyphicon-inbox"></i> Proposals received:</dt>
-					<dd>{{vm.stats.submitted}}</dd>
-				</dl>
+		<div class="col-xs-12">
+			<div class="well well-important well-left-align">
+				<p><span class="light"><i class="glyphicon glyphicon-eye-open"></i> Views:</span><span class="strong"> {{vm.pageViews}}</span></p>
+				<p><span class="light"><i class="glyphicon glyphicon-user"></i> Followers:</span><span class="strong"> {{vm.stats.following}}</span></p>
+				<p><span class="light"><i class="glyphicon glyphicon-file"></i> Proposals started:<span class="strong"> {{vm.stats.draft}}</span></p>
+				<p><span class="light"><i class="glyphicon glyphicon-inbox"></i> Proposals received:</span><span class="strong"> {{vm.stats.submitted}}</span></p>
 			</div>
 		</div>
-	</div>
-
-	<br>
-
-	<div class="row" ng-if="!vm.isclosed">
-		<div class="col-xs-12 text-center">
-			<div class="well well-info">
-				<p>You'll be able to view submitted proposals here when the opportunity closes.</p>
+		<div class="col-xs-12" ng-if="!vm.isclosed">
+			<div class="well well-gray well-left-align">
+				<p>You'll be able to view submitted proposals here when the opportunity closes.</p>	
 			</div>
-		</div>
+		</div>			
 	</div>
 
 	<div class="row list-head" ng-if="vm.isclosed">
@@ -62,4 +50,4 @@
 			</div>
 	</div>
 </div>
-
+</section>
