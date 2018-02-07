@@ -23,8 +23,8 @@
 	</div>
 	<div class="row" ng-if="vm.isclosed">
 		<div class="col-md-6" ng-if="! vm.proposals.length">
-			<div class="well">
-				<span class="text-muted"><i class="fa fa-frown-o"></i> No proposals were received!</span>
+			<div class="well well-gray">
+				<p><i class="fa fa-frown-o"></i> No proposals were received!</p>
 			</div>
 		</div>
 			<div class="card card-block" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
