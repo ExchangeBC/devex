@@ -1,17 +1,31 @@
-<section class="form-page">
+<section class="form">
 <div class="container" role="main">
 
 <form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
-<div class="modal-header">
-	<h3>Proposal for {{ppp.opportunity.name}}</h3>
+
+<div class="page-controls">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p class="light">Proposal from:</p>
+				<h4>
+					<a class="default pull-right fa fa-times fa-lg" style="cursor: pointer;" data-ng-click="ppp.close()" title="Close" aria-label="Close"></a>
+					<img class="img-avatar-flat img-avatar-sm" src="proposal.user.profileImageURL">&nbsp;
+					 
+					First Name Last Name
+				</h4>
+			</div>
+		</div>
+	</div>
 </div>
+
 <div class="modal-body">
 	<!-- <section class="static-page"><div class="container" role="main"> -->
 	<div class="row" ng-if="!ppp.isSprintWithUs">
 	<uib-tabset active>
 		<uib-tab index="0">
 			<uib-tab-heading>
-				<i class="fa fa-user"></i> Proponent
+				<i class="fa fa-user"></i> Applicant
 			</uib-tab-heading>
 			<div class="proposal-form-container">
 				<div class="form-group">
@@ -230,11 +244,14 @@
 	</div>
 
 </div>
-<div class="modal-footer">
-	<button type="button" class="btn btn-success" data-ng-click="ppp.assign()">Assign</button>
-	<span>&nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; &nbsp;</span>
-	<button type="button" class="btn" data-ng-click="ppp.close()">Close</button>
+<div class="page-controls">
+	<div class="row">
+		<div class="col-xs-12">
+			<button type="button" class="btn btn-success" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> ASSIGN THIS APPLICANT</button>
+		</div>
+	</div>
 </div>
+
 </form>
 
 </div>
