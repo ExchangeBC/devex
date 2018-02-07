@@ -22,32 +22,31 @@
 		</div>
 	</div>
 	<div class="row" ng-if="vm.isclosed">
-		<div class="col-md-6" ng-if="! vm.proposals.length">
+		<div class="col-xs-12" ng-if="! vm.proposals.length">
 			<div class="well well-gray">
 				<p><i class="fa fa-frown-o"></i> No proposals were received!</p>
 			</div>
 		</div>
-			<div class="card card-block" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
-				<div class="card-img">
-					<img class="card-img-left" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
-				</div>
+		<div class="col-xs-6 col-sm-2">
+			<div class="img-avatar" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
+				<img class="img-avatar" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
+				
 	<!-- 			<div class="col-md-3">
 				<div >
 					<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
 				</div>
 				</div>
 	 -->
+	 			<!--
 	 			<div class="col-md-5">
-					<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{proposal.user.firstName}} {{proposal.user.lastName}}</h4>
-					<p>Attachments: {{proposal.attachments.length}}</p>
-				</div>
-				<div class="col-md-2">
-					<a ng-if="proposal.user.email" href="mailto:{{proposal.user.email}}">Email Proponent</a></p>
+					<span class="card-title">{{proposal.user.firstName}} {{proposal.user.lastName}}</span>
 				</div>
 				<div class="col-md-2">
 					<a  id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })">View Proposal</a><br/>
 				</div>
+			-->
 			</div>
+		</div>
 	</div>
 </div>
-</section>
+
