@@ -1,0 +1,47 @@
+<div class="row list-head">
+	<div class="col-sm-7">
+		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.canAdd">
+		<button class="btn btn-primary" ui-sref="capabilityadmin.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> Add a Capability
+		</button>
+	</div>
+</div>
+
+<div class="row" ng-if="!vm.capabilities.length">
+	<div class="col-sm-12">
+		<div class="panel panel-default panel-body">
+			<span class="text-muted">No Capabilities right now. Check back soon!</span>
+		</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.capabilities.length">
+	<div class="panel panel-default" ng-repeat="capability in vm.capabilities">
+		<div class="panel-heading text-right" >
+			<h3 class="panel-title pull-left" ng-bind="capability.name"></h3>
+			<span class="label label-success" ng-if="capability.isInception">Inception</span>
+			<span class="label label-success" ng-if="capability.isPrototype">Prototype</span>
+			<span class="label label-success" ng-if="capability.isImplementation">Implementation</span>
+			<span class="label label-default" ng-if="capability.isRequired">Required</span>
+		</div>
+		<div class="panel-body" style="cursor:pointer" id="capabilities.view" ui-sref="capabilities.view({capabilityId:capability.code})">
+			<div class="row">
+				<div class="col-sm-8">
+					<p ng-bind-html="vm.trust(capability.description)"></p>
+				</div>
+				<div class="col-sm-4">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<strong>Specific Skills</strong>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item" ng-repeat="skill in capability.skills">{{skill}}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

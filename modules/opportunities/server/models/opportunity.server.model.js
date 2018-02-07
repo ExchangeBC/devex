@@ -6,6 +6,18 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
+// -------------------------------------------------------------------------
+//
+// Opportunity capabilities
+//
+// -------------------------------------------------------------------------
+var OpportunityCapabilities = new Schema ({
+	code         : {type: String, default: ''},
+	experience   : {type: String, default:''},
+	minimumYears : {type: Number, default:0 },
+	desiredYears : {type: Number, default:0 },
+	skills       : {type: [String], default:[]}
+});
 /**
  * Opportunity Schema
  */
@@ -24,7 +36,6 @@ var OpportunitySchema = new Schema({
 	program       : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project       : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
 	skills        : [String],
-	capabilities        : [String],
 	earn          : {type: Number, default: 0},
 	tags          : [String],
 	status        : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
@@ -71,6 +82,7 @@ var OpportunitySchema = new Schema({
 	c11_desiredYears : { type: Number, default:0 },
 	c12_desiredYears : { type: Number, default:0 },
 	c13_desiredYears : { type: Number, default:0 },
+	capabilities  : {type:[OpportunityCapabilities], default:[]},
 	c01_tags : { type:[String], default:[] },
 	c02_tags : { type:[String], default:[] },
 	c03_tags : { type:[String], default:[] },

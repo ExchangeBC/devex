@@ -1,35 +1,35 @@
 (function () {
 	'use strict';
-	angular.module ('superbasics')
+	angular.module ('capabilities')
 	// -------------------------------------------------------------------------
 	//
-	// directive for listing superbasics
+	// directive for listing capabilities
 	//
 	// -------------------------------------------------------------------------
-	.directive ('superbasicList', function () {
+	.directive ('capabilityList', function () {
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
 				title       : '@',
 				context     : '@',
-				superbasics : '='
+				capabilities : '='
 			},
-			templateUrl  : '/modules/superbasics/client/views/list.superbasics.directive.html',
-			controller   : function ($sce, $rootScope, $scope, SuperbasicsService, Authentication) {
+			templateUrl  : '/modules/capabilities/client/views/list.capabilities.directive.html',
+			controller   : function ($sce, $rootScope, $scope, CapabilitiesService, Authentication) {
 				var vm         = this;
 				vm.trust       = $sce.trustAsHtml;
 				vm.auth        = Authentication;
 				vm.title       = ($scope.title) ? $scope.title : null;
 				vm.canAdd      = vm.auth.isAdmin;
 				vm.context     = $scope.context;
-				vm.superbasics = $scope.superbasics;
-				$rootScope.$on ('updateSuperbasics', function () {
+				vm.capabilities = $scope.capabilities;
+				$rootScope.$on ('updateCapabilities', function () {
 					if (vm.context === 'all') {
-						vm.superbasics = SuperbasicsService.query ();
+						vm.capabilities = CapabilitiesService.query ();
 					}
 					else {
-						vm.superbasics = SuperbasicsService.query ();
+						vm.capabilities = CapabilitiesService.query ();
 					}
 				});
 			}
@@ -37,26 +37,26 @@
 	})
 	// -------------------------------------------------------------------------
 	//
-	// directive for viewing a superbasic, could have several different modes
+	// directive for viewing a capability, could have several different modes
 	//
 	// -------------------------------------------------------------------------
-	.directive ('superbasicView', function () {
+	.directive ('capabilityView', function () {
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',
 			scope        : {
 				mode       : '@',
 				size       : '@',
-				superbasic : '='
+				capability : '='
 			},
-			templateUrl  : '/modules/superbasics/client/views/view.superbasic.directive.html',
+			templateUrl  : '/modules/capabilities/client/views/view.capability.directive.html',
 			controller   : function ($scope, Authentication) {
 				var vm        = this;
 				var sz        = $scope.size ? $scope.size : 'lg';
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;
-				vm.superbasic = $scope.superbasic;
+				vm.capability = $scope.capability;
 			}
 		}
 

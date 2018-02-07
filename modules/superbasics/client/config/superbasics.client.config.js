@@ -6,7 +6,7 @@
 			title: 'Superbasics',
 			state: 'superbasics.list',
 			roles: ['*'],
-			icon: 'fa fa-pie-chart',
+			icon: 'none',
 			position: 2
 		});
 	}]);

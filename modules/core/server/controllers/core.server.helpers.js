@@ -136,6 +136,23 @@ exports.formatTime = function (d) {
   return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
 }
 
+exports.modelFindUniqueCode = function (_this, prefix, title, suffix, callback) {
+	prefix = prefix || '';
+	var possible = prefix + '-' + (title.toLowerCase ().replace (/\W/g,'-').replace (/-+/,'-')) + (suffix || '');
+	_this.findOne ({
+		code: possible
+	}, function (err, result) {
+		if (!err) {
+			if (!result) {
+				callback (possible);
+			} else {
+				return _this.findUniqueCode (title, (suffix || 0) + 1, callback);
+			}
+		} else {
+			callback (null);
+		}
+	});
+};
 
 
 

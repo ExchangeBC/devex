@@ -1,59 +1,60 @@
 (function () {
 	'use strict';
-	angular.module ('superbasics')
+	angular.module ('capabilities')
 	// =========================================================================
 	//
-	// Controller for the master list of superbasics
+	// Controller for the master list of capabilities
 	//
 	// =========================================================================
-	.controller ('SuperbasicsListController', function (superbasics, Authentication) {
+	.controller ('CapabilitiesListController', function (capabilities, Authentication) {
 		var vm         = this;
-		vm.superbasics = superbasics;
+		vm.capabilities = capabilities;
 	})
 	// =========================================================================
 	//
-	// Controller the view of the superbasic page
+	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('SuperbasicViewController', function ($sce, $state, superbasic, Authentication, Notification) {
+	.controller ('CapabilityViewController', function ($sce, $state, capability, Authentication, Notification) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
-		vm.superbasic          = superbasic;
+		vm.capability          = capability;
 		vm.auth                = Authentication;
 		vm.canEdit              = Authentication.isAdmin;
 	})
 	// =========================================================================
 	//
-	// Controller the view of the superbasic page
+	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('SuperbasicEditController', function ($scope, $state, superbasic, Authentication, Notification) {
-		var qqq        = this;
-		qqq.superbasic = superbasic;
-		qqq.auth       = Authentication;
+	.controller ('CapabilityEditController', function ($scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS) {
+		var qqq            = this;
+		qqq.capability     = capability;
+		qqq.auth           = Authentication;
+		qqq.tinymceOptions = TINYMCE_OPTIONS;
 		// -------------------------------------------------------------------------
 		//
-		// save the superbasic, could be added or edited (post or put)
+		// save the capability, could be added or edited (post or put)
 		//
 		// -------------------------------------------------------------------------
 		qqq.savenow = function (isValid, leavenow) {
 			if (!isValid) {
-				$scope.$broadcast ('show-errors-check-validity', 'qqq.superbasicForm');
+				$scope.$broadcast ('show-errors-check-validity', 'qqq.capabilityForm');
 				return false;
 			}
 			//
-			// Create a new superbasic, or update the current instance
+			// Create a new capability, or update the current instance
 			//
-			qqq.superbasic.createOrUpdate ()
+			qqq.capability.createOrUpdate ()
 			//
 			// success, notify and return to list
 			//
 			.then (function (result) {
-				qqq.superbasicForm.$setPristine ();
+				qqq.capabilityForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> superbasic saved successfully!'
+					message : '<i class="glyphicon glyphicon-ok"></i> capability saved successfully!'
 				});
-				if (leavenow) $state.go ('superbasics.view', {superbasicId:qqq.superbasic.code});
+				if (leavenow) $state.go ('capabilities.view', {capabilityId:qqq.capability.code});
 			})
 			//
 			// fail, notify and stay put
@@ -61,7 +62,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> superbasic save error!'
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> capability save error!'
 				});
 			});
 		};

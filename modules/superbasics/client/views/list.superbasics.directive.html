@@ -3,8 +3,8 @@
 		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
 	</div>
 	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.canAdd">
-		<button class="btn btn-default" ui-sref="superbasicadmin.create()" title="New">
-			<i class="glyphicon glyphicon-plus"></i> Post an Opportunity
+		<button class="btn btn-primary" ui-sref="superbasicadmin.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> Add a Superbasic
 		</button>
 	</div>
 </div>
@@ -18,10 +18,12 @@
 </div>
 
 <div class="row" ng-if="vm.superbasics.length">
-	<div class="card card-flat" ng-repeat="superbasic in vm.superbasics">
-		<div class="card-title" ng-bind="superbasic.name"></div>
-		<div class="card-block" id="superbasics.view" ui-sref="superbasics.view({superbasicId:superbasic.code})">
-			details go here
+	<div class="panel panel-default" ng-repeat="superbasic in vm.superbasics">
+		<div class="panel-heading" >
+			<h3 class="panel-title" ng-bind="superbasic.name"></h3>
+		</div>
+		<div class="panel-body" id="superbasics.view" ui-sref="superbasics.view({superbasicId:superbasic.code})">
+			<p ng-bind-html="vm.trust(superbasic.description)"></p>
 		</div>
 	</div>
 </div>

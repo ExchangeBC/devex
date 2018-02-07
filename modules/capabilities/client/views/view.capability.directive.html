@@ -1,0 +1,35 @@
+	<div class="banner banner-info" ng-if="1">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>This is a banner</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row" ng-if="vm.canEdit">
+			<div class="col-xs-12 text-right">
+				<button type="button" class="btn btn-default" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})">Edit</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<h3>Name</h3>
+				<p ng-bind="vm.capability.name"></p>
+				<h3>Description</h3>
+				<p ng-bind-html="vm.display.description"></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<button class="btn btn-default" ng-click="vm.quitnow()"> Cancel</button>
+				<button ng-if="vm.canEdit" type="button" class="btn btn-success" ng-if="vm.canEdit" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})">Edit</button>
+			</div>
+		</div>
+	</div>

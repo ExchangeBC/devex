@@ -1,0 +1,46 @@
+<div class="container">
+	<div class="row" ng-if="vm.canEdit">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-default" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})">Edit</button>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+				<p ng-bind="vm.capability.name"></p>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" ng-model="vm.capability.isRequired" ng-disabled="1"/>
+							This capability is required for companies to participate in the RFQ process
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="vm.capability.isInception" ng-disabled="1"/>
+							This capability is part of the inception phase
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="vm.capability.isPrototype" ng-disabled="1"/>
+							This capability is part of the prototype phase
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="vm.capability.isImplementation" ng-disabled="1"/>
+							This capability is part of the implementation phase
+					</label>
+				</div>
+				<p ng-bind-html="vm.trust(vm.capability.description)"></p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row form-foot text-right">
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-default" ui-sref="capabilities.list()">List</button>
+			<button ng-if="vm.canEdit" class="btn btn-success" ng-if="vm.canEdit" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})">Edit</button>
+		</div>
+	</div>
+</div>

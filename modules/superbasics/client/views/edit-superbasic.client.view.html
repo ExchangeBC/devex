@@ -29,7 +29,7 @@
 		</form-display>
 	</div>
 	<div class="row form-foot text-right">
-		<button class="btn btn-danger" ng-click="qqq.quitnow()"> Cancel</button>
+		<button class="btn btn-danger" ui-sref="superbasics.view({superbasicId:qqq.superbasic.code})"> Cancel</button>
 		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
 		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid, true)"><i class="fa fa-thumbs-o-up"></i> Save and Exit</button>
 	</div>

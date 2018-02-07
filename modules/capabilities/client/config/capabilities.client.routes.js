@@ -1,63 +1,63 @@
 // =========================================================================
 //
-// All the client side routes for superbasics
+// All the client side routes for capabilities
 //
 // =========================================================================
 (function () {
 	'use strict';
 
-	if (window.features.superbasics) angular.module ('superbasics.routes').config (['$stateProvider', function ($stateProvider) {
+	if (window.features.swu) angular.module ('capabilities.routes').config (['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//
-		// this is the top level, abstract route for all superbasic routes, it only
+		// this is the top level, abstract route for all capability routes, it only
 		// contians the ui-view that all other routes get rendered in
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasics', {
+		.state ('capabilities', {
 			abstract : true,
-			url      : '/superbasics',
+			url      : '/capabilities',
 			template : '<ui-view/>'
 		})
 		// -------------------------------------------------------------------------
 		//
-		// superbasic listing. Resolve to all superbasics in the system and place that in
+		// capability listing. Resolve to all capabilities in the system and place that in
 		// the scope. listing itself is done through a directive
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasics.list', {
+		.state ('capabilities.list', {
 			url          : '',
-			templateUrl  : '/modules/superbasics/client/views/list-superbasics.client.view.html',
-			controller   : 'SuperbasicsListController',
+			templateUrl  : '/modules/capabilities/client/views/list-capabilities.client.view.html',
+			controller   : 'CapabilitiesListController',
 			controllerAs : 'vm',
 			resolve: {
-				superbasics: function ($stateParams, SuperbasicsService) {
-					return SuperbasicsService.query ();
+				capabilities: function ($stateParams, CapabilitiesService) {
+					return CapabilitiesService.query ();
 				}
 			},
 			data: {
-				pageTitle: 'Superbasics List'
+				pageTitle: 'Capabilities List'
 			}
 		})
 		// -------------------------------------------------------------------------
 		//
-		// view a superbasic, resolve the superbasic data
+		// view a capability, resolve the capability data
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasics.view', {
-			url          : '/:superbasicId',
-			templateUrl  : '/modules/superbasics/client/views/view-superbasic.client.view.html',
-			controller   : 'SuperbasicViewController',
+		.state ('capabilities.view', {
+			url          : '/:capabilityId',
+			templateUrl  : '/modules/capabilities/client/views/view-capability.client.view.html',
+			controller   : 'CapabilityViewController',
 			controllerAs : 'vm',
 			resolve: {
-				superbasic: function ($stateParams, SuperbasicsService) {
-					return SuperbasicsService.get ({
-						superbasicId: $stateParams.superbasicId
+				capability: function ($stateParams, CapabilitiesService) {
+					return CapabilitiesService.get ({
+						capabilityId: $stateParams.capabilityId
 					}).$promise;
 				}
 			},
 			data: {
-				pageTitle: 'Superbasic: {{ superbasic.name }}'
+				pageTitle: 'Capability: {{ capability.name }}'
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -65,53 +65,53 @@
 		// the base for editing
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasicadmin', {
+		.state ('capabilityadmin', {
 			abstract : true,
-			url      : '/superbasicadmin',
+			url      : '/capabilityadmin',
 			template : '<ui-view/>'
 		})
 		// -------------------------------------------------------------------------
 		//
-		// edit a superbasic
+		// edit a capability
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasicadmin.edit', {
-			url          : '/:superbasicId/edit',
-			templateUrl  : '/modules/superbasics/client/views/edit-superbasic.client.view.html',
-			controller   : 'SuperbasicEditController',
+		.state ('capabilityadmin.edit', {
+			url          : '/:capabilityId/edit',
+			templateUrl  : '/modules/capabilities/client/views/edit-capability.client.view.html',
+			controller   : 'CapabilityEditController',
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
-				superbasic: function ($stateParams, SuperbasicsService) {
-					return SuperbasicsService.get ({
-						superbasicId: $stateParams.superbasicId
+				capability: function ($stateParams, CapabilitiesService) {
+					return CapabilitiesService.get ({
+						capabilityId: $stateParams.capabilityId
 					}).$promise;
 				}
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'Superbasic {{ superbasic.title }}'
+				pageTitle: 'Capability {{ capability.title }}'
 			}
 		})
 		// -------------------------------------------------------------------------
 		//
-		// create a new superbasic and edit it
+		// create a new capability and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state ('superbasicadmin.create', {
+		.state ('capabilityadmin.create', {
 			url          : '/create',
-			templateUrl  : '/modules/superbasics/client/views/edit-superbasic.client.view.html',
-			controller   : 'SuperbasicEditController',
+			templateUrl  : '/modules/capabilities/client/views/edit-capability.client.view.html',
+			controller   : 'CapabilityEditController',
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
-				superbasic: function (SuperbasicsService) {
-					return new SuperbasicsService ();
+				capability: function (CapabilitiesService) {
+					return new CapabilitiesService ();
 				}
 			},
 			data: {
 				roles: ['admin', 'gov'],
-				pageTitle: 'New Superbasic'
+				pageTitle: 'New Capability'
 			}
 		})
 		;

@@ -324,7 +324,7 @@ section {
   }
   &:active,&:focus {
     background-color: darken(@gray, 10%);
-    border-color: darken(@gray, 10%);  
+    border-color: darken(@gray, 10%);
   }
 }
 
@@ -338,7 +338,7 @@ section {
   }
   &:active,&:focus {
     background-color: darken(@theme-primary, 10%);
-    border-color: darken(@theme-primary, 10%);  
+    border-color: darken(@theme-primary, 10%);
   }
 }
 
@@ -499,62 +499,64 @@ section {
 
 
 // Panels
-
-// Common styles
-.panel {
-  .box-shadow(0 1px 2px rgba(0,0,0,.05));
-}
-
-// Mixin for generating new styles
-.panel-heading-normal(@bg) {
-  > .panel-heading {
-    #gradient > .vertical(@start-color: @bg; @end-color: darken(@bg, 5%));
-  }
-}
-.panel-heading-lighten(@bg; @color: #fff; @pc1: 16%; @pc2: 8%) {
-  > .panel-heading {
-    #gradient > .vertical(@start-color: lighten(@bg, @pc1); @end-color: lighten(@bg, @pc2));
-    border-color: lighten(@bg, 6%);
-    color: @color;
-  }
-  > .panel-body, > .panel-footer, {
-    border-color: lighten(@bg, 6%);
-  }
-  border-color: lighten(@bg, 8%);
-}
-
-// Apply the mixin to the panel headings only
-.panel-default  { .panel-heading-normal(@panel-default-heading-bg); }
-.panel-primary  { .panel-heading-lighten(@theme-primary; #fff; 20%); }
-.panel-success  { .panel-heading-lighten(@theme-success); }
-.panel-info     { .panel-heading-lighten(@theme-info, #31708f); }
-.panel-warning  { .panel-heading-lighten(@theme-warning); }
-.panel-danger   { .panel-heading-lighten(@theme-danger); }
-
-
-// Custom panel styles
-
-.panel-flat {
-	.panel-heading {
-		border-bottom: none;
-	}
-	.panel-footer {
-		border-top: none;
-	}
-}
-
-.panel-body .panel-title {
-	margin-top: 5px;
-	margin-bottom: 5px;
-	font-size: 18px;
-	&:first-child {
-		margin-top: 0;
-	}
-}
-
-.panel-default .panel-body .panel-title {
-	color: #888;
-}
+// ---------
+// CC : removed these
+// ---------
+// // Common styles
+// .panel {
+//   .box-shadow(0 1px 2px rgba(0,0,0,.05));
+// }
+//
+// // Mixin for generating new styles
+// .panel-heading-normal(@bg) {
+//   > .panel-heading {
+//     #gradient > .vertical(@start-color: @bg; @end-color: darken(@bg, 5%));
+//   }
+// }
+// .panel-heading-lighten(@bg; @color: #fff; @pc1: 16%; @pc2: 8%) {
+//   > .panel-heading {
+//     #gradient > .vertical(@start-color: lighten(@bg, @pc1); @end-color: lighten(@bg, @pc2));
+//     border-color: lighten(@bg, 6%);
+//     color: @color;
+//   }
+//   > .panel-body, > .panel-footer, {
+//     border-color: lighten(@bg, 6%);
+//   }
+//   border-color: lighten(@bg, 8%);
+// }
+//
+// // Apply the mixin to the panel headings only
+// .panel-default  { .panel-heading-normal(@panel-default-heading-bg); }
+// .panel-primary  { .panel-heading-lighten(@theme-primary; #fff; 20%); }
+// .panel-success  { .panel-heading-lighten(@theme-success); }
+// .panel-info     { .panel-heading-lighten(@theme-info, #31708f); }
+// .panel-warning  { .panel-heading-lighten(@theme-warning); }
+// .panel-danger   { .panel-heading-lighten(@theme-danger); }
+//
+//
+// // Custom panel styles
+//
+// .panel-flat {
+// 	.panel-heading {
+// 		border-bottom: none;
+// 	}
+// 	.panel-footer {
+// 		border-top: none;
+// 	}
+// }
+//
+// .panel-body .panel-title {
+// 	margin-top: 5px;
+// 	margin-bottom: 5px;
+// 	font-size: 18px;
+// 	&:first-child {
+// 		margin-top: 0;
+// 	}
+// }
+//
+// .panel-default .panel-body .panel-title {
+// 	color: #888;
+// }
 
 
 // Panels with logo images on the side
@@ -665,30 +667,33 @@ section {
 }
 
 // Labels
-.label {
-  .body-font;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  border-radius: 20px;
-  padding: 6px 7px;
-  margin: 4px 2px;
-}
-.label-lg {
-  font-size: 16px;
-}
-
-.label-primary {
-  background-color: @theme-primary;
-}
-
-.label-success {
-  background-color: @theme-success;
-}
-
-.label-info {
-  background-color: @gray-light;
-}
+// ---------
+// CC : removed these
+// ---------
+// .label {
+//   .body-font;
+//   font-size: 13px;
+//   font-weight: 400;
+//   letter-spacing: 0.04em;
+//   border-radius: 20px;
+//   padding: 6px 7px;
+//   margin: 4px 2px;
+// }
+// .label-lg {
+//   font-size: 16px;
+// }
+//
+// .label-primary {
+//   background-color: @theme-primary;
+// }
+//
+// .label-success {
+//   background-color: @theme-success;
+// }
+//
+// .label-info {
+//   background-color: @gray-light;
+// }
 
 .label-price {
   background-color: @gray-dark;
