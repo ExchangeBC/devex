@@ -1,49 +1,33 @@
+<!-- Persistent banner for Opportunity Creators -->
 <div class="banner banner-important" >
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-				<h4>Managing a Code With Us opportunity</h4>
 				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
 			</div>
 			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-				<h4>Managing a Sprint With Us opportunity</h4>
 				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
 			</div>
 		</div>
 	</div>	
 </div>
 
-<section class="form-page">
+<section class="form">
+
+<div class="page-controls">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<h4><a class="default pull-right fa fa-times fa-lg" style="cursor: pointer;" href="{{vm.previousState.url}}" title="Close" aria-label="Close"></a><span class="light small">EDITING:</span><span ng-if="vm.editing"> {{::vm.opportunity.name}}</span> <span ng-if="!vm.editing"> New Opportunity</span></h4>	
+			</div>
+		</div>		
+	</div>
+</div>
+
 
 <div class="container" role="main">
 
-	<div class="row"  ng-if="false && !vm.canPublish">
-		<div class="col-xs-12 well well-sm well-warning"">
-			<div class="text-center">
-				<span>
-					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i> &nbsp; You may not publish this opportunity until the following fields have been filled out.</label>
-				</span>
-			</div>
-			<br/>
-			<div class="col-sm-4 col-sm-offset-4">
-				<ul><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
-			</div>
-		</div>
-	</div>
-
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
-
-		<div class="row form-head">
-			<div class="col-md-6">
-				<h2 ng-if="vm.editing">Editing: {{::vm.opportunity.name}}</h2>
-				<h2 ng-if="!vm.editing">New Opportunity</h2>
-			</div>
-			<div class="col-md-6 col-form-buttons text-right">
-				<button type="submit" href="javascript:void(0);" class="btn btn-success" title="Save changes">Save changes</button>
-				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Delete opportunity">Delete opportunity</a>
-				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>
-			</div>
-		</div>
 
 		<div class="row">
 			<div class="col-sm-12">
@@ -133,16 +117,19 @@
 		</div>
 		<br/>
 
-		<div class="row form-foot">
-			<div class="col-sm-12 col-form-buttons foot text-right">
-				<button type="submit" href="javascript:void(0);" class="btn btn-success">Save changes</button>
-				<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-danger" ng-click="vm.remove()" title="Remove">Delete opportunity</a>
-				<a class="btn btn-default" href="{{vm.previousState.url}}" title="Cancel">Cancel</a>
+		<div class="page-controls">
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="submit" href="javascript:void(0);" class="btn btn-success"><i class="fa fa-save"></i> SAVE CHANGES</button>
+						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default pull-right" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
+					</div>
+				</div>
 			</div>
 		</div>
 
 	</form>
-
 </div>
+
 </section>
 
