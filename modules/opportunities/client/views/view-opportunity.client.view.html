@@ -1,5 +1,5 @@
 <!-- // If user is not signed in // -->
-<div class="banner banner-important" ng-if="!vm.loggedIn">
+<div class="banner banner-important" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
@@ -20,6 +20,37 @@
 	</div>
 </div>
 
+<!-- // Admin View / Proposals section // -->
+
+<section class="section admin" ng-if="vm.opportunity.status != 'Pending' || vm.canEdit && vm.opportunity.isPublished">
+	
+	<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals Received"></proposal-list>
+	<br>
+
+	<div class="container">	
+		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+			<div class="col-xs-12">
+				<p><span class="light">Assigned to:</span>
+					&nbsp;&nbsp;  
+					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
+					&nbsp;
+					<span class="strong">{{vm.opportunity.proposal.user.firstName}} {{vm.opportunity.proposal.user.lastName}}</span>
+					&nbsp;&nbsp;
+					<a  id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a>
+					&nbsp;
+					<button class="btn btn-sm btn-warning" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fa fa-times-circle"></i> UNASSIGN</button>
+				</p>
+			</div>
+		</div>
+
+		<div class="row" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
+			<div class="col-xs-12">
+				<a class="btn btn-default-inverse" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-file-archive-o"></i> Download .zip of all proposals</a>
+			</div>
+		</div>
+	</div>
+
+</section>
 
 <!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
 <div class="banner banner-important"  ng-if="!vm.canPublish && vm.canEdit">

@@ -3,9 +3,9 @@
   <div class="col-sm-7">
   <h3 ng-bind="vm.title" class="list-page-hide"></h3>
   </div>
-  <div class="col-sm-12 col-form-buttons text-left">
-  <button ng-if="vm.userCanAdd" class="btn btn-default" ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
-    <i class="glyphicon glyphicon-plus"></i> List a new project
+  <div class="col-sm-12 col-form-buttons text-right">
+  <button ng-if="vm.userCanAdd" class="btn btn-default-inverse" ng-class="{'btn-default': !vm.program, 'btn-link': vm.program}" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
+    <i class="fa fa-plus"></i> LIST YOUR PROJECT
   </button>
   </div>
 </div>
