@@ -1,61 +1,83 @@
 <section class="form-page"><div class="container" role="main"><form name="qqq.capabilityForm" id="qqq.capabilityForm" warn-on-exit novalidate autocomplete="off">
 	<div class="row">
-		<form-input
-			class="col-sm-12"
-			ng-model="qqq.capability.name"
-			x-form="qqq.capabilityForm"
-			x-options='{
-				"title":"Capability Name",
-				"id":"name",
-				"name":"name",
-				"placeholder":"name",
-				"required":"Must supply a capability name"
-			}'>
-		</form-input>
-		<form-display
-			class="col-sm-12"
-			x-options='{
-				"id":"flags",
-				"name":"flags"
-			}'>
-			<div class="checkbox">
-				<label>
-					<input type="checkbox" ng-model="qqq.capability.isRequired" />
-						This capability is required for companies to participate in the RFQ process
-				</label>
-				<br/>
-				<label>
-					<input type="checkbox" ng-model="qqq.capability.isInception" />
-						This capability is part of the inception phase
-				</label>
-				<br/>
-				<label>
-					<input type="checkbox" ng-model="qqq.capability.isPrototype" />
-						This capability is part of the prototype phase
-				</label>
-				<br/>
-				<label>
-					<input type="checkbox" ng-model="qqq.capability.isImplementation" />
-						This capability is part of the implementation phase
-				</label>
+		<div class="col-sm-8">
+			<form-input
+				class="col-sm-12"
+				ng-model="qqq.capability.name"
+				x-form="qqq.capabilityForm"
+				x-options='{
+					"title":"Capability Name",
+					"id":"name",
+					"name":"name",
+					"placeholder":"name",
+					"required":"Must supply a capability name"
+				}'>
+			</form-input>
+			<form-display
+				class="col-sm-12"
+				x-options='{
+					"id":"flags",
+					"name":"flags"
+				}'>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" ng-model="qqq.capability.isRequired" />
+							This capability is required for companies to participate in the RFQ process
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="qqq.capability.isInception" />
+							This capability is part of the inception phase
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="qqq.capability.isPrototype" />
+							This capability is part of the prototype phase
+					</label>
+					<br/>
+					<label>
+						<input type="checkbox" ng-model="qqq.capability.isImplementation" />
+							This capability is part of the implementation phase
+					</label>
+				</div>
+			</form-display>
+			<form-display
+				class="col-sm-12"
+				x-options='{
+					"title":"Capability Description",
+					"id":"description",
+					"name":"description"
+				}'>
+				<textarea
+					name="description"
+					id="description"
+					class="form-control input-sm"
+					ui-tinymce="qqq.tinymceOptions"
+					placeholder="A brief description of the capability"
+					ng-model="qqq.capability.description">
+				</textarea>
+			</form-display>
+		</div>
+		<div class="col-sm-4">
+					<div class="panel panel-success">
+						<div class="panel-heading">
+							<strong>Specific Skills</strong>
+						</div>
+						<ul class="list-group">
+							<!-- <li class="list-group-item" ng-repeat="skill in capability.skills">{{skill}}</li> -->
+							<li class="list-group-item">JavaScript <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
+							<li class="list-group-item">C++ <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
+							<li class="list-group-item">MongoDB <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
+							<li class="list-group-item">Openshift <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
+						</ul>
+					</div>
+			<div class="input-group">
+				<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="vm[newskillfield]"\>
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" ng-click="vm.addSkill(capability, tagField, vm[newskillfield], newskillfield)">Add</button>
+				</span>
 			</div>
-		</form-display>
-		<form-display
-			class="col-sm-12"
-			x-options='{
-				"title":"Capability Description",
-				"id":"description",
-				"name":"description"
-			}'>
-			<textarea
-				name="description"
-				id="description"
-				class="form-control input-sm"
-				ui-tinymce="qqq.tinymceOptions"
-				placeholder="A brief description of the capability"
-				ng-model="qqq.capability.description">
-			</textarea>
-		</form-display>
+		</div>
 	</div>
 	<div class="row form-foot text-right">
 		<button class="btn btn-danger" ui-sref="capabilities.view({capabilityId:qqq.capability.code})"> Cancel</button>

@@ -20,7 +20,7 @@
 		vm.trust               = $sce.trustAsHtml;
 		vm.capability          = capability;
 		vm.auth                = Authentication;
-		vm.canEdit              = Authentication.isAdmin;
+		vm.canEdit             = Authentication.isAdmin;
 	})
 	// =========================================================================
 	//

@@ -126,6 +126,8 @@
 		vm.canApply                = isUser && !isAdmin && !isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
 		vm.isMember                = opportunity.userIs.member;
+		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
+		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
 		var rightNow               = new Date ();
 		vm.closing = 'CLOSED';
 		var d                      = vm.opportunity.deadline - rightNow;
@@ -166,6 +168,69 @@
 			}).$promise.then (function () {
 				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Successfully Applied!' });
 			})
+		};
+		// -------------------------------------------------------------------------
+		//
+		// stuff for swu evaluation
+		//
+		// -------------------------------------------------------------------------
+		vm.nteams = 2;
+		// -------------------------------------------------------------------------
+		//
+		// Questions Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.questions = function () {
+			modalService.showModal ({
+				size: 'lg',
+				templateUrl: '/modules/opportunities/client/views/questions.modal.html',
+				controller: function ($scope, $uibModalInstance) {
+					$scope.close = function () {
+						console.log ('what');
+						$uibModalInstance.close();
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close();
+					};
+					$scope.pageChanged = function () {
+						console.log ('page changed');
+					};
+					$scope.totalQuestions = 5;
+					$scope.currentPage = 1;
+				}
+			}, {
+			})
+			.then (function () {
+				//
+				// TBD: calculate scores etc.
+				//
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// Interview Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.interview = function (team) {
+			modalService.showModal ({
+				size: 'lg',
+				templateUrl: '/modules/opportunities/client/views/interview.modal.html',
+				controller: function ($scope, $uibModalInstance) {
+					$scope.close = function () {
+						console.log ('what');
+						$uibModalInstance.close();
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close();
+					};
+				}
+			}, {
+			})
+			.then (function () {
+				//
+				// TBD: calculate scores etc.
+				//
+			});
 		};
 		// -------------------------------------------------------------------------
 		//

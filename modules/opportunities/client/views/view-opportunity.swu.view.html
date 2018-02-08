@@ -1,0 +1,156 @@
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 text-center" style="padding-top: 0; padding-bottom: 10px;">
+			<span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="warning"> {{vm.closing}}</span></span>
+			<!-- // User is NOT following the opportunity // -->
+			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
+			<!-- // User IS following the opportunity // -->
+			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-default-inverse" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+		</div>
+
+	</div>
+</div>
+
+<div class="container">
+<!-- // Title and Teaser // -->
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<h1>{{vm.opportunity.name}}</h1>
+			<p ng-bind="vm.opportunity.short"></p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<br>
+	<div class="row">
+		<div class="col-xs-12 col-sm-6">
+
+         	<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
+	      	  <span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.earn|currency}}</span>
+	          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
+	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
+	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
+	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
+	          <span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-6">
+			<dl class="dl-horizontal">
+			<dt>Posted by:</dt>
+			<dd>
+				<i class="fa fa-user-circle-o"></i>
+				<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+				<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+			</dd>
+			<dt>Program:</dt>
+			<dd>
+				<a ng-if="vm.opportunity.program"  id="programs.view" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+				<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
+			</dd>
+			<dt>Project:</dt>
+			<dd>
+				<a ng-if="vm.opportunity.project"  id="projects.view" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+				<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
+			</dd>
+			<!-- github link -->
+			<dt>Code:</dt>
+			<dd>
+			<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0"><a href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
+			<!--<dt>Assigned to:</dt>
+			<dd>
+				<span ng-if="vm.opportunity.assignedTo" ng-bind="vm.opportunity.assignedTo.displayName"></span>
+				<span ng-if="!vm.opportunity.assignedTo" class="text-muted">Not assigned</span>-->
+			</dl>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+		<div class="col-xs-12 text-center">
+			<div class="well well-info">
+				<p>This is a <b>Sprint With Us</b> opportunity governed by the <a href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, <a href="/sprintwithus" target="_blank">Sprint With Us</a>.
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
+		<div class="col-xs-12 text-center">
+			<div class="well well-info">
+				<p>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a>
+					of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Background</h3>
+			<p ng-bind-html="vm.display.description"></p>
+			<hr>
+			<h3>Acceptance Criteria</h3>
+			<p>To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
+			<p ng-bind-html="vm.display.criteria"></p>
+			<hr>
+			<h3>Proposal Evaluation Criteria</h3>
+			<p>Your proposal will be scored by this criteria:</p>
+			<p ng-bind-html="vm.display.evaluation"></p>
+			<hr>
+			<h3>How to Apply</h3>
+			<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
+			<!-- <p>With your proposal, you must upload a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">Code With Us terms,</a> to indicate your acceptance of the terms.</p> -->
+			<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-center">
+			<div class="well well-important">
+				<p><span class="strong"><i class="fa fa-comments"></i>&nbsp; Questions?</span>&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
+			</div>
+		</div>
+	</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+		<div class="col-xs-12">
+			<h3>Capabilities needed to fulfill this opportunity</h3>
+				<div class="form-group col-sm-12">
+
+					<uib-accordion close-others="true">
+
+						<div uib-accordion-group class="panel-default" ng-repeat="idnum in vm.clist" >
+							{{minimumYearsField=idnum+'_minimumYears';""}}
+							{{desiredYearsField=idnum+'_desiredYears';""}}
+							{{experienceField=idnum+'_experience';""}}
+							{{ratingField=idnum+'_years';""}}
+							<uib-accordion-heading>
+								<small>
+									<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity[minimumYearsField]>0, 'glyphicon-unchecked':vm.opportunity[minimumYearsField]===0}"></i>
+									&nbsp; &nbsp;
+									{{vm.capabilities.bykey[idnum].text}}
+									&nbsp; &nbsp;
+									<span class="pull-right" ng-if="vm.opportunity[minimumYearsField]>0">
+										<b>{{vm.opportunity[minimumYearsField]}}</b>{{vm.opportunity[minimumYearsField]>4?'+ years':' years'}} minimum &nbsp; | &nbsp;
+										<b>{{vm.opportunity[desiredYearsField]}}</b>{{vm.opportunity[desiredYearsField]>19?'+ years':' years'}} combined
+									</span>
+								</small>
+							</uib-accordion-heading>
+							<form-display
+								class="col-sm-12"
+								x-options='{
+									"title":"Capability Description"
+								}'>
+								{{vm.capabilities.bykey[idnum].description}}
+							</form-display>
+						</div>
+
+					</uib-accordion>
+				</div>
+
+		</div>
+	</div>
+</div>
