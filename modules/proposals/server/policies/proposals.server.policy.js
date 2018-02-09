@@ -42,9 +42,6 @@ exports.invokeRolesPolicies = function () {
   }, {
     roles: ['user'],
     allows: [{
-      resources: '/api/proposals',
-      permissions: '*'
-    }, {
       resources: '/api/proposals/for/opportunity/:opportunityId',
       permissions: ['get']
     }, {
