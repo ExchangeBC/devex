@@ -416,6 +416,11 @@ var addAttachment = function (req, res, proposal, name, path, type) {
 // -------------------------------------------------------------------------
 exports.uploaddoc = function (req, res) {
 	var proposal = req.proposal;
+	var user     = req.user;
+	var isAdmin  = user && !!~user.roles.indexOf ('admin');
+	var isGov    = user && !!~user.roles.indexOf ('gov');
+	var isOwner  = user && (proposal.user._id === user._id);
+	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
 	if (proposal) {
 		var storage = multer.diskStorage (config.uploads.diskStorage);
 		var upload = multer({storage: storage}).single('file');
@@ -438,10 +443,22 @@ exports.uploaddoc = function (req, res) {
 	}
 };
 exports.removedoc = function (req, res) {
+	var proposal = req.proposal;
+	var user     = req.user;
+	var isAdmin  = user && !!~user.roles.indexOf ('admin');
+	var isGov    = user && !!~user.roles.indexOf ('gov');
+	var isOwner  = user && (proposal.user._id === user._id);
+	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
 	req.proposal.attachments.id(req.params.documentId).remove();
 	saveProposalRequest (req, res, req.proposal);
 };
 exports.downloaddoc = function (req, res) {
+	var proposal = req.proposal;
+	var user     = req.user;
+	var isAdmin  = user && !!~user.roles.indexOf ('admin');
+	var isGov    = user && !!~user.roles.indexOf ('gov');
+	var isOwner  = user && (proposal.user._id === user._id);
+	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
 	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
 };
