@@ -42,6 +42,9 @@ exports.invokeRolesPolicies = function () {
   }, {
     roles: ['user'],
     allows: [{
+      resources: '/api/proposals',
+      permissions: ['post']
+    }, {
       resources: '/api/proposals/for/opportunity/:opportunityId',
       permissions: ['get']
     }, {
@@ -87,6 +90,11 @@ exports.invokeRolesPolicies = function () {
  */
 exports.isAllowed = function (req, res, next) {
   var roles = (req.user) ? req.user.roles : ['guest'];
+
+  // If an Proposal is being processed and the current user created it then allow any manipulation
+  if (req.proposal && req.user && req.proposal.user && req.proposal.user.id === req.user.id) {
+    return next();
+  }
 
   // Check for user roles
   acl.areAnyRolesAllowed(roles, req.route.path, req.method.toLowerCase(), function (err, isAllowed) {
