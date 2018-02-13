@@ -27,19 +27,19 @@ node('maven') {
        echo "Build: ${BUILD_ID}"
        checkout scm
     }
-    stage('code quality check') {
-           SONARQUBE_PWD = sh (
-             script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
-             returnStdout: true).trim()
-           //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
-           SONARQUBE_URL = sh (
-               script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
-               returnStdout: true).trim()
-           echo "SONARQUBE_URL: ${SONARQUBE_URL}"
-           dir('sonar-runner') {
-            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
-           }
-    }
+    //stage('code quality check') {
+    //       SONARQUBE_PWD = sh (
+    //         script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
+    //         returnStdout: true).trim()
+    //       //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
+    //      SONARQUBE_URL = sh (
+    //           script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
+    //           returnStdout: true).trim()
+    //       echo "SONARQUBE_URL: ${SONARQUBE_URL}"
+    //       dir('sonar-runner') {
+    //        sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
+    //       }
+    //}
     stage('build') {
 	    echo "Building..."
 	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
@@ -50,7 +50,7 @@ node('maven') {
 
 stage('deploy-test') {
   timeout(time: 2, unit: 'DAYS') {
-  	  input message: "Deploy to test?", submitter: 'scchapma-view,mark-a-wilson-view,paulroberts68-view,agehlers-admin'
+  	  input message: "Deploy to test?", submitter: 'scchapma-view,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
   }
   node('master'){
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'
@@ -64,7 +64,7 @@ stage('deploy-test') {
 
 stage('deploy-prod') {
     timeout(time: 3, unit: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'scchapma-view,mark-a-wilson-view,paulroberts68-view,agehlers-admin'
+	  input message: "Deploy to prod?", submitter: 'scchapma-view,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
     }
     node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'

@@ -50,8 +50,8 @@ node('maven') {
     }
     stage('build') {
 	    echo "Building..."
-	    openshiftBuild bldCfg: 'devxp', showBuildLogs: 'true'
-	    openshiftVerifyBuild bldCfg: 'devxp'
+	    openshiftBuild bldCfg: 'devxp-dev', showBuildLogs: 'true'
+	    openshiftVerifyBuild bldCfg: 'devxp-dev'
             echo ">>> Get Image Hash"
             IMAGE_HASH = sh (
                script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'',
@@ -143,7 +143,7 @@ stage('Functional Test') {
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-view'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-view,ccoldwell-admin'
   }
   node('master') {
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'

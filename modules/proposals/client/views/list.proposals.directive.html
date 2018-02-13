@@ -27,7 +27,7 @@
 				<p><i class="fa fa-frown-o"></i> No proposals were received!</p>
 			</div>
 		</div>
-		<div class="col-xs-12">
+		<div class="col-xs-4 col-sm-2">
 			<div class="img-avatar" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
 				<img class="img-avatar" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
 				
