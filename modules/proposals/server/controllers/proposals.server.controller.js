@@ -34,7 +34,7 @@ var path = require('path'),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
-var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
+var userfields = '_id displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
 var streamFile = function (res, file, name, mime) {
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
@@ -182,7 +182,7 @@ var saveProposalRequest = function (req, res, proposal) {
 exports.create = function(req, res) {
 	var proposal = new Proposal(req.body);
 	proposal.status = 'Draft';
-	proposal.user = req.user._id;
+	proposal.user = req.user;
 	//
 	// set the audit fields so we know who did what when
 	//
@@ -418,9 +418,9 @@ exports.uploaddoc = function (req, res) {
 	var proposal = req.proposal;
 	var user     = req.user;
 	var isAdmin  = user && !!~user.roles.indexOf ('admin');
-	var isGov    = user && !!~user.roles.indexOf ('gov');
-	var isOwner  = user && (proposal.user._id === user._id);
-	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
+	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
+	if ( ! (isOwner || isAdmin)) return res.status(401).send({message: 'Not permitted'});
+
 	if (proposal) {
 		var storage = multer.diskStorage (config.uploads.diskStorage);
 		var upload = multer({storage: storage}).single('file');
@@ -446,9 +446,8 @@ exports.removedoc = function (req, res) {
 	var proposal = req.proposal;
 	var user     = req.user;
 	var isAdmin  = user && !!~user.roles.indexOf ('admin');
-	var isGov    = user && !!~user.roles.indexOf ('gov');
-	var isOwner  = user && (proposal.user._id === user._id);
-	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
+	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
+	if ( ! (isOwner || isAdmin)) return res.status(401).send({message: 'Not permitted'});
 	req.proposal.attachments.id(req.params.documentId).remove();
 	saveProposalRequest (req, res, req.proposal);
 };
@@ -457,7 +456,7 @@ exports.downloaddoc = function (req, res) {
 	var user     = req.user;
 	var isAdmin  = user && !!~user.roles.indexOf ('admin');
 	var isGov    = user && !!~user.roles.indexOf ('gov');
-	var isOwner  = user && (proposal.user._id === user._id);
+	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
 	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
 	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
