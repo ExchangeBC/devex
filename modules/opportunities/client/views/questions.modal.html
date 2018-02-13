@@ -6,8 +6,13 @@
 </div>
 <div class="modal-body">
 	<div class="row">
+		<div class="col-sm-12 text-center">
+			<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-sm-12">
-			<div class="panel panel-primary" ng-if="currentPage===1">
+			<div class="panel panel-primary" ng-if="data.currentPage===1">
 				<div class="panel-heading text-center">
 					<strong>
 						Question: How rapid is rapid?
@@ -50,7 +55,7 @@
 				</ul>
 			</div>
 
-			<div class="panel panel-primary" ng-if="currentPage===2">
+			<div class="panel panel-primary" ng-if="data.currentPage===2">
 				<div class="panel-heading text-center">
 					<strong>
 						Question: How much wood could a wood chuck chuck if a wood chuck could chuck wood?
@@ -95,11 +100,9 @@
 
 		</div>
 	</div>
-	<div class="row">
-		<ul uib-pagination total-items="totalQuestions" ng-model="currentPage" ng-change="pageChanged()"></ul>
-	</div>
 </div>
-<div class="modal-footer">
-	<button class="btn btn-danger" data-ng-click="close()">Cancel</button>
-	<button class="btn btn-primary" data-ng-click="ok()"><i class="fa fa-thumbs-o-up"></i> Save</button>
+<div class="modal-footer text-right">
+	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
+	<button class="btn btn-default" data-ng-click="ok()">Save</button>
+	<button class="btn btn-primary" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
 </div>

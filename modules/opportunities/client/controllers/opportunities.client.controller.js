@@ -185,6 +185,9 @@
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/questions.modal.html',
 				controller: function ($scope, $uibModalInstance) {
+					$scope.data = {};
+					$scope.data.totalQuestions = 5;
+					$scope.data.currentPage = 2;
 					$scope.close = function () {
 						console.log ('what');
 						$uibModalInstance.close();
@@ -195,8 +198,6 @@
 					$scope.pageChanged = function () {
 						console.log ('page changed');
 					};
-					$scope.totalQuestions = 5;
-					$scope.currentPage = 1;
 				}
 			}, {
 			})
