@@ -39,7 +39,10 @@ module.exports = {
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
-    format: process.env.LOG_FORMAT || 'combined',
+    //
+    // cc:logging: modified apache format including internal user identification
+    //
+    format: ':remote-addr - :userid - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :referrer',
     fileLogger: {
       directoryPath: process.env.LOG_DIR_PATH || process.cwd(),
       fileName: process.env.LOG_FILE || 'app.log',

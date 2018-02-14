@@ -206,7 +206,7 @@ var UserSchema = new Schema({
 	c10_years : { type: Number, default:0 },
 	c11_years : { type: Number, default:0 },
 	c12_years : { type: Number, default:0 },
-	c13_years : { type: Number, default:0 },
+	c13_years : { type: Number, default:0 }
 
 
 });
