@@ -15,7 +15,10 @@ module.exports = {
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
-    format: 'dev',
+    //
+    // cc:logging: modified apache format including internal user identification
+    //
+    format: 'tiny',
     fileLogger: {
       directoryPath: process.cwd(),
       fileName: 'app.log',
