@@ -110,12 +110,13 @@ logger.getMorganOptions = function getMorganOptions() {
 
   return {
     stream: logger.stream,
+      //
+      // cc:logging: filter out all BUT api and uploads access
+      //
       skip: function (req, res) {
-        // console.log (req.path);
-        // console.log (res.statusCode);
-        var isAPI = req.path.substr(0, 4) === '/api';
-        var isOK = res.statusCode < 400;
-        var displayIf = isAPI && !isOK;
+        var isAPI         = (req.path.substr(0, 4) === '/api');
+        var isUpload      = (req.path.substr(0, 7) === '/upload');
+        var displayIf     = (isAPI || isUpload);
         return !(displayIf);
       }
   };
@@ -129,17 +130,18 @@ logger.getMorganOptions = function getMorganOptions() {
  */
 logger.getLogFormat = function getLogFormat() {
   var format = config.log && config.log.format ? config.log.format.toString() : 'combined';
-
-  // make sure we have a valid format
-  if (!_.includes(validFormats, format)) {
-    format = 'combined';
-
-    if (process.env.NODE_ENV !== 'test') {
-      console.log();
-      console.log(chalk.yellow('Warning: An invalid format was provided. The logger will use the default format of "' + format + '"'));
-      console.log();
-    }
-  }
+  //
+  // cc:logging: removed this code as we want to specify a full template specificially
+  //
+  // // make sure we have a valid format
+  // if (!_.includes(validFormats, format)) {
+  //   format = 'combined';
+  //   if (process.env.NODE_ENV !== 'test') {
+  //     console.log();
+  //     console.log(chalk.yellow('Warning: An invalid format was provided. The logger will use the default format of "' + format + '"'));
+  //     console.log();
+  //   }
+  // }
 
   return format;
 };
