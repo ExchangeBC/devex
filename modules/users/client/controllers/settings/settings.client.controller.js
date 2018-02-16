@@ -57,81 +57,43 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService, capabilities) {
-		var vm = this;
-		vm.features = window.features;
-		vm.user = angular.copy(Authentication.user);
-		var pristineUser = angular.toJson (Authentication.user);
-		vm.capabilities     = capabilities;
-		console.log ('capabilities:', vm.capabilities);
-		if (!vm.user.capabilities) vm.user.capabilities = [];
-		vm.c01_years = '0';
-		vm.tinymceOptions = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     :'',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-		};
-		// //
-		// // set up the capability structure to have variables for the tags that we can bind to
-		// //
-		// vm.capabilities.bykey.forEach (function (c, key) {
-		// 	console.log ('bykey key=',key,'obj=',c);
-		// 	c.tagvars = c.tags.reduce (function (accum, curr) {
-		// 		accum[curr] = false;
-		// 	}, {});
-		// });
+	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService, capabilities, CapabilitiesMethods, TINYMCE_OPTIONS) {
+		var vm                     = this;
+		vm.features                = window.features;
+		vm.trust                   = $sce.trustAsHtml;
+		vm.user                    = angular.copy (Authentication.user);
+		var pristineUser           = angular.toJson (Authentication.user);
+		vm.tinymceOptions          = TINYMCE_OPTIONS;
+		//
+		// set up the structures for capabilities
+		//
+		CapabilitiesMethods.init (vm, vm.user, capabilities);
+		// -------------------------------------------------------------------------
+		//
+		// perform the actual update
+		//
+		// -------------------------------------------------------------------------
 		vm.updateUserProfile = function (isValid) {
-			console.log ('saviong');
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 				return false;
 			}
-
-			vm.user.c01_flag = (vm.user.c01_experience !== '');
-			vm.user.c02_flag = (vm.user.c02_experience !== '');
-			vm.user.c03_flag = (vm.user.c03_experience !== '');
-			vm.user.c04_flag = (vm.user.c04_experience !== '');
-			vm.user.c05_flag = (vm.user.c05_experience !== '');
-			vm.user.c06_flag = (vm.user.c06_experience !== '');
-			vm.user.c07_flag = (vm.user.c07_experience !== '');
-			vm.user.c08_flag = (vm.user.c08_experience !== '');
-			vm.user.c09_flag = (vm.user.c09_experience !== '');
-			vm.user.c10_flag = (vm.user.c10_experience !== '');
-			vm.user.c11_flag = (vm.user.c11_experience !== '');
-			vm.user.c12_flag = (vm.user.c12_experience !== '');
-			vm.user.c13_flag = (vm.user.c13_experience !== '');
-
-			vm.user.capabilities = [];
-
-			if (vm.user.c01_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c01'].code); }
-			if (vm.user.c02_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c02'].code); }
-			if (vm.user.c03_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c03'].code); }
-			if (vm.user.c04_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c04'].code); }
-			if (vm.user.c05_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c05'].code); }
-			if (vm.user.c06_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c06'].code); }
-			if (vm.user.c07_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c07'].code); }
-			if (vm.user.c08_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c08'].code); }
-			if (vm.user.c09_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c09'].code); }
-			if (vm.user.c10_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c10'].code); }
-			if (vm.user.c11_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c11'].code); }
-			if (vm.user.c12_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c12'].code); }
-			if (vm.user.c13_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c13'].code); }
-
-
-			var successMessage = '<h4>Edit skills successful</h4>';
-			var user = new UsersService(vm.user);
-			user.$update(function (response) {
-				$scope.$broadcast('show-errors-reset', 'vm.userForm');
-				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
-				Authentication.user = response;
-				vm.user = angular.copy(Authentication.user);
-				pristineUser = angular.toJson(Authentication.user);
-			}, function (response) {
-				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+			//
+			// reconcile the meta version of the capability data into the model
+			//
+			CapabilitiesMethods.reconcile (vm, vm.user);
+			//
+			// do the update
+			//
+			(new UsersService(vm.user)).$update (
+				function (response) {
+					Authentication.user = response;
+					vm.user             = angular.copy(Authentication.user);
+					pristineUser        = angular.toJson(Authentication.user);
+					$scope.$broadcast ('show-errors-reset', 'vm.userForm');
+					Notification.success ({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> <h4>Edit skills successful</h4>'});
+				}, function (response) {
+					Notification.error ({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
 			});
 		}
 	})

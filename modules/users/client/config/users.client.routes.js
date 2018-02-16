@@ -21,8 +21,8 @@
 					roles: ['user', 'admin', 'gov-request', 'gov']
 				},
 				resolve: {
-					capabilities: function (SkillsService) {
-						return SkillsService.list ();
+					capabilities: function ($stateParams, CapabilitiesService) {
+						return CapabilitiesService.query ();
 					}
 				}
 			})
