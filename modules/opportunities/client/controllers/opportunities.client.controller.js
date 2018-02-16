@@ -1,6 +1,51 @@
 (function () {
 	'use strict';
 
+	// -------------------------------------------------------------------------
+	//
+	// CAPABILITIES SET UP
+	//
+	// -------------------------------------------------------------------------
+	var capabilitiesInit = function (vm) {
+		console.log ('vm.capabilities', vm.capabilities);
+		//
+		// index all the capabilities and skills by code, these are links to the actual objects
+		//
+		vm.iCapabilities = [];
+		vm.iCapabilitySkills = [];
+		vm.iOppCapabilities = [];
+		vm.iOppCapabilitySkills = [];
+		//
+		// if capabilities or skills not present make the empty arrays
+		//
+		if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
+		if (!vm.opportunity.capabilitySkills) vm.opportunity.capabilitySkills = [];
+		//
+		// set up flags for all capabilities, initially set to false
+		//
+		vm.capabilities.forEach (function (c) {
+			vm.iCapabilities[c.code] = c;
+			vm.iOppCapabilities[c.code] = false;
+			c.skills.forEach (function (capabilitySkill) {
+				vm.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
+				vm.iOppCapabilitySkills[capabilitySkill.code] = false;
+			});
+		});
+		//
+		// now set the ones we have to true
+		//
+		vm.opportunity.capabilities.forEach (function (capability) {
+			vm.iOppCapabilities[capability.code] = true;
+		});
+		vm.opportunity.capabilitySkills.forEach (function (capabilitySkill) {
+			vm.iOppCapabilitySkills[capabilitySkill.code] = true;
+		});
+		console.log ('vm.iCapabilities', vm.iCapabilities);
+		console.log ('vm.iCapabilitySkills', vm.iCapabilitySkills);
+		console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
+		console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
+	};
+
 	var publishStatus = function (o) {
 		//
 		// removed background for now
@@ -80,7 +125,6 @@
 	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
 		var vm                    = this;
 		vm.features = window.features;
-		vm.capabilities     = capabilities;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -94,7 +138,13 @@
 		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
-		vm.opportunity.endDate      = new Date (vm.opportunity.endDate);
+		vm.opportunity.endDate    = new Date (vm.opportunity.endDate);
+		vm.opportunity.inceptionStartDate    = new Date (vm.opportunity.inceptionStartDate);
+		vm.opportunity.inceptionEndDate    = new Date (vm.opportunity.inceptionEndDate);
+		vm.opportunity.prototypeStartDate    = new Date (vm.opportunity.prototypeStartDate);
+		vm.opportunity.prototypeEndDate    = new Date (vm.opportunity.prototypeEndDate);
+		vm.opportunity.implementationStartDate    = new Date (vm.opportunity.implementationStartDate);
+		vm.opportunity.implementationEndDate    = new Date (vm.opportunity.implementationEndDate);
 		vm.authentication         = Authentication;
 		vm.OpportunitiesService   = OpportunitiesService;
 		vm.idString               = 'opportunityId';
@@ -102,6 +152,13 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
+		vm.trust = $sce.trustAsHtml;
+		//
+		// set up capabilities
+		//
+		vm.capabilities = capabilities;
+		console.log ('capa',vm.capabilities);
+		capabilitiesInit (vm);
 		//
 		// what capabilities are required ?
 		//
@@ -363,7 +420,6 @@
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
-		vm.capabilities = capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -390,6 +446,11 @@
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 
+		//
+		// set up capabilities
+		//
+		vm.capabilities = capabilities;
+		capabilitiesInit (vm);
 		// -------------------------------------------------------------------------
 		//
 		// can this be published?
@@ -501,50 +562,6 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 
-		// -------------------------------------------------------------------------
-		//
-		// CAPABILITIES SET UP
-		//
-		// -------------------------------------------------------------------------
-		vm.capabilitiesInit = function () {
-			//
-			// index all the capabilities and skills by code, these are links to the actual objects
-			//
-			vm.iCapabilities = [];
-			vm.iCapabilitySkills = [];
-			vm.iOppCapabilities = [];
-			vm.iOppCapabilitySkills = [];
-			//
-			// if capabilities or skills not present make the empty arrays
-			//
-			if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
-			if (!vm.opportunity.capabilitySkills) vm.opportunity.capabilitySkills = [];
-			//
-			// set up flags for all capabilities, initially set to false
-			//
-			vm.capabilities.forEach (function (c) {
-				vm.iCapabilities[c.code] = c;
-				vm.iOppCapabilities[c.code] = false;
-				c.skills.forEach (function (capabilitySkill) {
-					vm.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
-					vm.iOppCapabilitySkills[capabilitySkill.code] = false;
-				});
-			});
-			//
-			// now set the ones we have to true
-			//
-			vm.opportunity.capabilities.forEach (function (capability) {
-				vm.iOppCapabilities[capability.code] = true;
-			});
-			vm.opportunity.capabilitySkills.forEach (function (capabilitySkill) {
-				vm.iOppCapabilitySkills[capabilitySkill.code] = true;
-			});
-			console.log ('vm.iCapabilities', vm.iCapabilities);
-			console.log ('vm.iCapabilitySkills', vm.iCapabilitySkills);
-			console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
-			console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
-		};
-		vm.capabilitiesInit ();
 		// -------------------------------------------------------------------------
 		//
 		// CAPABILITIES RECONCILE

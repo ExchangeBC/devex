@@ -19,8 +19,8 @@
 			url: '/opportunities',
 			template: '<ui-view/>',
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.list ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ();
 				}
 			}
 		})
