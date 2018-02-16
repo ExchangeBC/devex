@@ -21,6 +21,15 @@ var config = require('../config'),
   _ = require('lodash'),
   lusca = require('lusca');
 
+// -------------------------------------------------------------------------
+//
+// cc:logging: declare a new token for morgan to use in the log output
+//
+// -------------------------------------------------------------------------
+morgan.token ('userid', function (req, res) {
+  return (req.user) ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
+});
+
 /**
  * Initialize local variables
  */
