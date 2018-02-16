@@ -14,20 +14,20 @@
 
 <section class="form">
 
-<div class="page-controls">
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<h4><a class="default pull-right fa fa-times fa-lg" style="cursor: pointer;" href="{{vm.previousState.url}}" title="Close" aria-label="Close"></a><span class="light small">EDITING:</span><span ng-if="vm.editing"> {{::vm.opportunity.name}}</span> <span ng-if="!vm.editing"> New Opportunity</span></h4>
-			</div>
-		</div>
-	</div>
-</div>
 
 
 <div class="container" role="main">
 
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h4 ng-if="vm.editing">Editing {{vm.opportunity.name}}</h4>
+				<h4 ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</h4>
+				<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
+				<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-default  pull-right"> Close</a>
+			</div>
+		</div>
 
 		<div class="row">
 			<div class="col-sm-12">
@@ -129,8 +129,9 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="submit" href="javascript:void(0);" class="btn btn-success"><i class="fa fa-save"></i> SAVE CHANGES</button>
-						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-default pull-right" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
+						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
+						<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-default  pull-right"> Close</a>
+						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-warning" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
 					</div>
 				</div>
 			</div>

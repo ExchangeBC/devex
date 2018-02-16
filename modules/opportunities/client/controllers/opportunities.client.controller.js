@@ -1,51 +1,6 @@
 (function () {
 	'use strict';
 
-	// -------------------------------------------------------------------------
-	//
-	// CAPABILITIES SET UP
-	//
-	// -------------------------------------------------------------------------
-	var capabilitiesInit = function (vm) {
-		console.log ('vm.capabilities', vm.capabilities);
-		//
-		// index all the capabilities and skills by code, these are links to the actual objects
-		//
-		vm.iCapabilities = [];
-		vm.iCapabilitySkills = [];
-		vm.iOppCapabilities = [];
-		vm.iOppCapabilitySkills = [];
-		//
-		// if capabilities or skills not present make the empty arrays
-		//
-		if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
-		if (!vm.opportunity.capabilitySkills) vm.opportunity.capabilitySkills = [];
-		//
-		// set up flags for all capabilities, initially set to false
-		//
-		vm.capabilities.forEach (function (c) {
-			vm.iCapabilities[c.code] = c;
-			vm.iOppCapabilities[c.code] = false;
-			c.skills.forEach (function (capabilitySkill) {
-				vm.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
-				vm.iOppCapabilitySkills[capabilitySkill.code] = false;
-			});
-		});
-		//
-		// now set the ones we have to true
-		//
-		vm.opportunity.capabilities.forEach (function (capability) {
-			vm.iOppCapabilities[capability.code] = true;
-		});
-		vm.opportunity.capabilitySkills.forEach (function (capabilitySkill) {
-			vm.iOppCapabilitySkills[capabilitySkill.code] = true;
-		});
-		console.log ('vm.iCapabilities', vm.iCapabilities);
-		console.log ('vm.iCapabilitySkills', vm.iCapabilitySkills);
-		console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
-		console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
-	};
-
 	var publishStatus = function (o) {
 		//
 		// removed background for now
@@ -122,7 +77,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
 		//
@@ -154,11 +109,9 @@
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
 		//
-		// set up capabilities
+		// set up the structures for capabilities
 		//
-		vm.capabilities = capabilities;
-		console.log ('capa',vm.capabilities);
-		capabilitiesInit (vm);
+		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
 		//
 		// what capabilities are required ?
 		//
@@ -415,7 +368,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService) {
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
@@ -447,10 +400,13 @@
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 
 		//
+		// set up the structures for capabilities
+		//
+		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
+		CapabilitiesMethods.dump (vm);
+		//
 		// set up capabilities
 		//
-		vm.capabilities = capabilities;
-		capabilitiesInit (vm);
 		// -------------------------------------------------------------------------
 		//
 		// can this be published?
@@ -552,42 +508,8 @@
 			vm.opportunity.program = vm.programId;
 		}
 
-		vm.tinymceOptions = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     : '',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-		};
+		vm.tinymceOptions = TINYMCE_OPTIONS;
 
-		// -------------------------------------------------------------------------
-		//
-		// CAPABILITIES RECONCILE
-		//
-		// -------------------------------------------------------------------------
-		vm.capabilitiesReconcile = function () {
-			//
-			// sort of super duper blunt, but first clear the arrays
-			//
-			vm.opportunity.capabilities.length = 0;
-			vm.opportunity.capabilitySkills.length = 0;
-			//
-			// now push on all the correct stuff
-			// if the flag is set push the object (from the index by code) onto the opp array
-			//
-			Object.keys(vm.iCapabilities).forEach (function (code) {
-				if (vm.iOppCapabilities[code]) vm.opportunity.capabilities.push (vm.iCapabilities[code]);
-			});
-			Object.keys(vm.iCapabilitySkills).forEach (function (code) {
-				if (vm.iOppCapabilitySkills[code]) vm.opportunity.capabilitySkills.push (vm.iCapabilitySkills[code]);
-			});
-			console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
-			console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
-			console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
-			console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
-		};
 		vm.changeTargets = function () {
 			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
 			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);
@@ -694,10 +616,10 @@
 			//
 			// deal with capabilities
 			//
-			vm.capabilitiesReconcile ();
-			console.log (vm.opportunity.capabilities);
-			console.log (vm.opportunity.capabilitySkills);
-			//
+			CapabilitiesMethods.reconcile (vm, vm.opportunity);
+			console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
+			console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
+			CapabilitiesMethods.dump (vm);			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
 			//
@@ -757,7 +679,7 @@
 						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 					});
 
-					$state.go('opportunities.view', {opportunityId:opportunity.code});
+					// $state.go('opportunities.view', {opportunityId:opportunity.code});
 				})
 				//
 				// fail, notify and stay put
