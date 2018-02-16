@@ -22,6 +22,12 @@ exports.invokeRolesPolicies = function () {
 		}, {
 			resources: '/api/capabilities/:capabilityId',
 			permissions: '*'
+		}, {
+			resources: '/api/capabilityskill',
+			permissions: '*'
+		}, {
+			resources: '/api/capabilityskill/:capabilityskillId',
+			permissions: '*'
 		}]
 	}, {
 		roles: ['user'],
@@ -31,6 +37,12 @@ exports.invokeRolesPolicies = function () {
 		}, {
 			resources: '/api/capabilities/:capabilityId',
 			permissions: ['get']
+		}, {
+			resources: '/api/capabilityskill',
+			permissions: '*'
+		}, {
+			resources: '/api/capabilityskill/:capabilityskillId',
+			permissions: '*'
 		}]
 	}, {
 		roles: ['guest'],

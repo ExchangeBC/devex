@@ -121,7 +121,6 @@
 			}
 			if (attrs.hasOwnProperty ('onchange')) {
 				this.tmpl += ' ng-change="'+attrs.onchange+'()"';
-				console.log (this.tmpl);
 			}
 			// ----------------------------------------------------------------------------------
 			if ( this.options.hasOwnProperty('required') ) {

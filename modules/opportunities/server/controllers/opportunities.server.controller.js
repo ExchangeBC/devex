@@ -115,6 +115,8 @@ var opplist = function (query, req, callback) {
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'code name _id isPublished')
 	.populate('program', 'code title _id logo isPublished')
+	.populate('capabilities', 'code name')
+	.populate('capabilitySkills', 'code name')
 	.exec(function (err, opportunities) {
 		if (err) {
 			callback (err, null);
@@ -744,6 +746,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
+		.populate('capabilities', 'code name')
+		.populate('capabilitySkills', 'code name')
 		.populate({
 			path: 'proposal',
 			model: 'Proposal',
@@ -777,6 +781,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
+		.populate('capabilities', 'code name')
+		.populate('capabilitySkills', 'code name')
 		.populate({
 			path: 'proposal',
 			model: 'Proposal',

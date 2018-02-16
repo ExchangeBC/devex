@@ -114,9 +114,9 @@ logger.getMorganOptions = function getMorganOptions() {
       // cc:logging: filter out all BUT api and uploads access
       //
       skip: function (req, res) {
-        var isAPI = req.path.substr(0, 4) === '/api';
-        var isUpload = req.path.substr(0, 7) === '/upload';
-        var displayIf = isAPI || isUpload ;
+        var isAPI         = (req.path.substr(0, 4) === '/api');
+        var isUpload      = (req.path.substr(0, 7) === '/upload');
+        var displayIf     = (isAPI || isUpload);
         return !(displayIf);
       }
   };
@@ -131,7 +131,7 @@ logger.getMorganOptions = function getMorganOptions() {
 logger.getLogFormat = function getLogFormat() {
   var format = config.log && config.log.format ? config.log.format.toString() : 'combined';
   //
-  // cc:logging: removed this code as we want to speocify a full template specificially
+  // cc:logging: removed this code as we want to specify a full template specificially
   //
   // // make sure we have a valid format
   // if (!_.includes(validFormats, format)) {

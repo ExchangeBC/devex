@@ -9,7 +9,7 @@
 				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
 			</div>
 		</div>
-	</div>	
+	</div>
 </div>
 
 <section class="form">
@@ -18,9 +18,9 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<h4><a class="default pull-right fa fa-times fa-lg" style="cursor: pointer;" href="{{vm.previousState.url}}" title="Close" aria-label="Close"></a><span class="light small">EDITING:</span><span ng-if="vm.editing"> {{::vm.opportunity.name}}</span> <span ng-if="!vm.editing"> New Opportunity</span></h4>	
+				<h4><a class="default pull-right fa fa-times fa-lg" style="cursor: pointer;" href="{{vm.previousState.url}}" title="Close" aria-label="Close"></a><span class="light small">EDITING:</span><span ng-if="vm.editing"> {{::vm.opportunity.name}}</span> <span ng-if="!vm.editing"> New Opportunity</span></h4>
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>
 
@@ -89,6 +89,7 @@
 					</uib-tab-heading>
 					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.phases.view.html'"></ng-include>
 				</uib-tab>
+				<!--
 				<uib-tab index="8" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isInception">
 					<uib-tab-heading>
 						Inception &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isInception"></i>
@@ -104,6 +105,13 @@
 				<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isImplementation">
 					<uib-tab-heading>
 						Implementation &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isImplementation"></i>
+					</uib-tab-heading>
+					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
+				</uib-tab>
+				-->
+				<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+					<uib-tab-heading>
+						Capabilities and Skills
 					</uib-tab-heading>
 					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
 				</uib-tab>

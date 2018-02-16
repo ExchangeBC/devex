@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+	helpers = require(require('path').resolve('./modules/core/server/controllers/core.server.helpers')),
 	Schema = mongoose.Schema;
 
 // -------------------------------------------------------------------------
@@ -22,40 +23,62 @@ var OpportunityCapabilities = new Schema ({
  * Opportunity Schema
  */
 var OpportunitySchema = new Schema({
-	code          : {type: String, default: ''},
-	opportunityTypeCd : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
-	name          : {type: String, default: '', required: 'Name cannot be blank'},
-	short         : {type: String, default: ''},
-	description   : {type: String, default: ''},
-	background    : {type: String, default: ''},
-	evaluation    : {type: String, default: ''},
-	criteria      : {type: String, default: ''},
-	github        : {type: String, default: ''},
-	proposalEmail : {type: String, default: ''},
-	views         : {type: Number, default: 1},
-	program       : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
-	project       : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
-	skills        : [String],
-	earn          : {type: Number, default: 0},
-	tags          : [String],
-	status        : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
-	onsite        : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
-	location      : {type: String, default:''},
-	isPublished   : {type: Boolean, default: false},
-	wasPublished  : {type: Boolean, default: false},
-	lastPublished : {type: Date, default: null},
-	deadline      : {type: Date, default: null},
-	assignment    : {type: Date, default: null},
-	start         : {type: Date, default: null},
-	endDate       : {type: Date, default: null},
-	assignedTo    : {type: 'ObjectId', ref: 'User', default: null },
-	created       : {type: Date, default: null},
-	createdBy     : {type: 'ObjectId', ref: 'User', default: null },
-	updated       : {type: Date, default: null },
-	updatedBy     : {type: 'ObjectId', ref: 'User', default: null },
-	issueUrl      : {type: 'String', default: ''},
-	issueNumber   : {type: 'String', default: ''},
-	proposal      : {type:'ObjectId', ref: 'Proposal', default: null},
+	code                      : {type: String, default: ''},
+	opportunityTypeCd         : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
+	name                      : {type: String, default: '', required: 'Name cannot be blank'},
+	short                     : {type: String, default: ''},
+	description               : {type: String, default: ''},
+	background                : {type: String, default: ''},
+	evaluation                : {type: String, default: ''},
+	criteria                  : {type: String, default: ''},
+	github                    : {type: String, default: ''},
+	proposalEmail             : {type: String, default: ''},
+	views                     : {type: Number, default: 1},
+	program                   : {type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank'},
+	project                   : {type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank'},
+	skills                    : [String],
+	earn                      : {type: Number, default: 0},
+	tags                      : [String],
+	status                    : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
+	onsite                    : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
+	location                  : {type: String, default:''},
+	isPublished               : {type: Boolean, default: false},
+	wasPublished              : {type: Boolean, default: false},
+	lastPublished             : {type: Date, default: null},
+	deadline                  : {type: Date, default: null},
+	assignment                : {type: Date, default: null},
+	start                     : {type: Date, default: null},
+	endDate                   : {type: Date, default: null},
+	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },
+	created                   : {type: Date, default: null},
+	createdBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
+	updated                   : {type: Date, default: null },
+	updatedBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
+	issueUrl                  : {type: String, default: ''},
+	issueNumber               : {type: String, default: ''},
+	proposal                  : {type: Schema.ObjectId, ref: 'Proposal', default: null},
+	capabilities              : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+	capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+	implementationContract    : {type: String, default: ''},
+	implementationEndDate     : {type: Date, default: null},
+	implementationStartDate   : {type: Date, default: null},
+	implementationTarget      : {type: Number, default: 0},
+	inceptionContract         : {type: String, default: ''},
+	inceptionEndDate          : {type: Date, default: null},
+	inceptionStartDate        : {type: Date, default: null},
+	inceptionTarget           : {type: Number, default: 0},
+	prototypeContract         : {type: String, default: ''},
+	prototypeEndDate          : {type: Date, default: null},
+	prototypeStartDate        : {type: Date, default: null},
+	prototypeTarget           : {type: Number, default: 0},
+	isDocConflictOfInterest   : {type: Boolean, default: false},
+	isDocNonDisclosure        : {type: Boolean, default: false},
+	isDocRequestForReferences : {type: Boolean, default: false},
+	isImplementation          : {type: Boolean, default: false},
+	isInception               : {type: Boolean, default: false},
+	isPrototype               : {type: Boolean, default: false},
+	totalTarget               : {type: Number, default: 0},
+	terms                     : {type: String, default: ''},
 	c01_minimumYears : { type: Number, default:0 },
 	c02_minimumYears : { type: Number, default:0 },
 	c03_minimumYears : { type: Number, default:0 },
@@ -82,7 +105,6 @@ var OpportunitySchema = new Schema({
 	c11_desiredYears : { type: Number, default:0 },
 	c12_desiredYears : { type: Number, default:0 },
 	c13_desiredYears : { type: Number, default:0 },
-	capabilities  : {type:[OpportunityCapabilities], default:[]},
 	c01_tags : { type:[String], default:[] },
 	c02_tags : { type:[String], default:[] },
 	c03_tags : { type:[String], default:[] },
@@ -95,46 +117,27 @@ var OpportunitySchema = new Schema({
 	c10_tags : { type:[String], default:[] },
 	c11_tags : { type:[String], default:[] },
 	c12_tags : { type:[String], default:[] },
-	c13_tags : { type:[String], default:[] },
-	implementationContract    : {type: String, default: ''},
-	implementationEndDate     : {type: Date, default: null},
-	implementationStartDate   : {type: Date, default: null},
-	implementationTarget      : {type: Number, default: 0},
-	inceptionContract         : {type: String, default: ''},
-	inceptionEndDate          : {type: Date, default: null},
-	inceptionStartDate        : {type: Date, default: null},
-	inceptionTarget           : {type: Number, default: 0},
-	prototypeContract         : {type: String, default: ''},
-	prototypeEndDate          : {type: Date, default: null},
-	prototypeStartDate        : {type: Date, default: null},
-	prototypeTarget           : {type: Number, default: 0},
-	isDocConflictOfInterest   : {type: Boolean, default: false},
-	isDocNonDisclosure        : {type: Boolean, default: false},
-	isDocRequestForReferences : {type: Boolean, default: false},
-	isImplementation          : {type: Boolean, default: false},
-	isInception               : {type: Boolean, default: false},
-	isPrototype               : {type: Boolean, default: false},
-	totalTarget               : {type: Number, default: 0},
-	terms                     : {type: String, default: ''}
+	c13_tags : { type:[String], default:[] }
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
-	var _this = this;
-	var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+	return helpers.modelFindUniqueCode (this, 'opp', title, suffix, callback);
+	// var _this = this;
+	// var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 
-	_this.findOne({
-		code: possible
-	}, function (err, user) {
-		if (!err) {
-			if (!user) {
-				callback(possible);
-			} else {
-				return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
-			}
-		} else {
-			callback(null);
-		}
-	});
+	// _this.findOne({
+	// 	code: possible
+	// }, function (err, user) {
+	// 	if (!err) {
+	// 		if (!user) {
+	// 			callback(possible);
+	// 		} else {
+	// 			return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
+	// 		}
+	// 	} else {
+	// 		callback(null);
+	// 	}
+	// });
 };
 
 mongoose.model('Opportunity', OpportunitySchema);

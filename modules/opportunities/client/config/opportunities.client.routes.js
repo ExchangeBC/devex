@@ -98,8 +98,8 @@
 			url: '/opportunityadmin',
 			template: '<ui-view/>',
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.query ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ();
 				}
 			}
 		})

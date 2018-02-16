@@ -1,4 +1,6 @@
-<section class="form-page"><div class="container" role="main"><form name="qqq.capabilityForm" id="qqq.capabilityForm" warn-on-exit novalidate autocomplete="off">
+<section>
+<div class="container" role="main">
+<form name="qqq.capabilityForm" id="qqq.capabilityForm" warn-on-exit novalidate autocomplete="off">
 	<div class="row">
 		<div class="col-sm-8">
 			<form-input
@@ -59,23 +61,31 @@
 			</form-display>
 		</div>
 		<div class="col-sm-4">
-					<div class="panel panel-success">
-						<div class="panel-heading">
-							<strong>Specific Skills</strong>
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<strong>Specific Skills</strong>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item">
+						<div class="input-group" ng-cloak ng-if="!qqq.editingskill">
+							<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill"\>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" ng-click="qqq.addSkill()"  ng-cloak ng-if="!qqq.editingskill">Add</button>
+							</span>
 						</div>
-						<ul class="list-group">
-							<!-- <li class="list-group-item" ng-repeat="skill in capability.skills">{{skill}}</li> -->
-							<li class="list-group-item">JavaScript <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
-							<li class="list-group-item">C++ <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
-							<li class="list-group-item">MongoDB <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
-							<li class="list-group-item">Openshift <button title="Delete Skill" class="btn-link pull-right" ng-click="vm.deleteSkill('a')"><i class="fa fa-minus-square"></i></button></li>
-						</ul>
-					</div>
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="vm[newskillfield]"\>
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" ng-click="vm.addSkill(capability, tagField, vm[newskillfield], newskillfield)">Add</button>
-				</span>
+						<div class="input-group" ng-cloak ng-if="qqq.editingskill">
+							<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill"\>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" ng-click="qqq.updateSkill()">Save</button>
+							</span>
+						</div>
+					</li>
+					<li class="list-group-item" ng-repeat="skill in qqq.capability.skills">
+						{{skill.name}}
+						<button title="Delete Skill" class="btn-link pull-right" ng-click="qqq.deleteSkill(skill)"><i class="fa fa-minus-square"></i></button>
+						<button title="Edit Skill" class="btn-link pull-right" ng-click="qqq.editSkill(skill)"><i class="fa fa-edit"></i></button>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
@@ -85,4 +95,6 @@
 		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid, true)"><i class="fa fa-thumbs-o-up"></i> Save and Exit</button>
 	</div>
 
-</form></div></section>
+</form>
+</div>
+</section>

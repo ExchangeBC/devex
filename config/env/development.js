@@ -18,7 +18,7 @@ module.exports = {
     //
     // cc:logging: modified apache format including internal user identification
     //
-    format: ':remote-addr - :userid - [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :referrer',
+    format: 'tiny',
     fileLogger: {
       directoryPath: process.cwd(),
       fileName: 'app.log',

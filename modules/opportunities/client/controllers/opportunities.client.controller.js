@@ -358,11 +358,12 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, SkillsService) {
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
+		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
-		vm.capabilities     = capabilities;
+		vm.capabilities = capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -500,34 +501,76 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 
-		vm.cbykey = vm.capabilities.reduce (function (accum, curr) {
-			accum[curr.key] = curr;
-			return accum;
-		}, {});
-		vm.inceptionKeys = ['c04','c03','c08'];
-		vm.prototypeKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
-		vm.implementationKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
-		vm.inceptionCapabilities = vm.inceptionKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-		vm.prototypeCapabilities = vm.prototypeKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-		vm.implementationCapabilities = vm.implementationKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-
-
-
-		// $scope.$watch ('vm.opportunity.inceptionTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
-		// $scope.$watch ('vm.opportunity.prototypeTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
-		// $scope.$watch ('vm.opportunity.implementationTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
+		// -------------------------------------------------------------------------
+		//
+		// CAPABILITIES SET UP
+		//
+		// -------------------------------------------------------------------------
+		vm.capabilitiesInit = function () {
+			//
+			// index all the capabilities and skills by code, these are links to the actual objects
+			//
+			vm.iCapabilities = [];
+			vm.iCapabilitySkills = [];
+			vm.iOppCapabilities = [];
+			vm.iOppCapabilitySkills = [];
+			//
+			// if capabilities or skills not present make the empty arrays
+			//
+			if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
+			if (!vm.opportunity.capabilitySkills) vm.opportunity.capabilitySkills = [];
+			//
+			// set up flags for all capabilities, initially set to false
+			//
+			vm.capabilities.forEach (function (c) {
+				vm.iCapabilities[c.code] = c;
+				vm.iOppCapabilities[c.code] = false;
+				c.skills.forEach (function (capabilitySkill) {
+					vm.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
+					vm.iOppCapabilitySkills[capabilitySkill.code] = false;
+				});
+			});
+			//
+			// now set the ones we have to true
+			//
+			vm.opportunity.capabilities.forEach (function (capability) {
+				vm.iOppCapabilities[capability.code] = true;
+			});
+			vm.opportunity.capabilitySkills.forEach (function (capabilitySkill) {
+				vm.iOppCapabilitySkills[capabilitySkill.code] = true;
+			});
+			console.log ('vm.iCapabilities', vm.iCapabilities);
+			console.log ('vm.iCapabilitySkills', vm.iCapabilitySkills);
+			console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
+			console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
+		};
+		vm.capabilitiesInit ();
+		// -------------------------------------------------------------------------
+		//
+		// CAPABILITIES RECONCILE
+		//
+		// -------------------------------------------------------------------------
+		vm.capabilitiesReconcile = function () {
+			//
+			// sort of super duper blunt, but first clear the arrays
+			//
+			vm.opportunity.capabilities.length = 0;
+			vm.opportunity.capabilitySkills.length = 0;
+			//
+			// now push on all the correct stuff
+			// if the flag is set push the object (from the index by code) onto the opp array
+			//
+			Object.keys(vm.iCapabilities).forEach (function (code) {
+				if (vm.iOppCapabilities[code]) vm.opportunity.capabilities.push (vm.iCapabilities[code]);
+			});
+			Object.keys(vm.iCapabilitySkills).forEach (function (code) {
+				if (vm.iOppCapabilitySkills[code]) vm.opportunity.capabilitySkills.push (vm.iCapabilitySkills[code]);
+			});
+			console.log ('vm.iOppCapabilities', vm.iOppCapabilities);
+			console.log ('vm.iOppCapabilitySkills', vm.iOppCapabilitySkills);
+			console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
+			console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
+		};
 		vm.changeTargets = function () {
 			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
 			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);
@@ -632,6 +675,12 @@
 				vm.opportunity.skills = [];
 			}
 			//
+			// deal with capabilities
+			//
+			vm.capabilitiesReconcile ();
+			console.log (vm.opportunity.capabilities);
+			console.log (vm.opportunity.capabilitySkills);
+			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
 			//
@@ -661,7 +710,6 @@
 			vm.opportunity.prototypeEndDate.setHours(16);
 			vm.opportunity.prototypeStartDate.setHours(16);
 
-			vm.opportunity.capabilities = [];
 
 			//
 			// confirm save only if the user is also publishing

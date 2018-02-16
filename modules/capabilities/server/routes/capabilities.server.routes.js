@@ -16,5 +16,13 @@ module.exports = function (app) {
 		.get (capabilities.read)
 		.put (capabilities.update)
 		.delete (capabilities.delete);
+	app.route ('/api/capabilityskill')
+		.all (capabilitiesPolicy.isAllowed)
+		.post (capabilities.skillCreate);
+	app.route ('/api/capabilityskill/:capabilityskillId')
+		.all (capabilitiesPolicy.isAllowed)
+		.put (capabilities.skillUpdate)
+		.delete (capabilities.skillDelete);
 	app.param ('capabilityId', capabilities.capabilityByID);
+	app.param ('capabilityskillId', capabilities.capabilitySkillByID);
 };
