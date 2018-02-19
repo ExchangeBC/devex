@@ -7,6 +7,14 @@
 	</div>
 </div>
 
+<div class="banner banner-info" ng-if="qaz.case === 'needscompany'">
+	<div class="row">
+		<div class="col-xs-12">
+			You must be the administrator of a company to submit a proposal for this opportunity
+		</div>
+	</div>
+</div>
+
 <!-- // If user has started a proposal // -->
 <div class="banner banner-info" ng-if="qaz.case === 'canedit'">
 	<div class="row">
@@ -16,5 +24,5 @@
 			<!-- If proposal is in DRAFT -->
 			<p ng-if="qaz.proposal.status === 'Draft'"><span class="warning strong"><i class="glyphicon glyphicon-file"></i>&nbsp;You have a proposal in DRAFT!</span> &nbsp;&nbsp; Submit before <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></p>
 		</div>
-	</div>	
+	</div>
 </div>

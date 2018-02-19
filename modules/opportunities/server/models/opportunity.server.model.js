@@ -78,7 +78,9 @@ var OpportunitySchema = new Schema({
 	isInception               : {type: Boolean, default: false},
 	isPrototype               : {type: Boolean, default: false},
 	totalTarget               : {type: Number, default: 0},
-	terms                     : {type: String, default: ''}
+	terms                     : {type: String, default: ''},
+	evaluationStage           : {type: Number, default: 0},
+	numberOfInterviews        : {type: Number, default: 2}
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

@@ -12,92 +12,27 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="panel panel-primary" ng-if="data.currentPage===1">
+			<div class="panel panel-primary" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
 				<div class="panel-heading text-center">
+					{{qindex=$index;""}}
 					<strong>
-						Question: How rapid is rapid?
+						Question: {{question}}
 					</strong>
 				</div>
 				<ul class="list-group">
-					<li class="list-group-item">
+					<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
 						<div class="row">
 							<div class="col-sm-9">
-								How quick is quick?
+								<strong>{{response.rank}}.</strong> {{response.response}}
 							</div>
 							<div class="col-sm-3">
-								<button ng-if="1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="0" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item">
-						<div class="row">
-							<div class="col-sm-9">
-						What sort of stupid question is that?
-							</div>
-							<div class="col-sm-3">
-								<button ng-if="1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="1" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item">
-						<div class="row">
-							<div class="col-sm-9">
-						Huh?
-							</div>
-							<div class="col-sm-3">
-								<button ng-if="0" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="1" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
+								<button ng-click="moveDown(response, qindex)" ng-if="$index<data.nproposals-1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
+								<button ng-click="moveUp(response, qindex)" ng-if="$index>0" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
 							</div>
 						</div>
 					</li>
 				</ul>
 			</div>
-
-			<div class="panel panel-primary" ng-if="data.currentPage===2">
-				<div class="panel-heading text-center">
-					<strong>
-						Question: How much wood could a wood chuck chuck if a wood chuck could chuck wood?
-					</strong>
-				</div>
-				<ul class="list-group">
-					<li class="list-group-item">
-						<div class="row">
-							<div class="col-sm-9">
-								Do you not have anything better to do?
-							</div>
-							<div class="col-sm-3">
-								<button ng-if="1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="0" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item">
-						<div class="row">
-							<div class="col-sm-9">
-						Honestly.
-							</div>
-							<div class="col-sm-3">
-								<button ng-if="1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="1" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
-						</div>
-					</li>
-					<li class="list-group-item">
-						<div class="row">
-							<div class="col-sm-9">
-						A wood chuck could chuck lots of wood if a wood chuck could chuck wood.
-							</div>
-							<div class="col-sm-3">
-								<button ng-if="0" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-if="1" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-
 		</div>
 	</div>
 </div>

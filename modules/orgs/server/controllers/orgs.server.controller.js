@@ -33,6 +33,7 @@ var path = require('path'),
 	_ = require('lodash')
 	;
 
+var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills capabilityDetails';
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -310,13 +311,13 @@ exports.list = function (req, res) {
 	.populate ('owner', '_id lastName firstName displayName profileImageURL')
 	.populate ('createdBy', 'displayName')
 	.populate ('updatedBy', 'displayName')
-	.populate ('members')
-	.populate ('admins')
-	.populate ({
-		path : 'endorsements.createdBy',
-		model: 'User',
-		select: 'displayName orgImageURL'
-	})
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
+	// .populate ({
+	// 	path : 'endorsements.createdBy',
+	// 	model: 'User',
+	// 	select: 'displayName orgImageURL'
+	// })
 	.exec (function (err, orgs) {
 		if (err) {
 			return res.status(422).send ({
@@ -343,8 +344,8 @@ exports.orgByID = function (req, res, next, id) {
 	.populate ('owner', '_id lastName firstName displayName profileImageURL')
 	.populate ('createdBy', 'displayName')
 	.populate ('updatedBy', 'displayName')
-	.populate ('members')
-	.populate ('admins')
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
 	.exec (function (err, org) {
 		if (err) {
 			return next(err);

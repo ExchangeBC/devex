@@ -59,7 +59,6 @@
 		return errorFields;
 	};
 
-
 	angular.module('opportunities')
 	// =========================================================================
 	//
@@ -77,9 +76,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
+	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
+
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -125,6 +125,7 @@
 		//
 		// what can the user do here?
 		//
+		var user                   = Authentication.user;
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
@@ -133,11 +134,13 @@
 		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
-		vm.canApply                = isUser && !isAdmin && !isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
 		vm.isMember                = opportunity.userIs.member;
 		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
 		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
+		//
+		// dates
+		//
 		var rightNow               = new Date ();
 		vm.closing = 'CLOSED';
 		var d                      = vm.opportunity.deadline - rightNow;
@@ -165,8 +168,6 @@
 		// -------------------------------------------------------------------------
 		vm.errorFields = publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
-		console.log ('vm.errorFields', vm.errorFields);
-		console.log ('vm.canPublish', vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -184,7 +185,62 @@
 		// stuff for swu evaluation
 		//
 		// -------------------------------------------------------------------------
-		vm.nteams = 2;
+		if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
+			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
+			.then (function (proposals) {
+				vm.proposals = proposals;
+				//
+				// HACK: TBD : should have questions already on opportunity
+				//
+				vm.opportunity.questions = [];
+				vm.proposals[0].questions.forEach (function (q) {
+					vm.opportunity.questions.push (q.question);
+				});
+				//
+				// end of hack
+				//
+				//
+				// make an array of responses (question objects) by question
+				//
+				vm.responses = [];
+				var questionIndex, j;
+				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
+					vm.responses[questionIndex] = [];
+					vm.proposals.forEach (function (p) {
+						vm.responses[questionIndex].push (p.questions[questionIndex])
+					});
+				}
+				//
+				// if we have not yet begun evaluating do some question order randomizing
+				//
+				if (vm.opportunity.evaluationStage === 0) {
+					vm.responses.forEach (function (qset) {
+						//
+						// randomize the responses
+						//
+						qset.forEach (function (resp) {
+							resp.rank = Math.floor((Math.random() * 1000) + 1);
+						});
+						//
+						// now resolve those to 1 through whatever
+						//
+						qset.sort (function (a, b) {
+							if (a.rank < b.rank) return -1;
+							else if (a.rank > b.rank) return 1;
+							else return 0;
+						});
+						for (var i=0; i<qset.length; i++) {
+							qset[i].rank = i+1;
+						}
+					});
+					//
+					// save all the proposals now with the new question rankings
+					//
+					vm.saveProposals ();
+				}
+			});
+
+		}
 		// -------------------------------------------------------------------------
 		//
 		// Questions Modal
@@ -196,8 +252,14 @@
 				templateUrl: '/modules/opportunities/client/views/questions.modal.html',
 				controller: function ($scope, $uibModalInstance) {
 					$scope.data = {};
-					$scope.data.totalQuestions = 5;
-					$scope.data.currentPage = 2;
+					$scope.data.questions = [];
+					$scope.data.proposals = vm.proposals;
+					$scope.data.nproposals = vm.proposals.length;
+					$scope.data.questions = vm.opportunity.questions;
+					$scope.data.responses = vm.responses;
+					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.currentPage = 1;
+
 					$scope.close = function () {
 						console.log ('what');
 						$uibModalInstance.close();
@@ -207,6 +269,22 @@
 					};
 					$scope.pageChanged = function () {
 						console.log ('page changed');
+					};
+					$scope.moveUp = function (resp, qindex) {
+						var orank = resp.rank;
+						var nrank = orank-1;
+						vm.responses[qindex].forEach (function (r) {
+							if (r.rank === orank) r.rank = nrank;
+							else if (r.rank === nrank) r.rank = orank;
+						});
+					};
+					$scope.moveDown = function (resp, qindex) {
+						var orank = resp.rank;
+						var nrank = orank+1;
+						vm.responses[qindex].forEach (function (r) {
+							if (r.rank === orank) r.rank = nrank;
+							else if (r.rank === nrank) r.rank = orank;
+						});
 					};
 				}
 			}, {
@@ -242,6 +320,19 @@
 				// TBD: calculate scores etc.
 				//
 			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// save all the proposals (ranknings etc)
+		//
+		// -------------------------------------------------------------------------
+		vm.saveProposals = function () {
+			vm.proposals.forEach (function (proposal) {
+				proposal.$update ();
+			});
+		};
+		vm.saveOpportunity = function () {
+			vm.opportunity.$update ();
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -603,12 +694,12 @@
 				});
 				return false;
 			}
-			if (vm.opportunity.taglist !== '') {
+			if (vm.opportunity.taglist && vm.opportunity.taglist !== '') {
 				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
 			} else {
 				vm.opportunity.tags = [];
 			}
-			if (vm.opportunity.skilllist !== '') {
+			if (vm.opportunity.skilllist && vm.opportunity.skilllist !== '') {
 				vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
 			} else {
 				vm.opportunity.skills = [];
@@ -661,35 +752,35 @@
 					savemeSeymour = result;
 				});
 			}
-				//
-				// Create a new opportunity, or update the current instance
-				//
-				promise.then(function() {
-					if (savemeSeymour) {
-						return vm.opportunity.createOrUpdate();
-					}
-					else return Promise.reject ({data:{message:'Publish Cancelled'}});
-				})
-				//
-				// success, notify and return to list
-				//
-				.then (function () {
-					vm.opportunityForm.$setPristine ();
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
-					});
-
-					// $state.go('opportunities.view', {opportunityId:opportunity.code});
-				})
-				//
-				// fail, notify and stay put
-				//
-				.catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
-					});
+			//
+			// Create a new opportunity, or update the current instance
+			//
+			promise.then(function() {
+				if (savemeSeymour) {
+					return vm.opportunity.createOrUpdate();
+				}
+				else return Promise.reject ({data:{message:'Publish Cancelled'}});
+			})
+			//
+			// success, notify and return to list
+			//
+			.then (function () {
+				vm.opportunityForm.$setPristine ();
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
+
+				// $state.go('opportunities.view', {opportunityId:opportunity.code});
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+				});
+			});
 
 		};
 		vm.popoverCache = {};

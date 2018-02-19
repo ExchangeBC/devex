@@ -128,10 +128,34 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, org) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
+		var anyUnion = function (a, b) {
+			//
+			// I know I know I know. I should really sort first then compare up till greater than
+			// in order to optimize, but with such small lists doesn't two sorts outwiegh the potential
+			// of n*m comparisons in the worst case? it's pretty close
+			//
+			var i, j, found;
+			for (i=0; i<a.length; i++) {
+				for (j=0; j<b.length; j++) {
+					found = (a[i] === b[j]);
+					if (found) break;
+				}
+				if (found) break;
+			}
+			return found;
+		}
 		var ppp                                   = this;
 		ppp.features                              = window.features;
+		ppp.trust            = $sce.trustAsHtml;
+		//
+		// check we have an opp
+		//
+		if (!opportunity) {
+			console.error ('no opportunity was provided!');
+		}
+		ppp.opportunity   = opportunity;
 		ppp.org                                   = org;
 		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 		ppp.members = [];
@@ -141,24 +165,26 @@
 		ppp.proposal                              = angular.copy (proposal);
 		ppp.user                                  = angular.copy (Authentication.user);
 		var pristineUser                          = angular.toJson(Authentication.user);
-		ppp.capabilities                          = capabilities;
-		ppp.totals = {};
-		ppp.tinymceOptions = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     : '',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-		};
 		//
-		// check we have an opp
+		// set up the structures for capabilities
 		//
-		if (!opportunity) {
-			console.error ('no opportunity was provided!');
+		CapabilitiesMethods.init (ppp, ppp.opportunity, capabilities);
+		CapabilitiesMethods.dump (ppp, ppp.opportunity, capabilities);
+		//
+		// questions: HACK, needs to be better and indexed etc etc
+		//
+		ppp.questions = dataService.questions;
+		var i;
+		if (!ppp.proposal.questions) ppp.proposal.questions = [];
+		for (i=0; i<ppp.questions.length; i++) {
+			if (!ppp.proposal.questions[i]) {
+				ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
+			}
 		}
-		ppp.opportunity   = opportunity;
+		console.log ('questions', ppp.proposal.questions);
+
+		ppp.totals = {};
+		ppp.tinymceOptions = TINYMCE_OPTIONS;
 		//
 		// set up the html display stuff
 		//
@@ -183,60 +209,101 @@
 		}
 		//
 		// what capabilities are required ?
+		// we want to build an array of needed capability codes and needed skill codes to iterate over for
+		// calculating scores. We want each member who has at least one capability in an array, and inside each
+		// member we want a hash of capabiltiies and skills by code that have a boolean as data
 		//
 		if (ppp.isSprintWithUs) {
-			var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-			ppp.clist = [];
-			var idlist = [];
 
-			allclist.forEach (function (id) {
-				//
-				// iff the capability is required
-				//
-				if (ppp.opportunity[id+'_minimumYears']>0) {
-					var minimumYearsField = id+'_minimumYears';
-					var desiredYearsField = id+'_desiredYears';
-					var userYearsField    = id+'_years';
-					//
-					// put the user field onto a list
-					//
-					idlist.push (userYearsField);
-					//
-					// put all the capability stuff into a list of objects
-					//
-					ppp.clist.push ({
-						id: id,
-						minimumYearsField : minimumYearsField,
-						desiredYearsField : desiredYearsField,
-						userYearsField : userYearsField,
-						minYears : ppp.opportunity[minimumYearsField],
-						desYears : ppp.opportunity[desiredYearsField],
-						minMet : false,
-						desMet : false
+			//
+			// for building the output table we need a helper array of objects saying what the row is, in order
+			// that the capabilities come from the service
+			//
+			ppp.displayArray = [];
+			ppp.capabilities.forEach (function (cap) {
+				if (ppp.iOppCapabilities[cap.code]) {
+					ppp.displayArray.push ({
+						code                : cap.code,
+						capability          : cap,
+						capabilitySkill     : null
+					});
+					cap.skills.forEach (function (skill) {
+						if (ppp.iOppCapabilitySkills[skill.code]) {
+							ppp.displayArray.push ({
+								code                : skill.code,
+								capability          : null,
+								capabilitySkill     : skill
+							});
+						}
 					});
 				}
 			});
-			console.log (ppp.clist);
+
+			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities);
+			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills);
+
+			console.log ('ppp.allNeededCapabilities',ppp.allNeededCapabilities);
+			console.log ('ppp.allskills',ppp.allskills);
+
 			//
 			// now gather up ONLY those folks who have at least one of the required capabilities
 			// this should include any current team members
 			//
 			ppp.winners = [];
 			console.log ('team:' , ppp.proposal.team);
+			//
+			// make an array of all team member ids
+			// make an array of all opp capability ids
+			//
+			var teamIdMap = ppp.proposal.team.map(function(a){return a._id.toString();});
+			// var opportunityCapabilityIds = ppp.opportunity.capabilities.map(function(a){return a._id.toString();});
+			//
+			// go through he list of all org members and see who has the right skills
+			// and who is already on the opp team
+			//
 			ppp.members.forEach (function (member) {
-				member.selected = isInArray (ppp.proposal.team.map(function(a){return a._id;}), member._id);
+				var memberId = member._id.toString ();
+				//
+				// is the member already on the team ?
+				//
+				member.selected = isInArray (teamIdMap, memberId);
 				console.log (member._id, member.selected);
 				//
-				// add up their scores on all required capabilities, if > 0 include them
+				// index the member capabilities by code, the capabilities service already added a map of
+				// ids to codes as i2cc
 				//
-				var score = idlist.map (function (userfield) {
-					return member[userfield] || 0;
-				}).reduce (function (accum, elem) {
-					return accum + elem;
+				member.capabilitiesByCode = {};
+				member.capabilities.forEach (function (cid) {
+					member.capabilitiesByCode[ppp.i2cc[cid]] = true;
 				});
-				if (score > 0) ppp.winners.push (member);
+				//
+				// see if this member has any of the needed capabilities
+				//
+				var matches = (Object.keys (ppp.iOppCapabilities)).reduce (function (accum, curr) {
+					return (accum || ( member.capabilitiesByCode[curr] ));
+				}, false);
+				//
+				// if they match, of if they are already on the team, then add then to the winners array
+				// also make the index of their skills
+				//
+				if (matches || member.selected) {
+					ppp.winners.push (member);
+					member.skillsByCode = {};
+					member.capabilitySkills.forEach (function (cid) {
+						member.skillsByCode[ppp.i2cs[cid]] = true;
+					});
+				}
+				// //
+				// // make an array of all capabilities of the member
+				// //
+				// var memberCapabilityIds = member.capabilities.map(function(a){return a._id.toString();});
+				// //
+				// // if the member has any of the required capabilities then add them to
+				// // winners array
+				// //
+				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
 			});
-			console.log (ppp.winners);
+			console.log ('winners:',ppp.winners);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -246,29 +313,24 @@
 		// -------------------------------------------------------------------------
 		ppp.calculateScores = function () {
 			if (!ppp.isSprintWithUs) return;
-			ppp.clist.forEach (function (row) {
-					//
-					// map the winners into an array indicating total
-					// years experience of all members and if any one has met the min
-					//
-					var scores = ppp.winners.map (function (member) {
-						var years = member[row.userYearsField];
-						if (!member.selected) return [false, 0];
-						else return [
-							(years >= row.minYears),
-							years
-						];
-					})
-					.reduce (function (accum, elem) {
-						return [
-							(accum[0] || elem[0]),
-							accum[1] + elem[1]
-						];
-					}, [false, 0]);
-					// console.log (row.code, scores);
-					row.minMet = scores[0];
-					row.desMet = scores[1] >= row.desYears;
-			console.log (row);
+
+			//
+			// for each capability required go through all seleced members and OR up if they have it
+			// and set that result on the capability itself as MET, same with skills
+			//
+			(Object.keys (ppp.iOppCapabilities)).forEach (function (code) {
+				var c = ppp.iCapabilities[code];
+				c.met = ppp.winners.reduce (function (accum, member) {
+					return (accum || (member.selected && member.capabilitiesByCode[code]));
+				}, false);
+				console.log ('capability', code, c.met);
+			});
+			(Object.keys (ppp.iOppCapabilitySkills)).forEach (function (code) {
+				var c = ppp.iCapabilitySkills[code];
+				c.met = ppp.winners.reduce (function (accum, member) {
+					return (accum || (member.selected && member.skillsByCode[code]));
+				}, false);
+				console.log ('skill', code, c.met);
 			});
 		};
 		ppp.calculateScores ();

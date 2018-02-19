@@ -29,7 +29,14 @@
 	.factory ('dataService', function () {
 		return {
 			cities: citylist,
-			capabilities : capabilitiesObject
+			capabilities : capabilitiesObject,
+			questions : [
+				'When you are old, what do you think children will ask you to tell stories about?',
+				'If your job gave you a surprise three day paid break to rest and recuperate, what would you do with those three days?',
+				'What’s the best / worst practical joke that you’ve played on someone or that was played on you?',
+				'If you were moving to another country, but could only pack one carry-on sized bag, what would you pack?',
+				'What’s something that everyone, absolutely everyone, in the entire world can agree on?'
+			]
 		};
 	})
 

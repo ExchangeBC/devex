@@ -26,7 +26,7 @@
 			</div>
 			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
 				<h3 style="font-size: 17px; margin-top: 5px; font-family: Lato;">
-					<a  id="orgs.view" ui-sref="orgs.view({ orgId: org._id })" ng-bind="org.name"></a>
+					<a  id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">{{org.name}} <span ng-if="org.dba">({{org.dba}})</span></a>
 				</h3>
 				<p ng-bind-html="vm.trust(org.description)"></p>
 			</div>

@@ -246,9 +246,24 @@
 
 			<uib-tab index="1">
 				<uib-tab-heading>
-					<i class="fa fa-people"></i> Team
+					<i class="fa fa-people"></i> Team and Cost
 				</uib-tab-heading>
 				<div class="proposal-form-container">
+					<div class="col-sm-12">
+						<form-input
+							ng-model="ppp.proposal.cost"
+							x-form="ppp.form.proposalform"
+							class="col-sm-3"
+							x-options='{
+								"title":"Cost of Services",
+								"id":"cost",
+								"number":true,
+								"type":"number",
+								"name":"cost"
+							}'>
+						</form-input>
+					</div>
+
 					<div class="form-group col-sm-12">
 						<table class="table table-condensed table-striped">
 							<thead>
@@ -258,36 +273,31 @@
 										{{person.displayName}}
 									</button>
 								</td>
-								<td class="text-center" colspan="2">Minimum<sup>1</sup></td>
-								<td ng-if="0" class="text-center" colspan="2">Desired<sup>2</sup></td>
+								<td class="text-center">Met</td>
+
 							</thead>
 							<tbody>
-								<tr ng-repeat="row in ppp.clist">
+								<tr ng-repeat="o in ppp.displayArray" >
 									<td>
-										{{minimumYearsField=idnum+'_minimumYears';""}}
-										{{desiredYearsField=idnum+'_desiredYears';""}}
-										{{ppp.capabilities.bykey[row.id].text}}
+										<span ng-if="o.capability"><strong>{{o.capability.name}}</strong></span>
+										<span ng-if="o.capabilitySkill">&nbsp; &nbsp;{{o.capabilitySkill.name}}</span>
 									</td>
+
 									<td class="text-center" ng-repeat="person in ppp.winners" ng-class="{'cbg-light-steel-blue':person.selected}">
-										{{person[row.userYearsField]}}
+										<i class="fa fa-check-circle ctc-green" ng-if="person.capabilitiesByCode[o.code]"></i>
+										<i class="fa fa-check-circle ctc-green" ng-if="person.skillsByCode[o.code]"></i>
 									</td>
 									<td class="text-center">
-										{{row.minYears}}
+										<i class="fa fa-check-circle ctc-green" ng-if="o.capability && o.capability.met"></i>
+										<i class="fa fa-check-circle ctc-green" ng-if="o.capabilitySkill && o.capabilitySkill.met"></i>
 									</td>
-									<td class="text-center">
-										<i class="fa fa-check-circle ctc-green" ng-if="row.minMet"></i>
-									</td>
-									<td class="text-center" ng-if="0">
-										{{row.desYears}}
-									</td>
-									<td class="text-center" ng-if="0">
-										<i class="fa fa-check-circle ctc-green" ng-if="row.desMet"></i>
-									</td>
+
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					<div class="col-sm-12">
+
+<!-- 					<div class="col-sm-12">
 						<dl>
 							<dt>1. Mimimum</dt>
 							<dd>At least one team member MUST have this many years experience with this capability</dd>
@@ -295,32 +305,65 @@
 							<dd ng-if="0">It is desirable that the combined years experience of the teram in regards to this capability meets or exceeds this many years</dd>
 						</dl>
 					</div>
+ -->
 				</div>
 			</uib-tab>
 
 			<uib-tab index="2">
 				<uib-tab-heading>
-					<i class="fa fa-pencil"></i> Proposal
+					<i class="fa fa-pencil"></i> Proposal Questionairre
 				</uib-tab-heading>
 				<div class="proposal-form-container">
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="well well-info">
-								<p style="text-align: left">Draft your proposal here. Make sure to address the <b>proposal evaluation criteria</b> for this opportunity:</p>
-								<br>
-								<p ng-bind-html="ppp.display.evaluation"></p>
+								<p>Answer each question as simply as possible</p>
 							</div>
 						</div>
 					</div>
-					<div class="form-group">
-						<label class="control-label" for="detail">My Proposal</label>
+					<div class="col-sm-12 form-group">
+						<label>{{ppp.proposal.questions[0].question}}</label>
 						<textarea
-							name="detail"
-							id="detail"
-							class="form-control input-sm"
-							ui-tinymce="ppp.tinymceOptions"
-							placeholder="Proposal Detail"
-							ng-model="ppp.proposal.detail">
+							name="q1"
+							id="q1"
+							class="form-control"
+							ng-model="ppp.proposal.questions[0].response">
+						</textarea>
+					</div>
+					<div class="col-sm-12 form-group">
+						<label>{{ppp.proposal.questions[1].question}}</label>
+						<textarea
+							name="q2"
+							id="q1"
+							class="form-control"
+							ng-model="ppp.proposal.questions[1].response">
+						</textarea>
+					</div>
+					<div class="col-sm-12 form-group">
+						<label>{{ppp.proposal.questions[2].question}}</label>
+						<textarea
+							name="q3"
+							id="q1"
+							class="form-control"
+							ng-model="ppp.proposal.questions[2].response">
+						</textarea>
+					</div>
+					<div class="col-sm-12 form-group">
+						<label>{{ppp.proposal.questions[3].question}}</label>
+						<textarea
+							name="q4"
+							id="q1"
+							class="form-control"
+							ng-model="ppp.proposal.questions[3].response">
+						</textarea>
+					</div>
+					<div class="col-sm-12 form-group">
+						<label>{{ppp.proposal.questions[4].question}}</label>
+						<textarea
+							name="q5"
+							id="q1"
+							class="form-control"
+							ng-model="ppp.proposal.questions[4].response">
 						</textarea>
 					</div>
 				</div>

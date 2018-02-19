@@ -5,7 +5,7 @@
 		menuService.addMenuItem ('topbar', {
 			title: 'Capabilities',
 			state: 'capabilities.list',
-			roles: ['*'],
+			roles: ['admin'],
 			icon: 'none',
 			position: 2
 		});

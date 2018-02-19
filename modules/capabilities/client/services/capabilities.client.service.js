@@ -81,10 +81,12 @@
 				//
 				// index all the capabilities and skills by code, these are links to the actual objects
 				//
-				scope.iCapabilities = [];
-				scope.iCapabilitySkills = [];
-				scope.iOppCapabilities = [];
-				scope.iOppCapabilitySkills = [];
+				scope.iCapabilities = {};
+				scope.iCapabilitySkills = {};
+				scope.iOppCapabilities = {};
+				scope.iOppCapabilitySkills = {};
+				scope.i2cc = {};
+				scope.i2cs = {};
 				//
 				// if capabilities or skills not present make the empty arrays
 				//
@@ -94,9 +96,11 @@
 				// set up flags for all capabilities, initially set to false
 				//
 				scope.capabilities.forEach (function (c) {
+					scope.i2cc[c._id.toString()] = c.code;
 					scope.iCapabilities[c.code] = c;
 					scope.iOppCapabilities[c.code] = false;
 					c.skills.forEach (function (capabilitySkill) {
+						scope.i2cs[capabilitySkill._id.toString()] = capabilitySkill.code;
 						scope.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
 						scope.iOppCapabilitySkills[capabilitySkill.code] = false;
 					});
