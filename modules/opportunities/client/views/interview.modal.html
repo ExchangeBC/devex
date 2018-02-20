@@ -2,9 +2,27 @@
 	<h3>Interview</h3>
 </div>
 <div class="modal-body">
-	Interview Modal, to be determined
+	<div class="container">
+	<div class="row">
+		<div class="cols-md-12">
+			<p>Interview Modal, to be determined</p>
+		</div>
+	</div>
+	<div class="row">
+			<form-input
+				class="col-sm-3"
+				ng-model="data.score"
+				x-options='{
+					"title":"Interview Score",
+					"id":"score",
+					"name":"score",
+					"placeholder":"Score"
+				}'>
+			</form-input>
+	</div>
+	</div>
 </div>
 <div class="modal-footer">
-	<button class="btn btn-danger" data-ng-click="close()">Cancel</button>
+	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
 	<button class="btn btn-primary" data-ng-click="ok()"><i class="fa fa-thumbs-o-up"></i> Save</button>
 </div>

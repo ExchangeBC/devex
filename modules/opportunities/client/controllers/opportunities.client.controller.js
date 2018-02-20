@@ -262,10 +262,10 @@
 
 					$scope.close = function () {
 						console.log ('what');
-						$uibModalInstance.close();
+						$uibModalInstance.close('cancel');
 					};
 					$scope.ok = function () {
-						$uibModalInstance.close();
+						$uibModalInstance.close('save');
 					};
 					$scope.pageChanged = function () {
 						console.log ('page changed');
@@ -286,13 +286,23 @@
 							else if (r.rank === nrank) r.rank = orank;
 						});
 					};
+					$scope.commit = function () {
+						$uibModalInstance.close('commit');
+					}
 				}
 			}, {
 			})
-			.then (function () {
-				//
-				// TBD: calculate scores etc.
-				//
+			.then (function (resp) {
+				if (resp === 'save' || resp === 'commit') {
+					//
+					// TBD: calculate scores etc.
+					//
+					vm.saveProposals ();
+				}
+				if (resp === 'commit') {
+					vm.opportunity.evaluationStage++;
+					vm.saveOpportunity ();
+				}
 			});
 		};
 		// -------------------------------------------------------------------------

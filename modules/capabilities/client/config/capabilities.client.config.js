@@ -2,12 +2,10 @@
 	'use strict';
 
 	if (window.features.swu) angular.module('capabilities').run(['menuService', function (menuService) {
-		menuService.addMenuItem ('topbar', {
+		menuService.addSubMenuItem ('topbar', 'admin', {
 			title: 'Capabilities',
-			state: 'capabilities.list',
-			roles: ['admin'],
-			icon: 'none',
-			position: 2
+			state: 'capabilities.list'
+			roles: ['admin']
 		});
 	}]);
 

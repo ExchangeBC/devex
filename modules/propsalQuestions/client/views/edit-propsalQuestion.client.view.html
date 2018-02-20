@@ -1,0 +1,37 @@
+<section class="form-page"><div class="container" role="main"><form name="qqq.propsalQuestionForm" id="qqq.propsalQuestionForm" warn-on-exit novalidate autocomplete="off">
+	<div class="row">
+		<form-input
+			class="col-sm-12"
+			ng-model="qqq.propsalQuestion.name"
+			x-form="qqq.propsalQuestionForm"
+			x-options='{
+				"title":"PropsalQuestion Name",
+				"id":"name",
+				"name":"name",
+				"placeholder":"name",
+				"required":"Must supply a propsalQuestion name"
+			}'>
+		</form-input>
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title":"PropsalQuestion Description",
+				"id":"description",
+				"name":"description"
+			}'>
+			<textarea
+				name="description"
+				id="description"
+				class="form-control"
+				placeholder="A brief description of the propsalQuestion"
+				ng-model="qqq.propsalQuestion.description">
+			</textarea>
+		</form-display>
+	</div>
+	<div class="row form-foot text-right">
+		<button class="btn btn-danger" ui-sref="propsalQuestions.view({propsalQuestionId:qqq.propsalQuestion.code})"> Cancel</button>
+		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.propsalQuestionForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
+		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.propsalQuestionForm.$valid, true)"><i class="fa fa-thumbs-o-up"></i> Save and Exit</button>
+	</div>
+
+</form></div></section>
