@@ -12,133 +12,138 @@
 	</div>
 </div>
 
-<section class="form">
 
-
-
-<div class="container" role="main">
-
+<section class="edit-form-background" role="main">
+	
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 
-		<div class="row">
-			<div class="col-xs-12">
-				<h4 ng-if="vm.editing">Editing {{vm.opportunity.name}}</h4>
-				<h4 ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</h4>
-				<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
-				<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-default  pull-right"> Close</a>
-			</div>
-		</div>
 
-		<div class="row">
-			<div class="col-sm-12">
-				<fieldset>
-					<div class="form-group text-center" ng-if="vm.features.swu">
-								<div class="btn-group">
-									<label class="btn btn-success" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'code-with-us'">I am looking for an <em>Individual</em></label>
-									<label class="btn btn-success" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'sprint-with-us'">I am looking for a <em>Team</em></label>
-								</div>
-						<div class="radio" ng-if="0">
-							<label>
-								<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="code-with-us"/>
-								I am looking for an <em>Individual</em>
-								&nbsp; &nbsp; &nbsp;
-								<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="sprint-with-us"/>
-								I am looking for a <em>Team</em>
-							</label>
-						</div>
+		<div class="container container-edit-form">
+			
+			<div class="edit-form-header">
+				<div class="row">
+					<div class="col-xs-8" ng-if="vm.editing">
+						<h4 class="edit-form-header"><span class="light small">EDITING:</span> {{vm.opportunity.name}}</h4>
 					</div>
-				</fieldset>
+					<div class="col-xs-8" ng-if="!vm.editing">
+						<h4 class="edit-form-header">New Opportunity {{vm.opportunity.name}}</h4>
+					</div>
+					<div class="col-xs-4">
+						<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+				</div>
 			</div>
-		</div>
+			<br>
+	
+			<div class="row">
+				<div class="col-xs-12">
+					<fieldset>
+						<div class="form-group" ng-if="vm.features.swu">
+									<div class="btn-group">
+										<label class="btn btn-default" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'code-with-us'">I am looking for an <em>Individual</em></label>
+										<label class="btn btn-default" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'sprint-with-us'">I am looking for a <em>Team</em></label>
+									</div>
+							<div class="radio" ng-if="0">
+								<label>
+									<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="code-with-us"/>
+									I am looking for an <em>Individual</em>
+									&nbsp; &nbsp; &nbsp;
+									<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="sprint-with-us"/>
+									I am looking for a <em>Team</em>
+								</label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+			</div>
 
-		<div class="row">
-			<uib-tabset active>
-				<uib-tab index="0">
-					<uib-tab-heading>
-						Header
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.title.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="2">
-					<uib-tab-heading>
-						Background
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.description.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="4" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-					<uib-tab-heading>
-						Details
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.details.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="5" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-					<uib-tab-heading>
-						Acceptance and Evaluation
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.acceptance.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="6" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-					<uib-tab-heading>
-						Details
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.details.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="7" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-					<uib-tab-heading>
-						Phases
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.phases.view.html'"></ng-include>
-				</uib-tab>
-				<!--
-				<uib-tab index="8" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isInception">
-					<uib-tab-heading>
-						Inception &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isInception"></i>
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.inception.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="10" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isPrototype">
-					<uib-tab-heading>
-						Prototype &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isPrototype"></i>
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.prototype.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isImplementation">
-					<uib-tab-heading>
-						Implementation &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isImplementation"></i>
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
-				</uib-tab>
-				-->
-				<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-					<uib-tab-heading>
-						Capabilities and Skills
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
-				</uib-tab>
-				<uib-tab index="14" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-					<uib-tab-heading>
-						Terms and Conditions
-					</uib-tab-heading>
-					<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.terms.view.html'"></ng-include>
-				</uib-tab>
-			</uib-tabset>
-		</div>
-		<br/>
+			<div class="row">
+				<uib-tabset active>
+					<uib-tab index="0">
+						<uib-tab-heading>
+							Header
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.title.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="2">
+						<uib-tab-heading>
+							Background
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.description.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="4" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
+						<uib-tab-heading>
+							Details
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.details.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="5" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
+						<uib-tab-heading>
+							Acceptance and Evaluation
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.acceptance.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="6" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab-heading>
+							Details
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.details.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="7" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab-heading>
+							Phases
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.phases.view.html'"></ng-include>
+					</uib-tab>
+					<!--
+					<uib-tab index="8" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isInception">
+						<uib-tab-heading>
+							Inception &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isInception"></i>
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.inception.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="10" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isPrototype">
+						<uib-tab-heading>
+							Prototype &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isPrototype"></i>
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.prototype.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isImplementation">
+						<uib-tab-heading>
+							Implementation &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isImplementation"></i>
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
+					</uib-tab>
+					-->
+					<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab-heading>
+							Capabilities and Skills
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
+					</uib-tab>
+					<uib-tab index="14" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab-heading>
+							Terms and Conditions
+						</uib-tab-heading>
+						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.terms.view.html'"></ng-include>
+					</uib-tab>
+				</uib-tabset>
+			</div>
+			
+			<br/>
 
-		<div class="page-controls">
-			<div class="container">
+			<div class="edit-form-footer">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
-						<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-default  pull-right"> Close</a>
-						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-warning" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
+						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> SAVE CHANGES</button>
+						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
 					</div>
 				</div>
 			</div>
 		</div>
 
 	</form>
-</div>
-
 </section>
+
+
 
