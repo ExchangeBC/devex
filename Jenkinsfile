@@ -47,11 +47,6 @@ node('maven') {
        checkout scm
     }
     stage('code quality check') {
-           SONARQUBE_PWD = sh (
-             script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
-             returnStdout: true
-              ).trim()
-           //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
                returnStdout: true
