@@ -74,7 +74,7 @@ node('maven') {
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
             env
-	    echo "SLACK URL: https://hooks.slack.com/services/${SLACK_TOKEN}"
+	    //echo "SLACK URL: https://hooks.slack.com/services/${SLACK_TOKEN}"
 	    //notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
