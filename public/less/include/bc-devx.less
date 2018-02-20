@@ -8,7 +8,11 @@ body {
 body {
     .body-font;
     padding-bottom: 30px;
-    font-size: 15px;
+    font-size: 14px;
+}
+
+p.opp-detail-header {
+  margin: 0px;
 }
 
 a {
@@ -26,8 +30,23 @@ a.secondary {
     color: lighten(@theme-success, 40%);
     &:hover,
     &:focus {
-        color: lighten(@theme-success, 30%);
+      color: lighten(@theme-success, 30%);
     }
+}
+
+a.breadcrumb-nav {
+  font-size: 17px;
+  color: @gray;
+  &:hover,&:active:hover {
+    color: @gray-darker;
+  }
+  &:active,&:focus {
+    color: @gray-darker;
+  }
+}
+
+.breadcrumb-nav {
+  margin: 5px 0px 20px;
 }
 
 hr {
@@ -40,6 +59,10 @@ hr.light {
     border-color: white;
 }
 
+hr.detail-page {
+  margin: 15px -15px;  
+}
+
 h1,
 h2,
 h3,
@@ -50,10 +73,7 @@ h6 {
     padding: 0;
     margin-bottom: 0.25em;
 }
-.page-header h1 {
-	margin-top: 0px;
-  margin-bottom: 10px;
-}
+
 
 .light {
   font-weight: 300;
@@ -62,6 +82,7 @@ h6 {
 .strong {
   font-weight: bold;
 }
+
 
 // Global color classes
 
@@ -94,8 +115,35 @@ h6 {
 // Container
 .container {
 	max-width: 1040px;
+  padding: 0px 5px;
 }
 
+.container-edit-form {
+  background: #fff;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+// Edit form
+
+.edit-form-header {
+  padding: 10px 15px 10px; 
+  margin: -15px -15px 0px; 
+  background: #f6f8fa;
+  border-radius: 4px 4px 0px 0px;
+}
+
+h4.edit-form-header {
+  margin: 6px; 
+  padding: 0px;
+}
+
+.edit-form-footer {
+  padding: 15px 30px 15px; 
+  margin: -15px -15px -15px; 
+  background: #f6f8fa;
+  border-radius: 0px 0px 4px 4px;
+}
 
 // Navigation
 .navbar {
@@ -126,6 +174,7 @@ h6 {
     padding-top: 17.5px;
     padding-bottom: 17.5px;
     line-height: 16px;
+    font-size: 16px;
   }
   > li {
     .dropdown-menu {
@@ -194,21 +243,50 @@ h6 {
 
 // Sections
 
-.section {
-  padding: 10px 0 10px 0;
-  .btn-solo {
-    margin-right: 23px;
-  }
-  @media (min-width: 768px) {
-    padding: 10px 0 20px 0;
-    p.lg {
-    	font-size: 16px;
-    }
-    &.feature p {
-      font-size: 16px;
-      margin-bottom: 16px;
-    }
-  }
+section {
+  padding: 0.75em 0em;
+}
+
+section.gray-lightest {
+  background: @gray-lightest;
+}
+
+section.gray-lighter {
+  background: @gray-lighter;
+}
+
+section.gray-light {
+  background: @gray-light;
+}
+
+section.gray {
+  background: @gray;
+}
+
+section.gray-dark {
+  background: @gray-dark;
+}
+
+section.gray-darker {
+  background: @gray-darker;
+}
+
+section.page-controls {
+  padding: 0;
+  background: @theme-yellow;
+}
+
+section.proposals-admin-view {
+  background: @theme-important;
+}
+
+section.edit-form-background {
+  background: @gray-dark;
+  padding: 10px;
+}
+
+section.detail-page-background {
+  background: @gray-lighter;
 }
 
 
@@ -245,8 +323,7 @@ h6 {
 //  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   .transition-all(0.15s);
   text-decoration: none;
-//  margin-top: 10px;
-//  margin-bottom: 10px;
+  margin-left: 2px;
 }
 
 .btn-solo {
@@ -274,8 +351,6 @@ h6 {
   font-weight: 400;
   letter-spacing: 0.025em;
   line-height: 1;
-  margin-top: 7px;
-  margin-bottom: 7px;
 }
 
 .btn-xs {
@@ -286,9 +361,9 @@ h6 {
 
 
 .btn-default {
-  color: @gray;
-  background-color: none;
-  border-color: @gray;
+  color: @gray-dark;
+  background-color: @gray-lighter;
+  border-color: @gray-lighter;
   .input-group-btn & {
     border-color: @input-border;
   }
@@ -307,11 +382,13 @@ h6 {
   }
   &:hover {
   	color: @gray-dark;
-    border-color: @gray-dark;
+    background-color: darken(@gray-lighter, 7%);
+    border-color: darken(@gray-lighter, 7%);
   }
   &:hover,&:focus {
     color: @gray-dark;
-    border-color: @gray-dark;
+    background-color: darken(@gray-lighter, 7%);
+    border-color: darken(@gray-lighter, 7%);
   }
   &:active,
   &.active {
@@ -331,14 +408,45 @@ h6 {
   }
 }
 
+.btn-radio {
+  color: @gray;
+  background-color: @gray-lighter;
+  border-color: @gray-lighter;
+  &:hover {
+    color: @gray;
+    background-color: darken(@gray-lighter, 7%);
+    border-color: darken(@gray-lighter, 7%);
+  }
+  &:active {
+    color: #fff;
+    background-color: @theme-primary;
+    border-color: @theme-primary;
+  }
+  &:active,&:hover {
+    color: #fff;
+    background-color: @theme-primary;
+    border-color: @theme-primary;
+  }
+  &:focus,&:hover {
+    color: #fff;
+    background-color: @theme-primary;
+    border-color: @theme-primary;
+  }
+  &:active,&:visited {
+    color: #fff;
+    background-color: @theme-primary;
+    border-color: @theme-primary;
+  }
+}
+
 .btn-default-inverse {
   color: #fff;
   background: @gray-dark;
   border-color: @gray-dark;
   &:hover {
     color: #fff;
-    background: lighten(@gray-dark, 7%);
-    border-color: lighten(@gray-dark, 7%);
+    background: lighten(@gray-dark, 10%);
+    border-color: lighten(@gray-dark, 10%);
   }
   &:hover,&:focus {
     color: #fff;
@@ -352,10 +460,12 @@ h6 {
   background-color: @gray;
   border-color: @gray;
   &:hover,&:active:hover {
+    color: #fff;
     background-color: darken(@gray, 8%);
     border-color: darken(@gray, 8%);
   }
   &:active,&:focus {
+    color: #fff;
     background-color: darken(@gray, 10%);
     border-color: darken(@gray, 10%);
   }
@@ -366,19 +476,15 @@ h6 {
   background-color: @theme-primary;
   border-color: @theme-primary;
   &:hover,&:active:hover {
-    background-color: darken(@theme-primary, 8%);
-    border-color: darken(@theme-primary, 8%);
+    color: #fff;
+    background-color: lighten(@theme-primary, 8%);
+    border-color: lighten(@theme-primary, 8%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-primary, 10%);
-    border-color: darken(@theme-primary, 10%);
+    color: #fff;
+    background-color: lighten(@theme-primary, 10%);
+    border-color: lighten(@theme-primary, 10%);
   }
-}
-
-.btn-text-only {
-  text-decoration: none;
-  background-color: none;
-  border-color: none;
 }
 
 .btn-success {
@@ -389,8 +495,8 @@ h6 {
     border-color: lighten(@theme-success, 8%);
   }
   &:active,&:focus {
-    background-color: darken(@theme-success, 10%);
-    border-color: darken(@theme-success, 10%);
+    background-color: lighten(@theme-success, 10%);
+    border-color: lighten(@theme-success, 10%);
   }
 }
 
@@ -408,35 +514,75 @@ h6 {
 .btn-warning {
   background-color: @theme-warning;
   border-color: @theme-warning;
+  color: @gray-dark;
   &:hover,&:active:hover {
-    background-color: lighten(@theme-warning, 10%);
-    border-color: lighten(@theme-warning, 10%);
+    background-color: lighten(@theme-warning, 8%);
+    border-color: lighten(@theme-warning, 8%);
+    color: @gray-dark;
   }
   &:active,&:focus {
-    background-color: darken(@theme-warning, 8%);
-    border-color: darken(@theme-warning, 8%);
+    background-color: lighten(@theme-warning, 8%);
+    border-color: lighten(@theme-warning, 8%);
+    color: @gray-dark;
   }
 }
 
 .btn-danger {
-  color: @theme-danger;
-  background-color: #fff;
+  color: #fff;
+  background-color: @theme-danger;
   border-color: @theme-danger;
   &:hover,&:active:hover {
     color: #fff;
-    background-color: @theme-danger;
-    border-color: @theme-danger;
+    background-color: lighten(@theme-danger, 10%);
+    border-color: lighten(@theme-danger, 10%);
   }
   &:active,&:focus {
     color: #fff;
-    background-color: @theme-danger;
-    border-color: @theme-danger;
+    background-color: lighten(@theme-danger, 10%);
+    border-color: lighten(@theme-danger, 10%);
   }
 }
 
 .btn-link {
   color: @theme-primary;
   background: none;
+}
+
+.btn-text-only {
+  color: @gray;
+  background: transparent;
+  border-color: none;
+  &:hover,&:active:hover {
+    color: @gray-darker;
+    background: transparent;
+    border-color: none;
+  }
+  &:active,&:focus {
+    color: @gray-darker;
+    background: transparent;
+    border-color: none;
+  }
+}
+
+.btn-text-only-inverse {
+  color: @gray-lightest;
+  background: transparent;
+  border-color: none;
+  &:hover,&:active:hover {
+    color: #fff;
+    background: transparent;
+    border-color: none;
+  }
+  &:active,&:focus {
+    color: #fff;
+    background: transparent;
+    border-color: none;
+  }
+}
+
+.btn-opp-detail-header {
+  margin-top: -3px;
+  margin-bottom: -3px;
 }
 
 
@@ -475,16 +621,33 @@ h6 {
 
 // Common styles
 .alert {
-  padding: 8px 10px;
+  padding: 10px;
+  margin: 10px 0px;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .alert-info {
-  background: @theme-light-blue;
-  border-color: @theme-primary;
+  background: @theme-lighter-blue;
+  border-color: @theme-light-blue;
+}
+
+.alert-important {
+  background: @theme-important;
+  border-color: @theme-yellow;
   color: @gray-dark;
 }
+
+.alert-danger {
+  background: #fddece;
+  color: @theme-danger;
+}
+
+//.alert-info {
+//  background: @theme-light-blue;
+//  border-color: @theme-primary;
+//  color: @gray-dark;
+//}
 
 
 // Progress bars
@@ -649,14 +812,15 @@ h6 {
 	max-width: 100%;
 }
 .img-avatar {
-  width: @thumb-md;
-  height: @thumb-md;
+  width: 65px;
+  height: 65px;
+  margin: 6px;
   border-radius: 40px;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
   &:hover {
-    -webkit-transform: scale(1.06);
-    -ms-transform: scale(1.06);
-    transform: scale(1.06);
+    -webkit-transform: scale(1.0);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
     transition:all 0.3s ease;
     cursor: pointer;
   }
@@ -716,78 +880,6 @@ h6 {
   }
 }
 
-// Labels
-// ---------
-// CC : removed these
-// ---------
-.label {
-  letter-spacing: 0.04em;
-}
-// .label-lg {
-//   font-size: 16px;
-// }
-//
-// .label-primary {
-//   background-color: @theme-primary;
-// }
-//
-// .label-success {
-//   background-color: @theme-success;
-// }
-//
-// .label-info {
-//   background-color: @gray-light;
-// }
-
-.label-price {
-  background-color: @gray-dark;
-}
-
-.label-deadline {
-  color: @gray-dark;
-  background-color: @gray-lighter;
-  border: none;
-  font-weight: 600;
-}
-
-.label-location {
-  background-color: none;
-  color: @gray-darker;
-}
-
-.label-colocation {
-  background-color: @theme-light-blue;
-  color: #fff;
-}
-// .label-warning {
-//   background-color: @theme-warning;
-// }
-
-.label-skills {
-  background-color: @theme-orange;
-}
-
-.label-danger {
-  background-color: @theme-danger;
-}
-.label-danger-o {
-  color: @theme-danger;
-  background color: none;
-}
-.label-success {
-  background-color: @theme-success, 5%;
-}
-.label-success-o {
-  color: @theme-success;
-  background-color: none;
-}
-
-.label-list .label {
-	display: inline-block;
-}
-.label-list .label:not(:last-child) {
-	margin-right: 0.5em;
-}
 
 .input-help-source {
   color: @theme-primary;
@@ -826,12 +918,26 @@ h6 {
 // Cards
 .card {
   position: relative;
-  margin-bottom: @line-height-computed;
+  margin: 1em 0;
   border: 1px solid @panel-default-border;
   border-radius: @border-radius-base;
   background-color: white;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
 }
+
+.card-company {
+  border: none;
+  height: 5em;
+  .card-img-left {
+    width: 10em;
+    height: 5em;
+    border-radius: 4px 0 0 4px;
+    }
+  .card-title {
+    padding-top: 1.25em;
+  }
+}
+
 .card-panel {
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
   .panel-body + .panel-body {
@@ -887,6 +993,7 @@ h6 {
 .card-title {
   font-size: 18px;
   font-weight: 500;
+  margin-top: 0.25em;
 }
 
 .card-subtitle {
@@ -1182,67 +1289,21 @@ h6 {
 
 
 // Wells
-// --------------------------------------------------
 
-
-// Base class
 .well {
   max-width: 1040px;
-  padding: 5px;
+  padding: 20px;
+  margin: 20px 0px;
   border: 1px solid;
   border-radius: 4px;
-  display: inline-block;
-  box shadow: none;
+  box-shadow: none;
+  background: @gray-lighter;
+  border-color: #e3e3e3;
 }
 
-.well {
-  p {
-  text-align: center;
-  margin: 5px;
-  }
-}
-
-.well-left-align {
-  p {
-  text-align: left;
-  margin: 5px;
-  }
-  h1, h2, h3, h4 {
-  text-align: left;
-  margin: 5px;
-  }
-}
-
-// Sizes
-.well-lg {
-  padding: 15px;
-}
-
-// Colors
-.well-info {
-  background: @theme-info;
-  border-color: @theme-primary;
-}
 .well-important {
   background: @theme-important;
   border-color: @theme-yellow;
-}
-
-.well-gray {
-  background: none;
-  border-color: @gray-light;
-}
-.well-danger {
-  background: #feefcd;
-  border-color: @theme-danger;
-}
-.well-success {
-  background: #feefcd;
-  border-color: @theme-success;
-}
-.well-primary {
-  background: #feefcd;
-  border-color: @theme-primary;
 }
 
 
@@ -1257,6 +1318,11 @@ h6 {
 .banner p {
   padding: 0px;
   margin: 0px;
+}
+
+.banner-success {
+  color: #3c763d;
+  background-color: #dff0d8;
 }
 
 .banner-info {
@@ -1279,8 +1345,8 @@ h6 {
 // Page Controls
 
 .page-controls {
-  background-color: @gray-lightest;
-  padding: 10px 0px;
+  background-color: @gray;
+  padding: 2px 0px;
   p {
   margin: 0px;
   }
