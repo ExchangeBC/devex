@@ -1,5 +1,18 @@
 //define functions
 
+import groovy.json.JsonOutput
+def notifySlack(text, channel, url, attachments) {
+    def slackURL = url
+    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+    def payload = JsonOutput.toJson([text: text,
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: attachments
+    ])
+    sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+}
+
 @NonCPS
 def getChangeString() {
   MAX_MSG_LEN = 512
@@ -34,18 +47,13 @@ node('maven') {
        checkout scm
     }
     stage('code quality check') {
-           SONARQUBE_PWD = sh (
-             script: 'oc env dc/sonarqube --list | awk  -F  "=" \'/SONARQUBE_ADMINPW/{print $2}\'',
-             returnStdout: true
-              ).trim()
-           //echo "SONARQUBE_PWD: ${SONARQUBE_PWD}"
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
                returnStdout: true
                   ).trim()
            echo "SONARQUBE_URL: ${SONARQUBE_URL}"
            dir('sonar-runner') {
-            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info  -Dsonar.sources=.."
+            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.Dev -Dsonar.branch=develop -Dsonar.projectKey=org.sonarqube:bcgov-devex-dev -Dsonar.sources=.."
            }
     }
     stage('build') {
@@ -57,16 +65,15 @@ node('maven') {
                script: 'oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\'',
 	       returnStdout: true).trim()
 	    echo "IMAGE_HASH: ${IMAGE_HASH}"
-	    //sh 'export IMAGE_SHA=$(oc get istag devxp:latest -o template --template="{{.image.dockerImageReference}}"|awk -F "/" \'{print $3}\')'	    
-	    //echo ">>> ImageSha: ${IMAGE_SHA} ImageHash: ${IMAGE_HASH}"
-	    //sh 'env'
 	    echo ">>>> Build Complete"
 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
  	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$BUILD_ID'
+            sleep 5
 	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
+	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
 
