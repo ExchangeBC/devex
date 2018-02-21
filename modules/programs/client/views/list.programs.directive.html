@@ -1,9 +1,9 @@
 <div class="row list-head">
-  <div class="col-sm-8">
-    <h3 class="list-page-title list-page-hide">Government Partners</h3>
+  <div class="col-sm-7">
+    <h2 class="list-page-hide">Government Partners</h2>
   </div>
-  <div class="col-sm-4">
-    <button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="programadmin.create()" title="New">
+  <div class="col-sm-5 col-form-buttons text-right">
+    <button ng-if="vm.userCanAdd" class="btn btn-default-inverse" ui-sref="programadmin.create()" title="New">
       <i class="fa fa-plus"></i> LIST YOUR PROGRAM
     </button>
   </div>
@@ -13,13 +13,13 @@
 <div class="card card-flat" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
 
   <div class="card-header" ng-if="vm.isAdmin || program.userIs.admin" style="text-align: right">
-    <span ng-if="!program.isPublished" class="label label-danger" ><i class="fa fa-exclamation-triangle"></i> UNPUBLISHED</span>
-    &nbsp;
     <span ng-if="vm.isAdmin || program.userIs.admin" class="label label-primary">Admin</span>
     &nbsp;
     <span ng-if="program.userIs.member && !program.userIs.admin" class="label label-primary">Member</span>
     &nbsp;
     <span ng-if="program.userIs.request" class="label label-primary" uib-tooltip="Your membership request is pending approval">Pending Member</span>
+    &nbsp;
+    <span ng-if="!program.isPublished" class="label-danger" ><i class="fa fa-exclamation-triangle"></i> UNPUBLISHED</span>
     &nbsp;
     <a ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" uib-tooltip="Unpublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
     &nbsp;
