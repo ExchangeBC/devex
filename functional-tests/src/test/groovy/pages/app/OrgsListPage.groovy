@@ -4,7 +4,7 @@ import extensions.AngularJSAware
 
 
 class OrgsListPage extends Page implements AngularJSAware {
-	static at = { angularReady && title.startsWith("BCDevExchange - Orgs List") }
+	static at = { angularReady && title == "BCDevExchange - Orgs List" }
 	static url = "orgs"
 	static content = {}
 }
