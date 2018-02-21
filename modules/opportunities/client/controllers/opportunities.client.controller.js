@@ -908,6 +908,7 @@
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
+			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
 			vm.opportunity.implementationEndDate.setHours(16);
 			vm.opportunity.implementationStartDate.setHours(16);
@@ -935,6 +936,7 @@
 			//
 			// Create a new opportunity, or update the current instance
 			//
+			console.log ('saving now');
 			promise.then(function() {
 				if (savemeSeymour) {
 					return vm.opportunity.createOrUpdate();
@@ -950,7 +952,7 @@
 					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
 
-				// $state.go('opportunities.view', {opportunityId:opportunity.code});
+				$state.go('opportunities.view', {opportunityId:opportunity.code});
 			})
 			//
 			// fail, notify and stay put
