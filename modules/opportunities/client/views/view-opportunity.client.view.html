@@ -26,7 +26,7 @@
 <section class="detail-page-background">
 
 	<div class="container">
-		
+
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="breadcrumb-nav">
@@ -56,7 +56,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 
 		<!-- // Admin Controls / if opportunity is PUBLISHED // -->
 		<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
@@ -67,15 +67,13 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<!-- // Submit a proposal button // -->
-		<!--
 		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
 			<div class="col-xs-12">
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 			</div>
 		</div>
-		-->
 
 	</div>
 
@@ -93,7 +91,7 @@
 				<!-- // User is NOT following the opportunity // -->
 				<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right btn-opp-detail-header" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 				<!-- // User IS following the opportunity // -->
-				<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right btn-opp-detail-header" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>	
+				<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right btn-opp-detail-header" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
 			</div>
 		</div>
 		<hr class="detail-page">
@@ -182,9 +180,9 @@
 
 		<!-- // Opportunity Detail views // -->
 		<ng-include src="'/modules/opportunities/client/views/view-opportunity.cwu.view.html'" ng-if="!vm.isSprintWithUs"></ng-include>
-		
+
 		<ng-include src="'/modules/opportunities/client/views/view-opportunity.swu.view.html'" ng-if="vm.isSprintWithUs"></ng-include>
-		
+
 		<!--
 		<div class="row">
 			<div class="col-xs-12">

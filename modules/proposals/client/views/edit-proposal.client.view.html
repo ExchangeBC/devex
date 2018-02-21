@@ -23,11 +23,11 @@
 </div>
 
 <section class="edit-form-background" role="main">
-	
+
 	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
 
 		<div class="container container-edit-form">
-			
+
 			<div class="edit-form-header">
 				<div class="row">
 					<div class="col-xs-8">
@@ -41,7 +41,7 @@
 			<br>
 
 			<!-- // Code With Us opportunity // -->
-			<div ng-if="!ppp.isSprintWithUs">	
+			<div ng-if="!ppp.isSprintWithUs">
 				<uib-tabset active>
 					<uib-tab index="0" ng-if="!ppp.isSprintWithUs">
 						<uib-tab-heading>
@@ -120,7 +120,7 @@
 							<div class="form-group">
 								<div class="alert alert-info">Draft your complete proposal here, or write a short message and upload your proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation Criteria</span>:</div>
 								<div class="well" ng-bind-html="ppp.display.evaluation"></div>
-							
+
 								<label class="control-label" for="detail">My Proposal</label>
 								<textarea
 									name="detail"
@@ -148,7 +148,7 @@
 								<p><b>Mandatory:</b> To apply on this opportunity, you must agree to the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf" title="Code With Us terms">Code With Us terms</a>. To indicate your acceptance of the terms, download the terms document, and upload it here as an attachment.</p>
 								-->
 								<a href class="btn btn-sm btn-text-only" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> UPLOAD A FILE</a>
-								
+
 								<table class="table table-striped">
 									<tr ng-repeat="file in ppp.proposal.attachments">
 										<td class=" text-right">
@@ -207,70 +207,6 @@
 				</div>
 			</div>
 
-<<<<<<< HEAD
-			<uib-tab index="1">
-				<uib-tab-heading>
-					<i class="fa fa-people"></i> Team and Cost
-				</uib-tab-heading>
-				<div class="proposal-form-container">
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="well well-info">
-								<p>
-									Create your team by selecting the members with the buttons on the top of the table.
-									The required Capabilities are listed in bold and MUST be met in order to submit your proposal.
-									Individual skills under each capability are not required, but if met will be used as part of your overall score.
-							</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-sm-12">
-						<form-input
-							ng-model="ppp.proposal.cost"
-							x-form="ppp.form.proposalform"
-							class="col-sm-3"
-							x-options='{
-								"title":"Cost of Services",
-								"id":"cost",
-								"number":true,
-								"type":"number",
-								"name":"cost"
-							}'>
-						</form-input>
-					</div>
-
-					<div class="form-group col-sm-12">
-						<table class="table table-condensed table-striped">
-							<thead>
-								<td></td>
-								<td class="text-center" ng-repeat="person in ppp.winners">
-									<button type="button" class="btn btn-success" ng-model="person.selected" uib-btn-checkbox ng-click="ppp.calculateScores()">
-										{{person.displayName}}
-									</button>
-								</td>
-								<td class="text-center" ng-if="!ppp.isMetAllCapabilities"></td>
-								<td class="text-center" ng-if="ppp.isMetAllCapabilities">
-									All Met<br/>
-									<i class="fa fa-check-circle fa-lg ctc-green"></i>
-								</td>
-
-							</thead>
-							<tbody>
-								<tr ng-repeat="o in ppp.displayArray" >
-									<td>
-										<span class="text-success" ng-if="o.capability"><strong>{{o.capability.name}}</strong></span>
-										<span ng-if="o.capabilitySkill">&nbsp; &nbsp;{{o.capabilitySkill.name}}</span>
-									</td>
-
-									<td class="text-center" ng-repeat="person in ppp.winners" ng-class="{'cbg-light-steel-blue':person.selected}">
-										<i class="fa fa-check-circle fa-lg ctc-green" ng-if="person.capabilitiesByCode[o.code]"></i>
-										<i class="fa fa-check fa-sm" ng-if="person.skillsByCode[o.code]"></i>
-									</td>
-									<td class="text-center">
-										<i class="fa fa-check-circle fa-lg ctc-green" ng-if="o.capability && o.capability.met"></i>
-										<i class="fa fa-check fa-sm" ng-if="o.capabilitySkill && o.capabilitySkill.met"></i>
-									</td>
-=======
 			<!-- // Sprint With Us opportunity // -->
 			<div ng-if="ppp.isSprintWithUs">
 				<uib-tabset active>
@@ -307,6 +243,17 @@
 							<i class="fa fa-people"></i> Team and Cost
 						</uib-tab-heading>
 						<div class="proposal-form-container">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="well well-info">
+										<p>
+											Create your team by selecting the members with the buttons on the top of the table.
+											The required Capabilities are listed in bold and MUST be met in order to submit your proposal.
+											Individual skills under each capability are not required, but if met will be used as part of your overall score.
+									</p>
+									</div>
+								</div>
+							</div>
 							<div class="col-sm-12">
 								<form-input
 									ng-model="ppp.proposal.cost"
@@ -331,24 +278,27 @@
 												{{person.displayName}}
 											</button>
 										</td>
-										<td class="text-center">Met</td>
+										<td class="text-center" ng-if="!ppp.isMetAllCapabilities"></td>
+										<td class="text-center" ng-if="ppp.isMetAllCapabilities">
+											All Met<br/>
+											<i class="fa fa-check-circle fa-lg ctc-green"></i>
+										</td>
 
 									</thead>
 									<tbody>
 										<tr ng-repeat="o in ppp.displayArray" >
 											<td>
-												<span ng-if="o.capability"><strong>{{o.capability.name}}</strong></span>
+												<span class="text-success" ng-if="o.capability"><strong>{{o.capability.name}}</strong></span>
 												<span ng-if="o.capabilitySkill">&nbsp; &nbsp;{{o.capabilitySkill.name}}</span>
 											</td>
->>>>>>> develop
 
 											<td class="text-center" ng-repeat="person in ppp.winners" ng-class="{'cbg-light-steel-blue':person.selected}">
-												<i class="fa fa-check-circle ctc-green" ng-if="person.capabilitiesByCode[o.code]"></i>
-												<i class="fa fa-check-circle ctc-green" ng-if="person.skillsByCode[o.code]"></i>
+												<i class="fa fa-check-circle fa-lg ctc-green" ng-if="person.capabilitiesByCode[o.code]"></i>
+												<i class="fa fa-check fa-sm" ng-if="person.skillsByCode[o.code]"></i>
 											</td>
 											<td class="text-center">
-												<i class="fa fa-check-circle ctc-green" ng-if="o.capability && o.capability.met"></i>
-												<i class="fa fa-check-circle ctc-green" ng-if="o.capabilitySkill && o.capabilitySkill.met"></i>
+												<i class="fa fa-check-circle fa-lg ctc-green" ng-if="o.capability && o.capability.met"></i>
+												<i class="fa fa-check fa-sm" ng-if="o.capabilitySkill && o.capabilitySkill.met"></i>
 											</td>
 
 										</tr>
@@ -356,7 +306,7 @@
 								</table>
 							</div>
 
-								<!-- 				
+								<!--
 								<div class="col-sm-12">
 									<dl>
 										<dt>1. Mimimum</dt>
@@ -504,10 +454,10 @@
 					</div>
 				</div>
 			</div>
-			-->	
-		
+			-->
+
 		</div>
-	
+
 	</form>
 
 </section>
