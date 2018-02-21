@@ -207,7 +207,8 @@
 				</div>
 			</div>
 
-<<<<<<< HEAD
+			<! // This stuff appears to be orphaned from SWU? // -->
+			<!--
 			<uib-tab index="1">
 				<uib-tab-heading>
 					<i class="fa fa-people"></i> Team and Cost
@@ -270,7 +271,8 @@
 										<i class="fa fa-check-circle fa-lg ctc-green" ng-if="o.capability && o.capability.met"></i>
 										<i class="fa fa-check fa-sm" ng-if="o.capabilitySkill && o.capabilitySkill.met"></i>
 									</td>
-=======
+					-->
+
 			<!-- // Sprint With Us opportunity // -->
 			<div ng-if="ppp.isSprintWithUs">
 				<uib-tabset active>
@@ -340,8 +342,6 @@
 												<span ng-if="o.capability"><strong>{{o.capability.name}}</strong></span>
 												<span ng-if="o.capabilitySkill">&nbsp; &nbsp;{{o.capabilitySkill.name}}</span>
 											</td>
->>>>>>> develop
-
 											<td class="text-center" ng-repeat="person in ppp.winners" ng-class="{'cbg-light-steel-blue':person.selected}">
 												<i class="fa fa-check-circle ctc-green" ng-if="person.capabilitiesByCode[o.code]"></i>
 												<i class="fa fa-check-circle ctc-green" ng-if="person.skillsByCode[o.code]"></i>
