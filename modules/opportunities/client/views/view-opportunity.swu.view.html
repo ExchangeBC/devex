@@ -174,22 +174,20 @@
 					<div class="panel-body">
 						<p>
 							Complete the evaluation Matrix below.<br/>
-							<ol>
+							<ul>
 								<li>
-									How many teams do you wish to interview? <input type="text" class="form-input input-sm" width="1" ng-model="vm.opportunity.numberOfInterviews"/>
-								</li>
-								<li>
-									Complete the <a href ng-click="vm.questions()">Question Ranking</a>
+									Complete the Question Ranking
 								</li>
 								<li>
 									Complete the Interview Ranking for each team
 								</li>
 								<li>
-									At this point the price will be unmasked
+									At this point the price will be unmasked and you may assign the opportunity
 								</li>
-							</ol>
+							</ul>
 							<br/>
 							<p ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a></p>
+							<p ng-if="vm.stageIs('interview') || vm.stageIs('questions')">How many teams do you wish to interview? <input type="text" class="form-input input-sm" width="1" ng-model="vm.opportunity.numberOfInterviews"/></p>
 							<p ng-if="vm.stageIs('interview')"><strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score</p>
 							<p ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</p>
 							<p ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</p>
@@ -203,6 +201,8 @@
 								<td align="center"><strong>Questions</strong></td>
 								<td><strong>Interview</strong></td>
 								<td><strong>Price (Target: {{vm.opportunity.totalTarget | currency}})</strong></td>
+								<td><strong>Score</strong></td>
+								<td><strong>Assigned</strong></td>
 							</tr>
 						</thead>
 						<tbody>
@@ -224,31 +224,18 @@
 								<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
 								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.cost | currency}}</td>
 								<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
-							</tr>
-							<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
-								<td >{{proposal.scores.skill}} {{proposal.scores.total}}</td>
 
-								<td  align="center">{{proposal.scores.question}}</td>
+								<td ng-if="!vm.stage('price')">N/A</td>
+								<td ng-if="vm.stage('price')">{{proposal.scores.total}}</td>
 
-								<td >{{proposal.scores.interview}}</td>
-
-								<td >{{proposal.scores.price}}</td>
+								<td ng-if="!vm.stage('price')">&nbsp;</td>
+								<td ng-if="vm.stage('price') && $index!==0">&nbsp;</td>
+								<td ng-if="vm.stageIs('price') && $index===0">
+									<button type="button" class="btn btn-success" data-ng-click="vm.assign(proposal)">Assign</button>
+								</td>
+								<td ng-if="vm.stageIs('assigned') && $index===0"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
 							</tr>
 
-<!--
-							<tr>
-								<td>Team B</td>
-								<td align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
-								<td><a href ng-click="vm.interview(2)">Score : ( TBD )</a></td>
-								<td>Quote: ( TBD )</td>
-							</tr>
-							<tr>
-								<td>Team C</td>
-								<td align="center"><span class="text-danger"><i class="fa fa-times-circle"></i></span></td>
-								<td>N/A</td>
-								<td>N/A</td>
-							</tr>
- -->
 						</tbody>
 					</table>
 				</div>

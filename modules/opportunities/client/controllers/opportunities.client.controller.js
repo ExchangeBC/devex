@@ -500,6 +500,13 @@
 				}
 			});
 		};
+		vm.assign = function (proposal) {
+			vm.opportunity.evaluationStage = vm.stages.assigned;
+			vm.opportunity.proposal = proposal;
+			vm.saveOpportunity ();
+			proposal.isAccepted = true;
+			vm.saveProposal (proposal);
+		};
 		// -------------------------------------------------------------------------
 		//
 		// publish or un publish the opportunity

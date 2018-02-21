@@ -41,6 +41,7 @@ var ProposalSchema = new Schema ({
 	attachments          : {type: [AttachmentSchema], default: []},
 	cost                 : {type: Number, default: 0},
 	interviewComplete    : {type: Boolean, default: false},
+	isAccepted           : {type: Boolean, default: false},
 	scores : {
 		skill           : {type: Number, default: 0},
 		question        : {type: Number, default: 0},
