@@ -79,8 +79,15 @@ var OpportunitySchema = new Schema({
 	isPrototype               : {type: Boolean, default: false},
 	totalTarget               : {type: Number, default: 0},
 	terms                     : {type: String, default: ''},
+	questions                 : {type: [String], default:[]},
 	evaluationStage           : {type: Number, default: 0},
-	numberOfInterviews        : {type: Number, default: 2}
+	numberOfInterviews        : {type: Number, default: 2},
+	weights : {
+		skill               : {type: Number, default: 0.2},
+		question            : {type: Number, default: 0.2},
+		interview           : {type: Number, default: 0.5},
+		price               : {type: Number, default: 0.1}
+	}
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

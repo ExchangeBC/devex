@@ -129,7 +129,7 @@
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isGov = isGov;
+		vm.isGov                   = isGov;
 		vm.hasEmail                = isUser && Authentication.user.email !== '';
 		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
 		vm.loggedIn                = isUser;
@@ -189,6 +189,7 @@
 			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
 			.then (function (proposals) {
 				vm.proposals = proposals;
+
 				//
 				// HACK: TBD : should have questions already on opportunity
 				//
@@ -210,6 +211,7 @@
 						vm.responses[questionIndex].push (p.questions[questionIndex])
 					});
 				}
+				console.log ('responses', vm.responses);
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
@@ -236,8 +238,9 @@
 					//
 					// save all the proposals now with the new question rankings
 					//
-					vm.saveProposals ();
+					// vm.saveProposals ();
 				}
+				vm.saveProposals ();
 			});
 
 		}
@@ -276,6 +279,7 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
+							console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.moveDown = function (resp, qindex) {
@@ -284,6 +288,7 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
+							console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.commit = function () {
@@ -293,6 +298,7 @@
 			}, {
 			})
 			.then (function (resp) {
+				console.log ('resp', resp);
 				if (resp === 'save' || resp === 'commit') {
 					//
 					// TBD: calculate scores etc.
@@ -336,13 +342,75 @@
 		// save all the proposals (ranknings etc)
 		//
 		// -------------------------------------------------------------------------
+		vm.saveProposal = function (proposal) {
+			vm.calculateProposalScore (proposal);
+			console.log ('saving proposal');
+			console.log ('questions', proposal.questions);
+			proposal.$update ();
+		};
 		vm.saveProposals = function () {
 			vm.proposals.forEach (function (proposal) {
-				proposal.$update ();
+				vm.saveProposal (proposal);
 			});
 		};
 		vm.saveOpportunity = function () {
 			vm.opportunity.$update ();
+		};
+		//
+		// skills are scored when the proposal is saved
+		//
+		vm.skillScore = function (proposal) {
+			// console.log ('proposal.scores.skill', proposal.scores.skill);
+			return proposal.scores.skill;
+		};
+		//
+		// just pass it back
+		//
+		vm.interviewScore = function (proposal) {
+			// console.log ('proposal.scores.interview', proposal.scores.interview);
+			return proposal.scores.interview;
+		};
+		//
+		// since the ranking is from 1 - n we want to invert it and then add up and
+		// give a percent over best possible score
+		//
+		// n = number of proposals
+		// m = number of questions
+		// Q(r) = question ranking (will be from 1 to n with 1 being the best)
+		//
+		// score = sum ( (n+1)-Q(r) ) / (n * m) * 100
+		//
+		vm.questionScore = function (proposal) {
+			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
+			// console.log ('best:', bestScore);
+			proposal.scores.question = (proposal.questions.map (function (q) {
+				// console.log ('question score:', vm.proposals.length + 1 - q.rank);
+				return vm.proposals.length + 1 - q.rank;
+			}).reduce (function (a, b) {
+				// console.log ('reduction:', a+b);
+				return a + b;
+			})) / bestScore * 100;
+			// console.log ('proposal.scores.question', proposal.scores.question);
+			return proposal.scores.question;
+		};
+		//
+		// this will be a simple distance comparison
+		//
+		vm.priceScore = function (proposal) {
+			var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
+			proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
+			// console.log ('proposal.scores.price', proposal.scores.price);
+			return proposal.scores.price;
+		};
+		vm.calculateProposalScore = function (proposal) {
+			proposal.scores.total = [
+				vm.opportunity.weights.skill     * vm.skillScore     (proposal),
+				vm.opportunity.weights.question  * vm.questionScore  (proposal),
+				vm.opportunity.weights.interview * vm.interviewScore (proposal),
+				vm.opportunity.weights.price     * vm.priceScore     (proposal)
+			].reduce (function (t, c) {return t + c;});
+			// console.log ('proposal.scores.total', proposal.scores.total);
+			return proposal.scores.total;
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -499,7 +567,10 @@
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
-
+		//
+		// Every time we enter here until the opportunity has been published we will update the questions to the most current
+		//
+		if (!vm.isPublished) vm.opportunity.questions = dataService.questions;
 		//
 		// set up the structures for capabilities
 		//
@@ -762,6 +833,10 @@
 					savemeSeymour = result;
 				});
 			}
+			//
+			// update target total
+			//
+			vm.opportunity.totalTarget = vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget
 			//
 			// Create a new opportunity, or update the current instance
 			//

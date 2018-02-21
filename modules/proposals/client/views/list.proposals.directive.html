@@ -1,52 +1,31 @@
-<div class="container">
-	<br>
-	<div class="row">
-		<div class="col-xs-12">
-			<div class="well well-important well-left-align">
-				<p><span class="light"><i class="glyphicon glyphicon-eye-open"></i> Views:</span><span class="strong"> {{vm.pageViews}}</span></p>
-				<p><span class="light"><i class="glyphicon glyphicon-user"></i> Followers:</span><span class="strong"> {{vm.stats.following}}</span></p>
-				<p><span class="light"><i class="glyphicon glyphicon-file"></i> Proposals started:<span class="strong"> {{vm.stats.draft}}</span></p>
-				<p><span class="light"><i class="glyphicon glyphicon-inbox"></i> Proposals received:</span><span class="strong"> {{vm.stats.submitted}}</span></p>
+<div class="row">
+	<div class="col-xs-12 text-center">
+			<div class="label-list strong" style="font-size: 1.1em; margin: 10px;">
+				<span class="strong"><i class="fa fa-eye"></i> {{vm.pageViews}}</span> Views &nbsp;&nbsp;&nbsp;
+				<span class="strong"><i class="fa fa-user"></i> {{vm.stats.following}}</span> Followers &nbsp;&nbsp;&nbsp;
+				<span class="strong"><i class="fa fa-file-o"></i> {{vm.stats.draft}}</span> Proposals started &nbsp;&nbsp;&nbsp;
+				<span class="strong"><i class="fa fa-inbox"></i> {{vm.stats.submitted}}</span> Proposals submitted
 			</div>
-		</div>
-		<div class="col-xs-12" ng-if="!vm.isclosed">
-			<div class="well well-gray well-left-align">
-				<p>You'll be able to view submitted proposals here when the opportunity closes.</p>	
-			</div>
-		</div>			
-	</div>
-
-	<div class="row list-head" ng-if="vm.isclosed">
-		<div class="col-sm-7">
-			<h3 ng-bind="vm.title" class="list-page-hide"></h3>
-		</div>
-	</div>
-	<div class="row" ng-if="vm.isclosed">
-		<div class="col-xs-12" ng-if="! vm.proposals.length">
-			<div class="well well-gray">
-				<p><i class="fa fa-frown-o"></i> No proposals were received!</p>
-			</div>
-		</div>
-		<div class="col-xs-4 col-sm-2">
-			<div class="img-avatar" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
-				<img class="img-avatar" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
-				
-	<!-- 			<div class="col-md-3">
-				<div >
-					<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
-				</div>
-				</div>
-	 -->
-	 			<!--
-	 			<div class="col-md-5">
-					<span class="card-title">{{proposal.user.firstName}} {{proposal.user.lastName}}</span>
-				</div>
-				<div class="col-md-2">
-					<a  id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })">View Proposal</a><br/>
-				</div>
-			-->
-			</div>
-		</div>
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
+		<div class="well">You'll be able to view submitted proposals here when the opportunity closes.</div>
+	</div>			
+</div>
+
+<div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
+	<div class="col-xs-12 text-center">
+		<div class="well"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.isclosed && vm.proposals.length">
+	<div class="col-xs-12 text-center">
+		<div class="well well-important">
+			<p class="strong">You've got proposals!</p>
+			<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
+		</div>
+	</div>
+</div>

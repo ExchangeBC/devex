@@ -130,22 +130,6 @@
 	// =========================================================================
 	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
-		var anyUnion = function (a, b) {
-			//
-			// I know I know I know. I should really sort first then compare up till greater than
-			// in order to optimize, but with such small lists doesn't two sorts outwiegh the potential
-			// of n*m comparisons in the worst case? it's pretty close
-			//
-			var i, j, found;
-			for (i=0; i<a.length; i++) {
-				for (j=0; j<b.length; j++) {
-					found = (a[i] === b[j]);
-					if (found) break;
-				}
-				if (found) break;
-			}
-			return found;
-		}
 		var ppp                                   = this;
 		ppp.features                              = window.features;
 		ppp.trust            = $sce.trustAsHtml;
@@ -214,7 +198,13 @@
 		// member we want a hash of capabiltiies and skills by code that have a boolean as data
 		//
 		if (ppp.isSprintWithUs) {
-
+			//
+			// we need two total type things, one flag that indicates whether or not
+			// we have met all the capability requirements, and one number which is the total
+			// number of specific skills we have met, this latter becomes the skill score
+			//
+			ppp.isMetAllCapabilities = false;
+			ppp.numberOfSKillsMet = 0;
 			//
 			// for building the output table we need a helper array of objects saying what the row is, in order
 			// that the capabilities come from the service
@@ -239,8 +229,9 @@
 				}
 			});
 
-			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities);
-			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills);
+			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities).sort ();
+			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills).sort ();
+
 
 			console.log ('ppp.allNeededCapabilities',ppp.allNeededCapabilities);
 			console.log ('ppp.allskills',ppp.allskills);
@@ -318,20 +309,32 @@
 			// for each capability required go through all seleced members and OR up if they have it
 			// and set that result on the capability itself as MET, same with skills
 			//
+			ppp.isMetAllCapabilities = true;
 			(Object.keys (ppp.iOppCapabilities)).forEach (function (code) {
 				var c = ppp.iCapabilities[code];
 				c.met = ppp.winners.reduce (function (accum, member) {
 					return (accum || (member.selected && member.capabilitiesByCode[code]));
 				}, false);
+				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && c.met;
 				console.log ('capability', code, c.met);
 			});
+			//
+			// for each skill, see if the team meets it and then caount them up
+			//
+			ppp.numberOfSKillsMet = 0;
+			var nskills = 0;
 			(Object.keys (ppp.iOppCapabilitySkills)).forEach (function (code) {
-				var c = ppp.iCapabilitySkills[code];
-				c.met = ppp.winners.reduce (function (accum, member) {
-					return (accum || (member.selected && member.skillsByCode[code]));
-				}, false);
-				console.log ('skill', code, c.met);
+				if (ppp.iOppCapabilitySkills[code]) {
+					nskills ++;
+					var c = ppp.iCapabilitySkills[code];
+					c.met = ppp.winners.reduce (function (accum, member) {
+						return (accum || (member.selected && member.skillsByCode[code]));
+					}, false);
+					if (c.met) ppp.numberOfSKillsMet++;
+					console.log ('skill', code, c.met);
+				}
 			});
+			ppp.proposal.scores.skill = (ppp.numberOfSKillsMet / nskills) * 100;
 		};
 		ppp.calculateScores ();
 		// -------------------------------------------------------------------------
