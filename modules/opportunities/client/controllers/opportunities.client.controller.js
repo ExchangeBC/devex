@@ -79,7 +79,6 @@
 	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
-
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -182,6 +181,27 @@
 		};
 		// -------------------------------------------------------------------------
 		//
+		// constants for evaluation stages for swu proposals
+		//
+		// -------------------------------------------------------------------------
+		vm.stages = {
+			new        : 0,
+			questions  : 1,
+			interview  : 2,
+			price      : 3,
+			assigned   : 4
+		};
+		//
+		// this returns true if the current stage is on or past the indicated stage
+		//
+		vm.stage = function (stage) {
+			return vm.opportunity.evaluationStage >= vm.stages[stage];
+		};
+		vm.stageIs = function (stage) {
+			return vm.opportunity.evaluationStage === vm.stages[stage];
+		};
+		// -------------------------------------------------------------------------
+		//
 		// stuff for swu evaluation
 		//
 		// -------------------------------------------------------------------------
@@ -189,33 +209,41 @@
 			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
 			.then (function (proposals) {
 				vm.proposals = proposals;
+				//
+				// removed hack as this is now in the right place in the edit opportunity
+				//
 
-				//
-				// HACK: TBD : should have questions already on opportunity
-				//
-				vm.opportunity.questions = [];
-				vm.proposals[0].questions.forEach (function (q) {
-					vm.opportunity.questions.push (q.question);
-				});
-				//
-				// end of hack
-				//
+				// //
+				// // HACK: TBD : should have questions already on opportunity
+				// //
+				// vm.opportunity.questions = [];
+				// vm.proposals[0].questions.forEach (function (q) {
+				// 	vm.opportunity.questions.push (q.question);
+				// });
+				// //
+				// // end of hack
+				// //
 				//
 				// make an array of responses (question objects) by question
 				//
 				vm.responses = [];
-				var questionIndex, j;
+				var questionIndex,
+					j;
 				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
 					vm.proposals.forEach (function (p) {
 						vm.responses[questionIndex].push (p.questions[questionIndex])
 					});
 				}
-				console.log ('responses', vm.responses);
+				vm.responses.forEach (function (q) {
+					q.forEach (function (r) {
+						console.log ('response:', r.rank, r.response);
+					})
+				})
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
-				if (vm.opportunity.evaluationStage === 0) {
+				if (vm.opportunity.evaluationStage === vm.stages.new) {
 					vm.responses.forEach (function (qset) {
 						//
 						// randomize the responses
@@ -235,14 +263,15 @@
 							qset[i].rank = i+1;
 						}
 					});
-					//
-					// save all the proposals now with the new question rankings
-					//
-					// vm.saveProposals ();
+					vm.opportunity.evaluationStage = vm.stages.questions;
+					vm.saveOpportunity ();
 				}
+				//
+				// save all the proposals now with the new question rankings if applicable
+				// also because this will cause scoring to run on each proposal as well
+				//
 				vm.saveProposals ();
 			});
-
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -306,7 +335,7 @@
 					vm.saveProposals ();
 				}
 				if (resp === 'commit') {
-					vm.opportunity.evaluationStage++;
+					vm.opportunity.evaluationStage = vm.stages.interview;
 					vm.saveOpportunity ();
 				}
 			});
@@ -316,25 +345,64 @@
 		// Interview Modal
 		//
 		// -------------------------------------------------------------------------
-		vm.interview = function (team) {
+		vm.interview = function (proposal) {
 			modalService.showModal ({
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/interview.modal.html',
 				controller: function ($scope, $uibModalInstance) {
+					$scope.data = {
+						score: proposal.scores.interview,
+						name : proposal.businessName
+					};
 					$scope.close = function () {
-						console.log ('what');
-						$uibModalInstance.close();
+						$uibModalInstance.close ();
 					};
 					$scope.ok = function () {
-						$uibModalInstance.close();
+						$uibModalInstance.close ({
+							action : 'save',
+							score  : $scope.data.score
+						});
 					};
+					$scope.commit = function () {
+						$uibModalInstance.close ({
+							action : 'commit',
+							score  : $scope.data.score
+						});
+					}
 				}
 			}, {
 			})
-			.then (function () {
-				//
-				// TBD: calculate scores etc.
-				//
+			.then (function (resp) {
+				console.log ('resp', resp);
+				if (resp.action === 'save') {
+					//
+					// calculate scores etc.
+					//
+					proposal.scores.interview = resp.score;
+					vm.saveProposal (proposal);
+				}
+				else if (resp.action === 'commit') {
+					//
+					// calculate scores and close off interview
+					//
+					proposal.scores.interview = resp.score;
+					proposal.interviewComplete = true;
+					vm.saveProposal (proposal);
+					//
+					// if the number of interviews complete match the number of interviews required
+					// then we progress to the pricing stage
+					//
+					var ninterviewcomplete = 0;
+					vm.proposals.forEach (function (p) {
+						if (p.interviewComplete) ninterviewcomplete++;
+					});
+					if (ninterviewcomplete == vm.opportunity.numberOfInterviews) {
+						vm.opportunity.evaluationStage = vm.stages.price;
+						vm.saveOpportunity ();
+						vm.calculatePriceScores ();
+						vm.saveProposals ();
+					}
+				}
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -397,12 +465,13 @@
 		// this will be a simple distance comparison
 		//
 		vm.priceScore = function (proposal) {
-			var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
-			proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
+			// var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
+			// proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
 			// console.log ('proposal.scores.price', proposal.scores.price);
 			return proposal.scores.price;
 		};
 		vm.calculateProposalScore = function (proposal) {
+			vm.calculatePriceScores();
 			proposal.scores.total = [
 				vm.opportunity.weights.skill     * vm.skillScore     (proposal),
 				vm.opportunity.weights.question  * vm.questionScore  (proposal),
@@ -411,6 +480,25 @@
 			].reduce (function (t, c) {return t + c;});
 			// console.log ('proposal.scores.total', proposal.scores.total);
 			return proposal.scores.total;
+		};
+		vm.calculatePriceScores = function () {
+			var maxDistance = 0;
+			var minDistance = 30000000;
+			vm.proposals.forEach (function (p) {
+				if (p.interviewComplete) {
+					p.distance = Math.abs (vm.opportunity.totalTarget - p.cost);
+					if (p.distance > maxDistance) maxDistance = p.distance;
+					if (p.distance < minDistance) minDistance = p.distance;
+				}
+			});
+			maxDistance -= minDistance;
+			vm.proposals.forEach (function (p) {
+				if (p.interviewComplete) {
+					p.distance -= minDistance;
+					var distanceFromMax = maxDistance - p.distance;
+					p.scores.price = (distanceFromMax) / maxDistance * 100;
+				}
+			});
 		};
 		// -------------------------------------------------------------------------
 		//

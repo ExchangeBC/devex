@@ -80,6 +80,13 @@ var OpportunitySchema = new Schema({
 	totalTarget               : {type: Number, default: 0},
 	terms                     : {type: String, default: ''},
 	questions                 : {type: [String], default:[]},
+	//
+	// 0 = not started
+	// 1 = questions
+	// 2 = interview
+	// 3 = price
+	// 4 = assigned
+	//
 	evaluationStage           : {type: Number, default: 0},
 	numberOfInterviews        : {type: Number, default: 2},
 	weights : {

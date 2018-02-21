@@ -189,7 +189,10 @@
 								</li>
 							</ol>
 							<br/>
-							<strong>Current Stage: <a href ng-click="vm.questions()">Question Ranking</a></strong>
+							<p ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a></p>
+							<p ng-if="vm.stageIs('interview')"><strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score</p>
+							<p ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</p>
+							<p ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</p>
 						</p>
 
 					</div>
@@ -204,21 +207,22 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage<1">(Hidden {{$index+1}})</td>
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage>=1">{{proposal.businessName}}</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.view({ proposalId: proposal._id })">{{proposal.businessName}}</a></td>
 								<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
-								<td ng-if="$index < vm.opportunity.numberOfInterviews" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('questions')" align="center">TBD</td>
 								<td ng-if="$index >= vm.opportunity.numberOfInterviews" align="center">N/A</td>
 
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage<1">Score : ( TBD )</td>
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage===1 && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)">Score : ( TBD )</a></td>
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage===1 && proposal.interviewComplete">Score : XXXX</td>
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage>1">Score : {{proposal.scores.interview}}</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">Score : ( TBD )</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)">Score : ( TBD )</a></td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete">Score : XXXX</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Score : {{proposal.scores.interview}}</td>
 								<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage<2">Quote: ( TBD )</td>
-								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.opportunity.evaluationStage>=2">Quote: {{proposal.cost | currency}}</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
+								<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.cost | currency}}</td>
 								<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 							</tr>
 							<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
