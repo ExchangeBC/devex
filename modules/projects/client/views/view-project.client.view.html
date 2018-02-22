@@ -1,44 +1,52 @@
-<section class="detail">
+<section class="detail-page-background">
 
 	<div class="container">
+
 		<div class="row">
-			<div class="col-xs-12 text-right">
-				<div>
-					<label class="label-danger" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" uib-tooltip="No one can see this page until you publish it.">
-					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
-					</label>
-				</div>
-				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" uib-tooltip="Edit this page">
-						<i class="glyphicon glyphicon-edit"></i> Edit
-					</button>
-					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Click here to send a request to the project admin.">
-						<i class="glyphicon glyphicon-user"></i> Request Membership
-					</button>
-					<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now this project is published and anyone can view it. You can unpublish it here.">
-						<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
-					</a>
-					<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this project to the world?">
-						<i class="glyphicon glyphicon-check"></i> Publish
-					</a>
-				</div>
-				<div class="col-xs-12 col-sm-12 text-center">
-					<h1><i class="fa fa-pie-chart"></i> &nbsp; {{vm.project.name}}</h1>
-					<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.project.short"></span></p>
+			<div class="col-xs-12">
+				<div class="breadcrumb-nav">
+					<a href="/projects" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Projects</a>
 				</div>
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<button type="button" class="btn btn-sm btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" uib-tooltip="Edit this page"><i class="fa fa-pencil"></i> EDIT</button>
+				<button type="button" class="btn btn-sm btn-primary" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-user"></i> Request Membership
+				</button>
+				<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-sm btn-text-only" ng-click="vm.publish(false)" uib-tooltip="Right now this project is published and anyone can view it. You can unpublish it here.">
+					<i class="fa fa-ban"></i> UNPUBLISH
+				</a>
+				<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this project to the world?"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+			</div>
+		</div>
+
 	</div>
 
-<div class="container">
-<div class="card card-flat">
-	<div class="card-header">
+	<div class="container container-edit-form">
 		<div class="row">
-			<div class="col-sm-5">
+			<div class="col-xs-12 text-center">
+				<p class="opp-detail-header"><span class="small">Created on <span class="strong" ng-bind="vm.project.created | date:'mediumDate'"></span> by <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span><span ng-if="!vm.project.createdBy">Deleted User</span>&nbsp;&nbsp; Last updated on <span class="strong" ng-bind="vm.project.updated | date:'mediumDate'"></span> by <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span><span ng-if="!vm.project.updatedBy">Deleted User</span></p>
+			</div>
+		</div>
+		<hr class="detail-page">
+
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h1><i class="fa fa-pie-chart"></i> {{vm.project.name}}</h1>
+				<p ng-bind="vm.project.short"></p>
+			</div>
+		</div>
+		<hr class="detail-page">
+
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
 				<p class="label-list" ng-if="vm.project.tags">
 				<span class="label label-info" ng-repeat="code in vm.project.tags">{{code}}</span></p>
 			</div>
-			<div class="col-sm-7">
+			<div class="col-xs-12 col-sm-6">
 				<dl class="dl-horizontal">
 				<dt>Program:</dt>
 				<dd>
@@ -53,62 +61,22 @@
 				</dl>
 			</div>
 		</div>
-	</div>
+		<hr class="detail-page">
 
-	<div class="panel-body">
-		<p ng-bind-html="vm.display.description"></p>
-	</div>
-
-	<div class="panel-footer" style="background-color: #f2f2f2">
-		<em class="small text-muted">
-		Created on
-		<span ng-bind="vm.project.created | date:'mediumDate'"></span>
-		by
-		<span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span>
-		<span ng-if="!vm.project.createdBy">Deleted User</span>
-		</em>
-			<br/>
-		<em class="small text-muted">
-		Last updated on
-		<span ng-bind="vm.project.updated | date:'mediumDate'"></span>
-		by
-		<span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span>
-		<span ng-if="!vm.project.updatedBy">Deleted User</span>
-		</em>
-	</div>
-</div>
-</div>
-
-<div class="container">
-	<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
-	<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
-	<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
-</div>
-
-<div class="container">
-	<div class="row form-foot">
-	<div class="col-sm-12 col-form-buttons text-right">
-		<div>
-			<label class="label-danger" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" uib-tooltip="No one can see this page until you publish it.">
-			<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
-			</label>
+		<div class="row">
+			<div class="col-xs-12">
+				<p ng-bind-html="vm.display.description"></p>
+			</div>
 		</div>
-		<div class="btn-group">
-			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" uib-tooltip="Edit this page">
-				<i class="glyphicon glyphicon-edit"></i> Edit
-			</button>
-			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this project? Click here to send a request to the project admin.">
-				<i class="glyphicon glyphicon-user"></i> Request Membership
-			</button>
-			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this project is published and anyone can view it. You can unpublish it here.">
-				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
-			</a>
-			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this project to the world?">
-				<i class="glyphicon glyphicon-check"></i> Publish
-			</a>
-		</div>
+
 	</div>
+
+	<div class="container">
+		<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
+		<br>
+		<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
+		<br>
+		<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
 	</div>
-</div>
-</div>
+
 </section>
