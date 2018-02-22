@@ -334,6 +334,7 @@
 					console.log ('skill', code, c.met);
 				}
 			});
+			if (!ppp.proposal.scores) ppp.proposal.scores = {};
 			ppp.proposal.scores.skill = (ppp.numberOfSKillsMet / nskills) * 100;
 		};
 		ppp.calculateScores ();

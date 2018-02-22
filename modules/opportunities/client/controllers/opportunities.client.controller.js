@@ -396,7 +396,7 @@
 					vm.proposals.forEach (function (p) {
 						if (p.interviewComplete) ninterviewcomplete++;
 					});
-					if (ninterviewcomplete == vm.opportunity.numberOfInterviews) {
+					if (ninterviewcomplete === vm.opportunity.numberOfInterviews) {
 						vm.opportunity.evaluationStage = vm.stages.price;
 						vm.saveOpportunity ();
 						vm.calculatePriceScores ();
