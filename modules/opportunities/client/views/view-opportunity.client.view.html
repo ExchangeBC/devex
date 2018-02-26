@@ -179,9 +179,9 @@
 		</div>
 
 		<!-- // Opportunity Detail views // -->
-		<ng-include src="'/modules/opportunities/client/views/view-opportunity.cwu.view.html'" ng-if="!vm.isSprintWithUs"></ng-include>
+		<div class="row" ng-include="'/modules/opportunities/client/views/view-opportunity.cwu.view.html'" ng-if="!vm.isSprintWithUs"></div>
 
-		<ng-include src="'/modules/opportunities/client/views/view-opportunity.swu.view.html'" ng-if="vm.isSprintWithUs"></ng-include>
+		<div class="row" ng-include="'/modules/opportunities/client/views/view-opportunity.swu.view.html'" ng-if="vm.isSprintWithUs"></div>
 
 		<!--
 		<div class="row">

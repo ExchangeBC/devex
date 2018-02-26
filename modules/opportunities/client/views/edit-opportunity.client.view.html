@@ -14,12 +14,12 @@
 
 
 <section class="edit-form-background" role="main">
-	
+
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 
 
 		<div class="container container-edit-form">
-			
+
 			<div class="edit-form-header">
 				<div class="row">
 					<div class="col-xs-8" ng-if="vm.editing">
@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<br>
-	
+
 			<div class="row">
 				<div class="col-xs-12">
 					<fieldset>
@@ -63,73 +63,73 @@
 						<uib-tab-heading>
 							Header
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.title.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.title.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="2">
 						<uib-tab-heading>
 							Background
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.description.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.description.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="4" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
 						<uib-tab-heading>
 							Details
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.details.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.cwu.details.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="5" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
 						<uib-tab-heading>
 							Acceptance and Evaluation
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.cwu.acceptance.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.cwu.acceptance.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="6" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 						<uib-tab-heading>
 							Details
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.details.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.details.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="7" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 						<uib-tab-heading>
 							Phases
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.phases.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.phases.view.html'"></div>
 					</uib-tab>
 					<!--
 					<uib-tab index="8" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isInception">
 						<uib-tab-heading>
 							Inception &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isInception"></i>
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.inception.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.inception.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="10" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isPrototype">
 						<uib-tab-heading>
 							Prototype &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isPrototype"></i>
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.prototype.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.prototype.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isImplementation">
 						<uib-tab-heading>
 							Implementation &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isImplementation"></i>
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></div>
 					</uib-tab>
 					-->
 					<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 						<uib-tab-heading>
 							Capabilities and Skills
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.implementation.view.html'"></div>
 					</uib-tab>
 					<uib-tab index="14" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 						<uib-tab-heading>
 							Terms and Conditions
 						</uib-tab-heading>
-						<ng-include class="proposal-form-container" src="'/modules/opportunities/client/views/edit-opportunity.swu.terms.view.html'"></ng-include>
+						<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/edit-opportunity.swu.terms.view.html'"></div>
 					</uib-tab>
 				</uib-tabset>
 			</div>
-			
+
 			<br/>
 
 			<div class="edit-form-footer">

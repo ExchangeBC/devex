@@ -39,8 +39,8 @@
 				</div>
 			</div>
 			<br>
-			<ng-include ng-if="!ppp.isSprintWithUs" class="proposal-form-container" src="'/modules/proposals/client/views/edit-proposal.cwu.view.html'"></ng-include>
-			<ng-include ng-if="ppp.isSprintWithUs" class="proposal-form-container" src="'/modules/proposals/client/views/edit-proposal.swu.view.html'"></ng-include>
+			<div ng-if="!ppp.isSprintWithUs" class="proposal-form-container" ng-include="'/modules/proposals/client/views/edit-proposal.cwu.view.html'"></div>
+			<div ng-if="ppp.isSprintWithUs" class="proposal-form-container" ng-include="'/modules/proposals/client/views/edit-proposal.swu.view.html'"></div>
 
 		</div>
 

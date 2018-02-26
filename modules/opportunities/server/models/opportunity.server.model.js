@@ -7,6 +7,9 @@ var mongoose = require('mongoose'),
 	helpers = require(require('path').resolve('./modules/core/server/controllers/core.server.helpers')),
 	Schema = mongoose.Schema;
 
+var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var dayNames   = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 // -------------------------------------------------------------------------
 //
 // Opportunity capabilities
@@ -95,6 +98,64 @@ var OpportunitySchema = new Schema({
 		interview           : {type: Number, default: 0.5},
 		price               : {type: Number, default: 0.1}
 	}
+});
+
+OpportunitySchema.virtual ('closingIn').get (function () {
+	var closing = 'CLOSED';
+	var d = (new Date (this.deadline)) - (new Date ());
+	if (d > 0) {
+		var dd = Math.floor(d / 86400000); // days
+		var dh = Math.floor((d % 86400000) / 3600000); // hours
+		var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+		closing = dm+' minutes';
+		if (dd > 0) closing = dd+' days '+dh+' hours '+dm+' minutes';
+		else if (dh > 0) closing = dh+' hours '+dm+' minutes';
+		else closing = dm+' minutes';
+	}
+	return closing;
+});
+OpportunitySchema.virtual ('isOpen').get (function () {
+	return (new Date (this.deadline)) < (new Date ());
+});
+OpportunitySchema.virtual ('deadlineDisplay').get (function () {
+	var dt = new Date (this.deadline);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('assignmentDisplay').get (function () {
+	var dt = new Date (this.assignment);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('startDisplay').get (function () {
+	var dt = new Date (this.start);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('endDateDisplay').get (function () {
+	var dt = new Date (this.endDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('inceptionStartDateDisplay').get (function () {
+	var dt = new Date (this.inceptionStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('inceptionEndDateDisplay').get (function () {
+	var dt = new Date (this.inceptionEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('prototypeStartDateDisplay').get (function () {
+	var dt = new Date (this.prototypeStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('prototypeEndDateDisplay').get (function () {
+	var dt = new Date (this.prototypeEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('implementationStartDateDisplay').get (function () {
+	var dt = new Date (this.implementationStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('implementationEndDateDisplay').get (function () {
+	var dt = new Date (this.implementationEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {

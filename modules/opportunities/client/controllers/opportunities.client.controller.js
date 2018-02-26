@@ -79,6 +79,7 @@
 	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
+		console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -243,7 +244,7 @@
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
-				if (vm.opportunity.evaluationStage === vm.stages.new) {
+				if (vm.opportunity.evaluationStage === vm.stages.new && vm.closing = 'CLOSED') {
 					vm.responses.forEach (function (qset) {
 						//
 						// randomize the responses
