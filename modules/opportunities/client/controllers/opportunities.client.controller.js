@@ -244,7 +244,7 @@
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
-				if (vm.opportunity.evaluationStage === vm.stages.new && vm.closing = 'CLOSED') {
+				if (vm.opportunity.evaluationStage === vm.stages.new && vm.closing === 'CLOSED') {
 					vm.responses.forEach (function (qset) {
 						//
 						// randomize the responses
