@@ -21,6 +21,15 @@ var config = require('../config'),
   _ = require('lodash'),
   lusca = require('lusca');
 
+// -------------------------------------------------------------------------
+//
+// cc:logging: declare a new token for morgan to use in the log output
+//
+// -------------------------------------------------------------------------
+morgan.token ('userid', function (req, res) {
+  return (req.user) ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
+});
+
 /**
  * Initialize local variables
  */
@@ -63,6 +72,12 @@ module.exports.initMiddleware = function (app) {
     },
     level: 9
   }));
+
+  app.use ('/uploads/*', function (req, res, next) {
+    var pathname = req.baseUrl;
+    if (!!~pathname.indexOf ('file-')) res.status(403).send ('<h1>403 Forbidden</h1>');
+    else next();
+  });
 
   // Initialize favicon middleware
   app.use(favicon(app.locals.favicon));

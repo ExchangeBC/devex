@@ -43,7 +43,7 @@ exports.invokeRolesPolicies = function () {
     roles: ['user'],
     allows: [{
       resources: '/api/proposals',
-      permissions: '*'
+      permissions: ['post']
     }, {
       resources: '/api/proposals/for/opportunity/:opportunityId',
       permissions: ['get']
