@@ -29,6 +29,8 @@ var path = require('path'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
 
+var memberFields = 'displayName c01_flag c02_flag c03_flag c04_flag c05_flag c06_flag c07_flag c08_flag c09_flag c10_flag c11_flag c12_flag c13_flag c01_years c02_years c03_years c04_years c05_years c06_years c07_years c08_years c09_years c10_years c11_years c12_years c13_years';
+
 // -------------------------------------------------------------------------
 //
 // set a team role on a user
@@ -265,7 +267,7 @@ exports.delete = function (req, res) {
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
 	Team.find(searchTerm (req)).sort('activity name')
-	.populate('members', 'displayName')
+	.populate('members', memberFields)
 	.exec(function (err, teams) {
 		if (err) {
 			return res.status(422).send({
@@ -363,7 +365,7 @@ exports.denyMember = function (req, res) {
 // -------------------------------------------------------------------------
 exports.forOrg = function (req, res) {
 	Team.find({org:req.org._id}).sort('name')
-	.populate('members', 'displayName')
+	.populate('members', memberFields)
 	.exec(function (err, teams) {
 		if (err) {
 			return res.status(422).send({
@@ -393,7 +395,7 @@ exports.new = function (req, res) {
 exports.teamByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'prj' ) {
 		Team.findOne({code:id})
-		.populate('members', 'displayName')
+		.populate('members', memberFields)
 		.exec(function (err, team) {
 			if (err) {
 				return next(err);
@@ -414,7 +416,7 @@ exports.teamByID = function (req, res, next, id) {
 		}
 
 		Team.findById(id)
-		.populate('members', 'displayName')
+		.populate('members', memberFields)
 		.exec(function (err, team) {
 			if (err) {
 				return next(err);

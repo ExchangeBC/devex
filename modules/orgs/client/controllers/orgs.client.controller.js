@@ -6,9 +6,9 @@
 	// Controller for the master list of orgs
 	//
 	// =========================================================================
-	.controller('OrgsListController', function (OrgsService) {
+	.controller('OrgsListController', function (orgs) {
 		var vm      = this;
-		vm.orgs = OrgsService.query();
+		vm.orgs = orgs;
 	})
 	// =========================================================================
 	//
@@ -21,9 +21,10 @@
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isOwner = false;
-		vm.canEdit = vm.isAdmin || vm.isOwner;
-		vm.trust = $sce.trustAsHtml;
+		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+		vm.isOrgOwner      = (vm.user._id === org.owner._id);
+		vm.canEdit         = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
+		vm.trust           = $sce.trustAsHtml;
 
 		vm.description     = $sce.trustAsHtml(vm.org.description);
 		//
@@ -76,13 +77,15 @@
 	//
 	// =========================================================================
 	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+		var vm = this;
+		vm.org = org;
 	})
 	// =========================================================================
 	//
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -95,7 +98,7 @@
 		// vm.previousState  = previousState;
 		// vm.editing        = editing;
 		vm.cities         = dataService.cities;
-		vm.capabilities   = dataService.capabilities;
+		vm.capabilities   = capabilities;
 
 		// if (editing && (!vm.org || !vm.org._id)) {
 		// 	return $state.go('orgadmin.create');
@@ -136,7 +139,6 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.save = function (isValid) {
-			console.log ('org', vm.org.capabilities);
 			vm.orgForm.$setPristine ();
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
@@ -174,56 +176,111 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('OrgSkillsController', function ($scope, $sce, Notification, org, dataService, Authentication, UsersService) {
+	.controller('OrgSkillsController', function ($scope, capabilities, $sce, Notification, org, dataService, Authentication, UsersService) {
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
-		vm.capabilities     = dataService.capabilities;
-		if (!vm.org.capabilities) vm.org.capabilities = [];
-		vm.tinymceOptions = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     :'',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-		};
+		vm.capabilities     = capabilities;
 		vm.updateUserProfile = function (isValid) {
-			console.log ('saviong');
+			vm.orgForm.$setPristine ();
 			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
+				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
 				return false;
 			}
-			var successMessage = '<h4>Edit skills successful</h4>';
-			var user = new UsersService(vm.user);
-			user.$update(function (response) {
-				$scope.$broadcast('show-errors-reset', 'vm.userForm');
-				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
-				Authentication.user = response;
-				vm.user = angular.copy(Authentication.user);
-			}, function (response) {
-				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+			//
+			// Create a new org, or update the current instance
+			//
+			vm.org.createOrUpdate ()
+			//
+			// success, notify and return to list
+			//
+			.then (function () {
+				vm.orgForm.$setPristine ();
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> capabilities saved successfully!'
+				});
+				// .then (function () {
+				// 	$state.go('orgs.view', {orgId:vm.org._id});
+				// });
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> capabilities save error!'
+				});
 			});
 		}
 	})
 	// =========================================================================
 	//
-	// edit org skill list
-	//
-	// =========================================================================
-	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
-		var vm = this;
-		vm.org = org;
-	})
-	// =========================================================================
-	//
-	// edit org skill list
+	// edit org teams list
 	//
 	// =========================================================================
 	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm = this;
 		vm.org = org;
+		vm.features = window.features;
+	})
+	// =========================================================================
+	//
+	// edit org member list
+	//
+	// =========================================================================
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService) {
+		var vm = this;
+		vm.org = org;
+		vm.emaillist = '';
+		// -------------------------------------------------------------------------
+		//
+		// refresh the organization and also the additions email list
+		//
+		// -------------------------------------------------------------------------
+		vm.refresh = function () {
+			vm.emaillist = '';
+			OrgsService.get ({orgId: vm.org._id}).$promise
+			.then (function (org) {
+				vm.org = org;
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// add or remove members
+		//
+		// -------------------------------------------------------------------------
+		vm.addMembers = function () {
+			console.log ('add People');
+			if (vm.emaillist !== '') {
+				vm.org.additions = vm.emaillist;
+				vm.org.createOrUpdate ()
+				.then (function () {
+					Notification.success ({
+						message : '<i class="glyphicon glyphicon-ok"></i> invitations sent successfully!'
+					});
+					vm.refresh ();
+				})
+				//
+				// fail, notify and stay put
+				//
+				.catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> invitations send error!'
+					});
+				});
+			}
+		};
+		vm.removeMember = function (member) {
+			console.log ('remove person');
+			OrgsService.removeUser ({
+				orgId: vm.org._id,
+				userId: member._id
+			}).$promise.then (function (org) {
+				vm.refresh ();
+			});
+		};
 	})
 	// =========================================================================
 	//

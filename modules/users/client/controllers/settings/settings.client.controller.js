@@ -57,15 +57,15 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService) {
+	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService, capabilities) {
 		var vm = this;
 		vm.features = window.features;
 		vm.user = angular.copy(Authentication.user);
 		var pristineUser = angular.toJson (Authentication.user);
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		console.log ('capabilities:', vm.capabilities);
 		if (!vm.user.capabilities) vm.user.capabilities = [];
-		vm.c01_selfrating = '0';
+		vm.c01_years = '0';
 		vm.tinymceOptions = {
 			resize      : true,
 			width       : '100%',  // I *think* its a number and not '400' string
@@ -75,6 +75,15 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+		// //
+		// // set up the capability structure to have variables for the tags that we can bind to
+		// //
+		// vm.capabilities.bykey.forEach (function (c, key) {
+		// 	console.log ('bykey key=',key,'obj=',c);
+		// 	c.tagvars = c.tags.reduce (function (accum, curr) {
+		// 		accum[curr] = false;
+		// 	}, {});
+		// });
 		vm.updateUserProfile = function (isValid) {
 			console.log ('saviong');
 			if (!isValid) {
@@ -98,19 +107,19 @@
 
 			vm.user.capabilities = [];
 
-			if (vm.user.c01_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c01'].id); }
-			if (vm.user.c02_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c02'].id); }
-			if (vm.user.c03_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c03'].id); }
-			if (vm.user.c04_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c04'].id); }
-			if (vm.user.c05_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c05'].id); }
-			if (vm.user.c06_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c06'].id); }
-			if (vm.user.c07_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c07'].id); }
-			if (vm.user.c08_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c08'].id); }
-			if (vm.user.c09_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c09'].id); }
-			if (vm.user.c10_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c10'].id); }
-			if (vm.user.c11_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c11'].id); }
-			if (vm.user.c12_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c12'].id); }
-			if (vm.user.c13_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c13'].id); }
+			if (vm.user.c01_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c01'].code); }
+			if (vm.user.c02_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c02'].code); }
+			if (vm.user.c03_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c03'].code); }
+			if (vm.user.c04_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c04'].code); }
+			if (vm.user.c05_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c05'].code); }
+			if (vm.user.c06_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c06'].code); }
+			if (vm.user.c07_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c07'].code); }
+			if (vm.user.c08_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c08'].code); }
+			if (vm.user.c09_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c09'].code); }
+			if (vm.user.c10_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c10'].code); }
+			if (vm.user.c11_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c11'].code); }
+			if (vm.user.c12_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c12'].code); }
+			if (vm.user.c13_flag) { vm.user.capabilities.push (vm.capabilities.bykey['c13'].code); }
 
 
 			var successMessage = '<h4>Edit skills successful</h4>';
@@ -126,7 +135,7 @@
 			});
 		}
 	})
-	.controller('ProfileSkillsController2', function ($scope, $state, $sce, $window, $timeout, Upload, Authentication, Notification, previousState, dataService) {
+	.controller('ProfileSkillsController2', function ($scope, $state, $sce, $window, $timeout, Upload, Authentication, Notification, previousState, dataService, capabilities) {
 		var vm              = this;
 		vm.form             = {};
 		vm.profile          = angular.copy(Authentication.user);
@@ -137,7 +146,7 @@
 		vm.authentication   = Authentication;
 		vm.cities           = dataService.cities;
 		vm.profile.skillist = vm.profile.skills ? vm.profile.skills.join (', ') : '';
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		//
 		// if the user doesn't have the right access then kick them out
 		//

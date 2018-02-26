@@ -1,0 +1,114 @@
+<section class="detail">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<div>
+					<label class="label-danger" ng-if="vm.superbasic.program.isPublished && vm.canEdit && !vm.superbasic.isPublished" uib-tooltip="No one can see this page until you publish it.">
+					<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+					</label>
+				</div>
+				<div class="btn-group">
+					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="superbasicadmin.edit({superbasicId:vm.superbasic.code})" uib-tooltip="Edit this page">
+						<i class="glyphicon glyphicon-edit"></i> Edit
+					</button>
+					<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this superbasic? Click here to send a request to the superbasic admin.">
+						<i class="glyphicon glyphicon-user"></i> Request Membership
+					</button>
+					<a href="javascript:void(0);" ng-if="vm.superbasic.program.isPublished && vm.canEdit && vm.superbasic.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now this superbasic is published and anyone can view it. You can unpublish it here.">
+						<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+					</a>
+					<a href="javascript:void(0);" ng-if="vm.superbasic.program.isPublished && vm.canEdit && !vm.superbasic.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this superbasic to the world?">
+						<i class="glyphicon glyphicon-check"></i> Publish
+					</a>
+				</div>
+				<div class="col-xs-12 col-sm-12 text-center">
+					<h1><i class="fa fa-pie-chart"></i> &nbsp; {{vm.superbasic.name}}</h1>
+					<p style="font-size: 16px; padding-bottom: 30px;"><span ng-bind="vm.superbasic.short"></span></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div class="container">
+<div class="card card-flat">
+	<div class="card-header">
+		<div class="row">
+			<div class="col-sm-5">
+				<p class="label-list" ng-if="vm.superbasic.tags">
+				<span class="label label-info" ng-repeat="code in vm.superbasic.tags">{{code}}</span></p>
+			</div>
+			<div class="col-sm-7">
+				<dl class="dl-horizontal">
+				<dt>Program:</dt>
+				<dd>
+				<a ng-if="vm.superbasic.program"  id="programs.view" ui-sref="programs.view({programId:vm.superbasic.program.code})"><i class="fa fa-university"></i> {{vm.superbasic.program.title}}</a>
+				<span ng-if="!vm.superbasic.program" class="text-muted">No program</span>
+				</dd>
+				<!-- github link -->
+				<dt>Code:</dt>
+				<dd>
+				<a ng-if="vm.superbasic.github"><a href="{{vm.superbasic.github}}" rel="nofollow"><i class="fa fa-github"></i> View Code Repository on GitHub</a>
+				</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+
+	<div class="panel-body">
+		<p ng-bind-html="vm.display.description"></p>
+	</div>
+
+	<div class="panel-footer" style="background-color: #f2f2f2">
+		<em class="small text-muted">
+		Created on
+		<span ng-bind="vm.superbasic.created | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.superbasic.createdBy" ng-bind="vm.superbasic.createdBy.displayName"></span>
+		<span ng-if="!vm.superbasic.createdBy">Deleted User</span>
+		</em>
+			<br/>
+		<em class="small text-muted">
+		Last updated on
+		<span ng-bind="vm.superbasic.updated | date:'mediumDate'"></span>
+		by
+		<span ng-if="vm.superbasic.updatedBy" ng-bind="vm.superbasic.updatedBy.displayName"></span>
+		<span ng-if="!vm.superbasic.updatedBy">Deleted User</span>
+		</em>
+	</div>
+</div>
+</div>
+
+<div class="container">
+	<core-member-list model="vm.superbasic" idstring="vm.idString" service="vm.SuperbasicsService" title="Superbasic Members"></core-member-list>
+	<core-member-requests ng-if="vm.canEdit" model="vm.superbasic" idstring="vm.idString" service="vm.SuperbasicsService"></core-member-requests>
+	<opportunity-list superbasic="vm.superbasic" program="vm.superbasic.program" context="superbasic" title="Superbasic Opportunities"></opportunity-list>
+</div>
+
+<div class="container">
+	<div class="row form-foot">
+	<div class="col-sm-12 col-form-buttons text-right">
+		<div>
+			<label class="label-danger" ng-if="vm.superbasic.program.isPublished && vm.canEdit && !vm.superbasic.isPublished" uib-tooltip="No one can see this page until you publish it.">
+			<i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED
+			</label>
+		</div>
+		<div class="btn-group">
+			<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="superbasicadmin.edit({superbasicId:vm.superbasic.code})" uib-tooltip="Edit this page">
+				<i class="glyphicon glyphicon-edit"></i> Edit
+			</button>
+			<button type="button" class="btn btn-default" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" uib-tooltip="Want to be listed as a member of this superbasic? Click here to send a request to the superbasic admin.">
+				<i class="glyphicon glyphicon-user"></i> Request Membership
+			</button>
+			<a href="javascript:void(0);" ng-if="vm.superbasic.program.isPublished && vm.canEdit && vm.superbasic.isPublished" class="btn btn-default" ng-click="vm.publish(false)" uib-tooltip="Right now, this superbasic is published and anyone can view it. You can unpublish it here.">
+				<i class="glyphicon glyphicon-ban-circle"></i> Unpublish
+			</a>
+			<a href="javascript:void(0);" ng-if="vm.superbasic.program.isPublished && vm.canEdit && !vm.superbasic.isPublished" class="btn btn-default" ng-click="vm.publish(true)" uib-tooltip="Ready to publish this superbasic to the world?">
+				<i class="glyphicon glyphicon-check"></i> Publish
+			</a>
+		</div>
+	</div>
+	</div>
+</div>
+</div>
+</section>

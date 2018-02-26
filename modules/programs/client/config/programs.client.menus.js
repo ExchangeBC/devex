@@ -6,7 +6,7 @@
 			title: 'Programs',
 			state: 'programs.list',
 			roles: ['*'],
-			icon: 'fa fa-university',
+			icon: 'none',
 			position: 1
 		});
 	}]);

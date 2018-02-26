@@ -20,7 +20,7 @@
     });
 
     menuService.addSubMenuItem('account', 'settings', {
-      title: 'Edit Profile',
+      title: 'Profile',
       state: 'settings.profile'
     });
 

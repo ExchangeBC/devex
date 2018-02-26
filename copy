@@ -6,10 +6,10 @@
 # when plural is non-standard:
 # > copy fly flies
 #
-my $from_sl = 'project';
-my $from_pl = 'projects';
-my $from_sc = 'Project';
-my $from_pc = 'Projects';
+my $from_sl = 'superbasic';
+my $from_pl = 'superbasics';
+my $from_sc = 'Superbasic';
+my $from_pc = 'Superbasics';
 # my $from_sl = 'article';
 # my $from_pl = 'articles';
 # my $from_sc = 'Article';

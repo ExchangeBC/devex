@@ -8,6 +8,7 @@
   OrgsService.$inject = ['$resource', '$log'];
 
   function OrgsService($resource, $log) {
+    console.log ('starting org service');
     var Org = $resource('/api/orgs/:orgId', {
       orgId: '@_id'
     }, {
@@ -18,6 +19,11 @@
         method: 'GET',
         url: '/api/my/orgs',
         isArray: true
+      },
+      removeUser: {
+        method: 'GET',
+        url: '/api/orgs/:orgId/user/:userId/remove',
+        isArray: false
       }
     });
 

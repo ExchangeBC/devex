@@ -25,6 +25,7 @@ var OrgSchema = new Schema ({
 	city         : {type: String, default: ''},
 	province     : {type: String, default: 'BC', enum: ['AB', 'BC', 'MB', 'NB', 'NL', 'NT', 'NS', 'NU', 'ON', 'PE', 'QC', 'SK', 'YT']},
 	postalcode   : {type: String, default: ''},
+	fullAddress  : {type: String, default: ''},
 	contactName  : {type: String, default: ''},
 	// contactEmail : {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
 	contactEmail : {type: String, default: '', trim:true, lowercase:true},
@@ -34,7 +35,6 @@ var OrgSchema = new Schema ({
 	orgImageURL  : {type: String, default: 'img/default.png'},
 	skills       : [String],
 	badges       : [String],
-	capabilities : [String],
 	owner        : {type: 'ObjectId', ref: 'User', default: null },
 	created      : {type: Date, default: null},
 	createdBy    : {type: 'ObjectId', ref: 'User', default: null },
@@ -52,7 +52,27 @@ var OrgSchema = new Schema ({
 	c10_flag : { type: Boolean, default:false },
 	c11_flag : { type: Boolean, default:false },
 	c12_flag : { type: Boolean, default:false },
-	c13_flag : { type: Boolean, default:false }
+	c13_flag : { type: Boolean, default:false },
+	c01_tags : { type:[String], default:[] },
+	c02_tags : { type:[String], default:[] },
+	c03_tags : { type:[String], default:[] },
+	c04_tags : { type:[String], default:[] },
+	c05_tags : { type:[String], default:[] },
+	c06_tags : { type:[String], default:[] },
+	c07_tags : { type:[String], default:[] },
+	c08_tags : { type:[String], default:[] },
+	c09_tags : { type:[String], default:[] },
+	c10_tags : { type:[String], default:[] },
+	c11_tags : { type:[String], default:[] },
+	c12_tags : { type:[String], default:[] },
+	c13_tags : { type:[String], default:[] },
+	members  : [{type: 'ObjectId', ref: 'User'}],
+	admins   : [{type: 'ObjectId', ref: 'User'}]
+});
+
+OrgSchema.pre ('save', function (next) {
+	this.fullAddress = this.address + (this.address?', '+this.address:'') + ', ' + this.city + ', ' + this.province+ ', ' + this.postalcode
+	next();
 });
 
 

@@ -17,7 +17,12 @@
 		.state('opportunities', {
 			abstract: true,
 			url: '/opportunities',
-			template: '<ui-view/>'
+			template: '<ui-view/>',
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ();
+				}
+			}
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -91,7 +96,12 @@
 		.state('opportunityadmin', {
 			abstract: true,
 			url: '/opportunityadmin',
-			template: '<ui-view/>'
+			template: '<ui-view/>',
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.query ();
+				}
+			}
 		})
 		// -------------------------------------------------------------------------
 		//

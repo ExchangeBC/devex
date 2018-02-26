@@ -19,6 +19,11 @@
 				controllerAs: 'vm',
 				data: {
 					roles: ['user', 'admin', 'gov-request', 'gov']
+				},
+				resolve: {
+					capabilities: function (SkillsService) {
+						return SkillsService.list ();
+					}
 				}
 			})
 			.state ('settings.skills', {

@@ -1,0 +1,89 @@
+<div class="modal-header">
+	<h3>Superbasic</h3>
+</div>
+<div class="modal-body">
+	<form name="qqq.superbasicForm" id="qqq.superbasicForm" novalidate autocomplete="off">
+	<div class="row">
+	<div class="col-sm-12">
+		<fieldset>
+			<form-input
+				class="col-sm-12"
+				ng-model="qqq.superbasic.name"
+				x-form="qqq.superbasicForm"
+				x-options='{
+					"title":"Superbasic Name",
+					"id":"name",
+					"name":"name",
+					"placeholder":"name",
+					"required":"Must supply a superbasic name"
+				}'>
+			</form-input>
+			<form-display
+				class="col-sm-12"
+				x-options='{
+					"title":"Superbasic Description",
+					"id":"description",
+					"name":"description"
+				}'>
+				<textarea
+					name="description"
+					id="description"
+					class="form-control"
+					placeholder="A brief description of the superbasic"
+					ng-model="qqq.superbasic.description">
+				</textarea>
+			</form-display>
+		</fieldset>
+	</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-5">
+			<select-list
+				ng-model="qqq.removals"
+				class="col-sm-12"
+				x-type="arrayOfObjects"
+				x-values="qqq.superbasic.members"
+				x-form="qqq.superbasicForm"
+				x-options='{
+					"objectKeyAttribute":"_id",
+					"objectDisplayAttribute":"item.displayName",
+					"title":"Superbasic Members",
+					"id":"members",
+					"name":"members",
+					"primary":false,
+					"single":false,
+					"leaveOpen": true
+				}'>
+			</select-list>
+		</div>
+		<div class="col-sm-2">
+			<button class="btn btn-default" ng-click="qqq.addPerson()"><i class="fa fa-arrow-left"></i></button>
+			<br/>
+			<button class="btn btn-default" ng-click="qqq.remPerson()"><i class="fa fa-arrow-right"></i></button>
+		</div>
+		<div class="col-sm-5">
+			<select-list
+				ng-model="qqq.additions"
+				class="col-sm-12"
+				x-type="arrayOfObjects"
+				x-values="qqq.allusers"
+				x-form="qqq.superbasicForm"
+				x-options='{
+					"objectKeyAttribute":"_id",
+					"objectDisplayAttribute":"item.displayName",
+					"title":"Available Users",
+					"id":"available",
+					"name":"available",
+					"primary":false,
+					"single":false,
+					"leaveOpen": true
+				}'>
+			</select-list>
+		</div>
+	</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-danger" ng-click="qqq.quitnow()">Cancel</button>
+	<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
+</div>

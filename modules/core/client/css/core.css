@@ -17,21 +17,7 @@
 .x-ng-cloak {
 	display: none !important;
 }
-.header-profile-image {
-	border-radius: 10%;
-	height: 28px;
-	margin-right: 5px;
-	opacity: 0.8;
-	width: 28px;
-}
-.open .header-profile-image,
-a:hover .header-profile-image {
-	opacity: 1;
-}
-.user-header-dropdown-toggle {
-	padding-bottom: 11px !important;
-	padding-top: 11px !important;
-}
+
 .user-primary-account {
 	font-size: 30px;
 	position: absolute;
@@ -154,7 +140,7 @@ section.events h5 {
 	font-family: Lato;
 	font-size: 18px;
 	font-weight: 600;
-	margin: 2px 0px; 
+	margin: 2px 0px;
 }
 section.events .panel-default, .panel-body {
 	background-color: transparent;
@@ -286,4 +272,22 @@ section.signup h5 {
 	display: inline-block;
     vertical-align: middle;
     float: none;
+}
+.custombuttonbackground {
+	background-color: teal;
+}
+.cbg-light-steel-blue {
+	background-color: #b0c4de;
+}
+.cbg-light-blue {
+	background-color: #add8e6;
+}
+.cbg-powder-blue {
+	background-color: #b0e0e6;
+}
+.cbg-light-grey-blue {
+	background-color: #EBF5FB;
+}
+.ctc-green {
+	color: green;
 }

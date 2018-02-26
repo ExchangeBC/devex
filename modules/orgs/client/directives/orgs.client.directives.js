@@ -10,18 +10,35 @@
 		return {
 			restrict     : 'E',
 			controllerAs : 'vm',
-			scope        : {},
+			scope        : {
+				orgs: '='
+			},
 			templateUrl  : '/modules/orgs/client/views/list.orgs.directive.html',
 			controller   : function ($scope, $sce, OrgsService, Authentication, Notification) {
 				var vm = this;
-				var isAdmin  = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-				var isGov    = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+				var isUser = Authentication.user;
+				var isAdmin  = isUser && !!~Authentication.user.roles.indexOf ('admin');
+				var isGov    = isUser && !!~Authentication.user.roles.indexOf ('gov');
+				var uid      = isUser ? Authentication.user._id : 'none';
 				vm.isAdmin = isAdmin;
-				vm.isGov = isGov;
-				vm.userCanAdd = (isAdmin || !isGov);
-				vm.orgs = OrgsService.query ();
+				vm.isGov   = isGov;
+				vm.userCanAdd = isUser && (isAdmin || !isGov);
+				// console.log (isUser, isAdmin, isGov);
 				vm.trust = $sce.trustAsHtml;
-
+				$scope.orgs.forEach (function (org) {
+					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+					org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+					org.isOrgOwner      = (uid === org.owner._id);
+					org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+					// console.log ('org', org.name);
+					// console.log ('uid', uid);
+					// console.log ('owner', org.owner);
+					// console.log ('admin', org.isOrgAdmin);
+					// console.log ('member', org.isOrgMember);
+					// console.log ('owner', org.isOrgOwner);
+					// console.log ('canedit', org.canEdit);
+				});
+				vm.orgs = $scope.orgs;
 			}
 		}
 	})

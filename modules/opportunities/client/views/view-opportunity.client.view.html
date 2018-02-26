@@ -1,33 +1,53 @@
-<div class="container">
-
-<!-- // User IS signed in, and ... // -->
-	<div class="row" ng-if="vm.loggedIn">
-		<div class="col-xs-12 text-center">
+<!-- // If user is NOT signed in // -->
+<div class="banner banner-info" ng-if="!vm.loggedIn">
+	<div class="row">
+		<div class="col-xs-12">
+			<p>To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></p>
+		</div>
+	</div>
+</div>
 
 <!-- // User doesn't have an email address in their profile // -->
-			<div class="well well-info" ng-if="!vm.notifyMe && !vm.hasEmail">
-				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates<span class="hidden-sm hidden-xs"> about this opportunity</span>? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
-			</div>
+<div class="banner banner-info" ng-if="vm.notifyMe && !vm.hasEmail">
+	<div class="row">
+		<div class="col-xs-12">
+			<p>Want <span class="hidden-sm hidden-xs">to get </span>updates about this opportunity? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
+		</div>
+	</div>
+</div>
 
-<!-- // User is NOT following the opportunity // -->
-			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-default" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="glyphicon glyphicon-volume-up"></i> Follow</button>
+<div class="row">
+	<div class="col-xs-12">
+		<proposal-apply ng-if="true && vm.closing !== 'CLOSED'" opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+	</div>
+</div>
 
-<!-- // User IS following the opportunity // -->
-			<button ng-if="vm.notifyMe" type="button" class="btn btn-primary" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="glyphicon glyphicon-ok-sign"></i> Following</button>
+<br>
 
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12 text-center" style="padding-top: 0; padding-bottom: 10px;">
+			<span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing}}</span>
+			<!-- // User is NOT following the opportunity // -->
+			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-default" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
+
+			<!-- // User IS following the opportunity // -->
+			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-default" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-check-circle-o"></i> Following</button>
 		</div>
 	</div>
 
+
 	<!-- // Admin view, draft opportunity is missing stuff // -->
-	<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-		<div class="col-xs-12 text-right">
-			<div class="well well-sm well-danger">
+	<div class="row"  ng-if="!vm.canPublish && vm.canEdit">
+		<div class="col-xs-12 well well-sm well-danger"">
+			<div class="text-center">
 				<span>
-					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i></label>You can't publish this opportunity until all fields have been filled out.
+					<label class="label label-lg label-danger-o"><i class="fa fa-exclamation-triangle"></i> &nbsp; You may not publish this opportunity until the following fields have been filled out.</label>
 				</span>
-				<div class="btn-group">
-					<button type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})">Edit</button>
-				</div>
+			</div>
+			<br/>
+			<div class="col-sm-4 col-sm-offset-4">
+				<ul><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 			</div>
 		</div>
 	</div>
@@ -63,16 +83,25 @@
 <!-- // Title and Teaser // -->
 	<div class="row">
 		<div class="col-xs-12 text-center">
-			<h2>{{vm.opportunity.name}}</h2>
+			<h2 style="margin-top: 0px;">{{vm.opportunity.name}}</h2>
 			<p ng-bind="vm.opportunity.short"></p>
 		</div>
 	</div>
-
-	<hr>
-	<br>
-
 	<!--<div class="panel panel-default panel-flat card-panel">-->
+</div>
 
+<div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
+	<div class="row">
+		<div class="col-xs-12">
+			<p><span class="label label-lg label-price">{{vm.opportunity.earn|currency}}</span>&nbsp;&nbsp; This is a <b>fixed-price</b> opportunity governed by the
+				<a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a>
+				of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<br>
 	<div class="row">
 		<div class="col-xs-12 col-sm-6">
 
@@ -85,8 +114,8 @@
           <h4 ng-if="vm.opportunity.onsite == 'mixed'"  ><i class="fa fa-user"></i>&nbsp;<i class="fa fa-cloud">&nbsp;</i><i class="fa fa-building">&nbsp;</i>Some in-person work required</h4>-->
 
           <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
-	          <span class="label label-price">{{vm.opportunity.earn|currency}}</span>
-	          <span ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'" class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing}}</span>
+
+
 	          <span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 	          <span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
@@ -127,18 +156,10 @@
 
 	<br>
 
-	<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
-		<div class="col-xs-12 text-center">
-			<div class="well well-info">
-				<p>This is a <b>fixed-price</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.
-				</p>
-			</div>
-		</div>
-	</div>
 	<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 		<div class="col-xs-12 text-center">
 			<div class="well well-info">
-				<p>This is a <b>Sprint With Us</b> opportunity governed by the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">terms</a> of our lightweight procurement model, <a href="/sprintwithus" target="_blank">Sprint With Us</a>.
+				<p>This is a <b>Sprint With Us</b> opportunity governed by the <a href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, <a href="/sprintwithus" target="_blank">Sprint With Us</a>.
 				</p>
 			</div>
 		</div>
@@ -159,13 +180,24 @@
 			<hr>
 			<h3>How to Apply</h3>
 			<p>Submit your proposal before <b>{{vm.deadline}}</b>.</p>
-			<p>With your proposal, you must upload a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">Code With Us terms,</a> to indicate your acceptance of the terms.</p>
+			<!-- <p>With your proposal, you must upload a copy of the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf">Code With Us terms,</a> to indicate your acceptance of the terms.</p> -->
 			<p>We plan to assign this opportunity by <b>{{vm.assignment}}</b> with work to start on <b>{{vm.start}}</b>.</p>
 			<br>
 			<div class="text-center">
 				<div class="well well-info">
 					<h3 style="margin-top: 0px"><i class="fa fa-comments"></i>&nbsp; Questions?</h3>
 					<p><a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-if="qaz.case !== 'nothing'">
+		<div class="container">
+		<br>
+			<div class="row" ng-if="qaz.case === 'canadd'">
+				<div class="col-xs-12 text-center">
+					<button  id="proposaladmin.create" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" class="btn btn-lg btn-warning">Submit a proposal</button>
 				</div>
 			</div>
 		</div>
@@ -178,396 +210,31 @@
 
 					<uib-accordion close-others="true">
 
-						<div uib-accordion-group class="panel-default" is-open="isc01open">
+						<div uib-accordion-group class="panel-default" ng-repeat="idnum in vm.clist" >
+							{{minimumYearsField=idnum+'_minimumYears';""}}
+							{{desiredYearsField=idnum+'_desiredYears';""}}
+							{{experienceField=idnum+'_experience';""}}
+							{{ratingField=idnum+'_years';""}}
 							<uib-accordion-heading>
 								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c01_flag===true, 'glyphicon-unchecked':vm.opportunity.c01_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c01'].text}}
-							&nbsp; &nbsp;
+									<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity[minimumYearsField]>0, 'glyphicon-unchecked':vm.opportunity[minimumYearsField]===0}"></i>
+									&nbsp; &nbsp;
+									{{vm.capabilities.bykey[idnum].text}}
+									&nbsp; &nbsp;
+									<span class="pull-right" ng-if="vm.opportunity[minimumYearsField]>0">
+										<b>{{vm.opportunity[minimumYearsField]}}</b>{{vm.opportunity[minimumYearsField]>4?'+ years':' years'}} minimum &nbsp; | &nbsp;
+										<b>{{vm.opportunity[desiredYearsField]}}</b>{{vm.opportunity[desiredYearsField]>19?'+ years':' years'}} combined
+									</span>
 								</small>
 							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c01_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc01"
-									}'>
-									{{vm.capabilities.bykey['c01'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
+							<form-display
+								class="col-sm-12"
+								x-options='{
+									"title":"Capability Description"
+								}'>
+								{{vm.capabilities.bykey[idnum].description}}
+							</form-display>
 						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc02open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c02_flag===true, 'glyphicon-unchecked':vm.opportunity.c02_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c02'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c02_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc02"
-									}'>
-									{{vm.capabilities.bykey['c02'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc03open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c03_flag===true, 'glyphicon-unchecked':vm.opportunity.c03_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c03'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c03_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc03"
-									}'>
-									{{vm.capabilities.bykey['c03'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc04open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c04_flag===true, 'glyphicon-unchecked':vm.opportunity.c04_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c04'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c04_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc04"
-									}'>
-									{{vm.capabilities.bykey['c04'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc05open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c05_flag===true, 'glyphicon-unchecked':vm.opportunity.c05_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c05'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c05_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc05"
-									}'>
-									{{vm.capabilities.bykey['c05'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc06open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c06_flag===true, 'glyphicon-unchecked':vm.opportunity.c06_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c06'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c06_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc06"
-									}'>
-									{{vm.capabilities.bykey['c06'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc07open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c07_flag===true, 'glyphicon-unchecked':vm.opportunity.c07_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c07'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c07_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc07"
-									}'>
-									{{vm.capabilities.bykey['c07'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc08open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c08_flag===true, 'glyphicon-unchecked':vm.opportunity.c08_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c08'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c08_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc08"
-									}'>
-									{{vm.capabilities.bykey['c08'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc09open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c09_flag===true, 'glyphicon-unchecked':vm.opportunity.c09_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c09'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c09_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc09"
-									}'>
-									{{vm.capabilities.bykey['c09'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc10open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c10_flag===true, 'glyphicon-unchecked':vm.opportunity.c10_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c10'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c10_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc10"
-									}'>
-									{{vm.capabilities.bykey['c10'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc11open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c11_flag===true, 'glyphicon-unchecked':vm.opportunity.c11_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c11'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c11_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc11"
-									}'>
-									{{vm.capabilities.bykey['c11'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc12open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity.c12_flag===true, 'glyphicon-unchecked':vm.opportunity.c12_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c12'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c12_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc12"
-									}'>
-									{{vm.capabilities.bykey['c12'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
-						<div uib-accordion-group class="panel-default" is-open="isc13open">
-							<uib-accordion-heading>
-								<small>
-							<i class="pull-left glyphicon danger" ng-class="{'glyphicon-check':vm.opportunity.c13_flag===true, 'glyphicon-unchecked':vm.opportunity.c13_flag===false}"></i>
-							&nbsp; &nbsp;
-							{{vm.capabilities.bykey['c13'].text}}
-							&nbsp; &nbsp;
-								</small>
-							</uib-accordion-heading>
-								<div class="checkbox">
-									<label>
-									<input type="checkbox" disabled ng-model="vm.opportunity.c13_flag">
-										This capability is required for this opportunity
-									</label>
-								</div>
-								<form-display
-									class="col-sm-12"
-									x-options='{
-										"title":"Capability Description",
-										"name":"expc13"
-									}'>
-									{{vm.capabilities.bykey['c13'].description}}
-								</form-display>
-							<br/>
-							<div class="row">
-							<div class="col-sm-12 form-group">
-							</div>
-							</div>
-						</div>
-
 
 					</uib-accordion>
 				</div>
@@ -580,25 +247,10 @@
 		<core-member-requests title="Applicants" model="vm.opportunity" idstring="vm.idString" service="vm.OpportunitiesService" ng-if="vm.opportunity.userIs.admin"></core-member-requests>
 	-->
 
-	<!-- // User is NOT signed in // -->
-	<div class="row" ng-if="!vm.loggedIn">
-		<div class="col-xs-12 text-center">
-			<div class="well well-info">
-				<p>To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a>
-				</p>
-			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-xs-12">
-			<proposal-apply ng-if="true && vm.closing !== 'CLOSED'" opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-		</div>
-	</div>
-
-	<br>
 
 	<!-- // Admin view, draft opportunity is missing stuff // -->
+	<!--
 	<div class="row" ng-if="!vm.canPublish && vm.canEdit">
 		<div class="col-xs-12 text-center">
 			<div class="well well-sm well-danger">
@@ -611,6 +263,7 @@
 			</div>
 		</div>
 	</div>
+	-->
 
 	<!-- // Admin view, opportunity is unpublished // -->
 	<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
@@ -654,7 +307,7 @@
 <!-- // Footer showing recent updates // -->
 	<div class="row">
 		<div class="col-xs-12">
-			<p class="small text-muted">Created on <span ng-bind="vm.opportunity.created | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+			<p class="small text-muted">Published on <span ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
 			<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
 		&nbsp; &nbsp; Last updated on
 			<span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>

@@ -1,5 +1,65 @@
 (function () {
 	'use strict';
+
+	var publishStatus = function (o) {
+		//
+		// removed background for now
+		//
+		// [(o.background), 'Background'],
+		var fields = {
+			common: [
+				[(o.name), 'Title'],
+				[(o.short), 'Teaser'],
+				[(o.description), 'Summary'],
+				[(o.github), 'Github Repository'],
+				[(o.program), 'Program'],
+				[(o.project), 'Project'],
+				[(o.deadline), 'Proposal Deadline'],
+				[(o.assignment), 'Assignment Date'],
+				[(o.location), 'Location']
+			],
+			cwu: [
+				[(o.evaluation), 'Proposal Evaluation Criteria'],
+				[(o.criteria), 'Acceptance Criteria'],
+				[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
+				[(o.skills), 'Required Skills'],
+				[(o.earn), 'Fixed-Price Reward'],
+				[(o.start), 'Proposed Start Date']
+			],
+			swu: [
+				[(o.terms), 'Additional Terms and Conditions'],
+				[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
+				[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
+				[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
+				[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
+				[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
+				[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
+				[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
+				[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
+				[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
+				[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
+				[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
+				[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
+			]
+		}
+		var errorFields = fields.common.reduce (function (accum, elem) {
+			if (!elem[0]) accum.push (elem[1]);
+			return accum;
+		}, []);
+		if (o.opportunityTypeCd === 'code-with-us') {
+			fields.cwu.forEach (function (elem) {
+				if (!elem[0]) errorFields.push (elem[1]);
+			});
+		}
+		else {
+			fields.swu.forEach (function (elem) {
+				if (!elem[0]) errorFields.push (elem[1]);
+			});
+		}
+		return errorFields;
+	};
+
+
 	angular.module('opportunities')
 	// =========================================================================
 	//
@@ -17,10 +77,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
 		var vm                    = this;
 		vm.features = window.features;
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -42,7 +102,16 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
-		console.log (vm.opportunity);
+		//
+		// what capabilities are required ?
+		//
+		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
+		vm.clist = [];
+		allclist.forEach (function (id) {
+			if (vm.opportunity[id+'_minimumYears']>0) {
+				vm.clist.push (id);
+			}
+		});
 		//
 		// what can the user do here?
 		//
@@ -82,9 +151,10 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		var o = vm.opportunity;
-
-		vm.canPublish = (o.name && o.short && o.description && o.github && o.location && o.criteria && o.earn && o.evaluation && o.proposalEmail && o.deadline && o.assignment && o.start);
+		vm.errorFields = publishStatus (vm.opportunity);
+		vm.canPublish = (vm.errorFields.length === 0);
+		console.log ('vm.errorFields', vm.errorFields);
+		console.log ('vm.canPublish', vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -156,7 +226,7 @@
 					params: {opportunityId:opportunity.code},
 					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
 				};
-            });
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -222,10 +292,11 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask) {
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, SkillsService) {
+		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.features = window.features;
-		vm.capabilities     = dataService.capabilities;
+		vm.capabilities     = capabilities;
 		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
@@ -241,10 +312,35 @@
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
+		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
+		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
+		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
+		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
+		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
+		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
 		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+
+		// -------------------------------------------------------------------------
+		//
+		// can this be published?
+		//
+		// -------------------------------------------------------------------------
+		vm.errorFields = publishStatus (vm.opportunity);
+		vm.canPublish = vm.errorFields > 0;
+		//
+		// set up the dropdown amounts for code with us earnings
+		//
+		var minAmount = 500;
+		var maxAmount = 70000;
+		var step      = 500;
+		vm.amounts = [];
+		var i;
+		for (i = minAmount; i <= maxAmount; i += step) vm.amounts.push (i);
+
+
 		if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
 		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
@@ -299,6 +395,13 @@
 			vm.opportunity.assignment = new Date ();
 			vm.opportunity.start      = new Date ();
 			vm.opportunity.endDate    = new Date ();
+			vm.opportunity.implementationEndDate   = new Date ();
+			vm.opportunity.implementationStartDate = new Date ();
+			vm.opportunity.inceptionEndDate        = new Date ();
+			vm.opportunity.inceptionStartDate      = new Date ();
+			vm.opportunity.prototypeEndDate        = new Date ();
+			vm.opportunity.prototypeStartDate      = new Date ();
+
 		}
 		//
 		// if there are no available projects then post a warning and kick the user back to
@@ -329,6 +432,72 @@
 			elementpath : false,
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+		};
+
+		vm.cbykey = vm.capabilities.reduce (function (accum, curr) {
+			accum[curr.key] = curr;
+			return accum;
+		}, {});
+		vm.inceptionKeys = ['c04','c03','c08'];
+		vm.prototypeKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
+		vm.implementationKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
+		vm.inceptionCapabilities = vm.inceptionKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+		vm.prototypeCapabilities = vm.prototypeKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+		vm.implementationCapabilities = vm.implementationKeys.map (function (c) {
+			return vm.cbykey[c];
+		});
+
+
+
+		// $scope.$watch ('vm.opportunity.inceptionTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		// $scope.$watch ('vm.opportunity.prototypeTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		// $scope.$watch ('vm.opportunity.implementationTarget', function (value) {
+		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		// });
+		vm.changeTargets = function () {
+			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
+			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);
+			vm.opportunity.implementationTarget = Number (vm.opportunity.implementationTarget);
+			vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
+		};
+		vm.totalTargets = function () {
+			return 1234;
+		};
+		// -------------------------------------------------------------------------
+		//
+		// add a new skill under a capability
+		//
+		// -------------------------------------------------------------------------
+		vm.addSkill = function (capability, field, tag, newfield) {
+			console.log ('newskill:', tag);
+			//
+			// add the new tag to the capability
+			// add the new tag to the opportunity capability tags
+			// clear the add field
+			//
+			capability.tags.push (tag);
+			vm.opportunity[field].push (tag);
+			vm[newfield] = '';
+			capability.createOrUpdate();
+		};
+		// -------------------------------------------------------------------------
+		//
+		// these do things to balance the years required and desired when clicked
+		//
+		// -------------------------------------------------------------------------
+		vm.smin = function (mfield, dfield, value) {
+			if (vm.opportunity[dfield] < value) vm.opportunity[dfield] = value;
+		};
+		vm.sdes = function (dfield, mfield, value) {
+			if (vm.opportunity[mfield] > value) vm.opportunity[mfield] = value;
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -378,6 +547,7 @@
 				return false;
 			}
 			if (!isValid) {
+				console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -411,32 +581,26 @@
 			//
 			// ensure that there is a trailing '/' on the github field
 			//
-			if (vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
+			if (vm.opportunity.github && vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
 			//
 			// set the time on the 2 dates that care about it
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
+			vm.opportunity.endDate.setHours(16);
+			vm.opportunity.implementationEndDate.setHours(16);
+			vm.opportunity.implementationStartDate.setHours(16);
+			vm.opportunity.inceptionEndDate.setHours(16);
+			vm.opportunity.inceptionStartDate.setHours(16);
+			vm.opportunity.prototypeEndDate.setHours(16);
+			vm.opportunity.prototypeStartDate.setHours(16);
 
 			vm.opportunity.capabilities = [];
 
-			if (vm.opportunity.c01_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c01'].id); }
-			if (vm.opportunity.c02_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c02'].id); }
-			if (vm.opportunity.c03_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c03'].id); }
-			if (vm.opportunity.c04_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c04'].id); }
-			if (vm.opportunity.c05_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c05'].id); }
-			if (vm.opportunity.c06_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c06'].id); }
-			if (vm.opportunity.c07_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c07'].id); }
-			if (vm.opportunity.c08_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c08'].id); }
-			if (vm.opportunity.c09_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c09'].id); }
-			if (vm.opportunity.c10_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c10'].id); }
-			if (vm.opportunity.c11_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c11'].id); }
-			if (vm.opportunity.c12_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c12'].id); }
-			if (vm.opportunity.c13_flag) { vm.opportunity.capabilities.push (vm.capabilities.bykey['c13'].id); }
-	    	//
-	    	// confirm save only if the user is also publishing
-	    	//
-	    	var savemeSeymour = true;
+			//
+			// confirm save only if the user is also publishing
+			//
+			var savemeSeymour = true;
 			var promise = Promise.resolve ();
 			if (!originalPublishedState && vm.opportunity.isPublished) {
 				var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
@@ -447,7 +611,7 @@
 				//
 				// Create a new opportunity, or update the current instance
 				//
-	      		promise.then(function() {
+				promise.then(function() {
 					if (savemeSeymour) {
 						return vm.opportunity.createOrUpdate();
 					}

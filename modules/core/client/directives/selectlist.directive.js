@@ -14,9 +14,9 @@
 
 angular.module('core')
 .constant('UILISTSETTINGS', [
-		{'pos':0, 'class':'btn-default'},
-		{'pos':1, 'class':'btn-info'},
-		{'pos':2, 'class':'btn-primary'}
+		{'pos':0, 'class':'btn-default'}, // unselected
+		{'pos':1, 'class':'btn-info'}, // selected
+		{'pos':2, 'class':'btn-warning'}
 	])
 .filter('startFrom', function() {
     return function(input, start) {
@@ -44,6 +44,10 @@ angular.module('core')
 			var _ = window._;
 			//
 			var options = JSON.parse(attrs.options);
+			var listStyle = 'list-unstyled';
+			if ( options.hasOwnProperty('listStyle') ) {
+				listStyle = options.listStyle;
+			}
 			//
 			var tmpl = '<div';
 			// if the label is included with the configuration, add the form-group class, otherwise the
@@ -77,7 +81,7 @@ angular.module('core')
 			if ( options.hasOwnProperty('filter') && options.filter && options.hasOwnProperty('single') && options.single) {
 				tmpl += '<input type="text" class="form-control" ng-model=\'controlFilter' + attrs.name + '\' placeholder="Start typing here" ng-show="!closed">';
 			}
-			tmpl +=	'<ul class="list-unstyled">';
+			tmpl +=	'<ul class="'+listStyle+'">';
 			tmpl += 	'<li ng-repeat="item in filteredItems = (';
 			tmpl +=	'items';
 			if ( options.hasOwnProperty('filter') && options.filter ) {
@@ -149,9 +153,13 @@ angular.module('core')
 				tmpl += '<li ng-show="!closed && filteredItems.length === 1"><small class="text-muted">Top choice shown</small></li>';
 				tmpl += '<li ng-show="!closed && filteredItems.length === 0"><small class="text-muted">No matches available</small></li>';
 			}
+			var leaveOpen = true;
+			if (options.hasOwnProperty('leaveOpen')) {
+				leaveOpen = options.leaveOpen;
+			}
 			//
 			// if the leaveOpen is set or false then allow the close control.
-			if (!options.leaveOpen) {
+			if (!leaveOpen) {
 				tmpl +=	'<li ng-show="!closed && ngModel">'+
 						'<a href ng-click="hideChoices($event)" class="small">Hide Choices</a>'+
 						'</li>';
@@ -189,12 +197,17 @@ angular.module('core')
 				post: function (scope, elem, attrs, ngModelCtrl) {
 
 					var options = JSON.parse(attrs.options);
+					var leaveOpen = true;
+					if (options.hasOwnProperty('leaveOpen')) {
+						leaveOpen = options.leaveOpen;
+					}
+					options.leaveOpen = leaveOpen;
 
 					scope.internalReset = false;
 					scope.currentPage = 1;
 
 					// set primary setting, unset default is true.
-					scope.primary = (options.hasOwnProperty('primary')) ? options.primary : true;
+					scope.primary = (options.hasOwnProperty('primary')) ? options.primary : false;
 
 					// set single setting, unset default is false.
 					scope.single = (options.hasOwnProperty('single')) ? options.single : true;

@@ -1,0 +1,51 @@
+
+<div class="col-sm-12">
+	<fieldset>
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title" :"Acceptance Criteria",
+				"name"  :"criteria",
+				"help"  :"In this section, you need to clearly define everything that must be delivered and all criteria that must be met in order for you to be satisfied and ready to pay the developer."
+			}'>
+			<textarea
+				name="criteria"
+				id="criteria"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="A clear definition of everything that must be delivered to get paid for this opportunity..."
+				ng-model="vm.opportunity.criteria">
+			</textarea>
+		</form-display>
+
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.skilllist"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title"       :"Required Skills (seperate each skill with a comma)",
+				"help"        :"List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)",
+				"id"          :"skilllist",
+				"name"        :"skilllist",
+				"placeholder" :"e.g. JavaScript, WordPress, CSS"
+			}'>
+		</form-input>
+
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title" :"Proposal Evaluation Criteria",
+				"name"  :"evaluation",
+				"help"  :"In this section, you must explicitly describe the criteria you will use to score the proposals you receive. State the weight or points you will give to each criteria (e.g. \"Experience contributing Java code to any public code repositories with more than 5 contributors: (10 points)\".<br/> It is at your discretion which mandatory and weighted criteria you wish to use. Refer to the <a target=\"_blank\" href=\"http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria\">Government of B.C. information on procurement</a> for guidance."
+			}'>
+			<textarea
+				name="evaluation"
+				id="evaluation"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="An explicit definition of the criteria you will use to score proposals..."
+				ng-model="vm.opportunity.evaluation">
+			</textarea>
+		</form-display>
+	</fieldset>
+</div>

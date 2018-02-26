@@ -1,0 +1,387 @@
+<div class="col-sm-12">
+	<fieldset>
+
+			<div class="form-group col-sm-12" ng-if="vm.features.swu && vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+
+				<uib-accordion close-others="true">
+
+					<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities" >
+					<!-- <div uib-accordion-group class="panel-default" ng-repeat="idnum in ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13']" > -->
+						{{idnum=capability.key;""}}
+						{{minimumYearsField=idnum+'_minimumYears';""}}
+						{{desiredYearsField=idnum+'_desiredYears';""}}
+						{{tagField=idnum+'_tags';""}}
+						{{experienceField=idnum+'_experience';""}}
+						{{ratingField=idnum+'_years';""}}
+						{{newskillfield=idnum+'_newskill';""}}
+						<uib-accordion-heading>
+							<small>
+								<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.opportunity[minimumYearsField]>0, 'glyphicon-unchecked':vm.opportunity[minimumYearsField]===0}"></i>
+								&nbsp; &nbsp;
+								{{capability.text}}
+								&nbsp; &nbsp;
+								<span class="pull-right" ng-if="vm.opportunity[minimumYearsField]>0">
+									<b>{{vm.opportunity[minimumYearsField]}}</b>{{vm.opportunity[minimumYearsField]>4?'+ years':' years'}} minimum &nbsp; | &nbsp;
+									<b>{{vm.opportunity[desiredYearsField]}}</b>{{vm.opportunity[desiredYearsField]>19?'+ years':' years'}} combined
+								</span>
+							</small>
+						</uib-accordion-heading>
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Capability Description"
+							}'>
+							{{capability.description}}
+						</form-display>
+						<br/>
+						<div class="row">
+							<div class="col-sm-12 form-group">
+								<form-display
+									class="col-sm-12"
+									x-options='{
+										"title":"Mimum Years of Experience Required for at least one team member (1 to 5+) ",
+										"name":"{{minimumYearsField}}"
+									}'>
+									<div class="btn-group">
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 0)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="0">Not Required</label>
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 1)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="1">1</label>
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 2)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="2">2</label>
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 3)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="3">3</label>
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 4)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="4">4</label>
+										<label class="btn btn-success" ng-click="vm.smin(minimumYearsField, desiredYearsField, 5)" ng-model="vm.opportunity[minimumYearsField]" uib-btn-radio="5">5 or More</label>
+									</div>
+								</form-display>
+								<form-display
+									class="col-sm-12"
+									x-options='{
+										"title":"Desired Sum Years of Experience of combined team members (up to 20+)",
+										"name":"{{desiredYearsField}}"
+									}'>
+									<div class="btn-group">
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 0)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="0">Not Required</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 1)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="1">1</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 2)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="2">2</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 3)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="3">3</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 4)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="4">4</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 5)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="5">5</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 6)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="6">6</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 7)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="7">7</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 8)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="8">8</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 9)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="9">9</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 10)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="10">10</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 11)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="11">11</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 12)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="12">12</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 13)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="13">13</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 14)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="14">14</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 15)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="15">15</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 16)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="16">16</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 17)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="17">17</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 18)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="18">18</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 19)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="19">19</label>
+										<label class="btn btn-success" ng-click="vm.sdes(desiredYearsField, minimumYearsField, 20)" ng-model="vm.opportunity[desiredYearsField]" uib-btn-radio="20">20 or more</label>
+									</div>
+								</form-display>
+								<select-list
+									ng-model="vm.opportunity[tagField]"
+									class="col-sm-12"
+									x-type="arrayOfStrings"
+									x-values="capability.tags"
+									x-form="vm.opportunityForm"
+									x-options='{
+										"title":"Specific Skills",
+										"id":"lkjasd",
+										"name":"lkjasd",
+										"single":false,
+										"listStyle":"list-inline"
+									}'>
+								</select-list>
+								<div class="col-sm-6">
+									<div class="input-group">
+										<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="vm[newskillfield]"\>
+										<span class="input-group-btn">
+											<button class="btn btn-default" type="button" ng-click="vm.addSkill(capability, tagField, vm[newskillfield], newskillfield)">Add</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</uib-accordion>
+			</div>
+
+		<br><br>
+		<div class="form-group" ng-if="vm.isAdmin|| (!vm.editing && vm.isGov) ||vm.opportunity.userIs.admin" show-errors>
+			<label class="control-label" for="github">Github Repository</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('github')"></i>
+			<div class="input-help alert alert-info" data-field="github" ng-show="vm.displayHelp.github">
+				Paste the link to your project's GitHub repository.<br/>
+				When you publish this opportunity, a new Issue will be generated in your repository, and people can ask questions in the comments section.
+			</div>
+			<input name="github" type="text" ng-model="vm.opportunity.github" id="github" class="form-control" placeholder="Paste link to GitHub Issue" ng-required="true">
+			<div ng-messages="vm.opportunityForm.github.$error" role="alert">
+				<p class="help-block error-text" ng-message="required">A valid github repository is required.</p>
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="form-group">
+				<div class="col-sm-4 col-md-3">
+					<div class="form-group" show-errors>
+						<label class="control-label" for="location">Location</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('location')"></i>
+						<div class="input-help alert alert-info" data-field="location" ng-show="vm.displayHelp.location">
+							<p>Where is your office?</p>
+						</div>
+						<select name="location" ng-model="vm.opportunity.location" id="location" class="form-control" required ng-options="v as v for v in vm.cities">
+							<option value="">Select Location</option>
+						</select>
+						<div ng-messages="vm.opportunityForm.location.$error" role="alert">
+							<p class="help-block error-text" ng-message="required">Location is required.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<div class="row">
+			<div class="form-group">
+				<div class="col-sm-12 col-md-12">
+					<div class="form-group" show-errors>
+						<label class="control-label" >On Site Requirements</label>
+						<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('onsite')"></i>
+						<div class="input-help alert alert-info" data-field="onsite" ng-show="vm.displayHelp.onsite">
+							<p>State whether you are OK NOT to work with the developer in-person, or if you need them to work with you in-person some, or most of the time.</p>
+						</div>
+						<div>
+						<label class="radio-inline">
+						<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="offsite">In-person work NOT required
+						</label>
+						<label class="radio-inline">
+						<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="mixed">Some in-person work required
+						</label>
+						<label class="radio-inline">
+						<input type="radio" name="onsite" ng-model="vm.opportunity.onsite" value="onsite">In-person work required
+						</label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+
+		<div class="form-group">
+			<label class="control-label" for="skilllist">Required Skills (seperate each skill with a comma)</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('skilllist')"></i>
+			<div class="input-help alert alert-info" data-field="skilllist" ng-show="vm.displayHelp.skilllist">
+				List the skills that are necessary for the person working on this opportunity to have. (e.g. JavaScript, CSS, WordPress, UX Design)
+			</div>
+			<input type="text" name="skilllist" ng-model="vm.opportunity.skilllist" id="skilllist" class="form-control" placeholder="e.g. JavaScript, WordPress, CSS"></input>
+		</div>
+		<div class="form-group" show-errors>
+			<label class="control-label" for="description">Acceptance Criteria</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('criteria')"></i>
+			<div class="input-help alert alert-info" data-field="criteria" ng-show="vm.displayHelp.criteria">
+				In this section, you need to clearly define everything that must be delivered and all criteria that must be met in order for you to be satisfied and ready to pay the developer.
+			</div>
+			<!-- <textarea name="criteria" data-ng-model="vm.opportunity.criteria" id="criteria" class="form-control" cols="30" rows="10" placeholder="Opportunity acceptance criteria"></textarea> -->
+			<textarea
+				name="criteria"
+				id="criteria"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="A clear definition of everything that must be delivered to get paid for this opportunity..."
+				ng-required="true"
+				ng-model="vm.opportunity.criteria">
+			</textarea>
+			<div ng-messages="vm.opportunityForm.criteria.$error" role="alert">
+				<p class="help-block error-text" ng-message="required">Criteria is required.</p>
+			</div>
+		</div>
+
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
+			<div class="col-sm-4 col-md-3">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="earn">Fixed-Price Reward</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
+					<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
+						<p>To the best of your ability, estimate a fair price for the amount of work you think it should take a qualified developer to meet the acceptance criteria. It's best to over-estimate.</p>
+						<p>Right now, Code With Us opportunities may be offered to a maximum of $10,000.</p>
+					</div>
+					<select name="earn" ng-model="vm.opportunity.earn" id="earn" class="form-control" ng-required="true" required ng-options="v as (v|currency) for v in [500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,10500,11000,11500,12000,12500,13000,13500,14000,14500,15000,15500,16000,16500,17000,17500,18000,18500,19000,19500,20000,20500,21000,21500,22000,22500,23000,23500,24000,24500,25000,25500,26000,26500,27000,27500,28000,28500,29000,29500,30000]">
+						<option value="">Select reward amount</option>
+					</select>
+					<div ng-messages="vm.opportunityForm.earn.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Fixed-Price Reward is required.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+			<div class="col-sm-6 col-md-6">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="earn">Target Budget (Cannot exceed 2,000,000)</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('reward')"></i>
+					<div class="input-help alert alert-info" data-field="reward" ng-show="vm.displayHelp.reward">
+						<p>To the best of your ability, estimate a fair price for the amount of work you think it should take a qualified team to meet the acceptance criteria. It's best to over-estimate.</p>
+						<p>Sprint With Us opportunities may be offered to a maximum of $2,000,000.</p>
+					</div>
+					<input input-number type="text" ng-model="vm.opportunity.earn" id="earn" name="earn" class="form-control" ng-required="true" required ></input>
+					<div ng-messages="vm.opportunityForm.earn.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Target Budget is required.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<br><br>
+		<div class="form-group" show-errors>
+			<label class="control-label" for="description">Proposal Evaluation Criteria</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('evaluation')"></i>
+			<div class="input-help alert alert-info" data-field="evaluation" ng-show="vm.displayHelp.evaluation">
+				In this section, you must explicitly describe the criteria you will use to score the proposals you receive. State the weight or points you will give to each criteria (e.g. "Experience contributing Java code to any public code repositories with more than 5 contributors: (10 points)".<br/>
+				It is at your discretion which mandatory and weighted criteria you wish to use. Refer to the <a target="_blank" href="http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria">Government of B.C.'s information on procurement</a> for guidance.
+			</div>
+			<!-- <textarea name="criteria" data-ng-model="vm.opportunity.evaluation" id="criteria" class="form-control" cols="30" rows="10" placeholder="Evaluation criteria"></textarea> -->
+			<textarea
+				name="evaluation"
+				id="evaluation"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="An explicit definition of the criteria you will use to score proposals..."
+				ng-required="true"
+				ng-model="vm.opportunity.evaluation">
+			</textarea>
+			<div ng-messages="vm.opportunityForm.evaluation.$error" role="alert">
+				<p class="help-block error-text" ng-message="required">Proposal Evaluation Criteria is required.</p>
+			</div>
+		</div>
+
+		<div class="form-group" show-errors>
+			<label class="control-label" for="proposalEmail">Email to Receive Acceptance of Terms and Contract</label>
+			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('proposalEmail')"></i>
+			<div class="input-help alert alert-info" data-field="proposalEmail" ng-show="vm.displayHelp.proposalEmail">
+				Enter the email address where you would like the assigned applicant to send their acceptance of the Code With Us Terms and Contract for this opportunity.
+			</div>
+			<input name="proposalEmail" type="text" ng-model="vm.opportunity.proposalEmail" id="proposalEmail" class="form-control" placeholder="Enter email address" required>
+			<div ng-messages="vm.opportunityForm.proposalEmail.$error" role="alert">
+				<p class="help-block error-text" ng-message="required">Proposal email is required.</p>
+			</div>
+		</div>
+		<br/>
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
+			<div class="col-sm-4">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="deadline">Proposal Deadline</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
+					<div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
+              			<p>Choose a <b>cutoff date</b> for receiving proposals. (Time of day is fixed at 16:00 Pacific Time.)</p>
+              			<p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
+						<p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>
+					</div>
+					<div>
+					<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.deadline.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Proposal Deadline is required.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="assignment">Assignment Date</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('assignment')"></i>
+					<div class="input-help alert alert-info" data-field="assignment" ng-show="vm.displayHelp.assignment">
+						Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time of day is fixed at 16:00 Pacific Time.)
+					</div>
+					<div>
+					<input type="date" name="assignment" required ng-model="vm.opportunity.assignment"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.assignment.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Assignment Date is required.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="start">Proposed Start Date</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('start')"></i>
+					<div class="input-help alert alert-info" data-field="start" ng-show="vm.displayHelp.start">
+						When do you want the person to begin working?
+					</div>
+					<div>
+					<input type="date" name="start" ng-model="vm.opportunity.start"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.start.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Proposed Start Date is required.</p>
+					</div>
+				</div>
+			</div>
+			</div>
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+			<div class="col-sm-3">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="deadline">Proposal Deadline</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('deadline')"></i>
+					<div class="input-help alert alert-info" data-field="deadline" ng-show="vm.displayHelp.deadline">
+              			<p>Choose a <b>cutoff date</b> for receiving proposals. (Time of day is fixed at 16:00 Pacific Time.)</p>
+              			<p>The longer lead time you give, the more proposals you are likely to get. A deadline at least <b>5 days</b> from when you publish is a good aim.</p>
+						<p>Make sure you have your <b>opportunity contact</b> lined up to respond to questions on the GitHub Issue in a timely manner, from the time you publish the opportunity right up to the cutoff time.</p>
+					</div>
+					<div>
+					<input type="date" name="deadline" required ng-model="vm.opportunity.deadline"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.deadline.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Proposal Deadline is required.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="assignment">Assignment Date</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('assignment')"></i>
+					<div class="input-help alert alert-info" data-field="assignment" ng-show="vm.displayHelp.assignment">
+						Choose a date that you will commit to assigning someone to this opportunity (dependent, of course, on at least one of the proposals meeting your minimum requirements). (Time of day is fixed at 16:00 Pacific Time.)
+					</div>
+					<div>
+					<input type="date" name="assignment" required ng-model="vm.opportunity.assignment"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.assignment.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Assignment Date is required.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="start">Proposed Start Date</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('start')"></i>
+					<div class="input-help alert alert-info" data-field="start" ng-show="vm.displayHelp.start">
+						When do you want the person to begin working?
+					</div>
+					<div>
+					<input type="date" name="start" ng-model="vm.opportunity.start"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.start.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Proposed Start Date is required.</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-3">
+				<div class="form-group" show-errors>
+					<label class="control-label" for="endDate">Proposed End Date</label>
+					<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('endDate')"></i>
+					<div class="input-help alert alert-info" data-field="endDate" ng-show="vm.displayHelp.endDate">
+						When do you expect the opportunity to be completed?
+					</div>
+					<div>
+					<input type="date" name="endDate" ng-model="vm.opportunity.endDate"/>
+					</div>
+					<div ng-messages="vm.opportunityForm.endDate.$error" role="alert">
+						<p class="help-block error-text" ng-message="required">Proposed End Date is required.</p>
+					</div>
+				</div>
+			</div>
+			</div>
+	</fieldset>
+</div>

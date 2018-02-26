@@ -214,7 +214,7 @@ var oppBody = function (opp) {
 	var dt = opp.deadline;
 	var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	var deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+	var deadline = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 	dt = opp.assignment;
 	var assignment = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 	dt = opp.start;
@@ -236,7 +236,7 @@ var oppBody = function (opp) {
 	ret += '<h2>How to Apply</h2>';
 	ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
 	ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
-	ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
+	// ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
 	ret += '<h2>Proposal Evaluation Criteria</h2>';
 	ret += opp.evaluation;
 	return ret;
@@ -336,10 +336,11 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
+		console.log ('updating', opportunity.opportunityTypeCd);
 		//
 		// CC: TBD:SWU once sprint with us is active we can remove this restriction
 		//
-		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-Us') {
+		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-us') {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({
@@ -374,6 +375,7 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
+	console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op
@@ -405,7 +407,24 @@ var pub = function (req, res, isToBePublished) {
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 		}
-		res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		github.createOrUpdateIssue ({
+			title  : opportunity.name,
+			body   : oppBody (opportunity),
+			repo   : opportunity.github,
+			number : opportunity.issueNumber
+		})
+		.then (function (result) {
+			opportunity.issueUrl    = result.html_url;
+			opportunity.issueNumber = result.number;
+			opportunity.save ();
+			res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		})
+		.catch (function () {
+			res.status(422).send({
+				message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+			});
+		});
+		// res.json (decorate (opportunity, req.user ? req.user.roles : []));
 	})
 	.catch (function (err) {
 		return res.status(422).send({

@@ -52,7 +52,7 @@
 			},
 			resolve: {
 				orgs: function ($stateParams, OrgsService) {
-					return OrgsService.query ();
+					return OrgsService.query ().$promise;
 				}
 			},
 			controller: 'OrgsListController',
@@ -73,6 +73,9 @@
 					return OrgsService.get({
 						orgId: $stateParams.orgId
 					}).$promise;
+				},
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
 				}
 			}
 		})
@@ -92,6 +95,9 @@
 					return OrgsService.get({
 						orgId: $stateParams.orgId
 					}).$promise;
+				},
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
 				}
 			},
 			data: {
@@ -105,6 +111,11 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Settings'
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.query ().$promise;
+				}
 			}
 		})
 		.state ('orgadmin.skills', {
@@ -114,6 +125,20 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Skills'
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ().$promise;
+				}
+			}
+		})
+		.state ('orgadmin.members', {
+			url: '/members',
+			templateUrl: '/modules/orgs/client/views/org-members.html',
+			controller: 'OrgMembersController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Members'
 			}
 		})
 		.state ('orgadmin.teams', {

@@ -44,8 +44,8 @@
     </div>
     -->
 
-    <div class="card-block" id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })">
-      
+    <div class="card-block" ng-class="{'cbg-light-grey-blue':(opportunity.opportunityTypeCd==='sprint-with-us')}" id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })">
+
       <div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
           <span class="label label-price">{{opportunity.earn|currency}}</span>
           <span class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span> {{vm.closing(opportunity)}}</span>
@@ -54,12 +54,13 @@
           <span class="label label-location" ng-if="opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
           <span class="label label-location" ng-if="opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
           <span class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</span>
+          <span class="label label-primary pull-right" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Team Required </span>
+
       </div>
 
       <div class="card-title" ng-bind="opportunity.name"></div>
       <p ng-bind="opportunity.short"></p>
-      <div class="project-label"><i class="fa fa-pie-chart">&nbsp;</i>{{opportunity.project.name}}</a></div>
-    
+
     </div>
 
   </div>

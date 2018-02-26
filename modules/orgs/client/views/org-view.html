@@ -8,7 +8,7 @@
 			<div class="col-xs-12 text-right">
 
 				<div class="btn-group">
-					<button type="button" class="btn btn-success btn-sm"  ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit company profile">
+					<button type="button" ng-if="vm.canEdit" class="btn btn-success btn-sm"  ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit company profile">
 						<i class="glyphicon glyphicon-edit"></i> Update Profile
 					</button>
 				</div>

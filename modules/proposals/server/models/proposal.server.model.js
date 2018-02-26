@@ -30,6 +30,8 @@ var ProposalSchema = new Schema ({
 	createdBy            : {type: 'ObjectId', ref: 'User', default: null },
 	updated              : {type: Date, default: null },
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
+	team                 : [{type:Schema.ObjectId, ref:'User'}],
+	isAcceptedTerms      : {type: Boolean, default: false},
 	attachments          : [AttachmentSchema]
 });
 

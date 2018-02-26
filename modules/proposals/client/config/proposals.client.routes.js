@@ -17,7 +17,12 @@
 		.state ('proposals', {
 			abstract: true,
 			url: '/proposals',
-			template: '<ui-view/>'
+			template: '<ui-view/>',
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ();
+				}
+			}
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -65,35 +70,6 @@
 				}
 			}
 		})
-		.state ('proposals.viewmodal', {
-			url: '/modal/:proposalId',
-			data: {
-				roles: ['user']
-			},
-			onEnter: function ($uibModal, $state, $stateParams, ProposalsService) {
-				//
-				// CC: there is a weird bug here where $stateparams is available correctly here
-				// but NOT insidethe resolves. ??????
-				//
-				var proid = $stateParams.proposalId;
-				$uibModal.open ({
-					size: 'lg',
-					templateUrl: '/modules/proposals/client/views/view-proposal.modal.client.view.html',
-					controller: 'ProposalViewControllerModal',
-					controllerAs: 'ppp',
-					bindToController: true,
-					resolve: {
-						proposal: function ($stateParams, ProposalsService) {
-							return ProposalsService.get ({
-								proposalId: proid
-							}).$promise;
-						}
-					}
-				}).result.finally (function () {
-					$state.go ($state.previous.state, $state.previous.params);
-				});
-			}
-		})
 		// -------------------------------------------------------------------------
 		//
 		// the base for editing
@@ -105,6 +81,11 @@
 			template: '<ui-view/>',
 			data: {
 				notroles: ['gov', 'guest']
+			},
+			resolve: {
+				capabilities: function (SkillsService) {
+					return SkillsService.list ();
+				}
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -133,44 +114,13 @@
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
-				editing: function () { return true; }
-			}
-		})
-		.state ('proposaladmin.editmodal', {
-			url: '/:proposalId/edit/modal/:opportunityId',
-			data: {
-				roles: ['user'],
-				notroles: ['gov']
-			},
-			onEnter: function ($uibModal, $state, $stateParams, ProposalsService) {
-				//
-				// CC: there is a weird bug here where $stateparams is available correctly here
-				// but NOT insidethe resolves. ??????
-				//
-				var proid = $stateParams.proposalId;
-				var oppid = $stateParams.opportunityId;
-				$uibModal.open ({
-					size: 'lg',
-					templateUrl: '/modules/proposals/client/views/edit-proposal.nmodal.client.view.html',
-					controller: 'ProposalEditControllerModal',
-					controllerAs: 'ppp',
-					bindToController: true,
-					resolve: {
-						proposal: function ($stateParams, ProposalsService) {
-							return ProposalsService.get ({
-								proposalId: proid
-							}).$promise;
-						},
-						opportunity: function ($stateParams, OpportunitiesService) {
-							return OpportunitiesService.get({
-								opportunityId: oppid
-							}).$promise;
-						},
-						editing: true
-					}
-				}).result.finally (function () {
-					$state.go ($state.previous.state, $state.previous.params);
-				});
+				editing: function () { return true; },
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				}
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -197,37 +147,13 @@
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
 				editing: function () { return false; }
-			}
-		})
-		.state ('proposaladmin.createmodal', {
-			url: '/create/modal/:opportunityId',
-			data: {
-				roles: ['user'],
-				notroles: ['gov']
-			},
-			onEnter: function ($uibModal, $state, $stateParams, ProposalsService) {
-				var oppid = $stateParams.opportunityId;
-				$uibModal.open ({
-					size: 'lg',
-					templateUrl: '/modules/proposals/client/views/edit-proposal.modal.client.view.html',
-					controller: 'ProposalEditControllerModal',
-					controllerAs: 'ppp',
-					bindToController: true,
-					resolve: {
-						proposal: function ($stateParams, ProposalsService) {
-							return new ProposalsService ();
-						},
-						opportunity: function ($stateParams, OpportunitiesService) {
-							return OpportunitiesService.get({
-								opportunityId: oppid
-							}).$promise;
-						},
-						editing: false
-					}
-				}).result.finally (function () {
-					$state.go ($state.previous.state, $state.previous.params);
-				});
 			}
 		})
 		;

@@ -1,6 +1,9 @@
 package pages.app
 import geb.Page
+
+import pages.app.CodewithusPage
 import modules.LoginModule
+import org.openqa.selenium.Keys
 import extensions.AngularJSAware
 
 class HomePage extends Page implements AngularJSAware {
@@ -11,34 +14,25 @@ class HomePage extends Page implements AngularJSAware {
         login { module LoginModule  }
         
         //Links
-        AboutLink { PositionAndClick("a","about") }
+        //HomeLink { PositionAndClick("a","home") }
+		HomeLink { $("img", class:"navbar-brand" ) }
+		AboutLink { PositionAndClick("a","about") }
 		AccessibilityLink { PositionAndClick("a","accessibility") }
 		CodewithusLink { PositionAndClick("a","codewithus") }
-		CopyrightLink { PositionAndClick("a","copyright") }
+		//CopyrightLink { PositionAndClick("a","copyright") } Link was removed
 		DisclaimerLink { PositionAndClick("a","disclaimer") }
 		PrivacyLink { PositionAndClick("a","privacy") }
 		RoadmapLink { PositionAndClick("a","roadmap") }
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
-		OpportunitiesMenuLink { PositionAndClick("a","opportunities.list") }
-		ProjectsLink { PositionAndClick("a","projects.list") }
-		ProgramsLink { PositionAndClick("a","programs.list") }
+		OpportunitiesNavBar { PositionAndClick("a","opportunities.list") }
+		ProjectsNavbar { PositionAndClick("a","projects.list") }
+		ProgramsNavbar { PositionAndClick("a","programs.list") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
+		SignUpNavBar { PositionAndClick("a","authentication.gov") }
 		SignUpMidPageLink { PositionAndClick("a","authentication.gov",1) }
-		OrgsList { PositionAndClick("a","orgs.list") }
-		
-// Folowing links are not yet operational
-		LearnMoreLink { $("a", href:"/codewithus") }
-		AboutMidPageLink { $("a", text:"Learn More") }
-		AdminGovsLink { $() } //Admin
-		AdminNotifymeetsLink { $() } //Admin
-		AdminNotifyoppsLink { $() } //Admin
-		AdminUsersLink { $() } //Admin
-		ApiAuthSignoutLink { $() }
-		NotificationsLink { $() } //Admin
-		ProfilesLink { PositionAndClick("a","profiles.list") }
-		ProposalsLink { $("a", "ui-sref":"proposals.list({})") }
-		SettingsPictureLink { $() } //Admin
-		SettingsProfileLink { $() } //Admin
+		CompaniesNavbar { PositionAndClick("a","orgs.list") }
+		FindWorkButton { $("a.btn.btn-lg.btn-warning").click() }
+		learnMoreLink(to: CodewithusPage) { $("a.btn.btn-lg.btn-link").click() }
     }
 
     // Since webdriver does not want to click on non-visible links,
