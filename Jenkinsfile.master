@@ -54,6 +54,7 @@ node('maven') {
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
     }
+}
 
 stage('deploy-test') {
   timeout(time: 1, unit: 'DAYS') {
