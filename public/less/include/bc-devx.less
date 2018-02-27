@@ -251,6 +251,50 @@ h4.edit-form-header {
 	}
 }
 
+// NAV
+// -------------------------
+
+// Tabs
+// -------------------------
+
+// Give the tabs something to sit on
+.nav-tabs {
+  border-bottom: 1px solid @nav-tabs-border-color;
+  > li {
+    float: left;
+    // Make the list-items overlay the bottom border
+    margin-bottom: -1px;
+
+    // Actual tabs (as links)
+    > a {
+      color: @gray;
+      margin-right: 2px;
+      line-height: @line-height-base;
+      border: none;
+      border-radius: none;
+      &:hover {
+        color: @gray-dark;
+        font-weight: bold;
+        background: none;
+        border-bottom: 3px solid #f26925;
+      }
+    }
+
+    // Active state, and its :hover to override normal :hover
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: @gray-dark;
+        font-weight: bold;
+        background-color: none;
+        border-bottom: 3px solid #f26925;
+        cursor: default;
+      }
+    }
+  }
+}
+
 // Sections
 
 section {
@@ -597,6 +641,86 @@ section.list-page {
 .btn-opp-detail-header {
   margin-top: -3px;
   margin-bottom: -3px;
+}
+
+
+// Labels
+// --------------------------------------------------
+.label {
+  display: inline-block;
+  font-size: 80%;
+  font-weight: normal;
+  padding: .4em .8em;
+  letter-spacing: .08em;
+}
+
+//Sizes
+
+.label-lg {
+  font-size: 95%;
+  padding: .5em .8em;
+}
+
+
+// Generic classes
+
+.label-default {
+  color: @gray-dark;
+  background: @gray-lighter;
+}
+
+.label-primary {
+  background: @theme-primary;
+}
+
+.label-info {
+  background: @theme-info;
+  color: @gray-dark;
+  font-weight: bold;
+}
+
+.label-warning {
+  color: @gray-dark;
+  background: @theme-warning;
+  font-weight: bold;
+}
+
+.label-danger {
+  background: @theme-danger;
+}
+
+.label-success {
+  background: @theme-success;
+}
+
+.label-text-only {
+  background: transparent;
+  color: @gray-dark;
+  font-weight: bold;
+}
+
+// Specific labels
+
+.label-price {
+  background: @gray-darker;
+}
+
+.label-skill {
+  color: @gray-dark;
+  background: @theme-warning;
+  font-weight: bold;
+}
+
+.label-deadline {
+  background: transparent;
+  color: @gray-dark;
+  font-weight: bold;
+}
+
+.label-location {
+  background: transparent;
+  color: @gray-dark;
+  font-weight: bold;  
 }
 
 
