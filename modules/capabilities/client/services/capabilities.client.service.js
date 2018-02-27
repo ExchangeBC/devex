@@ -65,11 +65,11 @@
 			//
 			// -------------------------------------------------------------------------
 			dump: function (scope) {
-				console.log ('scope.capabilities', scope.capabilities);
-				console.log ('scope.iCapabilities', scope.iCapabilities);
-				console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
-				console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
-				console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
+				// console.log ('scope.capabilities', scope.capabilities);
+				// console.log ('scope.iCapabilities', scope.iCapabilities);
+				// console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
+				// console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
+				// console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
 			},
 			// -------------------------------------------------------------------------
 			//

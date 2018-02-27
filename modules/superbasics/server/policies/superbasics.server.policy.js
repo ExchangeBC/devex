@@ -15,7 +15,7 @@ acl = new acl (new acl.memoryBackend ());
  */
 exports.invokeRolesPolicies = function () {
 	acl.allow ([{
-		roles: ['admin','gov'],
+		roles: ['admin'],
 		allows: [{
 			resources: '/api/superbasics',
 			permissions: '*'
@@ -23,25 +23,29 @@ exports.invokeRolesPolicies = function () {
 			resources: '/api/superbasics/:superbasicId',
 			permissions: '*'
 		}]
-	}, {
-		roles: ['user'],
-		allows: [{
-			resources: '/api/superbasics',
-			permissions: ['get']
-		}, {
-			resources: '/api/superbasics/:superbasicId',
-			permissions: ['get']
-		}]
-	}, {
-		roles: ['guest'],
-		allows: [{
-			resources: '/api/superbasics',
-			permissions: ['get']
-		}, {
-			resources: '/api/superbasics/:superbasicId',
-			permissions: ['get']
-		}]
-	}]);
+	}
+	// ,
+	// {
+	// 	roles: ['user'],
+	// 	allows: [{
+	// 		resources: '/api/superbasics',
+	// 		permissions: ['get']
+	// 	}, {
+	// 		resources: '/api/superbasics/:superbasicId',
+	// 		permissions: ['get']
+	// 	}]
+	// },
+	// {
+	// 	roles: ['guest'],
+	// 	allows: [{
+	// 		resources: '/api/superbasics',
+	// 		permissions: ['get']
+	// 	}, {
+	// 		resources: '/api/superbasics/:superbasicId',
+	// 		permissions: ['get']
+	// 	}]
+	// }
+	]);
 };
 
 /**

@@ -433,7 +433,7 @@ angular.module('core')
 									_.pull(scope.ngModel, saveItem);
 									// add the item to the beginning of the ngModel
 									// the new primary is set in the catchall below.
-									console.log(saveItem);
+									// console.log(saveItem);
 									scope.ngModel.unshift(saveItem);
 								} else {
 									// not primary so toggle back to unselected

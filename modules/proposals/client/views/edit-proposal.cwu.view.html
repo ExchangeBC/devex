@@ -128,13 +128,14 @@
 	</div>
 </uib-tab>
 <!-- <uib-tab index="4" disable="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'" ng-hide="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'"> -->
-<uib-tab index="4" ng-if="!ppp.isSprintWithUs">
+<uib-tab index="4" ng-if="false && !ppp.isSprintWithUs">
 	<uib-tab-heading>
 		<i class="fa fa-file-o"></i> Terms
 	</uib-tab-heading>
 	<div class="proposal-form-container">
 		<div class="form-group">
-			<div class="alert alert-info">To submit a proposal, you must agree to the <i>Code With Us</i> Terms.</div>
+			<div class="alert alert-info">
+				To submit a proposal, you must agree to the <i>Code With Us</i> Terms.
 			</div>
 			<iframe class="col-sm-12" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
 			<a class="btn btn-sm btn-secondary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> DOWNLOAD</a>
@@ -149,6 +150,20 @@
 	</div>
 </uib-tab>
 </uib-tabset>
+<div class="row">
+	<div class="well well-lg well-info well-left-align pre-scrollable">
+		<h4>Sprint With Us Terms and Conditions</h4>
+		<p>To submit a proposal to work on this opportunity you must agree to the Terms.</p>
+		<iframe class="col-sm-12" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+		<div class="col-sm-12">
+			<br/>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read and fully understand and agree to the terms and conditions.
+			</label>
+			<a class="btn btn-default pull-right" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
+		</div>
+	</div>
+</div>
 <br>
 <div class="edit-form-footer">
 <div class="row">

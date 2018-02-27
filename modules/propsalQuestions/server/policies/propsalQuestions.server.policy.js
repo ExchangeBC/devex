@@ -15,7 +15,7 @@ acl = new acl (new acl.memoryBackend ());
  */
 exports.invokeRolesPolicies = function () {
 	acl.allow ([{
-		roles: ['admin','gov'],
+		roles: ['admin'],
 		allows: [{
 			resources: '/api/propsalQuestions',
 			permissions: '*'
@@ -23,25 +23,27 @@ exports.invokeRolesPolicies = function () {
 			resources: '/api/propsalQuestions/:propsalQuestionId',
 			permissions: '*'
 		}]
-	}, {
-		roles: ['user'],
-		allows: [{
-			resources: '/api/propsalQuestions',
-			permissions: ['get']
-		}, {
-			resources: '/api/propsalQuestions/:propsalQuestionId',
-			permissions: ['get']
-		}]
-	}, {
-		roles: ['guest'],
-		allows: [{
-			resources: '/api/propsalQuestions',
-			permissions: ['get']
-		}, {
-			resources: '/api/propsalQuestions/:propsalQuestionId',
-			permissions: ['get']
-		}]
-	}]);
+	}
+	// , {
+	// 	roles: ['user'],
+	// 	allows: [{
+	// 		resources: '/api/propsalQuestions',
+	// 		permissions: ['get']
+	// 	}, {
+	// 		resources: '/api/propsalQuestions/:propsalQuestionId',
+	// 		permissions: ['get']
+	// 	}]
+	// }, {
+	// 	roles: ['guest'],
+	// 	allows: [{
+	// 		resources: '/api/propsalQuestions',
+	// 		permissions: ['get']
+	// 	}, {
+	// 		resources: '/api/propsalQuestions/:propsalQuestionId',
+	// 		permissions: ['get']
+	// 	}]
+	// }
+	]);
 };
 
 /**

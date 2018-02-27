@@ -79,7 +79,7 @@
 	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
-		console.log ('virtuals', opportunity.isOpen);
+		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -238,7 +238,7 @@
 				}
 				vm.responses.forEach (function (q) {
 					q.forEach (function (r) {
-						console.log ('response:', r.rank, r.response);
+						// console.log ('response:', r.rank, r.response);
 					})
 				})
 				//
@@ -294,14 +294,14 @@
 					$scope.data.currentPage = 1;
 
 					$scope.close = function () {
-						console.log ('what');
+						// console.log ('what');
 						$uibModalInstance.close('cancel');
 					};
 					$scope.ok = function () {
 						$uibModalInstance.close('save');
 					};
 					$scope.pageChanged = function () {
-						console.log ('page changed');
+						// console.log ('page changed');
 					};
 					$scope.moveUp = function (resp, qindex) {
 						var orank = resp.rank;
@@ -309,7 +309,7 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							console.log ('response: ',r.rank,r.response);
+							// console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.moveDown = function (resp, qindex) {
@@ -318,7 +318,7 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							console.log ('response: ',r.rank,r.response);
+							// console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.commit = function () {
@@ -328,7 +328,7 @@
 			}, {
 			})
 			.then (function (resp) {
-				console.log ('resp', resp);
+				// console.log ('resp', resp);
 				if (resp === 'save' || resp === 'commit') {
 					//
 					// TBD: calculate scores etc.
@@ -374,7 +374,7 @@
 			}, {
 			})
 			.then (function (resp) {
-				console.log ('resp', resp);
+				// console.log ('resp', resp);
 				if (resp.action === 'save') {
 					//
 					// calculate scores etc.
@@ -413,8 +413,8 @@
 		// -------------------------------------------------------------------------
 		vm.saveProposal = function (proposal) {
 			vm.calculateProposalScore (proposal);
-			console.log ('saving proposal');
-			console.log ('questions', proposal.questions);
+			// console.log ('saving proposal');
+			// console.log ('questions', proposal.questions);
 			proposal.$update ();
 		};
 		vm.saveProposals = function () {
@@ -793,7 +793,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addSkill = function (capability, field, tag, newfield) {
-			console.log ('newskill:', tag);
+			// console.log ('newskill:', tag);
 			//
 			// add the new tag to the capability
 			// add the new tag to the opportunity capability tags
@@ -863,7 +863,7 @@
 				return false;
 			}
 			if (!isValid) {
-				console.log (vm.opportunityForm);
+				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -885,8 +885,8 @@
 			// deal with capabilities
 			//
 			CapabilitiesMethods.reconcile (vm, vm.opportunity);
-			console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
-			console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
+			// console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
+			// console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
 			CapabilitiesMethods.dump (vm);			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
@@ -937,7 +937,7 @@
 			//
 			// Create a new opportunity, or update the current instance
 			//
-			console.log ('saving now');
+			// console.log ('saving now');
 			promise.then(function() {
 				if (savemeSeymour) {
 					return vm.opportunity.createOrUpdate();

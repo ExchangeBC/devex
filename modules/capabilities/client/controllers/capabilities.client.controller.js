@@ -185,7 +185,7 @@
 		qqq.deleteSkill = function (capabilitySkill) {
 			(new CapabilitySkillsService (capabilitySkill)).$remove (
 			function (result) {
-				console.log ('this is running');
+				// console.log ('this is running');
 				qqq.capability.skills = qqq.capability.skills.reduce (function (accum, current) {
 					if (current.code !== capabilitySkill.code) accum.push (current);
 					return accum;

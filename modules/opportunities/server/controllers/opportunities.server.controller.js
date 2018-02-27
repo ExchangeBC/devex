@@ -338,7 +338,7 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		console.log ('updating', opportunity.opportunityTypeCd);
+		// console.log ('updating', opportunity.opportunityTypeCd);
 		//
 		// CC: TBD:SWU once sprint with us is active we can remove this restriction
 		//
@@ -377,7 +377,7 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
-	console.log ('publishinfg', isToBePublished);
+	// console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op

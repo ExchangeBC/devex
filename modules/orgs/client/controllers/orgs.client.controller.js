@@ -92,7 +92,7 @@
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 
 		vm.org        = org;
-		console.log (org);
+		// console.log (org);
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
 		// vm.previousState  = previousState;
@@ -115,7 +115,7 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		$rootScope.$on('orgImageUpdated', function (evt, data) {
-			console.log ('event data = ', data);
+			// console.log ('event data = ', data);
 			vm.org.orgImageURL = data;
 
 		});
@@ -126,7 +126,7 @@
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
-				console.log ('deleting');
+				// console.log ('deleting');
 				vm.org.$remove(function() {
 					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
@@ -251,7 +251,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
-			console.log ('add People');
+			// console.log ('add People');
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
@@ -273,7 +273,7 @@
 			}
 		};
 		vm.removeMember = function (member) {
-			console.log ('remove person');
+			// console.log ('remove person');
 			OrgsService.removeUser ({
 				orgId: vm.org._id,
 				userId: member._id

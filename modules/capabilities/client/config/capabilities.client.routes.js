@@ -5,7 +5,6 @@
 // =========================================================================
 (function () {
 	'use strict';
-
 	if (window.features.swu) angular.module ('capabilities.routes').config (['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------

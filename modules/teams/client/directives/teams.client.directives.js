@@ -38,7 +38,7 @@
 						}
 					})
 					.result.finally (function (r) {
-						console.log (r);
+						// console.log (r);
 						$rootScope.$broadcast('updateTeams', 'done');
 					})
 					;
@@ -59,7 +59,7 @@
 			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">Add Team</button>',
 			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
 				var wsx = this;
-				console.log ('wsx add team:', wsx);
+				// console.log ('wsx add team:', wsx);
 				var pteam = wsx.team;
 				wsx.edit = function () {
 					$uibModal.open ({
@@ -81,7 +81,7 @@
 						}
 					})
 					.result.finally (function (r) {
-						console.log (r);
+						// console.log (r);
 						$rootScope.$broadcast('updateTeams', 'done');
 					})
 					;
@@ -102,7 +102,7 @@
 			template : '<button class="btn btn-sm btn-success" ng-click="rfv.edit()">Choose Team</button>',
 			controller: function ($rootScope, $scope, $uibModal, Authentication, UsersService, TeamsService) {
 				var rfv = this;
-				console.log ('rfv choose team:', rfv);
+				// console.log ('rfv choose team:', rfv);
 				var inputOrg = rfv.org;
 				rfv.edit = function () {
 					$uibModal.open ({
@@ -121,7 +121,7 @@
 						}
 					})
 					.result.finally (function (r) {
-						console.log (r);
+						// console.log (r);
 						$rootScope.$broadcast('updateTeams', 'done');
 					})
 					;
@@ -152,7 +152,7 @@
 				vm.teams = TeamsService.forOrg({orgId:vm.org._id});
 				if ($scope.title) vm.title = $scope.title;
 				vm.columnCount = 1;
-				console.log ('teams', vm.teams, vm.context);
+				// console.log ('teams', vm.teams, vm.context);
 				$rootScope.$on('updateTeams', function () {
 					vm.teams = TeamsService.forOrg({orgId:vm.org._id});
 				});

@@ -22,7 +22,7 @@
 		vm.authentication  = Authentication;
 		vm.ProfilesService = ProfilesService;
 		vm.idString        = 'profileId';
-		console.log ('vm.profile.capabilities', vm.profile.capabilities);
+		// console.log ('vm.profile.capabilities', vm.profile.capabilities);
 		//
 		// what can the user do here?
 		//
@@ -104,7 +104,7 @@
 			this.save (true);
 		};
 		vm.save = function (isValid) {
-			console.log ('profile', vm.profile.capabilities);
+			// console.log ('profile', vm.profile.capabilities);
 			vm.form.profileForm.$setPristine ();
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.profileForm');

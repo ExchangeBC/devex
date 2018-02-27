@@ -47,7 +47,7 @@
 			restrict: 'EAC',
 			template : function (elem, attrs) {
 				var badges = attrs.badges;
-				console.log ('badges', badges);
+				// console.log ('badges', badges);
 				var isarray = false;
 				var isarrayofobjects = false;
 				var outarray;

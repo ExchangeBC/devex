@@ -14,8 +14,9 @@ acl = new acl (new acl.memoryBackend ());
  * Invoke Capabilities Permissions
  */
 exports.invokeRolesPolicies = function () {
-	acl.allow ([{
-		roles: ['admin','gov'],
+	acl.allow ([
+	{
+		roles: ['admin'],
 		allows: [{
 			resources: '/api/capabilities',
 			permissions: '*'
@@ -29,7 +30,24 @@ exports.invokeRolesPolicies = function () {
 			resources: '/api/capabilityskill/:capabilityskillId',
 			permissions: '*'
 		}]
-	}, {
+	},
+	{
+		roles: ['gov'],
+		allows: [{
+			resources: '/api/capabilities',
+			permissions: ['get']
+		}, {
+			resources: '/api/capabilities/:capabilityId',
+			permissions: ['get']
+		}, {
+			resources: '/api/capabilityskill',
+			permissions: ['post']
+		}, {
+			resources: '/api/capabilityskill/:capabilityskillId',
+			permissions: ['get', 'put', 'delete']
+		}]
+	},
+	{
 		roles: ['user'],
 		allows: [{
 			resources: '/api/capabilities',
@@ -44,7 +62,8 @@ exports.invokeRolesPolicies = function () {
 			resources: '/api/capabilityskill/:capabilityskillId',
 			permissions: '*'
 		}]
-	}, {
+	},
+	{
 		roles: ['guest'],
 		allows: [{
 			resources: '/api/capabilities',
@@ -53,7 +72,8 @@ exports.invokeRolesPolicies = function () {
 			resources: '/api/capabilities/:capabilityId',
 			permissions: ['get']
 		}]
-	}]);
+	}
+	]);
 };
 
 /**

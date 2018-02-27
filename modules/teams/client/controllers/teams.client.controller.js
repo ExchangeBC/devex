@@ -86,7 +86,7 @@
 		var qqq             = this;
 		qqq.team         = team;
 		if (!qqq.team.org) qqq.team.org = org._id;
-		console.log (team);
+		// console.log (team);
 		qqq.teamForm = {};
 		if (!qqq.team.members) qqq.team.members = [];
 		qqq.removals = [];
@@ -101,10 +101,10 @@
 			if (!memberHash[current._id]) qqq.allusers.push (current);
 			return accum;
 		}, {});
-		console.log ('member hash', memberHash);
-		console.log ('people hash', peopleHash);
-		console.log ('allusers', qqq.allusers);
-		console.log ('allusers', allusers);
+		// console.log ('member hash', memberHash);
+		// console.log ('people hash', peopleHash);
+		// console.log ('allusers', qqq.allusers);
+		// console.log ('allusers', allusers);
 		var removeElements = function (a, idlist) {
 			var idx = idlist.reduce (function (accum, curr) {accum[curr] = true; return accum;}, {});
 			return a.reduce (function (accum, curr) {
@@ -147,7 +147,7 @@
 		//
 		// -------------------------------------------------------------------------
 		qqq.addPerson = function () {
-			console.log ('add Person');
+			// console.log ('add Person');
 			if (qqq.additions.length) {
 				qqq.team.members = addElements (qqq.team.members, qqq.additions, peopleHash);
 				qqq.allusers = removeElements (qqq.allusers, qqq.additions);
@@ -155,7 +155,7 @@
 			}
 		};
 		qqq.remPerson = function () {
-			console.log ('remove person');
+			// console.log ('remove person');
 			if (qqq.removals.length) {
 				qqq.allusers = addElements (qqq.allusers, qqq.removals, peopleHash);
 				qqq.team.members = removeElements (qqq.team.members, qqq.removals);
@@ -176,7 +176,7 @@
 			//
 			// Create a new team, or update the current instance
 			//
-			console.log ('qqq.team', qqq.team);
+			// console.log ('qqq.team', qqq.team);
 			qqq.team.createOrUpdate ()
 			//
 			// success, notify and return to list

@@ -168,7 +168,7 @@ var addAdmins = function (org) {
 //
 // -------------------------------------------------------------------------
 var removeMember = function (user, org) {
-	console.log ('removing member:', user._id);
+	// console.log ('removing member:', user._id);
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
 	.then (saveUser)
@@ -253,7 +253,7 @@ exports.update = function (req, res) {
 	var list = null;
 	if (req.body.additions) {
 		list = req.body.additions.split (/[ ,]+/);
-		console.log ('users to be added:', list);
+		// console.log ('users to be added:', list);
 	}
 	//
 	// copy over everything passed in. This will overwrite the

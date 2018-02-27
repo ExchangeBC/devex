@@ -59,10 +59,10 @@
 			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">edit profile image</button>',
 			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
-				console.log (wsx);
+				// console.log (wsx);
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
-					console.log ('what');
+					// console.log ('what');
 					$uibModal.open ({
 						size: 'lg',
 						templateUrl: '/modules/orgs/client/views/change-logo-modal.html',
@@ -86,7 +86,7 @@
 										orgImageURL: Upload.dataUrltoBlob(dataUrl, name)
 									}
 								}).then(function (response) {
-									console.log (response);
+									// console.log (response);
 									wsx.org.orgImageURL = response.data.orgImageURL;
 									$rootScope.$broadcast('orgImageUpdated', response.data.orgImageURL);
 									$uibModalInstance.dismiss('cancel');

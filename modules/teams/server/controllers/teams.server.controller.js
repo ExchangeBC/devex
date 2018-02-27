@@ -177,7 +177,7 @@ exports.requests = function (team, cb) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
-	console.log (req.body);
+	// console.log (req.body);
 	var team = new Team(req.body);
 	//
 	// set the code, this is used for setting roles and other stuff
