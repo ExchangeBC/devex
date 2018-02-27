@@ -123,8 +123,6 @@
 		<!-- // Status and Follow // -->
 		<div class="row">
 			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
-				<label class="label label-lg label-success">OPEN</label>
-				&nbsp;&nbsp;
 				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
 			</div>
 		</div>
@@ -179,9 +177,9 @@
 		</div>
 
 		<!-- // Opportunity Detail views // -->
-		<div class="row" ng-include="'/modules/opportunities/client/views/view-opportunity.cwu.view.html'" ng-if="!vm.isSprintWithUs"></div>
+		<div ng-include="'/modules/opportunities/client/views/view-opportunity.cwu.view.html'" ng-if="!vm.isSprintWithUs"></div>
 
-		<div class="row" ng-include="'/modules/opportunities/client/views/view-opportunity.swu.view.html'" ng-if="vm.isSprintWithUs"></div>
+		<div ng-include="'/modules/opportunities/client/views/view-opportunity.swu.view.html'" ng-if="vm.isSprintWithUs"></div>
 
 		<!--
 		<div class="row">
