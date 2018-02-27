@@ -47,6 +47,7 @@ node('maven') {
 	    echo ">>>> Build Complete"
 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'M.$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
     }
+}
 
 stage('deploy-test') {
   timeout(time: 2, unit: 'DAYS') {
