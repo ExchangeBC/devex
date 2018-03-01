@@ -73,6 +73,23 @@
 	})
 	// =========================================================================
 	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller('OpportunitiesLandingController', function (Authentication, $stateParams) {
+		var vm          = this;
+		vm.programId    = $stateParams.programId;
+		vm.programTitle = $stateParams.programTitle;
+		vm.projectId    = $stateParams.projectId;
+		vm.projectTitle = $stateParams.projectTitle;
+		vm.context      = $stateParams.context;
+		var isUser      = Authentication.user;
+		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.userCanAdd   = (isAdmin || isGov);
+	})
+	// =========================================================================
+	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
@@ -284,6 +301,7 @@
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/questions.modal.html',
 				controller: function ($scope, $uibModalInstance) {
+
 					$scope.data = {};
 					$scope.data.questions = [];
 					$scope.data.proposals = vm.proposals;
@@ -330,6 +348,8 @@
 			.then (function (resp) {
 				// console.log ('resp', resp);
 				if (resp === 'save' || resp === 'commit') {
+				// vm.responses[0][0].rank = 999;
+				console.log ('whatproposals', vm.proposals[0].questions[0].rank);
 					//
 					// TBD: calculate scores etc.
 					//

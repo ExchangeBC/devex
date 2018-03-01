@@ -3,8 +3,9 @@
 		<h3 class="list-page-title list-page-hide" ng-bind="vm.title"></h3>
 	</div>
 	<div class="col-xs-4">
-		<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.create({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY
-		</button>
+		<button ng-if="vm.userCanAdd && vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY</button>
+		<button ng-if="vm.userCanAdd && !vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.create({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY</button>
+
 	</div>
 </div>
 
@@ -45,8 +46,7 @@
 	</div>
 
 
-	<div class="card-block" ng-class="{'cbg-light-grey-blue':(opportunity.opportunityTypeCd==='sprint-with-us')}" id="opportunities.view" ui-sref="opportunities.view({ opportunityId: opportunity.code, projectId: vm.projectId })">
-
+	<div class="card-block cbg-light-grey-blue" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 		<div class="label-list">
 				<label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
 				<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
@@ -58,10 +58,24 @@
 				</label>
 				<label class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</label>
 		</div>
-
 		<div class="card-title" ng-bind="opportunity.name"></div>
 		<p ng-bind="opportunity.short"></p>
+	</div>
 
+	<div class="card-block" ng-if="opportunity.opportunityTypeCd==='code-with-us'" id="opportunities.view" ui-sref="opportunities.viewcwu({ opportunityId: opportunity.code, projectId: vm.projectId })">
+		<div class="label-list">
+				<label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
+				<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
+				<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Team Required </label>
+				<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}} /
+					<span ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
+					<span ng-if="opportunity.onsite == 'onsite'">In-person work required</span>
+					<span ng-if="opportunity.onsite == 'mixed'">Some in-person work required</span>
+				</label>
+				<label class="label label-warning" ng-repeat="code in opportunity.skills">{{code}}</label>
+		</div>
+		<div class="card-title" ng-bind="opportunity.name"></div>
+		<p ng-bind="opportunity.short"></p>
 	</div>
 </div>
 
