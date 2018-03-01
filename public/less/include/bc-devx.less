@@ -13,6 +13,9 @@ body {
 
 p.opp-detail-header {
   margin: 0px;
+  font-size: 85%;
+  font-style: italic;
+  font-weight: lighter;
 }
 
 p.subtitle {
@@ -56,19 +59,6 @@ a.breadcrumb-nav {
   margin: 5px 0px 20px;
 }
 
-hr {
-    margin: 25px auto 0;
-    border-width: 1px;
-    border-color: fade(@gray-darker, 10%);
-}
-
-hr.light {
-    border-color: white;
-}
-
-hr.detail-page {
-  margin: 15px -15px;  
-}
 
 h1,
 h2,
@@ -134,10 +124,14 @@ h6 {
   border-radius: 4px;
 }
 
+hr {
+  border-color: #e3e3e3;
+}
+
 // Edit form
 
 .edit-form-header {
-  padding: 10px 15px 10px; 
+  padding: 10px 15px; 
   margin: -15px -15px 0px; 
   background: #f6f8fa;
   border-radius: 4px 4px 0px 0px;
@@ -149,7 +143,7 @@ h4.edit-form-header {
 }
 
 .edit-form-footer {
-  padding: 10px 35px; 
+  padding: 10px 15px; 
   margin: -15px; 
   background: #f6f8fa;
   border-radius: 0px 0px 4px 4px;
@@ -260,7 +254,7 @@ h4.edit-form-header {
 // Give the tabs something to sit on
 .nav-tabs {
   border-bottom: 1px solid @nav-tabs-border-color;
-  margin: 5px 15px;
+  margin: 5px 0px;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
@@ -269,6 +263,7 @@ h4.edit-form-header {
     // Actual tabs (as links)
     > a {
       color: @gray;
+      background: none;
       margin-right: 2px;
       line-height: @line-height-base;
       border: none;
@@ -288,8 +283,8 @@ h4.edit-form-header {
         color: @gray-dark;
         font-weight: bold;
         border: none;
-        background-color: none;
-        border-bottom: 4px solid #f26925;
+        background: none;
+        border-bottom: 6px solid #f26925;
         cursor: default;
       }
     }
@@ -341,11 +336,11 @@ section.edit-form-background {
 }
 
 section.detail-page-background {
-  background: @gray-lighter;
+  background: @theme-light-blue;
 }
 
 section.list-page {
-  background: @gray-lighter;
+  background: @theme-light-blue;
 }
 
 
@@ -640,8 +635,7 @@ section.list-page {
 }
 
 .btn-opp-detail-header {
-  margin-top: -3px;
-  margin-bottom: -3px;
+  margin-top: -5px;
 }
 
 

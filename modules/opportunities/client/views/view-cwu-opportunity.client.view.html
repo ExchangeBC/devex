@@ -26,7 +26,6 @@
 <section class="detail-page-background">
 
 	<div class="container">
-
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="breadcrumb-nav">
@@ -68,7 +67,7 @@
 			</div>
 		</div>
 
-		<!-- // Submit a proposal button // -->
+		<!-- // Proposal Application Directive // -->
 		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
 			<div class="col-xs-12">
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
@@ -81,10 +80,9 @@
 
 		<div class="row">
 			<div class="col-xs-8">
-				<p class="opp-detail-header"><span class="small">Published on <span class="strong" ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>&nbsp; &nbsp;
+				<p class="opp-detail-header">Published on <span class="strong" ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>&nbsp; &nbsp;
 					Last updated on <span class="strong" ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
 					<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
-					</span>
 				</p>
 			</div>
 			<div class="col-xs-4">
@@ -94,7 +92,7 @@
 				<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right btn-opp-detail-header" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
 			</div>
 		</div>
-		<hr class="detail-page">
+		<hr>
 
 		<!-- // Sprint With Us Terms // -->
 		<!--
@@ -132,11 +130,11 @@
 			<div class="col-xs-12 text-center">
 				<h1>{{vm.opportunity.name}}</h1>
 				<p ng-bind="vm.opportunity.short"></p>
-				<hr class="detail-page">
 				<br>
 			</div>
 		</div>
-
+		<hr>
+		<br>
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
@@ -175,89 +173,96 @@
 				</dl>
 			</div>
 		</div>
-
-<div class="row">
-	<div class="col-xs-12">
-		<hr class="detail-page">
-
-		<h3>Background</h3>
-		<p ng-bind-html="vm.display.description"></p>
-
-		<hr class="detail-page">
-
-		<h3>Acceptance Criteria</h3>
-		<p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a> of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p> To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
-		<div class="well" ng-bind-html="vm.display.criteria"></div>
-
-		<hr class="detail-page">
-
-		<h3>How to Apply</h3>
-		<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
-		<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
-		<div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-info">To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></div>
-
-		<h4>Proposal Evaluation Criteria</h4>
-		<p>Your proposal will be scored by this criteria:</p>
-		<div class="well" ng-bind-html="vm.display.evaluation"></div>
-
-		<!-- // Proposal Application Directive // -->
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+		<hr>
+		<div class="row">
 			<div class="col-xs-12">
-				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+				
+
+				<h3>Background</h3>
+				<p ng-bind-html="vm.display.description"></p>
+
+				<hr>
+
+				<h3>Acceptance Criteria</h3>
+				<p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a> of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p> To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
+				<div class="well" ng-bind-html="vm.display.criteria"></div>
+
+				<hr>
+
+				<h3>How to Apply</h3>
+				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
+				<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
+				<div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-info">To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></div>
+
+				<h4>Proposal Evaluation Criteria</h4>
+				<p>Your proposal will be scored by this criteria:</p>
+				<div class="well" ng-bind-html="vm.display.evaluation"></div>
+
+				<!-- // Proposal Application Directive // -->
+				<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+					<div class="col-xs-12">
+						<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+					</div>
+				</div>
+
+				<div class="alert alert-important">
+					<p><span class="strong"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?</span>&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<br>
+	<br>
+
+	<!-- // Admin view of proposals // -->
+	<div class="container container-edit-form">
+
+		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
+
+		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+			<div class="col-xs-12 text-center">
+				<p>
+					<span class="light">OPPORTUNITY ASSIGNED TO:</span>
+					&nbsp;
+					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+					&nbsp;
+					{{vm.opportunity.proposal.user.displayName}}
+					&nbsp;&nbsp;&nbsp;
+					<a  id="proposals.view" ng-if="vm.canEdit" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a>&nbsp;&nbsp;
+					<button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fa fa-ban"></i> UNASSIGN</button>
+				</p>
+
+				<!--
+				<div class="card card-block">
+					<div class="card-img">
+						<img class="card-img-left" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
+					</div>
+
+					<div class="col-md-5">
+						<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{vm.opportunity.proposal.user.firstName}} {{vm.opportunity.proposal.user.lastName}}</h4>
+						<p>Attachments: {{vm.opportunity.proposal.attachments.length}}</p>
+					</div>
+
+					<div class="col-md-2">
+						<button class="btn btn-warning" ng-if="vm.canEdit" ng-click="vm.unassign()">UNASSIGN</button>
+					</div>
+					<div class="col-md-2" ng-if="vm.canEdit || vm.isMember">
+						<a  id="proposals.view" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
+					</div>
+				</div>
+				-->
 			</div>
 		</div>
 
-		<div class="alert alert-important">
-			<p><span class="strong"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?</span>&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</p>
-		</div>
-		<hr class="detail-page">
-	</div>
-</div>
-
-<!-- // Admin view of proposals // -->
-<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
-
-<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
-	<div class="col-xs-12 text-center">
-		<p>
-			<span class="light">OPPORTUNITY ASSIGNED TO:</span>
-			&nbsp;
-			<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
-			&nbsp;
-			{{vm.opportunity.proposal.user.displayName}}
-			&nbsp;&nbsp;&nbsp;
-			<a  id="proposals.view" ng-if="vm.canEdit" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a>&nbsp;&nbsp;
-			<button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fa fa-ban"></i> UNASSIGN</button>
-		</p>
-
-		<!--
-		<div class="card card-block">
-			<div class="card-img">
-				<img class="card-img-left" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}"/>
-			</div>
-
-			<div class="col-md-5">
-				<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{vm.opportunity.proposal.user.firstName}} {{vm.opportunity.proposal.user.lastName}}</h4>
-				<p>Attachments: {{vm.opportunity.proposal.attachments.length}}</p>
-			</div>
-
-			<div class="col-md-2">
-				<button class="btn btn-warning" ng-if="vm.canEdit" ng-click="vm.unassign()">UNASSIGN</button>
-			</div>
-			<div class="col-md-2" ng-if="vm.canEdit || vm.isMember">
-				<a  id="proposals.view" ui-sref="proposals.view({ proposalId: vm.opportunity.proposal._id })">View Proposal</a><br/>
+		<div class="row">
+			<div class="col-xs-12 text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
+				<a class="btn btn-sm btn-secondary" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
 			</div>
 		</div>
-		-->
 	</div>
-</div>
-
-
-<div class="row">
-	<div class="col-xs-12 text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
-		<a class="btn btn-sm btn-secondary" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
-	</div>
-</div>
+	
+</section>
 
 	<!--
 	<uib-tabset active>
@@ -340,4 +345,3 @@
 		</uib-tab>
 	</uib-tabset>
 	-->
-	</div>
