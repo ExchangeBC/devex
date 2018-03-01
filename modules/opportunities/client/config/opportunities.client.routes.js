@@ -228,8 +228,8 @@
 		// create a new opportunity and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.landingcreate', {
-			url: '/landingcreate',
+		.state('opportunityadmin.createlanding', {
+			url: '/createlanding',
 			params: {
 				programId    : null,
 				programTitle : null,

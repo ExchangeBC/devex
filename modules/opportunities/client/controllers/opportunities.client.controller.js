@@ -76,7 +76,7 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitiesLandingController', function (Authentication, $stateParams) {
+	.controller('OpportunityLandingController', function (Authentication, $stateParams) {
 		var vm          = this;
 		vm.programId    = $stateParams.programId;
 		vm.programTitle = $stateParams.programTitle;
