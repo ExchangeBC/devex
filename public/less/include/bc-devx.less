@@ -133,7 +133,7 @@ hr {
 .edit-form-header {
   padding: 10px 15px; 
   margin: -15px -15px 0px; 
-  background: #e3e3e3;
+  background: @theme-light-blue;
   border-radius: 4px 4px 0px 0px;
 }
 
@@ -143,9 +143,9 @@ h4.edit-form-header {
 }
 
 .edit-form-footer {
-  padding: 10px 15px; 
+  padding: 15px; 
   margin: -15px; 
-  background: #e3e3e3;
+  background: @theme-light-blue;
   border-radius: 0px 0px 4px 4px;
 }
 
@@ -341,6 +341,46 @@ section.detail-page-background {
 
 section.list-page {
   background: @theme-light-blue;
+}
+
+section.form-page {
+  background: @gray;
+}
+
+// Forms / Might use these later to simplify html
+// ----------------------------------------------
+
+.form {
+  max-width: 1040px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: none;
+}
+
+.form-header {
+  padding: 10px 15px;
+  margin: none;
+  background: #e3e3e3;
+  border-radius: 4px 4px 0px 0px;
+}
+
+form-title {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.form-body {
+  display: block;
+  padding: 10px 15px;
+  margin: none;
+  background: #fff;
+}
+
+.form-footer {
+  padding: 10px 15px;
+  margin: none;
+  background: #e3e3e3;
+  border-radius: 0px 0px 4px 4px; 
 }
 
 
