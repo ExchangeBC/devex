@@ -298,6 +298,8 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.questions = function () {
+			vm.responses[0][0].rank = 2;
+			return;
 			modalService.showModal ({
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/questions.modal.html',
