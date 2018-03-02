@@ -184,8 +184,8 @@
 		// edit a opportunity
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.edit', {
-			url: '/:opportunityId/edit',
+		.state('opportunityadmin.editcwu', {
+			url: '/:opportunityId/editcwu',
 			params: {
 				programId: null,
 				projectId: null
@@ -229,7 +229,7 @@
 		//
 		// -------------------------------------------------------------------------
 		.state('opportunityadmin.editswu', {
-			url: '/:opportunityId/edit',
+			url: '/:opportunityId/editswu',
 			params: {
 				programId: null,
 				projectId: null
@@ -314,8 +314,8 @@
 		// create a new opportunity and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.create', {
-			url: '/create',
+		.state('opportunityadmin.createcwu', {
+			url: '/createcwu',
 			params: {
 				programId: null,
 				programTitle: null,

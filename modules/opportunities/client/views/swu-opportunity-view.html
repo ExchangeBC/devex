@@ -50,7 +50,7 @@
 		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
 					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
 				</div>
 			</div>
@@ -61,7 +61,7 @@
 		<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
 					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-sm btn-text-only" ng-click="vm.publish(vm.opportunity, false)"><i class="fa fa-ban"></i> UNPUBLISH</a>
 				</div>
 			</div>

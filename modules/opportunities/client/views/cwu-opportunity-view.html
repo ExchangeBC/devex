@@ -50,7 +50,7 @@
 		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
 					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
 				</div>
 			</div>
@@ -61,7 +61,7 @@
 		<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.edit({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
 					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-sm btn-text-only" ng-click="vm.publish(vm.opportunity, false)"><i class="fa fa-ban"></i> UNPUBLISH</a>
 				</div>
 			</div>
@@ -93,30 +93,6 @@
 			</div>
 		</div>
 		<hr>
-
-		<!-- // Sprint With Us Terms // -->
-		<!--
-		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-			<div class="col-xs-12 text-center">
-				<div class="alert alert-info">
-					<p>This is a <b>Sprint With Us</b> opportunity governed by the <a href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, <a href="/sprintwithus" target="_blank">Sprint With Us</a>.
-					</p>
-				</div>
-			</div>
-		</div>
-		-->
-
-		<!-- // Code With Us Terms // -->
-		<!--
-		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
-			<div class="col-xs-12 text-center">
-				<div class="alert alert-info">
-					<p>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a>
-						of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
-				</div>
-			</div>
-		</div>
-		-->
 
 		<!-- // Status and Follow // -->
 		<div class="row">
@@ -176,7 +152,7 @@
 		<hr>
 		<div class="row">
 			<div class="col-xs-12">
-				
+
 
 				<h3>Background</h3>
 				<p ng-bind-html="vm.display.description"></p>
@@ -261,7 +237,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 </section>
 
 	<!--

@@ -298,8 +298,8 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.questions = function () {
-			vm.responses[0][0].rank = 2;
-			return;
+			// vm.responses[0][0].rank = 2;
+			// return;
 			modalService.showModal ({
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-questions.html',
@@ -588,9 +588,9 @@
 		vm.signInAndApply = function () {
 			$state.go('authentication.signin').then(function () {
 				$state.previous = {
-					state: 'opportunities.view',
+					state: 'opportunities.viewcwu',
 					params: {opportunityId:opportunity.code},
-					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
+					href: $state.href('opportunities.viewcwu', {opportunityId:opportunity.code})
 				};
 			});
 		};
@@ -979,7 +979,7 @@
 					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
 
-				$state.go('opportunities.view', {opportunityId:opportunity.code});
+				$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
 			})
 			//
 			// fail, notify and stay put

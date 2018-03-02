@@ -28,34 +28,15 @@
 					<div class="col-xs-8" ng-if="!vm.editing">
 						<h4 class="edit-form-header">New Opportunity {{vm.opportunity.name}}</h4>
 					</div>
-					<div class="col-xs-4">
-						<a ui-sref="opportunities.view({opportunityId:vm.opportunity.code})" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					<div class="col-xs-4" ng-if="vm.opportunity._id">
+						<a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+					<div class="col-xs-4" ng-if="!vm.opportunity._id">
+						<a ui-sref="opportunities.list()" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
 					</div>
 				</div>
 			</div>
 			<br>
-
-			<div class="row">
-				<div class="col-xs-12">
-					<fieldset>
-						<div class="form-group" ng-if="vm.features.swu">
-									<div class="btn-group">
-										<label class="btn btn-default" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'code-with-us'">I am looking for an <em>Individual</em></label>
-										<label class="btn btn-default" ng-model="vm.opportunity.opportunityTypeCd" uib-btn-radio="'sprint-with-us'">I am looking for a <em>Team</em></label>
-									</div>
-							<div class="radio" ng-if="0">
-								<label>
-									<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="code-with-us"/>
-									I am looking for an <em>Individual</em>
-									&nbsp; &nbsp; &nbsp;
-									<input type="radio" name="opportunityTypeCd" ng-model="vm.opportunity.opportunityTypeCd" value="sprint-with-us"/>
-									I am looking for a <em>Team</em>
-								</label>
-							</div>
-						</div>
-					</fieldset>
-				</div>
-			</div>
 
 			<div class="row">
 				<div class="col-xs-12">
@@ -82,7 +63,7 @@
 							<uib-tab-heading>
 								Acceptance and Evaluation
 							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-acceptance.html.html'"></div>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-acceptance.html'"></div>
 						</uib-tab>
 						<uib-tab index="6" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
 							<uib-tab-heading>

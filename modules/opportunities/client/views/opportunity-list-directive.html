@@ -4,7 +4,7 @@
 	</div>
 	<div class="col-xs-4">
 		<button ng-if="vm.userCanAdd && vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY</button>
-		<button ng-if="vm.userCanAdd && !vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.create({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY</button>
+		<button ng-if="vm.userCanAdd && !vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createcwu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> POST AN OPPORTUNITY</button>
 
 	</div>
 </div>
@@ -41,7 +41,8 @@
 			<a ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-check"></i>
 			</a>
 			&nbsp;
-			<a ng-if="vm.isAdmin || opportunity.userIs.admin" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.edit({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+			<a ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.opportunityTypeCd==='code-with-us'" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.editcwu({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+			<a ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.opportunityTypeCd==='sprint-with-us'" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.editswu({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
 		 <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
 	</div>
 

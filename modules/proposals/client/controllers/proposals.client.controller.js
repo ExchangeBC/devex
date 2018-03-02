@@ -89,7 +89,11 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.close = function () {
-			$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+			if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+				$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+			} else {
+				$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+			}
 		};
 		ppp.type = function (type) {
 			if (type.indexOf ('pdf') > -1) return 'pdf';
@@ -113,7 +117,11 @@
 						function (response) {
 							ppp.proposal = response;
 							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
-							$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+							} else {
+								$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+							}
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
@@ -506,11 +514,19 @@
 				.then(function () {
 					window.onbeforeunload = null;
 					$locationChangeStartUnbind ();
-					$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+					if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+						$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+					} else {
+						$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+					}
 				}, function () {
 				});
 			} else {
-				$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+				if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+					$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+				} else {
+					$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+				}
 			}
 		};
 		// -------------------------------------------------------------------------
@@ -526,7 +542,11 @@
 						function () {
 							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
 							ppp.subscribe (false);
-							$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+							} else {
+								$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+							}
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
