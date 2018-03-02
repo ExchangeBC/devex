@@ -9,31 +9,30 @@
 	</div>
 </div>
 
+	<div class="card card-flat" ng-repeat="org in vm.orgs">
+		
+		<div class="card-header" ng-if="org.canEdit || org.isOrgMember" style="text-align: right">
+			<span ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-primary">Admin</span>
+			&nbsp;
+			<span ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-primary">Member</span>
+			&nbsp;
+			<a ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
+		</div>
 
-<div class="card card-flat" ng-repeat="org in vm.orgs">
-	
-	<div class="card-header" ng-if="org.canEdit || org.isOrgMember" style="text-align: right">
-		<span ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-primary">Admin</span>
-		&nbsp;
-		<span ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-primary">Member</span>
-		&nbsp;
-		<a ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
-	</div>
-
-	<div class="card-block" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
-		<div class="row">
-			<div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
-				<avatar-display url="org.orgImageURL" size="100"></avatar-display>
-			</div>
-			<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
-				<h3 style="font-size: 17px; margin-top: 5px;">
-					{{org.name}} 
-					<span ng-if="org.dba">({{org.dba}})</span>
-				</h3>
-				<p ng-bind-html="vm.trust(org.description)"></p>
+		<div class="card-block" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
+			<div class="row">
+				<div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
+					<avatar-display url="org.orgImageURL" size="100"></avatar-display>
+				</div>
+				<div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
+					<h3 style="font-size: 17px; margin-top: 5px;">
+						{{org.name}} 
+						<span ng-if="org.dba">({{org.dba}})</span>
+					</h3>
+					<p ng-bind-html="vm.trust(org.description)"></p>
+				</div>
 			</div>
 		</div>
-	</div>
 
-</div>
+	</div>
 
