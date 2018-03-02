@@ -1,0 +1,84 @@
+<!-- Persistent banner for Opportunity Creators -->
+<div class="banner banner-important" >
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<section class="edit-form-background" role="main">
+
+	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
+
+
+		<div class="container container-edit-form">
+
+			<div class="edit-form-header">
+				<div class="row">
+					<div class="col-xs-8" ng-if="vm.editing">
+						<h4 class="edit-form-header"><span class="light small">EDITING:</span> {{vm.opportunity.name}}</h4>
+					</div>
+					<div class="col-xs-8" ng-if="!vm.editing">
+						<h4 class="edit-form-header">New Opportunity {{vm.opportunity.name}}</h4>
+					</div>
+					<div class="col-xs-4" ng-if="vm.opportunity._id">
+						<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+					<div class="col-xs-4" ng-if="!vm.opportunity._id">
+						<a ui-sref="opportunities.list()" class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+				</div>
+			</div>
+			<br>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<uib-tabset active>
+						<uib-tab index="0">
+							<uib-tab-heading>
+								Header
+							</uib-tab-heading>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-title.html'"></div>
+						</uib-tab>
+						<uib-tab index="2">
+							<uib-tab-heading>
+								Background
+							</uib-tab-heading>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-description.html'"></div>
+						</uib-tab>
+						<uib-tab index="4">
+							<uib-tab-heading>
+								Details
+							</uib-tab-heading>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-details.html'"></div>
+						</uib-tab>
+						<uib-tab index="5">
+							<uib-tab-heading>
+								Acceptance and Evaluation
+							</uib-tab-heading>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-acceptance.html'"></div>
+						</uib-tab>
+				</div>
+			</div>
+
+			<br/>
+
+			<div class="edit-form-footer">
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> SAVE CHANGES</button>
+						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> DELETE</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</form>
+</section>
+
+
+
