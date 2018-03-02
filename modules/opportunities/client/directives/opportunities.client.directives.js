@@ -16,7 +16,7 @@
 				title: '@',
 				context: '@'
 			},
-			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
+			templateUrl  : '/modules/opportunities/client/views/opportunity-list-directive.html',
 			controller   : function ($scope, OpportunitiesService, Authentication, Notification, modalService, $q, ask) {
 				var rightNow = new Date ();
 				var vm     = this;
