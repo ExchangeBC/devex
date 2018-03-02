@@ -1,3 +1,8 @@
+// =========================================================================
+//
+// `this set of controllers is for SWU opportunities specifically
+//
+// =========================================================================
 (function () {
 	'use strict';
 
@@ -62,38 +67,10 @@
 	angular.module('opportunities')
 	// =========================================================================
 	//
-	// Controller for the master list of programs
-	//
-	// =========================================================================
-	.controller('OpportunitiesListController', function (OpportunitiesService, Authentication) {
-		var vm      = this;
-		vm.opportunities = OpportunitiesService.query();
-		var isUser = Authentication.user;
-		vm.isUser = isUser;
-	})
-	// =========================================================================
-	//
-	// Controller for the master list of programs
-	//
-	// =========================================================================
-	.controller('OpportunityLandingController', function (Authentication, $stateParams) {
-		var vm          = this;
-		vm.programId    = $stateParams.programId;
-		vm.programTitle = $stateParams.programTitle;
-		vm.projectId    = $stateParams.projectId;
-		vm.projectTitle = $stateParams.projectTitle;
-		vm.context      = $stateParams.context;
-		var isUser      = Authentication.user;
-		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.userCanAdd   = (isAdmin || isGov);
-	})
-	// =========================================================================
-	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
+	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -658,7 +635,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
+	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
@@ -674,7 +651,7 @@
 		vm.projects                           = projects;
 		vm.editing                            = editing;
 		vm.opportunity                        = opportunity;
-		vm.opportunity.opportunityTypeCd      = 'code-with-us';
+		vm.opportunity.opportunityTypeCd      = 'sprint-with-us';
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;

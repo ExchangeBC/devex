@@ -100,7 +100,7 @@
 				projectId: null
 			},
 			templateUrl: '/modules/opportunities/client/views/view-swu-opportunity.client.view.html',
-			controller: 'OpportunityViewController',
+			controller: 'OpportunityViewSWUController',
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: function ($stateParams, OpportunitiesService) {
@@ -190,8 +190,52 @@
 				programId: null,
 				projectId: null
 			},
-			templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
 			controller: 'OpportunityEditController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				programs: function (ProgramsService) {
+					return ProgramsService.myadmin ().$promise;
+				},
+				projects: function (ProjectsService) {
+					return ProjectsService.myadmin ().$promise;
+				},
+				editing: function () { return true; },
+				previousState: function ($state) {
+					return {
+						name: $state.current.name,
+						params: $state.params,
+						url: $state.href($state.current.name, $state.params)
+					};
+				}
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'Opportunity: {{ opportunity.name }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Edit Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// edit a opportunity
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.editswu', {
+			url: '/:opportunityId/edit',
+			params: {
+				programId: null,
+				projectId: null
+			},
+			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
+			controller: 'OpportunityEditSWUController',
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: function ($stateParams, OpportunitiesService) {
@@ -237,7 +281,7 @@
 				projectTitle : null,
 				context      : null
 			},
-			templateUrl: '/modules/opportunities/client/views/create-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/any-opportunity-create.html',
 			controller: 'OpportunityLandingController',
 			controllerAs: 'vm',
 			resolve: {
@@ -279,7 +323,7 @@
 				projectTitle: null,
 				context: null
 			},
-			templateUrl: '/modules/opportunities/client/views/edit-cwu-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
 			controller: 'OpportunityEditController',
 			controllerAs: 'vm',
 			resolve: {
@@ -321,8 +365,8 @@
 				projectTitle: null,
 				context: null
 			},
-			templateUrl: '/modules/opportunities/client/views/edit-swu-opportunity.client.view.html',
-			controller: 'OpportunityEditController',
+			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
+			controller: 'OpportunityEditSWUController',
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: function (OpportunitiesService) {
