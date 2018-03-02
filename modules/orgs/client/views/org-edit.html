@@ -1,37 +1,56 @@
-<section class="static">
-	<div class="container" role="main">
+
+<section class="edit-form-background">
+	<div class="container container-edit-form" role="main">
+		<div class="edit-form-header">
+			<div class="row">
+				<div class="col-xs-8">
+					<h4 class="edit-form-header"><span class="light small">EDITING:</span> {{::vm.org.name}}</h4>
+				</div>
+				<div class="col-xs-4">
+					<a class="btn btn-text-only pull-right" ui-sref="orgs.view({ orgId: vm.org._id })"><i class="fa fa-times"></i> CLOSE</a>
+				</div>
+			</div>
+		</div>
 		<div class="row">
 			<nav class="col-xs-12">
-				<ul class="nav nav-pills">
+				<ul class="nav nav-tabs">
 					<li ui-sref-active="active">
-						<a id="orgadmin.profile" ui-sref="orgadmin.profile">Profile</a>
+						<a id="orgadmin.profile" ui-sref="orgadmin.profile">Business Info</a>
 					</li>
 					<li ui-sref-active="active" ng-if="0">
 						<a id="orgadmin.skills" ui-sref="orgadmin.skills">Skills</a>
 					</li>
 					<li ui-sref-active="active">
-						<a id="orgadmin.members" ui-sref="orgadmin.members">Members</a>
+						<a id="orgadmin.members" ui-sref="orgadmin.members">Members & Capabilities</a>
 					</li>
 					<li ui-sref-active="active" ng-if="0">
 						<a id="orgadmin.teams" ui-sref="orgadmin.teams">Teams</a>
 					</li>
+					<!-- // Hide the Proposals tab until we can do something with it // -->
+					<!--
 					<li ui-sref-active="active">
 						<a id="orgadmin.proposals" ui-sref="orgadmin.proposals">Proposals</a>
 					</li>
 					<li>
-						<a ui-sref="orgs.view({ orgId: vm.org._id })">View Company</a>
+					-->	
 					</li>
 				</ul>
 			</nav>
 		</div>
-		<div class="panel">
-			<div class="panel-body">
-				<div ui-view></div>
+		
+		<div ui-view></div>
+			
+	</div>
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="alert alert-info">
+					<span class="strong">Collection Notice</span>
+					<br>
+					We're collecting this information through the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purpose of communicating with you! If you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.
+				</div>
 			</div>
-		</div>
-		<div class="alert alert-grey">
-			<p style="font-size: 11px;"><b>Collection Notice</b></p>
-			<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
 		</div>
 	</div>
 </section>
