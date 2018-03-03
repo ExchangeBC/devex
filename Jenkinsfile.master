@@ -57,28 +57,28 @@ node('maven') {
 }
 
 stage('deploy-test') {
-  timeout(time: 1, unit: 'DAYS') {
-  	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
+  timeout(time: 2, unit: 'DAYS') {
+  	  input message: "Deploy to test?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
   }
   node('master'){
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'
 	  openshiftVerifyDeployment depCfg: 'platform-test', namespace: 'devex-platform-test', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
-	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca,steve.chapman@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test",
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
   }
 }
 
 stage('deploy-prod') {
-    //timeout(time: 3, units: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
-    //}
-    node('master') {
+    timeout(time: 3, unit: 'DAYS') {
+	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
+    }
+    node('master'){
      openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'prod', srcStream: 'devxp', srcTag: 'M.$BUILD_ID'
      openshiftVerifyDeployment depCfg: 'platform-prod', namespace: 'devex-platform-prod', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
      echo ">>>> Deployment Complete"
-     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+     mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca,steve.chapman@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to production",
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
     }

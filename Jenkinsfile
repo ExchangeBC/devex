@@ -131,7 +131,7 @@ node('bddstack') {
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-view'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin'
   }
   node('master') {
 	  openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'test', srcStream: 'devxp', srcTag: '$BUILD_ID'
@@ -139,7 +139,7 @@ stage('deploy-test') {
 	  echo ">>>> Deployment Complete"
 	  //openshiftVerifyService svcName: 'platform-test', namespace: 'devex-platform-test'
 	  //echo ">>>> Service Verification Complete"
-	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca',
+	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca,steve.chapman@gov.bc.ca',
            subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
            body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
   }
