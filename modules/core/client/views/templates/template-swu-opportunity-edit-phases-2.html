@@ -1,0 +1,225 @@
+<section class="edit-form-background">
+	
+	<!-- Delete this container -->
+	<div class="container">
+		<div class="well instructions-for-dev">
+			Once a starting phase is selected (one of the buttons on <a href="/template/swu-opportunity-edit-phases-1" target="_blank">previous screen</a>): 
+			<br><br>
+			On the <span class="strong">selected starting phase</span>:
+			<ol>
+				<li>the 'Start here' button is replaced by a 'Cancel' button</li>
+				<li>the rest of the panel content is expanded</li>
+			</ol>
+			<br>
+			On <span class="strong">any phases to the right</span> of the selected starting phase:
+			<ol>
+				<li>the 'Start here' button is hidden</li>
+				<li>the rest of the panel content is expanded</li>
+			</ol>
+			<br>
+			To see what should happen if the 'Cancel' button is clicked in this example, <a href="/template/swu-opportunity-edit-phases-3" target="_blank">see next screen...</a>
+		</div>
+	</div>
+
+
+	<form>
+		<div class="container container-edit-form">
+			<div class="edit-form-header">
+				<div class="row">
+					<div class="col-xs-8">
+						<h4 class="edit-form-header"><span class="light small">EDITING:</span> Sprint With Us Opportunity Title</h4>
+					</div>
+					<div class="col-xs-4">
+						<a class="btn btn-text-only pull-right"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<uib-tabset active>
+						<uib-tab index="0">
+							<uib-tab-heading>
+								Phases
+							</uib-tab-heading>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="panel panel-default">
+									  	<div class="panel-body">
+									  		<button class="btn btn-block btn-default">Cancel</button>
+									  		<hr>
+									    	<h2 style="text-align: center"><i class="fa fa-map"></i> Inception</h2>
+									    	<p>During inception, you take your business goals and Discovery research you've done with your users and explore the potential value that a new digital product can bring. Then you prioritize features you think a Minimum Viable Product should have and try to scope out what will be required to get to an Alpha release.</p>
+									    	<div class="alert alert-simple">
+									    		<span class="strong">You're ready for Inception if you've:</span><br>
+									    		<ul>
+									    			<li>Done thorough Discovery work with stakeholders and potential end users</li>
+									    			<li>Have clear business objectives and a solid understanding of your users' needs</li>
+									    			<li>Have strong support from your senior executive</li>
+									    		</ul>
+									    	</div>
+									    	<div class="alert alert-info">
+									    		<i class="fa fa-cubes"></i>
+									    		<span class="strong">Deliverables</span><br>
+									    		At the end of Inception, you should have:
+									    		<ul>
+									    			<li>Happy stakeholders with a shared vision for your digital product</li>
+									    			<li>A product backlog for the Alpha release</li>
+									    		</ul>
+									    	</div>
+									  		<hr>
+									  	  	<label for="start-date" class="light">I want Inception to <span class="strong">start</span> on or before:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="start-date" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<br>
+											<label for="phase-deadline" class="light">I want Inception <span class="strong">complete</span> by:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="phase-deadline" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<hr>
+											<h4>Capabilities</h4>
+											<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+											<ul class="list-group">
+												<li class="list-group-item"><a href="">Agile Coaching</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Delivery Management</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">User Research</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">UX Design</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">Frontend Web Development</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">Backend Web Development</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Technical Architecture</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">DevOps Engineering</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">Security Engineering</a><label class="label label-fulltime pull-right">F/T</label></li>
+											</ul>
+									  	</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="panel panel-default">
+									  	<div class="panel-body">
+									    <!--
+									    	<button class="btn btn-block btn-primary">I'm ready to start here</button>
+									    	<hr>
+									    -->
+									    	<h2 style="text-align: center"><i class="fa fa-rocket"></i> Proof of Concept</h2>
+									    	<p>In this phase, you make your value propositions tangible so they can be validated. Here's where you get coding the core features you scoped out in Inception, working towards that exciting Alpha release! By the end of this phase, you should be able to plan what it will take to fully implement and maintain the product long-term.</p>
+									    	<div class="alert alert-simple">
+									    		<span class="strong">You're ready for Proof of Concept stage if you have:</span><br>
+									    		<ul>
+									    			<li>A clear product vision</li>
+									    			<li>A three month backlog</li>
+									    		</ul>
+									    	</div>
+									    	<div class="alert alert-info">
+									    		<i class="fa fa-cubes"></i>
+									    		<span class="strong">Deliverables</span><br>
+									    		At the end of Proof of Concept, you should have:
+									    		<ul>
+									    			<li>Alpha release of the product</li>
+									    			<li>A build/buy/licence decision</li>
+									    			<li>Product Roadmap</li>
+									    			<li>Resourcing plan for Implementation</li>
+									    		</ul>
+									    	</div>
+									  		<hr>
+									  	  	<label for="start-date" class="light">I want the P.O.C. phase to <span class="strong">start</span> on or before:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="start-date" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<br>
+											<label for="phase-deadline" class="light">I want an <span class="strong">Alpha release</span> on or before:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="phase-deadline" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<hr>
+											<h4>Capabilities</h4>
+											<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+											<ul class="list-group">
+												<li class="list-group-item list-group-item-selected"><a href="">Agile Coaching</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Delivery Management</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">User Research</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">UX Design</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Frontend Web Development</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Backend Web Development</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Technical Architecture</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">DevOps Engineering</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">Security Engineering</a><label class="label label-fulltime pull-right">F/T</label></li>
+											</ul>
+									  	</div>
+									</div>
+								</div>
+								<div class="col-sm-4">
+									<div class="panel panel-default">
+									  	<div class="panel-body">
+								  		<!--
+									  		<button class="btn btn-block btn-primary">My product is already implemented</button>
+									  		<hr>
+								  		-->
+									    	<h2 style="text-align: center"><i class="fa fa-cogs"></i> Implementation</h2>
+									    	<p>If you’ve reached the implementation stage, your organization is fully invested in the new digital product and intends to continuously improve it. Now you need to carefully architect and automate your delivery pipeline for stability and continuous deployment.</p>
+									    	<div class="alert alert-simple">
+									    		<span class="strong">You're at the Implementation phase when you:</span><br>
+									    		<ul>
+									    			<li>Have the product in production</li>
+									    			<li>Have a Product Roadmap</li>
+									    			<li>Know the resources you need for full implementation</li>
+									    		</ul>
+									    	</div>
+									    	<div class="alert alert-info">
+									    		<i class="fa fa-cubes"></i>
+									    		<span class="strong">Deliverables</span><br>
+									    		<ul>
+									    			<li>Delivery of the functional components in the Product Roadmap</li>
+									    		</ul>
+									    	</div>
+									  		<hr>
+									  	  	<label for="start-date" class="light">I want this phase to <span class="strong">start</span> on or before:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="start-date" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<br>
+											<label for="phase-deadline" class="light">I want my Implementation team until:</label>
+											<div class="input-group date">
+												<input type="text" class="form-control" id="phase-deadline" aria-describedby="basic-addon3">
+												<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+											</div>
+											<hr>
+											<h4>Capabilities</h4>
+											<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+											<ul class="list-group">
+												<li class="list-group-item"><a href="">Agile Coaching</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Delivery Management</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">User Research</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">UX Design</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Frontend Web Development</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Backend Web Development</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item"><a href="">Technical Architecture</a><label class="label label-fulltime pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">DevOps Engineering</a><label class="label label-fulltime-selected pull-right">F/T</label></li>
+												<li class="list-group-item list-group-item-selected"><a href="">Security Engineering</a><label class="label label-fulltime pull-right">F/T</label></li>
+											</ul>
+									  	</div>
+									</div>
+								</div>
+							</div>
+							
+						</uib-tab>
+					</uib-tabset>
+				</div>
+			</div>
+			
+			<div class="edit-form-footer">
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> SAVE CHANGES</button>
+						<a class="btn btn-text-only"><i class="fa fa-trash"></i> DELETE</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
