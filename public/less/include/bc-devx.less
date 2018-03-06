@@ -124,6 +124,12 @@ h6 {
   border-radius: 4px;
 }
 
+.container-proposal-admin-view {
+  background: @theme-important;
+  padding: 15px;
+  border-radius: 4px;
+}
+
 hr {
   border-color: #e3e3e3;
 }
@@ -742,9 +748,7 @@ form-title {
 }
 
 .label-skill {
-  color: @gray-dark;
-  background: @theme-warning;
-  font-weight: bold;
+  background: @theme-orange;
 }
 
 .label-deadline {
@@ -757,6 +761,20 @@ form-title {
   background: transparent;
   color: @gray-dark;
   font-weight: bold;  
+}
+
+.label-fulltime {
+  background: transparent;
+  color: @gray-light;
+  border: 1px solid @gray-light;
+  margin: -2px;
+}
+
+.label-fulltime-selected {
+  background: @gray-dark;
+  color: #fff;
+  border: 1px solid @gray-dark;
+  margin: -2px;
 }
 
 // Proposal stats list
@@ -807,6 +825,12 @@ form-title {
   margin: 10px 0px;
   font-weight: 400;
   font-size: 14px;
+}
+
+.alert-simple {
+  background: transparent;
+  color: @gray-dark;
+  border-color: @gray-lighter;
 }
 
 .alert-info {
@@ -1095,6 +1119,10 @@ form-title {
 .panel-tools {
 	text-align: right;
 	margin: 0;
+}
+
+.list-group-item-selected {
+  background: @theme-important;
 }
 
 // Cards
@@ -1486,6 +1514,12 @@ form-title {
 .well-important {
   background: @theme-important;
   border-color: @theme-yellow;
+}
+
+.instructions-for-dev {
+  color: purple;
+  background: #fff;
+  border: 3px solid purple;
 }
 
 
