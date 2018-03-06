@@ -69,27 +69,45 @@ var OpportunitySchema = new Schema({
 	// specific to sprint with us
 	//
 	proposal                  : {type: Schema.ObjectId, ref: 'Proposal', default: null},
-	capabilities              : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
-	capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-	implementationContract    : {type: String, default: ''},
-	implementationEndDate     : {type: Date, default: Date.now },
-	implementationStartDate   : {type: Date, default: Date.now },
-	implementationTarget      : {type: Number, default: 0},
-	inceptionContract         : {type: String, default: ''},
-	inceptionEndDate          : {type: Date, default: Date.now },
-	inceptionStartDate        : {type: Date, default: Date.now },
-	inceptionTarget           : {type: Number, default: 0},
-	prototypeContract         : {type: String, default: ''},
-	prototypeEndDate          : {type: Date, default: Date.now },
-	prototypeStartDate        : {type: Date, default: Date.now },
-	prototypeTarget           : {type: Number, default: 0},
+	phases : {
+		implementation : {
+			isImplementation          : {type: Boolean, default: false},
+			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract     : {type: String, default: ''},
+			endDate      : {type: Date, default: Date.now },
+			startDate    : {type: Date, default: Date.now },
+			target       : {type: Number, default: 0}
+		},
+		inception : {
+			isInception               : {type: Boolean, default: false},
+			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract     : {type: String, default: ''},
+			endDate      : {type: Date, default: Date.now },
+			startDate    : {type: Date, default: Date.now },
+			target       : {type: Number, default: 0}
+		},
+		prototype : {
+			isPrototype               : {type: Boolean, default: false},
+			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract     : {type: String, default: ''},
+			endDate      : {type: Date, default: Date.now },
+			startDate    : {type: Date, default: Date.now },
+			target       : {type: Number, default: 0}
+		},
+		aggregate : {
+			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			endDate      : {type: Date, default: Date.now },
+			startDate    : {type: Date, default: Date.now },
+			target       : {type: Number, default: 0}
+		}
+	}
 	isDocConflictOfInterest   : {type: Boolean, default: false},
 	isDocNonDisclosure        : {type: Boolean, default: false},
 	isDocRequestForReferences : {type: Boolean, default: false},
-	isImplementation          : {type: Boolean, default: false},
-	isInception               : {type: Boolean, default: false},
-	isPrototype               : {type: Boolean, default: false},
-	totalTarget               : {type: Number, default: 0},
 	terms                     : {type: String, default: ''},
 	questions                 : {type: [String], default:[]},
 	//
