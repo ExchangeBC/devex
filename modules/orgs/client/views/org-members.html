@@ -1,114 +1,168 @@
-<section>
-	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
-		<div class="row">
-			<div class="col-sm-6">
-				<div ng-repeat="member in vm.org.members">
-					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-					<button class="btn btn-sm btn-text-only" ng-click="vm.removeMember(member)"><i class="fa fa-times"></i></button>
-				</div>
-				<br>
-				<div class="well">
-					<span class="strong">Add Members</span>
-					<br>
-					Add members to your company. (They need to have a personal user profile on the BCDevExchange before you can add them.)
-					<br>
-					<br>
-				    <div class="input-group">
-				      <input type="text" class="form-control" placeholder="robwilkins@gmail.com">
-				      <span class="input-group-btn">
-				        <button class="btn btn-primary" type="button"><i class="fa fa-plus"></i> Add</button>
-				      </span>
-					</div>
-				</div>
+<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="alert alert-info">
+				Your company's capabilities are determined by the individuals who are members of your company.
 			</div>
-
-		    <div class="col-sm-6">
-		    	<h4>Company Capabilities</h4>
-		    	<p>Your team can qualify for the <i>Sprint With Us</i> RFQ once it can show it covers all these capabilites. </p>
-		    	<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Your company needs members with a few missing capabilities before it can apply on <i>Sprint With Us</i> opportunities.</div>
-		    	<div class="alert alert-success"><i class="fa fa-check-circle-o"></i> <span class="strong">Bingo!</span> Your company has all of the capabilities needed to apply for <i>Sprint With Us</i> opportunities! <br><a href="/opportunities">Browse opportunities</a></div>
-		    	<br>
-		    	<table class="table capabilities-list">
-					<tbody>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-info capability">Agile Coaching</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-info capability">Delivery Management</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-danger capability">UX Research</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-danger capability">UX Design</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-success capability">Frontend Development</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-success capability">Backend Development</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-success capability">DevOps Engineering</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-							<td><label class="label label-lg label-primary capability">Security Engineering</label></td>
-						</tr>
-						<tr>
-							<th scope="row"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-							<td><label class="label label-lg label-default capability">Technical Architecture</label></td>
-						</tr>
-					</tbody>
-				</table>
-		    </div>
-
-	    </div>
-
-
-		<div class="row">
-			<div class="col-sm-12">
-				<uib-accordion close-others="true">
-					<div uib-accordion-group class="panel-default" is-open="isc01open">
-						<uib-accordion-heading>
-							Add Members
-						</uib-accordion-heading>
-						<form-display
-							class="col-sm-12"
-							x-options='{
-								"title":"Enter a list of email addresses seperated by commas or spaces. Each member will be invited to join your company profile."
-							}'>
-							<textarea
-								name="memberemails"
-								id="memberemails"
-								class="form-control"
-								placeholder="email list"
-								ng-model="vm.emaillist">
-							</textarea>
-						</form-display>
-						<form-display
-							class="col-sm-12 text-right"
-							x-options='{}'>
-							<button ng-click="vm.addMembers()" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Add Members</button>
-						</form-display>
-					</div>
-				</uib-accordion>
-			</div>
-		</div>
-<!--
-	<br/>
- 	<div class="row text-center">
-		<div class="form-group">
-			<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
 		</div>
 	</div>
- -->
-	</form>
-</section>
+	<div class="row">
+		<div class="col-sm-7">
+			<div class="card card-user">
+				<img class="card-img-left" src="/img/Zeb_avatar.png">
+				<div class="card-body">
+					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>	
+					<div class="card-title">Mark Wilson</div>
+					<label-list>
+						<label class="label label-uxresearch">UX Research</label>
+						<label class="label label-uxdesign">UX Design</label>
+					</label-list>
+				</div>
+			</div>
+			<!-- Delete these instructions -->
+			<div class="alert instructions-for-dev">
+				<span class="strong">User Cards</span><br>
+				<ul>
+					<li>Clicking the 'X' on a card should cause a "Are you sure?" popup, then when confirmed, remove the member from the company.</li>
+					<li>Label list in the card needs to be populated with capabilites, followed by skills claimed by the user in their profile</li>
+				</ul>
+			</div>
+			<!--
+				<div class="col-xs-12 col-sm-6">
+					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+					<button class="btn btn-text-only pull-right" ng-click="vm.removeMember(member)"><i class="fa fa-trash"></i></button>
+				</div>
+			-->
+			<br>
+			<div class="well">
+				<span class="strong">Add Members</span>
+				<br>
+				Individuals need to have a personal user profile on the BCDevExchange before you can add them.
+				<br>
+				<br>
+			    <div class="input-group">
+			      <input type="text" class="form-control" placeholder="robwilkins@gmail.com">
+			      <span class="input-group-btn">
+			        <button class="btn btn-primary" type="button"><i class="fa fa-plus"></i> Add</button>
+			      </span>
+				</div>
+			</div>
+			<!-- Delete these instructions -->
+			<div class="alert instructions-for-dev">
+				<span class="strong">Add Members</span><br>
+				<ul>
+					<li>Please hook up the functionality you have in the panel into this new UI.</li>
+				</ul>
+			</div>
+		</div>
+
+	    <div class="col-sm-5">
+	    	<!-- Delete these instructions -->
+			<div class="alert instructions-for-dev">
+				<span class="strong">Alerts</span><br>
+				<ul>
+					<li>Yellow one should appear until all capabilities in the list are matched</li>
+					<li>Green one should appear when all capabilities are matched</li>
+				</ul>
+			</div>
+
+	    	<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> There are a capabilities you'll need to acquire before your company can apply on <i>Sprint With Us</i> opportunities.</div>
+	    	<div class="alert alert-success"><i class="fa fa-check-circle-o"></i> <span class="strong">Bingo!</span> Your company has all of the capabilities needed to apply for <i>Sprint With Us</i> opportunities! <br><a href="/opportunities">Browse opportunities</a></div>
+	    	<br>
+	    	<table class="table capabilities-list">
+				<tbody>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-agilecoaching">Agile Coaching</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-deliverymgmt">Delivery Management</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-uxresearch">UX Research</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-uxdesign">UX Design</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-frontend">Frontend Development</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-backend">Backend Development</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-exclamation-circle fa-lg"></i></th>
+						<td><label class="label label-lg label-technicalarch">Technical Architecture</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+						<td><label class="label label-lg label-devops">DevOps Engineering</label></td>
+					</tr>
+					<tr>
+						<th scope="row"><i class="fa fa-exclamation-circle fa-lg"></i></th>
+						<td><label class="label label-lg label-securityeng">Security Engineering</label></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- Delete these instructions -->
+			<div class="alert instructions-for-dev">
+				<span class="strong">Capabilities List</span><br>
+				Self-explanatory, hopefully
+			</div>
+	    </div>
+
+    </div>
+
+    <!-- Chris, can you make the function of this work with the different UI above? -->
+	<div class="row">
+		<div class="col-sm-12">
+			<uib-accordion close-others="true">
+				<div uib-accordion-group class="panel-default" is-open="isc01open">
+					<uib-accordion-heading>
+						Add Members
+					</uib-accordion-heading>
+					<form-display
+						class="col-sm-12"
+						x-options='{
+							"title":"Enter a list of email addresses seperated by commas or spaces. Each member will be invited to join your company profile."
+						}'>
+						<textarea
+							name="memberemails"
+							id="memberemails"
+							class="form-control"
+							placeholder="email list"
+							ng-model="vm.emaillist">
+						</textarea>
+					</form-display>
+					<form-display
+						class="col-sm-12 text-right"
+						x-options='{}'>
+						<button ng-click="vm.addMembers()" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Add Members</button>
+					</form-display>
+				</div>
+			</uib-accordion>
+		</div>
+	</div>
+<!--
+<br/>
+	<div class="row text-center">
+	<div class="form-group">
+		<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+	</div>
+</div>
+-->
+	<br/>
+	<div class="edit-form-footer">
+		<div class="row">
+			<div class="col-xs-12">
+				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> SAVE UPDATES</button>
+				<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> DELETE COMPANY PROFILE</button>
+			</div>
+		</div>
+	</div>
+</form>
