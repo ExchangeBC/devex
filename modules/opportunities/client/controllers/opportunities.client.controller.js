@@ -658,12 +658,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
-		uibButtonConfig.activeClass = 'custombuttonbackground';
+	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
-		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
 		// what can the user do here?
@@ -686,7 +684,6 @@
 		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
 		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
-		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//

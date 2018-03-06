@@ -26,6 +26,9 @@ var OpportunityCapabilities = new Schema ({
  * Opportunity Schema
  */
 var OpportunitySchema = new Schema({
+	//
+	// common fields
+	//
 	code                      : {type: String, default: ''},
 	opportunityTypeCd         : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
 	name                      : {type: String, default: '', required: 'Name cannot be blank'},
@@ -39,9 +42,6 @@ var OpportunitySchema = new Schema({
 	views                     : {type: Number, default: 1},
 	program                   : {type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project                   : {type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank'},
-	skills                    : {type: [String], default:[]},
-	earn                      : {type: Number, default: 0},
-	tags                      : {type: [String], default:[]},
 	status                    : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
 	onsite                    : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
 	location                  : {type: String, default:''},
@@ -49,16 +49,25 @@ var OpportunitySchema = new Schema({
 	wasPublished              : {type: Boolean, default: false},
 	lastPublished             : {type: Date, default: Date.now },
 	deadline                  : {type: Date, default: Date.now },
-	assignment                : {type: Date, default: Date.now },
-	start                     : {type: Date, default: Date.now },
-	endDate                   : {type: Date, default: Date.now },
-	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },
 	created                   : {type: Date, default: Date.now },
 	createdBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
 	updated                   : {type: Date, default: null },
 	updatedBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
 	issueUrl                  : {type: String, default: ''},
 	issueNumber               : {type: String, default: ''},
+	//
+	// specific to code with us
+	//
+	skills                    : {type: [String], default:[]},
+	earn                      : {type: Number, default: 0},
+	tags                      : {type: [String], default:[]},
+	assignment                : {type: Date, default: Date.now },
+	start                     : {type: Date, default: Date.now },
+	endDate                   : {type: Date, default: Date.now },
+	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },
+	//
+	// specific to sprint with us
+	//
 	proposal                  : {type: Schema.ObjectId, ref: 'Proposal', default: null},
 	capabilities              : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 	capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},

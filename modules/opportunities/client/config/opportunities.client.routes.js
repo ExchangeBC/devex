@@ -205,14 +205,7 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return true; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return true; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -249,14 +242,7 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return true; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return true; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -291,14 +277,7 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return false; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return false; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -333,14 +312,7 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return false; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return false; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -375,14 +347,7 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return false; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return false; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
