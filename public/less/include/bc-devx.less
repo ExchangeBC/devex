@@ -778,6 +778,16 @@ form-title {
   margin: -2px;
 }
 
+.label-preferred-skill {
+  background: transparent;
+  color: @gray-light;
+  border: 1px solid @gray-light; 
+}
+
+.label-preferred-skill-selected {
+  background: @theme-orange;
+}
+
 // Capability Labels
 
 .label-agilecoaching {
@@ -1600,8 +1610,7 @@ form-title {
 
 .instructions-for-dev {
   color: #fff;
-  background: deeppink;
-  font-size: .8em;
+  background: #222;
 }
 
 
@@ -1856,6 +1865,25 @@ table.capabilities-list {
       }
     }
   } 
+}
+
+table.preferred-skills {
+  > tbody {
+    > tr {
+      > th {
+        text-align: left;
+        width: 220px;
+        border: none;
+        vertical-align: middle;
+        padding: 3px 2px;
+      }
+      > td {
+        border: none;
+        padding: 1px 2px;
+        vertical-align: middle;
+      }
+    }
+  }
 }
 
 div.team-member-divider {
