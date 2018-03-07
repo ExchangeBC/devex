@@ -658,20 +658,20 @@
 				proto : {}
 			}
 		}
-		vm.imp                           = vm.opportunity.phases.implementation;
-		vm.inp                           = vm.opportunity.phases.inception;
-		vm.prp                           = vm.opportunity.phases.proto;
-		vm.agg                           = vm.opportunity.phases.aggregate;
+		vm.oimp                           = vm.opportunity.phases.implementation;
+		vm.oinp                           = vm.opportunity.phases.inception;
+		vm.oprp                           = vm.opportunity.phases.proto;
+		vm.oagg                           = vm.opportunity.phases.aggregate;
 		vm.opportunity.deadline          = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment        = new Date (vm.opportunity.assignment);
 		vm.opportunity.start             = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate           = new Date (vm.opportunity.endDate)	;
-		vm.imp.endDate                   = new Date (vm.imp.endDate  );
-		vm.imp.startDate                 = new Date (vm.imp.startDate);
-		vm.inp.endDate                   = new Date (vm.inp.endDate       );
-		vm.inp.startDate                 = new Date (vm.inp.startDate     );
-		vm.prp.endDate                   = new Date (vm.prp.endDate       );
-		vm.prp.startDate                 = new Date (vm.prp.startDate     );
+		vm.oimp.endDate                   = new Date (vm.oimp.endDate  );
+		vm.oimp.startDate                 = new Date (vm.oimp.startDate);
+		vm.oinp.endDate                   = new Date (vm.oinp.endDate       );
+		vm.oinp.startDate                 = new Date (vm.oinp.startDate     );
+		vm.oprp.endDate                   = new Date (vm.oprp.endDate       );
+		vm.oprp.startDate                 = new Date (vm.oprp.startDate     );
 		vm.authentication                = Authentication;
 		vm.form                          = {};
 		vm.opportunity.skilllist         = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
@@ -683,8 +683,15 @@
 		//
 		// set up the structures for capabilities
 		//
-		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
-		CapabilitiesMethods.dump (vm);
+		vm.imp = {};
+		vm.inp = {};
+		vm.prp = {};
+		CapabilitiesMethods.init (vm.imp, vm.oimp, capabilities, 'implementation');
+		CapabilitiesMethods.init (vm.inp, vm.oinp, capabilities, 'inception');
+		CapabilitiesMethods.init (vm.prp, vm.oprp, capabilities, 'prototype');
+		CapabilitiesMethods.dump (vm.imp);
+		CapabilitiesMethods.dump (vm.inp);
+		CapabilitiesMethods.dump (vm.prp);
 		//
 		// set up capabilities
 		//
@@ -760,12 +767,12 @@
 			vm.opportunity.assignment                      = new Date ();
 			vm.opportunity.start                           = new Date ();
 			vm.opportunity.endDate                         = new Date ();
-			vm.imp.endDate   = new Date ();
-			vm.imp.startDate = new Date ();
-			vm.inp.endDate        = new Date ();
-			vm.inp.startDate      = new Date ();
-			vm.prp.endDate    = new Date ();
-			vm.prp.startDate  = new Date ();
+			vm.oimp.endDate   = new Date ();
+			vm.oimp.startDate = new Date ();
+			vm.oinp.endDate        = new Date ();
+			vm.oinp.startDate      = new Date ();
+			vm.oprp.endDate    = new Date ();
+			vm.oprp.startDate  = new Date ();
 
 		}
 		//
@@ -924,12 +931,12 @@
 			vm.opportunity.assignment.setHours(16);
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.imp.endDate.setHours (16);
-			vm.imp.startDate.setHours (16);
-			vm.inp.endDate.setHours (16);
-			vm.inp.startDate.setHours (16);
-			vm.prp.endDate.setHours (16);
-			vm.prp.startDate.setHours (16);
+			vm.oimp.endDate.setHours (16);
+			vm.oimp.startDate.setHours (16);
+			vm.oinp.endDate.setHours (16);
+			vm.oinp.startDate.setHours (16);
+			vm.oprp.endDate.setHours (16);
+			vm.oprp.startDate.setHours (16);
 
 
 			//

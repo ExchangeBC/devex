@@ -82,6 +82,7 @@ var OpportunitySchema = new Schema({
 		inception : {
 			isInception               : {type: Boolean, default: false},
 			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
 			contract     : {type: String, default: ''},
 			endDate      : {type: Date, default: Date.now },
@@ -91,6 +92,7 @@ var OpportunitySchema = new Schema({
 		proto : {
 			isPrototype               : {type: Boolean, default: false},
 			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
 			contract     : {type: String, default: ''},
 			endDate      : {type: Date, default: Date.now },
@@ -99,6 +101,7 @@ var OpportunitySchema = new Schema({
 		},
 		aggregate : {
 			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
 			endDate      : {type: Date, default: Date.now },
 			startDate    : {type: Date, default: Date.now },
