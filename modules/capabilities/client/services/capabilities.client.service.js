@@ -147,6 +147,7 @@
 				// sort of super duper blunt, but first clear the arrays
 				//
 				model.capabilities.length = 0;
+				model.capabilitiesCore.length = 0;
 				model.capabilitySkills.length = 0;
 				//
 				// now push on all the correct stuff
@@ -154,6 +155,9 @@
 				//
 				Object.keys(scope.iCapabilities).forEach (function (code) {
 					if (scope.iOppCapabilities[code]) model.capabilities.push (scope.iCapabilities[code]);
+				});
+				Object.keys(scope.iCapabilities).forEach (function (code) {
+					if (scope.iOppCapabilitiesCore[code]) model.capabilitiesCore.push (scope.iCapabilities[code]);
 				});
 				Object.keys(scope.iCapabilitySkills).forEach (function (code) {
 					if (scope.iOppCapabilitySkills[code]) model.capabilitySkills.push (scope.iCapabilitySkills[code]);

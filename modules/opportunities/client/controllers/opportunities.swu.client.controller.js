@@ -904,10 +904,11 @@
 			//
 			// deal with capabilities
 			//
-			CapabilitiesMethods.reconcile (vm, vm.opportunity);
-			// console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
-			// console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
-			CapabilitiesMethods.dump (vm);			//
+			CapabilitiesMethods.reconcile (vm.inp, vm.oinp);
+			CapabilitiesMethods.reconcile (vm.prp, vm.oprp);
+			CapabilitiesMethods.reconcile (vm.imp, vm.oimp);
+			console.log (vm.opportunity.phases);
+			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
 			//

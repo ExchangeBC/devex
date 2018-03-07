@@ -272,8 +272,16 @@ var setPhases = function (opportunity) {
 	// we need to copy those into the aggregate view, simplest using a little pivot
 	//
 	var capabilities = imp.capabilities.concat (inp.capabilities, prp.capabilities);
+	var capabilitiesCore = imp.capabilitiesCore.concat (inp.capabilitiesCore, prp.capabilitiesCore);
 	var capabilitySkills = imp.capabilitySkills.concat (inp.capabilitySkills, prp.capabilitySkills);
 	var capabilityIds = capabilities.map (function (el) {
+		return (el._id) ? el._id : el;
+	})
+	.reduce (function (accum, curr) {
+		accum[curr] = 1;
+		return accum;
+	}, {});
+	var capabilityCoreIds = capabilitiesCore.map (function (el) {
 		return (el._id) ? el._id : el;
 	})
 	.reduce (function (accum, curr) {
@@ -288,6 +296,7 @@ var setPhases = function (opportunity) {
 		return accum;
 	}, {});
 	agg.capabilities = Object.keys (capabilityIds);
+	agg.capabilitiesCore = Object.keys (capabilityCoreIds);
 	agg.capabilitySkills = Object.keys (capabilitySkillIds);
 	//
 	// total up the targets

@@ -71,41 +71,42 @@ var OpportunitySchema = new Schema({
 	proposal                  : {type: Schema.ObjectId, ref: 'Proposal', default: null},
 	phases : {
 		implementation : {
-			isImplementation          : {type: Boolean, default: false},
-			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
-			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-			contract     : {type: String, default: ''},
-			endDate      : {type: Date, default: Date.now },
-			startDate    : {type: Date, default: Date.now },
-			target       : {type: Number, default: 0}
+			isImplementation : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
 		},
 		inception : {
-			isInception               : {type: Boolean, default: false},
-			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			isInception      : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
-			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-			contract     : {type: String, default: ''},
-			endDate      : {type: Date, default: Date.now },
-			startDate    : {type: Date, default: Date.now },
-			target       : {type: Number, default: 0}
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
 		},
 		proto : {
-			isPrototype               : {type: Boolean, default: false},
-			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			isPrototype      : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
-			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-			contract     : {type: String, default: ''},
-			endDate      : {type: Date, default: Date.now },
-			startDate    : {type: Date, default: Date.now },
-			target       : {type: Number, default: 0}
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
 		},
 		aggregate : {
-			capabilities : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
-			capabilitySkills          : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-			endDate      : {type: Date, default: Date.now },
-			startDate    : {type: Date, default: Date.now },
-			target       : {type: Number, default: 0}
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
 		}
 	},
 	isDocConflictOfInterest   : {type: Boolean, default: false},
