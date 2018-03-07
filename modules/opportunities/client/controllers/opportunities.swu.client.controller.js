@@ -6,71 +6,13 @@
 (function () {
 	'use strict';
 
-	var publishStatus = function (o) {
-		//
-		// removed background for now
-		//
-		// [(o.background), 'Background'],
-		var fields = {
-			common: [
-				[(o.name), 'Title'],
-				[(o.short), 'Teaser'],
-				[(o.description), 'Summary'],
-				[(o.github), 'Github Repository'],
-				[(o.program), 'Program'],
-				[(o.project), 'Project'],
-				[(o.deadline), 'Proposal Deadline'],
-				[(o.assignment), 'Assignment Date'],
-				[(o.location), 'Location']
-			],
-			cwu: [
-				[(o.evaluation), 'Proposal Evaluation Criteria'],
-				[(o.criteria), 'Acceptance Criteria'],
-				[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
-				[(o.skills), 'Required Skills'],
-				[(o.earn), 'Fixed-Price Reward'],
-				[(o.start), 'Proposed Start Date']
-			],
-			swu: [
-				[(o.terms), 'Additional Terms and Conditions'],
-				[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
-				[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
-				[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
-				[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
-				[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
-				[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
-				[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
-				[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
-				[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
-				[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
-				[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
-				[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
-			]
-		}
-		var errorFields = fields.common.reduce (function (accum, elem) {
-			if (!elem[0]) accum.push (elem[1]);
-			return accum;
-		}, []);
-		if (o.opportunityTypeCd === 'code-with-us') {
-			fields.cwu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		else {
-			fields.swu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		return errorFields;
-	};
-
 	angular.module('opportunities')
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
+	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -160,7 +102,7 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
@@ -635,7 +577,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
+	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                      = this;
 		vm.trust                    = $sce.trustAsHtml;
@@ -700,7 +642,7 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = vm.errorFields > 0;
 		//
 		// set up the dropdown amounts for code with us earnings
