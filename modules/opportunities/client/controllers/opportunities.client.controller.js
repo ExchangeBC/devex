@@ -111,12 +111,6 @@
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
 		vm.opportunity.endDate    = new Date (vm.opportunity.endDate);
-		vm.opportunity.inceptionStartDate    = new Date (vm.opportunity.inceptionStartDate);
-		vm.opportunity.inceptionEndDate    = new Date (vm.opportunity.inceptionEndDate);
-		vm.opportunity.prototypeStartDate    = new Date (vm.opportunity.prototypeStartDate);
-		vm.opportunity.prototypeEndDate    = new Date (vm.opportunity.prototypeEndDate);
-		vm.opportunity.implementationStartDate    = new Date (vm.opportunity.implementationStartDate);
-		vm.opportunity.implementationEndDate    = new Date (vm.opportunity.implementationEndDate);
 		vm.authentication         = Authentication;
 		vm.OpportunitiesService   = OpportunitiesService;
 		vm.idString               = 'opportunityId';
@@ -677,12 +671,6 @@
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
-		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
-		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
-		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
-		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
-		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
-		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
@@ -770,12 +758,6 @@
 			vm.opportunity.assignment = new Date ();
 			vm.opportunity.start      = new Date ();
 			vm.opportunity.endDate    = new Date ();
-			vm.opportunity.implementationEndDate   = new Date ();
-			vm.opportunity.implementationStartDate = new Date ();
-			vm.opportunity.inceptionEndDate        = new Date ();
-			vm.opportunity.inceptionStartDate      = new Date ();
-			vm.opportunity.prototypeEndDate        = new Date ();
-			vm.opportunity.prototypeStartDate      = new Date ();
 
 		}
 		//
@@ -784,7 +766,7 @@
 		//
 		if (vm.projects.length === 0) {
 			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
-			$state.go (previousState.name, previousState.params);
+			$state.go (opportunities.list);
 		}
 		//
 		// if there is only one available project just force it

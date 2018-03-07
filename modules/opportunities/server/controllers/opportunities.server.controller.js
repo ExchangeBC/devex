@@ -119,8 +119,8 @@ var opplist = function (query, req, callback) {
 	.populate('phases.implementation.capabilitySkills', 'code name')
 	.populate('phases.inception.capabilities', 'code name')
 	.populate('phases.inception.capabilitySkills', 'code name')
-	.populate('phases.prototype.capabilities', 'code name')
-	.populate('phases.prototype.capabilitySkills', 'code name')
+	.populate('phases.proto.capabilities', 'code name')
+	.populate('phases.proto.capabilitySkills', 'code name')
 	.populate('phases.aggregate.capabilities', 'code name')
 	.populate('phases.aggregate.capabilitySkills', 'code name')
 	.exec(function (err, opportunities) {
@@ -261,7 +261,7 @@ var setPhases = function (opportunity) {
 	if (opportunity.opportunityTypeCd !== 'sprint-with-us') return;
 	var imp = opportunity.phases.implementation;
 	var inp = opportunity.phases.inception;
-	var prp = opportunity.phases['prototype'];
+	var prp = opportunity.phases.proto;
 	var agg = opportunity.phases.aggregate;
 	//
 	// for sprint with us opportunities we may have arrays of phase capabilities
@@ -811,8 +811,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('phases.implementation.capabilitySkills', 'code name')
 		.populate('phases.inception.capabilities', 'code name')
 		.populate('phases.inception.capabilitySkills', 'code name')
-		.populate('phases.prototype.capabilities', 'code name')
-		.populate('phases.prototype.capabilitySkills', 'code name')
+		.populate('phases.proto.capabilities', 'code name')
+		.populate('phases.proto.capabilitySkills', 'code name')
 		.populate('phases.aggregate.capabilities', 'code name')
 		.populate('phases.aggregate.capabilitySkills', 'code name')
 		.populate({
@@ -852,8 +852,8 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('phases.implementation.capabilitySkills', 'code name')
 		.populate('phases.inception.capabilities', 'code name')
 		.populate('phases.inception.capabilitySkills', 'code name')
-		.populate('phases.prototype.capabilities', 'code name')
-		.populate('phases.prototype.capabilitySkills', 'code name')
+		.populate('phases.proto.capabilities', 'code name')
+		.populate('phases.proto.capabilitySkills', 'code name')
 		.populate('phases.aggregate.capabilities', 'code name')
 		.populate('phases.aggregate.capabilitySkills', 'code name')
 		.populate({

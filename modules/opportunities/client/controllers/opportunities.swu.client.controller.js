@@ -635,37 +635,47 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
+	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
-		var vm                                = this;
-		vm.trust               = $sce.trustAsHtml;
-		vm.features = window.features;
-		vm.previousState                      = previousState;
-		var originalPublishedState             = opportunity.isPublished;
+		var vm                      = this;
+		vm.trust                    = $sce.trustAsHtml;
+		vm.features                 = window.features;
+		var originalPublishedState  = opportunity.isPublished;
 		//
 		// what can the user do here?
 		//
-		var isUser                            = Authentication.user;
-		vm.isAdmin                            = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                              = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.projects                           = projects;
-		vm.editing                            = editing;
-		vm.opportunity                        = opportunity;
-		vm.opportunity.opportunityTypeCd      = 'sprint-with-us';
-		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
-		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
-		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
-		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
-		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
-		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
-		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
-		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
-		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
-		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
-		vm.authentication                     = Authentication;
-		vm.form                               = {};
-		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		var isUser                       = Authentication.user;
+		vm.isAdmin                       = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                         = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.projects                      = projects;
+		vm.editing                       = editing;
+		vm.opportunity                   = opportunity;
+		vm.opportunity.opportunityTypeCd = 'sprint-with-us';
+		if (!vm.opportunity.phases) {
+			vm.opportunity.phases = {
+				implementation : {},
+				inception : {},
+				proto : {}
+			}
+		}
+		vm.imp                           = vm.opportunity.phases.implementation;
+		vm.inp                           = vm.opportunity.phases.inception;
+		vm.prp                           = vm.opportunity.phases.proto;
+		vm.agg                           = vm.opportunity.phases.aggregate;
+		vm.opportunity.deadline          = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment        = new Date (vm.opportunity.assignment);
+		vm.opportunity.start             = new Date (vm.opportunity.start)		;
+		vm.opportunity.endDate           = new Date (vm.opportunity.endDate)	;
+		vm.imp.endDate                   = new Date (vm.imp.endDate  );
+		vm.imp.startDate                 = new Date (vm.imp.startDate);
+		vm.inp.endDate                   = new Date (vm.inp.endDate       );
+		vm.inp.startDate                 = new Date (vm.inp.startDate     );
+		vm.prp.endDate                   = new Date (vm.prp.endDate       );
+		vm.prp.startDate                 = new Date (vm.prp.startDate     );
+		vm.authentication                = Authentication;
+		vm.form                          = {};
+		vm.opportunity.skilllist         = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.opportunity.taglist           = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//
@@ -746,16 +756,16 @@
 			//
 			// if not editing, set some conveinient default dates
 			//
-			vm.opportunity.deadline   = new Date ();
-			vm.opportunity.assignment = new Date ();
-			vm.opportunity.start      = new Date ();
-			vm.opportunity.endDate    = new Date ();
-			vm.opportunity.implementationEndDate   = new Date ();
-			vm.opportunity.implementationStartDate = new Date ();
-			vm.opportunity.inceptionEndDate        = new Date ();
-			vm.opportunity.inceptionStartDate      = new Date ();
-			vm.opportunity.prototypeEndDate        = new Date ();
-			vm.opportunity.prototypeStartDate      = new Date ();
+			vm.opportunity.deadline                        = new Date ();
+			vm.opportunity.assignment                      = new Date ();
+			vm.opportunity.start                           = new Date ();
+			vm.opportunity.endDate                         = new Date ();
+			vm.imp.endDate   = new Date ();
+			vm.imp.startDate = new Date ();
+			vm.inp.endDate        = new Date ();
+			vm.inp.startDate      = new Date ();
+			vm.prp.endDate    = new Date ();
+			vm.prp.startDate  = new Date ();
 
 		}
 		//
@@ -764,7 +774,7 @@
 		//
 		if (vm.projects.length === 0) {
 			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
-			$state.go (previousState.name, previousState.params);
+			$state.go ('opportunities.list');
 		}
 		//
 		// if there is only one available project just force it
@@ -914,12 +924,12 @@
 			vm.opportunity.assignment.setHours(16);
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.opportunity.implementationEndDate.setHours(16);
-			vm.opportunity.implementationStartDate.setHours(16);
-			vm.opportunity.inceptionEndDate.setHours(16);
-			vm.opportunity.inceptionStartDate.setHours(16);
-			vm.opportunity.prototypeEndDate.setHours(16);
-			vm.opportunity.prototypeStartDate.setHours(16);
+			vm.imp.endDate.setHours (16);
+			vm.imp.startDate.setHours (16);
+			vm.inp.endDate.setHours (16);
+			vm.inp.startDate.setHours (16);
+			vm.prp.endDate.setHours (16);
+			vm.prp.startDate.setHours (16);
 
 
 			//
