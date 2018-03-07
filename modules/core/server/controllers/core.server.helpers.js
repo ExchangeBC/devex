@@ -17,6 +17,13 @@ exports.applyAudit = function (model, user) {
 	}
 };
 
+exports.isNumeric = function (n) {
+	return !isNaN (parseFloat (n)) && isFinite (n);
+}
+exports.numericOrZero = function (n) {
+	return exports.isNumeric (n) ? parseFloat (n) : 0;
+}
+
 exports.myStuff = function (roles) {
 	var a;
 	var l;
