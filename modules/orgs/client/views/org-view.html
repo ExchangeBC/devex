@@ -9,12 +9,12 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12 text-right">
-				<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="orgadmin.profile({orgId:vm.org._id})"><i class="fa fa-pencil"></i> EDIT
+				<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="orgadmin.profile({orgId:vm.org._id})"><i class="fa fa-cog"></i> MANAGE
 				</button>
 			</div>
 		</div>
 	</div>
-	<div class="container container-edit-form">
+	<div class="container container-detail-view">
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<img src="/{{vm.org.orgImageURL}}" style="max-height: 75px">

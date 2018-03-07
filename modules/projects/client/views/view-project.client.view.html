@@ -12,7 +12,7 @@
 
 		<div class="row">
 			<div class="col-xs-12 text-right">
-				<button type="button" class="btn btn-sm btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" uib-tooltip="Edit this page"><i class="fa fa-pencil"></i> EDIT</button>
+				<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" uib-tooltip="Edit this page"><i class="fa fa-pencil"></i> EDIT</button>
 				<button type="button" class="btn btn-sm btn-primary" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-user"></i> Request Membership
 				</button>
 				<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-sm btn-text-only" ng-click="vm.publish(false)" uib-tooltip="Right now this project is published and anyone can view it. You can unpublish it here.">
@@ -24,7 +24,7 @@
 
 	</div>
 
-	<div class="container container-edit-form">
+	<div class="container container-detail-view">
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<p class="opp-detail-header"><span class="small">Created on <span class="strong" ng-bind="vm.project.created | date:'mediumDate'"></span> by <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span><span ng-if="!vm.project.createdBy">Deleted User</span>&nbsp;&nbsp; Last updated on <span class="strong" ng-bind="vm.project.updated | date:'mediumDate'"></span> by <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span><span ng-if="!vm.project.updatedBy">Deleted User</span></p>

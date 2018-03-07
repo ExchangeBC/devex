@@ -45,8 +45,8 @@ a.secondary {
 }
 
 a.breadcrumb-nav {
-  font-size: 17px;
-  color: @gray;
+  font-size: 1.05em;
+  color: @gray-light;
   &:hover,&:active:hover {
     color: @gray-darker;
   }
@@ -118,10 +118,17 @@ h6 {
   padding: 0px 5px;
 }
 
+.container-detail-view {
+  background: #fff;
+  padding: 15px;
+  border-radius: 0px;
+}
+
 .container-edit-form {
   background: #fff;
   padding: 15px;
   border-radius: 4px;
+  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
 }
 
 .container-proposal-admin-view {
@@ -139,7 +146,7 @@ hr {
 .edit-form-header {
   padding: 10px 15px; 
   margin: -15px -15px 0px; 
-  background: @theme-light-blue;
+  background: @gray-lightest;
   border-radius: 4px 4px 0px 0px;
 }
 
@@ -151,7 +158,6 @@ h4.edit-form-header {
 .edit-form-footer {
   padding: 15px; 
   margin: -15px; 
-  background: @theme-light-blue;
   border-radius: 0px 0px 4px 4px;
 }
 
@@ -180,12 +186,6 @@ h4.edit-form-header {
 }
 
 .navbar-nav {
-  > li > a {
-    padding-top: 17.5px;
-    padding-bottom: 17.5px;
-    line-height: 16px;
-    font-size: 16px;
-  }
   > li {
     .dropdown-menu {
       font-size: 13px;
@@ -270,6 +270,7 @@ h4.edit-form-header {
     > a {
       color: @gray;
       background: none;
+      padding: 5px 15px;
       margin-right: 2px;
       line-height: @line-height-base;
       border: none;
@@ -290,7 +291,7 @@ h4.edit-form-header {
         font-weight: bold;
         border: none;
         background: none;
-        border-bottom: 6px solid #f26925;
+        border-bottom: 4px solid #f26925;
         cursor: default;
       }
     }
@@ -337,7 +338,7 @@ section.proposals-admin-view {
 }
 
 section.edit-form-background {
-  background: @gray;
+  background: @theme-light-blue;
   padding: 10px;
 }
 
@@ -577,13 +578,13 @@ form-title {
   border-color: @theme-primary;
   &:hover,&:active:hover {
     color: #fff;
-    background-color: lighten(@theme-primary, 8%);
-    border-color: lighten(@theme-primary, 8%);
+    background-color: darken(@theme-primary, 8%);
+    border-color: darken(@theme-primary, 8%);
   }
   &:active,&:focus {
     color: #fff;
-    background-color: lighten(@theme-primary, 10%);
-    border-color: lighten(@theme-primary, 10%);
+    background-color: darken(@theme-primary, 10%);
+    border-color: darken(@theme-primary, 10%);
   }
 }
 
@@ -649,7 +650,7 @@ form-title {
 }
 
 .btn-text-only {
-  color: @gray;
+  color: @gray-light;
   background: transparent;
   border-color: none;
   &:hover,&:active:hover {
@@ -689,7 +690,7 @@ form-title {
 // --------------------------------------------------
 .label {
   display: inline-block;
-  font-size: 80%;
+  font-size: .7em;
   font-weight: normal;
   padding: .4em .8em;
   letter-spacing: .08em;
@@ -699,7 +700,7 @@ form-title {
 //Sizes
 
 .label-lg {
-  font-size: 95%;
+  font-size: .85em;
   padding: .5em .8em;
 }
 
@@ -741,7 +742,7 @@ form-title {
   font-weight: bold;
 }
 
-// Specific labels
+// Opportunity labels
 
 .label-price {
   background: @gray-darker;
@@ -775,6 +776,54 @@ form-title {
   color: #fff;
   border: 1px solid @gray-dark;
   margin: -2px;
+}
+
+.label-preferred-skill {
+  background: transparent;
+  color: @gray-light;
+  border: 1px solid @gray-light; 
+}
+
+.label-preferred-skill-selected {
+  background: @theme-orange;
+}
+
+// Capability Labels
+
+.label-agilecoaching {
+  background: #00b377;
+}
+
+.label-deliverymgmt {
+  background: #00b377;
+}
+
+.label-uxresearch {
+  background: #432109; 
+}
+
+.label-uxdesign {
+  background: #432109;
+}
+
+.label-frontend {
+  background: #002699;
+}
+
+.label-backend {
+  background: #002699;
+}
+
+.label-devops {
+  background: #663399;
+}
+
+.label-technicalarch {
+  background: #002699;
+}
+
+.label-securityeng {
+  background: #4d004d;
 }
 
 // Proposal stats list
@@ -825,12 +874,6 @@ form-title {
   margin: 10px 0px;
   font-weight: 400;
   font-size: 14px;
-}
-
-.alert-simple {
-  background: transparent;
-  color: @gray-dark;
-  border-color: @gray-lighter;
 }
 
 .alert-info {
@@ -1050,6 +1093,14 @@ form-title {
   opacity: none;
 }
 
+.company-member {
+  display: inline-block;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  padding: 10px 5px;
+  margin: 5px 0px;
+}
+
 // Form header
 
 .col-text-buttons a {
@@ -1125,6 +1176,26 @@ form-title {
   background: @theme-important;
 }
 
+// User Avatar
+
+.avatar-user {
+  position: relative;
+  display: flex;
+  padding: 10px 5px;
+  > img {
+    float: left;
+    height: 50px;
+    width: 50px;
+    margin: 0px;
+  }
+  > .avatar-body {
+    margin: 10px 5px 0px;
+    > .avatar-name {
+      font-weight: 500;
+    }
+  }
+}
+
 // Cards
 .card {
   position: relative;
@@ -1133,6 +1204,27 @@ form-title {
   border-radius: @border-radius-base;
   background-color: white;
   box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
+}
+
+.card-user {
+  padding: 10px 5px;
+  margin: .5em 0;
+  border-radius: 0px;
+  > img.card-img-left {
+    height: 50px;
+    width: 50px;
+    margin: 0px;
+  }
+  > .card-body {
+  padding-left: 60px;
+    > button.btn-remove {
+      margin: -12px -10px;
+    }
+    > .card-title {
+      font-size: 1.1em;
+      margin: 0px;
+    }
+  }
 }
 
 .card-company {
@@ -1517,9 +1609,8 @@ form-title {
 }
 
 .instructions-for-dev {
-  color: purple;
-  background: #fff;
-  border: 3px solid purple;
+  color: #fff;
+  background: #222;
 }
 
 
@@ -1765,19 +1856,34 @@ table.capabilities-list {
       > th {
         text-align: center;
         border: none;
+        vertical-align: middle;
+        padding: 1px 2px;
       }
       > td {
         border: none;
-        > label.capability {
-          font-size: 100%;
-          margin: -5px 5px -5px -5px;
-        }
-        > label.label-skill {
-          margin: -5px 5px -5px -5px;
-        }
+        padding: 0px;
       }
     }
   } 
+}
+
+table.preferred-skills {
+  > tbody {
+    > tr {
+      > th {
+        text-align: left;
+        width: 220px;
+        border: none;
+        vertical-align: middle;
+        padding: 3px 2px;
+      }
+      > td {
+        border: none;
+        padding: 1px 2px;
+        vertical-align: middle;
+      }
+    }
+  }
 }
 
 div.team-member-divider {
