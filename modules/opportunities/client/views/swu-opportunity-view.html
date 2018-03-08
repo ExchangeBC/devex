@@ -366,7 +366,7 @@
 				<tbody>
 					<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.view({ proposalId: proposal._id })">{{proposal.businessName}}</a></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a></td>
 						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>

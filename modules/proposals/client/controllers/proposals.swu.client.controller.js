@@ -28,61 +28,6 @@
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
 		ppp.isSprintWithUs = false;
-		if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-			ppp.isSprintWithUs = true;
-
-			var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-			ppp.clist = [];
-			var idlist = [];
-
-			allclist.forEach (function (id) {
-				//
-				// iff the capability is required
-				//
-				if (ppp.opportunity[id+'_minimumYears']>0) {
-					var minimumYearsField = id+'_minimumYears';
-					var desiredYearsField = id+'_desiredYears';
-					var userYearsField    = id+'_years';
-					var teamYears = [];
-					var isMinimum = false;
-					var totalYears = 0;
-					var minYears = ppp.opportunity[minimumYearsField];
-					var desYears = ppp.opportunity[desiredYearsField];
-					proposal.team.forEach (function (member) {
-						var userYears = member[userYearsField];
-						teamYears.push ({
-							years: userYears
-						});
-						isMinimum = isMinimum || (userYears >= minYears);
-						totalYears += userYears;
-					});
-					if (desYears === 0) desYears = 100;
-					var score = (totalYears / desYears) * 100;
-					if (score > 100) score = 100;
-					//
-					// put the user field onto a list
-					//
-					idlist.push (userYearsField);
-					//
-					// put all the capability stuff into a list of objects
-					//
-					ppp.clist.push ({
-						id: id,
-						minimumYearsField : minimumYearsField,
-						desiredYearsField : desiredYearsField,
-						userYearsField : userYearsField,
-						minYears : minYears,
-						desYears : desYears,
-						minMet : isMinimum,
-						desMet : (totalYears >= desYears),
-						score : (isMinimum ? score : 0),
-						teamYears : teamYears,
-						totalYears : totalYears
-					});
-				}
-			});
-			// console.log (ppp.clist);
-		}
 		// -------------------------------------------------------------------------
 		//
 		// close the window

@@ -18,7 +18,7 @@
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
-		ppp.isSprintWithUs = false;
+		ppp.isSprintWithUs = true;
 		if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 			ppp.isSprintWithUs = true;
 

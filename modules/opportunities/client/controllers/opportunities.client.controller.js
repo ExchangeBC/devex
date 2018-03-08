@@ -466,7 +466,7 @@
 			vm.opportunity.evaluationStage = vm.stages.assigned;
 			vm.opportunity.proposal = proposal;
 			vm.saveOpportunity ();
-			proposal.isAccepted = true;
+			proposal.isAssigned = true;
 			vm.saveProposal (proposal);
 		};
 		// -------------------------------------------------------------------------
