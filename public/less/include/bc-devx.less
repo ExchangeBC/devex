@@ -696,7 +696,7 @@ form-title {
   display: inline-block;
   font-size: .7em;
   font-weight: normal;
-  padding: .4em .8em;
+  padding: .5em .8em .4em;
   letter-spacing: .08em;
   margin: 3px 3px 3px 0px;
 }
@@ -705,7 +705,7 @@ form-title {
 
 .label-lg {
   font-size: .85em;
-  padding: .5em .8em;
+  padding: .6em .8em .5em;
 }
 
 
@@ -746,6 +746,11 @@ form-title {
   font-weight: bold;
 }
 
+.label-input {
+  font-weight: normal;
+  font-size: .95em;
+}
+
 // Project labels
 
 .label-project-tags {
@@ -782,9 +787,9 @@ form-title {
 }
 
 .label-fulltime-selected {
-  background: @gray-dark;
+  background: @theme-danger;
   color: #fff;
-  border: 1px solid @gray-dark;
+  border: 1px solid @theme-danger;
   margin: -2px;
 }
 
@@ -809,11 +814,11 @@ form-title {
 }
 
 .label-uxresearch {
-  background: #432109; 
+  background: #ff1493; 
 }
 
 .label-uxdesign {
-  background: #432109;
+  background: #ff1493;
 }
 
 .label-frontend {
@@ -1214,8 +1219,32 @@ form-title {
     }
   }
   > .selected {
-    background-color: @theme-important;
+    background-color: @gray-lighter;
   }  
+}
+
+.capability-selection-list {
+  capability {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    border: 1px solid #ddd;
+    > label {
+      margin: -1px -5px;
+    }
+  }
+  capability.selected {
+    background: @gray-lighter;
+  }
+  capability:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+  capability:last-child {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
 }
 
 
