@@ -259,7 +259,8 @@ var removeUserRole = function (userid, oppcode) {
 };
 // -------------------------------------------------------------------------
 //
-// assigns a proposal to the opportunity
+// assigns a proposal to the opportunity, calls opportunities to complete the
+// work
 //
 // -------------------------------------------------------------------------
 exports.assign = function (req, res) {
@@ -279,7 +280,7 @@ exports.assign = function (req, res) {
 };
 // -------------------------------------------------------------------------
 //
-// unassign gets called from the opportunity side, so jusy do the work
+// unassign gets called from the opportunity side, so just do the work
 // and return a promise
 //
 // -------------------------------------------------------------------------
