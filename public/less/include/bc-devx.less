@@ -688,13 +688,17 @@ form-title {
 
 // Labels
 // --------------------------------------------------
+.label-list {
+  margin: 3px 3px 3px 0px;
+}
+
 .label {
   display: inline-block;
   font-size: .7em;
   font-weight: normal;
   padding: .4em .8em;
   letter-spacing: .08em;
-  margin: 3px;
+  margin: 3px 3px 3px 0px;
 }
 
 //Sizes
@@ -740,6 +744,12 @@ form-title {
   background: transparent;
   color: @gray-dark;
   font-weight: bold;
+}
+
+// Project labels
+
+.label-project-tags {
+  background: @theme-orange;
 }
 
 // Opportunity labels
@@ -890,6 +900,14 @@ form-title {
 .alert-danger {
   background: #fddece;
   color: @theme-danger;
+}
+
+.alert-definitions {
+  font-size: .85em;
+  font-weight: 300;
+  color: #777;
+  background: @gray-lighter;
+  border: none;
 }
 
 //.alert-info {
@@ -1157,6 +1175,7 @@ form-title {
 }
 
 // List Groups
+
 .list-group-item.active {
   background-color: @theme-primary;
   border-color: darken(@theme-primary, 5%);
@@ -1175,6 +1194,30 @@ form-title {
 .list-group-item-selected {
   background: @theme-important;
 }
+
+.team-selection-list {
+  > .team-member {
+    display: block;
+    padding: 0px 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    > img {
+      width: 35px;
+      height: 35px;
+      border-radius: 15px;
+      margin: 5px 5px 5px 0px;
+    }
+    > name {
+      color: @gray-dark;
+      font-weight: bold;
+      font-size: 1em;
+    }
+  }
+  > .selected {
+    background-color: @theme-important;
+  }  
+}
+
 
 // User Avatar
 
@@ -1207,7 +1250,7 @@ form-title {
 }
 
 .card-user {
-  padding: 10px 5px;
+  padding: 10px 5px 15px;
   margin: .5em 0;
   border-radius: 0px;
   > img.card-img-left {
@@ -1217,8 +1260,9 @@ form-title {
   }
   > .card-body {
   padding-left: 60px;
+  padding-top: 5px;
     > button.btn-remove {
-      margin: -12px -10px;
+      margin: -16px -10px;
     }
     > .card-title {
       font-size: 1.1em;
@@ -1855,13 +1899,18 @@ table.capabilities-list {
     > tr {
       > th {
         text-align: center;
+        width: 35px;
         border: none;
         vertical-align: middle;
         padding: 1px 2px;
       }
       > td {
         border: none;
+        vertical-align: middle;
         padding: 0px;
+        > label.label-fulltime-selected {
+          margin: 1px 0px;
+        }
       }
     }
   } 

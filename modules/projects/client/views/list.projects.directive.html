@@ -41,7 +41,7 @@
 
   <div class="card-block" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })">
     <div class="label-list">
-        <span class="label label-info" ng-repeat="code in project.tags">{{code}}</span>
+        <span class="label label-project-tags" ng-repeat="code in project.tags">{{code}}</span>
     </div>
     <div class="card-title" ng-bind="project.name"></div>
     <p ng-bind="project.short"></p>

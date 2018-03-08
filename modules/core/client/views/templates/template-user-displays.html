@@ -36,7 +36,7 @@
 				<div class="card card-user">
 					<img class="card-img-left" src="/img/Zeb_avatar.png">
 					<div class="card-body">
-						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>	
+						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>
 						<div class="card-title">Mark Wilson</div>
 						<label-list>
 							<label class="label label-uxresearch">UX Research</label>
@@ -137,6 +137,46 @@
 				</div>
 			</div>
 		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
+				<h3>List Groups</h3>
+				These are for within a company response on a SWU opportunity. The list shows them all of the team members they can select from, with their capability and skill labels, so they can select/deselect members to add them to the proposal.
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="alert alert-important">
+						This is a <code>&lt;div class="team-selection-list"&gt;</code><br>
+						It will typically be used within a <code>&lt;div class="col-sm-4"&gt;</code>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-8">
+						<div class="team-selection-list">
+							<div class="team-member selected">
+								<img src="/img/Zeb_avatar.png">
+								<name>Steve Chapman</name>
+								<div class="label-list">
+									<label class="label label-deliverymgmt">Delivery Management</label>
+									<label class="label label-skill">Agile Scrum</label>
+									<label class="label label-skill">Certified Scrum Master</label>
+								</div>
+							</div>
+							<div class="team-member">
+								<img src="/img/billy_avatar.png">
+								<name>Mark Wilson</name>
+								<div class="label-list">
+									<label class="label label-uxresearch">UX Research</label>
+									<label class="label label-uxdesign">UX Design</label>
+									<label class="label label-skill">Bootstrap</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		
 
 	</div>
