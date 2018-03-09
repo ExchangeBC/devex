@@ -22,12 +22,12 @@ We are open to pull requests. Please read our [contributing guidelines](https://
 
 Prerequisites: Docker
 
-To get up and running developing, run the following to set things up the first time:
+To get started, run the following command to set things up the first time:
 ```bash
 $ setup.sh
 ```
 
-This will start a container running mongo and build a new image for the application code.  If you already have an instance of mongo running
+This will start a Docker container running mongo and build a new image for the application code.  If you already have an instance of mongo running
 then you will likely get errors.  Make sure to shutdown your local mongo instance.
 
 Once setup has finished you can run the codebase with:
@@ -35,7 +35,7 @@ Once setup has finished you can run the codebase with:
 $ dev.sh
 ```
 
-This will run the application image and link it to your running database container.  It will not start the application, however, but put you oin the command line ready to do so.
+This will run the application image and link it to your running database container.  It will not start the application, however, but put you in the command line ready to do so.
 By default the application starts in development mode and if this is the first time running you should seed the dtabase users, so start the first time with:
 ```bash
 $ MONGO_SEED=true npm start
@@ -44,6 +44,14 @@ Once the seeding is done you need not do it again unless you lose your mongo con
 other time runing the application you can simply run
 ```bash
 $ npm start
+```
+You should now be able to run the application by entering "localhost:3030" into your browser.  If you are not able to view the application properly, then you need to add the Bower node package.  Do this by returning to the command line and running
+```bash
+$ bower install --allow-root
+```
+Once Bower has been installed, run 
+```bash
+$ npm run quiet
 ```
 
 ### Notes
