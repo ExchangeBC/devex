@@ -16,16 +16,19 @@
 </div>
 
 <div class="row">
-	<div class="col-sm-12 text-center">
-		Filter By: &nbsp;
-		<div class="btn-group">
-			<label class="btn btn-info" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-check" ng-if="vm.filter.sprint">&nbsp;</i>Sprint With Us</label>
-			<label class="btn btn-info" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-check" ng-if="vm.filter.code">&nbsp;</i>Code With Us</label>
-		</div>
-		<div class="btn-group">
-			<label class="btn btn-info" ng-model="vm.filter.open" uib-btn-checkbox><i class="fa fa-check" ng-if="vm.filter.open">&nbsp;</i>Open</label>
-			<label class="btn btn-info" ng-model="vm.filter.closed" uib-btn-checkbox><i class="fa fa-check" ng-if="vm.filter.closed">&nbsp;</i>Closed</label>
-		</div>
+	<div class="col-sm-12">
+		Show: &nbsp;
+		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
+		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
+		
+		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-code"></i> Code With Us</button>
+		<button class="btn btn-sm btn-filter-selected"  ng-if="vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-code"></i> Code With Us</button>
+		&nbsp;
+		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
+		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
+		
+		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
+		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 	</div>
 </div>
 
