@@ -2,13 +2,13 @@
 (function () {
 	'use strict';
 
-	angular
-		.module('opportunities')
-		.factory('OpportunitiesService', OpportunitiesService);
-
-	OpportunitiesService.$inject = ['$resource', '$log'];
-
-	function OpportunitiesService($resource, $log) {
+	angular	.module('opportunities')
+	// -------------------------------------------------------------------------
+	//
+	// service for database interaction - the $resource for opportunities
+	//
+	// -------------------------------------------------------------------------
+	.factory('OpportunitiesService', function ($resource, $log) {
 		var Opportunity = $resource('/api/opportunities/:opportunityId', {
 			opportunityId: '@_id'
 		}, {
@@ -95,38 +95,166 @@
 				url : '/api/opportunities/requests/deny/:opportunityId/:userId'
 			}
 		});
-
-		angular.extend(Opportunity.prototype, {
+		angular.extend (Opportunity.prototype, {
 			createOrUpdate: function () {
 				var opportunity = this;
-				return createOrUpdate(opportunity);
+				if (opportunity._id) {
+					return opportunity.$update (function () {}, function (e) {$log.error (e.data);});
+				} else {
+					return opportunity.$save (function () {}, function (e) {$log.error (e.data);});
+				}
 			}
 		});
 		return Opportunity;
+	})
+	// -------------------------------------------------------------------------
+	//
+	// this is a set of common things that all types of mopportunities need to do
+	// this is really part of the controller, but this is a great place to put common
+	// functions
+	//
+	// -------------------------------------------------------------------------
+	.factory ('OpportunitiesCommon', function ($sce, Authentication) {
+		return {
+			// -------------------------------------------------------------------------
+			//
+			// publishStatus checks for whether or not fields are missing so we can
+			// publish or not
+			//
+			// -------------------------------------------------------------------------
+			publishStatus : function (o) {
+				//
+				// removed background for now
+				//
+				// [(o.background), 'Background'],
+				var fields = {
+					common: [
+						[(o.name), 'Title'],
+						[(o.short), 'Teaser'],
+						[(o.description), 'Summary'],
+						[(o.github), 'Github Repository'],
+						[(o.program), 'Program'],
+						[(o.project), 'Project'],
+						[(o.deadline), 'Proposal Deadline'],
+						[(o.assignment), 'Assignment Date'],
+						[(o.location), 'Location']
+					],
+					cwu: [
+						[(o.evaluation), 'Proposal Evaluation Criteria'],
+						[(o.criteria), 'Acceptance Criteria'],
+						[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
+						[(o.skills), 'Required Skills'],
+						[(o.earn), 'Fixed-Price Reward'],
+						[(o.start), 'Proposed Start Date']
+					],
+					swu: [
+						[(o.terms), 'Additional Terms and Conditions'],
+						[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
+						[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
+						[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
+						[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
+						[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
+						[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
+						[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
+						[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
+						[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
+						[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
+						[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
+						[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
+					]
+				}
+				var errorFields = fields.common.reduce (function (accum, elem) {
+					if (!elem[0]) accum.push (elem[1]);
+					return accum;
+				}, []);
+				if (o.opportunityTypeCd === 'code-with-us') {
+					fields.cwu.forEach (function (elem) {
+						if (!elem[0]) errorFields.push (elem[1]);
+					});
+				}
+				else {
+					fields.swu.forEach (function (elem) {
+						if (!elem[0]) errorFields.push (elem[1]);
+					});
+				}
+				return errorFields;
+			},
+			// -------------------------------------------------------------------------
+			//
+			// all the common setup on the scope
+			//
+			// -------------------------------------------------------------------------
+			setScopeView : function (vm, opportunity, subscriptions, myproposal) {
+				vm.features = window.features;
+				//
+				// set the notification code for updates to this opp, and set the vm flag to current state
+				//
+				var notificationCode = 'not-update-'+opportunity.code;
+				vm.notifyMe = subscriptions.map (function (s) {return (s.notificationCode === notificationCode);}).reduce (function (a, c) {return (a || c);}, false);
+				//
+				// if I have a proposal
+				//
+				vm.myproposal             = myproposal;
+				vm.opportunity            = opportunity;
+				vm.pageViews              = opportunity.views;
+				vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+				vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+				vm.authentication         = Authentication;
+				vm.display                = {};
+				vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
+				vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
+				vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
+				vm.trust = $sce.trustAsHtml;
+				//
+				// what can the user do here?
+				//
+				var user                   = Authentication.user;
+				var isUser                 = Authentication.user;
+				var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
+				var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+				vm.isGov                   = isGov;
+				vm.hasEmail                = isUser && Authentication.user.email !== '';
+				var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
+				vm.loggedIn                = isUser;
+				vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+				vm.canEdit                 = isAdmin || opportunity.userIs.admin;
+				vm.isMember                = opportunity.userIs.member;
+				vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
+				vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
+				//
+				// dates
+				//
+				var rightNow               = new Date ();
+				vm.closing = 'CLOSED';
+				var d                      = vm.opportunity.deadline - rightNow;
+				if (d > 0) {
+					var dd = Math.floor(d / 86400000); // days
+					var dh = Math.floor((d % 86400000) / 3600000); // hours
+					var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+					vm.closing = dm+' minutes';
+					if (dd > 0) vm.closing = dd+' days '+dh+' hours '+dm+' minutes';
+					else if (dh > 0) vm.closing = dh+' hours '+dm+' minutes';
+					else vm.closing = dm+' minutes';
+				}
+				var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+				var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+				var dt = vm.opportunity.deadline;
+				vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+				dt = vm.opportunity.assignment;
+				vm.assignment = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+				dt = vm.opportunity.start;
+				vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+				// -------------------------------------------------------------------------
+				//
+				// can this be published?
+				//
+				// -------------------------------------------------------------------------
+				// vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
+				vm.canPublish = (vm.errorFields.length === 0);
 
-		function createOrUpdate(opportunity) {
-			if (opportunity._id) {
-				return opportunity.$update(onSuccess, onError);
-			} else {
-				return opportunity.$save(onSuccess, onError);
 			}
 
-			// Handle successful response
-			function onSuccess() {
-				// Any required internal processing from inside the service, goes here.
-			}
-
-			// Handle error response
-			function onError(errorResponse) {
-				var error = errorResponse.data;
-				// Handle error internally
-				handleError(error);
-			}
-
-			function handleError(error) {
-				// Log error
-				$log.error(error);
-			}
 		}
-	}
+	})
+	;
 }());

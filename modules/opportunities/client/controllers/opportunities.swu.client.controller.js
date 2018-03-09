@@ -6,71 +6,13 @@
 (function () {
 	'use strict';
 
-	var publishStatus = function (o) {
-		//
-		// removed background for now
-		//
-		// [(o.background), 'Background'],
-		var fields = {
-			common: [
-				[(o.name), 'Title'],
-				[(o.short), 'Teaser'],
-				[(o.description), 'Summary'],
-				[(o.github), 'Github Repository'],
-				[(o.program), 'Program'],
-				[(o.project), 'Project'],
-				[(o.deadline), 'Proposal Deadline'],
-				[(o.assignment), 'Assignment Date'],
-				[(o.location), 'Location']
-			],
-			cwu: [
-				[(o.evaluation), 'Proposal Evaluation Criteria'],
-				[(o.criteria), 'Acceptance Criteria'],
-				[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
-				[(o.skills), 'Required Skills'],
-				[(o.earn), 'Fixed-Price Reward'],
-				[(o.start), 'Proposed Start Date']
-			],
-			swu: [
-				[(o.terms), 'Additional Terms and Conditions'],
-				[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
-				[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
-				[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
-				[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
-				[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
-				[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
-				[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
-				[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
-				[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
-				[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
-				[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
-				[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
-			]
-		}
-		var errorFields = fields.common.reduce (function (accum, elem) {
-			if (!elem[0]) accum.push (elem[1]);
-			return accum;
-		}, []);
-		if (o.opportunityTypeCd === 'code-with-us') {
-			fields.cwu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		else {
-			fields.swu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		return errorFields;
-	};
-
 	angular.module('opportunities')
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods) {
+	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -160,7 +102,7 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
@@ -266,7 +208,6 @@
 				// also because this will cause scoring to run on each proposal as well
 				//
 				vm.saveProposals ();
-			vm.responses[0][0].rank = 999;
 			});
 		}
 		// -------------------------------------------------------------------------
@@ -507,7 +448,7 @@
 			vm.opportunity.evaluationStage = vm.stages.assigned;
 			vm.opportunity.proposal = proposal;
 			vm.saveOpportunity ();
-			proposal.isAccepted = true;
+			proposal.isAssigned = true;
 			vm.saveProposal (proposal);
 		};
 		// -------------------------------------------------------------------------
@@ -635,37 +576,47 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS) {
+	.controller('OpportunityEditSWUController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, uibButtonConfig, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		uibButtonConfig.activeClass = 'custombuttonbackground';
-		var vm                                = this;
-		vm.trust               = $sce.trustAsHtml;
-		vm.features = window.features;
-		vm.previousState                      = previousState;
-		var originalPublishedState             = opportunity.isPublished;
+		var vm                      = this;
+		vm.trust                    = $sce.trustAsHtml;
+		vm.features                 = window.features;
+		var originalPublishedState  = opportunity.isPublished;
 		//
 		// what can the user do here?
 		//
-		var isUser                            = Authentication.user;
-		vm.isAdmin                            = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                              = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.projects                           = projects;
-		vm.editing                            = editing;
-		vm.opportunity                        = opportunity;
-		vm.opportunity.opportunityTypeCd      = 'sprint-with-us';
-		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
-		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
-		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
-		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
-		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
-		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
-		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
-		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
-		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
-		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
-		vm.authentication                     = Authentication;
-		vm.form                               = {};
-		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
+		var isUser                       = Authentication.user;
+		vm.isAdmin                       = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		vm.isGov                         = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.projects                      = projects;
+		vm.editing                       = editing;
+		vm.opportunity                   = opportunity;
+		vm.opportunity.opportunityTypeCd = 'sprint-with-us';
+		if (!vm.opportunity.phases) {
+			vm.opportunity.phases = {
+				implementation : {},
+				inception : {},
+				proto : {}
+			}
+		}
+		vm.oimp                           = vm.opportunity.phases.implementation;
+		vm.oinp                           = vm.opportunity.phases.inception;
+		vm.oprp                           = vm.opportunity.phases.proto;
+		vm.oagg                           = vm.opportunity.phases.aggregate;
+		vm.opportunity.deadline          = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment        = new Date (vm.opportunity.assignment);
+		vm.opportunity.start             = new Date (vm.opportunity.start)		;
+		vm.opportunity.endDate           = new Date (vm.opportunity.endDate)	;
+		vm.oimp.endDate                   = new Date (vm.oimp.endDate  );
+		vm.oimp.startDate                 = new Date (vm.oimp.startDate);
+		vm.oinp.endDate                   = new Date (vm.oinp.endDate       );
+		vm.oinp.startDate                 = new Date (vm.oinp.startDate     );
+		vm.oprp.endDate                   = new Date (vm.oprp.endDate       );
+		vm.oprp.startDate                 = new Date (vm.oprp.startDate     );
+		vm.authentication                = Authentication;
+		vm.form                          = {};
+		vm.opportunity.skilllist         = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.opportunity.taglist           = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//
@@ -673,8 +624,15 @@
 		//
 		// set up the structures for capabilities
 		//
-		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
-		CapabilitiesMethods.dump (vm);
+		vm.imp = {};
+		vm.inp = {};
+		vm.prp = {};
+		CapabilitiesMethods.init (vm.imp, vm.oimp, capabilities, 'implementation');
+		CapabilitiesMethods.init (vm.inp, vm.oinp, capabilities, 'inception');
+		CapabilitiesMethods.init (vm.prp, vm.oprp, capabilities, 'prototype');
+		CapabilitiesMethods.dump (vm.imp);
+		CapabilitiesMethods.dump (vm.inp);
+		CapabilitiesMethods.dump (vm.prp);
 		//
 		// set up capabilities
 		//
@@ -683,7 +641,7 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = vm.errorFields > 0;
 		//
 		// set up the dropdown amounts for code with us earnings
@@ -746,16 +704,16 @@
 			//
 			// if not editing, set some conveinient default dates
 			//
-			vm.opportunity.deadline   = new Date ();
-			vm.opportunity.assignment = new Date ();
-			vm.opportunity.start      = new Date ();
-			vm.opportunity.endDate    = new Date ();
-			vm.opportunity.implementationEndDate   = new Date ();
-			vm.opportunity.implementationStartDate = new Date ();
-			vm.opportunity.inceptionEndDate        = new Date ();
-			vm.opportunity.inceptionStartDate      = new Date ();
-			vm.opportunity.prototypeEndDate        = new Date ();
-			vm.opportunity.prototypeStartDate      = new Date ();
+			vm.opportunity.deadline                        = new Date ();
+			vm.opportunity.assignment                      = new Date ();
+			vm.opportunity.start                           = new Date ();
+			vm.opportunity.endDate                         = new Date ();
+			vm.oimp.endDate   = new Date ();
+			vm.oimp.startDate = new Date ();
+			vm.oinp.endDate        = new Date ();
+			vm.oinp.startDate      = new Date ();
+			vm.oprp.endDate    = new Date ();
+			vm.oprp.startDate  = new Date ();
 
 		}
 		//
@@ -764,7 +722,7 @@
 		//
 		if (vm.projects.length === 0) {
 			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
-			$state.go (previousState.name, previousState.params);
+			$state.go ('opportunities.list');
 		}
 		//
 		// if there is only one available project just force it
@@ -887,10 +845,11 @@
 			//
 			// deal with capabilities
 			//
-			CapabilitiesMethods.reconcile (vm, vm.opportunity);
-			// console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
-			// console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
-			CapabilitiesMethods.dump (vm);			//
+			CapabilitiesMethods.reconcile (vm.inp, vm.oinp);
+			CapabilitiesMethods.reconcile (vm.prp, vm.oprp);
+			CapabilitiesMethods.reconcile (vm.imp, vm.oimp);
+			console.log (vm.opportunity.phases);
+			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
 			//
@@ -914,12 +873,12 @@
 			vm.opportunity.assignment.setHours(16);
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.opportunity.implementationEndDate.setHours(16);
-			vm.opportunity.implementationStartDate.setHours(16);
-			vm.opportunity.inceptionEndDate.setHours(16);
-			vm.opportunity.inceptionStartDate.setHours(16);
-			vm.opportunity.prototypeEndDate.setHours(16);
-			vm.opportunity.prototypeStartDate.setHours(16);
+			vm.oimp.endDate.setHours (16);
+			vm.oimp.startDate.setHours (16);
+			vm.oinp.endDate.setHours (16);
+			vm.oinp.startDate.setHours (16);
+			vm.oprp.endDate.setHours (16);
+			vm.oprp.startDate.setHours (16);
 
 
 			//

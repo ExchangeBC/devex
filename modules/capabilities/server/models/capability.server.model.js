@@ -25,7 +25,11 @@ var CapabilitySchema = new Schema ({
 	isRequired       : {type: Boolean, default: true},
 	isInception      : {type: Boolean, default: true},
 	isPrototype      : {type: Boolean, default: true},
-	isImplementation : {type: Boolean, default: true}
+	isImplementation : {type: Boolean, default: true},
+	//
+	// for UI purposes
+	//
+	labelClass : {type: String, default: ''}
 });
 
 CapabilitySchema.statics.findUniqueCode = function (title, suffix, callback) {

@@ -15,6 +15,27 @@
 					"required":"Must supply a capability name"
 				}'>
 			</form-input>
+			<form-input
+				class="col-sm-4"
+				ng-model="qqq.capability.labelClass"
+				x-form="qqq.capabilityForm"
+				x-options='{
+					"title":"Label Class for Display",
+					"id":"name",
+					"name":"name",
+					"placeholder":"name",
+					"required":"Must supply a capability name"
+				}'>
+			</form-input>
+			<form-display
+				class="col-sm-8"
+				x-options='{
+					"id":"flags",
+					"name":"flags"
+				}'>
+				<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}" ng-class={>{{qqq.capability.name}}</label>
+				<label class="label">{{qqq.capability.name}}</label>
+			</form-display>
 			<form-display
 				class="col-sm-12"
 				x-options='{

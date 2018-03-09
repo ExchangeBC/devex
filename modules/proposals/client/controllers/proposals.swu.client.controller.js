@@ -3,10 +3,19 @@
 	angular.module('proposals')
 	// =========================================================================
 	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller ('ProposalsListController', function (ProposalsService) {
+		var ppp           = this;
+		ppp.proposals = ProposalsService.query ();
+	})
+	// =========================================================================
+	//
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalSWUViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
 		ppp.features = window.features;
 		ppp.proposal      = angular.copy (proposal);
@@ -18,62 +27,7 @@
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
-		ppp.isSprintWithUs = true;
-		if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-			ppp.isSprintWithUs = true;
-
-			var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-			ppp.clist = [];
-			var idlist = [];
-
-			allclist.forEach (function (id) {
-				//
-				// iff the capability is required
-				//
-				if (ppp.opportunity[id+'_minimumYears']>0) {
-					var minimumYearsField = id+'_minimumYears';
-					var desiredYearsField = id+'_desiredYears';
-					var userYearsField    = id+'_years';
-					var teamYears = [];
-					var isMinimum = false;
-					var totalYears = 0;
-					var minYears = ppp.opportunity[minimumYearsField];
-					var desYears = ppp.opportunity[desiredYearsField];
-					proposal.team.forEach (function (member) {
-						var userYears = member[userYearsField];
-						teamYears.push ({
-							years: userYears
-						});
-						isMinimum = isMinimum || (userYears >= minYears);
-						totalYears += userYears;
-					});
-					if (desYears === 0) desYears = 100;
-					var score = (totalYears / desYears) * 100;
-					if (score > 100) score = 100;
-					//
-					// put the user field onto a list
-					//
-					idlist.push (userYearsField);
-					//
-					// put all the capability stuff into a list of objects
-					//
-					ppp.clist.push ({
-						id: id,
-						minimumYearsField : minimumYearsField,
-						desiredYearsField : desiredYearsField,
-						userYearsField : userYearsField,
-						minYears : minYears,
-						desYears : desYears,
-						minMet : isMinimum,
-						desMet : (totalYears >= desYears),
-						score : (isMinimum ? score : 0),
-						teamYears : teamYears,
-						totalYears : totalYears
-					});
-				}
-			});
-			// console.log (ppp.clist);
-		}
+		ppp.isSprintWithUs = false;
 		// -------------------------------------------------------------------------
 		//
 		// close the window
@@ -127,7 +81,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalSWUEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditSWUController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -336,7 +290,7 @@
 			if (!ppp.proposal.scores) ppp.proposal.scores = {};
 			ppp.proposal.scores.skill = (ppp.numberOfSKillsMet / nskills) * 100;
 		};
-		ppp.calculateScores ();
+		// ppp.calculateScores ();
 		// -------------------------------------------------------------------------
 		//
 		// these are helpers for setting ui colours and text

@@ -1,10 +1,5 @@
 <div class="col-sm-12">
 	<fieldset>
-
-<!-- 		<div class="form-group" ng-if="vm.projectLink" >
-			<a id="projects.view" ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
-		</div>
- -->
 		<form-display
 			ng-if="vm.projectLink"
 			class="col-sm-12"
@@ -48,32 +43,6 @@
 				<option value="">Select Project</option>
 			</select>
 		</form-display>
-<!--
-		<div class="form-group" ng-if="!vm.projectLink && (vm.context === 'program' || vm.context === 'allopportunities')" >
-			<label class="control-label" for="project">Project</label>
-			<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="vm.toggleHelp('project')"></i>
-			<div class="input-help alert alert-info" data-field="project" ng-show="vm.displayHelp.project">
-				Select the project that this opportunity falls under. If you don't see the project in the dropdown list, you'll need to go to the Projects tab and create a new project page first.
-			</div>
-			<select ng-if="!vm.projectLink && vm.context === 'program'"
-				name="project"
-				ng-model="vm.projectId"
-				id="project"
-				class="form-control"
-				ng-options="obj._id as obj.name for obj in vm.projects"
-			><option value="">Select Project</option>
-			</select>
-			<select ng-if="!vm.projectLink && vm.context === 'allopportunities'"
-				name="project"
-				ng-change="vm.updateProgramProject()"
-				ng-model="vm.projectobj"
-				id="project"
-				class="form-control"
-				ng-options="obj as obj.name group by obj.program.title for obj in vm.projects"
-			><option value="">Select Project</option>
-			</select>
-		</div>
- -->
 		<form-input
 			class="col-sm-12"
 			ng-model="vm.opportunity.name"

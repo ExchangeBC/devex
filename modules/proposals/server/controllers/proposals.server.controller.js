@@ -129,6 +129,7 @@ exports.my = function (req, res) {
 	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	var search = me.isAdmin ? {} : { code: { $in: me.proposals.member } };
 	Proposal.find (search)
+	.populate('opportunity', 'opportunityTypeCd name code')
 	.select ('code name short')
 	.exec (function (err, proposals) {
 		if (err) {
@@ -258,7 +259,8 @@ var removeUserRole = function (userid, oppcode) {
 };
 // -------------------------------------------------------------------------
 //
-// assigns a proposal to the opportunity
+// assigns a proposal to the opportunity, calls opportunities to complete the
+// work
 //
 // -------------------------------------------------------------------------
 exports.assign = function (req, res) {
@@ -278,7 +280,7 @@ exports.assign = function (req, res) {
 };
 // -------------------------------------------------------------------------
 //
-// unassign gets called from the opportunity side, so jusy do the work
+// unassign gets called from the opportunity side, so just do the work
 // and return a promise
 //
 // -------------------------------------------------------------------------
@@ -502,6 +504,7 @@ exports.downloadArchive = function (req, res) {
 	//
 	Proposal.find({opportunity:req.opportunity._id, status:{$in:['Submitted','Assigned']}}).sort('status created')
 	.populate('user', userfields)
+	.populate('opportunity', 'opportunityTypeCd name code')
 	.exec(function (err, proposals) {
 		if (err) {
 			return res.status(422).send({

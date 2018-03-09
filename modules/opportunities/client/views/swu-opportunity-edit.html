@@ -53,57 +53,62 @@
 							</uib-tab-heading>
 							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-description.html'"></div>
 						</uib-tab>
-						<uib-tab index="4" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-							<uib-tab-heading>
-								Details
-							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-details.html'"></div>
-						</uib-tab>
-						<uib-tab index="5" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-							<uib-tab-heading>
-								Acceptance and Evaluation
-							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-acceptance.html'"></div>
-						</uib-tab>
-						<uib-tab index="6" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab index="6">
 							<uib-tab-heading>
 								Details
 							</uib-tab-heading>
 							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-details.html'"></div>
 						</uib-tab>
-						<uib-tab index="7" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+						<uib-tab index="7">
 							<uib-tab-heading>
 								Phases
 							</uib-tab-heading>
 							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-phases.html'"></div>
 						</uib-tab>
-						<!--
-						<uib-tab index="8" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isInception">
+						<uib-tab index="12">
 							<uib-tab-heading>
-								Inception &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isInception"></i>
+								Preferred Skills
 							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-inception.html'"></div>
+							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-skills.html'"></div>
 						</uib-tab>
-						<uib-tab index="10" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isPrototype">
+						<uib-tab index="13">
 							<uib-tab-heading>
-								Prototype &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isPrototype"></i>
+								Budget
 							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-prototype.html'"></div>
+							<div class="row">
+								<div class="col-xs-12">
+									<uib-tabset active>
+										<uib-tab index="0">
+											<uib-tab-heading>
+												Budget
+											</uib-tab-heading>
+											<div class="row">
+												<div class="col-xs-12 col-sm-6">
+													<div class="well">
+														<label for="budget">What's your total max budget for this team?</label>
+														<div class="input-group">
+														  <span class="input-group-addon">$</span>
+														  <input type="text" id="budget" class="form-control" aria-label="Amount (to the nearest dollar)">
+														</div>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-6">
+													<div class="well">This is your signal to companies about the total amount of money they could potentially earn by working with you. This is the budget you are planning to use up if everything goes right....getting as far as you can with the team into the Implementation phase....
+													</div>
+												</div>
+											</div>
+
+										</uib-tab>
+									</uib-tabset>
+								</div>
+							</div>
 						</uib-tab>
-						<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us' && vm.opportunity.isImplementation">
-							<uib-tab-heading>
-								Implementation &nbsp; <i class="fa fa-check-circle ctc-green" ng-if="vm.opportunity.isImplementation"></i>
-							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-implementation.html'"></div>
-						</uib-tab>
-						-->
-						<uib-tab index="12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-							<uib-tab-heading>
-								Capabilities and Skills
-							</uib-tab-heading>
-							<div class="proposal-form-container" ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-implementation.html'"></div>
-						</uib-tab>
-						<uib-tab index="14" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+
+
+
+
+
+						<uib-tab index="14">
 							<uib-tab-heading>
 								Terms and Conditions
 							</uib-tab-heading>

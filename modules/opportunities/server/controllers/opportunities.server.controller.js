@@ -115,8 +115,18 @@ var opplist = function (query, req, callback) {
 	.populate('updatedBy', 'displayName')
 	.populate('project', 'code name _id isPublished')
 	.populate('program', 'code title _id logo isPublished')
-	.populate('capabilities', 'code name')
-	.populate('capabilitySkills', 'code name')
+	.populate('phases.implementation.capabilities', 'code name')
+	.populate('phases.implementation.capabilitiesCore', 'code name')
+	.populate('phases.implementation.capabilitySkills', 'code name')
+	.populate('phases.inception.capabilities', 'code name')
+	.populate('phases.inception.capabilitiesCore', 'code name')
+	.populate('phases.inception.capabilitySkills', 'code name')
+	.populate('phases.proto.capabilities', 'code name')
+	.populate('phases.proto.capabilitiesCore', 'code name')
+	.populate('phases.proto.capabilitySkills', 'code name')
+	.populate('phases.aggregate.capabilities', 'code name')
+	.populate('phases.aggregate.capabilitiesCore', 'code name')
+	.populate('phases.aggregate.capabilitySkills', 'code name')
 	.exec(function (err, opportunities) {
 		if (err) {
 			callback (err, null);
@@ -243,6 +253,64 @@ var oppBody = function (opp) {
 	ret += opp.evaluation;
 	return ret;
 };
+// -------------------------------------------------------------------------
+//
+// set up internal aggregate states for phase information
+//
+// -------------------------------------------------------------------------
+var setPhases = function (opportunity) {
+	//
+	// only for sprint with us
+	//
+	if (opportunity.opportunityTypeCd !== 'sprint-with-us') return;
+	var imp = opportunity.phases.implementation;
+	var inp = opportunity.phases.inception;
+	var prp = opportunity.phases.proto;
+	var agg = opportunity.phases.aggregate;
+	//
+	// for sprint with us opportunities we may have arrays of phase capabilities
+	// we need to copy those into the aggregate view, simplest using a little pivot
+	//
+	var capabilities = imp.capabilities.concat (inp.capabilities, prp.capabilities);
+	var capabilitiesCore = imp.capabilitiesCore.concat (inp.capabilitiesCore, prp.capabilitiesCore);
+	var capabilitySkills = imp.capabilitySkills.concat (inp.capabilitySkills, prp.capabilitySkills);
+	var capabilityIds = capabilities.map (function (el) {
+		return (el._id) ? el._id : el;
+	})
+	.reduce (function (accum, curr) {
+		accum[curr] = 1;
+		return accum;
+	}, {});
+	var capabilityCoreIds = capabilitiesCore.map (function (el) {
+		return (el._id) ? el._id : el;
+	})
+	.reduce (function (accum, curr) {
+		accum[curr] = 1;
+		return accum;
+	}, {});
+	var capabilitySkillIds = capabilitySkills.map (function (el) {
+		return (el._id) ? el._id : el;
+	})
+	.reduce (function (accum, curr) {
+		accum[curr] = 1;
+		return accum;
+	}, {});
+	agg.capabilities = Object.keys (capabilityIds);
+	agg.capabilitiesCore = Object.keys (capabilityCoreIds);
+	agg.capabilitySkills = Object.keys (capabilitySkillIds);
+	//
+	// total up the targets
+	//
+	imp.target = helpers.numericOrZero (imp.target);
+	inp.target = helpers.numericOrZero (inp.target);
+	prp.target = helpers.numericOrZero (prp.target);
+	agg.target = imp.target + inp.target + prp.target;
+	//
+	// get the earliest and latest date
+	//
+	agg.startDate = ([imp.startDate, inp.startDate, prp.startDate].sort ())[0];
+	agg.endDate = ([imp.endDate, inp.endDate, prp.endDate].sort ())[2];
+}
 /**
  * Create a Opportunity
  */
@@ -262,7 +330,11 @@ exports.create = function(req, res) {
 		//
 		// set the audit fields so we know who did what when
 		//
-		helpers.applyAudit (opportunity, req.user)
+		helpers.applyAudit (opportunity, req.user);
+		//
+		// update phase information
+		//
+		setPhases (opportunity);
 		//
 		// save and return
 		//
@@ -315,7 +387,6 @@ var updateSave = function (opportunity) {
 //
 // -------------------------------------------------------------------------
 exports.update = function (req, res) {
-
 	//
 	// if we dont have permission to do this just return as a no-op
 	//
@@ -331,7 +402,10 @@ exports.update = function (req, res) {
 	// set the audit fields so we know who did what when
 	//
 	helpers.applyAudit (opportunity, req.user);
-
+	//
+	// update phase information
+	//
+	setPhases (opportunity);
 	//
 	// save
 	//
@@ -746,8 +820,18 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
-		.populate('capabilities', 'code name')
-		.populate('capabilitySkills', 'code name')
+		.populate('phases.implementation.capabilities', 'code name')
+		.populate('phases.implementation.capabilitiesCore', 'code name')
+		.populate('phases.implementation.capabilitySkills', 'code name')
+		.populate('phases.inception.capabilities', 'code name')
+		.populate('phases.inception.capabilitiesCore', 'code name')
+		.populate('phases.inception.capabilitySkills', 'code name')
+		.populate('phases.proto.capabilities', 'code name')
+		.populate('phases.proto.capabilitiesCore', 'code name')
+		.populate('phases.proto.capabilitySkills', 'code name')
+		.populate('phases.aggregate.capabilities', 'code name')
+		.populate('phases.aggregate.capabilitiesCore', 'code name')
+		.populate('phases.aggregate.capabilitySkills', 'code name')
 		.populate({
 			path: 'proposal',
 			model: 'Proposal',
@@ -781,8 +865,18 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
-		.populate('capabilities', 'code name')
-		.populate('capabilitySkills', 'code name')
+		.populate('phases.implementation.capabilities', 'code name')
+		.populate('phases.implementation.capabilitiesCore', 'code name')
+		.populate('phases.implementation.capabilitySkills', 'code name')
+		.populate('phases.inception.capabilities', 'code name')
+		.populate('phases.inception.capabilitiesCore', 'code name')
+		.populate('phases.inception.capabilitySkills', 'code name')
+		.populate('phases.proto.capabilities', 'code name')
+		.populate('phases.proto.capabilitiesCore', 'code name')
+		.populate('phases.proto.capabilitySkills', 'code name')
+		.populate('phases.aggregate.capabilities', 'code name')
+		.populate('phases.aggregate.capabilitiesCore', 'code name')
+		.populate('phases.aggregate.capabilitySkills', 'code name')
 		.populate({
 			path: 'proposal',
 			model: 'Proposal',

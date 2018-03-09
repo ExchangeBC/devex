@@ -1,16 +1,36 @@
-<div ng-switch on="qaz.case">
+<div ng-if="qaz.isSprintWithUs">
+	<div ng-switch on="qaz.case">
 
-<button ng-switch-when="canadd" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.create({opportunityId:qaz.opportunity._id})" title="Apply">
-	<i class="fa fa-sign-in"></i> Create Proposal
-</button>
+	<button ng-switch-when="canadd" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.createswu({opportunityId:qaz.opportunity._id})" title="Apply">
+		<i class="fa fa-sign-in"></i> Create Proposal
+	</button>
 
-<button ng-switch-when="canedit" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.edit({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" title="Update Application">
-	<i class="fa fa-sign-in"></i> Edit Proposal
-</button>
+	<button ng-switch-when="canedit" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" title="Update Application">
+		<i class="fa fa-sign-in"></i> Edit Proposal
+	</button>
 
-<button ng-switch-when="guest" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
-	<i class="fa fa-sign-in"></i> Sign up or log in to submit a proposal
-</button>
+	<button ng-switch-when="guest" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+		<i class="fa fa-sign-in"></i> Sign up or log in to submit a proposal
+	</button>
 
-<div ng-switch-default></div>
+	<div ng-switch-default></div>
+	</div>
+</div>
+<div ng-if="!qaz.isSprintWithUs">
+	<div ng-switch on="qaz.case">
+
+	<button ng-switch-when="canadd" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.createcwu({opportunityId:qaz.opportunity._id})" title="Apply">
+		<i class="fa fa-sign-in"></i> Create Proposal
+	</button>
+
+	<button ng-switch-when="canedit" class="btn btn-solo btn-success btn-lg" ui-sref="proposaladmin.editcwu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})" title="Update Application">
+		<i class="fa fa-sign-in"></i> Edit Proposal
+	</button>
+
+	<button ng-switch-when="guest" class="btn btn-solo btn-success btn-lg" ui-sref="authentication.signin" title="Apply">
+		<i class="fa fa-sign-in"></i> Sign up or log in to submit a proposal
+	</button>
+
+	<div ng-switch-default></div>
+	</div>
 </div>

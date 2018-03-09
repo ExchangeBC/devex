@@ -34,7 +34,7 @@
 				var isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
 				var isProposal        = qaz.proposal && qaz.proposal._id;
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
-				var isSprintWIthUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
+				qaz.isSprintWithUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
 				var hasCompany        = isUser && Authentication.user.orgsAdmin.length > 0;
 				qaz.case               = 'nothing';
 				if (!isUser) qaz.case = 'guest';
@@ -49,7 +49,7 @@
 					//
 					// dont have one, code with us, let them add one
 					//
-					else if (!isSprintWIthUs) qaz.case = 'canadd';
+					else if (!qaz.isSprintWithUs) qaz.case = 'canadd';
 					//
 					// dont have one, sprint with us, have company, let them add
 					//

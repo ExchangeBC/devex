@@ -1,0 +1,217 @@
+
+<!-- // Banner if proposal is Submitted // -->
+<div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p><span class="strong"><i class="fa fa-check-circle"></i> Your proposal has been submitted!</span> &nbsp;&nbsp; You can make updates until <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span>.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- // Banner if proposal is in Draft // -->
+<div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p><span class="strong"><i class="fa fa-file"></i> Your proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity!</p>
+				<p ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your proposal, you must agree to the Terms.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section class="edit-form-background" role="main">
+
+	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate warn-on-exit>
+
+		<div class="container container-edit-form">
+
+			<div class="edit-form-header">
+				<div class="row">
+					<div class="col-xs-8">
+						<h4 class="edit-form-header"><span class="small light">MY PROPOSAL TO WORK ON:</span> {{ppp.opportunity.name}}</h4>
+					</div>
+					<div class="col-xs-4">
+						<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-times"></i> CLOSE</a>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div>
+			<div class="row">
+				<div class="col-xs-12">
+					<uib-tabset active>
+						<uib-tab index="0">
+							<uib-tab-heading>
+								<i class="fa fa-user"></i> Developer
+							</uib-tab-heading>
+							<div class="proposal-form-container">
+								<div class="form-group">
+									<div class="alert alert-info">Please enter contact information and a billing address for the <span class="strong">person who is proposing to do the work</span>. If you would like payment to be made to a company, please check the box below and complete the Company tab.
+									</div>
+									<div class="form-group" show-errors>
+										<label>
+											<input type="checkbox" name="isCompany" ng-model="ppp.proposal.isCompany" autofocus>&nbsp;
+											Payment can be made to a company
+											</label>
+										<br><br>
+										<label for="firstName">First Name</label>
+										<input  type="text" id="firstName" name="firstName" class="form-control" ng-model="ppp.user.firstName" placeholder="First Name">
+									</div>
+									<div class="form-group" show-errors>
+										<label for="lastName">Last Name</label>
+										<input  type="text" id="lastName" name="lastName" class="form-control" ng-model="ppp.user.lastName" placeholder="Last Name">
+									</div>
+									<div class="form-group" show-errors>
+										<label for="email">Email</label>
+										<input  type="email" id="email" name="email" class="form-control" ng-model="ppp.user.email" placeholder="Email" lowercase>
+										<div ng-messages="ppp.userForm.email.$error" role="alert">
+											<p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+										</div>
+									</div>
+									<div class="form-group" show-errors ng-if="!ppp.proposal.isCompany">
+										<label for="address">Address</label>
+										<input  type="text" id="address" name="address" class="form-control" ng-model="ppp.user.address" placeholder="Address">
+									</div>
+									<div class="form-group" show-errors>
+										<label for="phone">Phone</label>
+										<input  type="text" id="phone" name="phone" class="form-control" ng-model="ppp.user.phone" placeholder="Phone">
+									</div>
+								</div>
+							</div>
+						</uib-tab>
+						<uib-tab index="1" disable="!ppp.proposal.isCompany">
+							<uib-tab-heading>
+								<i class="fa fa-building"></i> Company
+							</uib-tab-heading>
+							<div class="proposal-form-container">
+								<div class="form-group" show-errors>
+									<label for="businessName">Legal Name of Company</label>
+									<input  type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.user.businessName" placeholder="Legal Name">
+								</div>
+								<div class="form-group" show-errors>
+									<label for="businessAddress">Company Mailing Address</label>
+									<input  type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="ppp.user.businessAddress" placeholder="Company Mailing Address">
+								</div>
+								<div class="form-group" show-errors>
+									<label for="businessContactName">Contact Name</label>
+									<input  type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="ppp.user.businessContactName" placeholder="Contact Name">
+								</div>
+								<div class="form-group" show-errors>
+									<label for="businessContactPhone">Contact Phone</label>
+									<input  type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="ppp.user.businessContactPhone" placeholder="Contact Phone">
+								</div>
+								<div class="form-group" show-errors>
+									<label for="businessContactEmail">Contact Email</label>
+									<input  type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="ppp.user.businessContactEmail" placeholder="Contact Email" lowercase>
+									<div ng-messages="ppp.form.proposalform.businessContactEmail.$error" role="alert">
+										<p class="help-block error-text" ng-message="businessContactEmail">Email address is invalid.</p>
+									</div>
+								</div>
+							</div>
+						</uib-tab>
+						<uib-tab index="2">
+							<uib-tab-heading>
+								<i class="fa fa-pencil"></i> Proposal
+							</uib-tab-heading>
+							<div class="proposal-form-container">
+								<div class="form-group">
+									<div class="alert alert-info">Draft your complete proposal here, or write a short message and upload your proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation Criteria</span>:</div>
+									<div class="well" ng-bind-html="ppp.display.evaluation"></div>
+
+									<label class="control-label" for="detail">My Proposal</label>
+									<textarea
+										name="detail"
+										id="detail"
+										class="form-control input-sm"
+										ui-tinymce="ppp.tinymceOptions"
+										placeholder="Proposal Detail"
+										ng-model="ppp.proposal.detail">
+									</textarea>
+								</div>
+							</div>
+							<br>
+						</uib-tab>
+
+
+						<uib-tab index="3" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
+							<uib-tab-heading>
+								<i class="fa fa-file"></i> Attachments
+							</uib-tab-heading>
+							<div class="proposal-form-container">
+								<div class="form-group">
+									<div class="alert alert-info">Upload any supporting material here.</div>
+									<!--
+									<br>
+									<p><b>Mandatory:</b> To apply on this opportunity, you must agree to the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf" title="Code With Us terms">Code With Us terms</a>. To indicate your acceptance of the terms, download the terms document, and upload it here as an attachment.</p>
+									-->
+									<a href class="btn btn-sm btn-text-only" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> UPLOAD A FILE</a>
+
+									<table class="table table-striped">
+										<tr ng-repeat="file in ppp.proposal.attachments">
+											<td class=" text-right">
+												<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+											</td>
+											<td class="text-left">
+												{{file.name}}
+											</td>
+											<td class=" text-left">
+												<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+											</td>
+										</tr>
+									</table>
+								<!-- <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
+								Drop File:
+								<div ngf-drop="uploadFiles($files)" class="drop-box"
+								ngf-drag-over-class="'dragover'" ngf-multiple="true"
+								ngf-pattern="'image/*,application/pdf'">Drop Images or PDFs files here</div>
+								<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div> -->
+								</div>
+							</div>
+						</uib-tab>
+						<!-- <uib-tab index="4" disable="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'" ng-hide="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'"> -->
+						<uib-tab index="4" ng-if="!ppp.isSprintWithUs">
+							<uib-tab-heading>
+								<i class="fa fa-file-o"></i> Terms
+							</uib-tab-heading>
+							<div class="proposal-form-container">
+								<div class="form-group">
+									<div class="alert alert-info">
+										To submit a proposal, you must agree to the <i>Code With Us</i> Terms.
+									</div>
+									<iframe class="terms" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+									<a class="btn btn-sm btn-secondary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> DOWNLOAD</a>
+									<div class="row">
+										<div class="col-xs-12">
+											<label class="checkbox-inline checkbox-alone">
+												<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</uib-tab>
+					</uib-tabset>
+				</div>
+			</div>
+			<br>
+			<div class="edit-form-footer">
+			<div class="row">
+				<div class="col-xs-12">
+					<button type="button" class="btn btn-warning pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i class="fa fa-paper-plane"></i> SUBMIT</button>
+					<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> SAVE UPDATES</button>
+					<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> SAVE CHANGES</button>
+					<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> DELETE</button>
+					<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" "><i class="fa fa-ban"></i> WITHDRAW</button>
+				</div>
+			</div>
+			</div>
+			</div>
+
+		</div>
+
+	</form>
+
+</section>
