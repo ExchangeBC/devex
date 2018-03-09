@@ -249,7 +249,7 @@
 				// can this be published?
 				//
 				// -------------------------------------------------------------------------
-				vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
+				// vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 				vm.canPublish = (vm.errorFields.length === 0);
 
 			}

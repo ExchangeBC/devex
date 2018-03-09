@@ -708,7 +708,7 @@
 		//
 		if (vm.projects.length === 0) {
 			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
-			$state.go (opportunities.list);
+			$state.go ('opportunities.list');
 		}
 		//
 		// if there is only one available project just force it
