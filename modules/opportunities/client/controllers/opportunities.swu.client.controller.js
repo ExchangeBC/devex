@@ -208,7 +208,6 @@
 				// also because this will cause scoring to run on each proposal as well
 				//
 				vm.saveProposals ();
-			vm.responses[0][0].rank = 999;
 			});
 		}
 		// -------------------------------------------------------------------------

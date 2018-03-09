@@ -15,7 +15,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
 		ppp.features = window.features;
 		ppp.proposal      = angular.copy (proposal);
@@ -81,7 +81,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditSWUController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -290,7 +290,7 @@
 			if (!ppp.proposal.scores) ppp.proposal.scores = {};
 			ppp.proposal.scores.skill = (ppp.numberOfSKillsMet / nskills) * 100;
 		};
-		ppp.calculateScores ();
+		// ppp.calculateScores ();
 		// -------------------------------------------------------------------------
 		//
 		// these are helpers for setting ui colours and text

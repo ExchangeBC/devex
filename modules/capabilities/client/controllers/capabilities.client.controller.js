@@ -7,8 +7,9 @@
 	//
 	// =========================================================================
 	.controller ('CapabilitiesListController', function (capabilities, Authentication) {
-		var vm         = this;
+		var vm          = this;
 		vm.capabilities = capabilities;
+		vm.auth         = Authentication.permissions ();
 	})
 	// =========================================================================
 	//
@@ -16,11 +17,11 @@
 	//
 	// =========================================================================
 	.controller ('CapabilityViewController', function ($sce, $state, capability, Authentication, Notification) {
-		var vm                 = this;
-		vm.trust               = $sce.trustAsHtml;
-		vm.capability          = capability;
-		vm.auth                = Authentication;
-		vm.canEdit             = Authentication.isAdmin;
+		var vm        = this;
+		vm.trust      = $sce.trustAsHtml;
+		vm.capability = capability;
+		vm.auth       = Authentication.permissions ();
+		vm.canEdit    = vm.auth.isAdmin;
 	})
 	// =========================================================================
 	//
@@ -30,7 +31,7 @@
 	.controller ('CapabilityEditController', function ($scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS, CapabilitySkillsService) {
 		var qqq            = this;
 		qqq.capability     = capability;
-		qqq.auth           = Authentication;
+		qqq.auth           = Authentication.permissions ();
 		qqq.tinymceOptions = TINYMCE_OPTIONS;
 		qqq.newskill       = '';
 		qqq.editingskill   = false;
