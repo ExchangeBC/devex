@@ -685,6 +685,30 @@ form-title {
   margin-top: -5px;
 }
 
+.btn-filter-selected {
+  transition: none;
+  color: #fff;
+  background: @gray;
+  border: 1px solid @gray;
+  &:hover, &:focus {
+    color: #fff;
+    background: @gray;
+    border: 1px solid @gray;
+  }
+}
+
+.btn-filter-unselected {
+  transition: none;
+  color: @gray-light;
+  background: @gray-lighter;
+  border: 1px solid #e3e3e3;
+  &:hover, &:focus {
+    color: @gray-light;
+    background: @gray-lighter;
+    border: 1px solid #e3e3e3;
+    box-shadow: none;
+  }
+}
 
 // Labels
 // --------------------------------------------------
@@ -806,44 +830,54 @@ form-title {
 
 .label-preferred-skill-selected {
   background: @theme-orange;
+  opacity: 0.7;
 }
 
 // Capability Labels
 
 .label-agilecoaching {
   background: #00b377;
+  opacity: 0.7;
 }
 
 .label-deliverymgmt {
   background: #00b377;
+  opacity: 0.7;
 }
 
 .label-uxresearch {
   background: #ff1493;
+  opacity: 0.7; 
 }
 
 .label-uxdesign {
   background: #ff1493;
+  opacity: 0.7;
 }
 
 .label-frontend {
   background: #002699;
+  opacity: 0.7;
 }
 
 .label-backend {
   background: #002699;
+  opacity: 0.7;
 }
 
 .label-devops {
   background: #663399;
+  opacity: 0.7;
 }
 
 .label-technicalarch {
   background: #002699;
+  opacity: 0.7;
 }
 
 .label-securityeng {
   background: #4d004d;
+  opacity: 0.7;
 }
 
 // Proposal stats list
@@ -1933,7 +1967,7 @@ table.capabilities-list {
     > tr {
       > th {
         text-align: center;
-        width: 35px;
+        width: 45px;
         border: none;
         vertical-align: middle;
         padding: 1px 2px;
