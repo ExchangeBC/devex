@@ -1,112 +1,112 @@
-			<div class="row">
-				<div class="col-xs-12">
-					<uib-tabset active>
-						<uib-tab index="0">
-							<uib-tab-heading>
-								Preferred Skills
-							</uib-tab-heading>
-							<div class="row">
-								<div class="col-xs-12">
-									<div class="alert alert-info">
-										Here are the capabilities you selected for your opportunity. If there are any preferred skills you would like the team to have, select them here.<br>
-										<span class="strong">Note:</span> If teams don't have the preferred skills, they won't be disqualified from applying on your opportunity as long as they have the required capabilities.
-									</div>
-									<table class="table preferred-skills">
-										<tbody>
-											<tr>
-												<th scope="row"><label class="label label-lg label-agilecoaching">Agile Coaching</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-deliverymgmt">Delivery Management</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-uxresearch">UX Research</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-														<label class="label label-preferred-skill">Skill 2</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-uxdesign">UX Design</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-														<label class="label label-preferred-skill">Skill 2</label>
-														<label class="label label-preferred-skill">Skill 3</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-frontend">Frontend Development</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill-selected">Skill 1</label>
-														<label class="label label-preferred-skill">Skill 2</label>
-														<label class="label label-preferred-skill">Skill 3</label>
-														<label class="label label-preferred-skill">Skill 4</label>
-														<label class="label label-preferred-skill">Skill 5</label>
-														<label class="label label-preferred-skill">Skill 6</label>
-														<label class="label label-preferred-skill">Skill 7</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-backend">Backend Development</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-														<label class="label label-preferred-skill-selected">Skill 2</label>
-														<label class="label label-preferred-skill">Skill 3</label>
-														<label class="label label-preferred-skill">Skill 4</label>
-														<label class="label label-preferred-skill-selected">Skill 5</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-technicalarch">Technical Architecture</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-														<label class="label label-preferred-skill">Skill 2</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-devops">DevOps Engineering</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-														<label class="label label-preferred-skill">Skill 2</label>
-														<label class="label label-preferred-skill">Skill 3</label>
-													</label-list>
-												</td>
-											</tr>
-											<tr>
-												<th scope="row"><label class="label label-lg label-securityeng">Security Engineering</label></th>
-												<td>
-													<label-list>
-														<label class="label label-preferred-skill">Skill 1</label>
-													</label-list>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
-							</div>
-
-						</uib-tab>
-					</uib-tabset>
-				</div>
-			</div>
+<div class="row">
+	<div class="col-xs-12">
+		<div class="alert alert-info">
+			Here are the capabilities you selected for your opportunity. If there are any preferred skills you would like the team to have, select them here.<br>
+			<span class="strong">Note:</span> If teams don't have the preferred skills, they won't be disqualified from applying on your opportunity as long as they have the required capabilities.
+		</div>
+		<table class="table preferred-skills">
+			<tbody>
+				<tr ng-repeat="c in vm.all.capabilities" ng-if="vm.all.iOppCapabilities[c.code]">
+					<th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}">{{c.name}}</label></th>
+					<td>
+						<label-list>
+							<label ng-repeat="s in c.skills" class="label" ng-class="{'label-preferred-skill':!vm.all.iOppCapabilitySkills[s.code],'label-preferred-skill-selected':vm.all.iOppCapabilitySkills[s.code]}" ng-click="vm.all.iOppCapabilitySkills[s.code]=!vm.all.iOppCapabilitySkills[s.code];vm.inp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.prp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.imp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];">{{s.name}}</label>
+						</label-list>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table preferred-skills">
+			<tbody>
+				<tr>
+					<th scope="row"><label class="label label-lg label-agilecoaching">Agile Coaching</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-deliverymgmt">Delivery Management</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-uxresearch">UX Research</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+							<label class="label label-preferred-skill">Skill 2</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-uxdesign">UX Design</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+							<label class="label label-preferred-skill">Skill 2</label>
+							<label class="label label-preferred-skill">Skill 3</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-frontend">Frontend Development</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill-selected">Skill 1</label>
+							<label class="label label-preferred-skill">Skill 2</label>
+							<label class="label label-preferred-skill">Skill 3</label>
+							<label class="label label-preferred-skill">Skill 4</label>
+							<label class="label label-preferred-skill">Skill 5</label>
+							<label class="label label-preferred-skill">Skill 6</label>
+							<label class="label label-preferred-skill">Skill 7</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-backend">Backend Development</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+							<label class="label label-preferred-skill-selected">Skill 2</label>
+							<label class="label label-preferred-skill">Skill 3</label>
+							<label class="label label-preferred-skill">Skill 4</label>
+							<label class="label label-preferred-skill-selected">Skill 5</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-technicalarch">Technical Architecture</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+							<label class="label label-preferred-skill">Skill 2</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-devops">DevOps Engineering</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+							<label class="label label-preferred-skill">Skill 2</label>
+							<label class="label label-preferred-skill">Skill 3</label>
+						</label-list>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row"><label class="label label-lg label-securityeng">Security Engineering</label></th>
+					<td>
+						<label-list>
+							<label class="label label-preferred-skill">Skill 1</label>
+						</label-list>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
