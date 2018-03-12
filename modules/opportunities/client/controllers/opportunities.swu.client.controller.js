@@ -835,6 +835,16 @@
 				});
 				return false;
 			}
+			//
+			// budget canot exceed 2 million
+			//
+			if (vm.opportunity.budget > 2000000) {
+				Notification.error ({
+					message : 'You cannot enter an overall budget greater than $2,000,000',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
 			if (!isValid) {
 				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');

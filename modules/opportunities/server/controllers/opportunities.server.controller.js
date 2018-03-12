@@ -306,6 +306,10 @@ var setPhases = function (opportunity) {
 	prp.target = helpers.numericOrZero (prp.target);
 	agg.target = imp.target + inp.target + prp.target;
 	//
+	// if the budget was set it takes priority over the total targets
+	//
+	if (opportunity.budget && opportunity.budget > 0) agg.target = opportunity.budget;
+	//
 	// get the earliest and latest date
 	//
 	agg.startDate = ([imp.startDate, inp.startDate, prp.startDate].sort ())[0];
