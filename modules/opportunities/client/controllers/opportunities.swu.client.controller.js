@@ -744,7 +744,7 @@
 		// currently selected skills into the aggregate
 		//
 		// NOTE HACK IMPORTANT:
-		// The way this is implemented is very simplistic. the aggreagate views of
+		// The way this is implemented is very simplistic. the aggregate views of
 		// capabilties and skills are generated, and then when a skill is selected
 		// it is set in EACH AND EVERY phase, regadless of whether or not the capability
 		// the skill is under is represented in that phase. This will propogate to the
