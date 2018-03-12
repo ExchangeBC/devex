@@ -789,11 +789,6 @@
 				});
 				return false;
 			}
-			if (vm.opportunity.taglist && vm.opportunity.taglist !== '') {
-				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
-			} else {
-				vm.opportunity.tags = [];
-			}
 			if (vm.opportunity.skilllist && vm.opportunity.skilllist !== '') {
 				vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
 			} else {
