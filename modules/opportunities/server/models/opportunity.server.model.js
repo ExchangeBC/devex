@@ -108,6 +108,7 @@ var OpportunitySchema = new Schema({
 			target           : {type: Number, default: 0}
 		}
 	},
+	budget                    : {type: Number, default: 0},
 	isDocConflictOfInterest   : {type: Boolean, default: false},
 	isDocNonDisclosure        : {type: Boolean, default: false},
 	isDocRequestForReferences : {type: Boolean, default: false},
