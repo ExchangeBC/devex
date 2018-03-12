@@ -35,10 +35,7 @@ var OpportunitySchema = new Schema({
 	short                     : {type: String, default: ''},
 	description               : {type: String, default: ''},
 	background                : {type: String, default: ''},
-	evaluation                : {type: String, default: ''},
-	criteria                  : {type: String, default: ''},
 	github                    : {type: String, default: ''},
-	proposalEmail             : {type: String, default: ''},
 	views                     : {type: Number, default: 1},
 	program                   : {type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project                   : {type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank'},
@@ -55,13 +52,15 @@ var OpportunitySchema = new Schema({
 	updatedBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
 	issueUrl                  : {type: String, default: ''},
 	issueNumber               : {type: String, default: ''},
+	assignment                : {type: Date, default: Date.now },
 	//
 	// specific to code with us
 	//
+	proposalEmail             : {type: String, default: ''},
+	evaluation                : {type: String, default: ''},
+	criteria                  : {type: String, default: ''},
 	skills                    : {type: [String], default:[]},
 	earn                      : {type: Number, default: 0},
-	tags                      : {type: [String], default:[]},
-	assignment                : {type: Date, default: Date.now },
 	start                     : {type: Date, default: Date.now },
 	endDate                   : {type: Date, default: Date.now },
 	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },

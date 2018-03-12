@@ -149,18 +149,18 @@
 					],
 					swu: [
 						[(o.terms), 'Additional Terms and Conditions'],
-						[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
-						[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
-						[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
-						[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
-						[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
-						[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
-						[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
-						[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
-						[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
-						[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
-						[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
-						[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
+						[(o.phases.implementation.isImplementation && o.phases.implementation.contract), 'Implementation Phase Contract Model'],
+						[(o.phases.implementation.isImplementation && o.phases.implementation.endDate), 'Implementation Phase End Date'],
+						[(o.phases.implementation.isImplementation && o.phases.implementation.startDate), 'Implementation Phase Start Date'],
+						[(o.phases.implementation.isImplementation && o.phases.implementation.target), 'Implementation Phase Target Cost'],
+						[(o.phases.inception.isInception && o..phases.inception.contract), 'Inception Phase Contract Model'],
+						[(o.phases.inception.isInception && o..phases.inception.endDate), 'Inception Phase End Date'],
+						[(o.phases.inception.isInception && o..phases.inception.startDate), 'Inception Phase Start Date'],
+						[(o.phases.inception.isInception && o..phases.inception.target), 'Inception Phase Target Cost'],
+						[(o.phases.proto.isPrototype && o..phases.proto.contract), 'Prototype Phase Contract Model'],
+						[(o.phases.proto.isPrototype && o..phases.proto.endDate), 'Prototype Phase End Date'],
+						[(o.phases.proto.isPrototype && o..phases.proto.startDate), 'Prototype Phase Start Date'],
+						[(o.phases.proto.isPrototype && o..phases.proto.target), 'Prototype Phase Target Cost']
 					]
 				}
 				var errorFields = fields.common.reduce (function (accum, elem) {
