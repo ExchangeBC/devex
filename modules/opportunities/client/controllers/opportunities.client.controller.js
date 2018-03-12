@@ -615,7 +615,6 @@
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
 		vm.authentication                     = Authentication;
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//
@@ -736,34 +735,6 @@
 		};
 		// -------------------------------------------------------------------------
 		//
-		// add a new skill under a capability
-		//
-		// -------------------------------------------------------------------------
-		vm.addSkill = function (capability, field, tag, newfield) {
-			// console.log ('newskill:', tag);
-			//
-			// add the new tag to the capability
-			// add the new tag to the opportunity capability tags
-			// clear the add field
-			//
-			capability.tags.push (tag);
-			vm.opportunity[field].push (tag);
-			vm[newfield] = '';
-			capability.createOrUpdate();
-		};
-		// -------------------------------------------------------------------------
-		//
-		// these do things to balance the years required and desired when clicked
-		//
-		// -------------------------------------------------------------------------
-		vm.smin = function (mfield, dfield, value) {
-			if (vm.opportunity[dfield] < value) vm.opportunity[dfield] = value;
-		};
-		vm.sdes = function (dfield, mfield, value) {
-			if (vm.opportunity[mfield] > value) vm.opportunity[mfield] = value;
-		};
-		// -------------------------------------------------------------------------
-		//
 		// this is used when we are setting the entire hierarchy from the project
 		// select box
 		//
@@ -817,11 +788,6 @@
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
 				});
 				return false;
-			}
-			if (vm.opportunity.taglist && vm.opportunity.taglist !== '') {
-				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
-			} else {
-				vm.opportunity.tags = [];
 			}
 			if (vm.opportunity.skilllist && vm.opportunity.skilllist !== '') {
 				vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
