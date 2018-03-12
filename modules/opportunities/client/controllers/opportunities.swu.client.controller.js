@@ -626,12 +626,12 @@
 		vm.imp = {};
 		vm.inp = {};
 		vm.prp = {};
+		vm.all = {};
+		CapabilitiesMethods.init (vm.all, {}, capabilities);
 		CapabilitiesMethods.init (vm.imp, vm.oimp, capabilities, 'implementation');
 		CapabilitiesMethods.init (vm.inp, vm.oinp, capabilities, 'inception');
 		CapabilitiesMethods.init (vm.prp, vm.oprp, capabilities, 'prototype');
-		CapabilitiesMethods.dump (vm.imp);
-		CapabilitiesMethods.dump (vm.inp);
-		CapabilitiesMethods.dump (vm.prp);
+		CapabilitiesMethods.dump (vm.all);
 		//
 		// set up capabilities
 		//
@@ -738,6 +738,36 @@
 
 		vm.tinymceOptions = TINYMCE_OPTIONS;
 
+		// -------------------------------------------------------------------------
+		//
+		// if the skills tab was selected we need to collapse all the capabilities and
+		// currently selected skills into the aggregate
+		//
+		// NOTE HACK IMPORTANT:
+		// The way this is implemented is very simplistic. the aggregate views of
+		// capabilties and skills are generated, and then when a skill is selected
+		// it is set in EACH AND EVERY phase, regadless of whether or not the capability
+		// the skill is under is represented in that phase. This will propogate to the
+		// database, but it does not matter as skills are treated in aggrerate anyhow.
+		// However, it is important to note in case skills become viewed on a per phase
+		// basis rather than in aggregate
+		//
+		// -------------------------------------------------------------------------
+		vm.selectSkills = function (e) {
+			//
+			// go through all the possible capabilities and indicate which ones were chosen
+			// in the aggregate
+			//
+			Object.keys(vm.all.iCapabilities).forEach (function (code) {
+				vm.all.iOppCapabilities[code] = vm.inp.iOppCapabilities[code] || vm.prp.iOppCapabilities[code] ||  vm.imp.iOppCapabilities[code];
+			});
+			//
+			// same with the most current view of skills
+			//
+			Object.keys(vm.all.iCapabilitySkills).forEach (function (code) {
+				vm.all.iOppCapabilitySkills[code] = vm.inp.iOppCapabilitySkills[code] || vm.prp.iOppCapabilitySkills[code] ||  vm.imp.iOppCapabilitySkills[code];
+			});
+		};
 		vm.changeTargets = function () {
 			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
 			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);

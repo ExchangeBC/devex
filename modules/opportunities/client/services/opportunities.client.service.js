@@ -150,15 +150,15 @@
 					swu: [
 						[(o.terms), 'Additional Terms and Conditions'],
 						[(o.phases.implementation.isImplementation || o.phases.inception.isInception || o.phases.proto.isPrototype), 'Phase Selection and Information'],
-						[((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.contract)), 'Implementation Phase Contract Model'],
+						// [((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.contract)), 'Implementation Phase Contract Model'],
 						[((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.endDate)), 'Implementation Phase End Date'],
 						[((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.startDate)), 'Implementation Phase Start Date'],
 						[((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.target)), 'Implementation Phase Target Cost'],
-						[((!o.phases.inception.isInception          ) || (o.phases.inception.isInception && o.phases.inception.contract)), 'Inception Phase Contract Model'],
+						// [((!o.phases.inception.isInception          ) || (o.phases.inception.isInception && o.phases.inception.contract)), 'Inception Phase Contract Model'],
 						[((!o.phases.inception.isInception          ) || (o.phases.inception.isInception && o.phases.inception.endDate)), 'Inception Phase End Date'],
 						[((!o.phases.inception.isInception          ) || (o.phases.inception.isInception && o.phases.inception.startDate)), 'Inception Phase Start Date'],
 						[((!o.phases.inception.isInception          ) || (o.phases.inception.isInception && o.phases.inception.target)), 'Inception Phase Target Cost'],
-						[((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.contract)), 'Prototype Phase Contract Model'],
+						// [((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.contract)), 'Prototype Phase Contract Model'],
 						[((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.endDate)), 'Prototype Phase End Date'],
 						[((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.startDate)), 'Prototype Phase Start Date'],
 						[((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.target)), 'Prototype Phase Target Cost']
@@ -253,7 +253,6 @@
 				// -------------------------------------------------------------------------
 				// vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 				vm.canPublish = (vm.errorFields.length === 0);
-
 			}
 
 		}
