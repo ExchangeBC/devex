@@ -120,10 +120,12 @@ h6 {
 
 .container-detail-view {
   background: #fff;
-  padding: 15px;
+  padding: 1.25em;
   border-radius: 0px;
+  border: 1px solid #e3e3e3;
 }
 
+// Remove this one later
 .container-edit-form {
   background: #fff;
   padding: 15px;
@@ -138,26 +140,39 @@ h6 {
 }
 
 hr {
-  border-color: #e3e3e3;
+  margin: .25em 0;
 }
 
 // Edit form
 
+.edit-form {
+  background: #fff;
+  padding: 1em 1.5em; 
+  border-radius: 4px;
+  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
+}
+
 .edit-form-header {
-  padding: 10px 15px;
-  margin: -15px -15px 0px;
-  background: @gray-lightest;
+  padding: 0 0 1.5em;
   border-radius: 4px 4px 0px 0px;
 }
 
+// Remove this one later
 h4.edit-form-header {
   margin: 6px;
   padding: 0px;
 }
 
+.edit-form-title {
+  font-weight: 500;
+  padding: 0.5em 0;
+  > button {
+    margin: -0.5em;
+  }
+}
+
 .edit-form-footer {
-  padding: 15px;
-  margin: -15px;
+  padding: 2.5em 0 0;
   border-radius: 0px 0px 4px 4px;
 }
 
@@ -259,8 +274,8 @@ h4.edit-form-header {
 
 // Give the tabs something to sit on
 .nav-tabs {
-  border-bottom: 1px solid @nav-tabs-border-color;
-  margin: 5px 0px;
+  border-bottom: none;
+  margin: 1.25em 0;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
@@ -268,7 +283,8 @@ h4.edit-form-header {
 
     // Actual tabs (as links)
     > a {
-      color: @gray;
+      color: @gray-light;
+      font-weight: 500;
       background: none;
       padding: 5px 15px;
       margin-right: 2px;
@@ -277,8 +293,8 @@ h4.edit-form-header {
       border-radius: none;
       &:hover {
         color: @gray-dark;
-        font-weight: bold;
         background: none;
+        border-bottom: 4px solid #f26925;
       }
     }
 
@@ -288,7 +304,6 @@ h4.edit-form-header {
       &:hover,
       &:focus {
         color: @gray-dark;
-        font-weight: bold;
         border: none;
         background: none;
         border-bottom: 4px solid #f26925;
@@ -338,20 +353,20 @@ section.proposals-admin-view {
 }
 
 section.edit-form-background {
-  background: @theme-light-blue;
+  background: @gray-lighter;
   padding: 10px;
 }
 
 section.detail-page-background {
-  background: @theme-light-blue;
+  background: @gray-lighter;
 }
 
 section.list-page {
-  background: @theme-light-blue;
+  background: @gray-lighter;
 }
 
 section.form-page {
-  background: @gray;
+  background: @gray-lighter;
 }
 
 // Forms / Might use these later to simplify html
@@ -931,13 +946,14 @@ form-title {
 }
 
 .alert-info {
-  background: @theme-lighter-blue;
-  border-color: @theme-light-blue;
+  background: @gray-lighter;
+  border-color: @gray-lighter;
+  color: @gray-dark;
 }
 
 .alert-important {
   background: @theme-important;
-  border-color: @theme-yellow;
+  border-color: @theme-important;
   color: @gray-dark;
 }
 
@@ -1035,8 +1051,14 @@ form-title {
 // .panel-danger   { .panel-heading-lighten(@theme-danger); }
 //
 //
-// // Custom panel styles
+// Custom panel styles
 //
+.panel-default {
+  > .panel-heading, .panel-footer {
+    background-color: @gray-lighter;
+  }
+}
+
 // .panel-flat {
 // 	.panel-heading {
 // 		border-bottom: none;
@@ -1295,12 +1317,30 @@ form-title {
   padding: 10px 5px;
   > img {
     float: left;
-    height: 50px;
-    width: 50px;
+    height: 40px;
+    width: 40px;
     margin: 0px;
   }
   > .avatar-body {
     margin: 10px 5px 0px;
+    > .avatar-name {
+      font-weight: 500;
+    }
+  }
+}
+
+.avatar-user-with-email {
+  position: relative;
+  display: flex;
+  padding: 10px 5px;
+  > img {
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 0px;
+  }
+  > .avatar-body {
+    margin: 0px 5px 0px;
     > .avatar-name {
       font-weight: 500;
     }
@@ -1312,9 +1352,7 @@ form-title {
   position: relative;
   margin: 1em 0;
   border: 1px solid @panel-default-border;
-  border-radius: @border-radius-base;
   background-color: white;
-  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
 }
 
 .card-user {
@@ -1388,7 +1426,7 @@ form-title {
 
 .card-block {
   &:hover {
-    background-color: @gray-lightest;
+    background-color: @gray-lighter;
     transition: .5s;
     cursor: pointer;
   }
@@ -2015,4 +2053,86 @@ div.selected {
 .username {
   font-size: 15px;
   font-weight: bold;
+}
+
+// UI Notification
+
+.ui-notification {
+    position: fixed;
+    top: 40%;
+    left: 5%;
+    right: 5%;
+    margin: 0 auto;
+    z-index: 9999;
+    max-width: 400px;
+    max-height: 150px;
+    border-radius: 3px;
+    color: #fff;
+    background: @gray-darker;
+   .transition(all ease 0.5s);
+    > message {
+        text-align: center;
+        padding: 1em;
+        margin: 0;
+    }
+    > title {
+        text-align: center;
+        padding: 1em;
+        margin: 0;
+        text-decoration: none;
+    } 
+
+    &.clickable {
+        cursor: pointer;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+    &.killed {
+        opacity: 0;
+        .transition(opacity ease 1s);
+    }
+    & > h3 {
+        display: block;
+        margin: 10px 10px 0 10px;
+        padding: 0 0 5px 0;
+        text-align: left;
+        font-size: @font-size-base;
+        font-weight: bold;
+        border-bottom: 1px solid fadeout(@btn-primary-color, 70%);
+    }
+    & a {
+        color: @btn-primary-color;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+    &.warning {
+        color: #fff;
+        background: @theme-warning;
+    }
+    &.error {
+        color: #fff;
+        background: @theme-danger;
+    }
+    &.success {
+        color: #fff;
+        background: @gray-darker;
+        > .title {
+          border: none;
+          text-align: center;
+          padding: 1em;
+          margin: 0;
+        }
+        > .message {
+          text-align: center;
+          padding: 1em;
+          margin: 0;
+        }
+    }
+    &.info {
+        color: #fff;
+        background: @gray-darker;
+    }
 }
