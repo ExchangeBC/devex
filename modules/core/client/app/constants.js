@@ -45,11 +45,11 @@
 					$eval = args.$eval;
 
 				var val = filter('currency')(modelValue);
-				return attrs.prefixed && $eval(attrs.prefixed) ? val : val.substr(1);
+				return attrs.prefixed && $eval(attrs.prefixed) ? val : val.substr(1);  // substr not a function (val undefined)
 			},
 			'parser': function(args) {
 				var viewValue = args.$viewValue;
-				var num = viewValue.replace(/[^0-9.]/g, '');
+				var num = viewValue.replace(/[^0-9.]/g, ''); // replace not a function - viewvalue undefined
 				var result = parseFloat(num, 10);
 				return isNaN(result) ? undefined : parseFloat(result.toFixed(2));
 			},
