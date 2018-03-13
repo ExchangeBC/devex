@@ -232,7 +232,7 @@
 		};
 		var performwithdrawal = function (txt) {
 			ppp.proposal.status = 'Draft';
-			saveproposal ('Your proposal has been withdrawn.')};
+			saveproposal ('Your proposal has been withdrawn.');
 		};
 		// -------------------------------------------------------------------------
 		//
