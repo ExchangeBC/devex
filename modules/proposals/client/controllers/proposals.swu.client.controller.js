@@ -18,7 +18,7 @@
 	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
 		ppp.features = window.features;
-		ppp.proposal      = angular.copy (proposal);
+		ppp.proposal      = proposal;
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
@@ -81,7 +81,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -92,16 +92,37 @@
 		if (!opportunity) {
 			console.error ('no opportunity was provided!');
 		}
-		ppp.opportunity   = opportunity;
-		ppp.org                                   = org;
+		ppp.opportunity  = opportunity;
+		ppp.org          = org;
+		ppp.members      = [];
+		ppp.title        = editing ? 'Edit' : 'Create' ;
+		ppp.proposal     = proposal;
+		ppp.user         = Authentication.user;
 		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
-		ppp.members = [];
-		if (org) ppp.members                      = org.members.concat (org.admins);
-		ppp.title                                 = editing ? 'Edit' : 'Create' ;
-		if (!proposal.team) proposal.team = [];
-		ppp.proposal                              = angular.copy (proposal);
-		ppp.user                                  = angular.copy (Authentication.user);
-		var pristineUser                          = angular.toJson(Authentication.user);
+		if (org) ppp.members = org.members.concat (org.admins);
+		if (!ppp.proposal.phases) {
+			ppp.proposal.phases = {
+				implementation : {
+					isImplementation : false,
+					team             : [],
+					cost             : 0
+				},
+				inception : {
+					isInception : false,
+					team        : [],
+					cost        : 0
+				},
+				proto : {
+					isPrototype : false,
+					team        : [],
+					cost        : 0
+				},
+				aggregate : {
+					team : [],
+					cost : 0
+				}
+			}
+		}
 		//
 		// set up the structures for capabilities
 		//
@@ -129,7 +150,6 @@
 		ppp.display.description    = $sce.trustAsHtml(ppp.opportunity.description);
 		ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
 		ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
-		uibButtonConfig.activeClass = 'cbg-light-steel-blue';
 		//
 		// ensure status set accordingly
 		//
@@ -139,293 +159,25 @@
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
-		ppp.isSprintWithUs = false;
-		if (opportunity.opportunityTypeCd === 'sprint-with-us') {
-			ppp.isSprintWithUs = true;
-			ppp.proposal.isCompany = true;
-		}
-		//
-		// what capabilities are required ?
-		// we want to build an array of needed capability codes and needed skill codes to iterate over for
-		// calculating scores. We want each member who has at least one capability in an array, and inside each
-		// member we want a hash of capabiltiies and skills by code that have a boolean as data
-		//
-		if (ppp.isSprintWithUs) {
-			//
-			// we need two total type things, one flag that indicates whether or not
-			// we have met all the capability requirements, and one number which is the total
-			// number of specific skills we have met, this latter becomes the skill score
-			//
-			ppp.isMetAllCapabilities = false;
-			ppp.numberOfSKillsMet = 0;
-			//
-			// for building the output table we need a helper array of objects saying what the row is, in order
-			// that the capabilities come from the service
-			//
-			ppp.displayArray = [];
-			ppp.capabilities.forEach (function (cap) {
-				if (ppp.iOppCapabilities[cap.code]) {
-					ppp.displayArray.push ({
-						code                : cap.code,
-						capability          : cap,
-						capabilitySkill     : null
-					});
-					cap.skills.forEach (function (skill) {
-						if (ppp.iOppCapabilitySkills[skill.code]) {
-							ppp.displayArray.push ({
-								code                : skill.code,
-								capability          : null,
-								capabilitySkill     : skill
-							});
-						}
-					});
-				}
-			});
-
-			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities).sort ();
-			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills).sort ();
-
-
-			// console.log ('ppp.allNeededCapabilities',ppp.allNeededCapabilities);
-			// console.log ('ppp.allskills',ppp.allskills);
-
-			//
-			// now gather up ONLY those folks who have at least one of the required capabilities
-			// this should include any current team members
-			//
-			ppp.winners = [];
-			// console.log ('team:' , ppp.proposal.team);
-			//
-			// make an array of all team member ids
-			// make an array of all opp capability ids
-			//
-			var teamIdMap = ppp.proposal.team.map(function(a){return a._id.toString();});
-			// var opportunityCapabilityIds = ppp.opportunity.capabilities.map(function(a){return a._id.toString();});
-			//
-			// go through he list of all org members and see who has the right skills
-			// and who is already on the opp team
-			//
-			ppp.members.forEach (function (member) {
-				var memberId = member._id.toString ();
-				//
-				// is the member already on the team ?
-				//
-				member.selected = isInArray (teamIdMap, memberId);
-				// console.log (member._id, member.selected);
-				//
-				// index the member capabilities by code, the capabilities service already added a map of
-				// ids to codes as i2cc
-				//
-				member.capabilitiesByCode = {};
-				member.capabilities.forEach (function (cid) {
-					member.capabilitiesByCode[ppp.i2cc[cid]] = true;
-				});
-				//
-				// see if this member has any of the needed capabilities
-				//
-				var matches = (Object.keys (ppp.iOppCapabilities)).reduce (function (accum, curr) {
-					return (accum || ( member.capabilitiesByCode[curr] ));
-				}, false);
-				//
-				// if they match, of if they are already on the team, then add then to the winners array
-				// also make the index of their skills
-				//
-				if (matches || member.selected) {
-					ppp.winners.push (member);
-					member.skillsByCode = {};
-					member.capabilitySkills.forEach (function (cid) {
-						member.skillsByCode[ppp.i2cs[cid]] = true;
-					});
-				}
-				// //
-				// // make an array of all capabilities of the member
-				// //
-				// var memberCapabilityIds = member.capabilities.map(function(a){return a._id.toString();});
-				// //
-				// // if the member has any of the required capabilities then add them to
-				// // winners array
-				// //
-				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
-			});
-			// console.log ('winners:',ppp.winners);
-		}
-		// -------------------------------------------------------------------------
-		//
-		// run through and figure out how the team stacks up
-		// this gets run on load as well, the call immediately follows the definition
-		//
-		// -------------------------------------------------------------------------
-		ppp.calculateScores = function () {
-			if (!ppp.isSprintWithUs) return;
-
-			//
-			// for each capability required go through all seleced members and OR up if they have it
-			// and set that result on the capability itself as MET, same with skills
-			//
-			ppp.isMetAllCapabilities = true;
-			(Object.keys (ppp.iOppCapabilities)).forEach (function (code) {
-				var c = ppp.iCapabilities[code];
-				c.met = ppp.winners.reduce (function (accum, member) {
-					return (accum || (member.selected && member.capabilitiesByCode[code]));
-				}, false);
-				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && c.met;
-				// console.log ('capability', code, c.met);
-			});
-			//
-			// for each skill, see if the team meets it and then caount them up
-			//
-			ppp.numberOfSKillsMet = 0;
-			var nskills = 0;
-			(Object.keys (ppp.iOppCapabilitySkills)).forEach (function (code) {
-				if (ppp.iOppCapabilitySkills[code]) {
-					nskills ++;
-					var c = ppp.iCapabilitySkills[code];
-					c.met = ppp.winners.reduce (function (accum, member) {
-						return (accum || (member.selected && member.skillsByCode[code]));
-					}, false);
-					if (c.met) ppp.numberOfSKillsMet++;
-					// console.log ('skill', code, c.met);
-				}
-			});
-			if (!ppp.proposal.scores) ppp.proposal.scores = {};
-			ppp.proposal.scores.skill = (ppp.numberOfSKillsMet / nskills) * 100;
-		};
-		// ppp.calculateScores ();
-		// -------------------------------------------------------------------------
-		//
-		// these are helpers for setting ui colours and text
-		//
-		// -------------------------------------------------------------------------
-		ppp.statusColour = function (status) {
-			if (status === 'New') return 'label-default';
-			else if (status === 'Draft') return 'label-primary';
-			else if (status === 'Submitted') return 'label-success';
-		};
-		ppp.saveText = function (status) {
-			if (status === 'New') return 'Save';
-			else if (status === 'Draft') return 'Submit';
-			else if (status === 'Submitted') return 'label-success';
-		}
-		// -------------------------------------------------------------------------
-		//
-		// things to do with leaving the form without saving
-		//
-		// -------------------------------------------------------------------------
-		var saveChangesModalOpt = {
-			closeButtonText: 'Return To Proposal',
-			actionButtonText: 'Continue',
-			headerText: 'Unsaved Changes!',
-			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
-		};
-		var pristineProposal = angular.toJson (ppp.proposal);
-		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-				if (toState.retryInProgress) {
-					toState.retryInProgress = false;
-					return;
-				}
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function  () {
-					toState.retryInProgress = true;
-					$state.go(toState, toParams);
-				}, function () {
-				});
-				event.preventDefault();
-			}
-		});
-		window.onbeforeunload = function() {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
-			}
-		};
-		$scope.$on('$destroy', function () {
-			window.onbeforeunload = null;
-			$locationChangeStartUnbind ();
-		});
-		// -------------------------------------------------------------------------
-		//
-		// team score
-		//
-		// -------------------------------------------------------------------------
-		ppp.teamScore = function (team) {
-			return 50;
-		};
-		ppp.memberScore = function (member) {
-			return 100;
-		};
-		// -------------------------------------------------------------------------
-		//
-		// save the user - promise
-		//
-		// -------------------------------------------------------------------------
-		var saveuser = function () {
-			return new Promise (function (resolve, reject) {
-				if (pristineUser !== angular.toJson(ppp.user)) {
-					UsersService.update (ppp.user).$promise
-					.then (
-						function (response) {
-							Authentication.user = response;
-							ppp.user = angular.copy(Authentication.user);
-							pristineUser = angular.toJson(Authentication.user);
-							resolve ();
-						},
-						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
-							 reject ();
-						}
-					);
-				} else resolve ();
-			});
-		};
-		// -------------------------------------------------------------------------
-		//
-		// copy over stuff
-		//
-		// -------------------------------------------------------------------------
-		var copyuser = function () {
-			ppp.proposal.opportunity          = ppp.opportunity;
-			if (!ppp.isSprintWithUs) {
-				ppp.proposal.businessName         = ppp.user.businessName;
-				ppp.proposal.businessAddress      = ppp.user.businessAddress;
-				ppp.proposal.businessContactName  = ppp.user.businessContactName;
-				ppp.proposal.businessContactEmail = ppp.user.businessContactEmail;
-				ppp.proposal.businessContactPhone = ppp.user.businessContactPhone;
-			} else {
-				ppp.proposal.businessName         = ppp.org.name;
-				ppp.proposal.businessAddress      = ppp.org.fullAddress;
-				ppp.proposal.businessContactName  = ppp.org.contactName;
-				ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-				ppp.proposal.businessContactPhone = ppp.org.contactPhone;
-			}
-		};
-		// -------------------------------------------------------------------------
-		//
-		// set the team from the winners circle
-		//
-		// -------------------------------------------------------------------------
-		var copyteam = function () {
-			if (ppp.isSprintWithUs) {
-				ppp.proposal.team = [];
-				ppp.winners.forEach (function (m) {
-					if (m.selected) ppp.proposal.team.push (m._id);
-				});
-			}
-		};
+		ppp.isSprintWithUs = true;
+		ppp.proposal.isCompany = true;
 		// -------------------------------------------------------------------------
 		//
 		// save the proposal - promise
 		//
 		// -------------------------------------------------------------------------
 		var saveproposal = function (goodmessage, badmessage) {
-			copyuser ();
-			copyteam ();
+			ppp.proposal.opportunity          = ppp.opportunity;
+			ppp.proposal.businessName         = ppp.org.name;
+			ppp.proposal.businessAddress      = ppp.org.fullAddress;
+			ppp.proposal.businessContactName  = ppp.org.contactName;
+			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
 			return new Promise (function (resolve, reject) {
 				ppp.proposal.createOrUpdate ()
 				.then (
 					function (response) {
 						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
-						ppp.proposal = response;
-						pristineProposal = angular.toJson (ppp.proposal);
 						ppp.subscribe (true);
 						resolve ();
 					},
@@ -446,7 +198,7 @@
 				$scope.$broadcast('show-errors-check-validity', 'ppp.form.proposalform');
 				return false;
 			}
-			saveuser().then (saveproposal);
+			saveproposal ();
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -454,25 +206,7 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.close = function () {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function () {
-					window.onbeforeunload = null;
-					$locationChangeStartUnbind ();
-					if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-						$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-					} else {
-						$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-					}
-				}, function () {
-				});
-			} else {
-				if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-				} else {
-					$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-				}
-			}
+			$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -487,11 +221,7 @@
 						function () {
 							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
 							ppp.subscribe (false);
-							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-							} else {
-								$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-							}
+							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
@@ -501,8 +231,8 @@
 			});
 		};
 		var performwithdrawal = function (txt) {
-					ppp.proposal.status = 'Draft';
-					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
+			ppp.proposal.status = 'Draft';
+			saveproposal ('Your proposal has been withdrawn.');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -526,19 +256,17 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
-			saveuser().then (function () {
-				copyuser ();
-				ProposalsService.submit (ppp.proposal).$promise
-				.then (
-					function (response) {
-						ppp.proposal = response;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
-					},
-					function (error) {
-						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-					}
-				);
-			});
+			copyuser ();
+			ProposalsService.submit (ppp.proposal).$promise
+			.then (
+				function (response) {
+					ppp.proposal = response;
+					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+				},
+				function (error) {
+					 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
+				}
+			);
 		}
 		// -------------------------------------------------------------------------
 		//
