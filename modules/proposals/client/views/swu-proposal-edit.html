@@ -173,7 +173,7 @@
 										<label class="label-input" for="budget-inception">Please enter a <span class="strong">fixed-price</span> for which you can supply selected team members for this phase.</label>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" id="budget-inception" class="form-control" aria-label="Amount (to the nearest dollar)">
+										  <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
 										</div>
 									</div>
 								</div>
@@ -273,7 +273,7 @@
 										<label class="label-input" for="budget-poc">Please enter a <span class="strong">fixed-price</span> for which you can supply selected team members for this phase.</label>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" id="budget-poc" class="form-control" aria-label="Amount (to the nearest dollar)">
+										  <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
 										</div>
 									</div>
 								</div>
@@ -373,7 +373,7 @@
 										<label class="label-input" for="budget-imp">Please enter a <span class="strong">fixed-price</span> for which you can supply selected team members for this phase.</label>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" id="budget-imp" class="form-control" aria-label="Amount (to the nearest dollar)">
+										  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
 										</div>
 									</div>
 								</div>
