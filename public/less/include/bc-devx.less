@@ -148,13 +148,20 @@ hr {
 .edit-form {
   background: #fff;
   padding: 1em 1.5em; 
-  border-radius: 4px;
   box-shadow: 0 4px 6px #777, 0 1px 3px #777;
 }
 
 .edit-form-header {
+  color: @gray-light;
+  font-size: 1.1em;
   padding: 0 0 1.5em;
-  border-radius: 4px 4px 0px 0px;
+  > .btn {
+    margin: -.75em -1em;
+  }
+}
+
+.edit-form-tab-content {
+  padding: 1em 0;
 }
 
 // Remove this one later
@@ -171,9 +178,9 @@ h4.edit-form-header {
   }
 }
 
+
 .edit-form-footer {
   padding: 2.5em 0 0;
-  border-radius: 0px 0px 4px 4px;
 }
 
 // Navigation
@@ -294,7 +301,7 @@ h4.edit-form-header {
       &:hover {
         color: @gray-dark;
         background: none;
-        border-bottom: 4px solid #f26925;
+        transition: none;
       }
     }
 
@@ -306,7 +313,7 @@ h4.edit-form-header {
         color: @gray-dark;
         border: none;
         background: none;
-        border-bottom: 4px solid #f26925;
+        transition: none;
         cursor: default;
       }
     }
