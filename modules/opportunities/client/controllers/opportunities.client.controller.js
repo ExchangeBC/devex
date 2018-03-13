@@ -35,7 +35,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -61,20 +61,6 @@
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
-		//
-		// set up the structures for capabilities
-		//
-		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
-		//
-		// what capabilities are required ?
-		//
-		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-		vm.clist = [];
-		allclist.forEach (function (id) {
-			if (vm.opportunity[id+'_minimumYears']>0) {
-				vm.clist.push (id);
-			}
-		});
 		//
 		// what can the user do here?
 		//
@@ -367,103 +353,10 @@
 				}
 			});
 		};
-		// -------------------------------------------------------------------------
-		//
-		// save all the proposals (ranknings etc)
-		//
-		// -------------------------------------------------------------------------
-		vm.saveProposal = function (proposal) {
-			vm.calculateProposalScore (proposal);
-			// console.log ('saving proposal');
-			// console.log ('questions', proposal.questions);
-			proposal.$update ();
-		};
-		vm.saveProposals = function () {
-			vm.proposals.forEach (function (proposal) {
-				vm.saveProposal (proposal);
-			});
-		};
 		vm.saveOpportunity = function () {
 			vm.opportunity.$update ();
 		};
-		//
-		// skills are scored when the proposal is saved
-		//
-		vm.skillScore = function (proposal) {
-			// console.log ('proposal.scores.skill', proposal.scores.skill);
-			return proposal.scores.skill;
-		};
-		//
-		// just pass it back
-		//
-		vm.interviewScore = function (proposal) {
-			// console.log ('proposal.scores.interview', proposal.scores.interview);
-			return proposal.scores.interview;
-		};
-		//
-		// since the ranking is from 1 - n we want to invert it and then add up and
-		// give a percent over best possible score
-		//
-		// n = number of proposals
-		// m = number of questions
-		// Q(r) = question ranking (will be from 1 to n with 1 being the best)
-		//
-		// score = sum ( (n+1)-Q(r) ) / (n * m) * 100
-		//
-		vm.questionScore = function (proposal) {
-			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
-			// console.log ('best:', bestScore);
-			proposal.scores.question = (proposal.questions.map (function (q) {
-				// console.log ('question score:', vm.proposals.length + 1 - q.rank);
-				return vm.proposals.length + 1 - q.rank;
-			}).reduce (function (a, b) {
-				// console.log ('reduction:', a+b);
-				return a + b;
-			})) / bestScore * 100;
-			// console.log ('proposal.scores.question', proposal.scores.question);
-			return proposal.scores.question;
-		};
-		//
-		// this will be a simple distance comparison
-		//
-		vm.priceScore = function (proposal) {
-			// var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
-			// proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
-			// console.log ('proposal.scores.price', proposal.scores.price);
-			return proposal.scores.price;
-		};
-		vm.calculateProposalScore = function (proposal) {
-			vm.calculatePriceScores();
-			proposal.scores.total = [
-				vm.opportunity.weights.skill     * vm.skillScore     (proposal),
-				vm.opportunity.weights.question  * vm.questionScore  (proposal),
-				vm.opportunity.weights.interview * vm.interviewScore (proposal),
-				vm.opportunity.weights.price     * vm.priceScore     (proposal)
-			].reduce (function (t, c) {return t + c;});
-			// console.log ('proposal.scores.total', proposal.scores.total);
-			return proposal.scores.total;
-		};
-		vm.calculatePriceScores = function () {
-			var maxDistance = 0;
-			var minDistance = 30000000;
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) {
-					p.distance = Math.abs (vm.opportunity.totalTarget - p.cost);
-					if (p.distance > maxDistance) maxDistance = p.distance;
-					if (p.distance < minDistance) minDistance = p.distance;
-				}
-			});
-			maxDistance -= minDistance;
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) {
-					p.distance -= minDistance;
-					var distanceFromMax = maxDistance - p.distance;
-					p.scores.price = (distanceFromMax) / maxDistance * 100;
-				}
-			});
-		};
 		vm.assign = function (proposal) {
-			vm.opportunity.evaluationStage = vm.stages.assigned;
 			vm.opportunity.proposal = proposal;
 			vm.saveOpportunity ();
 			proposal.isAssigned = true;
@@ -594,7 +487,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, CapabilitySkillsService, CapabilitiesMethods, TINYMCE_OPTIONS, OpportunitiesCommon) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
@@ -615,18 +508,6 @@
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
 		vm.authentication                     = Authentication;
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		//
-		// Every time we enter here until the opportunity has been published we will update the questions to the most current
-		//
-		if (!vm.isPublished) vm.opportunity.questions = dataService.questions;
-		//
-		// set up the structures for capabilities
-		//
-		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
-		CapabilitiesMethods.dump (vm);
-		//
-		// set up capabilities
-		//
 		// -------------------------------------------------------------------------
 		//
 		// can this be published?
@@ -646,7 +527,6 @@
 
 
 		if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
-		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
 		// if the user doesn't have the right access then kick them out
 		//
@@ -795,12 +675,6 @@
 				vm.opportunity.skills = [];
 			}
 			//
-			// deal with capabilities
-			//
-			CapabilitiesMethods.reconcile (vm, vm.opportunity);
-			// console.log ('vm.opportunity.capabilities', vm.opportunity.capabilities);
-			// console.log ('vm.opportunity.capabilitySkills', vm.opportunity.capabilitySkills);
-			CapabilitiesMethods.dump (vm);			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
 			//

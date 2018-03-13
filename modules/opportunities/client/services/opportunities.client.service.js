@@ -172,7 +172,6 @@
 						[((!o.phases.proto.isPrototype              ) || (o.phases.proto.isPrototype && o.phases.proto.startDate)), 'Prototype Phase Start Date']
 					]
 				};
-				console.log (fields);
 				var errorFields = fields.common.reduce (function (accum, elem) {
 					if (!elem[0]) accum.push (elem[1]);
 					return accum;
