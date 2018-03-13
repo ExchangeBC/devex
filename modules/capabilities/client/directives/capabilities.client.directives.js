@@ -19,6 +19,7 @@
 			controller   : function ($sce, $rootScope, $scope, CapabilitiesService, Authentication) {
 				var vm         = this;
 				vm.trust       = $sce.trustAsHtml;
+				vm.auth        = Authentication.permissions ();
 				vm.title       = ($scope.title) ? $scope.title : null;
 				vm.canAdd      = vm.auth.isAdmin;
 				vm.context     = $scope.context;
