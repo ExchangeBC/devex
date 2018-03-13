@@ -148,7 +148,7 @@ hr {
 .edit-form {
   background: #fff;
   padding: 1em 1.5em; 
-  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
+  box-shadow: 0 4px 6px #000, 0 1px 3px #000;
 }
 
 .edit-form-header {
@@ -161,6 +161,10 @@ hr {
 }
 
 .edit-form-tab-content {
+  padding: 1em 0;
+}
+
+.edit-form-body {
   padding: 1em 0;
 }
 
@@ -312,6 +316,7 @@ h4.edit-form-header {
       &:focus {
         color: @gray-dark;
         border: none;
+        border-bottom: 4px solid #f26925;
         background: none;
         transition: none;
         cursor: default;
@@ -360,7 +365,7 @@ section.proposals-admin-view {
 }
 
 section.edit-form-background {
-  background: @gray-lighter;
+  background: @gray-light;
   padding: 10px;
 }
 

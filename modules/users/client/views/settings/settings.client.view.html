@@ -1,22 +1,21 @@
-<section class="list-page">	
-	<div class="container container-edit-form" role="main">
-		<div class="row">
-			<div class="col-xs-12">
-				<uib-tabset active>
-					<li ui-sref-active="active">
-						<a  id="settings.profile" ui-sref="settings.profile">Profile</a>
-					</li>
-					<li ui-sref-active="active">
-						<a  id="settings.privacy" ui-sref="settings.privacy">Privacy & Notifications</a>
-					</li>
-					<li ui-sref-active="active" ng-if="vm.features.swu">
-						<a  id="settings.skills" ui-sref="settings.skills">Capabilities & Skills</a>
-					</li>
-					<li ui-sref-active="active" ng-if="vm.features.swu">
-						<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
-					</li>
-				</uib-tabset>
-			</div>
+<section class="edit-form-background">	
+	
+	<div class="container edit-form" role="main">
+		<div class="edit-form-body">
+			<uib-tabset active>
+				<li ui-sref-active="active">
+					<a  id="settings.profile" ui-sref="settings.profile">Basic Profile</a>
+				</li>
+				<li ui-sref-active="active">
+					<a  id="settings.privacy" ui-sref="settings.privacy">Privacy & Notifications</a>
+				</li>
+				<li ui-sref-active="active" ng-if="vm.features.swu">
+					<a  id="settings.skills" ui-sref="settings.skills">Capabilities & Skills</a>
+				</li>
+				<li ui-sref-active="active" ng-if="vm.features.swu">
+					<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
+				</li>
+			</uib-tabset>
 		</div>
 		
 		<div ui-view></div>

@@ -1,4 +1,3 @@
-<br>
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
 	<div class="row">
 		<div class="col-sm-7">
@@ -167,18 +166,19 @@
 	</div>
 -->
 
-	<br/>
-	<div class="row">
-		<div class="col-xs-12">
-			<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Update profile</button>
+	<div class="edit-form-footer">
+		<div class="row">
+			<div class="col-xs-12">
+				<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
+			</div>
 		</div>
-		<br><br>
 		<hr>
-		<div class="col-xs-12">
-			<h4>Delete my profile</h4>
-			<p>Deleting your profile will erase your record as a contributor on projects and opportunities. There is no undo - make sure you're sure!</p>
-			<button class="btn btn-sm btn-danger" ng-click="vm.delete()"><i class="fa fa-trash"></i> Delete my profile</button>
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Delete my profile</h4>
+				<p>Deleting your profile will erase your record as a contributor on projects and opportunities. There is no undo - make sure you're sure!</p>
+				<button class="btn btn-sm btn-danger" ng-click="vm.delete()"><i class="fa fa-trash"></i> Delete my profile</button>
+			</div>
 		</div>
 	</div>
-
 </form>
