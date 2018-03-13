@@ -138,7 +138,7 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
-					<span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.earn|currency}}</span>
+					<span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.budget|currency}}</span>
 					<span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
@@ -186,11 +186,11 @@
 						<td>Phase Start Date</td>
 						<td>Phase End Date</td>
 					</thead>
-					<tr ng-if="vm.opportunity.isInception">
+					<tr ng-if="vm.opportunity.phases.inception.isInception">
 						<td>Inception</td>
 						<td>
 							<form-input
-								ng-model="vm.opportunity.inceptionStartDate"
+								ng-model="vm.opportunity.phases.inception.startDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
@@ -202,7 +202,7 @@
 							</form-input>
 						</td><td>
 							<form-input
-								ng-model="vm.opportunity.inceptionEndDate"
+								ng-model="vm.opportunity.phases.inception.endDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
@@ -214,11 +214,11 @@
 							</form-input>
 						</td>
 					</tr>
-					<tr ng-if="vm.opportunity.isPrototype">
+					<tr ng-if="vm.opportunity.phases.proto.isPrototype">
 						<td>Prototype</td>
 						<td>
 							<form-input
-								ng-model="vm.opportunity.prototypeStartDate"
+								ng-model="vm.opportunity.phases.proto.startDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
@@ -230,7 +230,7 @@
 							</form-input>
 						</td><td>
 							<form-input
-								ng-model="vm.opportunity.prototypeEndDate"
+								ng-model="vm.opportunity.phases.proto.endDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
@@ -242,11 +242,11 @@
 							</form-input>
 						</td>
 					</tr>
-					<tr ng-if="vm.opportunity.isImplementation">
+					<tr ng-if="vm.opportunity.phases.implementation.isImplementation">
 						<td>Implementation</td>
 						<td>
 							<form-input
-								ng-model="vm.opportunity.implementationStartDate"
+								ng-model="vm.opportunity.phases.implementation.startDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
@@ -258,7 +258,7 @@
 							</form-input>
 						</td><td>
 							<form-input
-								ng-model="vm.opportunity.implementationEndDate"
+								ng-model="vm.opportunity.phases.implementation.endDate"
 								x-form="vm.opportunityForm"
 								x-options='{
 									"disabled":"true",
