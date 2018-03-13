@@ -824,12 +824,6 @@
 			vm.opportunity.assignment.setHours(16);
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.opportunity.implementationEndDate.setHours(16);
-			vm.opportunity.implementationStartDate.setHours(16);
-			vm.opportunity.inceptionEndDate.setHours(16);
-			vm.opportunity.inceptionStartDate.setHours(16);
-			vm.opportunity.prototypeEndDate.setHours(16);
-			vm.opportunity.prototypeStartDate.setHours(16);
 
 
 			//

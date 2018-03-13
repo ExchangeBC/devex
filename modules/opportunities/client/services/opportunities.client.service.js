@@ -127,6 +127,13 @@
 				// removed background for now
 				//
 				// [(o.background), 'Background'],
+				if (!o.phases) {
+					o.phases = {
+						implementation : {},
+						inception : {},
+						proto : {}
+					}
+				}
 				var fields = {
 					common: [
 						[(o.name), 'Title'],
