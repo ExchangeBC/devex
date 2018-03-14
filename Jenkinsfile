@@ -10,7 +10,10 @@ def notifySlack(text, channel, url, attachments) {
         icon_url: jenkinsIcon,
         attachments: attachments
     ])
-    sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+    def encodedReq = URLEncoder.encode(payload, "UTF-8")
+    sh("curl -s -S -X POST " +
+            "--data \'payload=${encodedReq}\' ${slackURL}")
+    //sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
 @NonCPS
@@ -73,7 +76,7 @@ node('maven') {
 	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
-	    //notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
+	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
 
