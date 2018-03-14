@@ -11,7 +11,7 @@
 
 <!--<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.projects | columnRanges:vm.columnCount">-->
 
-<div class="card card-flat" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
+<div class="card card-project" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
 
   <div class="card-header" ng-if="vm.isAdmin || project.userIs.admin" style="text-align: right">
     <span ng-if="!project.isPublished" class="label label-danger"><i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
@@ -39,13 +39,14 @@
     </a>
   </div>
 
-  <div class="card-block" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })">
+  <div class="card-body" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })">
     <div class="label-list">
         <span class="label label-project-tags" ng-repeat="code in project.tags">{{code}}</span>
     </div>
     <div class="card-title" ng-bind="project.name"></div>
-    <p ng-bind="project.short"></p>
-    <p ng-if="!vm.program && project.program"><!--<a  id="programs.view" ui-sref="programs.view({programId:project.program.code})">--><i class="fa fa-university"></i>{{project.program.title}}</p>
+    <div class="card-teaser" ng-bind="project.short"></div>
+  </div>
+  <div class="card-footer" ng-if="!vm.program && project.program"><!--<a  id="programs.view" ui-sref="programs.view({programId:project.program.code})">--><i class="fa fa-university"></i> {{project.program.title}}
   </div>
 
 </div>

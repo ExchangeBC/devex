@@ -11,13 +11,13 @@
 
 <div class="row">
 	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
-		<div class="well">You'll be able to view submitted proposals here when the opportunity closes.</div>
+		<div class="well well-important">You'll be able to view submitted proposals here when the opportunity closes.</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="well"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
+		<div class="well well-important"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
 	</div>
 </div>
 

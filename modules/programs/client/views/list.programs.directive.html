@@ -10,7 +10,7 @@
 </div>
 
 
-<div class="card card-flat" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
+<div class="card card-program" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
 
   <div class="card-header" ng-if="vm.isAdmin || program.userIs.admin" style="text-align: right">
     <span ng-if="!program.isPublished" class="label label-danger" ><i class="fa fa-exclamation-triangle"></i> UNPUBLISHED</span>
@@ -29,25 +29,16 @@
     &nbsp;
     <a ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);"  id="programadmin.edit" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
   </div>
-
-  <div class="card-block" id="programs.view" ui-sref="programs.view({ programId: program.code })">
-    <div class="row">
-      <div class="col-xs-3 col-sm-2" style="text-align: center; padding: 5px;">
-        <div class="card-img">
-          <img class="img-rounded" style="height: 60px;" src="/{{program.logo}}"/>
-        </div>
-      </div>
-      <div class="col-xs-9 col-sm-10" style="margin-left: 0px;">
-        <div class="card-title" ng-bind="program.title"></div>
-        <p ng-bind="program.short"></p>
-      </div>
-    </div>
+  <img class="card-img-left" src="/{{program.logo}}">
+  <div class="card-body" id="programs.view" ui-sref="programs.view({ programId: program.code })">
+    <div class="card-title" ng-bind="program.title"></div>
+    <div class="card-teaser" ng-bind="program.short"></div>
+  </div>
     <!--<div class="row">
       <div class="label-list">
         <span class="label label-info" ng-repeat="code in program.tags">{{code}}</span>
       </div>
     </div>-->
-  </div>
 
 </div>
 
