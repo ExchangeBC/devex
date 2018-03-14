@@ -99,6 +99,9 @@
 		ppp.proposal     = proposal;
 		ppp.user         = Authentication.user;
 		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+		//
+		// this is all the people in the org
+		//
 		if (org) ppp.members = org.members.concat (org.admins);
 		if (!ppp.proposal.phases) {
 			ppp.proposal.phases = {
@@ -124,10 +127,33 @@
 			}
 		}
 		//
-		// set up the structures for capabilities
+		// lazy lazy lazy
+		// set up pointers to the proposal phases just so we dont have to type so much
+		// and also to the opportunity phases for the same reason
 		//
-		CapabilitiesMethods.init (ppp, ppp.opportunity, capabilities);
-		CapabilitiesMethods.dump (ppp, ppp.opportunity, capabilities);
+		ppp.p_imp = ppp.proposal.phases.implementation;
+		ppp.p_inp = ppp.proposal.phases.inception;
+		ppp.p_prp = ppp.proposal.phases.proto;
+		ppp.p_agg = ppp.proposal.phases.aggregate;
+		ppp.oimp  = ppp.opportunity.phases.implementation;
+		ppp.oinp  = ppp.opportunity.phases.inception;
+		ppp.oprp  = ppp.opportunity.phases.proto;
+		ppp.oagg  = ppp.opportunity.phases.aggregate;
+		//
+		// set up the structures for capabilities
+		// each little bucket continas the capabilities required for that phase
+		// as well as the specific skills
+		//
+		ppp.imp = {};
+		ppp.inp = {};
+		ppp.prp = {};
+		CapabilitiesMethods.init (ppp.imp, ppp.oimp, capabilities, 'implementation');
+		CapabilitiesMethods.init (ppp.inp, ppp.oinp, capabilities, 'inception');
+		CapabilitiesMethods.init (ppp.prp, ppp.oprp, capabilities, 'prototype');
+		CapabilitiesMethods.dump (ppp.inp, 'inception');
+		CapabilitiesMethods.dump (ppp.prp, 'prototype');
+		CapabilitiesMethods.dump (ppp.imp, 'implementation');
+
 		//
 		// questions: HACK, needs to be better and indexed etc etc
 		//

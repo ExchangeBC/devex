@@ -64,12 +64,17 @@
 			// dump out the current state
 			//
 			// -------------------------------------------------------------------------
-			dump: function (scope) {
+			dump: function (scope, title) {
+				title = (title || 'capabilities') + ':';
+				console.groupCollapsed (title);
 				console.log ('scope.capabilities', scope.capabilities);
+				console.log ('scope.capabilitySkills', scope.capabilitySkills);
 				console.log ('scope.iCapabilities', scope.iCapabilities);
 				console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
 				console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
+				console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
 				console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
+				console.groupEnd ();
 			},
 			// -------------------------------------------------------------------------
 			//
@@ -95,13 +100,24 @@
 					scope.capabilities = capabilities;
 				}
 				//
+				// a collection of all capability skills within scope.capabilities
+				//
+				scope.capabilitySkills = [];
+				//
 				// index all the capabilities and skills by code, these are links to the actual objects
 				//
 				scope.iCapabilities = {};
 				scope.iCapabilitySkills = {};
+				//
+				// an object of code:boolean pairs indicating whether or not the capability
+				// is required, is core, and of the skill is required
+				//
 				scope.iOppCapabilities = {};
 				scope.iOppCapabilitiesCore = {};
 				scope.iOppCapabilitySkills = {};
+				//
+				// a pair of objects linking _ids to codes
+				//
 				scope.i2cc = {};
 				scope.i2cs = {};
 				//
@@ -119,6 +135,7 @@
 					scope.iOppCapabilities[c.code] = false;
 					scope.iOppCapabilitiesCore[c.code] = false;
 					c.skills.forEach (function (capabilitySkill) {
+						scope.capabilitySkills.push (capabilitySkill);
 						scope.i2cs[capabilitySkill._id.toString()] = capabilitySkill.code;
 						scope.iCapabilitySkills[capabilitySkill.code] = capabilitySkill;
 						scope.iOppCapabilitySkills[capabilitySkill.code] = false;
@@ -127,12 +144,33 @@
 				//
 				// now set the ones we have to true
 				//
+				//
+				// first make a list of listed skills, this may include skills not
+				// under any required capability
+				//
+				var listedSkills = {};
+				model.capabilitySkills.forEach (function (capabilitySkill) {
+					listedSkills[capabilitySkill.code] = true;
+				});
+				//
+				// now deal with capabilities and only retrieve nested skills
+				//
 				model.capabilities.forEach (function (capability) {
 					scope.iOppCapabilities[capability.code] = true;
+					//
+					// only set skills for which we have capabilities, this is becuase
+					// we just happen to magically know that skills become disjoint
+					// from capabilities in the database since they are not nested
+					// and treated as subbordinate in some cases and aggregate in others
+					//
+					var c = scope.iCapabilities[capability.code];
+					c.skills.forEach (function (capabilitySkill) {
+						scope.iOppCapabilitySkills[capabilitySkill.code] = listedSkills[capabilitySkill.code] || false;
+					});
 				});
-				model.capabilitySkills.forEach (function (capabilitySkill) {
-					scope.iOppCapabilitySkills[capabilitySkill.code] = true;
-				});
+				// model.capabilitySkills.forEach (function (capabilitySkill) {
+				// 	scope.iOppCapabilitySkills[capabilitySkill.code] = true;
+				// });
 				model.capabilitiesCore.forEach (function (capability) {
 					scope.iOppCapabilitiesCore[capability.code] = true;
 				});
