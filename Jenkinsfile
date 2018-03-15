@@ -160,8 +160,9 @@ stage('deploy-test') {
 	  echo ">>>> Deployment Complete"
 	  //openshiftVerifyService svcName: 'platform-test', namespace: 'devex-platform-test'
 	  //echo ">>>> Service Verification Complete"
-	  mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca,steve.chapman@gov.bc.ca',
-           subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
-           body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
+	  //mail (to: 'paul.a.roberts@gov.bc.ca,mark.wilson@gov.bc.ca,chris.coldwell@gmail.com,angelika.ehlers@gov.bc.ca,steve.chapman@gov.bc.ca',
+          // subject: "FYI: Job '${env.JOB_NAME}' (${env.BUILD_NUMBER}) deployed to test", 
+          // body: "Changes:\n" + getChangeString() + "\n\nSee ${env.BUILD_URL} for details. ");
+	  notifySlack("Test Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
   }
 }
