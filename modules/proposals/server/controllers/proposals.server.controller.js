@@ -364,6 +364,87 @@ exports.forOpportunity = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
+// given an opportunity and an organization, return all members that are
+// qualified to be assigned to each phase in the proposal
+//
+// -------------------------------------------------------------------------
+exports.getPotentialResources = function (req, res) {
+	//
+	// gather up all the bits and peices
+	//
+	var user        = req.user;
+	var org         = req.org;
+	var opportunity = req.opportunity;
+	var allMembers  = _.uniq (org.members.concat (org.admins));
+	console.log ('whatall', allMembers);
+
+	//
+	// if the user is not an admin of the org then bail out
+	//
+	if (!(user._id === org.owner._id || !!~org.admins.indexOf (user._id))) {
+		return res.status (422).send ({
+			message: 'Not Authorized Silly'
+		});
+	}
+	//
+	// select all the users and start sifting them into buckets that match their capabilities
+	//
+	var ret = {
+		inception      : [],
+		proto          : [],
+		implementation : []
+	};
+	User.find ({
+		_id: {$in: allMembers}
+	})
+	.select ('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
+	.populate ('capabilities', 'code name')
+	.populate ('capabilitySkills', 'code name')
+	.exec (function (err, users) {
+		var i;
+		var j;
+		var c;
+		for (i = 0; i < users.length; i++) {
+			var user = users[i].toObject ();
+			user.iCapabilities = {};
+			user.iCapabilitySkills = {};
+			user.capabilities.forEach (function (c) {
+				user.iCapabilities[c.code] = true;
+			});
+			user.capabilitySkills.forEach (function (c) {
+				user.iCapabilitySkills[c.code] = true;
+			});
+			users[i] = user;
+			for (j=0; j<opportunity.phases.inception.capabilities.length; j++) {
+				c = opportunity.phases.inception.capabilities[j].code;
+				console.log ('code:', c);
+				if (user.iCapabilities[c]) {
+					ret.inception.push (user);
+					break;
+				}
+			}
+			for (j=0; j<opportunity.phases.proto.capabilities.length; j++) {
+				c = opportunity.phases.proto.capabilities[j].code;
+				if (user.iCapabilities[c]) {
+					ret.proto.push (user);
+					break;
+				}
+			}
+			for (j=0; j<opportunity.phases.implementation.capabilities.length; j++) {
+				c = opportunity.phases.implementation.capabilities[j].code;
+				if (user.iCapabilities[c]) {
+					ret.implementation.push (user);
+					break;
+				}
+			}
+		};
+		ret.all = users;
+		res.json (ret);
+	});
+}
+
+// -------------------------------------------------------------------------
+//
 // new empty proposal
 //
 // -------------------------------------------------------------------------

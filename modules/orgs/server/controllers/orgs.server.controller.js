@@ -359,6 +359,27 @@ exports.orgByID = function (req, res, next, id) {
 		next();
 	});
 };
+exports.orgByIDSmall = function (req, res, next, id) {
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(400).send({
+			message: 'Org is invalid'
+		});
+	}
+	Org.findById (id)
+	.populate ('owner', '_id lastName firstName displayName profileImageURL')
+	.exec (function (err, org) {
+		if (err) {
+			return next(err);
+		} else if (!org) {
+			return res.status(200).send ({});
+			// return res.status(404).send({
+			// 	message: 'No org with that identifier has been found'
+			// });
+		}
+		req.org = org;
+		next();
+	});
+};
 // -------------------------------------------------------------------------
 //
 // Logo upload

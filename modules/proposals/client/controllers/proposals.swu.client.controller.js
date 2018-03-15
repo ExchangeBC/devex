@@ -15,7 +15,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
 		ppp.features = window.features;
 		ppp.proposal      = proposal;
@@ -81,7 +81,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -94,7 +94,7 @@
 		}
 		ppp.opportunity  = opportunity;
 		ppp.org          = org;
-		ppp.members      = [];
+		ppp.members      = resources;
 		ppp.title        = editing ? 'Edit' : 'Create' ;
 		ppp.proposal     = proposal;
 		ppp.user         = Authentication.user;
@@ -102,7 +102,6 @@
 		//
 		// this is all the people in the org
 		//
-		if (org) ppp.members = org.members.concat (org.admins);
 		if (!ppp.proposal.phases) {
 			ppp.proposal.phases = {
 				implementation : {
@@ -282,7 +281,12 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
-			copyuser ();
+			ppp.proposal.opportunity          = ppp.opportunity;
+			ppp.proposal.businessName         = ppp.org.name;
+			ppp.proposal.businessAddress      = ppp.org.fullAddress;
+			ppp.proposal.businessContactName  = ppp.org.contactName;
+			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
 			ProposalsService.submit (ppp.proposal).$promise
 			.then (
 				function (response) {

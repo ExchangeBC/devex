@@ -210,6 +210,15 @@
 					var org = orgs[0];
 					if (org) return OrgsService.get ({orgId:org}).$promise;
 					else return null;
+				},
+				resources: function (Authentication, ProposalsService, $stateParams) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return ProposalsService.getPotentialResources ({
+						opportunityId : $stateParams.opportunityId,
+						orgId         : org
+					}).$promise;
+					else return null;
 				}
 			}
 		})
@@ -229,7 +238,7 @@
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
-				proposal: function ($stateParams, ProposalsService) {
+				proposal: function (ProposalsService) {
 					return new ProposalsService ();
 				},
 				opportunity: function ($stateParams, OpportunitiesService) {
@@ -241,6 +250,15 @@
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
 					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
+				resources: function (Authentication, ProposalsService, $stateParams) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return ProposalsService.getPotentialResources ({
+						opportunityId : $stateParams.opportunityId,
+						orgId         : org
+					}).$promise;
 					else return null;
 				},
 				editing: function () { return false; }

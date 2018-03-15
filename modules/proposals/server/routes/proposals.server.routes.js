@@ -24,6 +24,12 @@ module.exports = function(app) {
 	//
 	// proposals for opportunity
 	//
+	app.route('/api/proposals/resources/opportunity/:opportunityId/org/:orgSmallId')
+		.get(proposals.getPotentialResources);
+
+	//
+	// potential resources that match up to opportunity requirements
+	//
 	app.route('/api/proposals/for/opportunity/:opportunityId')
 		.get(proposals.forOpportunity);
 
