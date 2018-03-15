@@ -12,8 +12,7 @@ def notifySlack(text, channel, url, attachments) {
     ])
     def encodedReq = URLEncoder.encode(payload, "UTF-8")
     sh("curl -s -S -X POST " +
-            "--data \'payload=${encodedReq}\' ${slackURL}")
-    //sh "curl -s -S -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
+            "--data \'payload=${encodedReq}\' ${slackURL}")    
 }
 
 @NonCPS
