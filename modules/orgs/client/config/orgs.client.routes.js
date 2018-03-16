@@ -74,8 +74,8 @@
 						orgId: $stateParams.orgId
 					}).$promise;
 				},
-				capabilities: function (SkillsService) {
-					return SkillsService.list ().$promise;
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -96,8 +96,8 @@
 						orgId: $stateParams.orgId
 					}).$promise;
 				},
-				capabilities: function (SkillsService) {
-					return SkillsService.list ().$promise;
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			},
 			data: {
@@ -113,8 +113,8 @@
 				pageTitle: 'Company Settings'
 			},
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.query ().$promise;
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -127,8 +127,8 @@
 				pageTitle: 'Company Skills'
 			},
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.list ().$promise;
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -139,6 +139,11 @@
 			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Company Members'
+			},
+			resolve: {
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
+				}
 			}
 		})
 		.state ('orgadmin.teams', {

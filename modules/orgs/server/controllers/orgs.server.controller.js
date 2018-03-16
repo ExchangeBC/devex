@@ -346,6 +346,8 @@ exports.orgByID = function (req, res, next, id) {
 	.populate ('updatedBy', 'displayName')
 	.populate ('members', popfields)
 	.populate ('admins', popfields)
+	.populate ('capabilities', 'code name')
+	.populate ('capabilitySkills', 'code name')
 	.exec (function (err, org) {
 		if (err) {
 			return next(err);

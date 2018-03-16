@@ -12,7 +12,7 @@
 				<div class="card card-user">
 					<img class="card-img-left" src="/img/Zeb_avatar.png">
 					<div class="card-body">
-						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>	
+						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>
 						<div class="card-title">Mark Wilson</div>
 						<label-list>
 							<label class="label label-uxresearch">UX Research</label>
@@ -72,9 +72,10 @@
 		    	<br>
 		    	<table class="table capabilities-list">
 					<tbody>
-						<tr>
-							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<td><label class="label label-lg label-agilecoaching">Agile Coaching</label></td>
+						<tr ng-repeat="capability in vm.capabilities">
+							<th scope="row" ng-if="vm.iOppCapability[capability.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+							<th scope="row" ng-if="!vm.iOppCapability[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
 						</tr>
 						<tr>
 							<th scope="row"><i class="fa fa-check-circle-o fa-lg success"></i></th>

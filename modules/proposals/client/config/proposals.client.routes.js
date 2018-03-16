@@ -20,7 +20,7 @@
 			template: '<ui-view/>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
-					return CapabilitiesService.query ();
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -41,7 +41,7 @@
 			},
 			resolve: {
 				proposals: function ($stateParams, ProposalsService) {
-					return ProposalsService.query ();
+					return ProposalsService.query ().$promise;
 				}
 			},
 			controller: 'ProposalsListController',
@@ -106,7 +106,7 @@
 			},
 			resolve: {
 				capabilities: function (CapabilitiesService) {
-					return CapabilitiesService.query ();
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})

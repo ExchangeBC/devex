@@ -180,7 +180,7 @@
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
-		vm.capabilities     = capabilities;
+		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
 			vm.orgForm.$setPristine ();
 			if (!isValid) {
@@ -229,10 +229,12 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService) {
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
+		console.log ('whatcaps', capabilities);
+		CapabilitiesMethods.init (vm, vm.org, capabilities);
 		// -------------------------------------------------------------------------
 		//
 		// refresh the organization and also the additions email list
