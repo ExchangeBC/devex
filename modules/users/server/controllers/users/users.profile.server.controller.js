@@ -61,7 +61,10 @@ var whitelistedFields = [
 	'isPublicProfile',
 	'isAutoAdd',
 	'capabilityDetails',
-	'capabilitySkills'
+	'capabilitySkills',
+	'opportunityAdmEmail',
+	'opportunityBranchEmail',
+	'opportunityDivisionalEmail'
 
 ];
 
@@ -295,8 +298,11 @@ exports.me = function (req, res) {
 			linkedIn                : req.user.linkedIn,
 			isPublicProfile         : req.user.isPublicProfile,
 			isAutoAdd               : req.user.isAutoAdd,
-			capabilityDetails : req.user.capabilityDetails,
-			capabilitySkills : req.user.capabilitySkills
+			capabilityDetails       : req.user.capabilityDetails,
+			capabilitySkills        : req.user.capabilitySkills,
+			opportunityAdmEmail     : req.user.opportunityAdmEmail,
+			opportunityBranchEmail  : req.user.opportunityBranchEmail,
+			opportunityDivisionalEmail : req.user.opportunityDivisionalEmail
 
 		};
 	}
