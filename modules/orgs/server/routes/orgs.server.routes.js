@@ -28,4 +28,5 @@ module.exports = function (app) {
 
 	// Finish by binding the org middleware
 	app.param('orgId', orgs.orgByID);
+	app.param('orgSmallId', orgs.orgByIDSmall);
 };
