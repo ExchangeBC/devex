@@ -229,11 +229,11 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods) {
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
-		console.log ('whatcaps', capabilities);
+		// console.log ('whatcaps', capabilities);
 		CapabilitiesMethods.init (vm, vm.org, capabilities);
 		// -------------------------------------------------------------------------
 		//
@@ -245,6 +245,7 @@
 			OrgsService.get ({orgId: vm.org._id}).$promise
 			.then (function (org) {
 				vm.org = org;
+				CapabilitiesMethods.init (vm, vm.org, capabilities);
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -275,13 +276,20 @@
 			}
 		};
 		vm.removeMember = function (member) {
-			// console.log ('remove person');
-			OrgsService.removeUser ({
-				orgId: vm.org._id,
-				userId: member._id
-			}).$promise.then (function (org) {
-				vm.refresh ();
+			ask.yesNo ('Are you sure you wish to remove this user from your company?')
+			.then (function (yes) {
+				if (yes) {
+					OrgsService.removeUser ({
+						orgId: vm.org._id,
+						userId: member._id
+					}).$promise.then (function (org) {
+						vm.refresh ();
+					});
+				}
 			});
+		};
+		vm.save = function () {
+			vm.org.createOrUpdate ()
 		};
 	})
 	// =========================================================================
