@@ -124,19 +124,16 @@ var c = isNaN(ic = Math.abs(ic)) ? 2 : ic,
  };
 
 exports.formatDate = function (d) {
-	  var monthNames = [
-    'January', 'February', 'March',
-    'April', 'May', 'June', 'July',
-    'August', 'September', 'October',
-    'November', 'December'
-  ];
-  var day = d.getDate();
-  var monthIndex = d.getMonth();
-  var year = d.getFullYear();
-
-
-
-  return monthNames[monthIndex] + ' ' + day + ', '+ year;
+var monthNames = [
+'January', 'February', 'March',
+'April', 'May', 'June', 'July',
+'August', 'September', 'October',
+'November', 'December'
+];
+var day = d.getDate();
+var monthIndex = d.getMonth();
+var year = d.getFullYear();
+return monthNames[monthIndex] + ' ' + day + ', '+ year;
 }
 
 exports.formatTime = function (d) {

@@ -398,8 +398,8 @@ exports.getPotentialResources = function (req, res) {
 		_id: {$in: allMembers}
 	})
 	.select ('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
-	.populate ('capabilities', 'code name')
-	.populate ('capabilitySkills', 'code name')
+	.populate ('capabilities', 'code name labelClass')
+	.populate ('capabilitySkills', 'code name labelClass')
 	.exec (function (err, users) {
 		var i;
 		var j;
@@ -470,7 +470,10 @@ exports.proposalByID = function (req, res, next, id) {
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')
 	.populate('user', userfields)
-	.populate('team')
+	.populate('phases.implementation.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL')
 	.exec(function (err, proposal) {
 		if (err) {
 			return next(err);

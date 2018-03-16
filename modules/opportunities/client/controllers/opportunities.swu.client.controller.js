@@ -599,23 +599,23 @@
 				proto : {}
 			}
 		}
-		vm.oimp                           = vm.opportunity.phases.implementation;
-		vm.oinp                           = vm.opportunity.phases.inception;
-		vm.oprp                           = vm.opportunity.phases.proto;
-		vm.oagg                           = vm.opportunity.phases.aggregate;
-		vm.opportunity.deadline          = new Date (vm.opportunity.deadline);
-		vm.opportunity.assignment        = new Date (vm.opportunity.assignment);
-		vm.opportunity.start             = new Date (vm.opportunity.start)		;
-		vm.opportunity.endDate           = new Date (vm.opportunity.endDate)	;
-		vm.oimp.endDate                   = new Date (vm.oimp.endDate  );
-		vm.oimp.startDate                 = new Date (vm.oimp.startDate);
-		vm.oinp.endDate                   = new Date (vm.oinp.endDate       );
-		vm.oinp.startDate                 = new Date (vm.oinp.startDate     );
-		vm.oprp.endDate                   = new Date (vm.oprp.endDate       );
-		vm.oprp.startDate                 = new Date (vm.oprp.startDate     );
-		vm.authentication                = Authentication;
-		vm.form                          = {};
-		vm.opportunity.skilllist         = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.oimp                   = vm.opportunity.phases.implementation;
+		vm.oinp                   = vm.opportunity.phases.inception;
+		vm.oprp                   = vm.opportunity.phases.proto;
+		vm.oagg                   = vm.opportunity.phases.aggregate;
+		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
+		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
+		vm.opportunity.start      = new Date (vm.opportunity.start)		;
+		vm.opportunity.endDate    = new Date (vm.opportunity.endDate)	;
+		vm.oimp.endDate           = new Date (vm.oimp.endDate  );
+		vm.oimp.startDate         = new Date (vm.oimp.startDate);
+		vm.oinp.endDate           = new Date (vm.oinp.endDate       );
+		vm.oinp.startDate         = new Date (vm.oinp.startDate     );
+		vm.oprp.endDate           = new Date (vm.oprp.endDate       );
+		vm.oprp.startDate         = new Date (vm.oprp.startDate     );
+		vm.authentication         = Authentication;
+		vm.form                   = {};
+		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//

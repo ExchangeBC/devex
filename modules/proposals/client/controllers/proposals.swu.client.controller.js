@@ -1,5 +1,17 @@
 (function () {
 	'use strict';
+	var formatDate = function (d) {
+		var monthNames = [
+		'January', 'February', 'March',
+		'April', 'May', 'June', 'July',
+		'August', 'September', 'October',
+		'November', 'December'
+		];
+		var day = d.getDate();
+		var monthIndex = d.getMonth();
+		var year = d.getFullYear();
+		return monthNames[monthIndex] + ' ' + day + ', '+ year;
+	}
 	angular.module('proposals')
 	// =========================================================================
 	//
@@ -82,110 +94,239 @@
 	//
 	// =========================================================================
 	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
-		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
-		ppp.features                              = window.features;
-		ppp.trust            = $sce.trustAsHtml;
-		//
-		// check we have an opp
-		//
-		if (!opportunity) {
-			console.error ('no opportunity was provided!');
-		}
-		ppp.opportunity  = opportunity;
-		ppp.org          = org;
-		ppp.members      = resources;
-		ppp.title        = editing ? 'Edit' : 'Create' ;
-		ppp.proposal     = proposal;
-		ppp.user         = Authentication.user;
-		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
-		//
-		// this is all the people in the org
-		//
-		if (!ppp.proposal.phases) {
-			ppp.proposal.phases = {
-				implementation : {
-					isImplementation : false,
-					team             : [],
-					cost             : 0
-				},
-				inception : {
-					isInception : false,
-					team        : [],
-					cost        : 0
-				},
-				proto : {
-					isPrototype : false,
-					team        : [],
-					cost        : 0
-				},
-				aggregate : {
-					team : [],
-					cost : 0
+		var _init = function () {
+			ppp.features = window.features;
+			ppp.trust    = $sce.trustAsHtml;
+			//
+			// check we have an opp
+			//
+			if (!opportunity) {
+				console.error ('no opportunity was provided!');
+			}
+			ppp.opportunity  = opportunity;
+			ppp.org          = org;
+			ppp.members      = resources;
+			ppp.title        = editing ? 'Edit' : 'Create' ;
+			ppp.proposal     = proposal;
+			ppp.user         = Authentication.user;
+			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+			//
+			// this is all the people in the org
+			//
+			if (!ppp.proposal.phases) {
+				ppp.proposal.phases = {
+					implementation : {
+						isImplementation : false,
+						team             : [],
+						cost             : 0
+					},
+					inception : {
+						isInception : false,
+						team        : [],
+						cost        : 0
+					},
+					proto : {
+						isPrototype : false,
+						team        : [],
+						cost        : 0
+					},
+					aggregate : {
+						team : [],
+						cost : 0
+					}
 				}
 			}
-		}
-		//
-		// lazy lazy lazy
-		// set up pointers to the proposal phases just so we dont have to type so much
-		// and also to the opportunity phases for the same reason
-		//
-		ppp.p_imp = ppp.proposal.phases.implementation;
-		ppp.p_inp = ppp.proposal.phases.inception;
-		ppp.p_prp = ppp.proposal.phases.proto;
-		ppp.p_agg = ppp.proposal.phases.aggregate;
-		ppp.oimp  = ppp.opportunity.phases.implementation;
-		ppp.oinp  = ppp.opportunity.phases.inception;
-		ppp.oprp  = ppp.opportunity.phases.proto;
-		ppp.oagg  = ppp.opportunity.phases.aggregate;
-		//
-		// set up the structures for capabilities
-		// each little bucket continas the capabilities required for that phase
-		// as well as the specific skills
-		//
-		ppp.imp = {};
-		ppp.inp = {};
-		ppp.prp = {};
-		CapabilitiesMethods.init (ppp.imp, ppp.oimp, capabilities, 'implementation');
-		CapabilitiesMethods.init (ppp.inp, ppp.oinp, capabilities, 'inception');
-		CapabilitiesMethods.init (ppp.prp, ppp.oprp, capabilities, 'prototype');
-		CapabilitiesMethods.dump (ppp.inp, 'inception');
-		CapabilitiesMethods.dump (ppp.prp, 'prototype');
-		CapabilitiesMethods.dump (ppp.imp, 'implementation');
-
-		//
-		// questions: HACK, needs to be better and indexed etc etc
-		//
-		ppp.questions = dataService.questions;
-		var i;
-		if (!ppp.proposal.questions) ppp.proposal.questions = [];
-		for (i=0; i<ppp.questions.length; i++) {
-			if (!ppp.proposal.questions[i]) {
-				ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
+			//
+			// lazy lazy lazy
+			// set up pointers to the proposal phases just so we dont have to type so much
+			// and also to the opportunity phases for the same reason
+			//
+			ppp.p_imp          = ppp.proposal.phases.implementation;
+			ppp.p_inp          = ppp.proposal.phases.inception;
+			ppp.p_prp          = ppp.proposal.phases.proto;
+			ppp.p_agg          = ppp.proposal.phases.aggregate;
+			ppp.oimp           = ppp.opportunity.phases.implementation;
+			ppp.oinp           = ppp.opportunity.phases.inception;
+			ppp.oprp           = ppp.opportunity.phases.proto;
+			ppp.oagg           = ppp.opportunity.phases.aggregate;
+			ppp.oimp.f_endDate   = formatDate (new Date (ppp.oimp.endDate  ));
+			ppp.oimp.f_startDate = formatDate (new Date (ppp.oimp.startDate));
+			ppp.oinp.f_endDate   = formatDate (new Date (ppp.oinp.endDate  ));
+			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
+			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
+			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
+			//
+			// set up the structures for capabilities
+			// each little bucket continas the capabilities required for that phase
+			// as well as the specific skills
+			//
+			ppp.imp = {};
+			ppp.inp = {};
+			ppp.prp = {};
+			CapabilitiesMethods.init (ppp.imp, ppp.oimp, capabilities, 'implementation');
+			CapabilitiesMethods.init (ppp.inp, ppp.oinp, capabilities, 'inception');
+			CapabilitiesMethods.init (ppp.prp, ppp.oprp, capabilities, 'prototype');
+			//
+			// now we need to make an index on the phase teams so we know who is
+			// in and who is out of each team, key by email as it is unique
+			// and we dont habve to worry about issues comparing _ids
+			//
+			ppp.iTeam = {};
+			ppp.inTeam = {}
+			ppp.proposal.phases.inception.team.forEach (function (member) {
+				ppp.inTeam[member.email] = true;
+				ppp.iTeam = member;
+			});
+			ppp.prTeam = {}
+			ppp.proposal.phases.proto.team.forEach (function (member) {
+				ppp.prTeam[member.email] = true;
+				ppp.iTeam = member;
+			});
+			ppp.imTeam = {}
+			ppp.proposal.phases.implementation.team.forEach (function (member) {
+				ppp.imTeam[member.email] = true;
+				ppp.iTeam = member;
+			});
+			//
+			// set up the structure that indicates the aggregate view of member's
+			// capabilties ans skills within each phase
+			//
+			ppp.p_inp.iPropCapabilities = {};
+			ppp.p_inp.iPropCapabilitySkills = {};
+			ppp.p_prp.iPropCapabilities = {};
+			ppp.p_prp.iPropCapabilitySkills = {};
+			ppp.p_imp.iPropCapabilities = {};
+			ppp.p_imp.iPropCapabilitySkills = {};
+			//
+			// questions: HACK, needs to be better and indexed etc etc
+			//
+			ppp.questions = dataService.questions;
+			var i;
+			if (!ppp.proposal.questions) ppp.proposal.questions = [];
+			for (i=0; i<ppp.questions.length; i++) {
+				if (!ppp.proposal.questions[i]) {
+					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
+				}
 			}
-		}
-		// console.log ('questions', ppp.proposal.questions);
+			// console.log ('questions', ppp.proposal.questions);
 
-		ppp.totals = {};
-		ppp.tinymceOptions = TINYMCE_OPTIONS;
-		//
-		// set up the html display stuff
-		//
-		ppp.display = {};
-		ppp.display.description    = $sce.trustAsHtml(ppp.opportunity.description);
-		ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
-		ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
-		//
-		// ensure status set accordingly
-		//
-		if (!editing) {
-			ppp.proposal.status = 'New';
+			ppp.totals = {};
+			ppp.tinymceOptions = TINYMCE_OPTIONS;
+			//
+			// set up the html display stuff
+			//
+			ppp.display = {};
+			ppp.display.description    = $sce.trustAsHtml(ppp.opportunity.description);
+			ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
+			ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
+			//
+			// ensure status set accordingly
+			//
+			if (!editing) {
+				ppp.proposal.status = 'New';
+			}
+			//
+			// what type of opportunity is this? this will determine what tabs get shown
+			//
+			ppp.isSprintWithUs = true;
+			ppp.proposal.isCompany = true;
 		}
+		// -------------------------------------------------------------------------
 		//
-		// what type of opportunity is this? this will determine what tabs get shown
+		// set the skills and capabilities per phase based on the team selection
 		//
-		ppp.isSprintWithUs = true;
-		ppp.proposal.isCompany = true;
+		// -------------------------------------------------------------------------
+		var setSkills = function () {
+			//
+			// reset all the flags
+			//
+			ppp.p_inp.iPropCapabilities = {};
+			ppp.p_inp.iPropCapabilitySkills = {};
+			ppp.p_prp.iPropCapabilities = {};
+			ppp.p_prp.iPropCapabilitySkills = {};
+			ppp.p_imp.iPropCapabilities = {};
+			ppp.p_imp.iPropCapabilitySkills = {};
+			//
+			// go through each capability and set the flag if any team member
+			// has the capability
+			//
+			ppp.inp.capabilities.forEach (function (c) {
+				var code = c.code;
+				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
+					if (!ppp.inTeam[member.email]) return false;
+					else return member.iCapabilities[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+			ppp.prp.capabilities.forEach (function (c) {
+				var code = c.code;
+				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
+					if (!ppp.prTeam[member.email]) return false;
+					else return member.iCapabilities[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+			ppp.imp.capabilities.forEach (function (c) {
+				var code = c.code;
+				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
+					if (!ppp.imTeam[member.email]) return false;
+					else return member.iCapabilities[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+			//
+			// now skills
+			//
+			ppp.inp.capabilitySkills.forEach (function (c) {
+				var code = c.code;
+				ppp.p_inp.iPropCapabilitySkills[code] = ppp.members.inception.map (function (member) {
+					if (!ppp.inTeam[member.email]) return false;
+					else return member.iCapabilitySkills[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+			ppp.prp.capabilitySkills.forEach (function (c) {
+				var code = c.code;
+				ppp.p_prp.iPropCapabilitySkills[code] = ppp.members.proto.map (function (member) {
+					if (!ppp.prTeam[member.email]) return false;
+					else return member.iCapabilitySkills[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+			ppp.imp.capabilitySkills.forEach (function (c) {
+				var code = c.code;
+				ppp.p_imp.iPropCapabilitySkills[code] = ppp.members.implementation.map (function (member) {
+					if (!ppp.imTeam[member.email]) return false;
+					else return member.iCapabilitySkills[code];
+				}).reduce (function (accum, el) {return accum || el}, false);
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// set the team arrays from the boolean lists
+		//
+		// -------------------------------------------------------------------------
+		var setTeams = function () {
+			ppp.p_inp.team = [];
+			ppp.members.inception.forEach (function (member) {
+				if (ppp.inTeam[member.email]) ppp.p_inp.team.push (member);
+			});
+			ppp.p_prp.team = [];
+			ppp.members.proto.forEach (function (member) {
+				if (ppp.prTeam[member.email]) ppp.p_prp.team.push (member);
+			});
+			ppp.p_imp.team = [];
+			ppp.members.implementation.forEach (function (member) {
+				if (ppp.imTeam[member.email]) ppp.p_imp.team.push (member);
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// when a member name is selecetd or deselected set the flag indicating such
+		// and add or remove the member's capabilities and skills from the overall
+		// phase list of capbilities and skills
+		//
+		// -------------------------------------------------------------------------
+		ppp.clickMember = function (member, boolIndex) {
+			boolIndex[member.email] = !boolIndex[member.email];
+			setSkills ();
+		};
 		// -------------------------------------------------------------------------
 		//
 		// save the proposal - promise
@@ -198,6 +339,7 @@
 			ppp.proposal.businessContactName  = ppp.org.contactName;
 			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
 			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			setTeams ();
 			return new Promise (function (resolve, reject) {
 				ppp.proposal.createOrUpdate ()
 				.then (
@@ -287,6 +429,7 @@
 			ppp.proposal.businessContactName  = ppp.org.contactName;
 			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
 			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			setTeams ();
 			ProposalsService.submit (ppp.proposal).$promise
 			.then (
 				function (response) {
@@ -357,6 +500,14 @@
 			else if (type.indexOf ('excel') > -1) return 'excel';
 			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
+		// -------------------------------------------------------------------------
+		//
+		// initialize the controller and then initialize the proposal capabilities
+		// and skills as aggreagate of the teams's
+		//
+		// -------------------------------------------------------------------------
+		_init ();
+		setSkills ();
 	})
 	;
 }());
