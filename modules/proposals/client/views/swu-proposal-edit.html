@@ -345,6 +345,87 @@
 							</table>
 						</div>
 					</uib-tab>
+					<uib-tab>
+						<uib-tab-heading>
+							Summary
+						</uib-tab-heading>
+						<div class="row">
+							<div class="col-xs-12">
+								<div class="alert alert-info">Here's the team you're putting forward. If you want to change team members or price, go back to the <span class="strong">Team &amp; Cost</span> tab.</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12 col-sm-4 text-center">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<i class="fa fa-map"></i> Inception
+										<br><br>
+										<i class="fa fa-calendar"></i> &nbsp;
+										<span class="strong">{{ppp.oinp.f_startDate}}</span> to <span class="strong">{{ppp.oinp.f_startDate}}</span>
+									</div>
+									<div class="panel-body">
+										<ul>
+											<li class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
+												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+											</li>
+										</ul>
+									</div>
+									<div class="panel-footer">
+										Price: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-4 text-center">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<i class="fa fa-rocket"></i> Proof of Concept Phase
+										<br><br>								  	  		<i class="fa fa-calendar"></i> &nbsp;
+										<span class="strong">{{ppp.oprp.f_startDate}}</span> to <span class="strong">{{ppp.oprp.f_startDate}}</span>
+									</div>
+									<div class="panel-body">
+										<ul>
+											<li class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
+												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+											</li>
+										</ul>
+									</div>
+									<div class="panel-footer">
+										Price: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xs-12 col-sm-4 text-center">
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<i class="fa fa-gears"></i> Implementation Phase
+										<br><br>
+										<i class="fa fa-calendar"></i> &nbsp;
+										<span class="strong">{{ppp.oimp.f_startDate}}</span> to <span class="strong">{{ppp.oimp.f_startDate}}</span>
+									</div>
+									<div class="panel-body">
+										<ul>
+											<li class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
+												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+											</li>
+										</ul>
+									</div>
+									<div class="panel-footer">
+										Price: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-4 pull-right">
+								<h4 style="text-align: center;"><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+							</div>
+						</div>
+
+					</uib-tab>
 
 				</uib-tabset>
 
