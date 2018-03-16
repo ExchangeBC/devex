@@ -12,7 +12,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
+	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -44,6 +44,7 @@
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
+		vm.canApply = org && org.metRFQ;
 		//
 		// set up the structures for capabilities
 		//

@@ -111,6 +111,12 @@
 				subscriptions: function (NotificationsService) {
 					return NotificationsService.subscriptions().$promise;
 				},
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
 				myproposal: function ($stateParams, ProposalsService, Authentication) {
 					if (!Authentication.user) return {};
 					return ProposalsService.myopp ({
