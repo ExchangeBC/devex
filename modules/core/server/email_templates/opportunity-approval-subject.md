@@ -1,1 +1,1 @@
-New Opportunity Pending Approval ({{opportunity.name}})
+New Opportunity Pending Approval ({{ opportunityId }})
