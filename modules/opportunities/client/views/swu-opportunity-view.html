@@ -49,7 +49,7 @@
 		<div class="row" ng-if="vm.canEdit">
 			<div class="col-xs-12">
 				<!-- // if opportunity is in DRAFT and can be submitted // -->
-				<div class="pull-right" ng-if="vm.canSubmit && vm.opportunity.status === 'Draft' && vm.opportunity.project.isPublished" role="group">
+				<div class="pull-right" ng-if="vm.canSubmit && vm.opportunity.status === 'Draft' && vm.isGov" role="group">
 					<button type="button" class="btn btn-success" ui-sref="opportunityadmin.submit({opportunityId:vm.opportunity.code})">Submit for Approval</button>
 				</div>
 
