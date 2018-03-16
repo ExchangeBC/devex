@@ -39,7 +39,21 @@
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
-		ppp.isSprintWithUs = false;
+		ppp.isSprintWithUs = true;
+			ppp.p_imp          = ppp.proposal.phases.implementation;
+			ppp.p_inp          = ppp.proposal.phases.inception;
+			ppp.p_prp          = ppp.proposal.phases.proto;
+			ppp.p_agg          = ppp.proposal.phases.aggregate;
+			ppp.oimp           = ppp.opportunity.phases.implementation;
+			ppp.oinp           = ppp.opportunity.phases.inception;
+			ppp.oprp           = ppp.opportunity.phases.proto;
+			ppp.oagg           = ppp.opportunity.phases.aggregate;
+			ppp.oimp.f_endDate   = formatDate (new Date (ppp.oimp.endDate  ));
+			ppp.oimp.f_startDate = formatDate (new Date (ppp.oimp.startDate));
+			ppp.oinp.f_endDate   = formatDate (new Date (ppp.oinp.endDate  ));
+			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
+			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
+			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
 		// -------------------------------------------------------------------------
 		//
 		// close the window
