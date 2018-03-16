@@ -9,7 +9,7 @@ var notificationsPolicy = require('../policies/notifications.server.policy'),
 module.exports = function(app) {
 	// Notifications Routes
 	//
-	// these should change and be focussed on templates more when we change to
+	// these should change and be focused on templates more when we change to
 	// database stored templates and notification meta data properly
 	//
 	app.route('/api/notifications').all(notificationsPolicy.isAllowed)
@@ -57,6 +57,7 @@ module.exports = function(app) {
 	app.route ('/api/check/subscriptions').all(notificationsPolicy.isAllowed).get(notifications.checkSubscriptions);
 
 	app.route('/api/cc/tryme').get(notifications.tryme);
+	app.route('/api/sendAdHoc').post(notifications.sendAdHoc);
 
 	// Finish by binding the Notification middleware
 	app.param('notificationId', notifications.notificationByID);

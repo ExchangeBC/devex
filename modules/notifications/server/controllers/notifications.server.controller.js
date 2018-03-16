@@ -806,3 +806,13 @@ exports.tryme = function (req, res) {
 	getTemplates ({target:'program', event:'add'}, {});
 	res.json({ok:true});
 };
+
+exports.sendAdHoc = function(req, res) {
+    exports.notifyUserAdHoc(req.body.templateName, req.body)
+        .then(function() {
+            res.json({ok:true});
+        })
+        .catch(function(error) {
+            res.status(500).json({message:'Failed to send email: ' + error.code});
+        })
+};

@@ -49,6 +49,10 @@
 				method: 'DELETE',
 				url: '/api/my/notification/:notificationId',
 				isArray: false
+			},
+			adHocNotification: {
+				method: 'POST',
+				url: '/api/sendAdHoc'
 			}
 		});
 
