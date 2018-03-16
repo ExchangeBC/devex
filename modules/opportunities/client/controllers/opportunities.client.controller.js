@@ -651,7 +651,7 @@
 		vm.saveme = function () {
 			this.save (true);
 		};
-		vm.save = function (isValid) {
+		vm.save = function (isValid, isSubmitting) {
 
 			if (!vm.opportunity.name) {
 				Notification.error ({
@@ -699,18 +699,32 @@
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
 
+			//
+			// AS - Set all opportunity status' to 'Draft' or 'Pending' depending on if user is submitting for ADM approval
+			//
+			if (isSubmitting) {
+				vm.opportunity.status = 'Pending'
+			}
+			else {
+				vm.opportunity.status = 'Draft';
+			}
+
 
 			//
 			// confirm save only if the user is also publishing
 			//
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
-			if (!originalPublishedState && vm.opportunity.isPublished) {
-				var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
-				promise = ask.yesNo (question).then (function (result) {
-					savemeSeymour = result;
-				});
-			}
+			
+			// AS - Since workflow for publishing is changing to be handled by ADM approval workflow, comment out the following check
+			
+			// if (!originalPublishedState && vm.opportunity.isPublished) {
+			// 	var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
+			// 	promise = ask.yesNo (question).then (function (result) {
+			// 		savemeSeymour = result;
+			// 	});
+			// }
+
 			//
 			// update target total
 			//
@@ -726,15 +740,21 @@
 				else return Promise.reject ({data:{message:'Publish Cancelled'}});
 			})
 			//
-			// success, notify and return to list
+			// AS - Success, notify and go to submission form (if submitting), or to opportunity view (otherwise)
 			//
-			.then (function () {
-				vm.opportunityForm.$setPristine ();
+			.then(function () {
+				vm.opportunityForm.$setPristine();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
 
-				$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+				if (isSubmitting) {
+					$state.go('opportunityadmin.submitcwu', {opportunityId:opportunity.code});
+				}
+				else {
+					$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+				}
+				
 			})
 			//
 			// fail, notify and stay put
