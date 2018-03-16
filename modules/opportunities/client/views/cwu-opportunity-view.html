@@ -84,22 +84,27 @@
 	
 	<div class="container">	
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+		<div class="row" ng-if="!vm.canSubmit && vm.canEdit">
 			<div class="col-xs-12">
 				<div class="alert alert-important">
-					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can submit for approval, you'll need to define these things:
 					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 				</div>
 			</div>
 		</div>
 
 
-		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
-		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
+		<!-- // Admin Controls // -->
+		<div class="row" ng-if="vm.canEdit">
 			<div class="col-xs-12">
-				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+				<!-- // if opportunity is in DRAFT and can be submitted // -->
+				<div class="pull-right" ng-if="vm.canSubmit && vm.opportunity.status === 'Draft' && vm.opportunity.project.isPublished" role="group">
+					<button type="button" class="btn btn-success" ui-sref="opportunityadmin.submit({opportunityId:vm.opportunity.code})">Submit for Approval</button>
+				</div>
+
+				<!-- // if opportunity is in DRAFT and COMPLETE // -->
+				<div class="pull-right" ng-if-"!vm.opportunity.isPublished" role="group">
+					<button type="button" class="btn btn-sm btn-text-only" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
 				</div>
 			</div>
 		</div>

@@ -102,11 +102,11 @@
 		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		// -------------------------------------------------------------------------
 		//
-		// can this be published?
+		// can this be submitted for approval?
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = (vm.errorFields.length === 0);
+		vm.canSubmit = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -510,11 +510,11 @@
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		// -------------------------------------------------------------------------
 		//
-		// can this be published?
+		// can this be submitted for approval?
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = vm.errorFields > 0;
+		vm.canSubmit = vm.errorFields === 0;
 		//
 		// set up the dropdown amounts for code with us earnings
 		//
