@@ -1,0 +1,83 @@
+<section class="detail-page-background">
+	<div class="container swu-evaluation">
+		<!-- No steps complete yet -->
+		<div class="swu-evaluation-progress text-center">
+			<step class="active">
+				 <icon>1</icon>
+				 <step-name>Rank Responses</step-name>
+			</step>
+			<step class="disabled">
+				<icon>2</icon>
+				<step-name>Choose # Interviews</step-name>
+			</step>
+			<step class="disabled">
+				<icon>3</icon>
+				<step-name>Score Interviews</step-name>
+			</step>
+		</div>
+
+		<!-- Questionnaire response ranking (modal) has been started and saved, but not finalized yet -->
+		<div class="swu-evaluation-cta text-center">
+			<!-- Questionnaire response ranking (modal) has been started and saved, but not finalized yet -->
+			<h4>Getting there...</h4>
+			<p>You still need to <strong><a href="/questionnaire-response-ranking-modal">finish ranking responses to the questionnaire...</a></strong></p>
+			<!-- The inline link here should open up the modal to rank all of the (anonymized) responses to the questionnaire -->
+		</div>
+
+		<div class="swu-evaluation-summary">
+			<div class="table-title">Evaluation Scoring Summary</div>
+			<table class="table table-condensed table-striped">
+				<thead>
+					<tr>
+						<!-- I'd like to link the column headings, so that each one opens a popover that explains what each score is and how it's calculated -->
+						<td class="text-left"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Company" data-content="You don't get to see the name of the companies until you rank anonymized and randomized repsonses to the questionnaire, then select how many you're going to interview! Cool, eh?!">Company</button></td>
+						
+						<td class="text-center"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Skills (/10)" data-content="All the companies claim to have all the capabilites you need. The score in this column is for the amount of the preferred skills you selected that the team members possess.">Skills</button></td>
+						
+						<td class="text-center"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Questionnaire (/20)" data-content="This score is out of 20. You blindly rank the repsonses to questions from best to worse. We do the rest.">Questionnaire</button></td>
+
+						<td class="text-center"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Interview (/60)" data-content="This is the category with the most weight, for good reason. Once you've conducted interviews, you'll enter one aggregated score for each company.">Interview</button></td>
+
+						<td class="text-center"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Price (/10)" data-content="You'll get to see a score for the pricing the company submitted after you enter an interview score. Score for pricing is based on an algorithm that looks at the minimum and maximum prices submitted. It's not heavily weighted because we don't want this to be the determining factor for you.">Price</button></td>
+
+						<td class="text-right"><button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Total (/100)" data-content="This is the total score out of 100%.">Total</button></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Company C</td>
+						<td class="text-center">7</td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-right">7</td>
+					</tr>
+					<tr>
+						<td>Company A</td>
+						<td class="text-center">5</td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-right">5</td>
+					</tr>
+					<tr>
+						<td>Company B</td>
+						<td class="text-center">5</td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-right">5</td>
+					</tr>
+					<tr>
+						<td>Company D</td>
+						<td class="text-center">2</td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-center"></td>
+						<td class="text-right">2</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</section>

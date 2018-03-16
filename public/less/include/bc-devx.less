@@ -164,9 +164,100 @@ h4.opp-detail {
   border: 1px solid #ddd;
 }
 
+// SWU Evaluation
+
+.swu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 1em;
+}
+
+.swu-evaluation-progress {
+  padding: 1em 0;
+  > step {
+    display: inline-block;
+    margin-right: -30px;
+    font-size: .9em;
+    > icon {
+        position: relative;
+        z-index: 2;
+        background: #fff;
+        border: 4px solid #222;
+        padding: 2px 3px;
+        border-radius: 18px;
+    }
+    > step-name {
+      position: relative;
+      z-index: 0;
+      color: #fff;
+      background: #222;
+      padding: 6px 32px 6px 24px;
+      margin-left: -20px;
+      border-radius: 0px 18px 18px 0px;
+    }
+  }
+  > step.active {
+    box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
+    > icon {
+      padding: 2px 8px;
+    }
+  }
+  > step.disabled {
+    > step-name {
+      opacity: .2;
+    }
+    > icon {
+      color: #bbb;
+      border-color: #bbb;
+      padding: 2px 8px;
+    }
+  }
+  > step.complete {
+    > step-name {
+      opacity: .2;
+    }
+    > icon {
+      color: #bbb;
+      border-color: #bbb;
+    }      
+  }
+}
+
+.swu-evaluation-cta {
+  padding: 2em 0 3em;
+  > h4 {
+    font-size: 1.4em;
+    margin-bottom: 2em;
+  }
+  > p {
+    font-size: 1.1em;
+  }
+}
+
+.swu-evaluation-summary {
+  border-top: 1px solid #ddd;
+  padding: 2em 0;
+  > .table-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 1.5em;
+    margin-left: 5px;
+  }
+}
+
+tr.last-screened-in {
+  border-bottom: 4px solid @theme-danger;
+}
+
+tr.screened-out {
+  opacity: .7;
+}
+
 hr {
   margin: .25em 0;
 }
+
+
 
 // Edit form
 
@@ -757,6 +848,22 @@ form-title {
     border: 1px solid #e3e3e3;
     box-shadow: none;
   }
+}
+
+.btn-table-heading {
+  padding: 4px 0;
+  margin: 0;
+  font-weight: bold;
+  color: @gray-dark;
+  background: transparent;
+  &:hover,&:active:hover {
+    color: @theme-primary;
+  }
+  &:active,&:focus {
+    outline: none;
+    box-shadow: none;
+    color: @theme-primary;
+  }  
 }
 
 // Labels
