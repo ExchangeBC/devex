@@ -68,7 +68,7 @@
 		</div>
 
 		<!-- // Submit a proposal button // -->
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+		<div class="row" ng-if="vm.canApply && vm.closing !== 'CLOSED'" >
 			<div class="col-xs-12">
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 			</div>

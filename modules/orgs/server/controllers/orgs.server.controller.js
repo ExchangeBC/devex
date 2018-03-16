@@ -27,13 +27,14 @@ var path = require('path'),
 	mongoose = require('mongoose'),
 	Org = mongoose.model('Org'),
 	User = mongoose.model('User'),
+	Capability = mongoose.model('Capability'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	multer = require('multer'),
 	_ = require('lodash')
 	;
 
-var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills capabilityDetails';
+var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -99,6 +100,61 @@ var removeUserFrom = function (org, fieldName) {
 };
 // -------------------------------------------------------------------------
 //
+// get required capabilities
+//
+// -------------------------------------------------------------------------
+var getRequiredCapabilities = function () {
+	return new Promise (function (resolve, reject) {
+		Capability.find ({
+			isRequired : true
+		}, function (err, capabilities) {
+			if (err) reject (err);
+			else resolve (capabilities);
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// collapse all member capabilities into the org
+//
+// -------------------------------------------------------------------------
+var collapseCapabilities = function (org) {
+	var c = {};
+	var s = {};
+	org.members.forEach (function (member) {
+		if (member.capabilities) member.capabilities.forEach (function (capability) {
+			if (capability._id) c[capability._id.toString()] = true;
+			else c[capability.toString()] = true;
+		});
+		if (member.capabilitySkills) member.capabilitySkills.forEach (function (skill) {
+			if (skill._id) s[skill._id.toString()] = true;
+			else s[skill.toString()] = true;
+		});
+	});
+	console.log ('what');
+	org.capabilities = Object.keys (c);
+	org.capabilitySkills = Object.keys (s);
+	console.log (org.capabilities);
+	console.log (org.capabilitySkills);
+};
+// -------------------------------------------------------------------------
+//
+// given an org that was selected using findById (with al users and their
+// capabilities) go through and ensure that the org has everythihng it
+// needs to satisfy the RFQ
+//
+// -------------------------------------------------------------------------
+var checkCapabilities = function (org) {
+	return getRequiredCapabilities ()
+	.then (function (capabilities) {
+		collapseCapabilities (org);
+		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
+		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
+		return org;
+	})
+};
+// -------------------------------------------------------------------------
+//
 // just to make things easier to read later on
 //
 // -------------------------------------------------------------------------
@@ -111,14 +167,17 @@ var resolveOrg = function (org) {
 var saveOrg = function (req, res) {
 	return function (org) {
 		// console.log ('saving org');
-		org.save (function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json (org);
-			}
+		checkCapabilities (org)
+		.then (function (org) {
+			org.save (function (err) {
+				if (err) {
+					return res.status(422).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					res.json (org);
+				}
+			});
 		});
 	};
 };
@@ -271,14 +330,17 @@ exports.update = function (req, res) {
 		//
 		// save
 		//
-		org.save (function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json (org);
-			}
+		checkCapabilities (org)
+		.then (function (org) {
+			org.save (function (err) {
+				if (err) {
+					return res.status(422).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					res.json (org);
+				}
+			});
 		});
 	});
 };
@@ -313,11 +375,6 @@ exports.list = function (req, res) {
 	.populate ('updatedBy', 'displayName')
 	.populate ('members', popfields)
 	.populate ('admins', popfields)
-	// .populate ({
-	// 	path : 'endorsements.createdBy',
-	// 	model: 'User',
-	// 	select: 'displayName orgImageURL'
-	// })
 	.exec (function (err, orgs) {
 		if (err) {
 			return res.status(422).send ({
@@ -335,6 +392,7 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.orgByID = function (req, res, next, id) {
+	// console.log ('get by id');
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
 			message: 'Org is invalid'
@@ -344,8 +402,23 @@ exports.orgByID = function (req, res, next, id) {
 	.populate ('owner', '_id lastName firstName displayName profileImageURL')
 	.populate ('createdBy', 'displayName')
 	.populate ('updatedBy', 'displayName')
-	.populate ('members', popfields)
 	.populate ('admins', popfields)
+	.populate ('capabilities', 'code name')
+	.populate ('capabilitySkills', 'code name')
+	.populate ({
+		path: 'members',
+		select: popfields,
+		populate: [{
+			path : 'capabilities',
+			model: 'Capability',
+			select: 'name code labelClass'
+		},
+		{
+			path : 'capabilitySkills',
+			model: 'CapabilitySkill',
+			select: 'name code'
+		}]
+	})
 	.exec (function (err, org) {
 		if (err) {
 			return next(err);
