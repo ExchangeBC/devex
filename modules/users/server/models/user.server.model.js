@@ -151,9 +151,10 @@ var UserSchema = new Schema({
 	isAutoAdd         : {type: Boolean, default:true},
 	capabilities      : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 	capabilitySkills  : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
-	capabilityDetails : {type:[UserCapabilities], default:[]}
-
-
+	capabilityDetails : {type:[UserCapabilities], default:[]},
+	preferredAdmEmail : {type: String, default: ''},
+	preferredBfsEmail : {type: String, default: ''},
+	preferredDfsEmail : {type: String, default: ''}
 });
 
 /**

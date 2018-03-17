@@ -70,6 +70,11 @@ exports.update = function (req, res) {
       user.capabilityDetails = req.body.capabilityDetails;
       user.capabilitySkills = req.body.capabilitySkills;
 
+  // Storing notification email addresses in user model
+  user.preferredAdmEmail = req.body.preferredAdmEmail;
+  user.preferredBfsEmail = req.body.preferredBfsEmail;
+  user.preferredDfsEmail = req.body.preferredDfsEmail;
+
 
 
 

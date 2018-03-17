@@ -709,7 +709,6 @@
 				vm.opportunity.status = 'Draft';
 			}
 
-
 			//
 			// confirm save only if the user is also publishing
 			//
@@ -717,7 +716,8 @@
 			var promise = Promise.resolve ();
 			
 			// AS - Since workflow for publishing is changing to be handled by ADM approval workflow, comment out the following check
-			
+			// This would now likely be handled by the workflow for ADM Authorization
+			//
 			// if (!originalPublishedState && vm.opportunity.isPublished) {
 			// 	var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
 			// 	promise = ask.yesNo (question).then (function (result) {
@@ -744,14 +744,13 @@
 			//
 			.then(function () {
 				vm.opportunityForm.$setPristine();
-				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
-				});
-
 				if (isSubmitting) {
 					$state.go('opportunityadmin.submitcwu', {opportunityId:opportunity.code});
 				}
 				else {
+					Notification.success ({
+						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+					});
 					$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
 				}
 				
@@ -782,5 +781,52 @@
 			vm.displayHelp[field] = ! vm.displayHelp[field];
 		};
 	})
-	;
+	// =========================================================================
+	//
+	// AS - controller for the new submission view
+	//
+	// =========================================================================
+	.controller('OpportunitySubmissionController', function($state, opportunity, Authentication, UsersService, OpportunitiesService, Notification) {
+		var vm 			= this;
+		vm.user 		= Authentication.user;
+		vm.opportunity 	= opportunity;
+
+		vm.submitForApproval = function(isValid) {
+			if (isValid) {
+				// Save the email addresses to the user model for current user
+				var user = new UsersService(vm.user);
+				var updatePromise = user.$update().$promise;
+
+				// Send the notification via the OpportunitiesService
+				var notificationPromise = OpportunitiesService.submitOpportunity(
+					{
+						useremail: vm.user.preferredAdmEmail,
+						opportunityId: vm.opportunity.code,
+						rfp: vm.opportunity.proposal != null ? vm.opportunity.proposal : "Not specified",
+						postingDate: new Date(vm.opportunity.start).toDateString(),
+						value: vm.opportunity.earn,
+						requiredSkills: vm.opportunity.skills.join(", "),
+						closingDate: new Date(vm.opportunity.deadline).toDateString()
+					
+					}
+				).$promise;
+
+				// Wait for user model update and email notification to finish
+				Promise.all([updatePromise, notificationPromise]).then(
+					function() {
+						Notification.success({
+							message: "Approval request has been submitted."
+						});
+						$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+					},
+					function(response) {
+						Notification.error({
+							title: "Approval request failed to send.",
+							message: "Please confirm you have entered valid email addresses."
+						});
+					}
+				);
+			}
+		}
+	});
 }());

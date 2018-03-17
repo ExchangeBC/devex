@@ -927,3 +927,21 @@ exports.unPublishOpportunities = function (programId, projectId) {
 		}));
 	});
 };
+// -------------------------------------------------------------------------
+//
+// Send a notification email requesting approval for opportunity publication
+//
+// -------------------------------------------------------------------------
+exports.submitForApproval = function(req, res) {
+	Notifications.notifyUserAdHoc('opportunity-publish-approval', req.body).then(
+		function() {
+			res.json({
+				ok: true
+			});
+		}, 
+		function(error) {
+			res.status(500).json({
+				message: "Automailer error: " + error.code
+			});
+		});
+};

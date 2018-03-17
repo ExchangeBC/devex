@@ -12,7 +12,7 @@
 
 <section class="edit-form-background" role="main">
 
-	<form id="submitForApprovalForm" warn-on-exit name="vm.submitForApprovalForm" class="form" novalidate>
+	<form id="submitForApprovalForm" name="vm.submitForApprovalForm" class="form" novalidate>
 
 		<div class="container edit-form">
 
@@ -23,14 +23,15 @@
                     </span>
                     {{vm.opportunity.name}}
                 </span>
-				<!-- <a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
-				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a> -->
+				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
+				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a>
 			</div>
 
              <fieldset>
                 <form-input
+                    type="email"
                     class="col-sm-12"
-                    ng-model="vm.user.preferredAdm"
+                    ng-model="vm.user.preferredAdmEmail"
                     x-form="vm.submitForApprovalForm"
                     x-options='{
                         "title":"Assistant Deputy Minister Email",
@@ -38,12 +39,14 @@
                         "id":"adm",
                         "name":"adm",
                         "placeholder":"firstname.lastname@gov.bc.ca"
-                    }'>
+                    }' 
+                    required>
                  </form-input>
 
                  <form-input
+                    type="email"
                     class="col-sm-12"
-                    ng-model="vm.user.preferredDfs"
+                    ng-model="vm.user.preferredDfsEmail"
                     x-form="vm.submitForApprovalForm"
                     x-options='{
                         "title":"Divisional Financial Staff Email",
@@ -51,12 +54,14 @@
                         "id":"dfs",
                         "name":"dfs",
                         "placeholder":"firstname.lastname@gov.bc.ca"
-                    }'>
+                    }' 
+                    required>
                  </form-input>
 
                  <form-input
+                    type="email"
                     class="col-sm-12"
-                    ng-model="vm.user.preferredBfs"
+                    ng-model="vm.user.preferredBfsEmail"
                     x-form="vm.submitForApprovalForm"
                     x-options='{
                         "title":"Branch Financial Staff Email",
@@ -64,24 +69,15 @@
                         "id":"bfs",
                         "name":"bfs",
                         "placeholder":"firstname.lastname@gov.bc.ca"
-                    }'>
+                    }' 
+                    required>
                  </form-input>
-
-                <form-display
-                    class="col-sm-12"
-                    x-options='{
-                        "title":"Email Body",
-                        "name":"emailbody",
-                        "help":"Confirm/edit the email body below before submitting"
-                    }'>
-                    <textarea class="form-control" cols="30" rows="3"></textarea>
-                </form-display>
 	        </fieldset> 
 
 			<div class="edit-form-footer">
 				<div class="row">
 					<div class="col-xs-12">
-						<button ng-click="" href-"javascript:void(0);" class="btn btn-primary pull-right" title="Send approval request"><i class="fa fa-save"></i> Submit</button>
+						<button ng-click="vm.submitForApproval(vm.submitForApprovalForm.$valid)" href-"javascript:void(0);" class="btn btn-primary pull-right" title="Send approval request"><i class="fa fa-save"></i> Submit</button>
 					</div>
 				</div>
 			</div>

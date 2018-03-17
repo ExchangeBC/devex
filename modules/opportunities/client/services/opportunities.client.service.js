@@ -93,6 +93,10 @@
 			denyMember: {
 				method: 'GET',
 				url : '/api/opportunities/requests/deny/:opportunityId/:userId'
+			},
+			submitOpportunity: {
+				method: 'POST',
+				url : '/api/opportunities/submit/for/approval'
 			}
 		});
 		angular.extend (Opportunity.prototype, {

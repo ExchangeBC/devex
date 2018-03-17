@@ -59,8 +59,11 @@ exports.renderIndex = function (req, res) {
       linkedIn                : req.user.linkedIn,
       isPublicProfile         : req.user.isPublicProfile,
       isAutoAdd               : req.user.isAutoAdd,
-      capabilityDetails : req.user.capabilityDetails,
-      capabilitySkills : req.user.capabilitySkills
+      capabilityDetails       : req.user.capabilityDetails,
+      capabilitySkills        : req.user.capabilitySkills,
+      preferredAdmEmail       : req.user.preferredAdmEmail,
+      preferredBfsEmail       : req.user.preferredBfsEmail,
+      preferredDfsEmail       : req.user.preferredDfsEmail
     };
   }
   var features = config.features.split ('-');
