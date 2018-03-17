@@ -744,13 +744,13 @@
 			//
 			.then(function () {
 				vm.opportunityForm.$setPristine();
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+				});
 				if (isSubmitting) {
 					$state.go('opportunityadmin.submitcwu', {opportunityId:opportunity.code});
 				}
 				else {
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
-					});
 					$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
 				}
 				
@@ -800,7 +800,7 @@
 				// Send the notification via the OpportunitiesService
 				var notificationPromise = OpportunitiesService.submitOpportunity(
 					{
-						useremail: vm.user.preferredAdmEmail,
+						useremail: vm.user.preferredAdmEmail + ';' + vm.user.preferredDfsEmail + ';' + vm.user.preferredBfsEmail,
 						opportunityId: vm.opportunity.code,
 						rfp: vm.opportunity.proposal != null ? vm.opportunity.proposal : "Not specified",
 						postingDate: new Date(vm.opportunity.start).toDateString(),
@@ -815,13 +815,13 @@
 				Promise.all([updatePromise, notificationPromise]).then(
 					function() {
 						Notification.success({
-							message: "Approval request has been submitted."
+							message: '<i class="glyphicon glyphicon-ok"></i>Approval request has been submitted.'
 						});
 						$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
 					},
 					function(response) {
 						Notification.error({
-							title: "Approval request failed to send.",
+							title: '<i class=\'glyphicon glyphicon-remove\'></i>Approval request failed to send.',
 							message: "Please confirm you have entered valid email addresses."
 						});
 					}
