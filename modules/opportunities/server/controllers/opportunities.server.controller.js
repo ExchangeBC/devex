@@ -938,10 +938,10 @@ exports.submitForApproval = function(req, res) {
 			res.json({
 				ok: true
 			});
-		}, 
+		},
 		function(error) {
 			res.status(500).json({
-				message: "Automailer error: " + error.code
+				message: 'Automailer error: ' + error.code
 			});
 		});
 };

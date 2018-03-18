@@ -714,7 +714,6 @@
 			//
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
-			
 			// AS - Since workflow for publishing is changing to be handled by ADM approval workflow, comment out the following check
 			// This would now likely be handled by the workflow for ADM Authorization
 			//
@@ -753,7 +752,6 @@
 				else {
 					$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
 				}
-				
 			})
 			//
 			// fail, notify and stay put
@@ -802,12 +800,11 @@
 					{
 						useremail: vm.user.preferredAdmEmail + ';' + vm.user.preferredDfsEmail + ';' + vm.user.preferredBfsEmail,
 						opportunityId: vm.opportunity.code,
-						rfp: vm.opportunity.proposal != null ? vm.opportunity.proposal : "Not specified",
+						rfp: vm.opportunity.proposal != null ? vm.opportunity.proposal : 'Not specified',
 						postingDate: new Date(vm.opportunity.start).toDateString(),
 						value: vm.opportunity.earn,
-						requiredSkills: vm.opportunity.skills.join(", "),
+						requiredSkills: vm.opportunity.skills.join(', '),
 						closingDate: new Date(vm.opportunity.deadline).toDateString()
-					
 					}
 				).$promise;
 
@@ -822,7 +819,7 @@
 					function(response) {
 						Notification.error({
 							title: '<i class=\'glyphicon glyphicon-remove\'></i>Approval request failed to send.',
-							message: "Please confirm you have entered valid email addresses."
+							message: 'Please confirm you have entered valid email addresses.'
 						});
 					}
 				);
