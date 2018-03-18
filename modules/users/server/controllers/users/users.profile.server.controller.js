@@ -61,8 +61,10 @@ var whitelistedFields = [
 	'isPublicProfile',
 	'isAutoAdd',
 	'capabilityDetails',
-	'capabilitySkills'
-
+	'capabilitySkills',
+	'admEmail',
+	'divisionalFinanicalStaffEmail',
+	'branchFinanicalStaffEmail'	
 ];
 
 /**

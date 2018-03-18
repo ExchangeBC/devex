@@ -64,6 +64,10 @@ var OpportunitySchema = new Schema({
 	start                     : {type: Date, default: Date.now },
 	endDate                   : {type: Date, default: Date.now },
 	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },
+    admEmail                  : {type: String, default: ''},
+    divisionalFinanicalStaffEmail : {type: String, default: ''},
+	branchFinanicalStaffEmail : {type: String, default: ''},	
+	emaiSentToADMAt           : {type: Date, default: null },	
 	//
 	// specific to sprint with us
 	//
