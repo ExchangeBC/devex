@@ -30,6 +30,12 @@ module.exports = function(app) {
 		.get(opportunities.forProgram);
 
 	//
+	//  submitting opportunities for publication
+	//
+	app.route('/api/opportunities/submit/for/approval')
+		.post(opportunities.submitForApproval);
+
+	//
 	// get lists of users
 	//
 	app.route('/api/opportunities/members/:opportunityId')

@@ -1,0 +1,87 @@
+<!-- Persistent banner for Opportunity Creators -->
+<div class="banner banner-important" >
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<section class="edit-form-background" role="main">
+
+	<form id="submitForApprovalForm" name="vm.submitForApprovalForm" class="form" novalidate>
+
+		<div class="container edit-form">
+
+			<div class="edit-form-header">
+                <span>
+                    <span class="light small">
+                        SUBMITTING:
+                    </span>
+                    {{vm.opportunity.name}}
+                </span>
+
+				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
+                <a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a>
+			</div>
+            <p>Please provide/confirm the required email addresses below and press <b>Submit</b> to complete the publication request.</b></p>
+             <fieldset>
+                <form-input
+                    type="email"
+                    class="col-sm-12"
+                    ng-model="vm.user.preferredAdmEmail"
+                    x-form="vm.submitForApprovalForm"
+                    x-options='{
+                        "title":"Assistant Deputy Minister Email",
+                        "help":"Enter the email of an ADM where the approval request will be sent.",
+                        "id":"adm",
+                        "name":"adm",
+                        "placeholder":"firstname.lastname@gov.bc.ca"
+                    }' 
+                    required>
+                 </form-input>
+
+                 <form-input
+                    type="email"
+                    class="col-sm-12"
+                    ng-model="vm.user.preferredDfsEmail"
+                    x-form="vm.submitForApprovalForm"
+                    x-options='{
+                        "title":"Divisional Financial Staff Email",
+                        "help":"Enter the email of a DFS where the approval request will be sent.",
+                        "id":"dfs",
+                        "name":"dfs",
+                        "placeholder":"firstname.lastname@gov.bc.ca"
+                    }' 
+                    required>
+                 </form-input>
+
+                 <form-input
+                    type="email"
+                    class="col-sm-12"
+                    ng-model="vm.user.preferredBfsEmail"
+                    x-form="vm.submitForApprovalForm"
+                    x-options='{
+                        "title":"Branch Financial Staff Email",
+                        "help":"Enter the email of a BFS where the approval request will be sent.",
+                        "id":"bfs",
+                        "name":"bfs",
+                        "placeholder":"firstname.lastname@gov.bc.ca"
+                    }' 
+                    required>
+                 </form-input>
+	        </fieldset> 
+
+			<div class="edit-form-footer">
+				<div class="row">
+					<div class="col-xs-12">
+						<button ng-click="vm.submitForApproval(vm.submitForApprovalForm.$valid)" href-"javascript:void(0);" class="btn btn-primary pull-right" title="Send approval request"><i class="fa fa-bullhorn"></i> Submit</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
