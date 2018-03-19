@@ -64,6 +64,10 @@ module.exports = function(app) {
 	app.route('/api/request/opportunity/:opportunityId')
 		.get(opportunities.request)
 
+	// Submit for Approval
+	app.route('/api/opportunities/submitForApproval/:opportunityId')
+		.all(opportunitiesPolicy.isAllowed)
+		.put(opportunities.submitForApproval);
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);
