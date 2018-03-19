@@ -63,7 +63,7 @@ module.exports = function(app) {
 
 	app.route('/api/request/opportunity/:opportunityId')
 		.get(opportunities.request)
-		
+
 	app.route('/api/opportunities/email/:opportunityId')
 		.post(opportunities.sendEmailToADM);
 

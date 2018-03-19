@@ -97,7 +97,7 @@
       sendEmailToADM: {
         method: 'POST',
         url: '/api/opportunities/email/:opportunityId'
-      },
+      }
 		});
 		angular.extend (Opportunity.prototype, {
 			createOrUpdate: function () {

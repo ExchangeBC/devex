@@ -73,6 +73,7 @@
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
+		vm.canSubmit               = isAdmin || opportunity.userIs.admin;
 		vm.isMember                = opportunity.userIs.member;
 		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
 		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
@@ -212,7 +213,7 @@
 				vm.saveProposals ();
 			vm.responses[0][0].rank = 999;
 			});
-		} 
+		}
 		else {
 			// -------------------------------------------------------------------------
 			//
@@ -375,8 +376,7 @@
 		// -------------------------------------------------------------------------
 		vm.submit = function (proposal) {
 			var copiedUser = angular.copy(Authentication.user);
-
-			//the opportunity transitions from the "Draft" state to the "Pending" state
+			// the opportunity transitions from the "Draft" state to the "Pending" state
 			modalService.showModal ({
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/cwu-opportunity-modal-email.html',
@@ -385,7 +385,7 @@
 					$scope.data = {
 						admEmail: copiedUser.admEmail,
 						dfsEmail: copiedUser.dfsEmail,
-						bfsEmail: copiedUser.bfsEmail,
+						bfsEmail: copiedUser.bfsEmail
 					};
 
 					$scope.close = function () {
@@ -398,10 +398,11 @@
 						});
 					};
 					$scope.checkEmails = function(emails) {
-						if (emails && _.isArray(emails) ) {
-							for (var i = 0; i < emails.length; i++ ) { 
+						if (emails && _.isArray(emails)) {
+							for (var i = 0; i < emails.length; i++) {
 								var email = emails[i];
-								if (email.length === 0) {  // The condition you want to check the email for
+								if (email.length === 0) {
+									// The condition you want to check the email for
 									return true;
 								}
 							}
@@ -415,12 +416,11 @@
 					//
 					// Send the emails
 					//
-					// 
+
 					vm.sendEmailToADM(resp.data);
 				}
 			});
 		};
-		
 		vm.sendEmailToADM = function (data) {
 			if (data) {
 				OpportunitiesService.sendEmailToADM({opportunityId: opportunity._id},{ emails: data, opportunity: vm.opportunity}).$promise
@@ -433,8 +433,6 @@
 						Authentication.user.dfsEmail = data.dfsEmail
 					})
 					.catch(onRequestEmailUpdateError);
-					
-				
 			}
 		}
 

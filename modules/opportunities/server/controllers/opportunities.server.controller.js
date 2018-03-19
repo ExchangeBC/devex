@@ -932,19 +932,6 @@ exports.unPublishOpportunities = function (programId, projectId) {
 };
 
 
-// async.waterfall(
-// {/* <body>
-//   <p>Unique ID {{U_ID}}</p>
-//   <p>Associated RFP control {{rfpControl}}</p>  
-//   <p>Posting date {{postDate}}</p>  
-//   <p>Value of opportunity {{value}}</p>  
-//   <p>Required Skills {{skills}}</p>  
-//   <p>Closing date {{closeDate}}</p>  
-//   <p>"Agree" and "Disagree" buttons</p>  
-//   <button>Agree</button>
-//   <button>Disagree</button>
-// </body> */}
-// 
 exports.sendEmailToADM = function (req, res) {
 	var user = req.user;
 	var body = req.body;
@@ -953,7 +940,6 @@ exports.sendEmailToADM = function (req, res) {
 		var opportunity = body.opportunity;
 
 		if (Object.keys(emails).length < 3) {
-			//Error Bad Request
 			res.status(401).send({
 				message: 'Please provide correct email array format'
 			});
@@ -963,11 +949,11 @@ exports.sendEmailToADM = function (req, res) {
 			user.BFSEmail = emails.bfsEmail;
 			res.render(path.resolve('modules/opportunities/server/email_templates/adm_message'), {
 				U_ID: opportunity._id,
-				rfpControl:'Some RFP control', //Unknown 
+				rfpControl:'Some RFP control',
 				postDate: opportunity.assignment,
 				value: opportunity.earn,
 				skills: opportunity.skills.join(' '),
-				closeDate:opportunity.endDate,
+				closeDate:opportunity.endDate
 			}, function (err, emailHTML) {
 				if (!err) {
 					var mailOptions = {
@@ -975,11 +961,9 @@ exports.sendEmailToADM = function (req, res) {
 						from: config.mailer.from,
 						subject: 'Review opportunity : ' + opportunity.name,
 						html: emailHTML
-					};	
-					
-					// TODO: Since this is a code challege, I will assume that the email will be sent in a mannar similar 
+					};
+					// TODO: Since this is a code challege, I will assume that the email will be sent in a mannar similar
 					// to the following process.
-
 					// var promise = smtpTransport.sendMail(mailOptions, function (err) {
 					// 	if (!err) {
 					// 		res.send({
@@ -995,7 +979,7 @@ exports.sendEmailToADM = function (req, res) {
 					// });
 
 					// Assuming the email is sent, Code challenge continues from here
-					user.save(function(err, result){ 
+					user.save(function(err, result){
 						if (!err) {
 							// Need to update the status of the opportunity
 							Opportunity.findOneAndUpdate({_id : opportunity._id}, {$set: {status: 'Pending'}}, function(err, result) {
@@ -1004,7 +988,7 @@ exports.sendEmailToADM = function (req, res) {
 						}
 					})
 				}
-			});			
+			});
 		}
 	} else {
 		res.status(401).send({

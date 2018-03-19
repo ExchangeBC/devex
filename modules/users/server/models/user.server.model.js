@@ -155,7 +155,7 @@ var UserSchema = new Schema({
 	// oppurtunity emails
 	ADMEmail: {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
 	DFSEmail: {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
-	BFSEmail: {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']},
+	BFSEmail: {type: String, default: '', trim:true, lowercase:true, validate: [validateLocalStrategyEmail, 'Please fill a valid email address']}
 });
 
 /**

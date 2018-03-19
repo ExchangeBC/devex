@@ -63,7 +63,7 @@ exports.renderIndex = function (req, res) {
       capabilitySkills : req.user.capabilitySkills,
       admEmail : validator.escape(req.user.ADMEmail),
       dfsEmail : validator.escape(req.user.DFSEmail),
-      bfsEmail : validator.escape(req.user.BFSEmail),
+      bfsEmail : validator.escape(req.user.BFSEmail)
     };
   }
   var features = config.features.split ('-');
