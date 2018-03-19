@@ -770,7 +770,7 @@
 	})
 	// =========================================================================
 	//
-	// Controller for the master list of programs
+	// Controller for submitting opportunities
 	//
 	// =========================================================================
 	.controller('OpportunitySubmitController', function ($scope, $state, Authentication, OpportunitiesService, UsersService, Notification, opportunity, $stateParams) {
