@@ -24,13 +24,13 @@ class HomePage extends Page implements AngularJSAware {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		RoadmapLink { PositionAndClick("a","roadmap") }
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
-		OpportunitiesNavBar { $("#mainNav > div > nav > ul:nth-child(1) > li:nth-child(4) > a") }
-		ProjectsNavbar { $("a","ui-sref":"projects.list") }
-		ProgramsNavbar { $("a","ui-sref":"programs.list") }
+		OpportunitiesNavBar { $('a[ui-sref ~= "opportunities.list"]', 0) }
+		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0) }
+		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0) }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SignUpNavBar { PositionAndClick("a","authentication.gov") }
 		SignUpMidPageLink { PositionAndClick("a","authentication.gov",1) }
-		CompaniesNavbar { $("a","ui-sref":"orgs.list") }
+		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0) }
 		FindWorkButton { $("a.btn.btn-lg.btn-warning").click() }
 		learnMoreLink(to: CodewithusPage) { $("a.btn.btn-lg.btn-link").click() }
     }
