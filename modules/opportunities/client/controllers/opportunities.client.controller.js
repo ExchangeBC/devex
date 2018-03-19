@@ -30,6 +30,65 @@
 		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.userCanAdd   = (isAdmin || isGov);
 	})
+		// =========================================================================
+	//
+	// Controller the view of the opportunity page
+	//
+	// =========================================================================
+	.controller('OpportunitySubmitController', function ($scope, $state, $stateParams, $timeout ,$window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, OpportunitiesService) {
+		var vm 					  = this;
+		vm.opportunity    = opportunity;
+		vm.features       = window.features;
+
+		var copiedUser = angular.copy(Authentication.user);
+
+		$scope.data = {
+			admEmail: copiedUser.admEmail,
+			dfsEmail: copiedUser.dfsEmail,
+			bfsEmail: copiedUser.bfsEmail
+		};
+
+		var checkEmails = function(emails) {
+			if (emails && _.isArray(emails)) {
+				for (var i = 0; i < emails.length; i++) {
+					var email = emails[i];
+					if (email.length === 0) {
+						// The condition you want to check the email for
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		// Email Update Callbacks
+		function onRequestEmailUpdateError(response) {
+			// Show user error message and clear form
+			vm.credentials = null;
+			Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Failed to send email and update profile!', delay: 4000 });
+		}
+		// -------------------------------------------------------------------------
+		//
+		// Submit Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.submit = function (data) {
+				OpportunitiesService.sendEmailToADM({opportunityId: opportunity._id},{ emails: data, opportunity: vm.opportunity}).$promise
+					.then(function(response) {
+						vm.credentials = null;
+						Notification.success({ message: response.message, title: '<i class="glyphicon glyphicon-ok"></i> Email was sent successfully! Profile updated' });
+						// Manually update user profile
+						Authentication.user.admEmail = data.admEmail
+						Authentication.user.bfsEmail = data.bfsEmail
+						Authentication.user.dfsEmail = data.dfsEmail
+						vm.opportunityForm.$setPristine();
+
+						$timeout(function() {
+							$state.go('opportunities.viewcwu', {opportunityId:vm.opportunity.code})
+						},250)
+					})
+					.catch(onRequestEmailUpdateError);
+		}
+	})
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
@@ -369,80 +428,6 @@
 			proposal.isAssigned = true;
 			vm.saveProposal (proposal);
 		};
-		// -------------------------------------------------------------------------
-		//
-		// Submit Modal
-		//
-		// -------------------------------------------------------------------------
-		vm.submit = function (proposal) {
-			var copiedUser = angular.copy(Authentication.user);
-			// the opportunity transitions from the "Draft" state to the "Pending" state
-			modalService.showModal ({
-				size: 'lg',
-				templateUrl: '/modules/opportunities/client/views/cwu-opportunity-modal-email.html',
-				controller: function ($scope, $uibModalInstance,AdminService) {
-
-					$scope.data = {
-						admEmail: copiedUser.admEmail,
-						dfsEmail: copiedUser.dfsEmail,
-						bfsEmail: copiedUser.bfsEmail
-					};
-
-					$scope.close = function () {
-						$uibModalInstance.close();
-					};
-					$scope.ok = function () {
-						$uibModalInstance.close ({
-							action : 'save',
-							data: $scope.data
-						});
-					};
-					$scope.checkEmails = function(emails) {
-						if (emails && _.isArray(emails)) {
-							for (var i = 0; i < emails.length; i++) {
-								var email = emails[i];
-								if (email.length === 0) {
-									// The condition you want to check the email for
-									return true;
-								}
-							}
-						}
-						return false;
-					}
-				}
-			}, {})
-			.then (function (resp) {
-				if (resp && resp.action === 'save') {
-					//
-					// Send the emails
-					//
-
-					vm.sendEmailToADM(resp.data);
-				}
-			});
-		};
-		vm.sendEmailToADM = function (data) {
-			if (data) {
-				OpportunitiesService.sendEmailToADM({opportunityId: opportunity._id},{ emails: data, opportunity: vm.opportunity}).$promise
-					.then(function(response) {
-						vm.credentials = null;
-						Notification.success({ message: response.message, title: '<i class="glyphicon glyphicon-ok"></i> Email was sent successfully! Profile updated' });
-						// Manually update user profile
-						Authentication.user.admEmail = data.admEmail
-						Authentication.user.bfsEmail = data.bfsEmail
-						Authentication.user.dfsEmail = data.dfsEmail
-					})
-					.catch(onRequestEmailUpdateError);
-			}
-		}
-
-
-		// Email Update Callbacks
-		function onRequestEmailUpdateError(response) {
-			// Show user error message and clear form
-			vm.credentials = null;
-			Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Failed to send email and update profile!', delay: 4000 });
-		}
 
 		// -------------------------------------------------------------------------
 		//
@@ -563,6 +548,11 @@
 				});
 			}
 		};
+
+		vm.submit = function() {
+			vm.opportunity.status = 'Pending';
+			$state.go('opportunityadmin.submitcwu' , {opportunityId:vm.opportunity.code});
+		}
 	})
 	// =========================================================================
 	//

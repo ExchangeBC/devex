@@ -99,7 +99,7 @@
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
 					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canSubmit"  ui-sref="opportunityadmin.submitcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-arrow-circle-right"></i> SUBMIT</button>
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canSubmit"  ng-click="vm.submit()"><i class="fa fa-arrow-circle-right"></i> SUBMIT</button>
 					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
 				</div>
 			</div>
@@ -227,9 +227,6 @@
 					<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
 				</div>
 
-				<div class="col-xs-12">
-					<button ng-disabled="!vm.canPublish" type="submit" href="javascript:void(0);" class="btn btn-primary pull-right" ng-click="vm.submit()">Submit</button>
-				</div>
 			</div>
 		</div>
 	</div>
