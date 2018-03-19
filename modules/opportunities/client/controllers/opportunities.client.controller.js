@@ -35,10 +35,9 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon, AdminService) {
 		var vm                    = this;
 		vm.features = window.features;
-		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -213,6 +212,13 @@
 				vm.saveProposals ();
 			vm.responses[0][0].rank = 999;
 			});
+		} 
+		else {
+			// -------------------------------------------------------------------------
+			//
+			// stuff for cwu evaluation
+			//
+			// -------------------------------------------------------------------------
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -362,6 +368,84 @@
 			proposal.isAssigned = true;
 			vm.saveProposal (proposal);
 		};
+		// -------------------------------------------------------------------------
+		//
+		// Submit Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.submit = function (proposal) {
+			var copiedUser = angular.copy(Authentication.user);
+
+			//the opportunity transitions from the "Draft" state to the "Pending" state
+			modalService.showModal ({
+				size: 'lg',
+				templateUrl: '/modules/opportunities/client/views/cwu-opportunity-modal-email.html',
+				controller: function ($scope, $uibModalInstance,AdminService) {
+
+					$scope.data = {
+						admEmail: copiedUser.admEmail,
+						dfsEmail: copiedUser.dfsEmail,
+						bfsEmail: copiedUser.bfsEmail,
+					};
+
+					$scope.close = function () {
+						$uibModalInstance.close();
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close ({
+							action : 'save',
+							data: $scope.data
+						});
+					};
+					$scope.checkEmails = function(emails) {
+						if (emails && _.isArray(emails) ) {
+							for (var i = 0; i < emails.length; i++ ) { 
+								var email = emails[i];
+								if (email.length === 0) {  // The condition you want to check the email for
+									return true;
+								}
+							}
+						}
+						return false;
+					}
+				}
+			}, {})
+			.then (function (resp) {
+				if (resp && resp.action === 'save') {
+					//
+					// Send the emails
+					//
+					// 
+					vm.sendEmailToADM(resp.data);
+				}
+			});
+		};
+		
+		vm.sendEmailToADM = function (data) {
+			if (data) {
+				OpportunitiesService.sendEmailToADM({opportunityId: opportunity._id},{ emails: data, opportunity: vm.opportunity}).$promise
+					.then(function(response) {
+						vm.credentials = null;
+						Notification.success({ message: response.message, title: '<i class="glyphicon glyphicon-ok"></i> Email was sent successfully! Profile updated' });
+						// Manually update user profile
+						Authentication.user.admEmail = data.admEmail
+						Authentication.user.bfsEmail = data.bfsEmail
+						Authentication.user.dfsEmail = data.dfsEmail
+					})
+					.catch(onRequestEmailUpdateError);
+					
+				
+			}
+		}
+
+
+		// Email Update Callbacks
+		function onRequestEmailUpdateError(response) {
+			// Show user error message and clear form
+			vm.credentials = null;
+			Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Failed to send email and update profile!', delay: 4000 });
+		}
+
 		// -------------------------------------------------------------------------
 		//
 		// publish or un publish the opportunity

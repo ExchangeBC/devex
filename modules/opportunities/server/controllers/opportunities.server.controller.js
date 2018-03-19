@@ -21,13 +21,16 @@ request : <code>-request
  */
 var path = require('path'),
 	mongoose = require('mongoose'),
+	config = require('../../../../config/config'),
 	Opportunity = mongoose.model('Opportunity'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
-	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
+	github = require(path.resolve('./modules/core/server/controllers/core.server.github')),
+	nodemailer = require('nodemailer'),
+	smtpTransport = nodemailer.createTransport(config.mailer.options);
 	;
 
 
@@ -530,7 +533,7 @@ exports.unassign = function (req, res) {
 	// update the opportunity into pending status with no proposal
 	//
 	.then (function () {
-		req.opportunity.status = 'Pending';
+		req.opportunity.status = 'Draft';
 		req.opportunity.proposal = null;
 		return updateSave (req.opportunity);
 	})
@@ -927,3 +930,85 @@ exports.unPublishOpportunities = function (programId, projectId) {
 		}));
 	});
 };
+
+
+// async.waterfall(
+// {/* <body>
+//   <p>Unique ID {{U_ID}}</p>
+//   <p>Associated RFP control {{rfpControl}}</p>  
+//   <p>Posting date {{postDate}}</p>  
+//   <p>Value of opportunity {{value}}</p>  
+//   <p>Required Skills {{skills}}</p>  
+//   <p>Closing date {{closeDate}}</p>  
+//   <p>"Agree" and "Disagree" buttons</p>  
+//   <button>Agree</button>
+//   <button>Disagree</button>
+// </body> */}
+// 
+exports.sendEmailToADM = function (req, res) {
+	var user = req.user;
+	var body = req.body;
+	if (body) {
+		var emails = body.emails;
+		var opportunity = body.opportunity;
+
+		if (Object.keys(emails).length < 3) {
+			//Error Bad Request
+			res.status(401).send({
+				message: 'Please provide correct email array format'
+			});
+		} else {
+			user.ADMEmail = emails.admEmail;
+			user.DFSEmail = emails.dfsEmail;
+			user.BFSEmail = emails.bfsEmail;
+			res.render(path.resolve('modules/opportunities/server/email_templates/adm_message'), {
+				U_ID: opportunity._id,
+				rfpControl:'Some RFP control', //Unknown 
+				postDate: opportunity.assignment,
+				value: opportunity.earn,
+				skills: opportunity.skills.join(' '),
+				closeDate:opportunity.endDate,
+			}, function (err, emailHTML) {
+				if (!err) {
+					var mailOptions = {
+						to: user.ADMEmail, // Need to validate this email here too
+						from: config.mailer.from,
+						subject: 'Review opportunity : ' + opportunity.name,
+						html: emailHTML
+					};	
+					
+					// TODO: Since this is a code challege, I will assume that the email will be sent in a mannar similar 
+					// to the following process.
+
+					// var promise = smtpTransport.sendMail(mailOptions, function (err) {
+					// 	if (!err) {
+					// 		res.send({
+					// 			message: 'An email has been sent to the provided email with further instructions.'
+					// 		});
+					// 	} else {
+					// 		console.log(err);
+					// 		// return res.status(400).send({
+					// 		// 	message: 'Failure sending email'
+					// 		// });
+					// 		res.status(200).send('Ok')
+					// 	}
+					// });
+
+					// Assuming the email is sent, Code challenge continues from here
+					user.save(function(err, result){ 
+						if (!err) {
+							// Need to update the status of the opportunity
+							Opportunity.findOneAndUpdate({_id : opportunity._id}, {$set: {status: 'Pending'}}, function(err, result) {
+								res.status(200).send('Ok')
+							})
+						}
+					})
+				}
+			});			
+		}
+	} else {
+		res.status(401).send({
+			message: 'Please provide emails'
+		});
+	}
+}

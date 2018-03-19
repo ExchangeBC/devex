@@ -225,6 +225,10 @@
 				<div>
 					<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
 				</div>
+
+				<div class="col-xs-12">
+					<button ng-disabled="!vm.canPublish" type="submit" href="javascript:void(0);" class="btn btn-primary pull-right" ng-click="vm.submit()">Submit</button>
+				</div>
 			</div>
 		</div>
 	</div>

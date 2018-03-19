@@ -1,0 +1,52 @@
+<div class="modal-header">
+	<h3>Email</h3>
+</div>
+<div class="modal-body">
+	<div class="container">
+    <div class="row">
+      <div class="cols-md-12">
+        <p>Email Modal, to be determined (Assistant Deputy Minister)</p>
+      </div>
+    </div>
+    <div class="row">
+        <form-input
+          class="col-sm-3"
+          ng-model="data.admEmail"
+          x-options='{
+            "title": "Assistant Deputy Minister&#39;s email address",
+            "id":"email-ADM",
+            "name":"email-ADM",
+            "placeholder":"Email"
+          }'>
+        </form-input>
+    </div>
+    <div class="row">
+      <form-input
+        class="col-sm-3"
+        ng-model="data.dfsEmail"
+        x-options='{
+          "title":"Divisional Financial Staff&#39;s email address",
+          "id":"email-DFS",
+          "name":"email-DFS",
+          "placeholder":"Email"
+        }'>
+      </form-input>
+    </div>
+    <div class="row">
+      <form-input
+        class="col-sm-3"
+        ng-model="data.bfsEmail"
+        x-options='{
+          "title":" Branch Financial Staff&#39;s email address",
+          "id":"email-BFS",
+          "name":"email-BFS",
+          "placeholder":"Email"
+        }'>
+      </form-input>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
+	<button ng-disabled="checkEmails(data.email)" class="btn btn-primary" data-ng-click="ok()">Submit</button>
+</div>
