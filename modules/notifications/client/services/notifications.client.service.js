@@ -40,6 +40,10 @@
 				url: '/api/my/subscriptions/:subscriptionId',
 				isArray: false
 			},
+			opportunityNotification: {
+				method: 'POST',
+				url: '/api/notification/opportunityNotification'
+			},
 			subscribeNotification: {
 				method: 'GET',
 				url: '/api/my/notification/:notificationId',

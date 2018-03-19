@@ -773,19 +773,12 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitySubmitController', function ($scope, Authentication, Notification, opportunity, $stateParams) {
+	.controller('OpportunitySubmitController', function ($scope, $state, Authentication, NotificationsService, UsersService, Notification, opportunity, $stateParams) {
 		var vm          = this;
-		vm.opportunity = opportunity;
-		var isUser      = Authentication.user;
-		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.userCanAdd   = (isAdmin || isGov);
-
-		console.log(vm.opportunity);
+		vm.opportunity 	= opportunity;
+		vm.user  		= Authentication.user;
 
 		vm.submit = function(isValid) {
-			console.log('CORRECT SUBMIT');
-			console.log(isValid);
 			if (!isValid) {
 				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunitySubmitForm');
@@ -795,6 +788,28 @@
 				});
 				return false;
 			}
+
+			// Set opportunity status to Pending
+			// vm.opportunity.status = 'Pending';
+			var opportunityPromise = vm.opportunity.createOrUpdate();
+
+			// Save email addresses to user profile, ng-model sets them
+			var userPromise = UsersService.update(user).$promise;
+
+			// Send email to ADM
+			var body = {
+				recipient: vm.user.admEmail,
+				opportunityId: vm.opportunity.code,
+				template: 'opportunity-notification',
+			};
+			var admNotificationPromise = NotificationsService.opportunityNotification(body).$promise;
+
+			// Resolve all promises
+			Promise.all([opportunityPromise, userPromise, admNotificationPromise]).then(function() {
+				// success and redirect
+				$state.go('opportunities.viewcwu', {opportunityId:vm.opportunity.code});
+			});
+
 		};
 	})
 	;

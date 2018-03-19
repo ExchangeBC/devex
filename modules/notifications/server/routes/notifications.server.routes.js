@@ -58,6 +58,8 @@ module.exports = function(app) {
 
 	app.route('/api/cc/tryme').get(notifications.tryme);
 
+	app.route('/api/notification/opportunityNotification').post(notifications.opportunityNotification);
+
 	// Finish by binding the Notification middleware
 	app.param('notificationId', notifications.notificationByID);
 	app.param('subscriptionId', notifications.subscriptionById);
