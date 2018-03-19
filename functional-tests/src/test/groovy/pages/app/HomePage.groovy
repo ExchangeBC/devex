@@ -24,7 +24,6 @@ class HomePage extends Page implements AngularJSAware {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		RoadmapLink { PositionAndClick("a","roadmap") }
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
-<<<<<<< HEAD
 		OpportunitiesNavBar { $('a[ui-sref ~= "opportunities.list"]', 0) }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0) }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0) }
@@ -32,7 +31,6 @@ class HomePage extends Page implements AngularJSAware {
 		SignUpNavBar { PositionAndClick("a","authentication.gov") }
 		SignUpMidPageLink { PositionAndClick("a","authentication.gov",1) }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0) }
-=======
 		OpportunitiesNavBar { $('a[ui-sref ~= "opportunities.list"]') }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]') }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]') }
@@ -40,7 +38,6 @@ class HomePage extends Page implements AngularJSAware {
 		SignUpNavBar { PositionAndClick("a","authentication.gov") }
 		SignUpMidPageLink { PositionAndClick("a","authentication.gov",1) }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]') }
->>>>>>> f17c96aa106a59460f8e3909b49a47681048e2d3
 		FindWorkButton { $("a.btn.btn-lg.btn-warning").click() }
 		learnMoreLink(to: CodewithusPage) { $("a.btn.btn-lg.btn-link").click() }
     }
