@@ -364,6 +364,32 @@
 				parent: 'opportunities.list'
 			}
 		})
+		// -------------------------------------------------------------------------
+		//
+		// submit view
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.submit', {
+			url: '/:opportunityId/submit',
+			templateUrl: '/modules/opportunities/client/views/opportunity-submit.html',
+			controller: 'OpportunitySubmitController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				}
+			},
+			data: {
+				roles: ['admin','gov'],
+				pageTitle: 'Submit Opportunity: {{ opportunity.name }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Submit Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
 		;
 	}]);
 }());

@@ -34,15 +34,15 @@
 
 
 <div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords">
-
+		
 	<div class="card-header" ng-if="vm.isAdmin || opportunity.userIs.admin" style="text-align: right">
+			<span class="label label-danger" ng-if="opportunity.status === 'Draft'"><i class="fa fa-exclamation-triangle" ></i> DRAFT</span>
+			<span class="label label-deadline" ng-if="opportunity.status === 'Pending'"><i class="fa fa-exclamation-triangle" ></i> PENDING APPROVAL</span>
 			<span class="label label-danger" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
 			&nbsp;
 			<span class="label label-primary">Admin</span>
-			&nbsp;
-			<a ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" uib-tooltip="Unpublish"><i class="glyphicon glyphicon-ban-circle"></i></a>
-			&nbsp;
-			<a ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" uib-tooltip="Publish"><i class="glyphicon glyphicon-check"></i>
+			&nbsp;					
+			<a ng-if="opportunity.status === 'Draft' && vm.isGov" href="javascript:void(0);" ui-sref="opportunityadmin.submit({opportunityId: opportunity.code})" ng-click="$event.stopPropagation()" uib-tooltip="Submit"><i class="glyphicon glyphicon-check"></i>
 			</a>
 			&nbsp;
 			<a ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.opportunityTypeCd==='code-with-us'" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.editcwu({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>

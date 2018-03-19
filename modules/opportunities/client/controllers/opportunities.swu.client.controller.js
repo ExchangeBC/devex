@@ -105,6 +105,14 @@
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
+
+		//
+		//
+		// can this be submitted for approval?
+		//
+		//
+		vm.canSubmit = vm.canPublish && vm.opportunity.status === 'Draft';
+
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership

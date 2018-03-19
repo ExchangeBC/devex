@@ -77,6 +77,7 @@
 		vm.isMember                = opportunity.userIs.member;
 		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
 		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
+		vm.user = user;
 		//
 		// dates
 		//
@@ -107,6 +108,13 @@
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
+		// -------------------------------------------------------------------------
+		//
+		// can this be submitted for approval?
+		//
+		// -------------------------------------------------------------------------
+		vm.canSubmit = (vm.errorFields.length === 0) && vm.opportunity.status === 'Draft';
+
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -496,6 +504,7 @@
 		// what can the user do here?
 		//
 		var isUser                            = Authentication.user;
+		var user  							  = Authentication.user;
 		vm.isAdmin                            = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov                              = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.projects                           = projects;
@@ -760,6 +769,55 @@
 		};
 		vm.toggleHelp = function(field) {
 			vm.displayHelp[field] = ! vm.displayHelp[field];
+		};
+	})
+	// =========================================================================
+	//
+	// Controller the submit of the opportunity page
+	//
+	// =========================================================================
+	.controller('OpportunitySubmitController', function ($scope, $state, opportunity, Authentication, Notification, OpportunitiesService, OpportunitiesCommon, UsersService) {
+		var vm 		= this;
+		vm.opportunity = opportunity;
+		var user        = Authentication.user;
+		vm.user = user;
+
+		vm.submit = function(field)
+		{
+			// Fetch the email approval address.
+			var approvalEmailList = vm.user.assistantDeputyMinisterEmail;
+
+			// Update the user with the approval email preferences
+			// And call submit for approval
+			var userUpdatePromise = UsersService.update(user).$promise;
+			var submitPromise     = OpportunitiesService.submitForApproval({opportunityId:opportunity._id, emaillist: approvalEmailList}).$promise;
+
+			Promise.all([userUpdatePromise, submitPromise]).then(
+				function()
+				{
+					Notification.success ({
+						message : '<i class="glyphicon glyphicon-ok"></i> Opportunity Submitted For Approval'
+					});
+
+					// Decide which view to send the user to next.
+					var nextStateView = 'opportunities.viewcwu';
+
+					if (vm.opportunity.opportunityTypeCd === 'sprint-with-us')
+					{
+						nextStateView = 'opportunities.viewswu';
+					}
+
+					$state.go(nextStateView, {opportunityId:opportunity.code});
+				})
+				//
+				// On error, notify user
+				//
+				.catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Failed to submit for approval'
+					});
+			});
 		};
 	})
 	;
