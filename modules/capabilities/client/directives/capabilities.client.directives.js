@@ -17,20 +17,15 @@
 			},
 			templateUrl  : '/modules/capabilities/client/views/list.capabilities.directive.html',
 			controller   : function ($sce, $rootScope, $scope, CapabilitiesService, Authentication) {
-				var vm         = this;
-				vm.trust       = $sce.trustAsHtml;
-				vm.auth        = Authentication.permissions ();
-				vm.title       = ($scope.title) ? $scope.title : null;
-				vm.canAdd      = vm.auth.isAdmin;
-				vm.context     = $scope.context;
+				var vm          = this;
+				vm.trust        = $sce.trustAsHtml;
+				vm.auth         = Authentication.permissions ();
+				vm.title        = ($scope.title) ? $scope.title : null;
+				vm.canAdd       = vm.auth.isAdmin;
+				vm.context      = $scope.context;
 				vm.capabilities = $scope.capabilities;
 				$rootScope.$on ('updateCapabilities', function () {
-					if (vm.context === 'all') {
-						vm.capabilities = CapabilitiesService.query ();
-					}
-					else {
-						vm.capabilities = CapabilitiesService.query ();
-					}
+					vm.capabilities = CapabilitiesService.query ();
 				});
 			}
 		}
@@ -52,7 +47,6 @@
 			templateUrl  : '/modules/capabilities/client/views/view.capability.directive.html',
 			controller   : function ($scope, Authentication) {
 				var vm        = this;
-				var sz        = $scope.size ? $scope.size : 'lg';
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;

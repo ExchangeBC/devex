@@ -21,7 +21,6 @@
 	.controller('ProfilePrivacyController', function ($scope, subscriptions, Authentication, UsersService, Notification) {
 		var vm = this;
 		vm.user = angular.copy(Authentication.user);
-		var pristineUser = angular.toJson (Authentication.user);
 		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 		vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
@@ -46,7 +45,6 @@
 				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
 				Authentication.user = response;
 				vm.user = angular.copy(Authentication.user);
-				pristineUser = angular.toJson(Authentication.user);
 			}, function (response) {
 				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
 			});
@@ -62,7 +60,6 @@
 		vm.features                = window.features;
 		vm.trust                   = $sce.trustAsHtml;
 		vm.user                    = angular.copy (Authentication.user);
-		var pristineUser           = angular.toJson (Authentication.user);
 		vm.tinymceOptions          = TINYMCE_OPTIONS;
 		//
 		// set up the structures for capabilities
@@ -89,7 +86,6 @@
 				function (response) {
 					Authentication.user = response;
 					vm.user             = angular.copy(Authentication.user);
-					pristineUser        = angular.toJson(Authentication.user);
 					$scope.$broadcast ('show-errors-reset', 'vm.userForm');
 					Notification.success ({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> <h4>Edit skills successful</h4>'});
 				}, function (response) {

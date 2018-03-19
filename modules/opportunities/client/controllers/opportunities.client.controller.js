@@ -64,7 +64,6 @@
 		//
 		// what can the user do here?
 		//
-		var user                   = Authentication.user;
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
@@ -167,8 +166,7 @@
 				// make an array of responses (question objects) by question
 				//
 				vm.responses = [];
-				var questionIndex,
-					j;
+				var questionIndex;
 				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
 					vm.proposals.forEach (function (p) {
@@ -586,7 +584,7 @@
 		// where they came from
 		//
 		if (vm.projects.length === 0) {
-			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
+			Notification.error ({message : 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'});
 			$state.go ('opportunities.list');
 		}
 		//

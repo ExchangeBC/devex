@@ -25,12 +25,7 @@
 				vm.context     = $scope.context;
 				vm.superbasics = $scope.superbasics;
 				$rootScope.$on ('updateSuperbasics', function () {
-					if (vm.context === 'all') {
-						vm.superbasics = SuperbasicsService.query ();
-					}
-					else {
-						vm.superbasics = SuperbasicsService.query ();
-					}
+					vm.superbasics = SuperbasicsService.query ();
 				});
 			}
 		}
@@ -46,13 +41,11 @@
 			controllerAs : 'vm',
 			scope        : {
 				mode       : '@',
-				size       : '@',
 				superbasic : '='
 			},
 			templateUrl  : '/modules/superbasics/client/views/view.superbasic.directive.html',
 			controller   : function ($scope, Authentication) {
 				var vm        = this;
-				var sz        = $scope.size ? $scope.size : 'lg';
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;

@@ -25,12 +25,7 @@
 				vm.context     = $scope.context;
 				vm.propsalQuestions = $scope.propsalQuestions;
 				$rootScope.$on ('updatePropsalQuestions', function () {
-					if (vm.context === 'all') {
-						vm.propsalQuestions = PropsalQuestionsService.query ();
-					}
-					else {
-						vm.propsalQuestions = PropsalQuestionsService.query ();
-					}
+					vm.propsalQuestions = PropsalQuestionsService.query ();
 				});
 			}
 		}
@@ -46,13 +41,11 @@
 			controllerAs : 'vm',
 			scope        : {
 				mode       : '@',
-				size       : '@',
 				propsalQuestion : '='
 			},
 			templateUrl  : '/modules/propsalQuestions/client/views/view.propsalQuestion.directive.html',
 			controller   : function ($scope, Authentication) {
 				var vm        = this;
-				var sz        = $scope.size ? $scope.size : 'lg';
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;

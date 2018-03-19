@@ -58,8 +58,7 @@
 			},
 			'keyDown': function(args) {
 				var event = args.$event,
-					viewValue = args.$viewValue,
-					modelValue = args.$modelValue;
+					viewValue = args.$viewValue;
 
 				if (!(gobal.keyHelper.smallKeyBoard(event) || gobal.keyHelper.numberKeyBpoard(event) || gobal.keyHelper.functionKeyBoard(event) || gobal.keyHelper.currencyKeyBoard(event, viewValue) || gobal.keyHelper.floatKeyBoard(event, viewValue))) {
 					event.stopPropagation();

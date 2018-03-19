@@ -41,7 +41,6 @@
 		vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
-		var isUser           = Authentication.user;
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {

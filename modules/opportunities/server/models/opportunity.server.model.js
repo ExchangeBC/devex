@@ -138,7 +138,6 @@ OpportunitySchema.virtual ('closingIn').get (function () {
 		var dd = Math.floor(d / 86400000); // days
 		var dh = Math.floor((d % 86400000) / 3600000); // hours
 		var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
-		closing = dm+' minutes';
 		if (dd > 0) closing = dd+' days '+dh+' hours '+dm+' minutes';
 		else if (dh > 0) closing = dh+' hours '+dm+' minutes';
 		else closing = dm+' minutes';

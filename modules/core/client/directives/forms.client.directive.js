@@ -219,17 +219,6 @@
 				// ----------------------------------------------------------------------------------
 				var options = JSON.parse(attrs.options);
 				// ----------------------------------------------------------------------------------
-				if ( options.hasOwnProperty('number') ) {
-					var precision = 3;
-					if ( options.hasOwnProperty('numberPrecision') ) {
-						precision = parseInt(options.numberPrecision);
-					}
-					// ERROR: 'number' is not a function
-					// $(elem).find('input').number(true, precision, '.', ',', true).on('focus', function () {
-					// 	this.select();
-					// });
-				}
-				// ----------------------------------------------------------------------------------
 				if ( attrs.hasOwnProperty('disabled') ) {
 
 					$scope.$watch('disabled', function (newValue, oldValue) {

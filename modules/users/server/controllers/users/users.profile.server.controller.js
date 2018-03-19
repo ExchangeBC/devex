@@ -169,7 +169,7 @@ exports.changeProfilePicture = function (req, res) {
 		existingImageUrl = user.profileImageURL;
 		uploadImage()
 			.then(updateUser)
-			// .then(deleteOldImage)
+			.then(deleteOldImage)
 			.then(login)
 			.then(function () {
 				res.json(user);
@@ -213,13 +213,7 @@ exports.changeProfilePicture = function (req, res) {
 		return new Promise(function (resolve, reject) {
 			if (existingImageUrl !== User.schema.path('profileImageURL').defaultValue) {
 				fs.unlink(existingImageUrl, function (unlinkError) {
-					if (unlinkError) {
-						reject({
-							message: 'Error occurred while deleting old profile picture'
-						});
-					} else {
-						resolve();
-					}
+					resolve();
 				});
 			} else {
 				resolve();

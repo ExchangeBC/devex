@@ -72,7 +72,7 @@
 				element.on('focus', function(e) {
 					// when the input box get focused, remove the thousand separators
 					var value = e.target.value;
-					var value = value.replace(/,/g, '');
+					value = value.replace(/,/g, '');
 					ngModel.$setViewValue(value);
 					ngModel.$render();
 
@@ -155,11 +155,6 @@
 
 					return toFloat ? parseFloat(z) : z;
 				}
-				// round the value
-				function round(value, decimals) {
-					return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals);
-				}
-
 				function getUnitLength(unit) {
 					var unitNumber = units[unit];
 					return _.isUndefined(unitNumber) ? 0 : (unitNumber + '').length - 1;
@@ -185,14 +180,6 @@
 					return !!match;
 				}
 
-				// remove all front zeros
-				function removeExtraZeros(value) {
-					var expr = /^(0+)([0-9]+)/g;
-					var match = expr.exec(value);
-					if (!match) return value
-					return value.substring(match[1].length);
-				}
-
 				// add thousands separators
 				function addThousands(value) {
 					var expr = value.indexOf('.') > 0 ? /\d{1,3}(?=(\d{3})+(?!\d)+(\.))/g : /\d{1,3}(?=(\d{3})+(?!\d))/g;
@@ -203,10 +190,11 @@
 				function adjustDecimals(value, difference) {
 
 					if (difference === 0) return value;
+					var p;
 					// if need more zeroes, add them at the end
 					if (difference > 0) {
 
-						var p = (value + '');
+						p = (value + '');
 						if (p.indexOf('.') === -1) p = p + '.';
 
 						return p + Array(difference + 1).join('0');
@@ -214,7 +202,7 @@
 					} else {
 
 						// truncate any zeroes, if too many
-						var p = (value + '').split('.');
+						p = (value + '').split('.');
 						p[1] = p[1].substring(0, Math.abs(precision));
 
 						return p[0] + (p[1].length > 0 ? '.' + p[1] : '');

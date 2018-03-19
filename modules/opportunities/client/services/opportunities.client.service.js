@@ -217,7 +217,6 @@
 				//
 				// what can the user do here?
 				//
-				var user                   = Authentication.user;
 				var isUser                 = Authentication.user;
 				var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');

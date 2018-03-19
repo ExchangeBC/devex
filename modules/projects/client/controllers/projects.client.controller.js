@@ -109,7 +109,7 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		if (vm.programs.length === 0) {
-			alert ('You do not have a program for which you are able to create a project. Please browse to or create a program to put the new project under.');
+			Notification.error ({message : 'You do not have a program for which you are able to create a project. Please browse to or create a program to put the new project under.'});
 			$state.go (previousState.name, previousState.params);
 		}
 		//

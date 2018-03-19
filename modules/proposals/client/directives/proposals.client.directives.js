@@ -182,7 +182,7 @@
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				vm.userCanAdd = true || vm.isAdmin;
+				vm.userCanAdd = vm.isAdmin;
 				// console.log ('user can add', vm.userCanAdd);
 				if ($scope.title) vm.title = $scope.title;
 			}
