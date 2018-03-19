@@ -688,6 +688,12 @@
 				}
 			}
 			//
+			// if status was Pending, set to Draft. happens on first save
+			//
+			if (vm.opportunity.status === 'Pending') {
+				vm.opportunity.status = 'Draft';
+			}
+			//
 			// ensure that there is a trailing '/' on the github field
 			//
 			if (vm.opportunity.github && vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
