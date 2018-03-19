@@ -773,7 +773,7 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitySubmitController', function ($scope, $state, Authentication, NotificationsService, UsersService, Notification, opportunity, $stateParams) {
+	.controller('OpportunitySubmitController', function ($scope, $state, Authentication, OpportunitiesService, UsersService, Notification, opportunity, $stateParams) {
 		var vm          = this;
 		vm.opportunity 	= opportunity;
 		vm.user  		= Authentication.user;
@@ -789,8 +789,11 @@
 				return false;
 			}
 
+			// TODO could be one API call
+			// might improve performance
+
 			// Set opportunity status to Pending
-			// vm.opportunity.status = 'Pending';
+			vm.opportunity.status = 'Pending';
 			var opportunityPromise = vm.opportunity.createOrUpdate();
 
 			// Save email addresses to user profile, ng-model sets them
@@ -799,10 +802,10 @@
 			// Send email to ADM
 			var body = {
 				recipient: vm.user.admEmail,
-				opportunityId: vm.opportunity.code,
+				opportunityId: vm.opportunity._id,
 				template: 'opportunity-notification',
 			};
-			var admNotificationPromise = NotificationsService.opportunityNotification(body).$promise;
+			var admNotificationPromise = OpportunitiesService.opportunityNotification(body).$promise;
 
 			// Resolve all promises
 			Promise.all([opportunityPromise, userPromise, admNotificationPromise]).then(function() {

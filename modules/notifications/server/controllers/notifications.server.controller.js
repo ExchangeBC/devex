@@ -792,14 +792,6 @@ exports.checkSubscriptions = function (req, res) {
 		res.status(404).json({ok:false});
 	}
 };
-exports.opportunityNotification = function (req, res) {
-	console.log('MADE IT TO THE SERVER JUST NEED TO SEND EMAIL');
-	console.log(req.body.template);
-	console.log(req.body.recipient);
-	console.log(req.body.opportunityId);
-	res.json(200);
-	//send email here
-};
 exports.countFollowingOpportunity = function (oppcode) {
 	var notcode = 'not-update-'+oppcode;
 	return new Promise (function (resolve, reject) {

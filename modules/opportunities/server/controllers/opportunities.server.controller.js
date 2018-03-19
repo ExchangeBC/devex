@@ -365,6 +365,33 @@ exports.create = function(req, res) {
 
 // -------------------------------------------------------------------------
 //
+// Sends email to ADM when opportunity is submitted
+//
+// -------------------------------------------------------------------------
+exports.opportunityNotification = function (req, res) {
+	console.log(req.body.opportunityId);
+	Opportunity.findById (req.body.opportunityId)
+		.exec (function (err, opportunity) {
+			var data = setNotificationData (opportunity);
+			data.username = '';
+			data.useremail = req.body.recipient;
+			data._id = opportunity._id;
+			data.name = opportunity.name;
+			data.rfp = opportunity.proposal;
+			data.postingDate = data.dateStart;
+			data.requiredSkills = opportunity.skills.join(', ');
+			data.closingDate = opportunity.dateDeadline
+			Notifications.notifyUserAdHoc(req.body.template, data);
+			res.status(200);
+		});
+
+	//TODO better error handling
+
+	res.status(500);
+};
+
+// -------------------------------------------------------------------------
+//
 // this just takes the already queried object and pass it back
 //
 // -------------------------------------------------------------------------

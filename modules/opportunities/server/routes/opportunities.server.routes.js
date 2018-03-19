@@ -21,6 +21,8 @@ module.exports = function(app) {
 	app.route('/api/my/opportunities').all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.my);
 
+	app.route('/api/opportunity/opportunityNotification').post(opportunities.opportunityNotification);
+
 	//
 	// opportunities for project
 	//
@@ -63,7 +65,6 @@ module.exports = function(app) {
 
 	app.route('/api/request/opportunity/:opportunityId')
 		.get(opportunities.request)
-
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);
