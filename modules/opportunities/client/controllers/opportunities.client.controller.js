@@ -106,7 +106,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = (vm.errorFields.length === 0);
+		vm.canSubmit = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -367,14 +367,14 @@
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		vm.publish = function (opportunity, state) {
-			var publishedState      = opportunity.isPublished;
+		vm.submit = function (opportunity, state) {
+			var publishedState = opportunity.isPublished;
 			var t = state ? 'Published' : 'Unpublished';
 
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
 			if (state) {
-				var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+				var question = 'When you submit this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
 				promise = ask.yesNo (question).then (function (result) {
 					savemeSeymour = result;
 				});
@@ -514,7 +514,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = vm.errorFields > 0;
+		vm.canSubmit = vm.errorFields > 0;
 		//
 		// set up the dropdown amounts for code with us earnings
 		//
@@ -766,6 +766,35 @@
 		};
 		vm.toggleHelp = function(field) {
 			vm.displayHelp[field] = ! vm.displayHelp[field];
+		};
+	})
+	// =========================================================================
+	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller('OpportunitySubmitController', function ($scope, Authentication, Notification, opportunity, $stateParams) {
+		var vm          = this;
+		vm.opportunity = opportunity;
+		var isUser      = Authentication.user;
+		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.userCanAdd   = (isAdmin || isGov);
+
+		console.log(vm.opportunity);
+
+		vm.submit = function(isValid) {
+			console.log('CORRECT SUBMIT');
+			console.log(isValid);
+			if (!isValid) {
+				// console.log (vm.opportunityForm);
+				$scope.$broadcast('show-errors-check-validity', 'vm.opportunitySubmitForm');
+				Notification.error ({
+					message : 'There are errors on the page, please review your work and re-save',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
 		};
 	})
 	;
