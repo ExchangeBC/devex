@@ -362,17 +362,17 @@
         var copyuser = function() {
             ppp.proposal.opportunity = ppp.opportunity;
             if (!ppp.isSprintWithUs) {
-                ppp.businessName = ppp.user.businessName;
-                ppp.businessAddress = ppp.user.businessAddress;
-                ppp.businessContactName = ppp.user.businessContactName;
-                ppp.businessContactEmail = ppp.user.businessContactEmail;
-                ppp.businessContactPhone = ppp.user.businessContactPhone;
+                ppp.proposal.businessName = ppp.user.businessName;
+                ppp.proposal.businessAddress = ppp.user.businessAddress;
+                ppp.proposal.businessContactName = ppp.user.businessContactName;
+                ppp.proposal.businessContactEmail = ppp.user.businessContactEmail;
+                ppp.proposal.businessContactPhone = ppp.user.businessContactPhone;
             } else {
-                ppp.businessName = ppp.org.name;
-                ppp.businessAddress = ppp.org.fullAddress;
-                ppp.businessContactName = ppp.org.contactName;
-                ppp.businessContactEmail = ppp.org.contactEmail;
-                ppp.businessContactPhone = ppp.org.contactPhone;
+                ppp.proposal.businessName = ppp.org.name;
+                ppp.proposal.businessAddress = ppp.org.fullAddress;
+                ppp.proposal.businessContactName = ppp.org.contactName;
+                ppp.proposal.businessContactEmail = ppp.org.contactEmail;
+                ppp.proposal.businessContactPhone = ppp.org.contactPhone;
             }
         };
         // -------------------------------------------------------------------------
