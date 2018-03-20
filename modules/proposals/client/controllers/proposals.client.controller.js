@@ -137,8 +137,6 @@
 		ppp.members = [];
 		if (org) ppp.members                      = org.members.concat (org.admins);
 		ppp.title                                 = editing ? 'Edit' : 'Create' ;
-		if (!proposal.team) proposal.team = [];
-		ppp.proposal                              = angular.copy (proposal);
 		ppp.user                                  = angular.copy (Authentication.user);
 		var pristineUser                          = angular.toJson(Authentication.user);
 		ppp.capabilities                          = capabilities;
@@ -167,19 +165,18 @@
 		ppp.display.evaluation     = $sce.trustAsHtml(ppp.opportunity.evaluation);
 		ppp.display.criteria       = $sce.trustAsHtml(ppp.opportunity.criteria);
 		uibButtonConfig.activeClass = 'cbg-light-steel-blue';
-		//
-		// ensure status set accordingly
-		//
-		if (!editing) {
-			ppp.proposal.status = 'New';
-		}
+
+		// Setup controller's proposal
+		// ###########################
+		setupProposal(proposal);
+
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
 		ppp.isSprintWithUs = false;
 		if (opportunity.opportunityTypeCd === 'sprint-with-us') {
 			ppp.isSprintWithUs = true;
-			ppp.proposal.isCompany = true;
+			updateProposal({ isCompany: true });
 		}
 		//
 		// what capabilities are required ?
@@ -568,6 +565,76 @@
 			else if (type.indexOf ('excel') > -1) return 'excel';
 			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
-	})
-	;
+
+		// Helper function for setting up controller proposal
+		// (Ideally these could be private class methods on the controller)
+		// ##################################################
+		/**
+		 * Sets up controller's proposal from the resolved proposal in route config.
+		 * @private
+		 * @param {object} proposal - Instance of a proposal resource.
+		 */
+		function setupProposal(proposal) {
+			var proposal = angular.copy(proposal);
+			proposal.status = editing ? proposal.status : 'New';
+			proposal.questions = proposal.questions || ppp.questions.map(function(question) {
+				return { question: question, response: '' };
+			}) || [];
+			proposal.team = proposal.team || [];
+			setProposal(proposal);
+		}
+
+		/**
+		 * Updates proposal with params object argument. Creates a new copy of the proposal.
+		 * @private
+		 * @param {object} params -  Key, value pairs to update proposal with.
+		 */
+		function updateProposal(params) {
+			var proposal = angular.extend({}, getProposal(), params);
+			setProposal(proposal);
+		}
+
+		/**
+		 * Sets proposal to empty object. Only to be used when deleting a proposal.
+		 * @private
+		 */
+		function unsetProposal() {
+			setProposal({});
+		}
+
+		/**
+		 * @private
+		 * @returns Controller's proposal.
+		 */
+		function getProposal() {
+			return ppp.proposal;
+		}
+
+		/**
+		 * Sets controller's proposal and internal pristine proposal to proposal.
+		 * @private
+		 * @param {object} proposal - Instance of a proposal resource.
+		 */
+		function setProposal(proposal) {
+			ppp.proposal = proposal;
+			setPristineProposal(proposal);
+		}
+
+		/**
+		 * @private
+		 * @returns Controller's internal pristine proposal.
+		 */
+		function getPristineProposal() {
+			return ppp.proposal.$$original;
+		}
+
+		/**
+		 * Sets controller's internal pristine proposal to proposal.
+		 * @private
+		 * @param {object} proposal - Instance of a proposal resource.
+		 */
+		function setPristineProposal(proposal) {
+			proposal.$$original = angular.toJson(proposal);
+		}
+	});
 }());
