@@ -175,8 +175,9 @@
 		//
 		ppp.isSprintWithUs = false;
 		if (opportunity.opportunityTypeCd === 'sprint-with-us') {
-			ppp.isSprintWithUs = true;
-			updateProposal({ isCompany: true });
+            ppp.isSprintWithUs = true;
+            ppp.proposal.isCompany = true;
+            setPristineProposal(ppp.proposal);
 		}
 		//
 		// what capabilities are required ?
@@ -295,7 +296,6 @@
 			headerText: 'Unsaved Changes!',
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
-		var pristineProposal = angular.toJson (ppp.proposal);
         var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function(event, toState, toParams) {
             if (getPristineProposal() !== angular.toJson(getProposal()) || pristineUser !== angular.toJson (ppp.user)) {
                 if (toState.retryInProgress) {
@@ -311,7 +311,7 @@
             }
         });
 		window.onbeforeunload = function() {
-			if (pristineProposal !== angular.toJson(getProposal())) {
+			if (getPristineProposal() !== angular.toJson(getProposal())) {
 				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
 			}
 		};
@@ -354,65 +354,58 @@
 				} else resolve ();
 			});
 		};
-		// -------------------------------------------------------------------------
-		//
-		// copy over stuff
-		//
-		// -------------------------------------------------------------------------
-		var copyuser = function () {
-			ppp.proposal.opportunity          = ppp.opportunity;
-			if (!ppp.isSprintWithUs) {
-				ppp.proposal.businessName         = ppp.user.businessName;
-				ppp.proposal.businessAddress      = ppp.user.businessAddress;
-				ppp.proposal.businessContactName  = ppp.user.businessContactName;
-				ppp.proposal.businessContactEmail = ppp.user.businessContactEmail;
-				ppp.proposal.businessContactPhone = ppp.user.businessContactPhone;
-			} else {
-				ppp.proposal.businessName         = ppp.org.name;
-				ppp.proposal.businessAddress      = ppp.org.fullAddress;
-				ppp.proposal.businessContactName  = ppp.org.contactName;
-				ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-				ppp.proposal.businessContactPhone = ppp.org.contactPhone;
-			}
-		};
-		// -------------------------------------------------------------------------
-		//
-		// set the team from the winners circle
-		//
-		// -------------------------------------------------------------------------
-		var copyteam = function () {
-			if (ppp.isSprintWithUs) {
-				ppp.proposal.team = [];
-				ppp.winners.forEach (function (m) {
-					if (m.selected) ppp.proposal.team.push (m._id);
-				});
-			}
-		};
-		// -------------------------------------------------------------------------
-		//
-		// save the proposal - promise
-		//
-		// -------------------------------------------------------------------------
-		var saveproposal = function (goodmessage, badmessage) {
-			copyuser ();
-			copyteam ();
-			return new Promise (function (resolve, reject) {
-				ppp.proposal.createOrUpdate ()
-				.then (
-					function (response) {
-						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
-						ppp.proposal = response;
-						pristineProposal = angular.toJson (ppp.proposal);
-						ppp.subscribe (true);
-						resolve ();
-					},
-					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
-						 reject ();
-					}
-				);
-			});
-		};
+        // -------------------------------------------------------------------------
+        //
+        // copy over stuff
+        //
+        // -------------------------------------------------------------------------
+        var copyuser = function() {
+            ppp.proposal.opportunity = ppp.opportunity;
+            if (!ppp.isSprintWithUs) {
+                ppp.businessName = ppp.user.businessName;
+                ppp.businessAddress = ppp.user.businessAddress;
+                ppp.businessContactName = ppp.user.businessContactName;
+                ppp.businessContactEmail = ppp.user.businessContactEmail;
+                ppp.businessContactPhone = ppp.user.businessContactPhone;
+            } else {
+                ppp.businessName = ppp.org.name;
+                ppp.businessAddress = ppp.org.fullAddress;
+                ppp.businessContactName = ppp.org.contactName;
+                ppp.businessContactEmail = ppp.org.contactEmail;
+                ppp.businessContactPhone = ppp.org.contactPhone;
+            }
+        };
+        // -------------------------------------------------------------------------
+        //
+        // set the team from the winners circle
+        //
+        // -------------------------------------------------------------------------
+        var copyteam = function () {
+            if (ppp.isSprintWithUs) {
+                ppp.proposal.team = ppp.winners.filter(function(winner) {
+                    return winner.selected;
+                }).map(function(winner) {
+                    return winner._id;
+                });
+            }
+        };
+        // -------------------------------------------------------------------------
+        //
+        // save the proposal - promise
+        //
+        // -------------------------------------------------------------------------
+        var saveproposal = function(goodmessage, badmessage) {
+            copyuser();
+            copyteam();
+            ppp.proposal.createOrUpdate()
+                .then(function(proposal) {
+                    setProposal(proposal);
+                    Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.' });
+                    ppp.subscribe (true);
+                }, function(error) {
+                    Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
+                });
+        };
 		// -------------------------------------------------------------------------
 		//
 		// perform the save, both user info and proposal info
@@ -425,24 +418,23 @@
 			}
 			saveuser().then (saveproposal);
 		};
-		// -------------------------------------------------------------------------
-		//
-		// leave without saving any work
-		//
-		// -------------------------------------------------------------------------
-		ppp.close = function () {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function () {
-					window.onbeforeunload = null;
-					$locationChangeStartUnbind ();
-					$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-				}, function () {
-				});
-			} else {
-				$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-			}
-		};
+        // -------------------------------------------------------------------------
+        //
+        // leave without saving any work
+        //
+        // -------------------------------------------------------------------------
+        ppp.close = function () {
+            if (getPristineProposal() !== angular.toJson(getProposal())) {
+                modalService.showModal({}, saveChangesModalOpt)
+                    .then(function() {
+                        window.onbeforeunload = null;
+                        $locationChangeStartUnbind();
+                        $state.go('opportunities.view', { opportunityId: ppp.opportunity.code });
+                    }, angular.noop);
+            } else {
+                $state.go('opportunities.view', { opportunityId: ppp.opportunity.code });
+            }
+        };
 		// -------------------------------------------------------------------------
 		//
 		// this is structured to be part of a promise chain, the input to the final
@@ -486,27 +478,27 @@
 		// -------------------------------------------------------------------------
 		ppp.withdraw = function () {
 			performwithdrawal ();
-		};
-		// -------------------------------------------------------------------------
-		//
-		// submit the proposal
-		//
-		// -------------------------------------------------------------------------
-		ppp.submit = function () {
-			saveuser().then (function () {
-				copyuser ();
-				ProposalsService.submit (ppp.proposal).$promise
-				.then (
-					function (response) {
-						ppp.proposal = response;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
-					},
-					function (error) {
-						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-					}
-				);
-			});
-		}
+        };
+
+        // -------------------------------------------------------------------------
+        //
+        // submit the proposal
+        //
+        // -------------------------------------------------------------------------
+        ppp.submit = function() {
+            saveuser()
+                .then(function() {
+                    copyuser();
+                    ppp.proposal.$submit()
+                        .then(function(proposal) {
+                            setProposal(proposal);
+                            Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!' });
+                        }, function(error) {
+                            Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
+                        });
+                });
+        }
+
 		// -------------------------------------------------------------------------
 		//
 		// upload documents
@@ -584,16 +576,6 @@
         }
 
 		/**
-		 * Updates proposal with params object argument. Creates a new copy of the proposal.
-		 * @private
-		 * @param {object} params -  Key, value pairs to update proposal with.
-		 */
-		function updateProposal(params) {
-			var proposal = angular.extend({}, getProposal(), params);
-			setProposal(proposal);
-		}
-
-		/**
 		 * Sets proposal to empty object. Only to be used when deleting a proposal.
 		 * @private
 		 */
@@ -628,7 +610,8 @@
 		}
 
 		/**
-		 * Sets controller's internal pristine proposal to proposal.
+		 * Sets controller's internal pristine proposal to proposal. Should be called whenever a
+         * property is added to proposal without calling `setProposal`.
 		 * @private
 		 * @param {object} proposal - Instance of a proposal resource.
 		 */
