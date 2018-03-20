@@ -296,29 +296,28 @@
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
-		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-				if (toState.retryInProgress) {
-					toState.retryInProgress = false;
-					return;
-				}
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function  () {
-					toState.retryInProgress = true;
-					$state.go(toState, toParams);
-				}, function () {
-				});
-				event.preventDefault();
-			}
-		});
+        var $locationChangeStartUnbind = $scope.$on('$stateChangeStart', function(event, toState, toParams) {
+            if (getPristineProposal() !== angular.toJson(getProposal()) || pristineUser !== angular.toJson (ppp.user)) {
+                if (toState.retryInProgress) {
+                    toState.retryInProgress = false;
+                    return;
+                }
+                modalService.showModal({}, saveChangesModalOpt)
+                    .then(function  () {
+                        toState.retryInProgress = true;
+                        $state.go(toState, toParams);
+                    }, angular.noop);
+                event.preventDefault();
+            }
+        });
 		window.onbeforeunload = function() {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
+			if (pristineProposal !== angular.toJson(getProposal())) {
 				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
 			}
 		};
 		$scope.$on('$destroy', function () {
 			window.onbeforeunload = null;
-			$locationChangeStartUnbind ();
+			$locationChangeStartUnbind();
 		});
 		// -------------------------------------------------------------------------
 		//
@@ -450,34 +449,36 @@
 		// function is a boolean as to whether or not to perform the action
 		//
 		// -------------------------------------------------------------------------
-		var performdelete = function (q) {
-			ask.yesNo (q).then (function (r) {
-				if (r) {
-					ppp.proposal.$remove (
-						function () {
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
-							ppp.subscribe (false);
-							$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-						},
-						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
-						}
-					);
-				}
-			});
-		};
+        var performdelete = function(q) {
+            ask.yesNo(q)
+                .then(function(r) {
+                    if (r) {
+                        ppp.proposal.$remove(function () {
+                            unsetProposal();
+                            Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful' });
+                            ppp.subscribe(false);
+                            $state.go('opportunities.view', { opportunityId: ppp.opportunity.code });
+                        }, function (error) {
+                            Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
+                        });
+                    }
+                });
+        };
+
 		var performwithdrawal = function (txt) {
 					ppp.proposal.status = 'Draft';
 					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
-		};
-		// -------------------------------------------------------------------------
-		//
-		// this deletes a draft
-		//
-		// -------------------------------------------------------------------------
-		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
-		};
+        };
+
+        // -------------------------------------------------------------------------
+        //
+        // this deletes a draft
+        //
+        // -------------------------------------------------------------------------
+        ppp.delete = function() {
+            performdelete('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
+        };
+
 		// -------------------------------------------------------------------------
 		//
 		// this deletes a submission
@@ -574,15 +575,13 @@
 		 * @private
 		 * @param {object} proposal - Instance of a proposal resource.
 		 */
-		function setupProposal(proposal) {
-			var proposal = angular.copy(proposal);
-			proposal.status = editing ? proposal.status : 'New';
-			proposal.questions = proposal.questions || ppp.questions.map(function(question) {
-				return { question: question, response: '' };
-			}) || [];
-			proposal.team = proposal.team || [];
-			setProposal(proposal);
-		}
+        function setupProposal(proposal) {
+            var proposal = angular.copy(proposal);
+            proposal.status = editing ? proposal.status : 'New';
+            proposal.questions = proposal.questions || [];
+            proposal.team = proposal.team || [];
+            setProposal(proposal);
+        }
 
 		/**
 		 * Updates proposal with params object argument. Creates a new copy of the proposal.
