@@ -1,9 +1,11 @@
 package pages.app
 import geb.Page
 import geb.module.*
+import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import geb.Browser
 import extensions.AngularJSAware
+import modules.CheckboxModule
 
 class FrameDescribingPage extends Page {
     static content = {
@@ -14,31 +16,32 @@ class FrameDescribingPage extends Page {
 class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     
 	static at = { angularReady && title == "BCDevExchange - New Opportunity" }
-    //static at = { title == "BCDevExchange - New Opportunity" }
-	static url = "opportunityadmin/create"
+	static url = "opportunityadmin/createcwu"
 	static content = {
-            opportunityTypeCd { $("input", name:"opportunityTypeCd").module(RadioButtons) }
-            desciFrame(page: FrameDescribingPage) { $("iframe", id: startsWith("ui-tinymce-"), 0) }
-            desciText { $("textarea", 1).module(Textarea) }
-            aciFrame(page: FrameDescribingPage) { $("iframe", id: startsWith("ui-tinymce-"), 1) }
-            actiText { $("textarea", 2).module(Textarea) }
-            propiFrame(page: FrameDescribingPage) { $("iframe", id: startsWith("ui-tinymce-"), 2) }
-            propiText { $("textarea", 3).module(Textarea) }
+            HeaderTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Header")]'), 0).click() }
+            BackgroundTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Background")]'), 0).click() }
+            DetailsTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Details")]'), 0).click() }
+            AcceptanceTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Acceptance and Evaluation")]'), 0).click() }
+  
+            SaveChangesButton { $("Button", type:"submit", 0) }
+            CloseButton { $(By.xpath('//a[i[@title="Close"]]'), 0) }
+
+            propiFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="criteria"]//following-sibling::p//iframe'), 0) }
+            desciFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="description"]//following-sibling::p//iframe'), 0) }
+            aciFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="evaluation"]//following-sibling::p//iframe'), 0) }
             oppTeaser { $(name: "short").module(Textarea) }
             oppTitle { $("input",id:"title") }
             selectProject { $("#opportunityForm") }
-            lowerSaveButton { $("#opportunityForm > div.row.form-foot > div > div > button") }
             oppEmail { $("input", id:"proposalEmail") }
             oppGithub { $("input",id:"github") }
             oppSkills { $("input", id:"skilllist") }
-            oppRole { waitFor { angularReady } 
-                    $("input", "ng-model":"vm.opportunity.c01_flag").module(Checkbox) 
-                    }
+            //oppRole { waitFor { angularReady } 
+            //$("input", "ng-model":"vm.opportunity.c01_flag").module(Checkbox) 
+            //}
             selectEarn { $("#opportunityForm") }
             selectLocation { $("#opportunityForm") }
             selectOnsite { $("#opportunityForm") }
             textArea { $("#ui-tinymce-7") }
-            upperSaveButton { $("button", type:"submit", 0) }
         }
 
     void "Add Description"(String desc){
@@ -46,7 +49,6 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
             withFrame( waitFor { desciFrame } ) {
               mceBody << desc
           }
-         //desciText.text = desc
     }
     
     void "Add Acceptance Criteria"(String desc){
@@ -54,7 +56,6 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
             withFrame( waitFor { aciFrame } ) {
               mceBody << desc
           }
-          //aciText.text = desc
     }
 
     void "Add Proposal Criteria"(String desc){
@@ -62,7 +63,6 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
             withFrame( waitFor { propiFrame } ) {
               mceBody << desc
           }
-          //propiText.text = desc
     }
    
     void "Set All Dates"(){
@@ -96,8 +96,9 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
         $("input", type:"date", name:"start").jquery.val(dDate)
         }
 
+   //@todo deprecated?
 	 //Hard wait function, sometimes useful to sync up the application when you cannot use waitFor.
-    Boolean sleepForNSeconds(int n) {
+   Boolean sleepForNSeconds(int n) {
     	def originalMilliseconds = System.currentTimeMillis()
     	waitFor(n + 1, 0.5) { (System.currentTimeMillis() - originalMilliseconds) > (n * 1000) }
         return true
