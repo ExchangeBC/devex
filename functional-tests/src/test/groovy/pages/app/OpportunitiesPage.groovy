@@ -4,7 +4,7 @@ import extensions.AngularJSAware
 
 class OpportunitiesPage extends Page implements AngularJSAware {
     
-	static at = { angularReady && $("head > title", text:"BCDevExchange - Opportunities List") }
+	static at = { angularReady && title == "BCDevExchange - Opportunities List" }
 	static url = "opportunities"
 
 	static content = {

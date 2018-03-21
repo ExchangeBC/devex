@@ -264,28 +264,39 @@
 			//
 			// go through each capability and set the flag if any team member
 			// has the capability
+			// also tally up the bolleans in isMetAllCapabilities. if they are all true
+			// then the user can submit their proposal
 			//
+			ppp.isMetAllCapabilities = true;
+			var haveanyatall = false;
 			ppp.inp.capabilities.forEach (function (c) {
+				haveanyatall = true;
 				var code = c.code;
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
 					else return member.iCapabilities[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
+				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
 			});
 			ppp.prp.capabilities.forEach (function (c) {
+				haveanyatall = true;
 				var code = c.code;
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
 					if (!ppp.prTeam[member.email]) return false;
 					else return member.iCapabilities[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
+				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
 			});
 			ppp.imp.capabilities.forEach (function (c) {
+				haveanyatall = true;
 				var code = c.code;
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
 					else return member.iCapabilities[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
+				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_imp.iPropCapabilities[code];
 			});
+			ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && haveanyatall;
 			//
 			// now skills
 			//

@@ -72,10 +72,13 @@ var addUserTo = function (org, fieldName) {
 	return function (user) {
 		// console.log ('add user', user._id, 'to ', fieldName);
 		org[fieldName].addToSet (user._id);
+		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.addToSet (org._id);
+			user.markModified ('orgsAdmin');
 		} else {
 			user.orgsMember.addToSet (org._id);
+			user.markModified ('orgsMember');
 		}
 		return user;
 	};
@@ -90,10 +93,13 @@ var removeUserFrom = function (org, fieldName) {
 	return function (user) {
 		// console.log ('removing user', user._id, 'from ', fieldName);
 		org[fieldName].pull (user._id);
+		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.pull (org._id);
+			user.markModified ('orgsAdmin');
 		} else {
 			user.orgsMember.pull (org._id);
+			user.markModified ('orgsMember');
 		}
 		return user;
 	};

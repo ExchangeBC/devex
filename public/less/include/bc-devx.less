@@ -138,7 +138,7 @@ h1.opp-detail {
 
 h3.opp-detail {
   padding: .75em 0;
-  margin-top: .75em;
+  margin: .5em 0 .75em;
   font-size: 1.2em;
 }
 
@@ -260,11 +260,6 @@ tr.last-screened-in {
 tr.screened-out {
   opacity: .7;
 }
-
-hr {
-  margin: .25em 0;
-}
-
 
 
 // Edit form
@@ -901,8 +896,8 @@ form-title {
 // Generic classes
 
 .label-cap-default {
-  color: #fff;
-  background: @gray-dark;
+  color: @gray-dark;
+  background: #fff;
 }
 
 .label-default {
@@ -978,13 +973,15 @@ form-title {
   color: @gray-light;
   border: 1px solid @gray-light;
   margin: -2px;
+  padding: .4em .4em .3em;
 }
 
 .label-fulltime-selected {
-  background: @theme-danger;
+  background: @gray;
   color: #fff;
-  border: 1px solid @theme-danger;
+  border: 1px solid @gray;
   margin: -2px;
+  padding: .4em .4em .3em;
 }
 
 .label-preferred-skill {
@@ -995,54 +992,71 @@ form-title {
 
 .label-preferred-skill-selected {
   background: @theme-orange;
-  opacity: 0.7;
 }
 
 // Capability Labels
 
 .label-agilecoaching {
-  background: #00b377;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+    color: black;
+  }
 }
 
 .label-deliverymgmt {
-  background: #00b377;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+    color: black;
+  }
 }
 
 .label-uxresearch {
-  background: #ff1493;
-  opacity: 0.7; 
+  color: @gray-dark;
+  > i {
+  color: violet;
+  } 
 }
 
 .label-uxdesign {
-  background: #ff1493;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: violet;
+  }
 }
 
 .label-frontend {
-  background: #002699;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: blue;
+  }
 }
 
 .label-backend {
-  background: #002699;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: blue;
+  }
 }
 
 .label-devops {
-  background: #663399;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: red;
+  }
 }
 
 .label-technicalarch {
-  background: #002699;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: blue;
+  }
 }
 
 .label-securityeng {
-  background: #4d004d;
-  opacity: 0.7;
+  color: @gray-dark;
+  > i {
+  color: red;
+  }
 }
 
 // Proposal stats list
@@ -1420,7 +1434,7 @@ form-title {
 .team-selection-list {
   > .team-member {
     display: block;
-    padding: 0px 5px;
+    padding: .5em;
     background-color: #fff;
     border: 1px solid #ddd;
     > img {
@@ -2282,7 +2296,8 @@ div.selected {
         cursor: pointer;
 
         &:hover {
-            opacity: 0.7;
+            
+
         }
     }
     &.killed {

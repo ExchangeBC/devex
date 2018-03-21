@@ -381,7 +381,7 @@ exports.getPotentialResources = function (req, res) {
 	//
 	// if the user is not an admin of the org then bail out
 	//
-	if (!(user._id === org.owner._id || !!~org.admins.indexOf (user._id))) {
+	if (!(user._id.toString () === org.owner._id.toString () || !!~org.admins.indexOf (user._id))) {
 		return res.status (422).send ({
 			message: 'Not Authorized Silly'
 		});
