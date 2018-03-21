@@ -7,7 +7,7 @@
 		<table class="table preferred-skills">
 			<tbody>
 				<tr ng-repeat="c in vm.all.capabilities" ng-if="vm.all.iOppCapabilities[c.code]">
-					<th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}">{{c.name}}</label></th>
+					<th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}"><i class="fa fa-circle"></i> {{c.name}}</label></th>
 					<td>
 						<label-list>
 							<label ng-repeat="s in c.skills" class="label" ng-class="{'label-preferred-skill':!vm.all.iOppCapabilitySkills[s.code],'label-preferred-skill-selected':vm.all.iOppCapabilitySkills[s.code]}" ng-click="vm.all.iOppCapabilitySkills[s.code]=!vm.all.iOppCapabilitySkills[s.code];vm.inp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.prp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.imp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];">{{s.name}}</label>

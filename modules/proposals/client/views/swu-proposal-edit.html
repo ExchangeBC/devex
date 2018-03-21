@@ -101,7 +101,7 @@
 												<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
 													<th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-lg success"></i></th>
 													<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-													<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+													<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
 													<td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 												</tr>
 											</tbody>
@@ -127,7 +127,7 @@
 												<avatar-display url="member.profileImageURL"></avatar-display>
 												<name>{{member.displayName}}</name>
 												<div class="label-list">
-													<label ng-repeat="capability in member.capabilities" class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label>
+													<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i>{{capability.name}}</label>
 												</div>
 											</div>
 										</div>
@@ -158,7 +158,7 @@
 												<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
 													<th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-lg success"></i></th>
 													<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-													<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+													<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
 													<td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 												</tr>
 											</tbody>
@@ -184,7 +184,7 @@
 												<avatar-display url="member.profileImageURL"></avatar-display>
 												<name>{{member.displayName}}</name>
 												<div class="label-list">
-													<label ng-repeat="capability in member.capabilities" class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label>
+													<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
 												</div>
 											</div>
 										</div>
@@ -215,7 +215,7 @@
 												<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
 													<th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-lg success"></i></th>
 													<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-													<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+													<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
 													<td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 												</tr>
 											</tbody>
@@ -241,7 +241,7 @@
 												<avatar-display url="member.profileImageURL"></avatar-display>
 												<name>{{member.displayName}}</name>
 												<div class="label-list">
-													<label ng-repeat="capability in member.capabilities" class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label>
+													<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
 												</div>
 											</div>
 										</div>

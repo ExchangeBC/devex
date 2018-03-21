@@ -28,7 +28,7 @@
 					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>
 					<div class="card-body">
 						<label-list>
-							<label ng-repeat="capability in member.capabilities" class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label>
+							<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
 							<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
 						</label-list>
 					</div>
@@ -44,7 +44,7 @@
 						<tr ng-repeat="capability in vm.capabilities">
 							<th scope="row" ng-if="vm.iOppCapability[capability.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
 							<th scope="row" ng-if="!vm.iOppCapability[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
 						</tr>
 					</tbody>
 				</table>
