@@ -10,11 +10,9 @@
 	</div>
 	
 	<div class="container detail-view">
-		<div class="row">
-			<div class="col-xs-12 text-right">
-				<button type="button" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company"><i class="fa fa-lg fa-cog"></i>
-				</button>
-			</div>
+		<div class="detail-view-header" ng-if="vm.canEdit">
+			<button type="button" class="btn btn-text-only pull-right" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company"><i class="fa fa-2x fa-gear"></i>
+			</button>
 		</div>
 		<div class="row">
 			<div class="col-xs-12 text-center">

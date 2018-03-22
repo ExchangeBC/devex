@@ -114,9 +114,17 @@ h6 {
 .detail-view {
   background: #fff;
   color: @gray;
-  padding: 2em;
+  padding: 1.5em 2em;
   border-radius: 3px;
   border: 1px solid #ddd;
+  > .detail-view-header {
+    padding: 0;
+    margin: 0;
+    > .btn {
+      padding: 0;
+      margin: 0;
+    }
+  }
 }
 
 // Opportunity detail views
@@ -1573,16 +1581,16 @@ form-title {
 }
 
 .card-company {
-  > img.card-img-left {
-    width: 70px;
-    height: 70px;
-    border-radius: 10px;
-    margin: 15px;
+  > .card-header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: none;
+    > .btn {
+      margin: -4px -15px;
     }
+  }
   > .card-body {
-    height: 100px;
     padding: 15px;
-    overflow: hidden;
   }
 }
 

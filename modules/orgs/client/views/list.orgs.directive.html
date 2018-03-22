@@ -9,21 +9,24 @@
 	</div>
 </div>
 
-<div class="card card-company" ng-repeat="org in vm.orgs">
-	<div class="card-header text-right" ng-if="org.canEdit || org.isOrgMember">
-		<span ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-primary">Admin</span>
-		&nbsp;
-		<span ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-primary">Member</span>
-		&nbsp;
-		<a ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="glyphicon glyphicon-edit"></i></a>
-	</div>
-	<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
-		<avatar-display url="org.orgImageURL" text="org.name"></avatar-display>
-		<div class="card-teaser" >
-			<p ng-bind-html="vm.trust(org.description)"></p>
+<div class="row">
+	<div class="col-xs-12 col-sm-4" ng-repeat="org in vm.orgs">
+		<div class="card card-company">
+			<div class="card-header" ng-if="org.canEdit || org.isOrgMember">
+				<span ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-default">Admin</span>
+				&nbsp;
+				<span ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default">Member</span>
+				&nbsp;
+				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="fa fa-lg fa-gear"></i></a>
+			</div>
+			
+			<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
+				<avatar-display url="org.orgImageURL" text="org.name"></avatar-display>
+			<!--
+				<p ng-bind-html="vm.trust(org.description)"></p>
+			-->
+			</div>
 		</div>
-		</div>
 	</div>
-
 </div>
 
