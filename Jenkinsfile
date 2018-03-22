@@ -69,13 +69,13 @@ node('maven') {
 	    echo "IMAGE_HASH: ${IMAGE_HASH}"
 	    echo ">>>> Build Complete"
 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: '$BUILD_ID', srcStream: 'devxp', srcTag: 'latest'
- 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$BUILD_ID'
-            sleep 5
-	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
-	    echo ">>>> Deployment Complete"
+// 	    openshiftTag destStream: 'devxp', verbose: 'true', destTag: 'dev', srcStream: 'devxp', srcTag: '$BUILD_ID'
+//            sleep 5
+//	    openshiftVerifyDeployment depCfg: 'platform-dev', namespace: 'devex-platform-dev', replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
+//	    echo ">>>> Deployment Complete"
 	    //openshiftVerifyService svcName: 'platform-dev', namespace: 'devex-platform-dev'
 	    //echo ">>>> Service Verification Complete"
-	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
+//	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
 
