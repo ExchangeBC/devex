@@ -299,21 +299,21 @@
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
-		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-				if (toState.retryInProgress) {
-					toState.retryInProgress = false;
-					return;
-				}
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function  () {
-					toState.retryInProgress = true;
-					$state.go(toState, toParams);
-				}, function () {
-				});
-				event.preventDefault();
-			}
-		});
+		// var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
+		// 	if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
+		// 		if (toState.retryInProgress) {
+		// 			toState.retryInProgress = false;
+		// 			return;
+		// 		}
+		// 		modalService.showModal ({}, saveChangesModalOpt)
+		// 		.then(function  () {
+		// 			toState.retryInProgress = true;
+		// 			$state.go(toState, toParams);
+		// 		}, function () {
+		// 		});
+		// 		event.preventDefault();
+		// 	}
+		// });
 		window.onbeforeunload = function() {
 			if (pristineProposal !== angular.toJson (ppp.proposal)) {
 				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
@@ -321,7 +321,7 @@
 		};
 		$scope.$on('$destroy', function () {
 			window.onbeforeunload = null;
-			$locationChangeStartUnbind ();
+			// $locationChangeStartUnbind ();
 		});
 		// -------------------------------------------------------------------------
 		//
@@ -435,17 +435,21 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.close = function () {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function () {
-					window.onbeforeunload = null;
-					$locationChangeStartUnbind ();
-					$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-				}, function () {
-				});
-			} else {
-				$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+			if (pristineProposal === angular.toJson (ppp.proposal)) {
+				window.onbeforeunload = null;
 			}
+			$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+			// if (pristineProposal !== angular.toJson (ppp.proposal)) {
+			// 	modalService.showModal ({}, saveChangesModalOpt)
+			// 	.then(function () {
+			// 		window.onbeforeunload = null;
+			// 		$locationChangeStartUnbind ();
+			// 		$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+			// 	}, function () {
+			// 	});
+			// } else {
+			// 	$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
+			// }
 		};
 		// -------------------------------------------------------------------------
 		//
