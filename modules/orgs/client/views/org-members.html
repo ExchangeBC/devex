@@ -2,13 +2,19 @@
 	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
 		<div class="row">
 			<div class="col-xs-12">
-				<div class="alert alert-info">
-					Your company's capabilities are determined by the individuals who are members of your company.
+				<div class="alert alert-important">
+					To apply on Sprint With Us opportunities, you need members with all of the Sprint With Us Capabilities.
+					<br><br>
+					<span>Instructions</span>:<br>
+					<ol>
+						<li>Get your people to sign up and claim their capabilities in their profile.</li>
+						<li>Using the email address in their profile, use the box below to add them to your company.</li>
+					</ol>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-sm-7">
+			<div class="col-sm-5">
 				<div class="well">
 					<span class="strong">Add Members</span>
 					<br>
@@ -35,10 +41,10 @@
 				</div>
 			</div>
 
+			<div class="col-sm-2"></div>
+
 			<div class="col-sm-5">
-				<div class="alert alert-warning" ng-if="!vm.org.metRFQ"><i class="fa fa-exclamation-triangle"></i> There are a capabilities you'll need to acquire before your company can apply on <i>Sprint With Us</i> opportunities.</div>
-				<div class="alert alert-success" ng-if="vm.org.metRFQ"><i class="fa fa-check-circle-o"></i> <span class="strong">Bingo!</span> Your company has all of the capabilities needed to apply for <i>Sprint With Us</i> opportunities! <br><a href="/opportunities">Browse opportunities</a></div>
-				<br>
+				<h4>Sprint With Us Capabilities</h4>
 				<table class="table capabilities-list">
 					<tbody>
 						<tr ng-repeat="capability in vm.capabilities">
@@ -48,6 +54,8 @@
 						</tr>
 					</tbody>
 				</table>
+				<div class="alert alert-warning" ng-if="!vm.org.metRFQ"><i class="fa fa-exclamation-triangle"></i> There are a capabilities you'll need to acquire before your company can apply on <i>Sprint With Us</i> opportunities.</div>
+				<div class="alert alert-success" ng-if="vm.org.metRFQ"><i class="fa fa-check-circle-o"></i> <span class="strong">Bingo!</span> Your company has all of the capabilities needed to apply for <i>Sprint With Us</i> opportunities! <br><a href="/opportunities">Browse opportunities</a></div>
 			</div>
 		</div>
 

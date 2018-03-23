@@ -21,8 +21,8 @@
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
 		
-		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-code"></i> Code With Us</button>
-		<button class="btn btn-sm btn-filter-selected"  ng-if="vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-code"></i> Code With Us</button>
+		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-tag"></i> Code With Us</button>
+		<button class="btn btn-sm btn-filter-selected"  ng-if="vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-tag"></i> Code With Us</button>
 		&nbsp;
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
@@ -53,9 +53,9 @@
 
 	<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 		<div class="label-list">
-			<label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
+			<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Sprint With Us</label>
+			<label class="label label-price" ng-if="opportunity.opportunityTypeCd==='code-with-us'"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
 			<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
-			<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Team Required </label>
 			<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}} /
 				<span ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
 				<span ng-if="opportunity.onsite == 'onsite'">In-person work required</span>

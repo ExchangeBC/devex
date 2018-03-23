@@ -29,6 +29,13 @@
 				</div>
 			</div>
 		</div>
+		
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+			<div class="alert alert-success">
+				<i class="fa fa-thumbs-o-up"></i>&nbsp; Your company is registered and it has members with the capabilities required for this opportunity.
+			</div>
+		</div>
+
 		<!-- // Proposal Application Directive // -->
 		
 
@@ -177,7 +184,7 @@
 
 		<div class="row">
 			<div class="col-xs-12">
-				<h3 class="opp-detail">Team Requirements</h3>
+				<h3 class="opp-detail"><i class="fa fa-group"></i> Team Capabilities Required</h3>
 				<p>In each phase, we need the following capabilities:</p>
 			</div>
 		</div>

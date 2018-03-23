@@ -108,7 +108,7 @@ h6 {
 // Container
 .container {
 	max-width: 1040px;
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 
 .detail-view {
@@ -1121,25 +1121,27 @@ form-title {
 // Common styles
 .alert {
   padding: 10px;
-  margin: 10px 0px;
+  margin: 10px;
   font-weight: 400;
   font-size: 14px;
+  border: 2px solid;
 }
 
 .alert-info {
-  background: @gray-lighter;
+  background: #fff;
   border-color: @gray-lighter;
   color: @gray-dark;
 }
 
 .alert-important {
-  background: @theme-important;
-  border-color: @theme-important;
+  background: #fff;
+  border-color: @theme-yellow;
   color: @gray-dark;
 }
 
 .alert-danger {
   background: #fddece;
+  border-color: @theme-danger;
   color: @theme-danger;
 }
 
@@ -1968,7 +1970,7 @@ form-title {
   max-width: 1040px;
   padding: 20px;
   margin: 20px 0px;
-  border: 1px solid;
+  border: 2px solid;
   border-radius: 4px;
   box-shadow: none;
   background: @gray-lighter;
@@ -1976,7 +1978,7 @@ form-title {
 }
 
 .well-important {
-  background: @theme-important;
+  background: #fff;
   border-color: @theme-yellow;
 }
 
@@ -1989,7 +1991,7 @@ form-title {
 // Banners
 
 .banner {
-  padding: 9px;
+  padding: .75em;
   margin: 0px;
   text-align: center;
 }
