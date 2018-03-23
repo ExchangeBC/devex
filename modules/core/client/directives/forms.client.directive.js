@@ -349,17 +349,18 @@
 						return 'You are about to leave the page with unsaved data. Click Cancel to remain here.';
 					}
 				};
-				var $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function(event, next, current) {
+				var $locationChangeStartUnbind = $scope.$on('$locationChangeStart', function(event, next, current) {
 					if ($scope.parentForm.$dirty) {
-						if (!confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
-							// Stay on current route if user cancels.
+						if ( !confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.') ) {
+							// cancel to not allow.
 							event.preventDefault();
+							return false;
 						}
 					}
 				});
 				$scope.$on('destroy', function () {
 					window.onbeforeunload = null;
-					$stateChangeStartUnbind();
+					$locationChangeStartUnbind ();
 				})
 			}
 		};
