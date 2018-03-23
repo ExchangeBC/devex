@@ -13,7 +13,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		// console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -72,7 +71,6 @@
 					});
 				}
 			});
-			// console.log (ppp.clist);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -164,7 +162,6 @@
 				ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
 			}
 		}
-		// console.log ('questions', ppp.proposal.questions);
 
 		ppp.totals = {};
 		ppp.tinymceOptions = TINYMCE_OPTIONS;
@@ -231,16 +228,11 @@
 			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities).sort ();
 			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills).sort ();
 
-
-			// console.log ('ppp.allNeededCapabilities',ppp.allNeededCapabilities);
-			// console.log ('ppp.allskills',ppp.allskills);
-
 			//
 			// now gather up ONLY those folks who have at least one of the required capabilities
 			// this should include any current team members
 			//
 			ppp.winners = [];
-			// console.log ('team:' , ppp.proposal.team);
 			//
 			// make an array of all team member ids
 			// make an array of all opp capability ids
@@ -257,7 +249,6 @@
 				// is the member already on the team ?
 				//
 				member.selected = isInArray (teamIdMap, memberId);
-				// console.log (member._id, member.selected);
 				//
 				// index the member capabilities by code, the capabilities service already added a map of
 				// ids to codes as i2cc
@@ -293,7 +284,6 @@
 				// //
 				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
 			});
-			// console.log ('winners:',ppp.winners);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -315,7 +305,6 @@
 					return (accum || (member.selected && member.capabilitiesByCode[code]));
 				}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && c.met;
-				// console.log ('capability', code, c.met);
 			});
 			//
 			// for each skill, see if the team meets it and then caount them up
@@ -330,7 +319,6 @@
 						return (accum || (member.selected && member.skillsByCode[code]));
 					}, false);
 					if (c.met) ppp.numberOfSKillsMet++;
-					// console.log ('skill', code, c.met);
 				}
 			});
 			if (!ppp.proposal.scores) ppp.proposal.scores = {};
@@ -364,30 +352,6 @@
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
-		// var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-		// 	if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-		// 		if (toState.retryInProgress) {
-		// 			toState.retryInProgress = false;
-		// 			return;
-		// 		}
-		// 		modalService.showModal ({}, saveChangesModalOpt)
-		// 		.then(function  () {
-		// 			toState.retryInProgress = true;
-		// 			$state.go(toState, toParams);
-		// 		}, function () {
-		// 		});
-		// 		event.preventDefault();
-		// 	}
-		// });
-		// window.onbeforeunload = function() {
-		// 	if (pristineProposal !== angular.toJson (ppp.proposal)) {
-		// 		return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
-		// 	}
-		// };
-		// $scope.$on('$destroy', function () {
-		// 	window.onbeforeunload = null;
-		// 	$locationChangeStartUnbind ();
-		// });
 		// -------------------------------------------------------------------------
 		//
 		// team score
