@@ -462,37 +462,32 @@
 		// save the proposal - promise
 		//
 		// -------------------------------------------------------------------------
-		var saveproposal = function (goodmessage, badmessage) {
-			copyuser ();
-			copyteam ();
-			return new Promise (function (resolve, reject) {
-				ppp.proposal.createOrUpdate ()
-				.then (
-					function (response) {
-						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
-						ppp.proposal = response;
-						pristineProposal = angular.toJson (ppp.proposal);
-						ppp.subscribe (true);
-						resolve ();
-					},
-					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
-						 reject ();
-					}
-				);
-			});
+		var saveproposal = function(goodmessage, badmessage) {
+			copyuser();
+			copyteam();
+			return ppp.proposal.createOrUpdate()
+				.then (function(proposal) {
+					Notification.success({message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+					ppp.proposal = proposal;
+					pristineProposal = angular.toJson(ppp.proposal);
+					ppp.subscribe(true);
+					ppp.form.proposalform.$setPristine();
+				}, function (error) {
+					Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
+				});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// perform the save, both user info and proposal info
 		//
 		// -------------------------------------------------------------------------
-		ppp.save = function (isvalid) {
+		ppp.save = function(isvalid) {
 			if (!isvalid) {
 				$scope.$broadcast('show-errors-check-validity', 'ppp.form.proposalform');
 				return false;
 			}
-			saveuser().then (saveproposal);
+			saveuser()
+				.then(saveproposal);
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -531,9 +526,12 @@
 					}
 				});
 		};
-		var performwithdrawal = function (txt) {
-					ppp.proposal.status = 'Draft';
-					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
+		var performwithdrawal = function(txt) {
+			ppp.proposal.status = 'Draft';
+			saveuser()
+				.then(function() {
+					saveproposal('Your proposal has been withdrawn.');
+				});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -548,8 +546,8 @@
 		// this deletes a submission
 		//
 		// -------------------------------------------------------------------------
-		ppp.withdraw = function () {
-			performwithdrawal ();
+		ppp.withdraw = function() {
+			performwithdrawal();
 		};
 		// -------------------------------------------------------------------------
 		//
