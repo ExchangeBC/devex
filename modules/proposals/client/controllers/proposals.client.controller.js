@@ -125,7 +125,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -340,17 +340,6 @@
 			else if (status === 'Draft') return 'Submit';
 			else if (status === 'Submitted') return 'label-success';
 		}
-		// -------------------------------------------------------------------------
-		//
-		// things to do with leaving the form without saving
-		//
-		// -------------------------------------------------------------------------
-		var saveChangesModalOpt = {
-			closeButtonText: 'Return To Proposal',
-			actionButtonText: 'Continue',
-			headerText: 'Unsaved Changes!',
-			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
-		};
 		// -------------------------------------------------------------------------
 		//
 		// team score
