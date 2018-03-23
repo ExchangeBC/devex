@@ -345,7 +345,7 @@
 							proposals p1 q1 rank: {{vm.proposals[0].questions[0].rank}}<br/>
 							responses q1 p1 rank: {{vm.responses[0][0].rank}}
 					<br/>
-					<p ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a></p>
+					<p ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></p>
 					<p ng-if="vm.stageIs('interview') || vm.stageIs('questions')">How many teams do you wish to interview? <input type="text" class="form-input input-sm" width="1" ng-model="vm.opportunity.numberOfInterviews"/></p>
 					<p ng-if="vm.stageIs('interview')"><strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score</p>
 					<p ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</p>

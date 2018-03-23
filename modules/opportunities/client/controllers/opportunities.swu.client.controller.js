@@ -200,6 +200,10 @@
 			});
 		};
 		buildQuestionPivot ();
+		vm.resetQuestions = function () {
+			vm.opportunity.evaluationStage === vm.stages.new;
+			buildQuestionPivot ();
+		};
 		// -------------------------------------------------------------------------
 		//
 		// Questions Modal
