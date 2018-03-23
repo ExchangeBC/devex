@@ -457,21 +457,20 @@
 		// function is a boolean as to whether or not to perform the action
 		//
 		// -------------------------------------------------------------------------
-		var performdelete = function (q) {
-			ask.yesNo (q).then (function (r) {
-				if (r) {
-					ppp.proposal.$remove (
-						function () {
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
-							ppp.subscribe (false);
-							$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-						},
-						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
-						}
-					);
-				}
-			});
+		var performdelete = function(q) {
+			ask.yesNo(q)
+				.then(function(r) {
+					if (r) {
+						ppp.proposal.$remove(function() {
+							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							ppp.subscribe(false);
+							ppp.form.proposalform.$setPristine();
+							$state.go('opportunities.view', {opportunityId:ppp.opportunity.code});
+						}, function(error) {
+							Notification.error({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!'});
+						});
+					}
+				});
 		};
 		var performwithdrawal = function (txt) {
 					ppp.proposal.status = 'Draft';
@@ -482,8 +481,8 @@
 		// this deletes a draft
 		//
 		// -------------------------------------------------------------------------
-		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
+		ppp.delete = function() {
+			performdelete('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
 		};
 		// -------------------------------------------------------------------------
 		//
