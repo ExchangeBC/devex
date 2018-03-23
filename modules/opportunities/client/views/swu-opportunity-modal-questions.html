@@ -24,7 +24,7 @@
 					<li class="list-group-item" ng-repeat="response in data.responses[qindex]">
 						<div class="row">
 							<div class="col-sm-9">
-								<strong>{{response.rank}}.</strong> {{response.response}}
+								{{response.response}}
 							</div>
 							<div class="col-sm-3">
 								<button ng-click="moveDown(response, qindex)" ng-if="$index<data.nproposals-1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
