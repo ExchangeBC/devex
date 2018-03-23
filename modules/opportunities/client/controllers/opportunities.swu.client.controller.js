@@ -142,24 +142,14 @@
 		// stuff for swu evaluation
 		//
 		// -------------------------------------------------------------------------
-		if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
+		var buildQuestionPivot = function () {
+			if (!vm.canEdit) return;
 			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
 			.then (function (proposals) {
 				vm.proposals = proposals;
 				//
 				// removed hack as this is now in the right place in the edit opportunity
 				//
-
-				// //
-				// // HACK: TBD : should have questions already on opportunity
-				// //
-				// vm.opportunity.questions = [];
-				// vm.proposals[0].questions.forEach (function (q) {
-				// 	vm.opportunity.questions.push (q.question);
-				// });
-				// //
-				// // end of hack
-				// //
 				//
 				// make an array of responses (question objects) by question
 				//
@@ -171,11 +161,11 @@
 						vm.responses[questionIndex].push (p.questions[questionIndex])
 					});
 				}
-				vm.responses.forEach (function (q) {
-					q.forEach (function (r) {
-						// console.log ('response:', r.rank, r.response);
-					})
-				})
+				// vm.responses.forEach (function (q) {
+				// 	q.forEach (function (r) {
+				// 		console.log ('response:', r.rank, r.response);
+				// 	})
+				// })
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
@@ -199,42 +189,38 @@
 							qset[i].rank = i+1;
 						}
 					});
+					//
+					// save all the proposals now with the new question rankings if applicable
+					// also because this will cause scoring to run on each proposal as well
+					//
 					vm.opportunity.evaluationStage = vm.stages.questions;
 					vm.saveOpportunity ();
+					vm.saveProposals ();
 				}
-				//
-				// save all the proposals now with the new question rankings if applicable
-				// also because this will cause scoring to run on each proposal as well
-				//
-				vm.saveProposals ();
 			});
-		}
+		};
+		buildQuestionPivot ();
 		// -------------------------------------------------------------------------
 		//
 		// Questions Modal
 		//
 		// -------------------------------------------------------------------------
 		vm.questions = function () {
-			// vm.responses[0][0].rank = 2;
-			// return;
 			modalService.showModal ({
 				size: 'lg',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-questions.html',
 				controller: function ($scope, $uibModalInstance) {
 
-					$scope.data = {};
-					$scope.data.questions = [];
-					$scope.data.proposals = vm.proposals;
-					$scope.data.nproposals = vm.proposals.length;
-					$scope.data.questions = vm.opportunity.questions;
-					$scope.data.responses = vm.responses;
+					$scope.data                = {};
+					$scope.data.questions      = [];
+					$scope.data.proposals      = vm.proposals;
+					$scope.data.nproposals     = vm.proposals.length;
+					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.responses      = vm.responses;
 					$scope.data.totalQuestions = vm.opportunity.questions.length;
-					$scope.data.currentPage = 1;
-
-					vm.responses[0][0].rank = 999;
+					$scope.data.currentPage    = 1;
 
 					$scope.close = function () {
-						// console.log ('what');
 						$uibModalInstance.close('cancel');
 					};
 					$scope.ok = function () {
@@ -350,21 +336,27 @@
 		};
 		// -------------------------------------------------------------------------
 		//
-		// save all the proposals (ranknings etc)
+		// save all the proposals (rankings etc)
 		//
 		// -------------------------------------------------------------------------
 		vm.saveProposal = function (proposal) {
+			if (!vm.canEdit) return;
 			vm.calculateProposalScore (proposal);
 			// console.log ('saving proposal');
 			// console.log ('questions', proposal.questions);
-			proposal.$update ();
+			return proposal.createOrUpdate ();
 		};
 		vm.saveProposals = function () {
-			vm.proposals.forEach (function (proposal) {
-				vm.saveProposal (proposal);
+			if (!vm.canEdit) return;
+			Promise.all (vm.proposals.map (function (proposal) {
+				return vm.saveProposal (proposal);
+			}))
+			.then (function () {
+				buildQuestionPivot ();
 			});
 		};
 		vm.saveOpportunity = function () {
+			if (!vm.canEdit) return;
 			vm.opportunity.$update ();
 		};
 		//
