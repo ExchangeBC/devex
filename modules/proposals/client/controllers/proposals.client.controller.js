@@ -22,7 +22,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -81,7 +80,6 @@
 					});
 				}
 			});
-			console.log (ppp.clist);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -216,16 +214,13 @@
 					});
 				}
 			});
-			console.log (ppp.clist);
 			//
 			// now gather up ONLY those folks who have at least one of the required capabilities
 			// this should include any current team members
 			//
 			ppp.winners = [];
-			console.log ('team:' , ppp.proposal.team);
 			ppp.members.forEach (function (member) {
 				member.selected = isInArray (ppp.proposal.team.map(function(a){return a._id;}), member._id);
-				console.log (member._id, member.selected);
 				//
 				// add up their scores on all required capabilities, if > 0 include them
 				//
@@ -236,7 +231,6 @@
 				});
 				if (score > 0) ppp.winners.push (member);
 			});
-			console.log (ppp.winners);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -265,10 +259,8 @@
 							accum[1] + elem[1]
 						];
 					}, [false, 0]);
-					// console.log (row.code, scores);
 					row.minMet = scores[0];
 					row.desMet = scores[1] >= row.desYears;
-			console.log (row);
 			});
 		};
 		ppp.calculateScores ();
@@ -299,30 +291,6 @@
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
 		var pristineProposal = angular.toJson (ppp.proposal);
-		// var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-		// 	if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-		// 		if (toState.retryInProgress) {
-		// 			toState.retryInProgress = false;
-		// 			return;
-		// 		}
-		// 		modalService.showModal ({}, saveChangesModalOpt)
-		// 		.then(function  () {
-		// 			toState.retryInProgress = true;
-		// 			$state.go(toState, toParams);
-		// 		}, function () {
-		// 		});
-		// 		event.preventDefault();
-		// 	}
-		// });
-		window.onbeforeunload = function() {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
-			}
-		};
-		$scope.$on('$destroy', function () {
-			window.onbeforeunload = null;
-			// $locationChangeStartUnbind ();
-		});
 		// -------------------------------------------------------------------------
 		//
 		// team score
@@ -431,17 +399,6 @@
 		// -------------------------------------------------------------------------
 		ppp.close = function() {
 			$state.go('opportunities.view', {opportunityId:ppp.opportunity.code});
-			// if (pristineProposal !== angular.toJson (ppp.proposal)) {
-			// 	modalService.showModal ({}, saveChangesModalOpt)
-			// 	.then(function () {
-			// 		window.onbeforeunload = null;
-			// 		$locationChangeStartUnbind ();
-			// 		$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-			// 	}, function () {
-			// 	});
-			// } else {
-			// 	$state.go ('opportunities.view',{opportunityId:ppp.opportunity.code});
-			// }
 		};
 		// -------------------------------------------------------------------------
 		//
