@@ -351,7 +351,6 @@
 			headerText: 'Unsaved Changes!',
 			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
 		};
-		var pristineProposal = angular.toJson (ppp.proposal);
 		// -------------------------------------------------------------------------
 		//
 		// team score
@@ -433,11 +432,10 @@
 				.then (function(proposal) {
 					Notification.success({message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
 					ppp.proposal = proposal;
-					pristineProposal = angular.toJson(ppp.proposal);
 					ppp.subscribe(true);
 					ppp.form.proposalform.$setPristine();
 				}, function (error) {
-					Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
+					Notification.error ({message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
 				});
 		};
 		// -------------------------------------------------------------------------
