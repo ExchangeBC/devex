@@ -499,25 +499,11 @@
 		// leave without saving any work
 		//
 		// -------------------------------------------------------------------------
-		ppp.close = function () {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function () {
-					// window.onbeforeunload = null;
-					// $locationChangeStartUnbind ();
-					if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-						$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-					} else {
-						$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-					}
-				}, function () {
-				});
+		ppp.close = function() {
+			if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+				$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 			} else {
-				if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-				} else {
-					$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-				}
+				$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
 			}
 		};
 		// -------------------------------------------------------------------------
@@ -570,20 +556,19 @@
 		// submit the proposal
 		//
 		// -------------------------------------------------------------------------
-		ppp.submit = function () {
-			saveuser().then (function () {
-				copyuser ();
-				ProposalsService.submit (ppp.proposal).$promise
-				.then (
-					function (response) {
-						ppp.proposal = response;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
-					},
-					function (error) {
-						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-					}
-				);
-			});
+		ppp.submit = function() {
+			saveuser()
+				.then(function() {
+					copyuser();
+					ppp.proposal.$submit()
+						.then (function(proposal) {
+							ppp.proposal = proposal;
+							ppp.form.proposalform.$setPristine();
+							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+						}, function(error) {
+							Notification.error ({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal'});
+						});
+				});
 		}
 		// -------------------------------------------------------------------------
 		//
