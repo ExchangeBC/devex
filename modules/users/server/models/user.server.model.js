@@ -90,6 +90,27 @@ var UserSchema = new Schema({
 		lowercase: true,
 		trim: true
 	},
+	admEmail : {
+		type: String,
+		lowercase: true,
+		trim: true,
+		default: '',
+		validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+	},
+	dfsEmail 				 : {
+		type: String,
+		lowercase: true,
+		trim: true,
+		default: '',
+		validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+	},
+	bfsEmail 				 : {
+		type: String,
+		lowercase: true,
+		trim: true,
+		default: '',
+		validate: [validateLocalStrategyEmail, 'Please fill a valid email address']
+	},
 	orgsAdmin                : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
 	orgsMember               : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
 	orgsPending              : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},

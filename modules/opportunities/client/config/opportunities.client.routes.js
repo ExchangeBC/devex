@@ -224,6 +224,33 @@
 		})
 		// -------------------------------------------------------------------------
 		//
+		// submit an opportunity
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.submitcwu', {
+			url: '/:opportunityId/submitcwu',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-submit.html',
+			controller: 'OpportunitySubmitController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				submitting: function () { return true; }
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'Submit Opportunity: {{ opportunity.name }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Submit Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
 		// edit a opportunity
 		//
 		// -------------------------------------------------------------------------

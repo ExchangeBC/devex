@@ -1,0 +1,78 @@
+<section class="edit-form-background" role="main">
+
+    <form id="opportunitySubmitForm" warn-on-exit name="vm.opportunitySubmitForm" class="form" ng-submit="vm.submit(vm.opportunitySubmitForm.$valid)" novalidate>
+
+        <div class="container edit-form">
+
+            <div class="edit-form-tab-content">
+                <fieldset>
+
+                    <form-display
+                        class="col-sm-12"
+                        x-options='{
+                            "title":"Opportunity",
+                            "name":"opportunity",
+                            "help":"This is the opportunity"
+                        }'>
+                        <span>
+                            {{vm.opportunity.name}}
+                        </span>
+                    </form-display>
+
+                    <form-input
+                        class="col-sm-12"
+                        type="email"
+                        ng-model="vm.user.admEmail"
+                        x-form="vm.opportunitySubmitForm"
+                        x-options='{
+                            "title":"ADM&#39;s Email",
+                            "help":"Enter the Assistant Deputy Minister&#39;s email.",
+                            "id":"admEmail",
+                            "name":"admEmail",
+                            "placeholder":"firstName.lastName@gov.bc.ca"
+                        }'>
+                    </form-input>
+
+                    <form-input
+                        class="col-sm-12"
+                        type="email"
+                        ng-model="vm.user.dfsEmail"
+                        x-form="vm.opportunitySubmitForm"
+                        x-options='{
+                            "title":"DFS&#39;s Email",
+                            "help":"Enter the Divisonal Financial Staff&#39;s email.",
+                            "id":"dfsEmail",
+                            "name":"dfsEmail",
+                            "placeholder":"firstName.lastName@gov.bc.ca"
+                        }'>
+                    </form-input>
+
+                    <form-input
+                        class="col-sm-12"
+                        type="email"
+                        ng-model="vm.user.bfsEmail"
+                        x-form="vm.opportunitySubmitForm"
+                        x-options='{
+                            "title":"BFS&#39;s Email",
+                            "help":"Enter the Branch Financial Staff&#39;s email.",
+                            "id":"bfsEmail",
+                            "name":"bfsEmail",
+                            "placeholder":"firstName.lastName@gov.bc.ca"
+                        }'>
+                    </form-input>
+                </fieldset>
+            </div>
+
+            <div class="edit-form-footer">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+
+</section>

@@ -83,11 +83,11 @@
 	</div>
 	
 	<div class="container">	
-		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+		<!-- // Admin View / if opportunity is in DRAFT/PENDING and INCOMPLETE // -->
+		<div class="row" ng-if="!vm.canSubmit && vm.canEdit && (vm.opportunity.status === 'Draft' || vm.opportunity.status === 'Pending')">
 			<div class="col-xs-12">
 				<div class="alert alert-important">
-					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can submit, you'll need to define these things:
 					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 				</div>
 			</div>
@@ -95,11 +95,13 @@
 
 
 		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
-		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
+		<div class="row" ng-if="vm.canEdit">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
 					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+
+					<button type="button" class="btn btn-sm btn-primary" ng-if="vm.canSubmit && vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.status === 'Draft'" ui-sref="opportunityadmin.submitcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-bullhorn"></i> SUBMIT</button>
+
 				</div>
 			</div>
 		</div>

@@ -39,7 +39,7 @@ var OpportunitySchema = new Schema({
 	views                     : {type: Number, default: 1},
 	program                   : {type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank'},
 	project                   : {type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank'},
-	status                    : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
+	status                    : {type: String, default:'Pending', enum:['Draft', 'Pending', 'Assigned', 'In Progress', 'Completed']},
 	onsite                    : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
 	location                  : {type: String, default:''},
 	isPublished               : {type: Boolean, default: false},

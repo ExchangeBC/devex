@@ -105,7 +105,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = (vm.errorFields.length === 0);
+		vm.canSubmit = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -365,14 +365,14 @@
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		vm.publish = function (opportunity, state) {
-			var publishedState      = opportunity.isPublished;
+		vm.submit = function (opportunity, state) {
+			var publishedState = opportunity.isPublished;
 			var t = state ? 'Published' : 'Unpublished';
 
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
 			if (state) {
-				var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+				var question = 'When you submit this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
 				promise = ask.yesNo (question).then (function (result) {
 					savemeSeymour = result;
 				});
@@ -512,7 +512,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = vm.errorFields > 0;
+		vm.canSubmit = vm.errorFields > 0;
 		//
 		// set up the dropdown amounts for code with us earnings
 		//
@@ -686,6 +686,12 @@
 				}
 			}
 			//
+			// if status was Pending, set to Draft. happens on first save
+			//
+			if (vm.opportunity.status === 'Pending') {
+				vm.opportunity.status = 'Draft';
+			}
+			//
 			// ensure that there is a trailing '/' on the github field
 			//
 			if (vm.opportunity.github && vm.opportunity.github.substr (-1, 1) !== '/') vm.opportunity.github += '/';
@@ -758,6 +764,53 @@
 		};
 		vm.toggleHelp = function(field) {
 			vm.displayHelp[field] = ! vm.displayHelp[field];
+		};
+	})
+	// =========================================================================
+	//
+	// Controller for submitting opportunities
+	//
+	// =========================================================================
+	.controller('OpportunitySubmitController', function ($scope, $state, Authentication, OpportunitiesService, UsersService, Notification, opportunity, $stateParams) {
+		var vm          = this;
+		vm.opportunity 	= opportunity;
+		vm.user  		= Authentication.user;
+
+		vm.submit = function(isValid) {
+			if (!isValid) {
+				// console.log (vm.opportunityForm);
+				$scope.$broadcast('show-errors-check-validity', 'vm.opportunitySubmitForm');
+				Notification.error ({
+					message : 'There are errors on the page, please review your work and re-save',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
+
+			// TODO could be one API call
+			// might improve performance
+
+			// Set opportunity status to Pending
+			vm.opportunity.status = 'Pending';
+			var opportunityPromise = vm.opportunity.createOrUpdate();
+
+			// Save email addresses to user profile, ng-model sets them
+			var userPromise = UsersService.update(user).$promise;
+
+			// Send email to ADM
+			var body = {
+				recipient: vm.user.admEmail,
+				opportunityId: vm.opportunity._id,
+				template: 'opportunity-notification',
+			};
+			var admNotificationPromise = OpportunitiesService.opportunityNotification(body).$promise;
+
+			// Resolve all promises
+			Promise.all([opportunityPromise, userPromise, admNotificationPromise]).then(function() {
+				// success and redirect
+				$state.go('opportunities.viewcwu', {opportunityId:vm.opportunity.code});
+			});
+
 		};
 	})
 	;

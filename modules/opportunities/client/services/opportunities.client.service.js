@@ -59,6 +59,10 @@
 				url: '/api/my/opportunities',
 				isArray: true
 			},
+			opportunityNotification: {
+				method: 'POST',
+				url: '/api/opportunity/opportunityNotification'
+			},
 			publish: {
 				method: 'GET',
 				url :'/api/opportunities/publish/:opportunityId'
