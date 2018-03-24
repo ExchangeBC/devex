@@ -68,8 +68,15 @@ module.exports = function(app) {
 		.get(opportunities.new);
 
 	app.route('/api/request/opportunity/:opportunityId')
-		.get(opportunities.request)
-
+		.get(opportunities.request);
+		
+	//---------------------------------------
+	// route for authorizing opportunity
+	// TBD: Requirement of role for invoking this API is not specified in #249, 
+	//	so API url is assumed exposed by the link in email. otherwise acl policy needs to be updated.
+	//---------------------------------------
+	app.route('/api/opportunities/authorize/:opportunityId')
+		.get(opportunities.authorize);
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);

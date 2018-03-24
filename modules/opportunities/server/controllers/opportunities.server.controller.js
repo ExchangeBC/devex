@@ -517,6 +517,65 @@ exports.unpublish = function (req, res) { return pub (req, res, false); }
 
 // -------------------------------------------------------------------------
 //
+//  Authorize opportunity
+//
+// -------------------------------------------------------------------------
+exports.authorize = function(req, res) {
+	var opportunity = req.opportunity;
+
+	opportunity.status = 'Published';
+	//TBD: more properties may need to be set, such as  "isPublshed", "lastPublished" and "wasPublished"  
+	opportunity.isPublished = true;
+	opportunity.lastPublished = new Date ();
+	opportunity.wasPublished = true;
+	//
+	// save opportunity and send email by Notification
+	//
+	updateSave (opportunity)
+	.then (function () {
+    	var data = setNotificationData (opportunity);
+		data.creator = opportunity.createdBy.displayName;
+		var maillist = [
+			opportunity.createdBy.preferredDfsEmail,
+			opportunity.createdBy.preferredBfsEmail,
+			opportunity.createdBy.email
+		];
+		maillist.forEach (function (rcp, i , array) {
+			data.useremail = rcp;
+			Notifications.notifyUserAdHoc ('opportunity-authorized', data);
+		});
+		
+		//TBD: it may need update gitHub content too.
+		github.createOrUpdateIssue ({
+			title  : opportunity.name,
+			body   : oppBody (opportunity),
+			repo   : opportunity.github,
+			number : opportunity.issueNumber
+		})
+		.then (function (result) {
+			opportunity.issueUrl    = result.html_url;
+			opportunity.issueNumber = result.number;
+			opportunity.save ();
+			res.json({
+				ok:true
+			}); 
+		})
+		.catch (function () {
+			res.status(422).send({
+				message: 'Update GitHub failed.'
+			});
+		});
+
+	})
+	.catch (function (err) {
+		res.status(422).send({
+			message: errorHandler.getErrorMessage(err)
+		});
+	});
+}
+
+// -------------------------------------------------------------------------
+//
 // unasasign the assigned proposal
 //
 // -------------------------------------------------------------------------
