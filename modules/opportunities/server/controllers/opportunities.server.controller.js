@@ -474,6 +474,7 @@ var pub = function (req, res, isToBePublished) {
 	if (isToBePublished) {
 		opportunity.lastPublished = new Date ();
 		opportunity.wasPublished = true;
+		opportunity.status = 'Published';
 	}
 
 	//

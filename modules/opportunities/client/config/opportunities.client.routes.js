@@ -390,6 +390,27 @@
 				parent: 'opportunities.list'
 			}
 		})
+		// -------------------------------------------------------------------------
+		//
+		// publish an opportunity
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.publishcwu', {
+			url: '/:opportunityId/publishcwu',
+			params: {
+				programId: null,
+				projectId: null
+			},
+			controller: 'OpportunityPublishController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				}
+			}
+		})
 		;
 	}]);
 }());

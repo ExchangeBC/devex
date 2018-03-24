@@ -823,5 +823,32 @@
 				);
 			}
 		}
+	})
+	// =========================================================================
+	//
+	// Controller for publishing an opportunity via email link
+	//
+	// =========================================================================
+	.controller('OpportunityPublishController', function ($state, Authentication, Notification, OpportunitiesService, opportunity) {
+		var promise = Promise.resolve ();
+
+		promise.then(function() {
+			opportunity.isPublished = true;
+
+			return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
+		})
+		.then(function () {
+			Notification.success ({
+				message : '<i class="glyphicon glyphicon-ok"></i> opportunity published successfully!'
+			});
+
+			$state.go('opportunities.viewcwu', {opportunityId: opportunity.code});
+		})
+		.catch (function (res) {
+			Notification.error ({
+				message : res.data.message,
+				title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+			});
+		});
 	});
 }());
