@@ -225,7 +225,19 @@ var saveOrg = function (req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
-					req.user.save ();
+					//
+					// TBD: the code following shoudl be nested in here and checked for
+					// failure properly etc.
+					//
+					req.user.save (function (err, user) {
+						req.login (user, function (err) {
+							if (err) {
+								res.status(422).send ({
+									message: errorHandler.getErrorMessage (err)
+								});
+							}
+						});
+					});
 					getOrgById (neworg._id)
 					.then (function (o) {
 						res.json (org);
