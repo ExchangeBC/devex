@@ -35,6 +35,40 @@ var path = require('path'),
 	;
 
 var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
+var getOrgById = function (id) {
+	return new Promise (function (resolve, reject) {
+		Org.findById (id)
+		.populate ('owner', '_id lastName firstName displayName profileImageURL')
+		.populate ('createdBy', 'displayName')
+		.populate ('updatedBy', 'displayName')
+		.populate ('admins', popfields)
+		.populate ('capabilities', 'code name')
+		.populate ('capabilitySkills', 'code name')
+		.populate ({
+			path: 'members',
+			select: popfields,
+			populate: [{
+				path : 'capabilities',
+				model: 'Capability',
+				select: 'name code labelClass'
+			},
+			{
+				path : 'capabilitySkills',
+				model: 'CapabilitySkill',
+				select: 'name code'
+			}]
+		})
+		.exec (function (err, org) {
+			if (err) {
+				reject (err);
+			} else if (!org) {
+				resolve (null);
+			} else {
+				resolve (org);
+			}
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -181,18 +215,26 @@ var resolveOrg = function (org) {
 };
 var saveOrg = function (req, res) {
 	return function (org) {
-		// console.log ('saving org');
+		console.log ('saving org', org);
 		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
-			org.save (function (err) {
+			org.save (function (err, neworg) {
 				if (err) {
 					return res.status(422).send({
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
 					req.user.save ();
-					res.json (org);
+					getOrgById (neworg._id)
+					.then (function (o) {
+						res.json (org);
+					})
+					.catch (function (err) {
+						res.status (422).send ({
+							message: 'Error popuilating organization'
+						});
+					});
 				}
 			});
 		});
@@ -321,7 +363,7 @@ exports.update = function (req, res) {
 	//
 	var org = _.assign (req.org, req.body);
 
-	var p = (list) ? inviteMembers (list, org) : Promise.resolve ();
+	var p = (list) ? inviteMembers (list, org) : Promise.resolve (org);
 
 	p.then (saveOrg (req, res));
 };
@@ -383,39 +425,50 @@ exports.orgByID = function (req, res, next, id) {
 			message: 'Org is invalid'
 		});
 	}
-	Org.findById (id)
-	.populate ('owner', '_id lastName firstName displayName profileImageURL')
-	.populate ('createdBy', 'displayName')
-	.populate ('updatedBy', 'displayName')
-	.populate ('admins', popfields)
-	.populate ('capabilities', 'code name')
-	.populate ('capabilitySkills', 'code name')
-	.populate ({
-		path: 'members',
-		select: popfields,
-		populate: [{
-			path : 'capabilities',
-			model: 'Capability',
-			select: 'name code labelClass'
-		},
-		{
-			path : 'capabilitySkills',
-			model: 'CapabilitySkill',
-			select: 'name code'
-		}]
-	})
-	.exec (function (err, org) {
-		if (err) {
-			return next(err);
-		} else if (!org) {
-			return res.status(200).send ({});
-			// return res.status(404).send({
-			// 	message: 'No org with that identifier has been found'
-			// });
+	getOrgById (id)
+	.then (function (org) {
+		if (!org) res.status(200).send ({});
+		else {
+			req.org = org;
+			next ();
 		}
-		req.org = org;
-		next();
+	})
+	.catch (function (err) {
+		next (err);
 	});
+	// Org.findById (id)
+	// .populate ('owner', '_id lastName firstName displayName profileImageURL')
+	// .populate ('createdBy', 'displayName')
+	// .populate ('updatedBy', 'displayName')
+	// .populate ('admins', popfields)
+	// .populate ('capabilities', 'code name')
+	// .populate ('capabilitySkills', 'code name')
+	// .populate ({
+	// 	path: 'members',
+	// 	select: popfields,
+	// 	populate: [{
+	// 		path : 'capabilities',
+	// 		model: 'Capability',
+	// 		select: 'name code labelClass'
+	// 	},
+	// 	{
+	// 		path : 'capabilitySkills',
+	// 		model: 'CapabilitySkill',
+	// 		select: 'name code'
+	// 	}]
+	// })
+	// .exec (function (err, org) {
+	// 	if (err) {
+	// 		return next(err);
+	// 	} else if (!org) {
+	// 		return res.status(200).send ({});
+	// 		// return res.status(404).send({
+	// 		// 	message: 'No org with that identifier has been found'
+	// 		// });
+	// 	}
+	// 	req.org = org;
+	// 	next();
+	// });
 };
 exports.orgByIDSmall = function (req, res, next, id) {
 	if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -430,9 +483,6 @@ exports.orgByIDSmall = function (req, res, next, id) {
 			return next(err);
 		} else if (!org) {
 			return res.status(200).send ({});
-			// return res.status(404).send({
-			// 	message: 'No org with that identifier has been found'
-			// });
 		}
 		req.org = org;
 		next();

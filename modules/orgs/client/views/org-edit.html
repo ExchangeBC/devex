@@ -5,32 +5,35 @@
 			{{::vm.org.name}}
 			<a class="btn btn-text-only pull-right" ui-sref="orgs.view({ orgId: vm.org._id })" title="Close"><i class="fa fa-2x fa-times"></i></a>
 		</div>
-		
+
 		<ul class="nav nav-tabs">
 			<li ui-sref-active="active">
 				<a id="orgadmin.profile" ui-sref="orgadmin.profile">Business Info</a>
 			</li>
-			<li ui-sref-active="active" ng-if="0">
+<!-- 			<li ui-sref-active="active" ng-if="0">
 				<a id="orgadmin.skills" ui-sref="orgadmin.skills">Skills</a>
 			</li>
-			<li ui-sref-active="active">
+ -->
+ 			<li ui-sref-active="active">
 				<a id="orgadmin.members" ui-sref="orgadmin.members">Members & Capabilities</a>
 			</li>
-			<li ui-sref-active="active" ng-if="0">
+
+<!-- 			<li ui-sref-active="active" ng-if="0">
 				<a id="orgadmin.teams" ui-sref="orgadmin.teams">Teams</a>
 			</li>
-			<!-- // Hide the Proposals tab until we can do something with it // -->
+ -->
+ 			<!-- // Hide the Proposals tab until we can do something with it // -->
 			<!--
 			<li ui-sref-active="active">
 				<a id="orgadmin.proposals" ui-sref="orgadmin.proposals">Proposals</a>
 			</li>
 			<li>
-			-->	
+			-->
 			</li>
 		</ul>
-		
+
 		<div ui-view></div>
-			
+
 	</div>
 	<br>
 	<div class="container">
