@@ -946,3 +946,35 @@ exports.submitForApproval = function(req, res) {
 			});
 		});
 };
+// -------------------------------------------------------------------------
+//
+// Send notification emails for approved opportunities
+//
+// -------------------------------------------------------------------------
+exports.approved = function (req, res) {
+
+	if (ensureAdmin(req.opportunity, req.user, res)) {
+		var opportunity = req.opportunity;
+
+		opportunity.status = 'Published';
+		opportunity.isPublished = true;
+
+		//
+		// save and notify
+		//
+		updateSave(opportunity)
+			.then(function () {
+				var data = setNotificationData(opportunity);
+				var notify_list = [
+					opportunity.createdBy.email,
+					opportunity.createdBy.preferredBfsEmail,
+					opportunity.createdBy.preferredDfsEmail
+				];
+
+				notify_list.forEach(function (to, i, array) {
+					data.sendmail = to;
+					Notifications.notifyUserAdHoc('opportunity-approved', data);
+				});
+			});
+	}
+};
