@@ -163,7 +163,8 @@ var setNotificationData = function (opportunity) {
 		name                 : opportunity.name,
 		short                : opportunity.short,
 		description          : opportunity.description,
-		earn_format_mnoney   : helpers.formatMoney (opportunity.earn, 2),
+		creator				 : opportunity.createdBy.displayName,
+		earn_format_money    : helpers.formatMoney (opportunity.earn, 2),
 		earn                 : helpers.formatMoney (opportunity.earn, 2),
 		dateDeadline         : helpers.formatDate (new Date(opportunity.deadline)),
 		timeDeadline         : helpers.formatTime (new Date(opportunity.deadline)),
@@ -944,4 +945,36 @@ exports.submitForApproval = function(req, res) {
 				message: 'Automailer error: ' + error.code
 			});
 		});
+};
+// -------------------------------------------------------------------------
+//
+// Send notification emails for approved opportunities
+//
+// -------------------------------------------------------------------------
+exports.approved = function (req, res) {
+
+	if (ensureAdmin(req.opportunity, req.user, res)) {
+		var opportunity = req.opportunity;
+
+		opportunity.status = 'Published';
+		opportunity.isPublished = true;
+
+		//
+		// save and notify
+		//
+		updateSave(opportunity)
+			.then(function () {
+				var data = setNotificationData(opportunity);
+				var notify_list = [
+					opportunity.createdBy.email,
+					opportunity.createdBy.preferredBfsEmail,
+					opportunity.createdBy.preferredDfsEmail
+				];
+
+				notify_list.forEach(function (to, i, array) {
+					data.sendmail = to;
+					Notifications.notifyUserAdHoc('opportunity-approved', data);
+				});
+			});
+	}
 };

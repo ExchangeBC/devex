@@ -29,6 +29,6 @@ A new *Code With Us* opportunity is pending and awaiting your approval.  Please 
     }
 </style>
 <div width=100% align=center>
-    <a href="https://bcdevexchange.org/path/to/opp/approval">Agree</a>&nbsp;&nbsp;
+    <a href="https://bcdevexchange.org/api/opportunities/approved/{{ data.code }}">Agree</a>&nbsp;&nbsp;
     <a href="https://bcdevexchange.org/path/to/opp/deny">Disagree</a>
 </div>

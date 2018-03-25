@@ -36,6 +36,12 @@ module.exports = function(app) {
 		.post(opportunities.submitForApproval);
 
 	//
+	// get approved opportunities
+	//
+	app.route('/api/opportunities/approved/:opportunityId')
+		.get(opportunities.approved);
+
+	//
 	// get lists of users
 	//
 	app.route('/api/opportunities/members/:opportunityId')
