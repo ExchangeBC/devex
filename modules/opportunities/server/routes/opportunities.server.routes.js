@@ -36,6 +36,18 @@ module.exports = function(app) {
 		.post(opportunities.submitForApproval);
 
 	//
+	//  notify Program Area Manager
+	//
+	app.route('/api/opportunities/notify/simple')
+		.post(opportunities.notifyPublishedSimple);
+
+	//
+	// notify Branch Financial Staff and Divisional Financial Staff
+	//
+	app.route('/api/opportunities/notify/detailed')
+		.post(opportunities.notifyPublishedDetailed);
+
+	//
 	// get lists of users
 	//
 	app.route('/api/opportunities/members/:opportunityId')

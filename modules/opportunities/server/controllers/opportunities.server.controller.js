@@ -474,6 +474,7 @@ var pub = function (req, res, isToBePublished) {
 	if (isToBePublished) {
 		opportunity.lastPublished = new Date ();
 		opportunity.wasPublished = true;
+		opportunity.status = 'Published';
 	}
 
 	//
@@ -934,6 +935,44 @@ exports.unPublishOpportunities = function (programId, projectId) {
 // -------------------------------------------------------------------------
 exports.submitForApproval = function(req, res) {
 	Notifications.notifyUserAdHoc('opportunity-publish-approval', req.body).then(
+		function() {
+			res.json({
+				ok: true
+			});
+		},
+		function(error) {
+			res.status(500).json({
+				message: 'Automailer error: ' + error.code
+			});
+		});
+};
+// -------------------------------------------------------------------------
+//
+// Send a notification email to the program area manager about the published
+// opportunity
+//
+// -------------------------------------------------------------------------
+exports.notifyPublishedSimple = function(req, res) {
+	Notifications.notifyUserAdHoc('opportunity-published-notify-program-area-manager', req.body).then(
+		function() {
+			res.json({
+				ok: true
+			});
+		},
+		function(error) {
+			res.status(500).json({
+				message: 'Automailer error: ' + error.code
+			});
+		});
+};
+// -------------------------------------------------------------------------
+//
+// Send a notification email to the Branch Financial Staff and Divisional
+// Financial Staff
+//
+// -------------------------------------------------------------------------
+exports.notifyPublishedDetailed = function(req, res) {
+	Notifications.notifyUserAdHoc('opportunity-published', req.body).then(
 		function() {
 			res.json({
 				ok: true

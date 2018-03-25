@@ -823,5 +823,68 @@
 				);
 			}
 		}
+	})
+	// =========================================================================
+	//
+	// Controller for publishing an opportunity via email link
+	//
+	// =========================================================================
+	.controller('OpportunityPublishController', function ($filter, $state, Authentication, Notification, OpportunitiesService, opportunity) {
+		var vm 					= this;
+		vm.user 				= Authentication.user;
+		vm.opportunity 	= opportunity;
+
+		vm.notifyPublished = function() {
+			// Send the notification via the OpportunitiesService
+			var notificationSimplePromise = OpportunitiesService.notifyPublishedSimple(
+				{
+					code: vm.opportunity.code,
+					useremail: vm.user.email,
+					username: vm.user.displayName
+				}
+			).$promise;
+
+			var notificationDetailedPromise = OpportunitiesService.notifyPublishedDetailed(
+				{
+					closingDate: new Date(vm.opportunity.deadline).toDateString(),
+					contractManager: vm.opportunity.updatedBy.displayName,
+					opportunityId: vm.opportunity.code,
+					opportunityName: vm.opportunity.name,
+					postingDate: new Date(vm.opportunity.lastPublished).toDateString(),
+					startDate: new Date(vm.opportunity.start).toDateString(),
+					useremail:  vm.user.preferredDfsEmail + ';' + vm.user.preferredBfsEmail,
+					value: $filter('currency')(vm.opportunity.earn)
+				}
+			).$promise;
+
+			return Promise.all([notificationSimplePromise, notificationDetailedPromise]);
+		}
+
+		vm.publish = function() {
+			var promise = Promise.resolve ();
+
+			promise.then(function() {
+				vm.opportunity.isPublished = true;
+
+				return OpportunitiesService.publish ({opportunityId: vm.opportunity._id}).$promise;
+			})
+			.then(function () {
+				vm.notifyPublished().then(function () {
+					$state.go('opportunities.viewcwu', {opportunityId: vm.opportunity.code}).then(function () {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> opportunity published successfully!'
+						});
+					});
+				});
+			})
+			.catch (function (res) {
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+				});
+			});
+		};
+
+		vm.publish();
 	});
 }());
