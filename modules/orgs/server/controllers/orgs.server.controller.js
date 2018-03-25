@@ -126,23 +126,30 @@ var getRequiredCapabilities = function () {
 //
 // -------------------------------------------------------------------------
 var collapseCapabilities = function (org) {
-	var c = {};
-	var s = {};
-	org.members.forEach (function (member) {
-		if (member.capabilities) member.capabilities.forEach (function (capability) {
-			if (capability._id) c[capability._id.toString()] = true;
-			else c[capability.toString()] = true;
-		});
-		if (member.capabilitySkills) member.capabilitySkills.forEach (function (skill) {
-			if (skill._id) s[skill._id.toString()] = true;
-			else s[skill.toString()] = true;
+	return new Promise (function (resolve, reject) {
+		var c = {};
+		var s = {};
+		var orgmembers = org.members.map (function (o) {if (o._id) return o._id; else return o;});
+		User.find ({_id: {$in:orgmembers}})
+		.populate ('capabilities','name code')
+		.populate ('capabilitySkills','name code')
+		.exec (function (err, members) {
+			if (err) reject ({message:'Error getting members'});
+			members.forEach (function (member) {
+				if (member.capabilities) member.capabilities.forEach (function (capability) {
+					if (capability._id) c[capability._id.toString()] = true;
+					else c[capability.toString()] = true;
+				});
+				if (member.capabilitySkills) member.capabilitySkills.forEach (function (skill) {
+					if (skill._id) s[skill._id.toString()] = true;
+					else s[skill.toString()] = true;
+				});
+			});
+			org.capabilities = Object.keys (c);
+			org.capabilitySkills = Object.keys (s);
+			resolve (org);
 		});
 	});
-	// console.log ('what');
-	org.capabilities = Object.keys (c);
-	org.capabilitySkills = Object.keys (s);
-	// console.log (org.capabilities);
-	// console.log (org.capabilitySkills);
 };
 // -------------------------------------------------------------------------
 //
@@ -152,9 +159,10 @@ var collapseCapabilities = function (org) {
 //
 // -------------------------------------------------------------------------
 var checkCapabilities = function (org) {
-	return getRequiredCapabilities ()
+	return collapseCapabilities (org)
+	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
-		collapseCapabilities (org);
+		console.log (capabilities);
 		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
 		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
 		return org;
@@ -174,6 +182,7 @@ var resolveOrg = function (org) {
 var saveOrg = function (req, res) {
 	return function (org) {
 		// console.log ('saving org');
+		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
 			org.save (function (err) {
@@ -182,6 +191,7 @@ var saveOrg = function (req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
+					req.user.save ();
 					res.json (org);
 				}
 			});
@@ -198,14 +208,14 @@ var saveOrg = function (req, res) {
 var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
-	// .then (saveUser)
+	.then (saveUser)
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (addUserTo (org, 'admins'))
-	// .then (saveUser)
+	.then (saveUser)
 	.then (resolveOrg (org));
 };
 //
@@ -273,35 +283,11 @@ exports.removeUserFromMemberList = function (req, res) {
 exports.create = function (req, res) {
 	var org = new Org(req.body);
 	//
-	// set the audit fields so we know who did what when
-	//
-	helpers.applyAudit (org, req.user);
-	//
 	// set the owner and also add the owner to the list of admins
 	//
-	// console.log ('org._id = ',org._id);
 	org.owner = req.user._id;
 	addAdmin (req.user, org)
-	.then (function () {
-		// console.log ('user.orgsAdmin', req.user.orgsAdmin);
-		// console.log ('user.orgsMember', req.user.orgsMember);
-		// console.log ('org.members', org.members);
-		// console.log ('org.admins', org.admins);
-		// return res.status(422).send({message:'testing, try again'});
-		//
-		// save and return
-		//
-		org.save (function (err) {
-			if (err) {
-				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				req.user.save ();
-				res.json (org);
-			}
-		});
-	})
+	.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------
@@ -337,28 +323,7 @@ exports.update = function (req, res) {
 
 	var p = (list) ? inviteMembers (list, org) : Promise.resolve ();
 
-	p.then (function () {
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (org, req.user)
-		//
-		// save
-		//
-		checkCapabilities (org)
-		.then (function (org) {
-			org.save (function (err) {
-				if (err) {
-					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
-					});
-				} else {
-					req.user.save ();
-					res.json (org);
-				}
-			});
-		});
-	});
+	p.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------

@@ -234,6 +234,7 @@
 		vm.emaillist = '';
 		// console.log ('whatcaps', capabilities);
 		CapabilitiesMethods.init (vm, vm.org, capabilities);
+		CapabilitiesMethods.dump (vm);
 		// -------------------------------------------------------------------------
 		//
 		// refresh the organization and also the additions email list

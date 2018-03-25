@@ -48,8 +48,8 @@
 				<table class="table capabilities-list">
 					<tbody>
 						<tr ng-repeat="capability in vm.capabilities">
-							<th scope="row" ng-if="vm.iOppCapability[capability.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-							<th scope="row" ng-if="!vm.iOppCapability[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
+							<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+							<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-exclamation-circle fa-lg"></i></th>
 							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
 						</tr>
 					</tbody>
