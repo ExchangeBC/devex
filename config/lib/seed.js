@@ -205,6 +205,15 @@ module.exports.start = function start(options) {
 			displayName: 'Test Developer',
 			roles: ['user']
 		});
+		var devAccount2 = new User ({
+			username: 'dev2',
+			provider: 'local',
+			email: 'dev2@localhost.com',
+			firstName: 'Test 2',
+			lastName: 'Developer 2',
+			displayName: 'Test Developer 2',
+			roles: ['user']
+		});
 		var govAccount = new User ({
 			username: 'gov',
 			provider: 'local',
@@ -237,6 +246,8 @@ module.exports.start = function start(options) {
 				//
 				.then(function () { return 'devdev'; })
 				.then(seedTheUser(devAccount))
+				.then(function () { return 'devdev'; })
+				.then(seedTheUser(devAccount2))
 				//
 				// gov account
 				//
