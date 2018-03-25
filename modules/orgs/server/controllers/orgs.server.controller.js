@@ -70,7 +70,7 @@ var getUsers = function (terms) {
 // -------------------------------------------------------------------------
 var addUserTo = function (org, fieldName) {
 	return function (user) {
-		// console.log ('add user', user._id, 'to ', fieldName);
+		// console.log ('add user', user._id, 'to ', fieldName, 'in org:', org._id);
 		org[fieldName].addToSet (user._id);
 		org.markModified (fieldName);
 		if (fieldName === 'admins') {
@@ -80,6 +80,7 @@ var addUserTo = function (org, fieldName) {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
 		}
+		// console.log ('org[fieldName]:',org[fieldName]);
 		return user;
 	};
 };
@@ -137,11 +138,11 @@ var collapseCapabilities = function (org) {
 			else s[skill.toString()] = true;
 		});
 	});
-	console.log ('what');
+	// console.log ('what');
 	org.capabilities = Object.keys (c);
 	org.capabilitySkills = Object.keys (s);
-	console.log (org.capabilities);
-	console.log (org.capabilitySkills);
+	// console.log (org.capabilities);
+	// console.log (org.capabilitySkills);
 };
 // -------------------------------------------------------------------------
 //
@@ -197,14 +198,14 @@ var saveOrg = function (req, res) {
 var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (addUserTo (org, 'admins'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (resolveOrg (org));
 };
 //
@@ -236,14 +237,14 @@ var removeMember = function (user, org) {
 	// console.log ('removing member:', user._id);
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (function () {return org;});
 };
 var removeAdmin = function (user, org) {
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
 	.then (removeUserFrom (org, 'admins'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (resolveOrg (org));
 };
 // -------------------------------------------------------------------------
@@ -278,21 +279,29 @@ exports.create = function (req, res) {
 	//
 	// set the owner and also add the owner to the list of admins
 	//
+	// console.log ('org._id = ',org._id);
 	org.owner = req.user._id;
-	addAdmin (req.user, org);
-	//
-	// save and return
-	//
-	org.save (function (err) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			req.user.save ();
-			res.json (org);
-		}
-	});
+	addAdmin (req.user, org)
+	.then (function () {
+		// console.log ('user.orgsAdmin', req.user.orgsAdmin);
+		// console.log ('user.orgsMember', req.user.orgsMember);
+		// console.log ('org.members', org.members);
+		// console.log ('org.admins', org.admins);
+		// return res.status(422).send({message:'testing, try again'});
+		//
+		// save and return
+		//
+		org.save (function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				req.user.save ();
+				res.json (org);
+			}
+		});
+	})
 };
 
 // -------------------------------------------------------------------------
@@ -344,6 +353,7 @@ exports.update = function (req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
+					req.user.save ();
 					res.json (org);
 				}
 			});
@@ -355,18 +365,22 @@ exports.update = function (req, res) {
 //
 // delete the org
 //
+// TBD : locate all members and admins and remove the org from thier
+// orgsAdmin and orgsMember arrays. Not a problem if they stay as the populate
+// will just ignore them, but it would be cleaner if it happens
+//
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-		var org = req.org;
-		org.remove(function (err) {
-			if (err) {
-				return res.status(422).send ({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json (org);
-			}
-		});
+	var org = req.org;
+	org.remove(function (err) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (org);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------

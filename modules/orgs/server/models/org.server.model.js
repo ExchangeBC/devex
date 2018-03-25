@@ -43,8 +43,8 @@ var OrgSchema = new Schema ({
 	createdBy        : {type: 'ObjectId', ref: 'User', default: null },
 	updated          : {type: Date, default: null },
 	updatedBy        : {type: 'ObjectId', ref: 'User', default: null },
-	members          : [{type: 'ObjectId', ref: 'User'}],
-	admins           : [{type: 'ObjectId', ref: 'User'}]
+	members          : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]},
+	admins           : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]}
 });
 
 OrgSchema.pre ('save', function (next) {

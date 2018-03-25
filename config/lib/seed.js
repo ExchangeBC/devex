@@ -245,9 +245,9 @@ module.exports.start = function start(options) {
 				// dev account
 				//
 				.then(function () { return 'devdev'; })
-				.then(seedTheUser(devAccount))
-				.then(function () { return 'devdev'; })
 				.then(seedTheUser(devAccount2))
+				.then(function () { return 'devdev'; })
+				.then(seedTheUser(devAccount))
 				//
 				// gov account
 				//
