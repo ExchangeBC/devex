@@ -15,7 +15,7 @@
 	// Controller the view of the org page
 	//
 	// =========================================================================
-	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification) {
+	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification, capabilities) {
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
@@ -234,7 +234,6 @@
 		vm.emaillist = '';
 		// console.log ('whatcaps', capabilities);
 		CapabilitiesMethods.init (vm, vm.org, capabilities);
-		CapabilitiesMethods.dump (vm);
 		// -------------------------------------------------------------------------
 		//
 		// refresh the organization and also the additions email list

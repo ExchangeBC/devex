@@ -8,7 +8,7 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<div class="container detail-view">
 		<div class="detail-view-header" ng-if="vm.canEdit">
 			<button type="button" class="btn btn-text-only pull-right" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company"><i class="fa fa-2x fa-gear"></i>
@@ -31,10 +31,10 @@
 		<div class="row">
 			<div class="col-xs-12 text-center">
 
-				<div class="label-list">
-					<!-- Insert all cumulative capabilities held here -->
-					<label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label>
-				</div>
+				<label-list>
+					<label ng-repeat="capability in vm.org.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+					<label ng-repeat="capabilitySkill in vm.org.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+				</label-list>
 			</div>
 		</div>
 	</div>
