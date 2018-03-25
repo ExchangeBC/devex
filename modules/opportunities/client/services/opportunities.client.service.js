@@ -97,6 +97,14 @@
 			submitOpportunity: {
 				method: 'POST',
 				url : '/api/opportunities/submit/for/approval'
+			},
+			notifyPublishedSimple: {
+				method: 'POST',
+				url : '/api/opportunities/notify/simple'
+			},
+			notifyPublishedDetailed: {
+				method: 'POST',
+				url : '/api/opportunities/notify/detailed'
 			}
 		});
 		angular.extend (Opportunity.prototype, {
