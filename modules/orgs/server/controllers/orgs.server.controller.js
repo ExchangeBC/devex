@@ -35,6 +35,40 @@ var path = require('path'),
 	;
 
 var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
+var getOrgById = function (id) {
+	return new Promise (function (resolve, reject) {
+		Org.findById (id)
+		.populate ('owner', '_id lastName firstName displayName profileImageURL')
+		.populate ('createdBy', 'displayName')
+		.populate ('updatedBy', 'displayName')
+		.populate ('admins', popfields)
+		.populate ('capabilities', 'code name')
+		.populate ('capabilitySkills', 'code name')
+		.populate ({
+			path: 'members',
+			select: popfields,
+			populate: [{
+				path : 'capabilities',
+				model: 'Capability',
+				select: 'name code labelClass'
+			},
+			{
+				path : 'capabilitySkills',
+				model: 'CapabilitySkill',
+				select: 'name code'
+			}]
+		})
+		.exec (function (err, org) {
+			if (err) {
+				reject (err);
+			} else if (!org) {
+				resolve (null);
+			} else {
+				resolve (org);
+			}
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -70,7 +104,7 @@ var getUsers = function (terms) {
 // -------------------------------------------------------------------------
 var addUserTo = function (org, fieldName) {
 	return function (user) {
-		// console.log ('add user', user._id, 'to ', fieldName);
+		// console.log ('add user', user._id, 'to ', fieldName, 'in org:', org._id);
 		org[fieldName].addToSet (user._id);
 		org.markModified (fieldName);
 		if (fieldName === 'admins') {
@@ -80,6 +114,7 @@ var addUserTo = function (org, fieldName) {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
 		}
+		// console.log ('org[fieldName]:',org[fieldName]);
 		return user;
 	};
 };
@@ -125,23 +160,30 @@ var getRequiredCapabilities = function () {
 //
 // -------------------------------------------------------------------------
 var collapseCapabilities = function (org) {
-	var c = {};
-	var s = {};
-	org.members.forEach (function (member) {
-		if (member.capabilities) member.capabilities.forEach (function (capability) {
-			if (capability._id) c[capability._id.toString()] = true;
-			else c[capability.toString()] = true;
-		});
-		if (member.capabilitySkills) member.capabilitySkills.forEach (function (skill) {
-			if (skill._id) s[skill._id.toString()] = true;
-			else s[skill.toString()] = true;
+	return new Promise (function (resolve, reject) {
+		var c = {};
+		var s = {};
+		var orgmembers = org.members.map (function (o) {if (o._id) return o._id; else return o;});
+		User.find ({_id: {$in:orgmembers}})
+		.populate ('capabilities','name code')
+		.populate ('capabilitySkills','name code')
+		.exec (function (err, members) {
+			if (err) reject ({message:'Error getting members'});
+			members.forEach (function (member) {
+				if (member.capabilities) member.capabilities.forEach (function (capability) {
+					if (capability._id) c[capability._id.toString()] = true;
+					else c[capability.toString()] = true;
+				});
+				if (member.capabilitySkills) member.capabilitySkills.forEach (function (skill) {
+					if (skill._id) s[skill._id.toString()] = true;
+					else s[skill.toString()] = true;
+				});
+			});
+			org.capabilities = Object.keys (c);
+			org.capabilitySkills = Object.keys (s);
+			resolve (org);
 		});
 	});
-	console.log ('what');
-	org.capabilities = Object.keys (c);
-	org.capabilitySkills = Object.keys (s);
-	console.log (org.capabilities);
-	console.log (org.capabilitySkills);
 };
 // -------------------------------------------------------------------------
 //
@@ -151,9 +193,10 @@ var collapseCapabilities = function (org) {
 //
 // -------------------------------------------------------------------------
 var checkCapabilities = function (org) {
-	return getRequiredCapabilities ()
+	return collapseCapabilities (org)
+	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
-		collapseCapabilities (org);
+		console.log (capabilities);
 		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
 		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
 		return org;
@@ -172,16 +215,38 @@ var resolveOrg = function (org) {
 };
 var saveOrg = function (req, res) {
 	return function (org) {
-		// console.log ('saving org');
+		console.log ('saving org', org);
+		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
-			org.save (function (err) {
+			org.save (function (err, neworg) {
 				if (err) {
 					return res.status(422).send({
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
-					res.json (org);
+					//
+					// TBD: the code following shoudl be nested in here and checked for
+					// failure properly etc.
+					//
+					req.user.save (function (err, user) {
+						req.login (user, function (err) {
+							if (err) {
+								res.status(422).send ({
+									message: errorHandler.getErrorMessage (err)
+								});
+							}
+						});
+					});
+					getOrgById (neworg._id)
+					.then (function (o) {
+						res.json (org);
+					})
+					.catch (function (err) {
+						res.status (422).send ({
+							message: 'Error popuilating organization'
+						});
+					});
 				}
 			});
 		});
@@ -236,14 +301,14 @@ var removeMember = function (user, org) {
 	// console.log ('removing member:', user._id);
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (function () {return org;});
 };
 var removeAdmin = function (user, org) {
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
 	.then (removeUserFrom (org, 'admins'))
-	.then (saveUser)
+	// .then (saveUser)
 	.then (resolveOrg (org));
 };
 // -------------------------------------------------------------------------
@@ -272,27 +337,11 @@ exports.removeUserFromMemberList = function (req, res) {
 exports.create = function (req, res) {
 	var org = new Org(req.body);
 	//
-	// set the audit fields so we know who did what when
-	//
-	helpers.applyAudit (org, req.user);
-	//
 	// set the owner and also add the owner to the list of admins
 	//
 	org.owner = req.user._id;
-	addAdmin (req.user, org);
-	//
-	// save and return
-	//
-	org.save (function (err) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			req.user.save ();
-			res.json (org);
-		}
-	});
+	addAdmin (req.user, org)
+	.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------
@@ -326,47 +375,31 @@ exports.update = function (req, res) {
 	//
 	var org = _.assign (req.org, req.body);
 
-	var p = (list) ? inviteMembers (list, org) : Promise.resolve ();
+	var p = (list) ? inviteMembers (list, org) : Promise.resolve (org);
 
-	p.then (function () {
-		//
-		// set the audit fields so we know who did what when
-		//
-		helpers.applyAudit (org, req.user)
-		//
-		// save
-		//
-		checkCapabilities (org)
-		.then (function (org) {
-			org.save (function (err) {
-				if (err) {
-					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
-					});
-				} else {
-					res.json (org);
-				}
-			});
-		});
-	});
+	p.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------
 //
 // delete the org
 //
+// TBD : locate all members and admins and remove the org from thier
+// orgsAdmin and orgsMember arrays. Not a problem if they stay as the populate
+// will just ignore them, but it would be cleaner if it happens
+//
 // -------------------------------------------------------------------------
 exports.delete = function (req, res) {
-		var org = req.org;
-		org.remove(function (err) {
-			if (err) {
-				return res.status(422).send ({
-					message: errorHandler.getErrorMessage(err)
-				});
-			} else {
-				res.json (org);
-			}
-		});
+	var org = req.org;
+	org.remove(function (err) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (org);
+		}
+	});
 };
 
 // -------------------------------------------------------------------------
@@ -404,39 +437,50 @@ exports.orgByID = function (req, res, next, id) {
 			message: 'Org is invalid'
 		});
 	}
-	Org.findById (id)
-	.populate ('owner', '_id lastName firstName displayName profileImageURL')
-	.populate ('createdBy', 'displayName')
-	.populate ('updatedBy', 'displayName')
-	.populate ('admins', popfields)
-	.populate ('capabilities', 'code name')
-	.populate ('capabilitySkills', 'code name')
-	.populate ({
-		path: 'members',
-		select: popfields,
-		populate: [{
-			path : 'capabilities',
-			model: 'Capability',
-			select: 'name code labelClass'
-		},
-		{
-			path : 'capabilitySkills',
-			model: 'CapabilitySkill',
-			select: 'name code'
-		}]
-	})
-	.exec (function (err, org) {
-		if (err) {
-			return next(err);
-		} else if (!org) {
-			return res.status(200).send ({});
-			// return res.status(404).send({
-			// 	message: 'No org with that identifier has been found'
-			// });
+	getOrgById (id)
+	.then (function (org) {
+		if (!org) res.status(200).send ({});
+		else {
+			req.org = org;
+			next ();
 		}
-		req.org = org;
-		next();
+	})
+	.catch (function (err) {
+		next (err);
 	});
+	// Org.findById (id)
+	// .populate ('owner', '_id lastName firstName displayName profileImageURL')
+	// .populate ('createdBy', 'displayName')
+	// .populate ('updatedBy', 'displayName')
+	// .populate ('admins', popfields)
+	// .populate ('capabilities', 'code name')
+	// .populate ('capabilitySkills', 'code name')
+	// .populate ({
+	// 	path: 'members',
+	// 	select: popfields,
+	// 	populate: [{
+	// 		path : 'capabilities',
+	// 		model: 'Capability',
+	// 		select: 'name code labelClass'
+	// 	},
+	// 	{
+	// 		path : 'capabilitySkills',
+	// 		model: 'CapabilitySkill',
+	// 		select: 'name code'
+	// 	}]
+	// })
+	// .exec (function (err, org) {
+	// 	if (err) {
+	// 		return next(err);
+	// 	} else if (!org) {
+	// 		return res.status(200).send ({});
+	// 		// return res.status(404).send({
+	// 		// 	message: 'No org with that identifier has been found'
+	// 		// });
+	// 	}
+	// 	req.org = org;
+	// 	next();
+	// });
 };
 exports.orgByIDSmall = function (req, res, next, id) {
 	if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -451,9 +495,6 @@ exports.orgByIDSmall = function (req, res, next, id) {
 			return next(err);
 		} else if (!org) {
 			return res.status(200).send ({});
-			// return res.status(404).send({
-			// 	message: 'No org with that identifier has been found'
-			// });
 		}
 		req.org = org;
 		next();

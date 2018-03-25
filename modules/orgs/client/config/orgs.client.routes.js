@@ -118,20 +118,20 @@
 				}
 			}
 		})
-		.state ('orgadmin.skills', {
-			url: '/skills',
-			templateUrl: '/modules/orgs/client/views/org-skills.html',
-			controller: 'OrgSkillsController',
-			controllerAs: 'vm',
-			data: {
-				pageTitle: 'Company Skills'
-			},
-			resolve: {
-				capabilities: function (CapabilitiesService) {
-					return CapabilitiesService.query ().$promise;
-				}
-			}
-		})
+		// .state ('orgadmin.skills', {
+		// 	url: '/skills',
+		// 	templateUrl: '/modules/orgs/client/views/org-skills.html',
+		// 	controller: 'OrgSkillsController',
+		// 	controllerAs: 'vm',
+		// 	data: {
+		// 		pageTitle: 'Company Skills'
+		// 	},
+		// 	resolve: {
+		// 		capabilities: function (CapabilitiesService) {
+		// 			return CapabilitiesService.query ().$promise;
+		// 		}
+		// 	}
+		// })
 		.state ('orgadmin.members', {
 			url: '/members',
 			templateUrl: '/modules/orgs/client/views/org-members.html',
@@ -141,29 +141,34 @@
 				pageTitle: 'Company Members'
 			},
 			resolve: {
+				org: function ($stateParams, OrgsService) {
+					return OrgsService.get({
+						orgId: $stateParams.orgId
+					}).$promise;
+				},
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
-		.state ('orgadmin.teams', {
-			url: '/teams',
-			templateUrl: '/modules/orgs/client/views/org-teams.html',
-			controller: 'OrgTeamsController',
-			controllerAs: 'vm',
-			data: {
-				pageTitle: 'Company Teams'
-			}
-		})
-		.state ('orgadmin.proposals', {
-			url: '/proposals',
-			templateUrl: '/modules/orgs/client/views/org-proposals.html',
-			controller: 'OrgProposalsController',
-			controllerAs: 'vm',
-			data: {
-				pageTitle: 'Company Proposals'
-			}
-		})
+		// .state ('orgadmin.teams', {
+		// 	url: '/teams',
+		// 	templateUrl: '/modules/orgs/client/views/org-teams.html',
+		// 	controller: 'OrgTeamsController',
+		// 	controllerAs: 'vm',
+		// 	data: {
+		// 		pageTitle: 'Company Teams'
+		// 	}
+		// })
+		// .state ('orgadmin.proposals', {
+		// 	url: '/proposals',
+		// 	templateUrl: '/modules/orgs/client/views/org-proposals.html',
+		// 	controller: 'OrgProposalsController',
+		// 	controllerAs: 'vm',
+		// 	data: {
+		// 		pageTitle: 'Company Proposals'
+		// 	}
+		// })
 		// // -------------------------------------------------------------------------
 		// //
 		// // edit a org

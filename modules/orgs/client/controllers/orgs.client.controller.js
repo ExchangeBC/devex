@@ -15,7 +15,7 @@
 	// Controller the view of the org page
 	//
 	// =========================================================================
-	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification) {
+	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification, capabilities) {
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
@@ -181,11 +181,11 @@
 		vm.org = org;
 		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
-			vm.orgForm.$setPristine ();
-			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
-				return false;
-			}
+			// vm.orgForm.$setPristine ();
+			// if (!isValid) {
+			// 	$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
+			// 	return false;
+			// }
 			//
 			// Create a new org, or update the current instance
 			//
@@ -194,7 +194,7 @@
 			// success, notify and return to list
 			//
 			.then (function () {
-				vm.orgForm.$setPristine ();
+				// vm.orgForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> capabilities saved successfully!'
 				});
@@ -289,6 +289,11 @@
 		};
 		vm.save = function () {
 			vm.org.createOrUpdate ()
+			.then (function () {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
+				});
+			})
 		};
 	})
 	// =========================================================================
