@@ -72,8 +72,10 @@ module.exports = function(app) {
 		
 	//---------------------------------------
 	// route for authorizing opportunity
-	// TBD: Requirement of role for invoking this API is not specified in #249, 
-	//	so API url is assumed exposed by the link in email. otherwise acl policy needs to be updated.
+	// TBD: Requirement of user role to invoke this API is not specified in #249, 
+	//	 Therefore assumption is that API url can be exposed directly by the link in email. 
+	//
+	//   Otherwise,  acl policy needs to be updated. 
 	//---------------------------------------
 	app.route('/api/opportunities/authorize/:opportunityId')
 		.get(opportunities.authorize);
