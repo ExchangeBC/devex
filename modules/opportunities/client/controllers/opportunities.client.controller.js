@@ -866,15 +866,16 @@
 			promise.then(function() {
 				vm.opportunity.isPublished = true;
 
-				return OpportunitiesService.publish ({opportunityId:vm.opportunity._id}).$promise;
+				return OpportunitiesService.publish ({opportunityId: vm.opportunity._id}).$promise;
 			})
 			.then(function () {
-				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> opportunity published successfully!'
+				vm.notifyPublished().then(function () {
+					$state.go('opportunities.viewcwu', {opportunityId: vm.opportunity.code}).then(function () {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> opportunity published successfully!'
+						});
+					});
 				});
-
-				vm.notifyPublished();
-				$state.go('opportunities.viewcwu', {opportunityId: vm.opportunity.code});
 			})
 			.catch (function (res) {
 				Notification.error ({
