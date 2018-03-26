@@ -508,47 +508,39 @@
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		vm.publish = function (opportunity, state) {
-			var publishedState      = opportunity.isPublished;
-			var t = state ? 'Published' : 'Unpublished';
-
-			var savemeSeymour = true;
+		vm.publish = function (opportunity, isToBePublished) {
+			var publishedState  = opportunity.isPublished;
+			var publishError    = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
+			var publishQuestion = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+			var publishSuccess  = isToBePublished ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
+			var publishMethod   = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
+			var isToBeSaved     = true;
 			var promise = Promise.resolve ();
-			if (state) {
-				var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
-				promise = ask.yesNo (question).then (function (result) {
-					savemeSeymour = result;
-				});
-			}
-				promise.then(function() {
-					if (savemeSeymour) {
-						opportunity.isPublished = state;
-						if (state)
-							return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
-						else
-							return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
-					}
-					else return Promise.reject ({data:{message:'Publish Cancelled'}});
-				})
-				.then (function () {
-					//
-					// success, notify
-					//
-					var m = state ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> '+m
+			if (isToBePublished) promise = ask.yesNo (publishQuestion).then (function (r) {isToBeSaved = r;});
+			promise.then (function () {
+				if (isToBeSaved) {
+					opportunity.isPublished = isToBePublished;
+					publishMethod ({opportunityId:opportunity._id}).$promise
+					.then (function () {
+						//
+						// success, notify
+						//
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> '+publishSuccess
+						});
+					})
+					.catch (function (res) {
+						//
+						// fail, notify and stay put
+						//
+						opportunity.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> '+publishError
+						});
 					});
-				})
-				.catch (function (res) {
-					//
-					// fail, notify and stay put
-					//
-					opportunity.isPublished = publishedState;
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
-					});
-				});
+				}
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
