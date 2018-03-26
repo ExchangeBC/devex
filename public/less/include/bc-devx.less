@@ -11,11 +11,68 @@ body {
     font-size: 14px;
 }
 
+p {
+  font-size: 14px;
+  margin: 0 0 14px;
+}
+
 p.subtitle {
-  color: @gray;
-  font-size: 16px;
-  font-weight: 300;
-  margin: 15px 0px;
+  font-size: 17px;
+  font-weight: 300;  
+  margin: 0 0 17px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  .heading-font;
+  padding: 0;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 0 0 30px;
+}
+
+h2 {
+  font-size: 24px;
+  margin: 0 0 24px;
+}
+
+h3 {
+  font-size: 21px;
+  margin: 0 0 21px;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 0 0 18px;
+}
+
+h5 {
+  font-size: 15px;
+  margin: 0 0 15px;
+}
+
+//---------------------------------------------
+// Grid
+//---------------------------------------------
+
+// Remove the negative margin for rows
+.row {
+  margin: 0;
+}
+
+// Reduce the spacing between columns
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  position: relative;
+  min-height: 1px;
+  padding: 0 .25em; 
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {
@@ -53,16 +110,7 @@ a.breadcrumb-nav {
 }
 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    .heading-font;
-    padding: 0;
-    margin-bottom: 0.25em;
-}
+
 
 .list-page-title {
   margin-top: 3px;
@@ -105,10 +153,14 @@ h6 {
   color: @theme-success;
 }
 
-// Container
+.gray-light {
+  color: @gray-light;
+}
+
+// Containers
 .container {
 	max-width: 1040px;
-  padding: 0 5px;
+  padding: 0;
 }
 
 .detail-view {
@@ -121,6 +173,10 @@ h6 {
     padding: 0;
     margin: 0;
     > .btn {
+      padding: 0;
+      margin: 0;
+    }
+    > button {
       padding: 0;
       margin: 0;
     }
@@ -413,7 +469,7 @@ h4.edit-form-header {
 // Give the tabs something to sit on
 .nav-tabs {
   border-bottom: none;
-  margin: 1.25em 0;
+  margin: 1.25em 0 .75em;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
@@ -909,8 +965,8 @@ form-title {
 }
 
 .label-default {
-  color: @gray-dark;
-  background: @gray-lighter;
+  color: @gray;
+  background: transparent;
 }
 
 .label-primary {
@@ -939,8 +995,7 @@ form-title {
 
 .label-text-only {
   background: transparent;
-  color: @gray-dark;
-  font-weight: bold;
+  color: @gray;
 }
 
 .label-input {
@@ -1120,28 +1175,31 @@ form-title {
 
 // Common styles
 .alert {
-  padding: 10px;
-  margin: 10px;
+  max-width: 1040px;
+  padding: 15px;
+  margin: 10px 0;
   font-weight: 400;
   font-size: 14px;
-  border: 2px solid;
+  border: none;
 }
 
 .alert-info {
-  background: #fff;
-  border-color: @gray-lighter;
+  background: @gray-lighter;
   color: @gray-dark;
 }
 
 .alert-important {
-  background: #fff;
-  border-color: @theme-yellow;
+  background: @theme-important;
+  color: @gray-dark;
+}
+
+.alert-warning {
+  background: @theme-warning;
   color: @gray-dark;
 }
 
 .alert-danger {
   background: #fddece;
-  border-color: @theme-danger;
   color: @theme-danger;
 }
 
@@ -1152,13 +1210,6 @@ form-title {
   background: @gray-lighter;
   border: none;
 }
-
-//.alert-info {
-//  background: @theme-light-blue;
-//  border-color: @theme-primary;
-//  color: @gray-dark;
-//}
-
 
 // Progress bars
 
@@ -1540,19 +1591,18 @@ form-title {
 .card {
   position: relative;
   margin: 1em 0;
-  border: 1px solid #ddd;
+  border: 2px solid transparent;
   border-radius: 3px;
   background: #fff;
   &:active, &:hover {
-  border-color: #999999;
+  border-color: @gray-dark;
   transition: border .4s ease-in-out;
   cursor: pointer;
   }
 }
 
 .card-header {
-  border-bottom: 1px solid #ddd;
-  padding: .75em 1em;
+  padding: .25em 1em;
 }
 
 .card-body {
@@ -1714,29 +1764,6 @@ form-title {
 }
 
 
-//
-// Optional textual caps
-//
-
-.card-header {
-  padding: @panel-heading-padding;
-  background-color: @panel-default-heading-bg;
-  /*border-bottom: 1px solid @panel-default-border;*/
-
-  &:first-child {
-    border-radius: (@border-radius-base - 1) (@border-radius-base - 1) 0 0;
-  }
-}
-
-.card-flat {
-	.card-header {
-		border-bottom: none;
-	}
-	.card-footer {
-		border-top: none;
-	}
-}
-
 .card-header-tabs {
   margin-right: -.625rem;
   margin-bottom: -.75rem;
@@ -1800,12 +1827,9 @@ form-title {
 
 .card-greyed {
 	color: #999;
-	border-color: #ddd;
+	border-color: transparent;
 	.card-img, .list-img {
 		opacity: 0.6;
-	}
-	a:not(:hover) {
-		color: lighten(desaturate(@theme-primary, 25%), 15%);
 	}
 }
 
@@ -1969,17 +1993,19 @@ form-title {
 .well {
   max-width: 1040px;
   padding: 20px;
-  margin: 20px 0px;
-  border: 2px solid;
+  margin: 10px 0px;
+  border: none;
   border-radius: 4px;
   box-shadow: none;
   background: @gray-lighter;
-  border-color: #e3e3e3;
 }
 
 .well-important {
   background: #fff;
-  border-color: @theme-yellow;
+}
+
+.well-warning {
+  background: @theme-warning;
 }
 
 .instructions-for-dev {

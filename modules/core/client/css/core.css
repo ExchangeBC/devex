@@ -241,28 +241,7 @@ section.signup h5 {
 		max-width: 50%;
 	}
 }
-.card-header {
-	background-color: #fff;
-	padding-top: 10px;
-	padding-bottom: 10px;
-}
-.card-header h1, h2, h3, h4, h5 {
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-.card-header h4 {
-	font-size: 15px;
-	font-weight: 100;
-	padding-top: 5px;
-	margin: 0;
-}
-.card-header h5 {
-	font-size: 13px;
-	font-weight: 100;
-}
-.card-header h3 {
-	font-size: 22px;
-}
+
 
 
 .vcenter {
