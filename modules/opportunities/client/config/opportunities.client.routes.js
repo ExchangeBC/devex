@@ -250,6 +250,32 @@
 		})
 		// -------------------------------------------------------------------------
 		//
+		// Opportunity publication
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.publishcwu', {
+			url: '/:opportunityId/publishcwu',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-publish.html',
+			controller: 'OpportunityPublishController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				}
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'Opportunity: {{ opportunity.name }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
 		// edit a opportunity
 		//
 		// -------------------------------------------------------------------------

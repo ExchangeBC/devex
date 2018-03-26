@@ -1,14 +1,15 @@
 {{#markdown this}}
 ![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
 
-A new *Code With Us* opportunity is pending and awaiting your approval.  Please review the information below, and choose *Agree* or *Disagree* to approve or deny publication of the opportunity.
+A *Code With Us* opportunity was approved and is now published.  For your information, the details of the opportunity are summarized below.
 
-### {{ data.opportunityId }}
+### {{ data.opportunityTitle }}
 
-- Associated RFP Control: **{{ data.rfp }}**
+- Contract manager: **{{ data.contractManager }}**
+- Unique ID: **{{ data.bcDevExUniqueId }}**
 - Posting Date: **{{ data.postingDate }}**
 - Value: **${{ data.value }}**
-- Required Skills: **{{ data.requiredSkills }}**
+- Start Date: **{{ data.startDate }}**
 - Closing Date: **{{ data.closingDate }}**
 
 ---
@@ -28,7 +29,3 @@ A new *Code With Us* opportunity is pending and awaiting your approval.  Please 
         border-left: 1px solid #CCCCCC;
     }
 </style>
-<div width=100% align=center>
-    <a href="https://bcdevexchange.org/opportunityadmin/publishcwu">Agree</a>&nbsp;&nbsp;
-    <a href="https://bcdevexchange.org/path/to/opp/deny">Disagree</a>
-</div>

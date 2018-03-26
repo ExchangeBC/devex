@@ -823,5 +823,63 @@
 				);
 			}
 		}
+	})
+	// =========================================================================
+	//
+	// Controller for the ADM approval publish view
+	//
+	// =========================================================================
+	.controller('OpportunityPublishController', function($state, opportunity, Authentication, UsersService, OpportunitiesService, Notification) {
+		var vm 			= this;
+		vm.user 		= Authentication.user;
+		vm.opportunity 	= opportunity;
+
+
+		vm.opportunityPublish = function(isValid) {
+			if (isValid) {
+				//
+				// user has confirmed publication, update and save the opportunity
+				//
+				vm.opportunity.status = 'Published';
+				vm.opportunity.isPublished = true;
+				vm.opportunity.wasPublished = true;
+				vm.opportunity.lastPublished = Date.now();
+				vm.opportunity.updated = Date.now();
+				var updateOpportunityPromise = vm.opportunity.$update(function () {}, function (e) {$log.error (e.data);}).$promise;
+
+				// Send the notification via the OpportunitiesService
+				var notificationPromise = OpportunitiesService.submitOpportunity(
+					{
+						//vm.programId    = opportunity.program._id
+						// TODO: Assume that "Email to Receive Acceptance of Terms and Contract" means
+						//       that proposalEmail is the Program Area Manager in charge of opportunities
+						useremail: vm.opportunity.proposalEmail + ';' + vm.user.preferredDfsEmail + ';' + vm.user.preferredBfsEmail,
+						opportunityTitle: vm.opportunity.name,
+						contractManager: vm.opportunity.createdBy.displayName,
+						bcDevExUniqueId: 'BCDevX(PGO100)' + vm.opportunity._id.toString(),
+						postingDate: new Date(vm.opportunity.start).toDateString(),
+						value: vm.opportunity.earn,
+						startDate: new Date(vm.opportunity.start).toDateString(),
+						closingDate: new Date(vm.opportunity.deadline).toDateString()
+					}
+				).$promise;
+
+				// Wait for opportunity model update and email notification to finish
+				Promise.all([updateOpportunityPromise, notificationPromise]).then(
+					function() {
+						Notification.success({
+							message: '<i class="glyphicon glyphicon-ok"></i>Opportunity publication succeeded.'
+						});
+						$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+					},
+					function(response) {
+						Notification.error({
+							title: '<i class=\'glyphicon glyphicon-remove\'></i>Opportunity publication failed.',
+							message: 'Please confirm you have entered valid email addresses.'
+						});
+					}
+				);
+			}
+		}
 	});
 }());
