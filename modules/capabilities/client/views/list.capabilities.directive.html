@@ -1,0 +1,57 @@
+<div class="row list-head">
+	<div class="col-sm-8">
+		<h3 class="list-page-title list-page-hide" ng-bind="vm.titleclass">Capabilities</h3>
+	</div>
+	<div class="col-sm-4">
+		<button ng-if="vm.canAdd" class="btn btn-primary pull-right" ui-sref="capabilityadmin.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> Add a Capability
+		</button>
+	</div>
+</div>
+
+<div class="row" ng-if="!vm.capabilities.length">
+	<div class="col-sm-12">
+		<div class="well">
+			No Capabilities right now. Check back soon!
+		</div>
+	</div>
+</div>
+
+<div class="well well-important">
+	You shouldn't be messing with any of these unless you're a member of the BCDevExhange Team!!
+</div>
+
+<div class="row" ng-if="vm.capabilities.length">
+	<div class="col-xs-12 col-sm-4" ng-repeat="capability in vm.capabilities">
+		<div class="card">
+			<div class="card-header" id="capabilities.view" ui-sref="capabilities.view({capabilityId:capability.code})">
+				<div class="card-title" ng-bind="capability.name"></div>
+			<!--
+				<span class="label label-success" ng-if="capability.isInception">Inception</span>
+				<span class="label label-success" ng-if="capability.isPrototype">Prototype</span>
+				<span class="label label-success" ng-if="capability.isImplementation">Implementation</span>
+				<span class="label label-default" ng-if="capability.isRequired">Required</span>
+			-->
+			</div>
+			<!--
+			<div class="card-body" style="cursor:pointer" >
+				<div class="row">
+					<div class="col-sm-8">
+						<p ng-bind-html="vm.trust(capability.description)"></p>
+					</div>
+					<div class="col-sm-4">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<strong>Preferred Skills</strong>
+							</div>
+							<ul class="list-group">
+								<li ng-repeat="skill in capability.skills" class="list-group-item">{{skill.name}}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		-->
+		</div>
+	</div>
+</div>

@@ -1,8 +1,7 @@
-
-<section>
+<div class="edit-form-tab-content">
 	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
 		<div class="row">
-			<div class="col-sm-6">
+			<div class="col-sm-7">
 				<fieldset>
 				<form-input
 					ng-model="vm.org.name"
@@ -12,8 +11,7 @@
 						"title":"Legal Name",
 						"id":"companyname",
 						"name":"companyname",
-						"placeholder":"Enter your compamny name",
-						"required":"A name is required"
+						"placeholder":"Enter your company name"
 					}'>
 				</form-input>
 
@@ -104,7 +102,7 @@
 
 				</fieldset>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-5">
 				<fieldset>
 				<h3><avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="70"></avatar-display></h3>
 				<div><edit-org-image org="vm.org"></edit-org-image></div>
@@ -114,7 +112,7 @@
 					ng-model="vm.org.contactName"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"contactName",
+						"title":"Contact Name",
 						"id":"contactName",
 						"name":"contactName",
 						"placeholder":"contactName"
@@ -126,7 +124,7 @@
 					ng-model="vm.org.contactPhone"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"contactPhone",
+						"title":"Contact Phone",
 						"id":"contactPhone",
 						"name":"contactPhone",
 						"placeholder":"contactPhone"
@@ -138,7 +136,7 @@
 					ng-model="vm.org.contactEmail"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"contactEmail",
+						"title":"Contact Email",
 						"id":"contactEmail",
 						"name":"contactEmail",
 						"placeholder":"contactEmail"
@@ -147,6 +145,8 @@
 				</fieldset>
 			</div>
 		</div>
+	<!-- // I'm thinking we hide this for now // -->
+	<!--
 		<div class="row">
 			<div class="col-sm-12">
 				<form-display
@@ -167,13 +167,15 @@
 				</form-display>
 			</div>
 		</div>
+	-->
 		<br/>
-		<div class="row text-center">
-			<div class="form-group">
-				<button class="btn btn-danger" ng-click="vm.remove()">Delete</button>
-				&nbsp; &nbsp; &nbsp;
-				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary"><i class="glyphicon glyphicon-save"></i> Save</button>
+		<div class="edit-form-footer">
+			<div class="row">
+				<div class="col-xs-12">
+					<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
+					<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
+				</div>
 			</div>
 		</div>
 	</form>
-</section>
+</div>

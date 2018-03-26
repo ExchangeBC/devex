@@ -1,0 +1,35 @@
+<div class="banner banner-info" ng-if="1">
+	<div class="row">
+		<div class="col-xs-12">
+			<p>This is a banner</p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row" ng-if="vm.canEdit">
+		<div class="col-xs-12 text-right">
+			<button type="button" class="btn btn-default" ui-sref="propsalQuestionadmin.edit({propsalQuestionId:vm.propsalQuestion.code})">Edit</button>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Name</h3>
+			<p ng-bind="vm.propsalQuestion.name"></p>
+			<h3>Description</h3>
+			<p ng-bind-html="vm.trust(vm.propsalQuestion.description)"></p>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row form-foot text-right">
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-default" ui-sref="propsalQuestions.list()">List</button>
+			<button ng-if="vm.canEdit" class="btn btn-success" ng-if="vm.canEdit" ui-sref="propsalQuestionadmin.edit({propsalQuestionId:vm.propsalQuestion.code})">Edit</button>
+		</div>
+	</div>
+</div>

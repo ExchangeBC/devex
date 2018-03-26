@@ -1,0 +1,459 @@
+<div class="edit-form-tab-content">
+	<div class="row">
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<button class="btn btn-block btn-primary" ng-if="!vm.oimp.isImplementation && !vm.oinp.isInception && !vm.oprp.isPrototype" ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true; vm.oinp.isInception = true; vm.oprp.isPrototype = true">Start here</button>
+					<button class="btn btn-block btn-default" ng-if="vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = false;">Cancel</button>
+					<button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = true; vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add this phase</button>
+					<hr>
+					<h2 style="text-align: center"><i class="fa fa-map"></i> Inception</h2>
+					<p>During inception, you take your business goals and Discovery research you've done with your users and explore the potential value that a new digital product can bring. Then you prioritize features you think a Minimum Viable Product should have and try to scope out what will be required to get to an Alpha release.</p>
+					<div class="alert alert-simple">
+						<span class="strong">You're ready for Inception if you've:</span><br>
+						<ul>
+							<li>Done thorough Discovery work with stakeholders and potential end users</li>
+							<li>Have clear business objectives and a solid understanding of your users' needs</li>
+							<li>Have strong support from your senior executive</li>
+						</ul>
+					</div>
+					<div class="alert alert-info">
+						<i class="fa fa-cubes"></i>
+						<span class="strong">Deliverables</span><br>
+						At the end of Inception, you should have:
+						<ul>
+							<li>Happy stakeholders with a shared vision for your digital product</li>
+							<li>A product backlog for the Alpha release</li>
+						</ul>
+					</div>
+					<div ng-if="vm.oinp.isInception">
+						<hr>
+						<label for="start-date" class="light">I want Inception to <span class="strong">start</span> on or before:</label>
+							<form-input
+								ng-model="vm.oinp.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"inceptionStartDate",
+									"name":"inceptionStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<br>
+						<label for="phase-deadline" class="light">I want Inception <span class="strong">complete</span> by:</label>
+							<form-input
+								ng-model="vm.oinp.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"inceptionStartDate",
+									"name":"inceptionStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<hr>
+						<h4>Capabilities</h4>
+						<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+						<ul class="list-group">
+							<li
+								class="list-group-item"
+								ng-repeat="capability in vm.inp.capabilities"
+								ng-class="{'list-group-item-selected' : vm.inp.iOppCapabilities[capability.code]}"
+								ng-click="$event.stopPropagation();vm.inp.iOppCapabilities[capability.code] = !vm.inp.iOppCapabilities[capability.code];vm.inp.iOppCapabilitiesCore[capability.code] = vm.inp.iOppCapabilities[capability.code] && vm.inp.iOppCapabilitiesCore[capability.code]">
+								<a href="">{{capability.name}}</a>
+								<label
+									class="label label-fulltime pull-right"
+									ng-class="{'label-fulltime-selected' : vm.inp.iOppCapabilitiesCore[capability.code]}"
+									ng-click="$event.stopPropagation();vm.inp.iOppCapabilitiesCore[capability.code] = !vm.inp.iOppCapabilitiesCore[capability.code];vm.inp.iOppCapabilities[capability.code] = vm.inp.iOppCapabilities[capability.code]||vm.inp.iOppCapabilitiesCore[capability.code];">
+									F/T
+								</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<button class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true;">Start here</button>
+					<button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = false;">Cancel</button>
+					<button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add this phase</button>
+					<hr>
+					<h2 style="text-align: center"><i class="fa fa-rocket"></i> Proof of Concept</h2>
+					<p>In this phase, you make your value propositions tangible so they can be validated. Here's where you get coding the core features you scoped out in Inception, working towards that exciting Alpha release! By the end of this phase, you should be able to plan what it will take to fully implement and maintain the product long-term.</p>
+					<div class="alert alert-simple">
+						<span class="strong">You're ready for Proof of Concept stage if you have:</span><br>
+						<ul>
+							<li>A clear product vision</li>
+							<li>A three month backlog</li>
+						</ul>
+					</div>
+					<div class="alert alert-info">
+						<i class="fa fa-cubes"></i>
+						<span class="strong">Deliverables</span><br>
+						At the end of Proof of Concept, you should have:
+						<ul>
+							<li>Alpha release of the product</li>
+							<li>A build/buy/licence decision</li>
+							<li>Product Roadmap</li>
+							<li>Resourcing plan for Implementation</li>
+						</ul>
+					</div>
+					<div ng-if="vm.oprp.isPrototype">
+						<hr>
+						<label for="start-date" class="light">I want the P.O.C. phase to <span class="strong">start</span> on or before:</label>
+							<form-input
+								ng-model="vm.oprp.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"prototypeStartDate",
+									"name":"prototypeStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<br>
+						<label for="phase-deadline" class="light">I want an <span class="strong">Alpha release</span> on or before:</label>
+							<form-input
+								ng-model="vm.oprp.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"prototypeStartDate",
+									"name":"prototypeStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<hr>
+						<h4>Capabilities</h4>
+						<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+						<ul class="list-group">
+							<li
+								class="list-group-item"
+								ng-repeat="capability in vm.prp.capabilities"
+								ng-class="{'list-group-item-selected' : vm.prp.iOppCapabilities[capability.code]}"
+								ng-click="$event.stopPropagation();vm.prp.iOppCapabilities[capability.code] = !vm.prp.iOppCapabilities[capability.code];vm.prp.iOppCapabilitiesCore[capability.code] = vm.prp.iOppCapabilities[capability.code] && vm.prp.iOppCapabilitiesCore[capability.code]">
+								<a href="">{{capability.name}}</a>
+								<label
+									class="label label-fulltime pull-right"
+									ng-class="{'label-fulltime-selected' : vm.prp.iOppCapabilitiesCore[capability.code]}"
+									ng-click="$event.stopPropagation();vm.prp.iOppCapabilitiesCore[capability.code] = !vm.prp.iOppCapabilitiesCore[capability.code];vm.prp.iOppCapabilities[capability.code] = vm.prp.iOppCapabilities[capability.code]||vm.prp.iOppCapabilitiesCore[capability.code];">
+									F/T
+								</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<button class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true;">Start here</button>
+					<button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation" ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = false;">Cancel</button>
+					<hr>
+					<h2 style="text-align: center"><i class="fa fa-cogs"></i> Implementation</h2>
+					<p>If you’ve reached the implementation stage, your organization is fully invested in the new digital product and intends to continuously improve it. Now you need to carefully architect and automate your delivery pipeline for stability and continuous deployment.</p>
+					<div class="alert alert-simple">
+						<span class="strong">You're at the Implementation phase when you:</span><br>
+						<ul>
+							<li>Have the product in production</li>
+							<li>Have a Product Roadmap</li>
+							<li>Know the resources you need for full implementation</li>
+						</ul>
+					</div>
+					<div class="alert alert-info">
+						<i class="fa fa-cubes"></i>
+						<span class="strong">Deliverables</span><br>
+						<ul>
+							<li>Delivery of the functional components in the Product Roadmap</li>
+						</ul>
+					</div>
+					<div ng-if="vm.oimp.isImplementation">
+						<hr>
+						<label for="start-date" class="light">I want this phase to <span class="strong">start</span> on or before:</label>
+							<form-input
+								ng-model="vm.oimp.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"prototypeStartDate",
+									"name":"prototypeStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<br>
+						<label for="phase-deadline" class="light">I want my Implementation team until:</label>
+							<form-input
+								ng-model="vm.oimp.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"id":"prototypeStartDate",
+									"name":"prototypeStartDate",
+									"type":"date"
+								}'>
+							</form-input>
+						<hr>
+						<h4>Capabilities</h4>
+						<p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>, mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
+						<ul class="list-group">
+							<li
+								class="list-group-item"
+								ng-repeat="capability in vm.imp.capabilities"
+								ng-class="{'list-group-item-selected' : vm.imp.iOppCapabilities[capability.code]}"
+								ng-click="$event.stopPropagation();vm.imp.iOppCapabilities[capability.code] = !vm.imp.iOppCapabilities[capability.code];vm.imp.iOppCapabilitiesCore[capability.code] = vm.imp.iOppCapabilities[capability.code] && vm.imp.iOppCapabilitiesCore[capability.code]">
+								<a href="">{{capability.name}}</a>
+								<label
+									class="label label-fulltime pull-right"
+									ng-class="{'label-fulltime-selected' : vm.imp.iOppCapabilitiesCore[capability.code]}"
+									ng-click="$event.stopPropagation();vm.imp.iOppCapabilitiesCore[capability.code] = !vm.imp.iOppCapabilitiesCore[capability.code];vm.imp.iOppCapabilities[capability.code] = vm.imp.iOppCapabilities[capability.code]||vm.imp.iOppCapabilitiesCore[capability.code];">
+									F/T
+								</label>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+<div class="col-sm-12">
+	<fieldset>
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title":"Opportunity Phases",
+				"name":"phases",
+				"help":"<ul> <li><b>Inception</b> blah blah ...</li> <li><b>Prototype</b> impsum lorem ...</li> <li><b>Implementation</b> build me something ...</li></ul>"
+			}'>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isInception" ng-model="vm.opportunity.isInception"> Inception
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isPrototype" ng-model="vm.opportunity.isPrototype"> Prototype
+			</label>
+			<label class="checkbox-inline">
+				<input type="checkbox" name="isImplementation" ng-model="vm.opportunity.isImplementation"> Implementation
+			</label>
+		</form-display>
+
+		<form-display
+			ng-if="vm.opportunity.isPrototype || vm.opportunity.isImplementation || vm.opportunity.isInception"
+			class="col-sm-12"
+			x-options='{
+				"title":"Contract Models",
+				"name":"models",
+				"help":"<ul> <li><b>Milestone</b> Pricing attached ...</li> <li><b>Time and Materials</b> A price time quantity ...</li> <li><b>Fixed / Lump Sum</b> Price is fixed ...</li> <li><b>Hybrid Targeted Cost</b> This model ...</li> </ul>"
+			}'>
+			<form-display
+				ng-if="vm.opportunity.isInception"
+				class="col-sm-4"
+				x-options='{
+					"title":"Inception",
+					"name":"inceptionContract"
+				}'>
+				<select name="inceptionContract" ng-model="vm.opportunity.inceptionContract" id="inceptionContract" class="form-control">
+					<option value="1">Milestone</option>
+					<option value="2">Time and Materials</option>
+					<option value="3">Fixed / Lump Sum</option>
+				</select>
+			</form-display>
+			<form-display
+				ng-if="vm.opportunity.isPrototype"
+				class="col-sm-4"
+				x-options='{
+					"title":"Prototype",
+					"name":"prototypeContract"
+				}'>
+				<select name="prototypeContract" ng-model="vm.opportunity.prototypeContract" id="prototypeContract" class="form-control">
+					<option value="1">Milestone</option>
+					<option value="2">Time and Materials</option>
+					<option value="3">Fixed / Lump Sum</option>
+				</select>
+			</form-display>
+			<form-display
+				ng-if="vm.opportunity.isImplementation"
+				class="col-sm-4"
+				x-options='{
+					"title":"Implementation",
+					"name":"implementationContract"
+				}'>
+				<select name="implementationContract" ng-model="vm.opportunity.implementationContract" id="implementationContract" class="form-control">
+					<option value="1">Milestone</option>
+					<option value="2">Time and Materials</option>
+					<option value="3">Fixed / Lump Sum</option>
+					<option value="4">Hybrid Targeted Cost</option>
+				</select>
+			</form-display>
+		</form-display>
+
+		<form-display
+			ng-if="vm.opportunity.isPrototype || vm.opportunity.isImplementation || vm.opportunity.isInception"
+			class="col-sm-12"
+			x-options='{
+				"title":"Dates and Costs",
+				"name":"models",
+				"help":"some help about dates and costs"
+			}'>
+			<table class="table table-striped">
+				<thead>
+					<td></td>
+					<td>Phase Start Date</td>
+					<td>Phase End Date</td>
+					<td>Target Cost</td>
+				</thead>
+				<tr ng-if="vm.opportunity.isInception">
+					<td>Inception</td>
+					<td>
+						<form-input
+							ng-model="vm.opportunity.inceptionStartDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"inceptionStartDate",
+								"name":"inceptionStartDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.inceptionEndDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"inceptionEndDate",
+								"name":"inceptionEndDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.inceptionTarget"
+							x-form="vm.opportunityForm"
+							x-onchange="vm.changeTargets"
+							x-options='{
+								"id":"inceptionTarget",
+								"onchange":"vm.changeTargets",
+								"number":true,
+								"type":"number",
+								"name":"inceptionTarget"
+							}'>
+						</form-input>
+					</td>
+				</tr>
+				<tr ng-if="vm.opportunity.isPrototype">
+					<td>Prototype</td>
+					<td>
+						<form-input
+							ng-model="vm.opportunity.prototypeStartDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"prototypeStartDate",
+								"name":"prototypeStartDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.prototypeEndDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"prototypeEndDate",
+								"name":"prototypeEndDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.prototypeTarget"
+							x-form="vm.opportunityForm"
+							x-onchange="vm.changeTargets"
+							x-options='{
+								"id":"prototypeTarget",
+								"onchange":"vm.changeTargets",
+								"number":true,
+								"type":"number",
+								"name":"prototypeTarget"
+							}'>
+						</form-input>
+					</td>
+				</tr>
+				<tr ng-if="vm.opportunity.isImplementation">
+					<td>Implementation</td>
+					<td>
+						<form-input
+							ng-model="vm.opportunity.implementationStartDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"implementationStartDate",
+								"name":"implementationStartDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.implementationEndDate"
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"implementationEndDate",
+								"name":"implementationEndDate",
+								"format":"MMMM dd, yyyy",
+								"type":"date"
+							}'>
+						</form-input>
+					</td><td>
+						<form-input
+							ng-model="vm.opportunity.implementationTarget"
+							x-form="vm.opportunityForm"
+							x-onchange="vm.changeTargets"
+							x-options='{
+								"id":"implementationTarget",
+								"onchange":"vm.changeTargets",
+								"number":true,
+								"type":"number",
+								"name":"implementationTarget"
+							}'>
+						</form-input>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>Total Costs:</td>
+					<td>
+						<form-display
+							x-form="vm.opportunityForm"
+							x-options='{
+								"id":"totalTarget",
+								"name":"totalTarget"
+							}'>
+								<input type="text" class="form-control format-as-number text-right col-sm-12" disabled
+							value="{{vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget}}"
+								>
+						</form-display>
+					</td>
+				</tr>
+			</table>
+		</form-display>
+	</fieldset>
+</div>
+ -->

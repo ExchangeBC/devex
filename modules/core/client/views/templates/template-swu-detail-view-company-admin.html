@@ -1,0 +1,324 @@
+<section class="detail-page-background">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="breadcrumb-nav">
+					<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container">	
+		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
+		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+			<div class="col-xs-12">
+				<div class="alert alert-important">
+					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
+				</div>
+			</div>
+		</div>
+		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
+		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
+			<div class="col-xs-12">
+				<div class="pull-right" role="group">
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+			<div class="alert alert-success">
+				<i class="fa fa-thumbs-o-up"></i>&nbsp; Your company is registered and it has members with the capabilities required for this opportunity.
+			</div>
+		</div>
+
+		<!-- // Proposal Application Directive // -->
+		
+
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+			<div class="col-xs-12">
+				<button class="btn btn-primary pull-right"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
+				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+			</div>
+		</div>
+	</div>
+
+	<br>
+
+	<div class="container detail-view">
+
+		<div class="opp-detail-header">
+			Published on Feb 12, 2018. Last updated on Feb 15, 2018.
+
+			<!-- // User is NOT following the opportunity // -->
+			<button type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
+			<!-- // User IS following the opportunity // -->
+			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+
+		</div>
+
+		<!-- // Status and Follow // -->
+		<div class="row" id="status">
+			<div class="col-xs-12 text-center">
+				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> 4 hours</span></label>
+			</div>
+		</div>
+
+		<!-- // Title and Teaser // -->
+		<div class="row">
+			<div class="col-xs-12 col-sm-8">
+				<h1 class="opp-detail">Agile Team needed for first provincial Cannabis registry</h1>
+				<p>Cannabis has long been used for hemp fibre, for hemp oils, for medicinal purposes, and as a recreational drug. Industrial hemp products are made from cannabis plants selected to produce an abundance of fiber. To satisfy the UN Narcotics Convention, some cannabis strains have been bred to produce minimal levels of tetrahydrocannabinol (THC), the principal psychoactive constituent. Many plants have been selectively bred to produce a maximum of THC (cannabinoids), which is obtained by curing the flowers. Various compounds, including hashish and hash oil, are extracted from the plant.</p>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<br><br>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<span class="light">Product Manager:</span>
+						<div class="avatar-user">
+							<img src="/img/Zeb_avatar.png">
+							<div class="avatar-body">
+								<div class="avatar-name">Mark Wilson</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Background</h3>
+				<p>The National Basketball Association All-Star Game Most Valuable Player (MVP) is an annual National Basketball Association (NBA) award given to the player(s) voted best of the annual All-Star Game. The award was established in 1953 when NBA officials decided to designate an MVP for each year's game. The league also re-honored players from the previous two All-Star Games. The voting is conducted by a panel of media members, who cast their vote after the conclusion of the game. No All-Star Game MVP was named in 1999 as the game was canceled due to the league's lockout. The current recipient is Cleveland Cavaliers forward LeBron James (pictured). Bob Pettit and Kobe Bryant are the only two players to win the All-Star Game MVP four times. Oscar Robertson, Michael Jordan, Shaquille O'Neal, and LeBron James have each won the award three times, while Bob Cousy, Julius Erving, Isiah Thomas, Magic Johnson, Karl Malone, Allen Iverson, and Russell Westbrook have all won twice. (Full list...)</p>
+				<div class="alert alert-info">
+					<span class="strong">Attachments</span><br>
+					<div><a href=""><i class="fa fa-file"></i> Attachment 1.pdf</a></div>
+					<div><a href=""><i class="fa fa-file"></i> Attachment 2.jpg</a></div>
+					<div><a href=""><i class="fa fa-file"></i> Attachment 3.docx</a></div>
+				</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Budget</h3>
+				<div class="alert alert-important">We have potential to spend <span class="strong">$ total budget value</span> on this opportunity if work proceeds successfully through all phases.</div>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Phases of Work & Deliverables</h3>
+				<p>We need to carry out the following phases of work:</p>
+				
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-map"></i> Inception <i class="fa fa-chevron-down pull-right"></i>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-rocket"></i> Proof of Concept <i class="fa fa-chevron-up pull-right"></i>
+					</div>
+					<div class="panel-body">
+						<p>In this phase, you'll code the core features you scoped out in Inception, working towards an Alpha release. By the end of this phase, you should be able to plan what it will take to fully implement and maintain the product long-term.</p>
+						<div class="alert alert-info">
+				    		<i class="fa fa-cubes"></i>
+				    		<span class="strong">Deliverables</span><br>
+				    		At the end of Proof of Concept, you'll have delivered:
+				    		<ul>
+				    			<li>Alpha release of the product</li>
+				    			<li>A build/buy/licence decision</li>
+				    			<li>Product Roadmap</li>
+				    			<li>Resourcing plan for Implementation</li>
+				    		</ul>
+				    	</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-gears"></i> Implementation <i class="fa fa-chevron-down pull-right"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Schedule</h3>
+				<p>We want to complete phases within these timeframes:</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important" style="text-align: center;">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">May 4, 2018</span> to <span class="strong">May 30, 2018</span>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important" style="text-align: center;">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">June 4, 2018</span> to <span class="strong">Aug 30, 2018</span>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important" style="text-align: center;">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">Sep 1, 2018</span> to <span class="strong">Dec 10, 2018</span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail"><i class="fa fa-group"></i> Team Capabilities Required</h3>
+				<p>In each phase, we need the following capabilities:</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-backend"><i class="fa fa-circle"></i> Backend Development</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-backend"><i class="fa fa-circle"></i> DevOps Engineering</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-backend"><i class="fa fa-circle"></i> Backend Development</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-backend"><i class="fa fa-circle"></i> DevOps Engineering</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-securityeng"><i class="fa fa-circle"></i> Security Engineering</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">How to Apply</h3>
+				<p>If your company can supply a team with the required capabilities on the timelines available, submit a proposal before <span class="strong">{{vm.deadline}}Closing Date and Time</span>.</p>
+				<p>We aim to complete interviews and have a team chosen by <span class="strong">{{vm.assignment}}This date</span>.</p>
+				<button class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
+				
+				<!-- // Proposal Application Directive // -->
+				<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+					<div class="col-xs-12">
+						<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+					</div>
+				</div>
+				<hr>
+				<h3 class="opp-detail">Proposal Evaluation Criteria</h3>
+				<p>Here's how your proposal will be scored:</p>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<i class="fa fa-chevron-up"></i>
+						&nbsp;&nbsp;
+						<span class="strong">Your Team's Capabilities &amp; Skills<span class="pull-right">10 points</span></span>
+					</div>
+					<div class="panel-body">
+						<p>In order for your company to be considered, the team members you put forward must collectively possess all the <span class="strong">required capabilities</span> and be available for the time periods stated.</p>
+						<p>In the proposal, you may also see a list of <span class="strong">preferred skills</span>. The more of these your team has, the higher they'll score.</p>
+					</div>
+					
+					<div class="panel-heading">
+						<i class="fa fa-chevron-up"></i>
+						&nbsp;&nbsp;
+						<span class="strong">The Questionnaire<span class="pull-right">20 points</span></span>
+					</div>
+					<div class="panel-body">
+						<p>All companies' responses to the questionnaire get anonymized and randomized. Then the issuer has to rank them from strongest to weakest. Once they decide how many companies they want to interview, they get to see which companies scored the highest and screen through to Interview.</p>
+						<p>Whether your team screens through for an Interview depends on the strength of responses and the number of companies that apply. Either way, we'll let you know right away.</p>
+					</div>
+
+					<div class="panel-heading">
+						<i class="fa fa-chevron-down"></i>
+						&nbsp;&nbsp;
+						<span class="strong">The Interview &nbsp;<span class="pull-right">60 points</span></span>
+					</div>
+					
+					
+					<div class="panel-heading">
+						<i class="fa fa-chevron-up"></i>
+						&nbsp;&nbsp;
+						<span class="strong">Pricing<span class="pull-right">10 points</span></span>
+					</div>
+					<div class="panel-body">	
+						<p>Your score for pricing is based on an algorithm that considers your bid compared with the the lowest and highest bids.</p>
+					</div>
+					<div class="panel-footer">
+						<span class="panel-title">Total<span class="pull-right">100 points</span></span>
+					</div>
+				</div>
+				
+
+				
+				<hr>
+				<div>
+					<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</section>

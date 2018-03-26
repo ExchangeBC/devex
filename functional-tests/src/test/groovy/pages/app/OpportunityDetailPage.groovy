@@ -1,6 +1,7 @@
 package pages.app
 
 import geb.Page
+import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import extensions.AngularJSAware
 
@@ -11,9 +12,7 @@ class OpportunityDetailPage extends Page implements AngularJSAware {
     	unPublished { $("label.label-danger")[0].contains("UNPUBLISHED") }
 		published {$("label.label-lg.label-success-o").contains("Published") } 
     	oppDetailTitle { $("h2").text() }
-		//oppPublish_click { $("#page-top > main > ui-view > div > div:nth-child(2) > div > a") << Keys.chord(Keys.ENTER) }
-		oppPublishclick { $("a", text: startsWith("Publish")) << Keys.chord(Keys.ENTER) }
-		//oppPublishYes_click { $("#page-top > div.modal.fade.in > div > div > div.modal-footer > button.btn.btn-primary") << Keys.chord(Keys.ENTER) }
+		oppPublishclick { $(By.xpath('//a[contains(.,"PUBLISH") and i[@class[contains(.,"fa-bullhorn")]]]'), 0).click() }
 		oppubYesclick { $("button", text: startsWith("Yes")) << Keys.chord(Keys.ENTER) }
     }
 }

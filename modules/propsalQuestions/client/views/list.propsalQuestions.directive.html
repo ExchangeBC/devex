@@ -1,0 +1,29 @@
+<div class="row list-head">
+	<div class="col-sm-7">
+		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
+	</div>
+	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.canAdd">
+		<button class="btn btn-default-inverse" ui-sref="propsalQuestionadmin.create()" title="New">
+			<i class="fa fa-plus"></i> POST AN OPPORTUNITY
+		</button>
+	</div>
+</div>
+
+<div class="row" ng-if="!vm.propsalQuestions.length">
+	<div class="col-sm-12">
+		<div class="panel panel-default panel-body">
+			<span class="text-muted">No PropsalQuestions right now. Check back soon!</span>
+		</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.propsalQuestions.length">
+	<div class="panel panel-default" ng-repeat="propsalQuestion in vm.propsalQuestions">
+		<div class="panel-heading" >
+			<h3 class="panel-title" ng-bind="propsalQuestion.name"></h3>
+		</div>
+		<div class="panel-body" id="propsalQuestions.view" ui-sref="propsalQuestions.view({propsalQuestionId:propsalQuestion.code})">
+			<p ng-bind-html="vm.trust(propsalQuestion.description)"></p>
+		</div>
+	</div>
+</div>

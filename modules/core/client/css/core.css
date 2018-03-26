@@ -264,17 +264,16 @@ section.signup h5 {
 	font-size: 22px;
 }
 
-.card-img-left {
-	margin-right: 15px;
-	margin-left: -2px;
-}
+
 .vcenter {
 	display: inline-block;
     vertical-align: middle;
     float: none;
 }
 .custombuttonbackground {
-	background-color: teal;
+	background-color: #555;
+	border-color: #555;
+	color: #fff;
 }
 .cbg-light-steel-blue {
 	background-color: #b0c4de;

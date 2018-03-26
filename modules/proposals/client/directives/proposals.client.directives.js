@@ -34,9 +34,32 @@
 				var isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
 				var isProposal        = qaz.proposal && qaz.proposal._id;
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
+				qaz.isSprintWithUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
+				console.log (Authentication.user);
+				var hasCompany        = isUser && Authentication.user.orgsAdmin.length > 0;
 				qaz.case               = 'nothing';
 				if (!isUser) qaz.case = 'guest';
-				else if (canedit) qaz.case = isProposal ? 'canedit' : 'canadd';
+				//
+				// if the user is even allowed to add proposals
+				//
+				else if (canedit) {
+					//
+					// they have one, let them erdit it
+					//
+					if (isProposal) qaz.case = 'canedit';
+					//
+					// dont have one, code with us, let them add one
+					//
+					else if (!qaz.isSprintWithUs) qaz.case = 'canadd';
+					//
+					// dont have one, sprint with us, have company, let them add
+					//
+					else if (hasCompany) qaz.case = 'canadd';
+					//
+					// dont have one, sprint with us, no company, tell then they need one
+					//
+					else qaz.case = 'needscompany';
+				}
 			}
 		};
 	})
@@ -160,8 +183,8 @@
 				var isUser = Authentication.user;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
-				vm.userCanAdd = true || vm.isAdmin;
-				console.log ('user can add', vm.userCanAdd);
+				vm.userCanAdd = vm.isAdmin;
+				// console.log ('user can add', vm.userCanAdd);
 				if ($scope.title) vm.title = $scope.title;
 			}
 		}

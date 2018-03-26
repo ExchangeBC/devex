@@ -4,125 +4,208 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+	helpers = require(require('path').resolve('./modules/core/server/controllers/core.server.helpers')),
 	Schema = mongoose.Schema;
 
+var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+var dayNames   = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+// -------------------------------------------------------------------------
+//
+// Opportunity capabilities
+//
+// -------------------------------------------------------------------------
+var OpportunityCapabilities = new Schema ({
+	code         : {type: String, default: ''},
+	experience   : {type: String, default:''},
+	minimumYears : {type: Number, default:0 },
+	desiredYears : {type: Number, default:0 },
+	skills       : {type: [String], default:[]}
+});
 /**
  * Opportunity Schema
  */
 var OpportunitySchema = new Schema({
-	code          : {type: String, default: ''},
-	opportunityTypeCd : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
-	name          : {type: String, default: '', required: 'Name cannot be blank'},
-	short         : {type: String, default: ''},
-	description   : {type: String, default: ''},
-	background    : {type: String, default: ''},
-	evaluation    : {type: String, default: ''},
-	criteria      : {type: String, default: ''},
-	github        : {type: String, default: ''},
-	proposalEmail : {type: String, default: ''},
-	views         : {type: Number, default: 1},
-	program       : {type:'ObjectId', ref: 'Program', default: null, required: 'Program cannot be blank'},
-	project       : {type:'ObjectId', ref: 'Project', default: null, required: 'Project cannot be blank'},
-	skills        : [String],
-	capabilities        : [String],
-	earn          : {type: Number, default: 0},
-	tags          : [String],
-	status        : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
-	onsite        : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
-	location      : {type: String, default:''},
-	isPublished   : {type: Boolean, default: false},
-	wasPublished  : {type: Boolean, default: false},
-	lastPublished : {type: Date, default: null},
-	deadline      : {type: Date, default: null},
-	assignment    : {type: Date, default: null},
-	start         : {type: Date, default: null},
-	endDate       : {type: Date, default: null},
-	assignedTo    : {type: 'ObjectId', ref: 'User', default: null },
-	created       : {type: Date, default: null},
-	createdBy     : {type: 'ObjectId', ref: 'User', default: null },
-	updated       : {type: Date, default: null },
-	updatedBy     : {type: 'ObjectId', ref: 'User', default: null },
-	issueUrl      : {type: 'String', default: ''},
-	issueNumber   : {type: 'String', default: ''},
-	proposal      : {type:'ObjectId', ref: 'Proposal', default: null},
-	c01_minimumYears : { type: Number, default:0 },
-	c02_minimumYears : { type: Number, default:0 },
-	c03_minimumYears : { type: Number, default:0 },
-	c04_minimumYears : { type: Number, default:0 },
-	c05_minimumYears : { type: Number, default:0 },
-	c06_minimumYears : { type: Number, default:0 },
-	c07_minimumYears : { type: Number, default:0 },
-	c08_minimumYears : { type: Number, default:0 },
-	c09_minimumYears : { type: Number, default:0 },
-	c10_minimumYears : { type: Number, default:0 },
-	c11_minimumYears : { type: Number, default:0 },
-	c12_minimumYears : { type: Number, default:0 },
-	c13_minimumYears : { type: Number, default:0 },
-	c01_desiredYears : { type: Number, default:0 },
-	c02_desiredYears : { type: Number, default:0 },
-	c03_desiredYears : { type: Number, default:0 },
-	c04_desiredYears : { type: Number, default:0 },
-	c05_desiredYears : { type: Number, default:0 },
-	c06_desiredYears : { type: Number, default:0 },
-	c07_desiredYears : { type: Number, default:0 },
-	c08_desiredYears : { type: Number, default:0 },
-	c09_desiredYears : { type: Number, default:0 },
-	c10_desiredYears : { type: Number, default:0 },
-	c11_desiredYears : { type: Number, default:0 },
-	c12_desiredYears : { type: Number, default:0 },
-	c13_desiredYears : { type: Number, default:0 },
-	c01_tags : { type:[String], default:[] },
-	c02_tags : { type:[String], default:[] },
-	c03_tags : { type:[String], default:[] },
-	c04_tags : { type:[String], default:[] },
-	c05_tags : { type:[String], default:[] },
-	c06_tags : { type:[String], default:[] },
-	c07_tags : { type:[String], default:[] },
-	c08_tags : { type:[String], default:[] },
-	c09_tags : { type:[String], default:[] },
-	c10_tags : { type:[String], default:[] },
-	c11_tags : { type:[String], default:[] },
-	c12_tags : { type:[String], default:[] },
-	c13_tags : { type:[String], default:[] },
-	implementationContract    : {type: String, default: ''},
-	implementationEndDate     : {type: Date, default: null},
-	implementationStartDate   : {type: Date, default: null},
-	implementationTarget      : {type: Number, default: 0},
-	inceptionContract         : {type: String, default: ''},
-	inceptionEndDate          : {type: Date, default: null},
-	inceptionStartDate        : {type: Date, default: null},
-	inceptionTarget           : {type: Number, default: 0},
-	prototypeContract         : {type: String, default: ''},
-	prototypeEndDate          : {type: Date, default: null},
-	prototypeStartDate        : {type: Date, default: null},
-	prototypeTarget           : {type: Number, default: 0},
+	//
+	// common fields
+	//
+	code                      : {type: String, default: ''},
+	opportunityTypeCd         : {type: String, default:'code-with-us', enum:['code-with-us', 'sprint-with-us']},
+	name                      : {type: String, default: '', required: 'Name cannot be blank'},
+	short                     : {type: String, default: ''},
+	description               : {type: String, default: ''},
+	background                : {type: String, default: ''},
+	github                    : {type: String, default: ''},
+	views                     : {type: Number, default: 1},
+	program                   : {type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank'},
+	project                   : {type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank'},
+	status                    : {type: String, default:'Pending', enum:['Pending', 'Assigned', 'In Progress', 'Completed']},
+	onsite                    : {type: String, default:'mixed', enum:['mixed', 'onsite', 'offsite']},
+	location                  : {type: String, default:''},
+	isPublished               : {type: Boolean, default: false},
+	wasPublished              : {type: Boolean, default: false},
+	lastPublished             : {type: Date, default: Date.now },
+	deadline                  : {type: Date, default: Date.now },
+	created                   : {type: Date, default: Date.now },
+	createdBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
+	updated                   : {type: Date, default: null },
+	updatedBy                 : {type: Schema.ObjectId, ref: 'User', default: null },
+	issueUrl                  : {type: String, default: ''},
+	issueNumber               : {type: String, default: ''},
+	assignment                : {type: Date, default: Date.now },
+	//
+	// specific to code with us
+	//
+	proposalEmail             : {type: String, default: ''},
+	evaluation                : {type: String, default: ''},
+	criteria                  : {type: String, default: ''},
+	skills                    : {type: [String], default:[]},
+	earn                      : {type: Number, default: 0},
+	start                     : {type: Date, default: Date.now },
+	endDate                   : {type: Date, default: Date.now },
+	assignedTo                : {type: Schema.ObjectId, ref: 'User', default: null },
+	//
+	// specific to sprint with us
+	//
+	proposal                  : {type: Schema.ObjectId, ref: 'Proposal', default: null},
+	phases : {
+		implementation : {
+			isImplementation : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
+		},
+		inception : {
+			isInception      : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
+		},
+		proto : {
+			isPrototype      : {type: Boolean, default: false},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			contract         : {type: String, default: ''},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
+		},
+		aggregate : {
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitiesCore : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			endDate          : {type: Date, default: Date.now },
+			startDate        : {type: Date, default: Date.now },
+			target           : {type: Number, default: 0}
+		}
+	},
+	budget                    : {type: Number, default: 0},
 	isDocConflictOfInterest   : {type: Boolean, default: false},
 	isDocNonDisclosure        : {type: Boolean, default: false},
 	isDocRequestForReferences : {type: Boolean, default: false},
-	isImplementation          : {type: Boolean, default: false},
-	isInception               : {type: Boolean, default: false},
-	isPrototype               : {type: Boolean, default: false},
-	totalTarget               : {type: Number, default: 0},
-	terms                     : {type: String, default: ''}
+	terms                     : {type: String, default: ''},
+	questions                 : {type: [String], default:[]},
+	//
+	// 0 = not started
+	// 1 = questions
+	// 2 = interview
+	// 3 = price
+	// 4 = assigned
+	//
+	evaluationStage           : {type: Number, default: 0},
+	numberOfInterviews        : {type: Number, default: 4},
+	weights : {
+		skill               : {type: Number, default: 0.2},
+		question            : {type: Number, default: 0.2},
+		interview           : {type: Number, default: 0.5},
+		price               : {type: Number, default: 0.1}
+	}
+});
+
+OpportunitySchema.virtual ('closingIn').get (function () {
+	var closing = 'CLOSED';
+	var d = (new Date (this.deadline)) - (new Date ());
+	if (d > 0) {
+		var dd = Math.floor(d / 86400000); // days
+		var dh = Math.floor((d % 86400000) / 3600000); // hours
+		var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+		if (dd > 0) closing = dd+' days '+dh+' hours '+dm+' minutes';
+		else if (dh > 0) closing = dh+' hours '+dm+' minutes';
+		else closing = dm+' minutes';
+	}
+	return closing;
+});
+OpportunitySchema.virtual ('isOpen').get (function () {
+	return (new Date (this.deadline)) < (new Date ());
+});
+OpportunitySchema.virtual ('deadlineDisplay').get (function () {
+	var dt = new Date (this.deadline);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('assignmentDisplay').get (function () {
+	var dt = new Date (this.assignment);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('startDisplay').get (function () {
+	var dt = new Date (this.start);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('endDateDisplay').get (function () {
+	var dt = new Date (this.endDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('inceptionStartDateDisplay').get (function () {
+	var dt = new Date (this.inceptionStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('inceptionEndDateDisplay').get (function () {
+	var dt = new Date (this.inceptionEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('prototypeStartDateDisplay').get (function () {
+	var dt = new Date (this.prototypeStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('prototypeEndDateDisplay').get (function () {
+	var dt = new Date (this.prototypeEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('implementationStartDateDisplay').get (function () {
+	var dt = new Date (this.implementationStartDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+});
+OpportunitySchema.virtual ('implementationEndDateDisplay').get (function () {
+	var dt = new Date (this.implementationEndDate);
+	return dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 });
 
 OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
-	var _this = this;
-	var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
+	return helpers.modelFindUniqueCode (this, 'opp', title, suffix, callback);
+	// var _this = this;
+	// var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
 
-	_this.findOne({
-		code: possible
-	}, function (err, user) {
-		if (!err) {
-			if (!user) {
-				callback(possible);
-			} else {
-				return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
-			}
-		} else {
-			callback(null);
-		}
-	});
+	// _this.findOne({
+	// 	code: possible
+	// }, function (err, user) {
+	// 	if (!err) {
+	// 		if (!user) {
+	// 			callback(possible);
+	// 		} else {
+	// 			return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
+	// 		}
+	// 	} else {
+	// 		callback(null);
+	// 	}
+	// });
 };
 
 mongoose.model('Opportunity', OpportunitySchema);

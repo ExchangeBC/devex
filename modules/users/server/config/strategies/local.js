@@ -20,7 +20,10 @@ module.exports = function () {
       }, {
         email: usernameOrEmail.toLowerCase()
       }]
-    }, function (err, user) {
+    })
+    .populate ('capabilities', 'code name')
+    .populate ('capabilitySkills', 'code name')
+    .exec (function (err, user) {
       if (err) {
         return done(err);
       }

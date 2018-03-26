@@ -1,0 +1,23 @@
+<div class="banner banner-important" ng-if="!vm.isUser">
+	<div class="row">
+		<div class="col-xs-12">
+			<i class="fa fa-lg fa-envelope-o"></i>&nbsp;&nbsp;To get notified when new opportunities are posted, or post an opportunity yourself, <a href ui-sref="authentication.signin">Sign In</a> or <a href  id="authentication.gov" ui-sref="authentication.gov">Sign Up</a>
+		</div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="alert alert-important">
+		<label class="label label-price"><i class="fa fa-tag"></i> Code With Us</label> opportunities pay a fixed-price for meeting acceptance criteria.
+		<br>
+		<label class="label label-danger"><i class="fa fa-group"></i> Sprint With Us</label> opportunities are for <a href="/orgs">registered companies</a> who can supply teams with <a href="">these capabilities</a>.
+	</div>
+</div>
+
+
+<section class="list-page">
+	<div class="container" role="main">
+		<opportunity-list context="allopportunities"></opportunity-list>
+	</div>
+</section>

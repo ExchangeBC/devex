@@ -28,7 +28,7 @@
 				$scope.orgs.forEach (function (org) {
 					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
 					org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgOwner      = (uid === org.owner._id);
+					org.isOrgOwner      = org.owner && (uid === org.owner._id);
 					org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
 					// console.log ('org', org.name);
 					// console.log ('uid', uid);
@@ -56,13 +56,13 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-success" ng-click="wsx.edit()">edit profile image</button>',
+			template : '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Update logo</button>',
 			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
-				console.log (wsx);
+				// console.log (wsx);
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
-					console.log ('what');
+					// console.log ('what');
 					$uibModal.open ({
 						size: 'lg',
 						templateUrl: '/modules/orgs/client/views/change-logo-modal.html',
@@ -86,7 +86,7 @@
 										orgImageURL: Upload.dataUrltoBlob(dataUrl, name)
 									}
 								}).then(function (response) {
-									console.log (response);
+									// console.log (response);
 									wsx.org.orgImageURL = response.data.orgImageURL;
 									$rootScope.$broadcast('orgImageUpdated', response.data.orgImageURL);
 									$uibModalInstance.dismiss('cancel');

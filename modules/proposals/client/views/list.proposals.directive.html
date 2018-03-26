@@ -1,65 +1,31 @@
-<div class="container">
-	<hr>
-	<br>
-	<div class="row">
-		<div class="col-xs-12 col-sm-7">
-			<div class="well well-info">
-				<dl class="dl-horizontal">
-					<dt><i class="glyphicon glyphicon-eye-open"></i> Views:</dt>
-					<dd>{{vm.pageViews}}</dd>
-					<dt><i class="glyphicon glyphicon-user"></i> Followers:</dt>
-					<dd>{{vm.stats.following}}</dd>
-					<dt><i class="glyphicon glyphicon-file"></i> Proposals started:</dt>
-					<dd>{{vm.stats.draft}}</dd>
-					<dt><i class="glyphicon glyphicon-inbox"></i> Proposals received:</dt>
-					<dd>{{vm.stats.submitted}}</dd>
-				</dl>
-			</div>
-		</div>
-	</div>
-
-	<br>
-
-	<div class="row" ng-if="!vm.isclosed">
-		<div class="col-xs-12 text-center">
-			<div class="well well-info">
-				<p>You'll be able to view submitted proposals here when the opportunity closes.</p>
-			</div>
-		</div>
-	</div>
-
-	<div class="row list-head" ng-if="vm.isclosed">
-		<div class="col-sm-7">
-			<h3 ng-bind="vm.title" class="list-page-hide"></h3>
-		</div>
-	</div>
-	<div class="row" ng-if="vm.isclosed">
-		<div class="col-md-6" ng-if="! vm.proposals.length">
-			<div class="well">
-				<span class="text-muted"><i class="fa fa-frown-o"></i> No proposals were received!</span>
-			</div>
-		</div>
-			<div class="card card-block" ng-repeat="proposal in vm.proposals | slice:column.start:column.end">
-				<div class="card-img">
-					<img class="card-img-left" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
-				</div>
-	<!-- 			<div class="col-md-3">
-				<div >
-					<img class="card-img-left" style="margin-right:0; margin-left:20px" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}"/>
-				</div>
-				</div>
-	 -->
-	 			<div class="col-md-5">
-					<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{proposal.user.firstName}} {{proposal.user.lastName}}</h4>
-					<p>Attachments: {{proposal.attachments.length}}</p>
-				</div>
-				<div class="col-md-2">
-					<a ng-if="proposal.user.email" href="mailto:{{proposal.user.email}}">Email Proponent</a></p>
-				</div>
-				<div class="col-md-2">
-					<a  id="proposals.view" ui-sref="proposals.view({ proposalId: proposal._id })">View Proposal</a><br/>
-				</div>
+<div class="row">
+	<div class="col-xs-12 text-center">
+			<div class="proposal-stats">
+				<span><i class="fa fa-eye"></i> {{vm.pageViews}}</span> Views &nbsp;&nbsp;&nbsp;
+				<span><i class="fa fa-user"></i> {{vm.stats.following}}</span> Followers &nbsp;&nbsp;&nbsp;
+				<span><i class="fa fa-file-o"></i> {{vm.stats.draft}}</span> Proposals started &nbsp;&nbsp;&nbsp;
+				<span><i class="fa fa-inbox"></i> {{vm.stats.submitted}}</span> Proposals submitted
 			</div>
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
+		<div class="well well-important">You'll be able to view submitted proposals here when the opportunity closes.</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
+	<div class="col-xs-12 text-center">
+		<div class="well well-important"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.isclosed && vm.proposals.length">
+	<div class="col-xs-12 text-center">
+		<div class="well well-important">
+			<p class="strong">You've got proposals!</p>
+			<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
+		</div>
+	</div>
+</div>

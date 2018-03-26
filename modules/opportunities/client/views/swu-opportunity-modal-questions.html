@@ -1,0 +1,44 @@
+<div class="modal-header">
+	<h3>Questions</h3>
+	<p>
+		Organize the responses to the question from best to worst using the arrow buttons provided.
+	</p>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-primary" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
+				<div class="panel-heading text-center">
+					{{qindex=$index;""}}
+					<strong>
+						Question: {{question}}
+					</strong>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
+					<!-- <li class="list-group-item" ng-repeat="response in data.responses[qindex]"> -->
+						<div class="row">
+							<div class="col-sm-9">
+								{{response.response}}
+							</div>
+							<div class="col-sm-3">
+								<button ng-click="moveDown(response, qindex)" ng-if="$index<data.nproposals-1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
+								<button ng-click="moveUp(response, qindex)" ng-if="$index>0" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer text-right">
+	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
+	<button class="btn btn-primary" data-ng-click="ok()">Save</button>
+	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
+</div>

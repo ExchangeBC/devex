@@ -1,0 +1,84 @@
+<div class="edit-form-tab-content">
+	<fieldset>
+		<form-display
+			ng-if="vm.projectLink"
+			class="col-sm-12"
+			x-options='{
+				"title":"Project",
+				"name":"project",
+				"help":"This is the project that the opportunity falls under"
+			}'>
+			<a id="projects.view" ui-sref="projects.view({projectId:vm.projectId})"><i class="fa fa-pie-chart"></i> {{vm.projectTitle}}</a>
+		</form-display>
+
+
+
+		<form-display
+			ng-if="!vm.projectLink && (vm.context === 'program' || vm.context === 'allopportunities')"
+			class="col-sm-12"
+			x-options='{
+				"title":"Project",
+				"name":"project",
+				"help":"Select the project that this opportunity falls under. If you do not see the project in the dropdown list, you will need to go to the Projects tab and create a new project page first."
+			}'>
+			<select
+				ng-if="!vm.projectLink && vm.context === 'program'"
+				name="project"
+				ng-model="vm.projectId"
+				id="project"
+				class="form-control"
+				ng-options="obj._id as obj.name for obj in vm.projects"
+			>
+				<option value="">Select Project</option>
+			</select>
+			<select
+				ng-if="!vm.projectLink && vm.context === 'allopportunities'"
+				name="project"
+				ng-change="vm.updateProgramProject()"
+				ng-model="vm.projectobj"
+				id="project"
+				class="form-control"
+				ng-options="obj as obj.name group by obj.program.title for obj in vm.projects"
+			>
+				<option value="">Select Project</option>
+			</select>
+		</form-display>
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.name"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title":"Title",
+				"help":"Create a short title for the opportunity that conveys the core of the work you need done.",
+				"id":"title",
+				"name":"title",
+				"placeholder":"Opportunity Title"
+			}'>
+		</form-input>
+
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title":"Teaser",
+				"name":"short",
+				"help":"Enter a 1-2 sentence description that will entice readers to apply on this opportunity. Describe what you are inviting them to do."
+			}'>
+			<textarea name="short" data-ng-model="vm.opportunity.short" id="short" class="form-control" cols="30" rows="3" placeholder="1-2 sentences that entice the reader to apply..."></textarea>
+		</form-display>
+
+
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.github"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title":"GitHub Repository",
+				"help":"Paste the link to your project GitHub repository.<br/> When you publish this opportunity, a new Issue will be generated in your repository, and people can ask questions in the comments section.",
+				"id":"github",
+				"name":"github",
+				"placeholder":"Paste link to GitHub Issue"
+			}'>
+		</form-input>
+	</fieldset>
+</div>
+

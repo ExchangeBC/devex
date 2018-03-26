@@ -10,7 +10,12 @@ var AttachmentSchema = new Schema ({
 	name : {type: String},
 	path : {type: String},
 	type : {type: String}
-})
+});
+var QuestionSchema = new Schema ({
+	question : {type: String},
+	response : {type: String},
+	rank     : {type: Number, default: 0}
+});
 /**
  * Proposal Schema
  */
@@ -18,8 +23,8 @@ var ProposalSchema = new Schema ({
 	summary              : {type: String},
 	detail               : {type: String},
 	opportunity          : {type: Schema.ObjectId, ref: 'Opportunity', required: 'Please select a program', index: true},
-	user                 : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true},
 	status               : {type: String, default: 'New', enum:['New', 'Draft', 'Submitted', 'Reviewed', 'Assigned']},
+	isAssigned           : {type: Boolean, default: false},
 	isCompany            : {type: Boolean, default: false},
 	businessName         : {type: String, default: ''},
 	businessAddress      : {type: String, default: ''},
@@ -30,9 +35,48 @@ var ProposalSchema = new Schema ({
 	createdBy            : {type: 'ObjectId', ref: 'User', default: null },
 	updated              : {type: Date, default: null },
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
-	team                 : [{type:Schema.ObjectId, ref:'User'}],
 	isAcceptedTerms      : {type: Boolean, default: false},
-	attachments          : [AttachmentSchema]
+	//
+	// for CWU we just have an individual, we still link the cretor of a SWU here, but we
+	// focus on the following fields for SWU primarily
+	//
+	user                 : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true},
+	//
+	// SWU is averything below
+	//
+	phases : {
+		implementation : {
+			isImplementation : {type: Boolean, default: false},
+			team             : {type: [{type:Schema.ObjectId, ref:'User'}], default: []},
+			cost             : {type: Number, default: 0}
+		},
+		inception : {
+			isInception : {type: Boolean, default: false},
+			team        : {type: [{type:Schema.ObjectId, ref:'User'}], default: []},
+			cost        : {type: Number, default: 0}
+		},
+		proto : {
+			isPrototype : {type: Boolean, default: false},
+			team        : {type: [{type:Schema.ObjectId, ref:'User'}], default: []},
+			cost        : {type: Number, default: 0}
+		},
+		aggregate : {
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
+			cost : {type: Number, default: 0}
+		}
+	},
+	questions            : {type: [QuestionSchema], default: []},
+	attachments          : {type: [AttachmentSchema], default: []},
+	interviewComplete    : {type: Boolean, default: false},
+	scores : {
+		skill           : {type: Number, default: 0},
+		question        : {type: Number, default: 0},
+		interview       : {type: Number, default: 0},
+		price           : {type: Number, default: 0},
+		total           : {type: Number, default: 0}
+
+	}
 });
 
 

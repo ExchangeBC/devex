@@ -1,0 +1,64 @@
+<section class="detail-page-background">
+	<div class="container">
+		<div class="breadcrumb-nav">
+			<a class="breadcrumb-nav" ui-sref="capabilities.list()"><i class="fa fa-chevron-left"></i> All Capabilities</a>
+		</div>
+	</div>
+
+	<div class="container detail-view">
+		<div class="row" ng-if="vm.canEdit">
+			<div class="col-xs-12 text-right">
+				<button type="button" class="btn btn-text-only" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})" title="Edit capability"><i class="fa fa-lg fa-pencil"></i></button>
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col-xs-12 col-sm-8" >
+				<h1 class="capability-detail" ng-bind="vm.capability.name"></h1>
+					<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
+					<!--		
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" ng-model="vm.capability.isRequired" ng-disabled="1"/>
+									This capability is required for companies to participate in the RFQ process
+							</label>
+							<br/>
+							<label>
+								<input type="checkbox" ng-model="vm.capability.isInception" ng-disabled="1"/>
+									This capability is part of the inception phase
+							</label>
+							<br/>
+							<label>
+								<input type="checkbox" ng-model="vm.capability.isPrototype" ng-disabled="1"/>
+									This capability is part of the prototype phase
+							</label>
+							<br/>
+							<label>
+								<input type="checkbox" ng-model="vm.capability.isImplementation" ng-disabled="1"/>
+									This capability is part of the implementation phase
+							</label>
+						</div>
+					-->
+				<p ng-bind-html="vm.trust(vm.capability.description)"></p>
+			</div>
+			<div class="col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<strong>Specific Skills</strong>
+					</div>
+					<ul class="list-group">
+						<!-- This was previously commented out. I've removed the comment out, but it doesn't seem to be the right code. -->
+						<li class="list-group-item" ng-repeat="skill in capability.skills">{{skill}}</li>
+					<!-- These were previously here as placeholder. Skills were not wired to this page yet. --> 	
+					<!--
+						<li class="list-group-item">JavaScript</li>
+						<li class="list-group-item">C++</li>
+						<li class="list-group-item">MongoDB</li>
+						<li class="list-group-item">Openshift</li>
+					-->
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

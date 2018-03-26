@@ -19,8 +19,8 @@
 			url: '/proposals',
 			template: '<ui-view/>',
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.list ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -41,7 +41,7 @@
 			},
 			resolve: {
 				proposals: function ($stateParams, ProposalsService) {
-					return ProposalsService.query ();
+					return ProposalsService.query ().$promise;
 				}
 			},
 			controller: 'ProposalsListController',
@@ -53,13 +53,35 @@
 		// view a proposal, resolve the proposal data
 		//
 		// -------------------------------------------------------------------------
-		.state ('proposals.view', {
-			url: '/:proposalId',
+		.state ('proposals.viewcwu', {
+			url: '/cwu/:proposalId',
 			data: {
 				roles: ['user']
 			},
-			templateUrl: '/modules/proposals/client/views/view-proposal.client.view.html',
+			templateUrl: '/modules/proposals/client/views/cwu-proposal-view.html',
 			controller: 'ProposalViewController',
+			controllerAs: 'ppp',
+			bindToController: true,
+			resolve: {
+				proposal: function ($stateParams, ProposalsService) {
+					return ProposalsService.get ({
+						proposalId: $stateParams.proposalId
+					}).$promise;
+				}
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// view a proposal, resolve the proposal data
+		//
+		// -------------------------------------------------------------------------
+		.state ('proposals.viewswu', {
+			url: '/swu/:proposalId',
+			data: {
+				roles: ['user']
+			},
+			templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
+			controller: 'ProposalViewSWUController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -83,8 +105,8 @@
 				notroles: ['gov', 'guest']
 			},
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.list ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}
 			}
 		})
@@ -93,13 +115,13 @@
 		// edit a proposal
 		//
 		// -------------------------------------------------------------------------
-		.state ('proposaladmin.edit', {
-			url: '/:proposalId/edit/:opportunityId',
+		.state ('proposaladmin.editcwu', {
+			url: '/:proposalId/editcwu/:opportunityId',
 			data: {
 				roles: ['user'],
 				notroles: ['gov']
 			},
-			templateUrl: '/modules/proposals/client/views/edit-proposal.client.view.html',
+			templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
 			controller: 'ProposalEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
@@ -128,13 +150,13 @@
 		// create a new proposal and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state ('proposaladmin.create', {
-			url: '/create/:opportunityId',
+		.state ('proposaladmin.createcwu', {
+			url: '/createcwu/:opportunityId',
 			data: {
 				roles: ['user'],
 				notroles: ['gov']
 			},
-			templateUrl: '/modules/proposals/client/views/edit-proposal.client.view.html',
+			templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
 			controller: 'ProposalEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
@@ -151,6 +173,92 @@
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
 					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
+				editing: function () { return false; }
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// edit a proposal
+		//
+		// -------------------------------------------------------------------------
+		.state ('proposaladmin.editswu', {
+			url: '/:proposalId/editswu/:opportunityId',
+			data: {
+				roles: ['user'],
+				notroles: ['gov']
+			},
+			templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
+			controller: 'ProposalEditSWUController',
+			controllerAs: 'ppp',
+			bindToController: true,
+			resolve: {
+				proposal: function ($stateParams, ProposalsService) {
+					return ProposalsService.get ({
+						proposalId: $stateParams.proposalId
+					}).$promise;
+				},
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				editing: function () { return true; },
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
+				resources: function (Authentication, ProposalsService, $stateParams) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return ProposalsService.getPotentialResources ({
+						opportunityId : $stateParams.opportunityId,
+						orgId         : org
+					}).$promise;
+					else return null;
+				}
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// create a new proposal and edit it
+		//
+		// -------------------------------------------------------------------------
+		.state ('proposaladmin.createswu', {
+			url: '/createswu/:opportunityId',
+			data: {
+				roles: ['user'],
+				notroles: ['gov']
+			},
+			templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
+			controller: 'ProposalEditSWUController',
+			controllerAs: 'ppp',
+			bindToController: true,
+			resolve: {
+				proposal: function (ProposalsService) {
+					return new ProposalsService ();
+				},
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
+				resources: function (Authentication, ProposalsService, $stateParams) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return ProposalsService.getPotentialResources ({
+						opportunityId : $stateParams.opportunityId,
+						orgId         : org
+					}).$promise;
 					else return null;
 				},
 				editing: function () { return false; }

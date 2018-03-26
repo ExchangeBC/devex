@@ -1,33 +1,29 @@
-
 <div class="row list-head">
 	<div class="col-sm-7">
 		<h3 ng-bind="vm.title" class="list-page-hide"></h3>
 	</div>
-	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.context != 'orgview'">
-		<add-superbasic org="vm.org"></add-superbasic>
+	<div class="col-sm-5 col-form-buttons text-right" ng-if="vm.canAdd">
+		<button class="btn btn-default-inverse" ui-sref="superbasicadmin.create()" title="New">
+			<i class="fa fa-plus"></i> POST AN OPPORTUNITY
+		</button>
 	</div>
 </div>
 
-<div class="row">
-<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.superbasics | columnRanges:vm.columnCount">
-
-
-<div class="card card-flat" ng-repeat="superbasic in vm.superbasics | slice:column.start:column.end">
-
-	<div class="card-header text-right" ng-if="vm.context != 'orgview'">
-		<edit-superbasic org="vm.org" superbasic="superbasic"></edit-superbasic>
-	</div>
-
-	<div class="card-block">
-		<div class="row">
-			<div class="col-xs-6 col-sm-6">
-				<h4>Superbasic {{superbasic.name}}</h4>{{superbasic.description}}
-			</div>
-			<div class="col-xs-6 col-sm-6">
-				<h4>Members</h4>
-				<span ng-repeat="member in superbasic.members">{{member.displayName}}<br/></span>
-			</div>
+<div class="row" ng-if="!vm.superbasics.length">
+	<div class="col-sm-12">
+		<div class="panel panel-default panel-body">
+			<span class="text-muted">No Superbasics right now. Check back soon!</span>
 		</div>
 	</div>
+</div>
 
+<div class="row" ng-if="vm.superbasics.length">
+	<div class="panel panel-default" ng-repeat="superbasic in vm.superbasics">
+		<div class="panel-heading" >
+			<h3 class="panel-title" ng-bind="superbasic.name"></h3>
+		</div>
+		<div class="panel-body" id="superbasics.view" ui-sref="superbasics.view({superbasicId:superbasic.code})">
+			<p ng-bind-html="vm.trust(superbasic.description)"></p>
+		</div>
+	</div>
 </div>

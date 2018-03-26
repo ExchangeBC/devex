@@ -34,16 +34,16 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Upload new picture</button>',
+			template : '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Upload new picture</button>',
 			controller: function ($scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
 				var uploadurl = '/api/users/picture';
-				console.log ('org:', $scope.org);
+				// console.log ('org:', $scope.org);
 				if ($scope.org) {
 					uploadurl = '/api/upload/logo/org/'+$scope.org._id
 				}
 				wsx.edit = function () {
-					console.log ('what');
+					// console.log ('what');
 					$uibModal.open ({
 						size: 'lg',
 						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',

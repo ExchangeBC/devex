@@ -21,7 +21,10 @@ module.exports = function (app) {
   passport.deserializeUser(function (id, done) {
     User.findOne({
       _id: id
-    }, '-salt -password', function (err, user) {
+    }, '-salt -password')
+    .populate ('capabilities', 'code name')
+    .populate ('capabilitySkills', 'code name')
+    .exec (function (err, user) {
       done(err, user);
     });
   });

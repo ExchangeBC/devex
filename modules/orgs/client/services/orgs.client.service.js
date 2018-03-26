@@ -8,7 +8,6 @@
   OrgsService.$inject = ['$resource', '$log'];
 
   function OrgsService($resource, $log) {
-    console.log ('starting org service');
     var Org = $resource('/api/orgs/:orgId', {
       orgId: '@_id'
     }, {

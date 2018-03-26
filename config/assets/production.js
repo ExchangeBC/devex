@@ -26,6 +26,7 @@ module.exports = {
         'public/lib/tinymce/tinymce.min.js',
         'public/lib/angular-ui-tinymce/src/tinymce.js',
         'public/lib/angular-breadcrumb/release/angular-breadcrumb.min.js',
+        'public/lib/lodash/lodash.js',
         'public/lib/ng-file-upload/ng-file-upload.min.js',
         'public/lib/ng-img-crop/compile/minified/ng-img-crop.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',

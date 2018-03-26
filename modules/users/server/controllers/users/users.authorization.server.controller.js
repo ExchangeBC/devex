@@ -20,7 +20,10 @@ exports.userByID = function (req, res, next, id) {
 
   User.findOne({
     _id: id
-  }).exec(function (err, user) {
+  })
+  .populate ('capabilities', 'code name')
+  .populate ('capabilitySkills', 'code name')
+  .exec(function (err, user) {
     if (err) {
       return next(err);
     } else if (!user) {

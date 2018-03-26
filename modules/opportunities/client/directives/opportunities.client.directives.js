@@ -16,10 +16,13 @@
 				title: '@',
 				context: '@'
 			},
-			templateUrl  : '/modules/opportunities/client/views/list.opportunities.directive.html',
+			templateUrl  : '/modules/opportunities/client/views/opportunity-list-directive.html',
 			controller   : function ($scope, OpportunitiesService, Authentication, Notification, modalService, $q, ask) {
 				var rightNow = new Date ();
 				var vm     = this;
+				vm.features = window.features;
+				vm.rightNow = rightNow;
+				vm.rightNowString = vm.rightNow.toString();
 				var isUser = Authentication.user;
 				vm.isUser = isUser;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
@@ -61,11 +64,33 @@
 					vm.columnCount   = 1;
 				}
 				if ($scope.title) vm.title = $scope.title;
+				if (!window.opportunityFilter) {
+					window.opportunityFilter = {
+						sprint: true,
+						code: true,
+						open: true,
+						closed: false
+					};
+				}
+				vm.filter = window.opportunityFilter;
+				vm.filterRecords = function (r, i, a) {
+					var d = new Date (r.deadline);
+					var result = (
+						(vm.filter.sprint && r.opportunityTypeCd === 'sprint-with-us') ||
+						(vm.filter.code && r.opportunityTypeCd === 'code-with-us')
+					) && (
+						(vm.filter.open && vm.rightNow < d) ||
+						(vm.filter.closed && vm.rightNow >= d)
+					);
+					// console.log ('filter:', vm.filter);
+					// console.log ('filter:', r.opportunityTypeCd, vm.rightNow, d);
+					// console.log ('result:', result);
+					return result;
+				};
 				vm.publish = function (opportunity, state) {
-					var publishedState      = opportunity.isPublished;
-					var t = state ? 'Published' : 'Unpublished';
-
-					var savemeSeymour = true;
+					var publishedState = opportunity.isPublished;
+					var t              = state ? 'Published' : 'Unpublished';
+					var savemeSeymour  = true;
 					var promise = Promise.resolve ();
 					if (state) {
 						var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
@@ -73,36 +98,33 @@
 							savemeSeymour = result;
 						});
 					}
-
-						promise.then(function() {
-							if (savemeSeymour) {
-								opportunity.isPublished = state;
-								if (state) return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
-								else return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
-							}
-							else return Promise.reject ({data:{message:'Publish Cancelled'}});
-						})
-						.then (function () {
-
-
-							//
-							// success, notify
-							//
-							var m = state ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
-							Notification.success ({
-								message : '<i class="glyphicon glyphicon-ok"></i> '+m
-							});
-						})
-						.catch (function (res) {
-							//
-							// fail, notify and stay put
-							//
-							opportunity.isPublished = publishedState;
-							Notification.error ({
-								message : res.data.message,
-								title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
-							});
+					promise.then(function() {
+						if (savemeSeymour) {
+							opportunity.isPublished = state;
+							if (state) return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
+							else return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
+						}
+						else return Promise.reject ({data:{message:'Publish Cancelled'}});
+					})
+					.then (function () {
+						//
+						// success, notify
+						//
+						var m = state ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> '+m
 						});
+					})
+					.catch (function (res) {
+						//
+						// fail, notify and stay put
+						//
+						opportunity.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
+						});
+					});
 				};
 				vm.request = function (opportunity) {
 					OpportunitiesService.makeRequest({

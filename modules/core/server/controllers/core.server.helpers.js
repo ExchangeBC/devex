@@ -17,6 +17,13 @@ exports.applyAudit = function (model, user) {
 	}
 };
 
+exports.isNumeric = function (n) {
+	return !isNaN (parseFloat (n)) && isFinite (n);
+}
+exports.numericOrZero = function (n) {
+	return exports.isNumeric (n) ? parseFloat (n) : 0;
+}
+
 exports.myStuff = function (roles) {
 	var a;
 	var l;
@@ -117,26 +124,77 @@ var c = isNaN(ic = Math.abs(ic)) ? 2 : ic,
  };
 
 exports.formatDate = function (d) {
-	  var monthNames = [
-    'January', 'February', 'March',
-    'April', 'May', 'June', 'July',
-    'August', 'September', 'October',
-    'November', 'December'
-  ];
-  var day = d.getDate();
-  var monthIndex = d.getMonth();
-  var year = d.getFullYear();
-
-
-
-  return monthNames[monthIndex] + ' ' + day + ', '+ year;
+var monthNames = [
+'January', 'February', 'March',
+'April', 'May', 'June', 'July',
+'August', 'September', 'October',
+'November', 'December'
+];
+var day = d.getDate();
+var monthIndex = d.getMonth();
+var year = d.getFullYear();
+return monthNames[monthIndex] + ' ' + day + ', '+ year;
 }
 
 exports.formatTime = function (d) {
   return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
 }
 
+exports.modelFindUniqueCode = function (_this, prefix, title, suffix, callback) {
+	prefix = prefix || '';
+	var possible = prefix + '-' + (title.toLowerCase ().replace (/\W/g,'-').replace (/-+/,'-')) + (suffix || '');
+	_this.findOne ({
+		code: possible
+	}, function (err, result) {
+		if (!err) {
+			if (!result) {
+				callback (possible);
+			} else {
+				return _this.findUniqueCode (title, (suffix || 0) + 1, callback);
+			}
+		} else {
+			callback (null);
+		}
+	});
+};
 
+exports.soundex = function(s) {
+	var a = s.toLowerCase().split('');
+	var f = a.shift();
+	var r = '';
+	var codes = {
+		a: '',
+		e: '',
+		i: '',
+		o: '',
+		u: '',
+		b: 1,
+		f: 1,
+		p: 1,
+		v: 1,
+		c: 2,
+		g: 2,
+		j: 2,
+		k: 2,
+		q: 2,
+		s: 2,
+		x: 2,
+		z: 2,
+		d: 3,
+		t: 3,
+		l: 4,
+		m: 5,
+		n: 5,
+		r: 6
+	};
+	r = a.map(function(v, i, a) {
+		return codes[v]
+	}).filter(function(v, i, a) {
+		return ((i === 0) ? v !== codes[f] : v !== a[i - 1]);
+	}).join('');
+	r += f;
+	return (r + '000').slice(0, 4).toUpperCase();
+};
 
 
 

@@ -1,0 +1,6 @@
+projectKey=devex-local-1
+serverUrl=http://localhost:9000
+serverVersion=6.7.2.37468
+dashboardUrl=http://localhost:9000/dashboard/index/devex-local-1
+ceTaskId=AWJAGWVM2wPkp7VGe4cI
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWJAGWVM2wPkp7VGe4cI

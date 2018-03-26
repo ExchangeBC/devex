@@ -15,14 +15,14 @@
 	// Controller the view of the org page
 	//
 	// =========================================================================
-	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification) {
+	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification, capabilities) {
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-		vm.isOrgOwner      = (vm.user._id === org.owner._id);
+		vm.isOrgOwner      = org.owner && (vm.user._id === org.owner._id);
 		vm.canEdit         = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
 		vm.trust           = $sce.trustAsHtml;
 
@@ -41,7 +41,6 @@
 		vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
-		var isUser           = Authentication.user;
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {
@@ -92,7 +91,7 @@
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 
 		vm.org        = org;
-		console.log (org);
+		// console.log (org);
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
 		// vm.previousState  = previousState;
@@ -115,7 +114,7 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		$rootScope.$on('orgImageUpdated', function (evt, data) {
-			console.log ('event data = ', data);
+			// console.log ('event data = ', data);
 			vm.org.orgImageURL = data;
 
 		});
@@ -126,7 +125,7 @@
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
-				console.log ('deleting');
+				// console.log ('deleting');
 				vm.org.$remove(function() {
 					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
@@ -180,13 +179,13 @@
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
-		vm.capabilities     = capabilities;
+		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
-			vm.orgForm.$setPristine ();
-			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
-				return false;
-			}
+			// vm.orgForm.$setPristine ();
+			// if (!isValid) {
+			// 	$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
+			// 	return false;
+			// }
 			//
 			// Create a new org, or update the current instance
 			//
@@ -195,7 +194,7 @@
 			// success, notify and return to list
 			//
 			.then (function () {
-				vm.orgForm.$setPristine ();
+				// vm.orgForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> capabilities saved successfully!'
 				});
@@ -229,10 +228,12 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService) {
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
+		// console.log ('whatcaps', capabilities);
+		CapabilitiesMethods.init (vm, vm.org, capabilities);
 		// -------------------------------------------------------------------------
 		//
 		// refresh the organization and also the additions email list
@@ -243,6 +244,7 @@
 			OrgsService.get ({orgId: vm.org._id}).$promise
 			.then (function (org) {
 				vm.org = org;
+				CapabilitiesMethods.init (vm, vm.org, capabilities);
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -251,7 +253,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
-			console.log ('add People');
+			// console.log ('add People');
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
@@ -273,13 +275,25 @@
 			}
 		};
 		vm.removeMember = function (member) {
-			console.log ('remove person');
-			OrgsService.removeUser ({
-				orgId: vm.org._id,
-				userId: member._id
-			}).$promise.then (function (org) {
-				vm.refresh ();
+			ask.yesNo ('Are you sure you wish to remove this user from your company?')
+			.then (function (yes) {
+				if (yes) {
+					OrgsService.removeUser ({
+						orgId: vm.org._id,
+						userId: member._id
+					}).$promise.then (function (org) {
+						vm.refresh ();
+					});
+				}
 			});
+		};
+		vm.save = function () {
+			vm.org.createOrUpdate ()
+			.then (function () {
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
+				});
+			})
 		};
 	})
 	// =========================================================================

@@ -24,7 +24,7 @@
 					// console.log ('full path', fullPath);
 					avat.fullurl = fullPath;
 				};
-				avat.size = $scope.size || 40;
+				avat.size = $scope.size || 50;
 				avat.text = $scope.text || '';
 				seturl ();
 				$scope.$watch('url', function (newValue, oldValue) {
@@ -47,7 +47,7 @@
 			restrict: 'EAC',
 			template : function (elem, attrs) {
 				var badges = attrs.badges;
-				console.log ('badges', badges);
+				// console.log ('badges', badges);
 				var isarray = false;
 				var isarrayofobjects = false;
 				var outarray;

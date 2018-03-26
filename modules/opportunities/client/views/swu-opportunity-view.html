@@ -1,0 +1,421 @@
+<!-- // If user is not signed in // -->
+<!--
+<div class="banner banner-important" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+-->
+
+<!-- // If user doesn't have an email address in their profile // -->
+<div class="banner banner-important" ng-if="vm.notifyMe && !vm.hasEmail">
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<p>Want <span class="hidden-sm hidden-xs">to get </span>updates about this opportunity? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<section class="detail-page-background">
+
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="breadcrumb-nav">
+					<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
+		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+			<div class="col-xs-12">
+				<div class="alert alert-important">
+					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
+		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
+			<div class="col-xs-12">
+				<div class="pull-right" role="group">
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+				</div>
+			</div>
+		</div>
+
+
+		<!-- // Admin Controls / if opportunity is PUBLISHED // -->
+		<div class="row" ng-if="vm.canEdit && vm.opportunity.isPublished">
+			<div class="col-xs-12">
+				<div class="pull-right" role="group">
+					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+					<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-sm btn-text-only" ng-click="vm.publish(vm.opportunity, false)"><i class="fa fa-ban"></i> UNPUBLISH</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- // Submit a proposal button // -->
+		<div class="row" ng-if="vm.canApply && vm.closing !== 'CLOSED'" >
+			<div class="col-xs-12">
+				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="container container-edit-form">
+
+		<div class="row">
+			<div class="col-xs-8">
+				<p class="opp-detail-header">Published on <span class="strong" ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>&nbsp; &nbsp;
+					Last updated on <span class="strong" ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span>
+					<span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
+				</p>
+			</div>
+			<div class="col-xs-4">
+				<!-- // User is NOT following the opportunity // -->
+				<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right btn-opp-detail-header" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
+				<!-- // User IS following the opportunity // -->
+				<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right btn-opp-detail-header" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+			</div>
+		</div>
+		<hr>
+
+		<!-- // Sprint With Us Terms // -->
+		<!--
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+			<div class="col-xs-12 text-center">
+				<div class="alert alert-info">
+					<p>This is a <b>Sprint With Us</b> opportunity governed by the <a href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, <a href="/sprintwithus" target="_blank">Sprint With Us</a>.
+					</p>
+				</div>
+			</div>
+		</div>
+		-->
+
+		<!-- // Code With Us Terms // -->
+		<!--
+		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'code-with-us'">
+			<div class="col-xs-12 text-center">
+				<div class="alert alert-info">
+					<p>&nbsp;&nbsp; This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a>
+						of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p>
+				</div>
+			</div>
+		</div>
+		-->
+
+		<!-- // Status and Follow // -->
+		<div class="row">
+			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
+				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
+			</div>
+		</div>
+
+		<!-- // Title and Teaser // -->
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h1>{{vm.opportunity.name}}</h1>
+				<p ng-bind="vm.opportunity.short"></p>
+				<hr>
+				<br>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-6">
+				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
+					<span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.budget|currency}}</span>
+					<span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
+					<span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
+					<span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
+					<span class="label label-location" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
+					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+				<dl class="dl-horizontal">
+					<dt>Posted by:</dt>
+					<dd>
+						<i class="fa fa-user-circle-o"></i>
+						<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+						<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+					</dd>
+					<dt>Program:</dt>
+					<dd>
+						<a ng-if="vm.opportunity.program"  id="programs.view" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i class="fa fa-university"></i> {{vm.opportunity.program.title}}</a>
+						<span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
+					</dd>
+					<dt>Project:</dt>
+					<dd>
+						<a ng-if="vm.opportunity.project"  id="projects.view" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i class="fa fa-pie-chart"></i> {{vm.opportunity.project.name}}</a>
+						<span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
+					</dd>
+					<!-- github link -->
+					<dt>Code:</dt>
+					<dd>
+					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0" href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
+					</dd>
+				</dl>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3>Background</h3>
+				<p ng-bind-html="vm.display.description"></p>
+				<hr>
+				<h3>Required Phases and Team Capabilities</h3>
+				<table class="table table-striped">
+					<thead>
+						<td></td>
+						<td>Phase Start Date</td>
+						<td>Phase End Date</td>
+					</thead>
+					<tr ng-if="vm.opportunity.phases.inception.isInception">
+						<td>Inception</td>
+						<td>
+							<form-input
+								ng-model="vm.opportunity.phases.inception.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"inceptionStartDate",
+									"name":"inceptionStartDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td><td>
+							<form-input
+								ng-model="vm.opportunity.phases.inception.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"inceptionEndDate",
+									"name":"inceptionEndDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td>
+					</tr>
+					<tr ng-if="vm.opportunity.phases.proto.isPrototype">
+						<td>Prototype</td>
+						<td>
+							<form-input
+								ng-model="vm.opportunity.phases.proto.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"prototypeStartDate",
+									"name":"prototypeStartDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td><td>
+							<form-input
+								ng-model="vm.opportunity.phases.proto.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"prototypeEndDate",
+									"name":"prototypeEndDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td>
+					</tr>
+					<tr ng-if="vm.opportunity.phases.implementation.isImplementation">
+						<td>Implementation</td>
+						<td>
+							<form-input
+								ng-model="vm.opportunity.phases.implementation.startDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"implementationStartDate",
+									"name":"implementationStartDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td><td>
+							<form-input
+								ng-model="vm.opportunity.phases.implementation.endDate"
+								x-form="vm.opportunityForm"
+								x-options='{
+									"disabled":"true",
+									"id":"implementationEndDate",
+									"name":"implementationEndDate",
+									"format":"MMMM dd, yyyy",
+									"type":"date"
+								}'>
+							</form-input>
+						</td>
+					</tr>
+				</table>
+				<div class="panel panel-default" ng-repeat="capability in vm.capabilities" ng-if="vm.iOppCapabilities[capability.code]">
+					<div class="panel-heading text-right" >
+						<h3 class="panel-title pull-left" ng-bind="capability.name"></h3>
+						<span class="label label-success" ng-if="capability.isInception">Inception</span>
+						<span class="label label-success" ng-if="capability.isPrototype">Prototype</span>
+						<span class="label label-success" ng-if="capability.isImplementation">Implementation</span>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-8">
+								<p ng-bind-html="vm.trust(capability.description)"></p>
+							</div>
+							<div class="col-sm-4" ng-if="capability.skills.length > 0">
+								<div class="panel panel-success">
+									<div class="panel-heading">
+										<strong>Specific Skills</strong>
+									</div>
+									<ul class="list-group">
+										<li class="list-group-item" ng-repeat="skill in capability.skills" ng-if="vm.iOppCapabilitySkills[skill.code]">{{skill.name}}</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<h3>Terms & Conditions</h3>
+				<p ng-bind-html="vm.trust(vm.opportunity.terms)"></p>
+				<hr>
+				<h3>How to Apply</h3>
+				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
+				<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
+				<!-- // Proposal Application Directive // -->
+				<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+					<div class="col-xs-12">
+						<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+	<div class="container container-edit-form" ng-if="vm.canEdit && vm.opportunity.isPublished">
+
+		<div class="row" ng-if="vm.closing !== 'CLOSED'">
+			<div class="col-xs-12">
+				<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
+			</div>
+		</div>
+
+		<div class="panel panel-info" ng-if="vm.closing === 'CLOSED'">
+			<div class="panel-heading">
+				<strong>Evaluation Matrix</strong>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+				<div class="row">
+					<div>
+						<p>
+							Complete the evaluation Matrix below.<br/>
+							<ul>
+								<li>
+									Complete the Question Ranking
+								</li>
+								<li>
+									Complete the Interview Ranking for each team
+								</li>
+								<li>
+									At this point the price will be unmasked and you may assign the opportunity
+								</li>
+							</ul>
+						</p>
+						<br/>
+					</div>
+				</div>
+				<div class="row">
+					<div ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></div>
+					<div ng-if="vm.stageIs('interview')">
+						<div>
+							<strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score
+						</div>
+						<div class="col-sm-6 ">
+							<label>How many teams do you wish to interview?</label>
+						</div>
+						<div class="col-sm-4 input-group input-group-sm">
+							<input type="text" class="form-control" ng-model="vm.numberOfInterviews"\>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" ng-click="vm.updateNumberOfTeams()">Update</button>
+								<button ng-disabled="!vm.canCloseInterviews" class="btn btn-sm btn-primary" type="button" ng-click="vm.doneInterviews()">Interviews Complete</button>
+							</span>
+						</div>
+					</div>
+					<div ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</div>
+					<div ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</div>
+				</div>
+				</div>
+			</div>
+			<table class="table table-condensed table-striped">
+				<thead>
+					<tr>
+						<td><strong>Team</strong><br/>[weight : {{vm.opportunity.weights.skill}}]</td>
+						<td align="center"><strong>Questions</strong><br/>[weight : {{vm.opportunity.weights.question}}]</td>
+						<td><strong>Interview</strong><br/>[weight : {{vm.opportunity.weights.interview}}]</td>
+						<td><strong>Price (Target: {{vm.opportunity.budget | currency}})</strong><br/>[weight : {{vm.opportunity.weights.price}}]</td>
+						<td><strong>Total Score</strong></td>
+						<td><strong>Assigned</strong></td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a> <span class="text-success">(Score : {{proposal.scores.skill | number:0}})</span></td>
+						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span> <span class="text-success">(Score : {{proposal.scores.question | number:0}})</span></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('questions')" align="center">TBD</td>
+						<td ng-if="$index >= vm.opportunity.numberOfInterviews" align="center">N/A</td>
+
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">Score : ( TBD )</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)"><span class="text-success">(Score : TBD)</a></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete"><span class="text-success">(Score : XXXX)</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')"><span class="text-success">(Score : {{proposal.scores.interview}})</td>
+						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.phases.aggregate.cost | currency}} <span class="text-success">(Score : {{proposal.scores.price | number:0}})</td>
+						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+						<td ng-if="!vm.stage('price')">N/A</td>
+						<td ng-if="vm.stage('price')">{{proposal.scores.total | number:0}}</td>
+
+						<td ng-if="!vm.stage('price')">&nbsp;</td>
+						<td ng-if="vm.stage('price') && $index!==0">&nbsp;</td>
+						<td ng-if="vm.stageIs('price') && $index===0">
+							<button type="button" class="btn btn-success" data-ng-click="vm.assign(proposal)">Assign</button>
+						</td>
+						<td ng-if="vm.stageIs('assigned') && $index===0"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+					</tr>
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+</section>

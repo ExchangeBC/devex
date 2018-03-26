@@ -19,8 +19,8 @@
 			url: '/opportunities',
 			template: '<ui-view/>',
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.list ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ();
 				}
 			}
 		})
@@ -32,7 +32,7 @@
 		// -------------------------------------------------------------------------
 		.state('opportunities.list', {
 			url: '',
-			templateUrl: '/modules/opportunities/client/views/list-opportunities.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/opportunity-list.html',
 			data: {
 				pageTitle: 'Opportunities List'
 			},
@@ -55,13 +55,13 @@
 		// view a opportunity, resolve the opportunity data
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunities.view', {
-			url: '/:opportunityId',
+		.state('opportunities.viewcwu', {
+			url: '/cwu/:opportunityId',
 			params: {
 				programId: null,
 				projectId: null
 			},
-			templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-view.html',
 			controller: 'OpportunityViewController',
 			controllerAs: 'vm',
 			resolve: {
@@ -90,6 +90,88 @@
 		})
 		// -------------------------------------------------------------------------
 		//
+		// view a opportunity, resolve the opportunity data
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunities.viewswu', {
+			url: '/swu/:opportunityId',
+			params: {
+				programId: null,
+				projectId: null
+			},
+			templateUrl: '/modules/opportunities/client/views/swu-opportunity-view.html',
+			controller: 'OpportunityViewSWUController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get ({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				subscriptions: function (NotificationsService) {
+					return NotificationsService.subscriptions().$promise;
+				},
+				org: function (Authentication, OrgsService) {
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return null;
+				},
+				myproposal: function ($stateParams, ProposalsService, Authentication) {
+					if (!Authentication.user) return {};
+					return ProposalsService.myopp ({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				}
+			},
+			data: {
+				pageTitle: 'Opportunity: {{opportunity.name}}'
+			},
+			ncyBreadcrumb: {
+				label: '{{vm.opportunity.name}}',
+				parent: 'opportunities.list'
+			}
+		})
+		// // -------------------------------------------------------------------------
+		// //
+		// // view a opportunity, resolve the opportunity data
+		// //
+		// // -------------------------------------------------------------------------
+		// .state('opportunities.view', {
+		// 	url: '/any/:opportunityId',
+		// 	params: {
+		// 		programId: null,
+		// 		projectId: null
+		// 	},
+		// 	templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
+		// 	controller: 'OpportunityViewController',
+		// 	controllerAs: 'vm',
+		// 	resolve: {
+		// 		opportunity: function ($stateParams, OpportunitiesService) {
+		// 			return OpportunitiesService.get ({
+		// 				opportunityId: $stateParams.opportunityId
+		// 			}).$promise;
+		// 		},
+		// 		subscriptions: function (NotificationsService) {
+		// 			return NotificationsService.subscriptions().$promise;
+		// 		},
+		// 		myproposal: function ($stateParams, ProposalsService, Authentication) {
+		// 			if (!Authentication.user) return {};
+		// 			return ProposalsService.myopp ({
+		// 				opportunityId: $stateParams.opportunityId
+		// 			}).$promise;
+		// 		}
+		// 	},
+		// 	data: {
+		// 		pageTitle: 'Opportunity: {{opportunity.name}}'
+		// 	},
+		// 	ncyBreadcrumb: {
+		// 		label: '{{vm.opportunity.name}}',
+		// 		parent: 'opportunities.list'
+		// 	}
+		// })
+		// -------------------------------------------------------------------------
+		//
 		// the base for editing
 		//
 		// -------------------------------------------------------------------------
@@ -98,8 +180,8 @@
 			url: '/opportunityadmin',
 			template: '<ui-view/>',
 			resolve: {
-				capabilities: function (SkillsService) {
-					return SkillsService.query ();
+				capabilities: function (CapabilitiesService) {
+					return CapabilitiesService.query ();
 				}
 			}
 		})
@@ -108,13 +190,13 @@
 		// edit a opportunity
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.edit', {
-			url: '/:opportunityId/edit',
+		.state('opportunityadmin.editcwu', {
+			url: '/:opportunityId/editcwu',
 			params: {
 				programId: null,
 				projectId: null
 			},
-			templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
 			controller: 'OpportunityEditController',
 			controllerAs: 'vm',
 			resolve: {
@@ -129,14 +211,44 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return true; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return true; }
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'Opportunity: {{ opportunity.name }}'
+			},
+			ncyBreadcrumb: {
+				label: 'Edit Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// edit a opportunity
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.editswu', {
+			url: '/:opportunityId/editswu',
+			params: {
+				programId: null,
+				projectId: null
+			},
+			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
+			controller: 'OpportunityEditSWUController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
+				programs: function (ProgramsService) {
+					return ProgramsService.myadmin ().$promise;
+				},
+				projects: function (ProjectsService) {
+					return ProjectsService.myadmin ().$promise;
+				},
+				editing: function () { return true; }
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -152,8 +264,43 @@
 		// create a new opportunity and edit it
 		//
 		// -------------------------------------------------------------------------
-		.state('opportunityadmin.create', {
-			url: '/create',
+		.state('opportunityadmin.createlanding', {
+			url: '/createlanding',
+			params: {
+				programId    : null,
+				programTitle : null,
+				projectId    : null,
+				projectTitle : null,
+				context      : null
+			},
+			templateUrl: '/modules/opportunities/client/views/opportunity-create.html',
+			controller: 'OpportunityLandingController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function (OpportunitiesService) {
+					return new OpportunitiesService();
+				},
+				projects: function (ProjectsService) {
+					return ProjectsService.myadmin ().$promise;
+				},
+				editing: function () { return false; }
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'New Opportunity'
+			},
+			ncyBreadcrumb: {
+				label: 'New Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// create a new opportunity and edit it
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.createcwu', {
+			url: '/createcwu',
 			params: {
 				programId: null,
 				programTitle: null,
@@ -161,7 +308,7 @@
 				projectTitle: null,
 				context: null
 			},
-			templateUrl: '/modules/opportunities/client/views/edit-opportunity.client.view.html',
+			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
 			controller: 'OpportunityEditController',
 			controllerAs: 'vm',
 			resolve: {
@@ -171,14 +318,42 @@
 				projects: function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
 				},
-				editing: function () { return false; },
-				previousState: function ($state) {
-					return {
-						name: $state.current.name,
-						params: $state.params,
-						url: $state.href($state.current.name, $state.params)
-					};
-				}
+				editing: function () { return false; }
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: 'New Opportunity'
+			},
+			ncyBreadcrumb: {
+				label: 'New Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// create a new opportunity and edit it
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.createswu', {
+			url: '/createswu',
+			params: {
+				programId: null,
+				programTitle: null,
+				projectId: null,
+				projectTitle: null,
+				context: null
+			},
+			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
+			controller: 'OpportunityEditSWUController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function (OpportunitiesService) {
+					return new OpportunitiesService();
+				},
+				projects: function (ProjectsService) {
+					return ProjectsService.myadmin ().$promise;
+				},
+				editing: function () { return false; }
 			},
 			data: {
 				roles: ['admin', 'gov'],

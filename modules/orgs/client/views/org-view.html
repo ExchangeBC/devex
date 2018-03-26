@@ -1,42 +1,41 @@
-<section class="static">
+<section class="detail-page-background">
 	<div class="container" role="main">
-		<div class="panel">
-			<div class="panel-body">
-<section class="detail">
-	<div class="container">
 		<div class="row">
-			<div class="col-xs-12 text-right">
-
-				<div class="btn-group">
-					<button type="button" ng-if="vm.canEdit" class="btn btn-success btn-sm"  ui-sref="orgadmin.profile({orgId:vm.org._id})" uib-tooltip="Edit company profile">
-						<i class="glyphicon glyphicon-edit"></i> Update Profile
-					</button>
-				</div>
-			</div>
-			<div class="col-xs-12 col-sm-12 text-center" style="padding-top: 0;">
-				<div class="row">
-					<div class="col-xs-12">
-						<h1>
-							<avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="100"></avatar-display>
-						</h1>
-					</div>
-					<div class="panel-body">
-						<p ng-if="vm.org.website"><a href="{{vm.org.website}}" target="_blank" rel="nofollow"><i class="fa fa-external-link"></i> company website</a></p>
-						<p ng-bind-html="vm.trust(vm.org.description)"></p>
-					</div>
+			<div class="col-xs-12">
+				<div class="breadcrumb-nav">
+					<a href="/orgs" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Companies</a>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="container">
-		<team-list org="vm.org" title="Teams" context="orgview"></team-list>
+	<div class="container detail-view">
+		<div class="detail-view-header" ng-if="vm.canEdit">
+			<button type="button" class="btn btn-text-only pull-right" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company"><i class="fa fa-2x fa-gear"></i>
+			</button>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<img src="/{{vm.org.orgImageURL}}" style="max-height: 75px">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+				<h1 ng-bind="vm.org.name"></h1>
+				<h4 ng-if="vm.org.website"><a href="{{vm.org.website}}" target="_blank" rel="nofollow"><i class="fa fa-external-link"></i> Company Website</a></h4>
+				<br>
+				<p ng-bind-html="vm.trust(vm.org.description)"></p>
+			</div>
+		</div>
+		<hr>
+		<div class="row">
+			<div class="col-xs-12 text-center">
+
+				<label-list>
+					<label ng-repeat="capability in vm.org.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+					<label ng-repeat="capabilitySkill in vm.org.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+				</label-list>
+			</div>
+		</div>
 	</div>
-
-</div>
-</section>
-
-</div>
-</div>
-</div>
 </section>

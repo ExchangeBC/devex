@@ -60,6 +60,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/proposals/requests/:proposalId',
       permissions: ['get']
     }, {
+      resources: '/api/proposals/resources/opportunity/:opportunityId/org/:orgSmallId',
+      permissions: ['get']
+    }, {
       resources: '/api/my/proposals',
       permissions: ['get']
     }, {

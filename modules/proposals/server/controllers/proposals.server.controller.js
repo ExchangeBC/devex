@@ -34,7 +34,7 @@ var path = require('path'),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
-var userfields = 'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
+var userfields = '_id displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
 var streamFile = function (res, file, name, mime) {
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
@@ -129,6 +129,7 @@ exports.my = function (req, res) {
 	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
 	var search = me.isAdmin ? {} : { code: { $in: me.proposals.member } };
 	Proposal.find (search)
+	.populate('opportunity', 'opportunityTypeCd name code')
 	.select ('code name short')
 	.exec (function (err, proposals) {
 		if (err) {
@@ -157,11 +158,75 @@ exports.myopp = function (req, res) {
 		}
 	});
 };
+var getUserCapabilities = function (users) {
+	return new Promise (function (resolve, reject) {
+		var userids = users.map (function (o) {if (o._id) return o._id; else return o;});
+		User.find ({_id: {$in:userids}})
+		.populate ('capabilities','name code')
+		.populate ('capabilitySkills','name code')
+		.exec (function (err, members) {
+			var ret = {capabilities:{},capabilitySkills:{}}
+			if (err) reject ({message:'Error getting members'});
+			members.forEach (function (member) {
+				if (member.capabilities) member.capabilities.forEach (function (capability) {
+					ret.capabilities[capability.code] = capability;
+				});
+				if (member.capabilitySkills) member.capabilitySkills.forEach (function (capabilitySkill) {
+					ret.capabilitySkills[capabilitySkill.code] = capabilitySkill;
+				});
+			});
+			resolve (ret);
+		});
+	});
+};
+var getPhaseCapabilities = function (proposal) {
+	return Promise.all ([
+		getUserCapabilities (proposal.phases.inception.team),
+		getUserCapabilities (proposal.phases.proto.team),
+		getUserCapabilities (proposal.phases.implementation.team)
+	]).then (function (results) {
+		return results.reduce (function (accum, curr) {
+			Object.keys (curr.capabilities).forEach (function (key) {
+				accum.capabilities[key] = curr.capabilities[key];
+			});
+			Object.keys (curr.capabilitySkills).forEach (function (key) {
+				accum.capabilitySkills[key] = curr.capabilitySkills[key];
+			});
+			return accum;
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// set up internal aggregate states for phase information
+//
+// -------------------------------------------------------------------------
+var setPhases = function (proposal) {
+	//
+	// only for sprint with us
+	//
+	if (proposal.opportunity.opportunityTypeCd !== 'sprint-with-us') return Promise.resolve ();
+	else return getPhaseCapabilities (proposal)
+	.then (function (curr) {
+		proposal.phases.aggregate.capabilities = [];
+		proposal.phases.aggregate.capabilitySkills = [];
+		Object.keys (curr.capabilities).forEach (function (key) {
+			proposal.phases.aggregate.capabilities.push (curr.capabilities[key]);
+		});
+		Object.keys (curr.capabilitySkills).forEach (function (key) {
+			proposal.phases.aggregate.capabilitySkills.push (curr.capabilitySkills[key]);
+		});
+		proposal.phases.aggregate.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
+	});
+}
 var saveProposal = function (proposal) {
 	return new Promise (function (resolve, reject) {
-		proposal.save(function (err, doc) {
-			if (err) reject (err);
-			else resolve (doc);
+		setPhases (proposal)
+		.then (function () {
+			proposal.save(function (err, doc) {
+				if (err) reject (err);
+				else resolve (doc);
+			});
 		});
 	});
 };
@@ -182,7 +247,7 @@ var saveProposalRequest = function (req, res, proposal) {
 exports.create = function(req, res) {
 	var proposal = new Proposal(req.body);
 	proposal.status = 'Draft';
-	proposal.user = req.user._id;
+	proposal.user = req.user;
 	//
 	// set the audit fields so we know who did what when
 	//
@@ -258,7 +323,8 @@ var removeUserRole = function (userid, oppcode) {
 };
 // -------------------------------------------------------------------------
 //
-// assigns a proposal to the opportunity
+// assigns a proposal to the opportunity, calls opportunities to complete the
+// work
 //
 // -------------------------------------------------------------------------
 exports.assign = function (req, res) {
@@ -278,7 +344,7 @@ exports.assign = function (req, res) {
 };
 // -------------------------------------------------------------------------
 //
-// unassign gets called from the opportunity side, so jusy do the work
+// unassign gets called from the opportunity side, so just do the work
 // and return a promise
 //
 // -------------------------------------------------------------------------
@@ -362,6 +428,87 @@ exports.forOpportunity = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
+// given an opportunity and an organization, return all members that are
+// qualified to be assigned to each phase in the proposal
+//
+// -------------------------------------------------------------------------
+exports.getPotentialResources = function (req, res) {
+	//
+	// gather up all the bits and peices
+	//
+	var user        = req.user;
+	var org         = req.org;
+	var opportunity = req.opportunity;
+	var allMembers  = _.uniq (org.members.concat (org.admins));
+	console.log ('whatall', allMembers);
+
+	//
+	// if the user is not an admin of the org then bail out
+	//
+	if (!(user._id.toString () === org.owner._id.toString () || !!~org.admins.indexOf (user._id))) {
+		return res.status (422).send ({
+			message: 'Not Authorized Silly'
+		});
+	}
+	//
+	// select all the users and start sifting them into buckets that match their capabilities
+	//
+	var ret = {
+		inception      : [],
+		proto          : [],
+		implementation : []
+	};
+	User.find ({
+		_id: {$in: allMembers}
+	})
+	.select ('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
+	.populate ('capabilities', 'code name labelClass')
+	.populate ('capabilitySkills', 'code name labelClass')
+	.exec (function (err, users) {
+		var i;
+		var j;
+		var c;
+		for (i = 0; i < users.length; i++) {
+			var user = users[i].toObject ();
+			user.iCapabilities = {};
+			user.iCapabilitySkills = {};
+			user.capabilities.forEach (function (c) {
+				user.iCapabilities[c.code] = true;
+			});
+			user.capabilitySkills.forEach (function (c) {
+				user.iCapabilitySkills[c.code] = true;
+			});
+			users[i] = user;
+			for (j=0; j<opportunity.phases.inception.capabilities.length; j++) {
+				c = opportunity.phases.inception.capabilities[j].code;
+				console.log ('code:', c);
+				if (user.iCapabilities[c]) {
+					ret.inception.push (user);
+					break;
+				}
+			}
+			for (j=0; j<opportunity.phases.proto.capabilities.length; j++) {
+				c = opportunity.phases.proto.capabilities[j].code;
+				if (user.iCapabilities[c]) {
+					ret.proto.push (user);
+					break;
+				}
+			}
+			for (j=0; j<opportunity.phases.implementation.capabilities.length; j++) {
+				c = opportunity.phases.implementation.capabilities[j].code;
+				if (user.iCapabilities[c]) {
+					ret.implementation.push (user);
+					break;
+				}
+			}
+		};
+		ret.all = users;
+		res.json (ret);
+	});
+}
+
+// -------------------------------------------------------------------------
+//
 // new empty proposal
 //
 // -------------------------------------------------------------------------
@@ -387,7 +534,10 @@ exports.proposalByID = function (req, res, next, id) {
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')
 	.populate('user', userfields)
-	.populate('team')
+	.populate('phases.implementation.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL')
+	.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL')
 	.exec(function (err, proposal) {
 		if (err) {
 			return next(err);
@@ -448,7 +598,6 @@ exports.removedoc = function (req, res) {
 	var isAdmin  = user && !!~user.roles.indexOf ('admin');
 	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
 	if ( ! (isOwner || isAdmin)) return res.status(401).send({message: 'Not permitted'});
-
 	req.proposal.attachments.id(req.params.documentId).remove();
 	saveProposalRequest (req, res, req.proposal);
 };
@@ -459,7 +608,6 @@ exports.downloaddoc = function (req, res) {
 	var isGov    = user && !!~user.roles.indexOf ('gov');
 	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
 	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
-
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
 	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
 };
@@ -504,6 +652,7 @@ exports.downloadArchive = function (req, res) {
 	//
 	Proposal.find({opportunity:req.opportunity._id, status:{$in:['Submitted','Assigned']}}).sort('status created')
 	.populate('user', userfields)
+	.populate('opportunity', 'opportunityTypeCd name code')
 	.exec(function (err, proposals) {
 		if (err) {
 			return res.status(422).send({

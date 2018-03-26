@@ -75,7 +75,7 @@ module.exports.initMiddleware = function (app) {
 
   app.use ('/uploads/*', function (req, res, next) {
     var pathname = req.baseUrl;
-    if (!!~pathname.indexOf ('file-')) res.status(403).send ('<h1>403 Forbidden</h1>');
+    if (!!~pathname.indexOf ('file-')) res.status(403).send('<h1>403 Forbidden</h1>');
     else next();
   });
 

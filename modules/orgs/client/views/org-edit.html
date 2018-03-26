@@ -1,37 +1,50 @@
-<section class="static">
-	<div class="container" role="main">
+<section class="edit-form-background">
+	<div class="container edit-form" role="main">
+		<div class="edit-form-header">
+			<span class="light small">MANAGING:</span>
+			{{::vm.org.name}}
+			<a class="btn btn-text-only pull-right" ui-sref="orgs.view({ orgId: vm.org._id })" title="Close"><i class="fa fa-2x fa-times"></i></a>
+		</div>
+
+		<ul class="nav nav-tabs">
+			<li ui-sref-active="active">
+				<a id="orgadmin.profile" ui-sref="orgadmin.profile">Business Info</a>
+			</li>
+<!-- 			<li ui-sref-active="active" ng-if="0">
+				<a id="orgadmin.skills" ui-sref="orgadmin.skills">Skills</a>
+			</li>
+ -->
+ 			<li ui-sref-active="active">
+				<a id="orgadmin.members" ui-sref="orgadmin.members">Members & Capabilities</a>
+			</li>
+
+<!-- 			<li ui-sref-active="active" ng-if="0">
+				<a id="orgadmin.teams" ui-sref="orgadmin.teams">Teams</a>
+			</li>
+ -->
+ 			<!-- // Hide the Proposals tab until we can do something with it // -->
+			<!--
+			<li ui-sref-active="active">
+				<a id="orgadmin.proposals" ui-sref="orgadmin.proposals">Proposals</a>
+			</li>
+			<li>
+			-->
+			</li>
+		</ul>
+
+		<div ui-view></div>
+
+	</div>
+	<br>
+	<div class="container">
 		<div class="row">
-			<nav class="col-xs-12">
-				<ul class="nav nav-pills">
-					<li ui-sref-active="active">
-						<a id="orgadmin.profile" ui-sref="orgadmin.profile">Profile</a>
-					</li>
-					<li ui-sref-active="active">
-						<a id="orgadmin.skills" ui-sref="orgadmin.skills">Skills</a>
-					</li>
-					<li ui-sref-active="active">
-						<a id="orgadmin.members" ui-sref="orgadmin.members">Members</a>
-					</li>
-					<li ui-sref-active="active" ng-if="0">
-						<a id="orgadmin.teams" ui-sref="orgadmin.teams">Teams</a>
-					</li>
-					<li ui-sref-active="active">
-						<a id="orgadmin.proposals" ui-sref="orgadmin.proposals">Proposals</a>
-					</li>
-					<li>
-						<a ui-sref="orgs.view({ orgId: vm.org._id })">View Company</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-		<div class="panel">
-			<div class="panel-body">
-				<div ui-view></div>
+			<div class="col-xs-12">
+				<div class="alert">
+					<span class="strong">Collection Notice</span>
+					<br>
+					We're collecting this information through the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purpose of communicating with you! If you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.
+				</div>
 			</div>
-		</div>
-		<div class="alert alert-grey">
-			<p style="font-size: 11px;"><b>Collection Notice</b></p>
-			<p style="font-size: 11px;"><i>This personal information is collected by the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purposes of communications with registered users. Should you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.<i></p>
 		</div>
 	</div>
 </section>

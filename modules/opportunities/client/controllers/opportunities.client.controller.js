@@ -1,65 +1,6 @@
 (function () {
 	'use strict';
 
-	var publishStatus = function (o) {
-		//
-		// removed background for now
-		//
-		// [(o.background), 'Background'],
-		var fields = {
-			common: [
-				[(o.name), 'Title'],
-				[(o.short), 'Teaser'],
-				[(o.description), 'Summary'],
-				[(o.github), 'Github Repository'],
-				[(o.program), 'Program'],
-				[(o.project), 'Project'],
-				[(o.deadline), 'Proposal Deadline'],
-				[(o.assignment), 'Assignment Date'],
-				[(o.location), 'Location']
-			],
-			cwu: [
-				[(o.evaluation), 'Proposal Evaluation Criteria'],
-				[(o.criteria), 'Acceptance Criteria'],
-				[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
-				[(o.skills), 'Required Skills'],
-				[(o.earn), 'Fixed-Price Reward'],
-				[(o.start), 'Proposed Start Date']
-			],
-			swu: [
-				[(o.terms), 'Additional Terms and Conditions'],
-				[(o.isImplementation && o.implementationContract), 'Implementation Phase Contract Model'],
-				[(o.isImplementation && o.implementationEndDate), 'Implementation Phase End Date'],
-				[(o.isImplementation && o.implementationStartDate), 'Implementation Phase Start Date'],
-				[(o.isImplementation && o.implementationTarget), 'Implementation Phase Target Cost'],
-				[(o.isInception && o.inceptionContract), 'Inception Phase Contract Model'],
-				[(o.isInception && o.inceptionEndDate), 'Inception Phase End Date'],
-				[(o.isInception && o.inceptionStartDate), 'Inception Phase Start Date'],
-				[(o.isInception && o.inceptionTarget), 'Inception Phase Target Cost'],
-				[(o.isPrototype && o.prototypeContract), 'Prototype Phase Contract Model'],
-				[(o.isPrototype && o.prototypeEndDate), 'Prototype Phase End Date'],
-				[(o.isPrototype && o.prototypeStartDate), 'Prototype Phase Start Date'],
-				[(o.isPrototype && o.prototypeTarget), 'Prototype Phase Target Cost']
-			]
-		}
-		var errorFields = fields.common.reduce (function (accum, elem) {
-			if (!elem[0]) accum.push (elem[1]);
-			return accum;
-		}, []);
-		if (o.opportunityTypeCd === 'code-with-us') {
-			fields.cwu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		else {
-			fields.swu.forEach (function (elem) {
-				if (!elem[0]) errorFields.push (elem[1]);
-			});
-		}
-		return errorFields;
-	};
-
-
 	angular.module('opportunities')
 	// =========================================================================
 	//
@@ -74,13 +15,30 @@
 	})
 	// =========================================================================
 	//
+	// Controller for the master list of programs
+	//
+	// =========================================================================
+	.controller('OpportunityLandingController', function (Authentication, $stateParams) {
+		var vm          = this;
+		vm.programId    = $stateParams.programId;
+		vm.programTitle = $stateParams.programTitle;
+		vm.projectId    = $stateParams.projectId;
+		vm.projectTitle = $stateParams.projectTitle;
+		vm.context      = $stateParams.context;
+		var isUser      = Authentication.user;
+		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
+		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		vm.userCanAdd   = (isAdmin || isGov);
+	})
+	// =========================================================================
+	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, capabilities, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
-		vm.capabilities     = capabilities;
+		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -94,7 +52,7 @@
 		vm.opportunity.deadline   = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
-		vm.opportunity.endDate      = new Date (vm.opportunity.endDate);
+		vm.opportunity.endDate    = new Date (vm.opportunity.endDate);
 		vm.authentication         = Authentication;
 		vm.OpportunitiesService   = OpportunitiesService;
 		vm.idString               = 'opportunityId';
@@ -102,30 +60,25 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
-		//
-		// what capabilities are required ?
-		//
-		var allclist = ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c10','c11','c12','c13'];
-		vm.clist = [];
-		allclist.forEach (function (id) {
-			if (vm.opportunity[id+'_minimumYears']>0) {
-				vm.clist.push (id);
-			}
-		});
+		vm.trust = $sce.trustAsHtml;
 		//
 		// what can the user do here?
 		//
 		var isUser                 = Authentication.user;
 		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isGov = isGov;
+		vm.isGov                   = isGov;
 		vm.hasEmail                = isUser && Authentication.user.email !== '';
 		var isMemberOrWaiting      = opportunity.userIs.member || opportunity.userIs.request;
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
-		vm.canApply                = isUser && !isAdmin && !isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
 		vm.isMember                = opportunity.userIs.member;
+		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
+		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
+		//
+		// dates
+		//
 		var rightNow               = new Date ();
 		vm.closing = 'CLOSED';
 		var d                      = vm.opportunity.deadline - rightNow;
@@ -151,10 +104,8 @@
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = (vm.errorFields.length === 0);
-		console.log ('vm.errorFields', vm.errorFields);
-		console.log ('vm.canPublish', vm.canPublish);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -169,50 +120,284 @@
 		};
 		// -------------------------------------------------------------------------
 		//
+		// constants for evaluation stages for swu proposals
+		//
+		// -------------------------------------------------------------------------
+		vm.stages = {
+			new        : 0,
+			questions  : 1,
+			interview  : 2,
+			price      : 3,
+			assigned   : 4
+		};
+		//
+		// this returns true if the current stage is on or past the indicated stage
+		//
+		vm.stage = function (stage) {
+			return vm.opportunity.evaluationStage >= vm.stages[stage];
+		};
+		vm.stageIs = function (stage) {
+			return vm.opportunity.evaluationStage === vm.stages[stage];
+		};
+		// -------------------------------------------------------------------------
+		//
+		// stuff for swu evaluation
+		//
+		// -------------------------------------------------------------------------
+		if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
+			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
+			.then (function (proposals) {
+				vm.proposals = proposals;
+				//
+				// removed hack as this is now in the right place in the edit opportunity
+				//
+
+				// //
+				// // HACK: TBD : should have questions already on opportunity
+				// //
+				// vm.opportunity.questions = [];
+				// vm.proposals[0].questions.forEach (function (q) {
+				// 	vm.opportunity.questions.push (q.question);
+				// });
+				// //
+				// // end of hack
+				// //
+				//
+				// make an array of responses (question objects) by question
+				//
+				vm.responses = [];
+				var questionIndex;
+				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
+					vm.responses[questionIndex] = [];
+					vm.proposals.forEach (function (p) {
+						vm.responses[questionIndex].push (p.questions[questionIndex])
+					});
+				}
+				vm.responses.forEach (function (q) {
+					q.forEach (function (r) {
+						// console.log ('response:', r.rank, r.response);
+					})
+				})
+				//
+				// if we have not yet begun evaluating do some question order randomizing
+				//
+				if (vm.opportunity.evaluationStage === vm.stages.new && vm.closing === 'CLOSED') {
+					vm.responses.forEach (function (qset) {
+						//
+						// randomize the responses
+						//
+						qset.forEach (function (resp) {
+							resp.rank = Math.floor((Math.random() * 1000) + 1);
+						});
+						//
+						// now resolve those to 1 through whatever
+						//
+						qset.sort (function (a, b) {
+							if (a.rank < b.rank) return -1;
+							else if (a.rank > b.rank) return 1;
+							else return 0;
+						});
+						for (var i=0; i<qset.length; i++) {
+							qset[i].rank = i+1;
+						}
+					});
+					vm.opportunity.evaluationStage = vm.stages.questions;
+					vm.saveOpportunity ();
+				}
+				//
+				// save all the proposals now with the new question rankings if applicable
+				// also because this will cause scoring to run on each proposal as well
+				//
+				vm.saveProposals ();
+			vm.responses[0][0].rank = 999;
+			});
+		}
+		// -------------------------------------------------------------------------
+		//
+		// Questions Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.questions = function () {
+			// vm.responses[0][0].rank = 2;
+			// return;
+			modalService.showModal ({
+				size: 'lg',
+				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-questions.html',
+				controller: function ($scope, $uibModalInstance) {
+
+					$scope.data = {};
+					$scope.data.questions = [];
+					$scope.data.proposals = vm.proposals;
+					$scope.data.nproposals = vm.proposals.length;
+					$scope.data.questions = vm.opportunity.questions;
+					$scope.data.responses = vm.responses;
+					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.currentPage = 1;
+
+					vm.responses[0][0].rank = 999;
+
+					$scope.close = function () {
+						// console.log ('what');
+						$uibModalInstance.close('cancel');
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close('save');
+					};
+					$scope.pageChanged = function () {
+						// console.log ('page changed');
+					};
+					$scope.moveUp = function (resp, qindex) {
+						var orank = resp.rank;
+						var nrank = orank-1;
+						vm.responses[qindex].forEach (function (r) {
+							if (r.rank === orank) r.rank = nrank;
+							else if (r.rank === nrank) r.rank = orank;
+							// console.log ('response: ',r.rank,r.response);
+						});
+					};
+					$scope.moveDown = function (resp, qindex) {
+						var orank = resp.rank;
+						var nrank = orank+1;
+						vm.responses[qindex].forEach (function (r) {
+							if (r.rank === orank) r.rank = nrank;
+							else if (r.rank === nrank) r.rank = orank;
+							// console.log ('response: ',r.rank,r.response);
+						});
+					};
+					$scope.commit = function () {
+						$uibModalInstance.close('commit');
+					}
+				}
+			}, {
+			})
+			.then (function (resp) {
+				// console.log ('resp', resp);
+				if (resp === 'save' || resp === 'commit') {
+				// vm.responses[0][0].rank = 999;
+				console.log ('whatproposals', vm.proposals[0].questions[0].rank);
+					//
+					// TBD: calculate scores etc.
+					//
+					vm.saveProposals ();
+				}
+				if (resp === 'commit') {
+					vm.opportunity.evaluationStage = vm.stages.interview;
+					vm.saveOpportunity ();
+				}
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// Interview Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.interview = function (proposal) {
+			modalService.showModal ({
+				size: 'lg',
+				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
+				controller: function ($scope, $uibModalInstance) {
+					$scope.data = {
+						score: proposal.scores.interview,
+						name : proposal.businessName
+					};
+					$scope.close = function () {
+						$uibModalInstance.close ();
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close ({
+							action : 'save',
+							score  : $scope.data.score
+						});
+					};
+					$scope.commit = function () {
+						$uibModalInstance.close ({
+							action : 'commit',
+							score  : $scope.data.score
+						});
+					}
+				}
+			}, {
+			})
+			.then (function (resp) {
+				// console.log ('resp', resp);
+				if (resp.action === 'save') {
+					//
+					// calculate scores etc.
+					//
+					proposal.scores.interview = resp.score;
+					vm.saveProposal (proposal);
+				}
+				else if (resp.action === 'commit') {
+					//
+					// calculate scores and close off interview
+					//
+					proposal.scores.interview = resp.score;
+					proposal.interviewComplete = true;
+					vm.saveProposal (proposal);
+					//
+					// if the number of interviews complete match the number of interviews required
+					// then we progress to the pricing stage
+					//
+					var ninterviewcomplete = 0;
+					vm.proposals.forEach (function (p) {
+						if (p.interviewComplete) ninterviewcomplete++;
+					});
+					if (ninterviewcomplete === vm.opportunity.numberOfInterviews) {
+						vm.opportunity.evaluationStage = vm.stages.price;
+						vm.saveOpportunity ();
+						vm.calculatePriceScores ();
+						vm.saveProposals ();
+					}
+				}
+			});
+		};
+		vm.saveOpportunity = function () {
+			vm.opportunity.$update ();
+		};
+		vm.assign = function (proposal) {
+			vm.opportunity.proposal = proposal;
+			vm.saveOpportunity ();
+			proposal.isAssigned = true;
+			vm.saveProposal (proposal);
+		};
+		// -------------------------------------------------------------------------
+		//
 		// publish or un publish the opportunity
 		//
 		// -------------------------------------------------------------------------
-		vm.publish = function (opportunity, state) {
-			var publishedState      = opportunity.isPublished;
-			var t = state ? 'Published' : 'Unpublished';
-
-			var savemeSeymour = true;
+		vm.publish = function (opportunity, isToBePublished) {
+			var publishedState  = opportunity.isPublished;
+			var publishError    = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
+			var publishQuestion = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+			var publishSuccess  = isToBePublished ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
+			var publishMethod   = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
+			var isToBeSaved     = true;
 			var promise = Promise.resolve ();
-			if (state) {
-				var question = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
-				promise = ask.yesNo (question).then (function (result) {
-					savemeSeymour = result;
-				});
-			}
-				promise.then(function() {
-					if (savemeSeymour) {
-						opportunity.isPublished = state;
-						if (state)
-							return OpportunitiesService.publish ({opportunityId:opportunity._id}).$promise;
-						else
-							return OpportunitiesService.unpublish ({opportunityId:opportunity._id}).$promise;
-					}
-					else return Promise.reject ({data:{message:'Publish Cancelled'}});
-				})
-				.then (function () {
-					//
-					// success, notify
-					//
-					var m = state ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!'
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> '+m
+			if (isToBePublished) promise = ask.yesNo (publishQuestion).then (function (r) {isToBeSaved = r;});
+			promise.then (function () {
+				if (isToBeSaved) {
+					opportunity.isPublished = isToBePublished;
+					publishMethod ({opportunityId:opportunity._id}).$promise
+					.then (function () {
+						//
+						// success, notify
+						//
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> '+publishSuccess
+						});
+					})
+					.catch (function (res) {
+						//
+						// fail, notify and stay put
+						//
+						opportunity.isPublished = publishedState;
+						Notification.error ({
+							message : res.data.message,
+							title   : '<i class=\'glyphicon glyphicon-remove\'></i> '+publishError
+						});
 					});
-				})
-				.catch (function (res) {
-					//
-					// fail, notify and stay put
-					//
-					opportunity.isPublished = publishedState;
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Opportunity '+t+' Error!'
-					});
-				});
+				}
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -222,9 +407,9 @@
 		vm.signInAndApply = function () {
 			$state.go('authentication.signin').then(function () {
 				$state.previous = {
-					state: 'opportunities.view',
+					state: 'opportunities.viewcwu',
 					params: {opportunityId:opportunity.code},
-					href: $state.href('opportunities.view', {opportunityId:opportunity.code})
+					href: $state.href('opportunities.viewcwu', {opportunityId:opportunity.code})
 				};
 			});
 		};
@@ -292,12 +477,10 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, capabilities, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, previousState, dataService, modalService, $q, ask, uibButtonConfig, SkillsService) {
-		uibButtonConfig.activeClass = 'custombuttonbackground';
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
+		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
-		vm.capabilities     = capabilities;
-		vm.previousState                      = previousState;
 		var originalPublishedState             = opportunity.isPublished;
 		//
 		// what can the user do here?
@@ -308,27 +491,19 @@
 		vm.projects                           = projects;
 		vm.editing                            = editing;
 		vm.opportunity                        = opportunity;
+		vm.opportunity.opportunityTypeCd      = 'code-with-us';
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
 		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
 		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
-		vm.opportunity.implementationEndDate   = new Date (vm.opportunity.implementationEndDate  );
-		vm.opportunity.implementationStartDate = new Date (vm.opportunity.implementationStartDate);
-		vm.opportunity.inceptionEndDate        = new Date (vm.opportunity.inceptionEndDate       );
-		vm.opportunity.inceptionStartDate      = new Date (vm.opportunity.inceptionStartDate     );
-		vm.opportunity.prototypeEndDate        = new Date (vm.opportunity.prototypeEndDate       );
-		vm.opportunity.prototypeStartDate      = new Date (vm.opportunity.prototypeStartDate     );
 		vm.authentication                     = Authentication;
-		vm.form                               = {};
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
-		vm.opportunity.taglist                = vm.opportunity.tags   ? vm.opportunity.tags.join (', ')   : '';
-
 		// -------------------------------------------------------------------------
 		//
 		// can this be published?
 		//
 		// -------------------------------------------------------------------------
-		vm.errorFields = publishStatus (vm.opportunity);
+		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 		vm.canPublish = vm.errorFields > 0;
 		//
 		// set up the dropdown amounts for code with us earnings
@@ -342,7 +517,6 @@
 
 
 		if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
-		// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 		//
 		// if the user doesn't have the right access then kick them out
 		//
@@ -395,12 +569,6 @@
 			vm.opportunity.assignment = new Date ();
 			vm.opportunity.start      = new Date ();
 			vm.opportunity.endDate    = new Date ();
-			vm.opportunity.implementationEndDate   = new Date ();
-			vm.opportunity.implementationStartDate = new Date ();
-			vm.opportunity.inceptionEndDate        = new Date ();
-			vm.opportunity.inceptionStartDate      = new Date ();
-			vm.opportunity.prototypeEndDate        = new Date ();
-			vm.opportunity.prototypeStartDate      = new Date ();
 
 		}
 		//
@@ -408,8 +576,8 @@
 		// where they came from
 		//
 		if (vm.projects.length === 0) {
-			alert ('You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.');
-			$state.go (previousState.name, previousState.params);
+			Notification.error ({message : 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'});
+			$state.go ('opportunities.list');
 		}
 		//
 		// if there is only one available project just force it
@@ -424,44 +592,8 @@
 			vm.opportunity.program = vm.programId;
 		}
 
-		vm.tinymceOptions = {
-			resize      : true,
-			width       : '100%',  // I *think* its a number and not '400' string
-			height      : 100,
-			menubar     : '',
-			elementpath : false,
-			plugins     : 'textcolor lists advlist link',
-			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-		};
+		vm.tinymceOptions = TINYMCE_OPTIONS;
 
-		vm.cbykey = vm.capabilities.reduce (function (accum, curr) {
-			accum[curr.key] = curr;
-			return accum;
-		}, {});
-		vm.inceptionKeys = ['c04','c03','c08'];
-		vm.prototypeKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
-		vm.implementationKeys = ['c04','c02','c03','c05','c07','c08','c10','c11'];
-		vm.inceptionCapabilities = vm.inceptionKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-		vm.prototypeCapabilities = vm.prototypeKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-		vm.implementationCapabilities = vm.implementationKeys.map (function (c) {
-			return vm.cbykey[c];
-		});
-
-
-
-		// $scope.$watch ('vm.opportunity.inceptionTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
-		// $scope.$watch ('vm.opportunity.prototypeTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
-		// $scope.$watch ('vm.opportunity.implementationTarget', function (value) {
-		// 	vm.opportunity.totalTarget = vm.opportunity.inceptionTarget+vm.opportunity.prototypeTarget+vm.opportunity.implementationTarget;
-		// });
 		vm.changeTargets = function () {
 			vm.opportunity.inceptionTarget = Number (vm.opportunity.inceptionTarget);
 			vm.opportunity.prototypeTarget = Number (vm.opportunity.prototypeTarget);
@@ -470,34 +602,6 @@
 		};
 		vm.totalTargets = function () {
 			return 1234;
-		};
-		// -------------------------------------------------------------------------
-		//
-		// add a new skill under a capability
-		//
-		// -------------------------------------------------------------------------
-		vm.addSkill = function (capability, field, tag, newfield) {
-			console.log ('newskill:', tag);
-			//
-			// add the new tag to the capability
-			// add the new tag to the opportunity capability tags
-			// clear the add field
-			//
-			capability.tags.push (tag);
-			vm.opportunity[field].push (tag);
-			vm[newfield] = '';
-			capability.createOrUpdate();
-		};
-		// -------------------------------------------------------------------------
-		//
-		// these do things to balance the years required and desired when clicked
-		//
-		// -------------------------------------------------------------------------
-		vm.smin = function (mfield, dfield, value) {
-			if (vm.opportunity[dfield] < value) vm.opportunity[dfield] = value;
-		};
-		vm.sdes = function (dfield, mfield, value) {
-			if (vm.opportunity[mfield] > value) vm.opportunity[mfield] = value;
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -547,7 +651,7 @@
 				return false;
 			}
 			if (!isValid) {
-				console.log (vm.opportunityForm);
+				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -555,12 +659,7 @@
 				});
 				return false;
 			}
-			if (vm.opportunity.taglist !== '') {
-				vm.opportunity.tags = vm.opportunity.taglist.split(/ *, */);
-			} else {
-				vm.opportunity.tags = [];
-			}
-			if (vm.opportunity.skilllist !== '') {
+			if (vm.opportunity.skilllist && vm.opportunity.skilllist !== '') {
 				vm.opportunity.skills = vm.opportunity.skilllist.split(/ *, */);
 			} else {
 				vm.opportunity.skills = [];
@@ -587,15 +686,9 @@
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
+			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.opportunity.implementationEndDate.setHours(16);
-			vm.opportunity.implementationStartDate.setHours(16);
-			vm.opportunity.inceptionEndDate.setHours(16);
-			vm.opportunity.inceptionStartDate.setHours(16);
-			vm.opportunity.prototypeEndDate.setHours(16);
-			vm.opportunity.prototypeStartDate.setHours(16);
 
-			vm.opportunity.capabilities = [];
 
 			//
 			// confirm save only if the user is also publishing
@@ -608,35 +701,40 @@
 					savemeSeymour = result;
 				});
 			}
-				//
-				// Create a new opportunity, or update the current instance
-				//
-				promise.then(function() {
-					if (savemeSeymour) {
-						return vm.opportunity.createOrUpdate();
-					}
-					else return Promise.reject ({data:{message:'Publish Cancelled'}});
-				})
-				//
-				// success, notify and return to list
-				//
-				.then (function () {
-					vm.opportunityForm.$setPristine ();
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
-					});
-
-					$state.go('opportunities.view', {opportunityId:opportunity.code});
-				})
-				//
-				// fail, notify and stay put
-				//
-				.catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
-					});
+			//
+			// update target total
+			//
+			vm.opportunity.totalTarget = vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget
+			//
+			// Create a new opportunity, or update the current instance
+			//
+			// console.log ('saving now');
+			promise.then(function() {
+				if (savemeSeymour) {
+					return vm.opportunity.createOrUpdate();
+				}
+				else return Promise.reject ({data:{message:'Publish Cancelled'}});
+			})
+			//
+			// success, notify and return to list
+			//
+			.then (function () {
+				vm.opportunityForm.$setPristine ();
+				Notification.success ({
+					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
 				});
+
+				$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+			})
+			//
+			// fail, notify and stay put
+			//
+			.catch (function (res) {
+				Notification.error ({
+					message : res.data.message,
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> opportunity save error!'
+				});
+			});
 
 		};
 		vm.popoverCache = {};

@@ -1,0 +1,52 @@
+<div class="col-sm-12">
+	<fieldset>
+
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title":"Required Capabilities and Skills",
+				"name":"implementationphaserequirements",
+				"help":"Select all the Capabilities and specific skills required for your opportunity. As you select more phases under the phases tab more capabilities will become available for selection."
+			}'>
+
+			<uib-accordion close-others="true">
+
+				<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities" ng-if="(capability.isPrototype && vm.opportunity.isPrototype) || (capability.isInception && vm.opportunity.isInception) || (capability.isImplementation && vm.opportunity.isImplementation)">
+					<uib-accordion-heading>
+						<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.iOppCapabilities[capability.code], 'glyphicon-unchecked':!vm.iOppCapabilities[capability.code]}"></i>
+						&nbsp; &nbsp;
+						{{capability.name}}
+						<span class="label label-success pull-right" ng-if="capability.isImplementation">Implementation</span>
+						<span class="label label-success pull-right" ng-if="capability.isPrototype">Prototype</span>
+						<span class="label label-success pull-right" ng-if="capability.isInception">Inception</span>
+					</uib-accordion-heading>
+					<div class="row">
+						<div class="col-sm-8">
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
+										This capability is required
+								</label>
+							</div>
+							<p ng-bind-html="vm.trust(capability.description)"></p>
+						</div>
+						<div class="col-sm-4">
+							<div class="panel panel-success">
+								<div class="panel-heading">
+									<strong>Specific Skills (select all those that apply)</strong>
+								</div>
+								<ul class="list-group">
+									<li class="list-group-item" ng-repeat="skill in capability.skills" ng-class="{'list-group-item-info':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
+										<span ng-bind="skill.name"></span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</uib-accordion>
+		</form-display>
+
+	</fieldset>
+</div>
