@@ -203,32 +203,6 @@ section.detail dt {
 	color: #a6a6a6;
 }
 
-section.signup {
-  position: relative;
-  width: 100%;
-  min-height: auto;
-  overflow-y: hidden;
-  background-color: #0a4d8d;
-  background-size: cover;
-  padding-top: 20px;
-  padding-bottom: 40px;
-  color: #fff;
-}
-section.signup p {
-	font-size: 14px;
-}
-section.signup h2 {
-  font-size: 24px;
-  line-height: 1.6em;
-  color: #fff;
-}
-section.signup h5 {
-	font-weight: 300;
-	font-size: 20px;
-	line-height: 1.7em;
-	padding-bottom: 30px;
-	color: #fff;
-}
 
 @media (max-width: 767px) {
 	.img-responsive {
