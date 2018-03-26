@@ -158,11 +158,75 @@ exports.myopp = function (req, res) {
 		}
 	});
 };
+var getUserCapabilities = function (users) {
+	return new Promise (function (resolve, reject) {
+		var userids = users.map (function (o) {if (o._id) return o._id; else return o;});
+		User.find ({_id: {$in:userids}})
+		.populate ('capabilities','name code')
+		.populate ('capabilitySkills','name code')
+		.exec (function (err, members) {
+			var ret = {capabilities:{},capabilitySkills:{}}
+			if (err) reject ({message:'Error getting members'});
+			members.forEach (function (member) {
+				if (member.capabilities) member.capabilities.forEach (function (capability) {
+					ret.capabilities[capability.code] = capability;
+				});
+				if (member.capabilitySkills) member.capabilitySkills.forEach (function (capabilitySkill) {
+					ret.capabilitySkills[capabilitySkill.code] = capabilitySkill;
+				});
+			});
+			resolve (ret);
+		});
+	});
+};
+var getPhaseCapabilities = function (proposal) {
+	return Promise.all ([
+		getUserCapabilities (proposal.phases.inception.team),
+		getUserCapabilities (proposal.phases.proto.team),
+		getUserCapabilities (proposal.phases.implementation.team)
+	]).then (function (results) {
+		return results.reduce (function (accum, curr) {
+			Object.keys (curr.capabilities).forEach (function (key) {
+				accum.capabilities[key] = curr.capabilities[key];
+			});
+			Object.keys (curr.capabilitySkills).forEach (function (key) {
+				accum.capabilitySkills[key] = curr.capabilitySkills[key];
+			});
+			return accum;
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// set up internal aggregate states for phase information
+//
+// -------------------------------------------------------------------------
+var setPhases = function (proposal) {
+	//
+	// only for sprint with us
+	//
+	if (proposal.opportunity.opportunityTypeCd !== 'sprint-with-us') return Promise.resolve ();
+	else return getPhaseCapabilities (proposal)
+	.then (function (curr) {
+		proposal.phases.aggregate.capabilities = [];
+		proposal.phases.aggregate.capabilitySkills = [];
+		Object.keys (curr.capabilities).forEach (function (key) {
+			proposal.phases.aggregate.capabilities.push (curr.capabilities[key]);
+		});
+		Object.keys (curr.capabilitySkills).forEach (function (key) {
+			proposal.phases.aggregate.capabilitySkills.push (curr.capabilitySkills[key]);
+		});
+		proposal.phases.aggregate.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
+	});
+}
 var saveProposal = function (proposal) {
 	return new Promise (function (resolve, reject) {
-		proposal.save(function (err, doc) {
-			if (err) reject (err);
-			else resolve (doc);
+		setPhases (proposal)
+		.then (function () {
+			proposal.save(function (err, doc) {
+				if (err) reject (err);
+				else resolve (doc);
+			});
 		});
 	});
 };

@@ -45,6 +45,7 @@
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
 		vm.canApply = org && org.metRFQ;
+		vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
 		//
 		// set up the structures for capabilities
 		//
@@ -139,6 +140,45 @@
 		};
 		// -------------------------------------------------------------------------
 		//
+		// set the number of teams to interview
+		//
+		// -------------------------------------------------------------------------
+		vm.updateNumberOfTeams = function () {
+			vm.opportunity.numberOfInterviews = vm.numberOfInterviews;
+			vm.canProgress ();
+			vm.saveOpportunity ();
+		};
+		// -------------------------------------------------------------------------
+		//
+		// click here when all done interviewing
+		//
+		// -------------------------------------------------------------------------
+		vm.doneInterviews = function () {
+			vm.opportunity.evaluationStage = vm.stages.price;
+			vm.saveOpportunity ();
+			vm.calculatePriceScores ();
+			vm.saveProposals ();
+		};
+		// -------------------------------------------------------------------------
+		//
+		// check if we can progress from interviews
+		//
+		// -------------------------------------------------------------------------
+		vm.canProgress = function () {
+			//
+			// if we have proposals, are we through the interview process yet?
+			//
+			vm.canCloseInterviews = false;
+			var ninterviewcomplete = 0;
+			vm.proposals.forEach (function (p) {
+				if (p.interviewComplete) ninterviewcomplete++;
+			});
+			if (ninterviewcomplete >= vm.opportunity.numberOfInterviews) {
+				vm.canCloseInterviews = true;
+			}
+		};
+		// -------------------------------------------------------------------------
+		//
 		// stuff for swu evaluation
 		//
 		// -------------------------------------------------------------------------
@@ -147,6 +187,7 @@
 			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
 			.then (function (proposals) {
 				vm.proposals = proposals;
+				vm.canProgress ();
 				//
 				// removed hack as this is now in the right place in the edit opportunity
 				//
@@ -161,11 +202,15 @@
 						vm.responses[questionIndex].push (p.questions[questionIndex])
 					});
 				}
-				// vm.responses.forEach (function (q) {
+				// console.group ('reponses');
+				// vm.responses.forEach (function (q, i) {
+				// 	console.group ('question '+i);
 				// 	q.forEach (function (r) {
 				// 		console.log ('response:', r.rank, r.response);
 				// 	})
+				// 	console.groupEnd ();
 				// })
+				// console.groupEnd ();
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
@@ -188,6 +233,20 @@
 						for (var i=0; i<qset.length; i++) {
 							qset[i].rank = i+1;
 						}
+					});
+					//
+					// and now figure out the team score, hopefully only once
+					//
+					vm.proposals.forEach (function (proposal) {
+						var p = {};
+						proposal.phases.aggregate.capabilitySkills.forEach (function (skillid) {
+							p[skillid.toString()] = true;
+						});
+						proposal.scores.skill = 0;
+						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
+							if (p[skill._id.toString()]) proposal.scores.skill++;
+						});
+						console.log ('proposal.scores.skill', proposal.scores.skill);
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
@@ -234,21 +293,27 @@
 						// console.log ('page changed');
 					};
 					$scope.moveUp = function (resp, qindex) {
+						console.group ('moving up in question '+qindex);
+						console.log ('resp', resp);
 						var orank = resp.rank;
 						var nrank = orank-1;
+						console.log ('old rank: ',orank, 'new rank:', nrank);
 						vm.responses[qindex].forEach (function (r) {
+							console.log ('checking: ', r.rank);
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							// console.log ('response: ',r.rank,r.response);
+							console.log ('is now: ', r.rank);
 						});
+						console.groupEnd ();
 					};
 					$scope.moveDown = function (resp, qindex) {
+						console.log ('moving down!', resp, qindex);
 						var orank = resp.rank;
 						var nrank = orank+1;
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							// console.log ('response: ',r.rank,r.response);
+							console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.commit = function () {
@@ -325,16 +390,7 @@
 					// if the number of interviews complete match the number of interviews required
 					// then we progress to the pricing stage
 					//
-					var ninterviewcomplete = 0;
-					vm.proposals.forEach (function (p) {
-						if (p.interviewComplete) ninterviewcomplete++;
-					});
-					if (ninterviewcomplete === vm.opportunity.numberOfInterviews) {
-						vm.opportunity.evaluationStage = vm.stages.price;
-						vm.saveOpportunity ();
-						vm.calculatePriceScores ();
-						vm.saveProposals ();
-					}
+					vm.canProgress ();
 				}
 			});
 		};
@@ -425,7 +481,8 @@
 			var minDistance = 30000000;
 			vm.proposals.forEach (function (p) {
 				if (p.interviewComplete) {
-					p.distance = Math.abs (vm.opportunity.totalTarget - p.cost);
+					p.cost = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
+					p.distance = Math.abs (vm.opportunity.budget - p.cost);
 					if (p.distance > maxDistance) maxDistance = p.distance;
 					if (p.distance < minDistance) minDistance = p.distance;
 				}

@@ -327,64 +327,82 @@
 				<strong>Evaluation Matrix</strong>
 			</div>
 			<div class="panel-body">
-				<p>
-					Complete the evaluation Matrix below.<br/>
-					<ul>
-						<li>
-							Complete the Question Ranking
-						</li>
-						<li>
-							Complete the Interview Ranking for each team
-						</li>
-						<li>
-							At this point the price will be unmasked and you may assign the opportunity
-						</li>
-					</ul>
-							proposals p1 q1 rank: {{vm.proposals[0].questions[0].question}}<br/>
-							responses q1 p1 rank: {{vm.responses[0][0].question}}<br/>
-							proposals p1 q1 rank: {{vm.proposals[0].questions[0].rank}}<br/>
-							responses q1 p1 rank: {{vm.responses[0][0].rank}}
-					<br/>
-					<p ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></p>
-					<p ng-if="vm.stageIs('interview') || vm.stageIs('questions')">How many teams do you wish to interview? <input type="text" class="form-input input-sm" width="1" ng-model="vm.opportunity.numberOfInterviews"/></p>
-					<p ng-if="vm.stageIs('interview')"><strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score</p>
-					<p ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</p>
-					<p ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</p>
-				</p>
+				<div class="container">
+				<div class="row">
+					<div>
+						<p>
+							Complete the evaluation Matrix below.<br/>
+							<ul>
+								<li>
+									Complete the Question Ranking
+								</li>
+								<li>
+									Complete the Interview Ranking for each team
+								</li>
+								<li>
+									At this point the price will be unmasked and you may assign the opportunity
+								</li>
+							</ul>
+						</p>
+						<br/>
+					</div>
+				</div>
+				<div class="row">
+					<div ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></div>
+					<div ng-if="vm.stageIs('interview')">
+						<div>
+							<strong>Current Stage:</strong> Click on the interview links for each team to enter the Interview Score
+						</div>
+						<div class="col-sm-6 ">
+							<label>How many teams do you wish to interview?</label>
+						</div>
+						<div class="col-sm-4 input-group input-group-sm">
+							<input type="text" class="form-control" ng-model="vm.numberOfInterviews"\>
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" ng-click="vm.updateNumberOfTeams()">Update</button>
+								<button ng-disabled="!vm.canCloseInterviews" class="btn btn-sm btn-primary" type="button" ng-click="vm.doneInterviews()">Interviews Complete</button>
+							</span>
+						</div>
+					</div>
+					<div ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</div>
+					<div ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</div>
+				</div>
+				</div>
 			</div>
 			<table class="table table-condensed table-striped">
 				<thead>
 					<tr>
-						<td><strong>Team</strong></td>
-						<td align="center"><strong>Questions</strong></td>
-						<td><strong>Interview</strong></td>
-						<td><strong>Price (Target: {{vm.opportunity.totalTarget | currency}})</strong></td>
-						<td><strong>Score</strong></td>
+						<td><strong>Team</strong><br/>[weight : {{vm.opportunity.weights.skill}}]</td>
+						<td align="center"><strong>Questions</strong><br/>[weight : {{vm.opportunity.weights.question}}]</td>
+						<td><strong>Interview</strong><br/>[weight : {{vm.opportunity.weights.interview}}]</td>
+						<td><strong>Price (Target: {{vm.opportunity.budget | currency}})</strong><br/>[weight : {{vm.opportunity.weights.price}}]</td>
+						<td><strong>Total Score</strong></td>
 						<td><strong>Assigned</strong></td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a> <span class="text-success">(Score : {{proposal.scores.skill | number:0}})</span></td>
 						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span> <span class="text-success">(Score : {{proposal.scores.question | number:0}})</span></td>
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('questions')" align="center">TBD</td>
 						<td ng-if="$index >= vm.opportunity.numberOfInterviews" align="center">N/A</td>
 
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">Score : ( TBD )</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)">Score : ( TBD )</a></td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete">Score : XXXX</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Score : {{proposal.scores.interview}}</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)"><span class="text-success">(Score : TBD)</a></td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete"><span class="text-success">(Score : XXXX)</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')"><span class="text-success">(Score : {{proposal.scores.interview}})</td>
 						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
 						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.cost | currency}}</td>
+						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.phases.aggregate.cost | currency}} <span class="text-success">(Score : {{proposal.scores.price | number:0}})</td>
 						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
 
 						<td ng-if="!vm.stage('price')">N/A</td>
-						<td ng-if="vm.stage('price')">{{proposal.scores.total}}</td>
+						<td ng-if="vm.stage('price')">{{proposal.scores.total | number:0}}</td>
 
 						<td ng-if="!vm.stage('price')">&nbsp;</td>
 						<td ng-if="vm.stage('price') && $index!==0">&nbsp;</td>

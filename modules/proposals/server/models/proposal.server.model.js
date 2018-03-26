@@ -61,7 +61,8 @@ var ProposalSchema = new Schema ({
 			cost        : {type: Number, default: 0}
 		},
 		aggregate : {
-			team : {type: [{type:Schema.ObjectId, ref:'User'}], default: []},
+			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
+			capabilitySkills : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
 			cost : {type: Number, default: 0}
 		}
 	},
