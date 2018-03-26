@@ -13,7 +13,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		// console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -72,7 +71,6 @@
 					});
 				}
 			});
-			// console.log (ppp.clist);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -127,7 +125,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, modalService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp                                   = this;
 		ppp.features                              = window.features;
@@ -164,7 +162,6 @@
 				ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
 			}
 		}
-		// console.log ('questions', ppp.proposal.questions);
 
 		ppp.totals = {};
 		ppp.tinymceOptions = TINYMCE_OPTIONS;
@@ -231,16 +228,11 @@
 			ppp.allNeededCapabilities = Object.keys (ppp.iOppCapabilities).sort ();
 			ppp.allskills = Object.keys (ppp.iOppCapabilitySkills).sort ();
 
-
-			// console.log ('ppp.allNeededCapabilities',ppp.allNeededCapabilities);
-			// console.log ('ppp.allskills',ppp.allskills);
-
 			//
 			// now gather up ONLY those folks who have at least one of the required capabilities
 			// this should include any current team members
 			//
 			ppp.winners = [];
-			// console.log ('team:' , ppp.proposal.team);
 			//
 			// make an array of all team member ids
 			// make an array of all opp capability ids
@@ -257,7 +249,6 @@
 				// is the member already on the team ?
 				//
 				member.selected = isInArray (teamIdMap, memberId);
-				// console.log (member._id, member.selected);
 				//
 				// index the member capabilities by code, the capabilities service already added a map of
 				// ids to codes as i2cc
@@ -293,7 +284,6 @@
 				// //
 				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
 			});
-			// console.log ('winners:',ppp.winners);
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -315,7 +305,6 @@
 					return (accum || (member.selected && member.capabilitiesByCode[code]));
 				}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && c.met;
-				// console.log ('capability', code, c.met);
 			});
 			//
 			// for each skill, see if the team meets it and then caount them up
@@ -330,7 +319,6 @@
 						return (accum || (member.selected && member.skillsByCode[code]));
 					}, false);
 					if (c.met) ppp.numberOfSKillsMet++;
-					// console.log ('skill', code, c.met);
 				}
 			});
 			if (!ppp.proposal.scores) ppp.proposal.scores = {};
@@ -352,42 +340,6 @@
 			else if (status === 'Draft') return 'Submit';
 			else if (status === 'Submitted') return 'label-success';
 		}
-		// -------------------------------------------------------------------------
-		//
-		// things to do with leaving the form without saving
-		//
-		// -------------------------------------------------------------------------
-		var saveChangesModalOpt = {
-			closeButtonText: 'Return To Proposal',
-			actionButtonText: 'Continue',
-			headerText: 'Unsaved Changes!',
-			bodyText: 'You have unsaved changes. Changes will be discarded if you continue.'
-		};
-		var pristineProposal = angular.toJson (ppp.proposal);
-		var $locationChangeStartUnbind = $scope.$on ('$stateChangeStart', function (event, toState, toParams) {
-			if (pristineProposal !== angular.toJson (ppp.proposal) || pristineUser !== angular.toJson (ppp.user)) {
-				if (toState.retryInProgress) {
-					toState.retryInProgress = false;
-					return;
-				}
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function  () {
-					toState.retryInProgress = true;
-					$state.go(toState, toParams);
-				}, function () {
-				});
-				event.preventDefault();
-			}
-		});
-		window.onbeforeunload = function() {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				return 'onbeforeunload: You are about to leave the page with unsaved data. Click Cancel to remain here.';
-			}
-		};
-		$scope.$on('$destroy', function () {
-			window.onbeforeunload = null;
-			$locationChangeStartUnbind ();
-		});
 		// -------------------------------------------------------------------------
 		//
 		// team score
@@ -462,62 +414,42 @@
 		// save the proposal - promise
 		//
 		// -------------------------------------------------------------------------
-		var saveproposal = function (goodmessage, badmessage) {
-			copyuser ();
-			copyteam ();
-			return new Promise (function (resolve, reject) {
-				ppp.proposal.createOrUpdate ()
-				.then (
-					function (response) {
-						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
-						ppp.proposal = response;
-						pristineProposal = angular.toJson (ppp.proposal);
-						ppp.subscribe (true);
-						resolve ();
-					},
-					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
-						 reject ();
-					}
-				);
-			});
+		var saveproposal = function(goodmessage, badmessage) {
+			copyuser();
+			copyteam();
+			return ppp.proposal.createOrUpdate()
+				.then (function(proposal) {
+					Notification.success({message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+					ppp.proposal = proposal;
+					ppp.subscribe(true);
+					ppp.form.proposalform.$setPristine();
+				}, function (error) {
+					Notification.error ({message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
+				});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// perform the save, both user info and proposal info
 		//
 		// -------------------------------------------------------------------------
-		ppp.save = function (isvalid) {
+		ppp.save = function(isvalid) {
 			if (!isvalid) {
 				$scope.$broadcast('show-errors-check-validity', 'ppp.form.proposalform');
 				return false;
 			}
-			saveuser().then (saveproposal);
+			saveuser()
+				.then(saveproposal);
 		};
 		// -------------------------------------------------------------------------
 		//
 		// leave without saving any work
 		//
 		// -------------------------------------------------------------------------
-		ppp.close = function () {
-			if (pristineProposal !== angular.toJson (ppp.proposal)) {
-				modalService.showModal ({}, saveChangesModalOpt)
-				.then(function () {
-					window.onbeforeunload = null;
-					$locationChangeStartUnbind ();
-					if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-						$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-					} else {
-						$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-					}
-				}, function () {
-				});
+		ppp.close = function() {
+			if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+				$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 			} else {
-				if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-				} else {
-					$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-				}
+				$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
 			}
 		};
 		// -------------------------------------------------------------------------
@@ -526,65 +458,66 @@
 		// function is a boolean as to whether or not to perform the action
 		//
 		// -------------------------------------------------------------------------
-		var performdelete = function (q) {
-			ask.yesNo (q).then (function (r) {
-				if (r) {
-					ppp.proposal.$remove (
-						function () {
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
-							ppp.subscribe (false);
+		var performdelete = function(q) {
+			ask.yesNo(q)
+				.then(function(r) {
+					if (r) {
+						ppp.proposal.$remove(function() {
+							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							ppp.subscribe(false);
+							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+								$state.go ('opportunities.viewswu', {opportunityId:ppp.opportunity.code});
 							} else {
-								$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+								$state.go ('opportunities.viewcwu', {opportunityId:ppp.opportunity.code});
 							}
-						},
-						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
-						}
-					);
-				}
-			});
+						}, function(error) {
+							Notification.error({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!'});
+						});
+					}
+				});
 		};
-		var performwithdrawal = function (txt) {
-					ppp.proposal.status = 'Draft';
-					saveuser().then (function () {saveproposal ('Your proposal has been withdrawn.')});
+		var performwithdrawal = function(txt) {
+			ppp.proposal.status = 'Draft';
+			saveuser()
+				.then(function() {
+					saveproposal('Your proposal has been withdrawn.');
+				});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// this deletes a draft
 		//
 		// -------------------------------------------------------------------------
-		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
+		ppp.delete = function() {
+			performdelete('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
 		};
 		// -------------------------------------------------------------------------
 		//
 		// this deletes a submission
 		//
 		// -------------------------------------------------------------------------
-		ppp.withdraw = function () {
-			performwithdrawal ();
+		ppp.withdraw = function() {
+			performwithdrawal();
 		};
 		// -------------------------------------------------------------------------
 		//
 		// submit the proposal
 		//
 		// -------------------------------------------------------------------------
-		ppp.submit = function () {
-			saveuser().then (function () {
-				copyuser ();
-				ProposalsService.submit (ppp.proposal).$promise
-				.then (
-					function (response) {
-						ppp.proposal = response;
-						Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
-					},
-					function (error) {
-						 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-					}
-				);
-			});
+		ppp.submit = function() {
+			saveuser()
+				.then(function() {
+					copyuser();
+					ppp.proposal.$submit()
+						.then (function(proposal) {
+							ppp.proposal = proposal;
+							ppp.form.proposalform.$setPristine();
+							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+						}, function(error) {
+							Notification.error ({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal'});
+						});
+				});
 		}
 		// -------------------------------------------------------------------------
 		//
