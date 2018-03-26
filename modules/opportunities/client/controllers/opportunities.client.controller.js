@@ -30,15 +30,73 @@
 		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.userCanAdd   = (isAdmin || isGov);
 	})
+		// =========================================================================
+	//
+	// Controller the view of the opportunity page
+	//
+	// =========================================================================
+	.controller('OpportunitySubmitController', function ($scope, $state, $stateParams, $timeout ,$window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, OpportunitiesService) {
+		var vm 					  = this;
+		vm.opportunity    = opportunity;
+		vm.features       = window.features;
+
+		var copiedUser = angular.copy(Authentication.user);
+
+		$scope.data = {
+			admEmail: copiedUser.admEmail,
+			dfsEmail: copiedUser.dfsEmail,
+			bfsEmail: copiedUser.bfsEmail
+		};
+
+		var checkEmails = function(emails) {
+			if (emails && _.isArray(emails)) {
+				for (var i = 0; i < emails.length; i++) {
+					var email = emails[i];
+					if (email.length === 0) {
+						// The condition you want to check the email for
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+		// Email Update Callbacks
+		function onRequestEmailUpdateError(response) {
+			// Show user error message and clear form
+			vm.credentials = null;
+			Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Failed to send email and update profile!', delay: 4000 });
+		}
+		// -------------------------------------------------------------------------
+		//
+		// Submit Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.submit = function (data) {
+				OpportunitiesService.sendEmailToADM({opportunityId: opportunity._id},{ emails: data, opportunity: vm.opportunity}).$promise
+					.then(function(response) {
+						vm.credentials = null;
+						Notification.success({ message: response.message, title: '<i class="glyphicon glyphicon-ok"></i> Email was sent successfully! Profile updated' });
+						// Manually update user profile
+						Authentication.user.admEmail = data.admEmail
+						Authentication.user.bfsEmail = data.bfsEmail
+						Authentication.user.dfsEmail = data.dfsEmail
+						vm.opportunityForm.$setPristine();
+
+						$timeout(function() {
+							$state.go('opportunities.viewcwu', {opportunityId:vm.opportunity.code})
+						},250)
+					})
+					.catch(onRequestEmailUpdateError);
+		}
+	})
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
+	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon, AdminService) {
 		var vm                    = this;
 		vm.features = window.features;
-		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -73,6 +131,7 @@
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || opportunity.userIs.admin;
+		vm.canSubmit               = isAdmin || opportunity.userIs.admin;
 		vm.isMember                = opportunity.userIs.member;
 		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
 		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
@@ -211,6 +270,13 @@
 				vm.saveProposals ();
 			vm.responses[0][0].rank = 999;
 			});
+		}
+		else {
+			// -------------------------------------------------------------------------
+			//
+			// stuff for cwu evaluation
+			//
+			// -------------------------------------------------------------------------
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -360,6 +426,7 @@
 			proposal.isAssigned = true;
 			vm.saveProposal (proposal);
 		};
+
 		// -------------------------------------------------------------------------
 		//
 		// publish or un publish the opportunity
@@ -471,6 +538,11 @@
 				});
 			}
 		};
+
+		vm.submit = function() {
+			vm.opportunity.status = 'Pending';
+			$state.go('opportunityadmin.submitcwu' , {opportunityId:vm.opportunity.code});
+		}
 	})
 	// =========================================================================
 	//

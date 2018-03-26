@@ -60,7 +60,10 @@ exports.renderIndex = function (req, res) {
       isPublicProfile         : req.user.isPublicProfile,
       isAutoAdd               : req.user.isAutoAdd,
       capabilityDetails : req.user.capabilityDetails,
-      capabilitySkills : req.user.capabilitySkills
+      capabilitySkills : req.user.capabilitySkills,
+      admEmail : validator.escape(req.user.ADMEmail),
+      dfsEmail : validator.escape(req.user.DFSEmail),
+      bfsEmail : validator.escape(req.user.BFSEmail)
     };
   }
   var features = config.features.split ('-');
