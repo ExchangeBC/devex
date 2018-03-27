@@ -1,7 +1,7 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" novalidate autocomplete="off">
-	<div class="alert alert-important">
-		<i class="fa fa-lg fa-hand-paper-o"></i> <span class="strong">Let us know what you can do!</span><br>
-		<i><a href="/">Sprint With Us</a></i> opportunities call for teams with these capabilities and skills. Identify which ones you have, and you can be put forward by a company on a proposal!</p>
+	<div class="alert alert-warning">
+		<h5>Let us know what you can do!</h5>
+		<p><label class="label label-danger"><i class="fa fa-group"> Sprint With Us</i></label> opportunities call for teams with these capabilities and skills. Claim the ones you have, and let your trusted companies know.</p>
 	</div>
 	
 	<fieldset>
@@ -9,33 +9,40 @@
 			<uib-accordion close-others="true">
 				<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities">
 					<uib-accordion-heading>
-						<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.iOppCapabilities[capability.code], 'glyphicon-unchecked':!vm.iOppCapabilities[capability.code]}"></i>
-						&nbsp; &nbsp;
+						<i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>
+						&nbsp; 
 						{{capability.name}}
 					</uib-accordion-heading>
 					<div class="row">
-						<div class="col-sm-8">
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
-										I have experience with this capability
-								</label>
-							</div>
+						
+						<div class="col-xs-12 col-sm-7">
+							<h5>Definition:</h5>
 							<p ng-bind-html="vm.trust(capability.description)"></p>
 						</div>
-						<div class="col-sm-4" ng-if="capability.skills.length > 0">
-							<div class="panel panel-success">
-								<div class="panel-heading">
-									<strong>Specific Skills</strong>
-									select those you possess
+
+						<div class="hidden-xs col-sm-1"></div>
+
+						<div class="col-xs-12 col-sm-4">
+							<div class="alert alert-warning">
+								<div class="checkbox">
+								
+								<label>
+									<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
+										<strong>Claim this capability</strong>
+								</label>
 								</div>
-								<ul class="list-group">
-									<li class="list-group-item" ng-repeat="skill in capability.skills" ng-class="{'list-group-item-info':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
+							</div>
+
+							<div class="well well-warning" ng-if="capability.skills.length > 0">
+								<p>Select all the <strong>preferred skills</strong> you possess:</p>
+								<div class="label-list">
+									<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
 										<span ng-bind="skill.name"></span>
-									</li>
-								</ul>
+									</label>
+								</div>
 							</div>
 						</div>
+
 					</div>
 				</div>
 			</uib-accordion>

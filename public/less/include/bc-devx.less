@@ -94,6 +94,14 @@ a.secondary {
     }
 }
 
+a.accordion-toggle {
+  color: @gray-dark;
+  &:hover, &:active, &:visited, &:focus {
+  color: @gray-dark;
+  outline: none;
+  }
+}
+
 a.breadcrumb-nav {
   font-size: 1.05em;
   color: @gray-light;
@@ -636,7 +644,7 @@ form-title {
   white-space: nowrap;
   border-radius: 3px;
   font-size: 14px;
-//  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   .transition-all(0.15s);
   text-decoration: none;
   margin-left: 2px;
@@ -795,11 +803,13 @@ form-title {
     color: #fff;
     background-color: darken(@theme-primary, 8%);
     border-color: darken(@theme-primary, 8%);
+    box-shadow: none;
   }
   &:active,&:focus {
     color: #fff;
     background-color: darken(@theme-primary, 10%);
     border-color: darken(@theme-primary, 10%);
+    box-shadow: none;
   }
 }
 
@@ -872,11 +882,13 @@ form-title {
     color: @gray-darker;
     background: transparent;
     border-color: none;
+    box-shadow: none;
   }
   &:active,&:focus {
     color: @gray-darker;
     background: transparent;
     border-color: none;
+    box-shadow: none;
   }
 }
 
@@ -900,24 +912,26 @@ form-title {
 .btn-filter-selected {
   transition: none;
   color: #fff;
-  background: @gray;
-  border: 1px solid @gray;
-  &:hover, &:focus {
+  background: @theme-primary;
+  border: none;
+  box-shadow: none;
+  &:hover, &:focus, &:active {
     color: #fff;
-    background: @gray;
-    border: 1px solid @gray;
+    background: @theme-primary;
+    border: none;
+    box-shadow: none;
   }
 }
 
 .btn-filter-unselected {
   transition: none;
-  color: @gray-light;
-  background: @gray-lighter;
-  border: 1px solid #e3e3e3;
-  &:hover, &:focus {
-    color: @gray-light;
-    background: @gray-lighter;
-    border: 1px solid #e3e3e3;
+  color: @gray;
+  background: transparent;
+  border: none;
+  &:hover, &:focus, &:active {
+    color: @gray;
+    background: transparent;
+    border: none;
     box-shadow: none;
   }
 }
@@ -957,17 +971,12 @@ form-title {
 //Sizes
 
 .label-lg {
-  font-size: .85em;
+  font-size: 1em;
   padding: .6em .8em .5em;
 }
 
 
 // Generic classes
-
-.label-cap-default {
-  color: @gray-dark;
-  background: transparent;
-}
 
 .label-default {
   color: @gray;
@@ -1060,13 +1069,22 @@ form-title {
 
 .label-preferred-skill-selected {
   background: @theme-orange;
+  color: #fff;
+  border: 1px solid @theme-orange;
 }
 
 // Capability Labels
 
+.label-cap-default {
+  color: @gray-dark;
+  background: transparent;
+  letter-spacing: -0.02em;
+}
+
 .label-agilecoaching {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
     color: black;
   }
@@ -1075,6 +1093,7 @@ form-title {
 .label-deliverymgmt {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
     color: black;
   }
@@ -1083,6 +1102,7 @@ form-title {
 .label-uxresearch {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: violet;
   } 
@@ -1091,6 +1111,7 @@ form-title {
 .label-uxdesign {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: violet;
   }
@@ -1099,6 +1120,7 @@ form-title {
 .label-frontend {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1107,6 +1129,7 @@ form-title {
 .label-backend {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1115,6 +1138,7 @@ form-title {
 .label-devops {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: red;
   }
@@ -1123,6 +1147,7 @@ form-title {
 .label-technicalarch {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1131,6 +1156,7 @@ form-title {
 .label-securityeng {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: red;
   }
@@ -1597,7 +1623,7 @@ form-title {
   position: relative;
   margin: 1em 0;
   border: 2px solid transparent;
-  border-radius: 3px;
+  border-radius: 4px;
   background: #fff;
   &:active, &:hover {
   border-color: @gray-dark;
@@ -1621,9 +1647,10 @@ form-title {
 }
 
 .card-user {
-  padding: 10px 5px;
+  padding: 10px;
   margin: .5em 0;
-  border-radius: 0px;
+  border: 1px solid;
+  border-color: #e3e3e3;
   > img.card-img-left {
     height: 50px;
     width: 50px;
@@ -2006,11 +2033,16 @@ form-title {
 }
 
 .well-important {
-  background: #fff;
+  background: @theme-important;
 }
 
 .well-warning {
   background: @theme-warning;
+}
+
+.well-transparent {
+  background: transparent;
+  border: 1px solid #b3b3b3;
 }
 
 .instructions-for-dev {
