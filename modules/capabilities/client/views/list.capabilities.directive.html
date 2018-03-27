@@ -1,6 +1,6 @@
-<div class="row list-head">
+<div class="row">
 	<div class="col-sm-8">
-		<h3 class="list-page-title list-page-hide" ng-bind="vm.titleclass">Capabilities</h3>
+		<h2 style="margin-top: 6px;">Capabilities</h2>
 	</div>
 	<div class="col-sm-4">
 		<button ng-if="vm.canAdd" class="btn btn-primary pull-right" ui-sref="capabilityadmin.create()" title="New">
@@ -18,7 +18,9 @@
 </div>
 
 <div class="well well-important">
-	You shouldn't be messing with any of these unless you're a member of the BCDevExhange Team!!
+	<label class="label label-danger"><i class="fa fa-group"></i> Sprint With Us</label> opportunities are for <a href="/orgs">registered companies</a> who can supply teams with these capabilities</a>.
+	<br><br>
+	Make sure to <strong>claim the capabilities you possess in your personal profile</strong>!
 </div>
 
 <div class="row" ng-if="vm.capabilities.length">

@@ -87,7 +87,7 @@
 					Authentication.user = response;
 					vm.user             = angular.copy(Authentication.user);
 					$scope.$broadcast ('show-errors-reset', 'vm.userForm');
-					Notification.success ({ delay:5000, message: '<i class="fa fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'});
+					Notification.success ({ delay:2000, message: '<i class="fa fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'});
 				}, function (response) {
 					Notification.error ({ message: response.data.message, title: '<i class="fa fa-alert-triangle"></i> Changes were not saved!' });
 			});
