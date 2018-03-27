@@ -1,49 +1,39 @@
 <section class="detail-page-background">
 
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="breadcrumb-nav">
-					<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
-				</div>
-			</div>
+		<div class="breadcrumb-nav">
+			<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
 		</div>
 	</div>
 
 	<div class="container">	
+
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-			<div class="col-xs-12">
-				<div class="alert alert-important">
-					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
-					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
-				</div>
-			</div>
+		<div class="alert alert-important" ng-if="!vm.canPublish && vm.canEdit">
+			<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+			<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 		</div>
+			
 		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
 		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-			<div class="col-xs-12">
-				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
-				</div>
+			<div class="pull-right" role="group">
+				<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
+				<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
 			</div>
 		</div>
 		
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-			<div class="alert alert-success">
-				<i class="fa fa-thumbs-o-up"></i>&nbsp; Your company is registered and it has members with the capabilities required for this opportunity.
-			</div>
+		
+		<div class="alert alert-success" ng-if="true && vm.closing !== 'CLOSED'">
+			<i class="fa fa-thumbs-o-up"></i>&nbsp; Your company is registered and has members with the capabilities required for this opportunity!
 		</div>
+		
 
 		<!-- // Proposal Application Directive // -->
 		
 
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-			<div class="col-xs-12">
-				<button class="btn btn-primary pull-right"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
-				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-			</div>
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >	
+			<button class="btn btn-primary pull-right"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
+			<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 		</div>
 	</div>
 
@@ -62,10 +52,8 @@
 		</div>
 
 		<!-- // Status and Follow // -->
-		<div class="row" id="status">
-			<div class="col-xs-12 text-center">
-				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> 4 hours</span></label>
-			</div>
+		<div class="row text-center" id="status">
+			<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> 4 hours</span></label>
 		</div>
 
 		<!-- // Title and Teaser // -->
