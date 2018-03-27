@@ -1,43 +1,57 @@
 <section class="edit-form-background">
-	<div class="container container-edit-form" role="main">
+	
+	<div class="container edit-form" role="main">
 		
 		<div class="edit-form-header">
-			Register Your Company
+			Register a Company
 		</div>
 
-		<div class="edit-form-tab-content">
-			<form name="vm.orgForm" id="vm.orgForm" warn-on-exit ng-submit="vm.add(vm.orgForm.$valid)" class="signin" novalidate autocomplete="off">
-				
-				<div class="row">
-					<div class="col-sm-6">
-						<fieldset>
-							<form-input
-								ng-model="vm.org.name"
-								class="col-sm-12"
-								x-form="orgForm"
-								x-options='{
-									"title":"Legal Name",
-									"id":"companyname",
-									"name":"companyname",
-									"placeholder":"Enter your company name",
-									"required":"A name is required"
-								}'>
-							</form-input>
-						</fieldset>
-					</div>
-				</div>
-					
+		<div class="edit-form-body">
+			<div class="col-xs-12">
+				<label>
+					<input type="checkbox">&nbsp;
+					By registering this company, I'm claiming to have authority to act on behalf of the company for the purposes of: listing basic company information, associating members to the company, and submitting proposals on <label class="label label-danger"><i class="fa fa-group"></i> Sprint With Us</label> opportunities on behalf of those individuals and the company.
+				</label>
+				<br><br>
+			</div>
 
-				<div class="edit-form-footer">
+			<br>
+
+			<div class="edit-form-body">
+				<form name="vm.orgForm" id="vm.orgForm" warn-on-exit ng-submit="vm.add(vm.orgForm.$valid)" class="signin" novalidate autocomplete="off">
+					
+					
 					<div class="row">
-						<div class="col-xs-12">
-							<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save</button>
-							<button class="btn btn-text-only pull-right" ng-click="vm.delete()">Cancel</button>
+						<div class="col-sm-6">
+							<fieldset>
+								<form-input
+									ng-model="vm.org.name"
+									class="col-sm-12"
+									x-form="orgForm"
+									x-options='{
+										"title":"Legal Name",
+										"id":"companyname",
+										"name":"companyname",
+										"placeholder":"Enter your company name",
+										"required":"A name is required"
+									}'>
+								</form-input>
+							</fieldset>
+							<button type="submit" class="btn btn-primary disabled"><i class="fa fa-arrow-circle-right"></i> Continue</button>
+							<button class="btn btn-text-only" ng-click="vm.delete()">Cancel</button>
+						</div>
+						<div class="col-sm-5 pull-right">
+							<div class="alert alert-info">
+								<span class="strong">Company Profile</span><br>
+								Public viewers will be able to see basic business information and the <a href="">Sprint With Us capabilities</a> your company possesses.<br> 
+								<i class="fa fa-user-secret fa-lg"></i> The individual members you associate to your company profile is kept private.
+							</div>
 						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+			</div>
 		</div>
+
 	</div>
 	
 	<br>
