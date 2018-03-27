@@ -113,6 +113,14 @@ var UserSchema = new Schema({
 	/* For reset password */
 	resetPasswordToken       : {type: String },
 	resetPasswordExpires     : {type: Date },
+
+	//
+	// Opportunity Approver Email Addresses
+	//
+	divisionalFinancialStaffEmail: {type: String},
+	assistantDeputyMinisterEmail : {type: String},
+	branchFinancialStaffEmail	 : {type: String},
+
 	//
 	// this is where we put the payment preferences for users who are developers
 	// all of these need to be added to the field whitelists

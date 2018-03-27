@@ -1,0 +1,25 @@
+<section class="edit-form-background" role="main">
+	<form id="opportunitySubmitForm" warn-on-exit name="vm.opportunitySubmitForm" class="form" ng-submit="vm.submit(vm.opportunitySubmitForm.$valid)">
+		<div class="container edit-form">
+			<div class="edit-form-header">				
+				<span class="light small">Submitting Opportunity:</span> {{vm.opportunity.name}} <span class="light small">For Approval</span>
+				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id && vm.opportunity.opportunityTypeCd === 'code-with-us'" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
+				<a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id && vm.opportunity.opportunityTypeCd === 'sprint-with-us'" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
+				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a>
+			</div>
+
+			<div ng-include="'/modules/opportunities/client/views/opportunity-submit-approvers.html'"></div>
+
+			<div class="edit-form-footer">
+				<div class="row">
+					<div class="col-xs-12">
+						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Submit For Approval</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>
+
+
+

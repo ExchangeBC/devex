@@ -59,6 +59,11 @@
 				url: '/api/my/opportunities',
 				isArray: true
 			},
+			submitForApproval: {
+				method: 'PUT',
+				url: '/api/opportunities/submitForApproval/:opportunityId',
+				params: {opportunityId:'@opportunityId'}
+			},
 			publish: {
 				method: 'GET',
 				url :'/api/opportunities/publish/:opportunityId'

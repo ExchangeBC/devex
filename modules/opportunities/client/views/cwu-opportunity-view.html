@@ -93,13 +93,12 @@
 			</div>
 		</div>
 
-
 		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
 		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
 			<div class="col-xs-12">
 				<div class="pull-right" role="group">
 					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+					<button type="button" class="btn btn-sm btn-primary" ng-if="vm.canSubmit && vm.isGov" ui-sref="opportunityadmin.submit({opportunityId:vm.opportunity.code})"><i class="fa fa-bullhorn"></i> Submit For Approval</button>					
 				</div>
 			</div>
 		</div>
@@ -188,7 +187,6 @@
 		<hr>
 		<div class="row">
 			<div class="col-xs-12">
-
 
 				<h3 class="opp-detail">Background</h3>
 				<p ng-bind-html="vm.display.description"></p>

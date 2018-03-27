@@ -1,0 +1,44 @@
+<div class="edit-form">
+	<fieldset>	
+		
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.user.assistantDeputyMinisterEmail"
+			x-form="vm.opportunitySubmitForm"
+			x-options='{
+				"title":"Assistant Deputy Minister Email Address",
+				"id":"assistant-deputy-minister-email-id",
+				"name":"assistant-deputy-minister-email",
+				"placeholder":"firstname.lastname@gov.bc.ca",
+				"type":"email"
+			}'>
+		</form-input>	
+
+		<form-input		
+			class="col-sm-12"
+			ng-model="vm.user.divisionalFinancialStaffEmail" 
+			x-form="vm.opportunitySubmitForm"						
+			x-options='{
+				"title":"Divisional Financial Staff Email Address",
+				"id":"divisional-financial-staff-email-id",
+				"name":"divisional-financial-staff-email",
+				"placeholder":"firstname.lastname@gov.bc.ca",
+				"type":"email"		
+			}'>
+		</form-input>	
+
+		<form-input
+		class="col-sm-12"
+		ng-model="vm.user.branchFinancialStaffEmail"
+		x-form="vm.opportunitySubmitForm"
+		x-options='{
+			"title":"Branch Financial Staff Email Address",			
+			"id":"branch-financial-staff-email-id",
+			"name":"branch-financial-staff-email",
+			"placeholder":"firstname.lastname@gov.bc.ca",
+			"type":"email"		
+		}'>
+		</form-input>			
+	</fieldset>
+</div>
+

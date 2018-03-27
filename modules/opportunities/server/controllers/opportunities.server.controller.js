@@ -515,6 +515,52 @@ var pub = function (req, res, isToBePublished) {
 exports.publish = function (req, res) { return pub (req, res, true); }
 exports.unpublish = function (req, res) { return pub (req, res, false); }
 
+
+// -------------------------------------------------------------------------
+//
+// submit for approval
+//
+// -------------------------------------------------------------------------
+var submit = function (req, res) {
+	var opportunity = req.opportunity;
+	var approverEmailList = req.body.emaillist;
+
+	// Set the opportunity state to Pending
+	opportunity.status = 'Pending';
+
+	//
+	// save and notify
+	//
+	updateSave (opportunity)
+	.then (function () {
+
+		// Only send if user entered an email address
+		if (approverEmailList !== '')
+		{
+			// Set notification template.
+			var notificaitonTemplateName = 'opportunity-submitted';
+			// Obtain standard notification data
+			var notificationData = setNotificationData (opportunity);
+
+			// Enrich notificaiton information for submit
+			notificationData.rfp              = opportunity.proposal          || 'Proposal Not Included';
+			notificationData.requiredSkills   = opportunity.skills.join(', ') || 'Required Skills Not Provided';
+			notificationData.postingDate      = notificationData.dateStart    || 'Start Date Not Provided';
+			notificationData.useremail        = approverEmailList;
+
+			// Send Email
+			Notifications.notifyUserAdHoc (notificaitonTemplateName, notificationData);
+		}
+	})
+	.then (function () { res.json (opportunity); })
+	.catch (function (err) {
+		return res.status(422).send({
+			message: errorHandler.getErrorMessage(err)
+		});
+	});
+}
+exports.submitForApproval = function (req, res) { return submit (req, res); }
+
 // -------------------------------------------------------------------------
 //
 // unasasign the assigned proposal
@@ -561,6 +607,7 @@ exports.unassign = function (req, res) {
 	.then (function () {res.json (decorate (opportunity, req.user ? req.user.roles : [])); })
 	.catch (function (err) {res.status(422).send ({message: errorHandler.getErrorMessage(err)}); });
 };
+
 // -------------------------------------------------------------------------
 //
 // assign the passed in proposal
