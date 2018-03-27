@@ -32,6 +32,51 @@
 	})
 	// =========================================================================
 	//
+	// Controller which manages the submission of opportunities for approval
+	//
+	// =========================================================================
+	.controller('OpportunityApprovalController', function ($state, opportunity, Authentication, Notification, UsersService, NotificationsService) {
+		var vm         = this;
+		vm.opportunity = opportunity;
+		vm.user        = Authentication.user;
+
+		vm.sendForApproval = function () {
+			// Update the opportunity status, cache the emails on the user model,
+			// and send an email to the ADM
+			vm.opportunity.status = 'Pending';
+			var opportunityPromise = vm.opportunity.createOrUpdate(),
+				userPromise = UsersService.update(vm.user).$promise,
+				emailPromise = NotificationsService.adHocNotification({
+					useremail: vm.user.opportunityAdmEmail,
+					templateName: 'opportunity-approval',
+
+					opportunityId: vm.opportunity.code,
+					rfp: vm.opportunity.proposal,
+					startDate: vm.opportunity.start,
+					deadline: vm.opportunity.deadline,
+					earn: vm.opportunity.earn,
+					skills: vm.opportunity.skills.join(', ')
+				}).$promise;
+
+			Promise.all([opportunityPromise, userPromise, emailPromise])
+				.then( function() {
+					Notification.success ({ message : 'Sent for approval!' });
+					var nextState = 'opportunities.viewcwu';
+					if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
+						nextState = 'opportunities.viewswu';
+					}
+					$state.go(nextState, {opportunityId:vm.opportunity.code});
+				})
+				.catch (function (res) {
+					Notification.error ({
+						message : res.data.message,
+						title   : 'Error sending for approval'
+					});
+				});
+		};
+	})
+	// =========================================================================
+	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
@@ -101,11 +146,11 @@
 		vm.start = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		// -------------------------------------------------------------------------
 		//
-		// can this be published?
+		// can this be submitted for approval?
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = (vm.errorFields.length === 0);
+		vm.canSubmit = (vm.errorFields.length === 0);
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership
@@ -500,11 +545,11 @@
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		// -------------------------------------------------------------------------
 		//
-		// can this be published?
+		// can this be submitted for approval?
 		//
 		// -------------------------------------------------------------------------
 		vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
-		vm.canPublish = vm.errorFields > 0;
+		vm.canSubmit = vm.errorFields === 0;
 		//
 		// set up the dropdown amounts for code with us earnings
 		//

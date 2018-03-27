@@ -261,6 +261,32 @@
 		})
 		// -------------------------------------------------------------------------
 		//
+		// Submit this opportunity for approval
+		//
+		// -------------------------------------------------------------------------
+		.state('opportunityadmin.submit', {
+			url: '/:opportunityId/submit',
+			templateUrl: '/modules/opportunities/client/views/opportunity-approval-form.html',
+			controller: 'OpportunityApprovalController',
+			controllerAs: 'vm',
+			resolve: {
+				opportunity: function ($stateParams, OpportunitiesService) {
+					return OpportunitiesService.get({
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				}
+			},
+			data: {
+				roles: ['admin', 'gov'],
+				pageTitle: '{{ opportunity.name }} Approval'
+			},
+			ncyBreadcrumb: {
+				label: 'Opportunity',
+				parent: 'opportunities.list'
+			}
+		})
+		// -------------------------------------------------------------------------
+		//
 		// create a new opportunity and edit it
 		//
 		// -------------------------------------------------------------------------
