@@ -259,7 +259,7 @@
 				vm.org.createOrUpdate ()
 				.then (function () {
 					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> invitations sent successfully!'
+						message : '<i class="glyphicon glyphicon-ok"></i> Member added and notified'
 					});
 					vm.refresh ();
 				})
