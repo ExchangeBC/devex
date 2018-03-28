@@ -31,7 +31,7 @@
 		</div>
 	</div>
 
-	<!-- Admin View for Evaluation -->
+<!-- Admin View for Evaluation -->
 	<div class="container swu-evaluation" ng-if="vm.canEdit && vm.opportunity.isPublished">
 
 		<div class="row" ng-if="vm.closing !== 'CLOSED'">
@@ -45,25 +45,21 @@
 				<strong>Evaluation Matrix</strong>
 			</div>
 			<div class="panel-body">
-				<div class="container">
 				<div class="row">
-					<div>
-						<p>
-							Complete the evaluation Matrix below.<br/>
-							<ul>
-								<li>
-									Complete the Question Ranking
-								</li>
-								<li>
-									Complete the Interview Ranking for each team
-								</li>
-								<li>
-									At this point the price will be unmasked and you may assign the opportunity
-								</li>
-							</ul>
-						</p>
-						<br/>
-					</div>
+					<p>Complete the evaluation Matrix below.<br/>
+						<ul>
+							<li>
+								Complete the Question Ranking
+							</li>
+							<li>
+								Complete the Interview Ranking for each team
+							</li>
+							<li>
+								At this point the price will be unmasked and you may assign the opportunity
+							</li>
+						</ul>
+					</p>
+					<br/>	
 				</div>
 				<div class="row">
 					<div ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></div>
@@ -85,54 +81,52 @@
 					<div ng-if="vm.stageIs('price')"><strong>Current Stage:</strong> Click on the 'Assign' button to Assign the opportunity to the highest scoring team</div>
 					<div ng-if="vm.stageIs('assigned')"><strong>Current Stage:</strong> This opportunity has been assigned</div>
 				</div>
-				</div>
 			</div>
-			<table class="table table-condensed table-striped">
-				<thead>
-					<tr>
-						<td><strong>Team</strong><br/>[weight : {{vm.opportunity.weights.skill}}]</td>
-						<td align="center"><strong>Questions</strong><br/>[weight : {{vm.opportunity.weights.question}}]</td>
-						<td><strong>Interview</strong><br/>[weight : {{vm.opportunity.weights.interview}}]</td>
-						<td><strong>Price (Target: {{vm.opportunity.budget | currency}})</strong><br/>[weight : {{vm.opportunity.weights.price}}]</td>
-						<td><strong>Total Score</strong></td>
-						<td><strong>Assigned</strong></td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a> <span class="text-success">(Score : {{proposal.scores.skill | number:0}})</span></td>
-						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
-
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span> <span class="text-success">(Score : {{proposal.scores.question | number:0}})</span></td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('questions')" align="center">TBD</td>
-						<td ng-if="$index >= vm.opportunity.numberOfInterviews" align="center">N/A</td>
-
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">Score : ( TBD )</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)"><span class="text-success">(Score : TBD)</a></td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete"><span class="text-success">(Score : XXXX)</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')"><span class="text-success">(Score : {{proposal.scores.interview}})</td>
-						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
-
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
-						<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.phases.aggregate.cost | currency}} <span class="text-success">(Score : {{proposal.scores.price | number:0}})</td>
-						<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
-
-						<td ng-if="!vm.stage('price')">N/A</td>
-						<td ng-if="vm.stage('price')">{{proposal.scores.total | number:0}}</td>
-
-						<td ng-if="!vm.stage('price')">&nbsp;</td>
-						<td ng-if="vm.stage('price') && $index!==0">&nbsp;</td>
-						<td ng-if="vm.stageIs('price') && $index===0">
-							<button type="button" class="btn btn-success" data-ng-click="vm.assign(proposal)">Assign</button>
-						</td>
-						<td ng-if="vm.stageIs('assigned') && $index===0"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
-					</tr>
-
-				</tbody>
-			</table>
 		</div>
+		<table class="table table-condensed table-striped">
+			<thead>
+				<tr>
+					<td><strong>Team</strong><br/>[weight : {{vm.opportunity.weights.skill}}]</td>
+					<td align="center"><strong>Questions</strong><br/>[weight : {{vm.opportunity.weights.question}}]</td>
+					<td><strong>Interview</strong><br/>[weight : {{vm.opportunity.weights.interview}}]</td>
+					<td><strong>Price (Target: {{vm.opportunity.budget | currency}})</strong><br/>[weight : {{vm.opportunity.weights.price}}]</td>
+					<td><strong>Total Score</strong></td>
+					<td><strong>Assigned</strong></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="proposal in vm.proposals | orderBy:'scores.total' : true">
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">(Hidden {{$index+1}})</td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')"><a ui-sref="proposals.viewswu({ proposalId: proposal._id })">{{proposal.businessName}}</a> <span class="text-success">(Score : {{proposal.scores.skill | number:0}})</span></td>
+					<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('questions')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('interview')" align="center"><span class="text-success"><i class="fa fa-check-circle"></i></span> <span class="text-success">(Score : {{proposal.scores.question | number:0}})</span></td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('questions')" align="center">TBD</td>
+					<td ng-if="$index >= vm.opportunity.numberOfInterviews" align="center">N/A</td>
+
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('interview')">Score : ( TBD )</td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && !proposal.interviewComplete"><a href ng-click="vm.interview(proposal)"><span class="text-success">(Score : TBD)</a></td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stageIs('interview') && proposal.interviewComplete"><span class="text-success">(Score : XXXX)</td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')"><span class="text-success">(Score : {{proposal.scores.interview}})</td>
+					<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && !vm.stage('price')">Quote: ( TBD )</td>
+					<td ng-if="$index < vm.opportunity.numberOfInterviews && vm.stage('price')">Quote: {{proposal.phases.aggregate.cost | currency}} <span class="text-success">(Score : {{proposal.scores.price | number:0}})</td>
+					<td ng-if="$index >= vm.opportunity.numberOfInterviews">N/A</td>
+
+					<td ng-if="!vm.stage('price')">N/A</td>
+					<td ng-if="vm.stage('price')">{{proposal.scores.total | number:0}}</td>
+
+					<td ng-if="!vm.stage('price')">&nbsp;</td>
+					<td ng-if="vm.stage('price') && $index!==0">&nbsp;</td>
+					<td ng-if="vm.stageIs('price') && $index===0">
+						<button type="button" class="btn btn-success" data-ng-click="vm.assign(proposal)">Assign</button>
+					</td>
+					<td ng-if="vm.stageIs('assigned') && $index===0"><span class="text-success"><i class="fa fa-check-circle"></i></span></td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 
 			
@@ -143,13 +137,10 @@
 			<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
 			<ul><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 		</div>
-			
 
-		<!-- // Proposal Apply Directive // -->
-		<div class="row" ng-if="vm.canApply && vm.closing !== 'CLOSED'" >
-			<div class="col-xs-12">
-				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-			</div>
+		<!-- // Proposal Application Directive // -->
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+			<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 		</div>
 
 	</div>
@@ -257,13 +248,95 @@
 				</dl>
 			</div>
 		</div>
+		
 		<hr>
+		
 		<div class="row">
 			<div class="col-xs-12">
 				<h4>Background</h4>
 				<p ng-bind-html="vm.display.description"></p>
-				<hr>
-				<h4>Required Phases and Team Capabilities</h4>
+			</div>
+		</div>
+		
+		<hr>
+		
+		<!-- // Phases // -->
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Phases of Work &amp; Deliverables</h4>
+				<p>We need to carry out the following phases of work:</p>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-sm-4">
+				<!-- // Chris: Please wire so that columns only show up if that phase is included in the opportunity -->
+				<uib-accordion class="panel-default">	
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-map"></i> Inception
+						</uib-accordion-heading>
+						<div>In this phase, you'll....
+							<div class="alert alert-info">
+				    			<i class="fa fa-cubes"></i>
+				    			<span class="strong">Deliverables</span><br>
+				    			At the end of Inception, you'll have delivered:
+				    			<ul>
+					    			<li>Product vision</li>
+					    			<li>Next deliverable</li>
+					    			<li>Next deliverable</li>
+					    		</ul>
+				    		</div>
+				    	</div>
+					</div>
+				</uib-accordion>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<uib-accordion>	
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-rocket"></i> Proof of Concept
+						</uib-accordion-heading>
+						<div>In this phase, you'll code the core features you scoped out in 	Inception, working towards an Alpha release. By the end of this 	phase, you should be able to plan what it will take to fully 		implement and maintain the product long-term.
+							<div class="alert alert-info">
+					    		<i class="fa fa-cubes"></i>
+					    		<span class="strong">Deliverables</span><br>
+					    		At the end of Proof of Concept, you'll have delivered:
+					    		<ul>
+					    			<li>Alpha release of the product</li>
+					    			<li>A build/buy/licence decision</li>
+					    			<li>Product Roadmap</li>
+					    			<li>Resourcing plan for Implementation</li>
+					    		</ul>
+				    		</div>
+				    	</div>
+					</div>
+				</uib-accordion>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<uib-accordion>	
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-gears"></i> Implementation
+						</uib-accordion-heading>
+						<div>In this phase, you'll work towards delivery of the functional components of the roadmap.
+							<div class="alert alert-info">
+					    		<i class="fa fa-cubes"></i>
+					    		<span class="strong">Deliverables</span><br>
+					    		<ul>
+					    			<li>Functional components of the roadmap</li>
+					    			<li>Automated code quality and functional testing</li>
+					    			<li>Continuous integration</li>
+					    		</ul>
+				    		</div>
+				    	</div>
+					</div>
+				</uib-accordion>
+			</div>
+		</div>
+
+<!-- // This was the original expression of Phases & Dates // -->
+<!--
 				<table class="table table-striped">
 					<thead>
 						<td></td>
@@ -355,6 +428,10 @@
 						</td>
 					</tr>
 				</table>
+			-->
+				
+<!-- // This was the original expression of Capabilities & Skills //  -->
+<!--
 				<div class="panel panel-default" ng-repeat="capability in vm.capabilities" ng-if="vm.iOppCapabilities[capability.code]">
 					<div class="panel-heading text-right" >
 						<h4 class="panel-title pull-left" ng-bind="capability.name"></h4>
@@ -380,20 +457,152 @@
 						</div>
 					</div>
 				</div>
-				<hr>
-				<h4>Terms & Conditions</h4>
+-->
+		
+<!-- // Schedule // -->
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Schedule</h4>
+				<p>We want to complete phases within these timeframes:</p>
+			</div>
+		</div>
+		<div class="row">
+<!-- // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->			
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important text-center">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">Inception Start Date</span> 
+					to 
+					<span class="strong">Inception End Date</span>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important text-center">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">Proof of Concept Start Date</span> 
+					to 
+					<span class="strong">Proof of Concept End Date</span>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-4">
+				<div class="alert alert-important text-center">
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">Implementation Start Date</span> 
+					to 
+					<span class="strong">Implementation End Date</span>
+				</div>
+			</div>
+
+		</div>
+
+		<!-- // Capabilites Required // -->
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Capabilities Required</h4>
+				<p>In each phase, we need the team you put forward to have the following capabilities:</p>
+			</div>
+		</div>
+		<div class="row">
+
+<!-- // Chris: Please wire up the following tables to populate with the CAPABILITIES and FULL-TIME labels where appropriate. // -->
+			
+			<!-- Inception Phase, if applicable -->
+			<div class="col-xs-12 col-sm-4">
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Proof of Concept Phase, if applicable -->
+			<div class="col-xs-12 col-sm-4">
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Implementation Phase -->
+			<div class="col-xs-12 col-sm-4">
+				<table class="table capabilities-list">
+					<tbody>
+						<tr>
+							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
+						</tr>
+						<tr>
+							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<hr>
+
+		<!-- // Terms & Conditions // -->
+		<div class="row">
+			<div class="col-xs-12">
+				<h4>Terms &amp; Conditions</h4>
 				<p ng-bind-html="vm.trust(vm.opportunity.terms)"></p>
-				<hr>
+			</div>
+		</div>
+
+		<hr>
+		
+		<!-- // How to Apply // -->
+		<div class="row">
+			<div class="col-xs-12">
 				<h4>How to Apply</h4>
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
-				<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
-				<!-- // Proposal Application Directive // -->
-				<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-					<div class="col-xs-12">
-						<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-					</div>
-				</div>
-				<hr>
+				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
+				<p>Thanks for your interest!</p>
+			</div>
+		</div>		
+		
+		<!-- // Proposal Application Directive // -->
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
+			<div class="col-xs-12">
+				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+			</div>
+		</div>
+				
+		<hr>
+		
+		<!-- // Proposal Evaluation Criteria // -->
+		<div class="row">
+			<div class="col-xs-12">		
 				<h4>Proposal Evaluation Criteria</h4>
 				<p>Here's how your proposal will be scored:</p>
 				
@@ -448,8 +657,13 @@
 				</div>	
 			</div>
 		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
+			</div>
+		</div>
+
 	</div>
-	
-</div>
 
 </section>
