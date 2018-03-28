@@ -843,17 +843,17 @@ form-title {
 }
 
 .btn-warning {
-  background-color: @theme-warning;
-  border-color: @theme-warning;
+  background-color: @theme-yellow;
+  border-color: @theme-yellow;
   color: @gray-dark;
   &:hover,&:active:hover {
-    background-color: lighten(@theme-warning, 8%);
-    border-color: lighten(@theme-warning, 8%);
+    background-color: darken(@theme-yellow, 8%);
+    border-color: darken(@theme-yellow, 8%);
     color: @gray-dark;
   }
   &:active,&:focus {
-    background-color: lighten(@theme-warning, 8%);
-    border-color: lighten(@theme-warning, 8%);
+    background-color: darken(@theme-yellow, 8%);
+    border-color: darken(@theme-yellow, 8%);
     color: @gray-dark;
   }
 }
@@ -1327,6 +1327,10 @@ form-title {
   > .panel-heading, .panel-footer {
     background-color: @gray-lighter;
   }
+}
+
+.panel-group {
+  margin-bottom: 0;
 }
 
 .panel-title {

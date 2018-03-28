@@ -2,9 +2,7 @@
 <!-- // If user is signed in but hasn't started a proposal yet // -->
 <div ng-if="qaz.isSprintWithUs">
 	<div class="row" ng-if="qaz.case === 'canadd'">
-		<div class="col-xs-12">
-			<button id="proposaladmin.create" ui-sref="proposaladmin.createswu({opportunityId:qaz.opportunity._id})" class="btn btn-warning pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> SUBMIT A PROPOSAL</button>
-		</div>
+		<button id="proposaladmin.create" ui-sref="proposaladmin.createswu({opportunityId:qaz.opportunity._id})" class="btn btn-primary pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
 	</div>
 
 
@@ -29,7 +27,7 @@
 <div ng-if="!qaz.isSprintWithUs">
 	<div class="row" ng-if="qaz.case === 'canadd'">
 		<div class="col-xs-12">
-			<button id="proposaladmin.create" ui-sref="proposaladmin.createcwu({opportunityId:qaz.opportunity._id})" class="btn btn-warning pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> SUBMIT A PROPOSAL</button>
+			<button id="proposaladmin.create" ui-sref="proposaladmin.createcwu({opportunityId:qaz.opportunity._id})" class="btn btn-primary pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> Submit a Proposal</button>
 		</div>
 	</div>
 

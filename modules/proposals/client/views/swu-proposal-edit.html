@@ -447,11 +447,11 @@
 				<div class="edit-form-footer">
 					<div class="row">
 						<div class="col-xs-12">
-							<button type="button" class="btn btn-warning pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> SUBMIT</button>
-							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> SAVE UPDATES</button>
-							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> SAVE CHANGES</button>
-							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> DELETE</button>
-							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" "><i class="fa fa-ban"></i> WITHDRAW</button>
+							<button type="button" class="btn btn-primary pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Save Updates</button>
+							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
+							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> Delete This Proposal</button>
+							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" "><i class="fa fa-ban"></i> Withdraw Proposal</button>
 						</div>
 					</div>
 				</div>
