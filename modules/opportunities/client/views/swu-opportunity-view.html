@@ -203,7 +203,7 @@
 		<!-- // Title and Teaser // -->
 		<div class="row">
 			<div class="col-xs-12 text-center">
-				<h1>{{vm.opportunity.name}}</h1>
+				<h1 class="opp-detail">{{vm.opportunity.name}}</h1>
 				<p ng-bind="vm.opportunity.short"></p>
 				<hr>
 				<br>
@@ -213,7 +213,6 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
-					<span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.budget|currency}}</span>
 					<span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'onsite'"><i class="fa fa-user"></i>&nbsp;In-person work required</span>
@@ -260,10 +259,20 @@
 		
 		<hr>
 		
+		<!-- // Budget // -->
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Budget</h3>
+				<div class="alert alert-important">We have potential to spend <span class="strong">{{vm.opportunity.budget|currency}}</span> on this opportunity if work proceeds successfully through all phases.</div>
+			</div>
+		</div>
+
+		<hr>
+
 		<!-- // Phases // -->
 		<div class="row">
 			<div class="col-xs-12">
-				<h4>Phases of Work &amp; Deliverables</h4>
+				<h3>Phases of Work &amp; Deliverables</h3>
 				<p>We need to carry out the following phases of work:</p>
 			</div>
 		</div>
