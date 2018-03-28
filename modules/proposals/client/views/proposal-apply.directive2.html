@@ -8,19 +8,19 @@
 
 	<div class="row" ng-if="qaz.case === 'needscompany'">
 		<div class="col-xs-12">
-			<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> You must be the administrator of a company to submit a proposal for this opportunity.</div>
+			<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> To apply on this opportunity you need to <a href="/orgs">register your company</a> and add members who collectively possess <a href="/capabilities">these capabilities</a>.</div>
 		</div>
 	</div>
 
 
 	<!-- // If user has started a proposal // -->
 	<div class="row" ng-if="qaz.case === 'canedit'">
-		<div class="col-xs-12">
-			<!-- If proposal has been SUBMITTED -->
-			<div class="alert alert-success" ng-if="qaz.proposal.status === 'Submitted'"><span class="strong"><i class="fa fa-lg fa-check-circle-o"></i>&nbsp; Your proposal has been submitted!</span>&nbsp;&nbsp; You can make updates until <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></div>
-			<!-- If proposal is in DRAFT -->
-			<div class="alert alert-important" ng-if="qaz.proposal.status === 'Draft'"><span class="strong"><i class="fa fa-file"></i>&nbsp;You have a proposal in DRAFT!</span> &nbsp;&nbsp; Submit before <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></div>
-		</div>
+		
+		<!-- If proposal has been SUBMITTED -->
+		<div class="alert alert-success" ng-if="qaz.proposal.status === 'Submitted'"><span class="strong"><i class="fa fa-lg fa-check-circle"></i>&nbsp; Your proposal has been submitted!</span>&nbsp;&nbsp; You can make updates until <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></div>
+		<!-- If proposal is in DRAFT -->
+		<div class="alert alert-important" ng-if="qaz.proposal.status === 'Draft'"><span class="strong"><i class="fa fa-file"></i>&nbsp;You have a proposal in DRAFT!</span> &nbsp;&nbsp; Submit before <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity.&nbsp;&nbsp;<a  id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i class="fa fa-pencil"></i> Update my proposal</a></div>
+		
 	</div>
 </div>
 
