@@ -35,7 +35,7 @@
 		</div>
 	</div>
 
-	<!-- // Admin view of proposals // -->
+	<!-- // Admin View for Proposals // -->
 	<div class="container proposal-admin-view" ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished">
 
 		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
@@ -85,30 +85,15 @@
 	<div class="container">	
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
 		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-			<div class="col-xs-12">
-				<div class="alert alert-important">
-					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
-					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
-				</div>
-			</div>
-		</div>
-
-
-		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
-		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-			<div class="col-xs-12">
-				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
-				</div>
+			<div class="alert alert-important">
+				<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+				<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 			</div>
 		</div>
 
 		<!-- // Proposal Application Directive // -->
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-			<div class="col-xs-12">
-				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-			</div>
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+			<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 		</div>
 
 	</div>
@@ -120,14 +105,24 @@
 			&nbsp; &nbsp;
 			Last updated on <span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
 
+		<!-- // Opportunity Admin control buttons // -->
+			
+			<!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
+			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-lg fa-bullhorn"></i> Publish</a>
+
+			<!-- EDIT -->
+			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})" title="Edit this Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
+			
+			<!-- UNPUBLISH (if opportunity is PUBLISHED) -->
+			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
+
+		<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
+			
 			<!-- // User is NOT following the opportunity // -->
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 			<!-- // User IS following the opportunity // -->
 			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
-
-			<!-- // Admin Controls / if opportunity is PUBLISHED // -->
-			<button ng-if="vm.canEdit && vm.opportunity.isPublished" type="button" class="btn btn-text-only pull-right" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})" title="Edit Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
-			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
+				
 		</div>
 
 		<!-- // Status and Follow // -->
@@ -216,10 +211,8 @@
 				</div>
 
 				<!-- // Proposal Application Directive // -->
-				<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-					<div class="col-xs-12">
-						<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-					</div>
+				<div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+					<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 				</div>
 
 				<div>

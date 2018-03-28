@@ -153,7 +153,7 @@
 			<!-- // Opportunity Admin control buttons // -->
 			<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
 			<!-- PUBLISH -->
-			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-bullhorn"></i> Publish</a>
 
 			<!-- EDIT -->
 			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})" title="Edit Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
