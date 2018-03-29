@@ -1563,7 +1563,15 @@ form-title {
     }
   }
   > .selected {
-    background-color: @gray-lighter;
+    background-color: @theme-primary;
+    > name {
+      color: #fff;
+    }
+    > .label-list {
+      > label {
+        color: #fff;
+      }
+    }
   }
 }
 
