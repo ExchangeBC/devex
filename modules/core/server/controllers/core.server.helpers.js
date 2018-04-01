@@ -1,6 +1,7 @@
 'use strict';
 var _ = require('lodash');
 var path = require('path');
+var createTextVersion = require("textversionjs");
 var config = require(path.resolve('./config/config'));
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
@@ -194,6 +195,11 @@ exports.soundex = function(s) {
 	}).join('');
 	r += f;
 	return (r + '000').slice(0, 4).toUpperCase();
+};
+
+
+exports.extractText = function(html) {
+	return createTextVersion(html);
 };
 
 

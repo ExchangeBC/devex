@@ -174,7 +174,10 @@ var setNotificationData = function (opportunity) {
 		deadline_format_time : helpers.formatTime (new Date(opportunity.deadline)),
 		updatenotification   : 'not-update-'+opportunity.code,
 		code                 : opportunity.code,
-		skills               : opportunity.skills.join (', ')
+		skills               : opportunity.skills.join (', '),
+		_id                  : opportunity._id,
+		criteria             : helpers.extractText(opportunity.criteria),				
+		created              : helpers.formatDate (new Date(opportunity.created)),
 	};
 };
 // -------------------------------------------------------------------------
@@ -325,6 +328,11 @@ var setPhases = function (opportunity) {
 //
 // -------------------------------------------------------------------------
 exports.create = function(req, res) {
+
+	// have to read from req.body because it is NOT in the Opportunity Schema
+	var toSendEmailToADM = req.body.toSendEmailToADM || false;
+	toSendEmailToADM = toSendEmailToADM && !!req.body.admEmail;
+
 	var opportunity = new Opportunity(req.body);
 	//
 	// set the code, this is used setting roles and other stuff
@@ -348,16 +356,43 @@ exports.create = function(req, res) {
 					message: errorHandler.getErrorMessage(err)
 				});
 			} else {
-				setOpportunityAdmin (opportunity, req.user);
-				req.user.save ();
-				Notifications.addNotification ({
-					code: 'not-update-'+opportunity.code,
-					name: 'Update of Opportunity '+opportunity.name,
-					// description: 'Update of Opportunity '+opportunity.name,
-					target: 'Opportunity',
-					event: 'Update'
-				});
-				res.json(opportunity);
+				if ( !toSendEmailToADM ) {
+					// this is the old code, it is confusing.
+					//					
+					setOpportunityAdmin (opportunity, req.user);					
+					req.user.save ();
+					Notifications.addNotification ({
+						code: 'not-update-'+opportunity.code,
+						name: 'Update of Opportunity '+opportunity.name,
+						// description: 'Update of Opportunity '+opportunity.name,
+						target: 'Opportunity',
+						event: 'Update'
+					});
+					res.json(opportunity);
+				} else {
+					sendEmailToADM(opportunity).then(
+						function(result) {
+							// email sent to ADM successfully
+							opportunity.emaiSentToADMAt = new Date();
+
+							// we need to save the above field.
+							opportunity.save(function (err2) {
+								if (err2) {
+									return res.status(422).send({
+										message: errorHandler.getErrorMessage(err2)
+									});
+								} else {
+									res.json(opportunity);
+								}
+							});
+						},
+                        function(err) {
+						   // failed to send email to adm, no need to update the opportunity data
+						   // send back partially success code
+						   res.status(207).send(opportunity); 
+						}
+					); 
+				}				
 			}
 		});
 	});
@@ -382,6 +417,32 @@ var updateSave = function (opportunity) {
 		});
 	});
 };
+
+// -------------------------------------------------------------------------
+//
+// when a new opportunity is created, and its data is complete, and the createor wants to send email to ADM,
+// the function will do the task
+//
+// -------------------------------------------------------------------------
+var sendEmailToADM = function(opportunity) {	
+	var data = setNotificationData (opportunity);
+	data.useremail = opportunity.admEmail;					
+	return new Promise (function (resolve, reject) {		
+		//console.log("data.useremail", data.useremail);			
+		if ( data.useremail ) {			
+			Notifications.notifyUserAdHoc('opportunity-create', data).then(function() {
+				//console.log("send email status", "success!");	
+				opportunity.emaiSentToADMAt = new Date();
+				resolve (1);
+			}, function(err){
+				//console.log("---------error in send notifcation emails!!!");
+				//console.log("err", err);
+				reject ("failed to send email");
+			})			
+		}
+		else resolve (0);
+	});
+}
 // -------------------------------------------------------------------------
 //
 // update the document, make sure to apply audit. We don't mess with the
@@ -410,6 +471,10 @@ exports.update = function (req, res) {
 	// update phase information
 	//
 	setPhases (opportunity);
+
+	var toSendEmailToADM = opportunity.toSendEmailToADM;
+	toSendEmailToADM = toSendEmailToADM && !!opportunity.admEmail;
+
 	//
 	// save
 	//
@@ -441,7 +506,34 @@ exports.update = function (req, res) {
 				});
 			});
 		}
-		else res.json (decorate (opportunity, req.user ? req.user.roles : []));
+		else {
+			if ( !toSendEmailToADM ) {
+				res.json (decorate (opportunity, req.user ? req.user.roles : []));
+			} else {
+				sendEmailToADM(opportunity).then(
+					function(result) {
+						// email sent to ADM successfully
+						opportunity.emaiSentToADMAt = new Date();
+
+						// we need to save the above field.
+						opportunity.save(function (err2) {
+							if (err2) {
+								return res.status(422).send({
+									message: errorHandler.getErrorMessage(err2)
+								});
+							} else {
+								res.json(opportunity);
+							}
+						});
+					},
+					function(err) {
+					   // failed to send email to adm, no need to update the opportunity data
+					   // send back partially success code
+					   res.status(207).send(opportunity); 
+					}
+				); 
+			}
+		}
 	})
 	.catch (function (err) {
 		return res.status(422).send({

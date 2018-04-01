@@ -152,7 +152,10 @@
 						[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
 						[(o.skills), 'Required Skills'],
 						[(o.earn), 'Fixed-Price Reward'],
-						[(o.start), 'Proposed Start Date']
+						[(o.start), 'Proposed Start Date'],
+						[(o.admEmail), 'Email Address of ADM'],
+						[(o.divisionalFinanicalStaffEmail), 'Email Address of Divisional Financial Staff'],
+						[(o.branchFinanicalStaffEmail), 'Email Address of Branch Financial Staff']
 					],
 					swu: [
 						[(o.terms), 'Additional Terms and Conditions'],

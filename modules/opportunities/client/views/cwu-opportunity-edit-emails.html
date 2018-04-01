@@ -1,0 +1,57 @@
+<div class="edit-form-tab-content">    
+	<fieldset>
+
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.admEmail"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title": "Email Address of ADM",
+				"help":"Email Address of ADM.",
+				"id":"admEmail",
+				"name":"admEmail",
+                "placeholder":"Enter email address",
+                "type": "email"
+			}'>
+        </form-input>
+        <div ng-messages="vm.opportunityForm.admEmail.$error" style="margin-left: 15px; margin-bottom: 20px;">                
+                <div ng-message="email" class="app-error">The ADM's email address is invalid!</div>
+        </div>
+
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.divisionalFinanicalStaffEmail"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title":"Email Address of Divisional Financial Staff",
+				"help":"Email Address of Divisional Financial Staff.",
+				"id":"divisionalFinanicalStaffEmail",
+				"name":"divisionalFinanicalStaffEmail",
+                "placeholder":"Enter email address",
+                "type": "email"
+			}'>
+		</form-input>
+        <div ng-messages="vm.opportunityForm.divisionalFinanicalStaffEmail.$error" style="margin-left: 15px; margin-bottom: 20px;">                
+                <div ng-message="email" class="app-error">The divisional financial staff's email address is invalid!</div>
+        </div>
+
+		<form-input
+			class="col-sm-12"
+			ng-model="vm.opportunity.branchFinanicalStaffEmail"
+			x-form="vm.opportunityForm"
+			x-options='{
+				"title":"Email Address of Branch Financial Staff",
+				"help":"Email Address of Branch Financial Staff.",
+				"id":"branchFinanicalStaffEmail",
+				"name":"branchFinanicalStaffEmail",
+                "placeholder":"Enter email address",
+                "type": "email"
+			}'>
+        </form-input>
+        <div ng-messages="vm.opportunityForm.branchFinanicalStaffEmail.$error" style="margin-left: 15px;">                
+            <div ng-message="email" class="app-error">The branch financial staff's email is invalid!</div>
+        </div>
+
+
+	</fieldset>
+</div>

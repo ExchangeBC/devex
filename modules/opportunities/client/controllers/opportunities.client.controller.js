@@ -477,11 +477,14 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon, UsersService) {
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.features = window.features;
 		var originalPublishedState             = opportunity.isPublished;
+		var originalEmaiSentToADMAt           = opportunity.emaiSentToADMAt;
+		vm.emails = ["admEmail", "divisionalFinanicalStaffEmail", "branchFinanicalStaffEmail"];
+		
 		//
 		// what can the user do here?
 		//
@@ -570,6 +573,18 @@
 			vm.opportunity.start      = new Date ();
 			vm.opportunity.endDate    = new Date ();
 
+			
+
+			// set staff notfication emails if available				
+			//
+			//
+			//
+			getEmails(Authentication.user);  // fix the data lost problem caused by browser refreshing
+			vm.emails.forEach(function (v) {
+				if ( !vm.opportunity[v] && Authentication.user[v] ) {
+					vm.opportunity[v] = Authentication.user[v];	
+				}				
+			});		
 		}
 		//
 		// if there are no available projects then post a warning and kick the user back to
@@ -641,6 +656,80 @@
 		vm.saveme = function () {
 			this.save (true);
 		};
+
+		// -------------------------------------------------------------------------
+		//
+		// The following function is used to temporarily resolve the data lost problem is browser window is refreshed.
+		//
+		// -------------------------------------------------------------------------
+		function getEmails(user) {
+			if ( !$window.sessionStorage.user) return;
+			var obj = JSON.parse($window.sessionStorage.user);			
+			vm.emails.forEach(function (v) {
+				if ( !!obj[v] && !user[v] ) {
+					user[v] = obj[v];
+				}				
+			});					
+		}
+
+		// -------------------------------------------------------------------------
+		//
+		//  check if the any email of adm, divisional finanical staff, or branch finanical staff is changed,
+		//
+		// -------------------------------------------------------------------------
+		vm.notificationEmailsChanged = function() {
+			var same = true;
+			vm.emails.forEach(function (v) {
+				same = same && vm.opportunity[v] === Authentication.user[v];
+			});
+			return !same;
+		}		
+		// -------------------------------------------------------------------------
+		//
+		// function returns an user object that will be the payload of the user update call
+		//
+		// -------------------------------------------------------------------------
+		vm.createUserObject = function() {
+			var newUser = _.assign({}, Authentication.user);			
+			var oppo = _.assign({}, vm.opportunity);						
+			vm.emails.forEach(function (v) {
+				if ( !oppo[v] ) {
+					delete newUser[v];
+				} else if ( newUser[v] !== oppo[v] ) {
+					newUser[v] = oppo[v];	
+				}				
+			});			
+			return newUser;
+		}
+		// -------------------------------------------------------------------------
+		//
+		// update the creator user of the opportunity if needed - promise
+		//
+		// -------------------------------------------------------------------------
+		vm.updateUser = function () {
+			return new Promise (function (resolve, reject) {
+				if ( vm.notificationEmailsChanged() ) {		
+                    
+					UsersService.updateUser( vm.createUserObject() ).$promise
+				    .then (
+					    function (response) {
+							Authentication.user = response;
+
+							// when we refresh the browser, the emails could be lost
+							// the following is a fix							
+							$window.sessionStorage.user = angular.toJson(response);
+
+						    resolve ();
+				        },
+				        function (error) {					
+					        reject ();
+				        }
+			        );				
+				} else resolve ();
+			});		
+		};
+
+		
 		vm.save = function (isValid) {
 
 			if (!vm.opportunity.name) {
@@ -686,20 +775,31 @@
 			//
 			vm.opportunity.deadline.setHours(16);
 			vm.opportunity.assignment.setHours(16);
-			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
+			if (!vm.opportunity.endDate || typeof vm.opportunity.endDate !== 'object' ) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
 
+
+			// check if the opportunity data is complete
+			vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
+		    vm.canPublish = (vm.errorFields.length === 0);
 
 			//
 			// confirm save only if the user is also publishing
 			//
 			var savemeSeymour = true;
 			var promise = Promise.resolve ();
-			if (!originalPublishedState && vm.opportunity.isPublished) {
-				var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
-				promise = ask.yesNo (question).then (function (result) {
-					savemeSeymour = result;
-				});
+			if ( !originalPublishedState ) {
+				if ( vm.opportunity.isPublished) {
+					var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?'
+					promise = ask.yesNo (question).then (function (result) {
+						savemeSeymour = result;
+					});
+				} else if ( vm.opportunity.admEmail && !originalEmaiSentToADMAt && vm.canPublish ) {  // the opportunity is complete and notification email was nenver sent to ADM
+					var question = 'This opportunity data is complete. Do you also want to send a notification email to ADM now?  If you choose No, you will have another chance to send the email when you edit the opportunity next time.'
+					promise = ask.yesNo (question, "Send Notification Email to ADM?").then (function (result) {						
+						vm.opportunity.toSendEmailToADM = result; 												
+				    });
+				}				
 			}
 			//
 			// update target total
@@ -720,11 +820,22 @@
 			//
 			.then (function () {
 				vm.opportunityForm.$setPristine ();
-				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
-				});
-
-				$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+				
+				// the notification emails could be changed, update the creator's profile if needed
+				vm.updateUser().then(
+					function() {
+						Notification.success ({
+							message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+						});		
+						$state.go('opportunities.viewcwu', {opportunityId:opportunity.code});
+					},				
+					function(err) {
+						var message = "There is an error when saving your data. Please contact ....";
+					    Notification.success ({
+						    message : '<i class="glyphicon glyphicon-ok"></i> opportunity saved successfully!'
+					    });
+					}
+				);
 			})
 			//
 			// fail, notify and stay put
