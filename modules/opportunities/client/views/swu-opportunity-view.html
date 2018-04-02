@@ -279,24 +279,23 @@
 		
 		<div class="row">
 			<div class="col-xs-12 col-sm-4">
-				<!-- // Chris: Please wire so that columns only show up if that phase is included in the opportunity -->
+<!-- // BA-175 // Chris: Please wire so that Phases only show up if that phase is included in the opportunity -->
 				<uib-accordion class="panel-default">	
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-map"></i> Inception
 						</uib-accordion-heading>
-						<div>In this phase, you'll....
-							<div class="alert alert-info">
-				    			<i class="fa fa-cubes"></i>
-				    			<span class="strong">Deliverables</span><br>
-				    			At the end of Inception, you'll have delivered:
-				    			<ul>
-					    			<li>Product vision</li>
-					    			<li>Next deliverable</li>
-					    			<li>Next deliverable</li>
-					    		</ul>
-				    		</div>
-				    	</div>
+						<div>During Inception, you'll take our business goals and discovery research and help us explore the potential value that a new digital product can bring. Then we'll work together to prioritize the features of a Proof of Concept and scope out what will be required to get to an Alpha release.</div>
+						<hr>
+						<div>
+			    			<i class="fa fa-cubes"></i>
+			    			<span class="strong">Deliverables</span><br>
+			    			At the end of Inception, we should have:
+			    			<ul>
+				    			<li>Happy stakeholders with a shared vision for a Proof of Concept</li>
+								<li>A product backlog for the Alpha release</li>
+				    		</ul>
+			    		</div>
 					</div>
 				</uib-accordion>
 			</div>
@@ -306,19 +305,19 @@
 						<uib-accordion-heading>
 							<i class="fa fa-rocket"></i> Proof of Concept
 						</uib-accordion-heading>
-						<div>In this phase, you'll code the core features you scoped out in 	Inception, working towards an Alpha release. By the end of this 	phase, you should be able to plan what it will take to fully 		implement and maintain the product long-term.
-							<div class="alert alert-info">
-					    		<i class="fa fa-cubes"></i>
-					    		<span class="strong">Deliverables</span><br>
-					    		At the end of Proof of Concept, you'll have delivered:
-					    		<ul>
-					    			<li>Alpha release of the product</li>
-					    			<li>A build/buy/licence decision</li>
-					    			<li>Product Roadmap</li>
-					    			<li>Resourcing plan for Implementation</li>
-					    		</ul>
-				    		</div>
-				    	</div>
+						<div>In the Proof of Concept phase, we'll make our value propositions tangible and validate them. You'll code the core features we scoped out in Inception, working towards our Alpha release. By the end of this phase, we should have a plan for what it will take to fully implement and maintain the product long-term.</div>
+						<hr>
+						<div>
+				    		<i class="fa fa-cubes"></i>
+				    		<span class="strong">Deliverables</span><br>
+				    		At the end of Proof of Concept, we should have:
+				    		<ul>
+				    			<li>Alpha release of the product</li>
+				    			<li>A build/buy/licence decision</li>
+				    			<li>A product roadmap</li>
+				    			<li>A resourcing plan for Implementation</li>
+				    		</ul>
+			    		</div>
 					</div>
 				</uib-accordion>
 			</div>
@@ -328,17 +327,15 @@
 						<uib-accordion-heading>
 							<i class="fa fa-gears"></i> Implementation
 						</uib-accordion-heading>
-						<div>In this phase, you'll work towards delivery of the functional components of the roadmap.
-							<div class="alert alert-info">
-					    		<i class="fa fa-cubes"></i>
-					    		<span class="strong">Deliverables</span><br>
-					    		<ul>
-					    			<li>Functional components of the roadmap</li>
-					    			<li>Automated code quality and functional testing</li>
-					    			<li>Continuous integration</li>
-					    		</ul>
-				    		</div>
-				    	</div>
+						<div>If we proceed with your team into Implementation, we'll be fully invested in our new product and have a clear intention to continuously improve it. Now we'll need your expertise to carefully architect and automate the delivery pipeline for stability and continuous deployment.</div>
+						<hr>
+						<div>
+				    		<i class="fa fa-cubes"></i>
+				    		<span class="strong">Deliverables</span><br>
+				    		<ul>
+				    			<li>Functional components in the product roadmap</li>
+				    		</ul>
+			    		</div>
 					</div>
 				</uib-accordion>
 			</div>
@@ -476,9 +473,9 @@
 			</div>
 		</div>
 		<div class="row">
-<!-- // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->			
+<!-- // BA-177 // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->			
 			<div class="col-xs-12 col-sm-4">
-				<div class="alert alert-important text-center">
+				<div class="alert alert-important text-center" ng-if="vm.opportunity.phases.inception.isInception">
 					<i class="fa fa-calendar"></i> &nbsp;
 					<span class="strong">Inception Start Date</span> 
 					to 
@@ -509,13 +506,13 @@
 		<!-- // Capabilites Required // -->
 		<div class="row">
 			<div class="col-xs-12">
-				<h4>Capabilities Required</h4>
+				<h4>Required Capabilities</h4>
 				<p>In each phase, we need the team you put forward to have the following capabilities:</p>
 			</div>
 		</div>
 		<div class="row">
 
-<!-- // Chris: Please wire up the following tables to populate with the CAPABILITIES and FULL-TIME labels where appropriate. // -->
+<!-- // BA-179 // Chris: Please wire up the following tables to populate with the CAPABILITIES and FULL-TIME labels where appropriate. // -->
 			
 			<!-- Inception Phase, if applicable -->
 			<div class="col-xs-12 col-sm-4">
@@ -584,7 +581,9 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h4>Terms &amp; Conditions</h4>
-				<p ng-bind-html="vm.trust(vm.opportunity.terms)"></p>
+				<p>This is a <i>Sprint With Us</i> opportunity governed by <a href="">these terms</a>.</p>
+				<p><span class="small">Additional terms:</span><br>
+				<span ng-bind-html="vm.trust(vm.opportunity.terms)"></span></p>
 			</div>
 		</div>
 
@@ -618,6 +617,7 @@
 				<uib-accordion>	
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
+							<i class="fa fa-group"></i> &nbsp;
 							Your Team's Capabilities &amp; Skills <span class="pull-right">10 points</span>
 						</uib-accordion-heading>
 						<div class="row">
@@ -630,11 +630,13 @@
 				<uib-accordion>	
 					<div uib-accordion-group class="panel-default">		
 						<uib-accordion-heading>
+							<i class="fa fa-pencil"></i> &nbsp;
 							The Questionnaire <span class="pull-right">20 points</span>
 						</uib-accordion-heading>
 						<div class="row">
-							<p>All companies' responses to the questionnaire get anonymized and randomized. Then the issuer has to rank them from strongest to weakest. Once they decide how many companies they want to interview, they get to see which companies scored the highest and screen through to Interview.</p>
-							<p>Whether your team screens through for an Interview depends on the strength of responses and the number of companies that apply. Either way, we'll let you know right away.</p>
+							<p>Your responses to the questionnaire will be anonymized and ranked against the responses from other companies who apply.</p>
+							<p>Depending on the strength of your responses and how many other companies apply, your team may be screened out from the Interview stage.</p>
+							<p>Either way, you'll be notified shortly after the closing date whether your team is in the running.</p>
 						</div>
 					</div>
 				</uib-accordion>
@@ -642,10 +644,12 @@
 				<uib-accordion>	
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
+							<i class="fa fa-comments"></i> &nbsp;
 							The Interview <span class="pull-right">60 points</span>
 						</uib-accordion-heading>
 						<div class="row">
-							
+							<p>If your team screens through, they'll be asked to participate in a 2-hour interview. They'll present a brief 'pitch' explaining how they would approach the business problem and work with the government product manager.</p>
+							<p>(Interviews can be facilitated in person or by video conference.)</p>
 						</div>
 					</div>
 				</uib-accordion>
@@ -653,24 +657,23 @@
 				<uib-accordion>	
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
+							<i class="fa fa-usd"></i> &nbsp;
 							Pricing<span class="pull-right">10 points</span>
 						</uib-accordion-heading>
 						<div class="row">	
-							<p>Your score for pricing is based on an algorithm that considers your bid compared with the the lowest and highest bids.</p>
+							<p>Your score for pricing is based on a formula that compares your bid in relation to the lowest and highest bids.</p>
 						</div>
 					</div>
 				</uib-accordion>
 				
 				<div class="panel-default panel-body">
-					<h4>Total<span class="pull-right">/100 points</span></h4>
+					<h4 style="margin-top: 0">Total<span class="pull-right">/100 points</span></h4>
 				</div>	
 			</div>
 		</div>
-
-		<div class="row">
-			<div class="col-xs-12">
-				<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
-			</div>
+		<hr>
+		<div class="row text-center">
+			<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
 		</div>
 
 	</div>
