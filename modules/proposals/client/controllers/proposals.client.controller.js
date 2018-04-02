@@ -105,7 +105,7 @@
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {
@@ -368,7 +368,7 @@
 							resolve ();
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 							 reject ();
 						}
 					);
@@ -419,12 +419,12 @@
 			copyteam();
 			return ppp.proposal.createOrUpdate()
 				.then (function(proposal) {
-					Notification.success({message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+					Notification.success({message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i> Changes Saved'});
 					ppp.proposal = proposal;
 					ppp.subscribe(true);
 					ppp.form.proposalform.$setPristine();
 				}, function (error) {
-					Notification.error ({message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
+					Notification.error ({message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit Proposal failed!'});
 				});
 		};
 		// -------------------------------------------------------------------------
@@ -463,7 +463,7 @@
 				.then(function(r) {
 					if (r) {
 						ppp.proposal.$remove(function() {
-							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i> Your proposal has been deleted'});
 							ppp.subscribe(false);
 							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
@@ -472,7 +472,7 @@
 								$state.go ('opportunities.viewcwu', {opportunityId:ppp.opportunity.code});
 							}
 						}, function(error) {
-							Notification.error({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!'});
+							Notification.error({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Remove Proposal failed!'});
 						});
 					}
 				});
@@ -513,9 +513,10 @@
 						.then (function(proposal) {
 							ppp.proposal = proposal;
 							ppp.form.proposalform.$setPristine();
-							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i> Your proposal has been submitted!'});
 						}, function(error) {
-							Notification.error ({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal'});
+
+							Notification.error ({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Submitting Proposal'});
 						});
 				});
 		}
@@ -534,10 +535,10 @@
 			.then(
 				function (response) {
 					ppp.proposal = response.data;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
+					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
 				},
 				function (evt) {
 					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
