@@ -26,7 +26,7 @@
 
 	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate warn-on-exit>
 
-		<div class="container container-edit-form">
+		<div class="container edit-form">
 
 			<div class="edit-form-header">
 				<div class="row">
@@ -47,7 +47,7 @@
 							<uib-tab-heading>
 								<i class="fa fa-user"></i> Developer
 							</uib-tab-heading>
-							<div class="proposal-form-container">
+							<div>
 								<div class="form-group">
 									<div class="alert alert-info">Please enter contact information and a billing address for the <span class="strong">person who is proposing to do the work</span>. If you would like payment to be made to a company, please check the box below and complete the Company tab.
 									</div>
@@ -86,7 +86,7 @@
 							<uib-tab-heading>
 								<i class="fa fa-building"></i> Company
 							</uib-tab-heading>
-							<div class="proposal-form-container">
+							<div>
 								<div class="form-group" show-errors>
 									<label for="businessName">Legal Name of Company</label>
 									<input  type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.user.businessName" placeholder="Legal Name">
@@ -116,7 +116,7 @@
 							<uib-tab-heading>
 								<i class="fa fa-pencil"></i> Proposal
 							</uib-tab-heading>
-							<div class="proposal-form-container">
+							<div>
 								<div class="form-group">
 									<div class="alert alert-info">Draft your complete proposal here, or write a short message and upload your proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation Criteria</span>:</div>
 									<div class="well" ng-bind-html="ppp.display.evaluation"></div>
@@ -140,7 +140,7 @@
 							<uib-tab-heading>
 								<i class="fa fa-file"></i> Attachments
 							</uib-tab-heading>
-							<div class="proposal-form-container">
+							<div>
 								<div class="form-group">
 									<div class="alert alert-info">Upload any supporting material here.</div>
 									<!--
@@ -174,22 +174,19 @@
 						<!-- <uib-tab index="4" disable="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'" ng-hide="!ppp.features.swu || !ppp.org || ppp.opportunity.opportunityTypeCd === 'code-with-us'"> -->
 						<uib-tab index="4" ng-if="!ppp.isSprintWithUs">
 							<uib-tab-heading>
-								<i class="fa fa-file-o"></i> Terms
+								<i class="fa fa-handshake-o"></i> Terms
 							</uib-tab-heading>
-							<div class="proposal-form-container">
-								<div class="form-group">
-									<div class="alert alert-info">
-										To submit a proposal, you must agree to the <i>Code With Us</i> Terms.
-									</div>
-									<iframe class="terms" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
-									<a class="btn btn-sm btn-secondary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> DOWNLOAD</a>
-									<div class="row">
-										<div class="col-xs-12">
-											<label class="checkbox-inline checkbox-alone">
-												<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
-											</label>
-										</div>
-									</div>
+							<div class="form-group">
+								<div class="alert alert-info">
+									To submit a proposal, you must agree to the following terms:
+								</div>
+								<iframe class="row" style="height: 400px;" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+								<br>
+								<a class="btn btn-sm btn-primary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
+								<div class="alert alert-warning">
+									<label class="checkbox-inline checkbox-alone">
+										<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
+									</label>
 								</div>
 							</div>
 						</uib-tab>
