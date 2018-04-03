@@ -36,6 +36,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/assign/proposal/:proposalId',
       permissions: ['put']
     }, {
+      resources: '/api/assign/proposalswu/:proposalId',
+      permissions: ['put']
+    }, {
       resources: '/api/proposals/:proposalId',
       permissions: '*'
     }]

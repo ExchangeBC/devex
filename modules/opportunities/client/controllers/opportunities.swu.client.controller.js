@@ -497,11 +497,27 @@
 			});
 		};
 		vm.assign = function (proposal) {
-			vm.opportunity.evaluationStage = vm.stages.assigned;
-			vm.opportunity.proposal = proposal;
-			vm.saveOpportunity ();
-			proposal.isAssigned = true;
-			vm.saveProposal (proposal);
+			var q = 'Are you sure you want to assign this opportunity to this proponent?';
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+					ProposalsService.assignswu (ppp.proposal).$promise
+					.then (
+						function (response) {
+							ppp.proposal = response;
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
+							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+						},
+						function (error) {
+							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+						}
+					);
+				}
+			});
+			// vm.opportunity.evaluationStage = vm.stages.assigned;
+			// vm.opportunity.proposal = proposal;
+			// vm.saveOpportunity ();
+			// proposal.isAssigned = true;
+			// vm.saveProposal (proposal);
 		};
 		// -------------------------------------------------------------------------
 		//

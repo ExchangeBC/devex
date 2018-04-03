@@ -46,7 +46,7 @@
 						<uib-tab-heading>
 							<i class="fa fa-handshake-o"></i> Terms
 						</uib-tab-heading>
-						
+
 						<div class="form-group">
 							<div class="alert alert-info">
 								To submit a proposal, you must agree to the following terms:
@@ -59,8 +59,8 @@
 									<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
 								</label>
 							</div>
-						</div>	
-							
+						</div>
+
 							<!-- // No point showing business info here if user can't edit it from here // -->
 							<!--
 							<div class="form-group" show-errors>
@@ -89,7 +89,7 @@
 
 					<uib-tab index="1">
 						<uib-tab-heading>
-							<i class="fa fa-group"></i> Team 
+							<i class="fa fa-group"></i> Team
 						</uib-tab-heading>
 						<div class="alert alert-info">
 							<h5 style="margin-top: 0;">Select the team members you want to put forward.</h5>
@@ -345,7 +345,7 @@
 						</uib-tab-heading>
 						<div class="alert alert-info">
 							You can upload any supporting material here as an attachment.
-						</div>	
+						</div>
 						<div class="col-xs-12">
 							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-upload"></i> Upload a file</a>
 						</div>
@@ -367,8 +367,8 @@
 						<uib-tab-heading>
 							<i class="fa fa-usd"></i> Pricing
 						</uib-tab-heading>
-						<div class="alert alert-info">	
-							Here's the team you're putting forward. Please enter a <strong>fixed price</strong> for which you can supply the team members for the dates stated. 
+						<div class="alert alert-info">
+							Here's the team you're putting forward. Please enter a <strong>fixed price</strong> for which you can supply the team members for the dates stated.
 						</div>
 						<div class="row">
 							<div class="col-xs-12 col-sm-4 text-center">
@@ -495,7 +495,7 @@
 													<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
 															<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
 													</div>
-												</div>	
+												</div>
 												<div class="panel-footer">
 													Price: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
 												</div>
@@ -566,7 +566,13 @@
 											<hr>
 											<p><strong>{{ppp.proposal.questions[4].question}}</strong><br>
 											{{ppp.proposal.questions[4].response}}
-											</p>											
+											</p>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12 pull-right">
+											<button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
 										</div>
 									</div>
 								</div>
@@ -597,7 +603,7 @@
 				<div class="edit-form-footer">
 					<div class="row">
 						<div class="col-xs-12">
-							<button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Save Updates</button>
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
 							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> Delete This Proposal</button>
