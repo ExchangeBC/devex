@@ -531,12 +531,12 @@
 			var q = 'Are you sure you want to assign this opportunity to this proponent?';
 			ask.yesNo (q).then (function (r) {
 				if (r) {
-					ProposalsService.assignswu (ppp.proposal).$promise
+					ProposalsService.assignswu (proposal).$promise
 					.then (
 						function (response) {
-							ppp.proposal = response;
+							vm.proposal = response;
 							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
-							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+							$state.go ('opportunities.viewswu',{opportunityId:vm.opportunity.code});
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });

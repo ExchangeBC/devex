@@ -634,7 +634,7 @@ exports.assignswu = function (opportunityId, proposalId, proposalUser, user) {
 			else {
 				opportunity.status = 'Assigned';
 				opportunity.proposal = proposalId;
-				vm.opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
+				opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
 				updateSave (opportunity)
 				.then (function (opp) {
 					opportunity = opp;
