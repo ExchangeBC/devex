@@ -81,8 +81,8 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="container">	
+
+	<div class="container">
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
 		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
 			<div class="alert alert-important">
@@ -106,23 +106,23 @@
 			Last updated on <span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy" ng-bind="vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
 
 		<!-- // Opportunity Admin control buttons // -->
-			
+
 			<!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
 			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-lg fa-bullhorn"></i> Publish</a>
 
 			<!-- EDIT -->
 			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})" title="Edit this Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
-			
+
 			<!-- UNPUBLISH (if opportunity is PUBLISHED) -->
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
 
 		<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
-			
+
 			<!-- // User is NOT following the opportunity // -->
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 			<!-- // User IS following the opportunity // -->
 			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
-				
+
 		</div>
 
 		<!-- // Status and Follow // -->
@@ -175,7 +175,7 @@
 					<!-- github link -->
 					<dt>Code:</dt>
 					<dd>
-					<a ng-if="vm.opportunity.issueUrl && vm.opportunity.issueUrl.length > 0" href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
+					<a ng-if="vm.opportunity.github && vm.opportunity.github.length > 0" href="{{vm.opportunity.github}}" rel="nofollow" target="_blank"><i class="fa fa-github"></i> GitHub Repository</a>
 					</dd>
 				</dl>
 			</div>
@@ -189,11 +189,11 @@
 				<p ng-bind-html="vm.display.description"></p>
 
 				<hr>
-				
+
 				<div class="well">
 					<h3 class="opp-detail">Acceptance Criteria</h3>
 					<p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i>terms</a> of our lightweight procurement model, <a href="/codewithus" target="_blank">Code With Us</a>.</p> To be paid the fixed price for this opportunity, you need to meet all of the following criteria:</p>
-					<p ng-bind-html="vm.display.criteria"></p>	
+					<p ng-bind-html="vm.display.criteria"></p>
 				</div>
 
 				<hr>
@@ -203,7 +203,7 @@
 				<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
 				<div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-info">To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a> or	<a href  id="authentication.gov" ui-sref="authentication.gov"> Sign Up</a></div>
 
-				
+
 				<div class="well">
 					<h4 class="opp-detail">Proposal Evaluation Criteria</h4>
 					<p>Your proposal will be scored by this criteria:</p>

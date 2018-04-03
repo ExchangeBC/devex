@@ -416,11 +416,7 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		// console.log ('updating', opportunity.opportunityTypeCd);
-		//
-		// CC: TBD:SWU once sprint with us is active we can remove this restriction
-		//
-		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-us') {
+		if (opportunity.isPublished) {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({
@@ -437,7 +433,7 @@ exports.update = function (req, res) {
 			})
 			.catch (function () {
 				res.status(422).send({
-					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+					message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 				});
 			});
 		}
