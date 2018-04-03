@@ -30,8 +30,8 @@
 
 	<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
 			<label class="label label-default" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> Unpublished</label>
-			<a class="btn btn-text-only" ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" title="Unpublish"><i class="fa fa-ban"></i></a>
-			<a class="btn btn-text-only" ng-if="opportunity.project.isPublished && (vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" title="Publish"><i class="fa fa-bullhorn"></i>
+			<a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" title="Unpublish"><i class="fa fa-ban"></i></a>
+			<a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, true); $event.stopPropagation()" title="Publish"><i class="fa fa-bullhorn"></i>
 			</a>
 			<a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.opportunityTypeCd==='code-with-us'" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.editcwu({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-gear"></i></a>
 			<a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.opportunityTypeCd==='sprint-with-us'" href="javascript:void(0);"  id="opportunityadmin.edit" ui-sref="opportunityadmin.editswu({ opportunityId: opportunity.code, projectId: vm.projectId })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-gear"></i></a>

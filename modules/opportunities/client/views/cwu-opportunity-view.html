@@ -108,13 +108,13 @@
 		<!-- // Opportunity Admin control buttons // -->
 
 			<!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
-			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-lg fa-bullhorn"></i> Publish</a>
+			<a href="javascript:void(0);" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary pull-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i class="fa fa-lg fa-bullhorn"></i> Publish</a>
 
 			<!-- EDIT -->
 			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})" title="Edit this Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
 
 			<!-- UNPUBLISH (if opportunity is PUBLISHED) -->
-			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
 
 		<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
 
