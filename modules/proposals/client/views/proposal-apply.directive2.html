@@ -1,3 +1,7 @@
+<!-- // If user is not signed in // -->
+<div class="alert alert-warning" ng-if="!vm.isUser">
+	<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin">Sign In</a>.
+</div>
 
 <!-- // If user is signed in but hasn't started a proposal yet // -->
 <div ng-if="qaz.isSprintWithUs">
