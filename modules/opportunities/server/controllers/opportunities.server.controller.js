@@ -614,6 +614,60 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 };
 // -------------------------------------------------------------------------
 //
+// assign the passed in swu proposal
+// TBD : in futre we should likely send an email to ALL the admins of the
+// winning org, but for now, let's just do the one who created it.
+//
+// -------------------------------------------------------------------------
+exports.assignswu = function (opportunityId, proposalId, proposalUser, user) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.findById (opportunityId)
+		.exec (function (err, opportunity) {
+			if (err) {
+				reject (err);
+			}
+			else if (!opportunity) {
+				reject (new Error ({
+					message: 'No opportunity with that identifier has been found'
+				}));
+			}
+			else {
+				opportunity.status = 'Assigned';
+				opportunity.proposal = proposalId;
+				vm.opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
+				updateSave (opportunity)
+				.then (function (opp) {
+					opportunity = opp;
+					var data = setNotificationData (opportunity);
+					Notifications.notifyObject ('not-updateany-opportunity', data);
+					Notifications.notifyObject ('not-update-'+opportunity.code, data);
+					data.username = proposalUser.displayName;
+					data.useremail = proposalUser.email;
+					//
+					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
+					//
+					data.assignor = user.displayName;
+					data.assignoremail = opportunity.proposalEmail;
+					Notifications.notifyUserAdHoc ('assignopp', data);
+					return github.addCommentToIssue ({
+						comment : 'This opportunity has been assigned',
+						repo    : opportunity.github,
+						number  : opportunity.issueNumber
+					})
+					.then (function () {
+						return github.lockIssue ({
+							repo   : opportunity.github,
+							number : opportunity.issueNumber
+						});
+					});
+				})
+				.then (resolve, reject);
+			}
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
 // delete the opportunity
 //
 // -------------------------------------------------------------------------

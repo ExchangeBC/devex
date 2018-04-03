@@ -342,6 +342,18 @@ exports.assign = function (req, res) {
 	.then (function () {res.json (proposal); })
 	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
 };
+exports.assignswu = function (req, res) {
+	var proposal = req.proposal;
+	proposal.status = 'Assigned';
+	proposal.isAssigned = true;
+	helpers.applyAudit (proposal, req.user);
+	saveProposal (proposal)
+	.then (function () {
+		return Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+	})
+	.then (function () {res.json (proposal); })
+	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+};
 // -------------------------------------------------------------------------
 //
 // unassign gets called from the opportunity side, so just do the work
