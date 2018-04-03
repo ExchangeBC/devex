@@ -104,24 +104,29 @@
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: function ($stateParams, OpportunitiesService) {
+					console.log ('resource opportunity');
 					return OpportunitiesService.get ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
 				subscriptions: function (NotificationsService) {
+					console.log ('resource subscriptions');
 					return NotificationsService.subscriptions().$promise;
 				},
-				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
-				},
 				myproposal: function ($stateParams, ProposalsService, Authentication) {
+					console.log ('resource myproposal');
 					if (!Authentication.user) return {};
 					return ProposalsService.myopp ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
+				},
+				org: function (Authentication, OrgsService) {
+					console.log ('resource org');
+					if (!Authentication.user) return {};
+					var orgs = Authentication.user.orgsAdmin || [null];
+					var org = orgs[0];
+					if (org) return OrgsService.get ({orgId:org}).$promise;
+					else return {};
 				}
 			},
 			data: {
