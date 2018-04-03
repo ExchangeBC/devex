@@ -28,6 +28,7 @@ var path = require('path'),
 	Org = mongoose.model('Org'),
 	User = mongoose.model('User'),
 	Capability = mongoose.model('Capability'),
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	multer = require('multer'),
@@ -81,6 +82,12 @@ var saveUser = function (user) {
 			if (err) {reject (err);}
 			else {resolve (newuser);}
 		});
+	});
+};
+var notifyUser = function (user) {
+	return Notifications.notifyUserAdHoc ('user-added-to-company', {
+		username : user.displayName,
+		useremail : user.email
 	});
 };
 // -------------------------------------------------------------------------
@@ -263,6 +270,7 @@ var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
+	.then (notifyUser)
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
