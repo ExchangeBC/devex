@@ -40,7 +40,7 @@
 			</div>
 		</div>
 
-		<div class="panel panel-info" ng-if="vm.closing === 'CLOSED'">
+		<div class="panel panel-info" ng-if="vm.closing=='CLOSED'">
 			<div class="panel-heading">
 				<strong>Evaluation Matrix</strong>
 			</div>
@@ -83,7 +83,7 @@
 				</div>
 			</div>
 		</div>
-		<table class="table table-condensed table-striped">
+		<table class="table table-condensed table-striped" ng-if="vm.closing=='CLOSED'">
 			<thead>
 				<tr>
 					<td><strong>Team</strong><br/>[weight : {{vm.opportunity.weights.skill}}]</td>

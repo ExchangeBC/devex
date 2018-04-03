@@ -38,7 +38,6 @@
 		 <button ng-if="vm.canApplyGeneral && !opportunity.userIs.member && !opportunity.userIs.request" class="btn btn-default btn-sm">Apply</button>
 	</div>
 
-
 	<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 		<div class="label-list">
 			<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Sprint With Us</label>

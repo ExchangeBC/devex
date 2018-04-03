@@ -25,6 +25,7 @@
 	//
 	// =========================================================================
 	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
+		console.log ('yes indeed');
 		var vm                    = this;
 		vm.features = window.features;
 		// console.log ('virtuals', opportunity.isOpen);
@@ -661,6 +662,7 @@
 				});
 			}
 		};
+
 	})
 	// =========================================================================
 	//
