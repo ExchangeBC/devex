@@ -14,19 +14,19 @@
 		Showing: &nbsp;
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
-		
+
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-tag"></i> Code With Us</button>
 		<button class="btn btn-sm btn-filter-selected"  ng-if="vm.filter.code" ng-model="vm.filter.code" uib-btn-checkbox><i class="fa fa-tag"></i> Code With Us</button>
 		&nbsp;
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox>Open</button>
-		
+
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 	</div>
 </div>
 
-<div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords">
+<div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
 
 	<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
 			<label class="label label-default" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> Unpublished</label>
@@ -71,11 +71,15 @@
 		<div class="card-teaser" ng-bind="opportunity.short"></div>
 	</div>
 
-<div class="row" ng-if="! vm.opportunities.length">
-	<div class="col-xs-12">
-		<div class="well well-transparent">No open opportunities right now. Check back soon!</div>
+	<div class="row" ng-if="! vm.opportunities.length">
+		<div class="col-xs-12">
+			<div class="well well-transparent">No open opportunities right now. Check back soon!</div>
+		</div>
 	</div>
+
 </div>
 
+<div class="card" ng-if="results.length==0">
+	Nothing matches your filter
 </div>
 
