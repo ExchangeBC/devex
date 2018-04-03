@@ -5,6 +5,18 @@
 // =========================================================================
 (function () {
 	'use strict';
+	var formatDate = function (d) {
+		var monthNames = [
+		'January', 'February', 'March',
+		'April', 'May', 'June', 'July',
+		'August', 'September', 'October',
+		'November', 'December'
+		];
+		var day = d.getDate();
+		var monthIndex = d.getMonth();
+		var year = d.getFullYear();
+		return monthNames[monthIndex] + ' ' + day + ', '+ year;
+	}
 
 	angular.module('opportunities')
 	// =========================================================================
@@ -30,12 +42,21 @@
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
 		vm.opportunity.endDate    = new Date (vm.opportunity.endDate);
-		vm.opportunity.phases.inception.startDate    = new Date (vm.opportunity.phases.inception.startDate);
-		vm.opportunity.phases.inception.endDate    = new Date (vm.opportunity.phases.inception.endDate);
-		vm.opportunity.phases.proto.startDate    = new Date (vm.opportunity.phases.proto.startDate);
-		vm.opportunity.phases.proto.endDate    = new Date (vm.opportunity.phases.proto.endDate);
-		vm.opportunity.phases.implementation.startDate    = new Date (vm.opportunity.phases.implementation.startDate);
-		vm.opportunity.phases.implementation.endDate    = new Date (vm.opportunity.phases.implementation.endDate);
+
+		vm.opportunity.phases.inception.startDate      = new Date (vm.opportunity.phases.inception.startDate);
+		vm.opportunity.phases.inception.endDate        = new Date (vm.opportunity.phases.inception.endDate);
+		vm.opportunity.phases.proto.startDate          = new Date (vm.opportunity.phases.proto.startDate);
+		vm.opportunity.phases.proto.endDate            = new Date (vm.opportunity.phases.proto.endDate);
+		vm.opportunity.phases.implementation.startDate = new Date (vm.opportunity.phases.implementation.startDate);
+		vm.opportunity.phases.implementation.endDate   = new Date (vm.opportunity.phases.implementation.endDate);
+
+		vm.opportunity.phases.inception.fstartDate      = formatDate (vm.opportunity.phases.inception.startDate      ) ;
+		vm.opportunity.phases.inception.fendDate        = formatDate (vm.opportunity.phases.inception.endDate        ) ;
+		vm.opportunity.phases.proto.fstartDate          = formatDate (vm.opportunity.phases.proto.startDate          ) ;
+		vm.opportunity.phases.proto.fendDate            = formatDate (vm.opportunity.phases.proto.endDate            ) ;
+		vm.opportunity.phases.implementation.fstartDate = formatDate (vm.opportunity.phases.implementation.startDate ) ;
+		vm.opportunity.phases.implementation.fendDate   = formatDate (vm.opportunity.phases.implementation.endDate   ) ;
+
 		vm.authentication         = Authentication;
 		vm.OpportunitiesService   = OpportunitiesService;
 		vm.idString               = 'opportunityId';
@@ -49,7 +70,17 @@
 		//
 		// set up the structures for capabilities
 		//
+		vm.oimp                   = vm.opportunity.phases.implementation;
+		vm.oinp                   = vm.opportunity.phases.inception;
+		vm.oprp                   = vm.opportunity.phases.proto;
 		CapabilitiesMethods.init (vm, vm.opportunity, capabilities);
+		vm.imp = {};
+		vm.inp = {};
+		vm.prp = {};
+		CapabilitiesMethods.init (vm.imp, vm.oimp, capabilities);
+		CapabilitiesMethods.init (vm.inp, vm.oinp, capabilities);
+		CapabilitiesMethods.init (vm.prp, vm.oprp, capabilities);
+		CapabilitiesMethods.dump (vm.inp);
 		//
 		// what capabilities are required ?
 		//

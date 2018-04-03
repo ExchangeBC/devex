@@ -59,7 +59,7 @@
 							</li>
 						</ul>
 					</p>
-					<br/>	
+					<br/>
 				</div>
 				<div class="row">
 					<div ng-if="vm.stageIs('questions')"><strong>Current Stage:</strong> <a href ng-click="vm.questions()">Click here to perform the Question Ranking</a> <button ng-click="vm.resetQuestions();">reset questions</button></div>
@@ -129,7 +129,7 @@
 		</table>
 	</div>
 
-			
+
 	<div class="container">
 
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
@@ -157,19 +157,19 @@
 
 			<!-- EDIT -->
 			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})" title="Edit Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
-			
-			<!-- UNPUBLISH -->		
+
+			<!-- UNPUBLISH -->
 			<a href="javascript:void(0);" ng-if="vm.opportunity.project.isPublished && vm.canEdit && vm.opportunity.isPublished" class="btn btn-sm btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish this Opportunity"><i class="fa fa-lg fa-ban"></i></a>
 
 			<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
-			
+
 			<!-- // If user is NOT following the opportunity // -->
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
-			
+
 			<!-- // If user IS following the opportunity // -->
 			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
 		</div>
-	
+
 		<!-- // Sprint With Us Terms // -->
 		<!--
 		<div class="row" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
@@ -247,18 +247,18 @@
 				</dl>
 			</div>
 		</div>
-		
+
 		<hr>
-		
+
 		<div class="row">
 			<div class="col-xs-12">
 				<h4>Background</h4>
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
 		</div>
-		
+
 		<hr>
-		
+
 		<!-- // Budget // -->
 		<div class="row">
 			<div class="col-xs-12">
@@ -276,11 +276,11 @@
 				<p>We need to carry out the following phases of work:</p>
 			</div>
 		</div>
-		
+
 		<div class="row">
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
 <!-- // BA-175 // Chris: Please wire so that Phases only show up if that phase is included in the opportunity -->
-				<uib-accordion class="panel-default">	
+				<uib-accordion class="panel-default">
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-map"></i> Inception
@@ -299,8 +299,8 @@
 					</div>
 				</uib-accordion>
 			</div>
-			<div class="col-xs-12 col-sm-4">
-				<uib-accordion>	
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
+				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-rocket"></i> Proof of Concept
@@ -321,8 +321,8 @@
 					</div>
 				</uib-accordion>
 			</div>
-			<div class="col-xs-12 col-sm-4">
-				<uib-accordion>	
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
+				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-gears"></i> Implementation
@@ -435,7 +435,7 @@
 					</tr>
 				</table>
 			-->
-				
+
 <!-- // This was the original expression of Capabilities & Skills //  -->
 <!--
 				<div class="panel panel-default" ng-repeat="capability in vm.capabilities" ng-if="vm.iOppCapabilities[capability.code]">
@@ -464,7 +464,7 @@
 					</div>
 				</div>
 -->
-		
+
 <!-- // Schedule // -->
 		<div class="row">
 			<div class="col-xs-12">
@@ -473,31 +473,31 @@
 			</div>
 		</div>
 		<div class="row">
-<!-- // BA-177 // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->			
-			<div class="col-xs-12 col-sm-4">
-				<div class="alert alert-important text-center" ng-if="vm.opportunity.phases.inception.isInception">
+<!-- // BA-177 // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
+				<div class="alert alert-important text-center">
 					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">Inception Start Date</span> 
-					to 
-					<span class="strong">Inception End Date</span>
+					<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
 				</div>
 			</div>
 
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
 				<div class="alert alert-important text-center">
 					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">Proof of Concept Start Date</span> 
-					to 
-					<span class="strong">Proof of Concept End Date</span>
+					<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
 				</div>
 			</div>
 
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
 				<div class="alert alert-important text-center">
 					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">Implementation Start Date</span> 
-					to 
-					<span class="strong">Implementation End Date</span>
+					<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
 				</div>
 			</div>
 
@@ -513,62 +513,35 @@
 		<div class="row">
 
 <!-- // BA-179 // Chris: Please wire up the following tables to populate with the CAPABILITIES and FULL-TIME labels where appropriate. // -->
-			
+
 			<!-- Inception Phase, if applicable -->
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
 				<table class="table capabilities-list">
 					<tbody>
-						<tr>
-							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 
 			<!-- Proof of Concept Phase, if applicable -->
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
 				<table class="table capabilities-list">
 					<tbody>
-						<tr>
-							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
 
 			<!-- Implementation Phase -->
-			<div class="col-xs-12 col-sm-4">
+			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
 				<table class="table capabilities-list">
 					<tbody>
-						<tr>
-							<td><label class="label label-lg label-deliverymgmt"><i class="fa fa-circle"></i> Delivery Management</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxresearch"><i class="fa fa-circle"></i> UX Research</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-uxdesign"><i class="fa fa-circle"></i> UX Design</label><label class="label label-fulltime-selected">full time</label></td>
-						</tr>
-						<tr>
-							<td><label class="label label-lg label-frontend"><i class="fa fa-circle"></i> Frontend Development</label></td>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
 						</tr>
 					</tbody>
 				</table>
@@ -588,7 +561,7 @@
 		</div>
 
 		<hr>
-		
+
 		<!-- // How to Apply // -->
 		<div class="row">
 			<div class="col-xs-12">
@@ -597,24 +570,24 @@
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
 			</div>
-		</div>		
-		
+		</div>
+
 		<!-- // Proposal Application Directive // -->
 		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
 			<div class="col-xs-12">
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 			</div>
 		</div>
-				
+
 		<hr>
-		
+
 		<!-- // Proposal Evaluation Criteria // -->
 		<div class="row">
-			<div class="col-xs-12">		
+			<div class="col-xs-12">
 				<h4>Proposal Evaluation Criteria</h4>
 				<p>Here's how your proposal will be scored:</p>
-				
-				<uib-accordion>	
+
+				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-group"></i> &nbsp;
@@ -626,9 +599,9 @@
 						</div>
 					</div>
 				</uib-accordion>
-				
-				<uib-accordion>	
-					<div uib-accordion-group class="panel-default">		
+
+				<uib-accordion>
+					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-pencil"></i> &nbsp;
 							The Questionnaire <span class="pull-right">20 points</span>
@@ -641,7 +614,7 @@
 					</div>
 				</uib-accordion>
 
-				<uib-accordion>	
+				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-comments"></i> &nbsp;
@@ -654,21 +627,21 @@
 					</div>
 				</uib-accordion>
 
-				<uib-accordion>	
+				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
 							<i class="fa fa-usd"></i> &nbsp;
 							Pricing<span class="pull-right">10 points</span>
 						</uib-accordion-heading>
-						<div class="row">	
+						<div class="row">
 							<p>Your score for pricing is based on a formula that compares your bid in relation to the lowest and highest bids.</p>
 						</div>
 					</div>
 				</uib-accordion>
-				
+
 				<div class="panel-default panel-body">
 					<h4 style="margin-top: 0">Total<span class="pull-right">/100 points</span></h4>
-				</div>	
+				</div>
 			</div>
 		</div>
 		<hr>
