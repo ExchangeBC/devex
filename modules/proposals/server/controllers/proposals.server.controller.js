@@ -373,7 +373,7 @@ exports.notifyBranchFinancialStaff = function (req, res) {
 						{
 							name: proposal.businessName,
 							address: proposal.businessAddress,
-							business_number: proposal.businessNumber,
+							business_number: proposal.businessContactPhone,
 							email: proposal.businessContactEmail
 						} :
 						{
