@@ -38,6 +38,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/proposals/:proposalId',
       permissions: '*'
+    }, {
+      resources: '/api/assign/proposal/:proposalId/notifyFinance',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],

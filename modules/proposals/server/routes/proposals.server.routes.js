@@ -21,6 +21,8 @@ module.exports = function(app) {
 		.put(proposals.submit);
 	app.route('/api/assign/proposal/:proposalId').all(proposalsPolicy.isAllowed)
 		.put(proposals.assign);
+	app.route('/api/assign/proposal/:proposalId/notifyFinance').all(proposalsPolicy.isAllowed)
+		.put(proposals.notifyBranchFinancialStaff)
 	//
 	// proposals for opportunity
 	//

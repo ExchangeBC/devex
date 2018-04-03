@@ -23,6 +23,10 @@
         method: 'PUT',
         url: '/api/assign/proposal/:proposalId'
       },
+      notifyBranchFinancialStaff: {
+        method: 'PUT',
+        url: '/api/assign/proposal/:proposalId/notifyFinance'
+      },
       forOpportunity: {
         method: 'GET',
         url: '/api/proposals/for/opportunity/:opportunityId',

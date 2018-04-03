@@ -1,0 +1,1 @@
+Opportunity {{data.opportunity.name}} has been assigned

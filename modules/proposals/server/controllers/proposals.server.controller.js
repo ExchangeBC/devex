@@ -339,8 +339,70 @@ exports.assign = function (req, res) {
 	.then (function () {
 		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user, req.user);
 	})
+	// Note: I would have placed the call to Notify Branch Financial Staff Opportunities
+	// here if not for the specific instruction to hit a REST service. Doing something as
+	// follows:
+	// .then (function () {
+	//  	notifyBranchFinancialStaff({...blah blah...});
+	// })
+	// It doesn't make sense to me to break back to a REST service at this point, so I'm
+	// assuming it's wanted in the front end.
 	.then (function () {res.json (proposal); })
 	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+};
+exports.notifyBranchFinancialStaff = function (req, res) {
+	Proposal.findById(req.params.proposalId)
+		.populate('user')
+		.populate('opportunity')
+		.exec(function (err, proposal) {
+			if (err) {
+				res.status(500).send({ message: errorHandler.getErrorMessage(err)});
+			}
+			else if (!proposal) {
+				res.status(404).send({ message: 'Could not load proposal ' + req.params.proposalId});
+			}
+			else {
+				var data = {
+					useremail: 'placeholder@placeholder.com', // TODO: Assumes https://github.com/BCDevExchange/devex/issues/236 has been completed.
+					opportunity: {
+						name: proposal.opportunity.name,
+						id: proposal.opportunity._id,
+						code: proposal.opportunity.code
+					},
+					vendor: proposal.isCompany ?
+						{
+							name: proposal.businessName,
+							address: proposal.businessAddress,
+							business_number: proposal.businessNumber,
+							email: proposal.businessContactEmail
+						} :
+						{
+							name: proposal.user.firstName + ' ' + proposal.user.lastName,
+							address: proposal.user.address,
+							business_number: proposal.user.phone,
+							email: proposal.user.email
+						}
+				}
+				try {
+					Notifications.notifyUserAdHoc('opportunity-assigned', data).then(
+						function(success) {
+							console.log(success);
+							res.json({}).send();
+						},
+						function(error) {
+							console.log('error', error);
+							res.status(500).send(error);
+						}
+					).catch(function (e) {
+						res.status(500).send({ message: errorHandler.getErrorMessage(e) });
+					});
+				} catch (e) {
+					res.status(500).send({ message: errorHandler.getErrorMessage(e) });
+				}
+			}
+		}).catch(function (e) {
+			res.status(500).send({ message: errorHandler.getErrorMessage(e) });
+		});
 };
 // -------------------------------------------------------------------------
 //

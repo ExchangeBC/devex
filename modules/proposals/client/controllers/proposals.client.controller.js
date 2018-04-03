@@ -106,11 +106,22 @@
 						function (response) {
 							ppp.proposal = response;
 							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
-							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
-								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-							} else {
-								$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
-							}
+							// NB: I would have thought that kicking off the notification to branch financial staff
+							// would be something that should be done on the server side (proposals.server.controller).
+							// I have however placed the logic here due to the specific request: "Ensure that you use a
+							// REST endpoint to send the email notification"
+							ProposalsService.notifyBranchFinancialStaff({_id: ppp.proposal._id})
+								.$promise
+								.then()
+								.finally(function() {
+										// By placing this section in "finally", we ensure that the flow won't
+										// be interrupted by a failure to send a notification email.
+										if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
+											$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
+										} else {
+											$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
+										}
+									});
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
