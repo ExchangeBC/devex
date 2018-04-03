@@ -406,7 +406,6 @@ h4.edit-form-header {
 
 .navbar-brand {
   padding: 3px 15px 3px 0px;
-  margin-left: 25px;
   height: 50px;
 }
 
@@ -513,7 +512,8 @@ h4.edit-form-header {
       &,
       &:hover,
       &:focus {
-        color: @gray-dark;
+        color: #111;
+        font-weight: 700;
         border: none;
         border-bottom: 4px solid #f26925;
         background: none;
@@ -1220,6 +1220,9 @@ form-title {
   font-weight: 400;
   font-size: 14px;
   border: none;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .alert-info {
@@ -2050,6 +2053,9 @@ form-title {
   border-radius: 4px;
   box-shadow: none;
   background: @gray-lighter;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .well-important {

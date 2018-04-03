@@ -28,6 +28,11 @@
 
 <div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
 
+	<div class="card-header danger" ng-if="!vm.isUser && opportunity.opportunityTypeCd==='sprint-with-us'">
+		To view the details of this opportunity, you need to <a href ui-sref="authentication.signin">Sign In</a>
+	</div> 
+
+
 	<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
 			<label class="label label-default" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> Unpublished</label>
 			<a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.isPublished" href="javascript:void(0);" ng-click="vm.publish(opportunity, false); $event.stopPropagation()" title="Unpublish"><i class="fa fa-ban"></i></a>
@@ -78,7 +83,7 @@
 
 </div>
 
-<div class="card" ng-if="results.length==0">
-	Nothing matches your filter
+<div class="alert alert-danger" ng-if="results.length==0">
+	<i class="fa fa-lg fa-frown-o"></i> &nbsp;No opportunities that match your filter right now...
 </div>
 
