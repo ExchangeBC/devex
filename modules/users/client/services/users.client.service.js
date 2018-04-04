@@ -8,7 +8,7 @@
 
   UsersService.$inject = ['$resource'];
 
-  function UsersService($resource) {
+  function UsersService($resource, Authentication) {
     var Users = $resource('/api/users', {}, {
       update: {
         method: 'PUT'
@@ -23,6 +23,10 @@
         params: {
           provider: '@provider'
         }
+      },
+      self: {
+        method: 'GET',
+        url: '/api/users/me'
       },
       removeSelf: {
         method: 'DELETE',
@@ -75,6 +79,9 @@
       },
       countUsers: function () {
         return this.numUsers ().$promise;
+      },
+      resetMe: function () {
+        return this.self ().$promise.then (function (me) {Authentication.user = me;});
       }
     });
 

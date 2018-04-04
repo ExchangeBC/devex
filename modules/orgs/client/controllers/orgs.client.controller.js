@@ -36,7 +36,7 @@
 	// create a new org
 	//
 	// =========================================================================
-	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
@@ -44,17 +44,23 @@
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.orgaddForm');
+				console.log (vm.orgForm);
+				$scope.$broadcast('show-errors-check-validity', 'vm.orgForm');
 				return false;
 			}
 			vm.orgForm.$setPristine ();
+			console.log ('here');
 			vm.org.createOrUpdate ()
 			.then (function (result) {
+				console.log ('kjhasd');
 				vm.orgForm.$setPristine ();
 				newId = result._id;
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Company saved successfully!'
 				})
+			})
+			.then (function () {
+				UsersService.resetMe ();
 			})
 			.then (function () {
 				$state.go ('orgadmin.profile', {orgId:newId});
