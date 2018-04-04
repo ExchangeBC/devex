@@ -452,7 +452,6 @@ exports.getPotentialResources = function (req, res) {
 	var org         = req.org;
 	var opportunity = req.opportunity;
 	var allMembers  = _.uniq (org.members.concat (org.admins));
-	console.log ('whatall', allMembers);
 
 	//
 	// if the user is not an admin of the org then bail out
@@ -493,7 +492,6 @@ exports.getPotentialResources = function (req, res) {
 			users[i] = user;
 			for (j=0; j<opportunity.phases.inception.capabilities.length; j++) {
 				c = opportunity.phases.inception.capabilities[j].code;
-				console.log ('code:', c);
 				if (user.iCapabilities[c]) {
 					ret.inception.push (user);
 					break;

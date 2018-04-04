@@ -25,10 +25,8 @@
 	//
 	// =========================================================================
 	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
-		console.log ('yes indeed');
 		var vm                    = this;
 		vm.features = window.features;
-		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -234,15 +232,6 @@
 						vm.responses[questionIndex].push (p.questions[questionIndex])
 					});
 				}
-				// console.group ('reponses');
-				// vm.responses.forEach (function (q, i) {
-				// 	console.group ('question '+i);
-				// 	q.forEach (function (r) {
-				// 		console.log ('response:', r.rank, r.response);
-				// 	})
-				// 	console.groupEnd ();
-				// })
-				// console.groupEnd ();
 				//
 				// if we have not yet begun evaluating do some question order randomizing
 				//
@@ -278,7 +267,6 @@
 						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
 							if (p[skill._id.toString()]) proposal.scores.skill++;
 						});
-						console.log ('proposal.scores.skill', proposal.scores.skill);
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
@@ -322,30 +310,23 @@
 						$uibModalInstance.close('save');
 					};
 					$scope.pageChanged = function () {
-						// console.log ('page changed');
 					};
 					$scope.moveUp = function (resp, qindex) {
 						console.group ('moving up in question '+qindex);
-						console.log ('resp', resp);
 						var orank = resp.rank;
 						var nrank = orank-1;
-						console.log ('old rank: ',orank, 'new rank:', nrank);
 						vm.responses[qindex].forEach (function (r) {
-							console.log ('checking: ', r.rank);
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							console.log ('is now: ', r.rank);
 						});
 						console.groupEnd ();
 					};
 					$scope.moveDown = function (resp, qindex) {
-						console.log ('moving down!', resp, qindex);
 						var orank = resp.rank;
 						var nrank = orank+1;
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.commit = function () {
@@ -355,10 +336,8 @@
 			}, {
 			})
 			.then (function (resp) {
-				// console.log ('resp', resp);
 				if (resp === 'save' || resp === 'commit') {
 				// vm.responses[0][0].rank = 999;
-				console.log ('whatproposals', vm.proposals[0].questions[0].rank);
 					//
 					// TBD: calculate scores etc.
 					//
@@ -403,7 +382,6 @@
 			}, {
 			})
 			.then (function (resp) {
-				// console.log ('resp', resp);
 				if (resp.action === 'save') {
 					//
 					// calculate scores etc.
@@ -434,8 +412,6 @@
 		vm.saveProposal = function (proposal) {
 			if (!vm.canEdit) return;
 			vm.calculateProposalScore (proposal);
-			// console.log ('saving proposal');
-			// console.log ('questions', proposal.questions);
 			return proposal.createOrUpdate ();
 		};
 		vm.saveProposals = function () {
@@ -455,14 +431,12 @@
 		// skills are scored when the proposal is saved
 		//
 		vm.skillScore = function (proposal) {
-			// console.log ('proposal.scores.skill', proposal.scores.skill);
 			return proposal.scores.skill;
 		};
 		//
 		// just pass it back
 		//
 		vm.interviewScore = function (proposal) {
-			// console.log ('proposal.scores.interview', proposal.scores.interview);
 			return proposal.scores.interview;
 		};
 		//
@@ -477,15 +451,11 @@
 		//
 		vm.questionScore = function (proposal) {
 			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
-			// console.log ('best:', bestScore);
 			proposal.scores.question = (proposal.questions.map (function (q) {
-				// console.log ('question score:', vm.proposals.length + 1 - q.rank);
 				return vm.proposals.length + 1 - q.rank;
 			}).reduce (function (a, b) {
-				// console.log ('reduction:', a+b);
 				return a + b;
 			})) / bestScore * 100;
-			// console.log ('proposal.scores.question', proposal.scores.question);
 			return proposal.scores.question;
 		};
 		//
@@ -494,7 +464,6 @@
 		vm.priceScore = function (proposal) {
 			// var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
 			// proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
-			// console.log ('proposal.scores.price', proposal.scores.price);
 			return proposal.scores.price;
 		};
 		vm.calculateProposalScore = function (proposal) {
@@ -505,7 +474,6 @@
 				vm.opportunity.weights.interview * vm.interviewScore (proposal),
 				vm.opportunity.weights.price     * vm.priceScore     (proposal)
 			].reduce (function (t, c) {return t + c;});
-			// console.log ('proposal.scores.total', proposal.scores.total);
 			return proposal.scores.total;
 		};
 		vm.calculatePriceScores = function () {
@@ -939,7 +907,6 @@
 				return false;
 			}
 			if (!isValid) {
-				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -958,7 +925,6 @@
 			CapabilitiesMethods.reconcile (vm.inp, vm.oinp);
 			CapabilitiesMethods.reconcile (vm.prp, vm.oprp);
 			CapabilitiesMethods.reconcile (vm.imp, vm.oimp);
-			console.log (vm.opportunity.phases);
 			//
 			// if any context pieces were being set then copy in to the
 			// right place here (only when adding)
@@ -1009,7 +975,6 @@
 			//
 			// Create a new opportunity, or update the current instance
 			//
-			// console.log ('saving now');
 			promise.then(function() {
 				if (savemeSeymour) {
 					return vm.opportunity.createOrUpdate();

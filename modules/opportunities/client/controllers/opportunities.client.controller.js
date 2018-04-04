@@ -38,7 +38,6 @@
 	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
 		var vm                    = this;
 		vm.features = window.features;
-		// console.log ('virtuals', opportunity.isOpen);
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -175,7 +174,6 @@
 				}
 				vm.responses.forEach (function (q) {
 					q.forEach (function (r) {
-						// console.log ('response:', r.rank, r.response);
 					})
 				})
 				//
@@ -237,14 +235,12 @@
 					vm.responses[0][0].rank = 999;
 
 					$scope.close = function () {
-						// console.log ('what');
 						$uibModalInstance.close('cancel');
 					};
 					$scope.ok = function () {
 						$uibModalInstance.close('save');
 					};
 					$scope.pageChanged = function () {
-						// console.log ('page changed');
 					};
 					$scope.moveUp = function (resp, qindex) {
 						var orank = resp.rank;
@@ -252,7 +248,6 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							// console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.moveDown = function (resp, qindex) {
@@ -261,7 +256,6 @@
 						vm.responses[qindex].forEach (function (r) {
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
-							// console.log ('response: ',r.rank,r.response);
 						});
 					};
 					$scope.commit = function () {
@@ -271,10 +265,8 @@
 			}, {
 			})
 			.then (function (resp) {
-				// console.log ('resp', resp);
 				if (resp === 'save' || resp === 'commit') {
 				// vm.responses[0][0].rank = 999;
-				console.log ('whatproposals', vm.proposals[0].questions[0].rank);
 					//
 					// TBD: calculate scores etc.
 					//
@@ -319,7 +311,6 @@
 			}, {
 			})
 			.then (function (resp) {
-				// console.log ('resp', resp);
 				if (resp.action === 'save') {
 					//
 					// calculate scores etc.
@@ -651,7 +642,6 @@
 				return false;
 			}
 			if (!isValid) {
-				// console.log (vm.opportunityForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({
 					message : 'There are errors on the page, please review your work and re-save',
@@ -708,7 +698,6 @@
 			//
 			// Create a new opportunity, or update the current instance
 			//
-			// console.log ('saving now');
 			promise.then(function() {
 				if (savemeSeymour) {
 					return vm.opportunity.createOrUpdate();

@@ -34,7 +34,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		// console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -224,7 +223,6 @@
 					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
 				}
 			}
-			// console.log ('questions', ppp.proposal.questions);
 
 			ppp.totals = {};
 			ppp.tinymceOptions = TINYMCE_OPTIONS;

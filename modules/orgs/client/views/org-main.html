@@ -70,8 +70,7 @@
 						"title":"Province",
 						"id":"province",
 						"name":"province",
-						"placeholder":"BC",
-						"disabled":"true"
+						"placeholder":"BC"
 					}'>
 				</form-input>
 
@@ -84,6 +83,30 @@
 						"id":"postalcode",
 						"name":"postalcode",
 						"placeholder":"Postal Code"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.businessNumber"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Business Registration Number",
+						"id":"businessNumber",
+						"name":"businessNumber",
+						"placeholder":"Business Number"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.businessJurisdiction"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Registration Jurisdiction",
+						"id":"businessJurisdiction",
+						"name":"businessJurisdiction",
+						"placeholder":"Registered In"
 					}'>
 				</form-input>
 

@@ -24,7 +24,6 @@
 		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 		vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
-			// console.log ('runing');
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 				return false;

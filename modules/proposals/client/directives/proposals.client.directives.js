@@ -35,7 +35,6 @@
 				var isProposal        = qaz.proposal && qaz.proposal._id;
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
 				qaz.isSprintWithUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
-				console.log (Authentication.user);
 				var hasCompany        = isUser && Authentication.user.orgsAdmin.length > 0;
 				qaz.case               = 'nothing';
 				if (!isUser) qaz.case = 'guest';
@@ -184,7 +183,6 @@
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				vm.userCanAdd = vm.isAdmin;
-				// console.log ('user can add', vm.userCanAdd);
 				if ($scope.title) vm.title = $scope.title;
 			}
 		}

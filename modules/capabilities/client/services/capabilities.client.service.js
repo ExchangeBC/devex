@@ -66,15 +66,15 @@
 			// -------------------------------------------------------------------------
 			dump: function (scope, title) {
 				title = (title || 'capabilities') + ':';
-				console.groupCollapsed (title);
-				console.log ('scope.capabilities', scope.capabilities);
-				console.log ('scope.capabilitySkills', scope.capabilitySkills);
-				console.log ('scope.iCapabilities', scope.iCapabilities);
-				console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
-				console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
-				console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
-				console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
-				console.groupEnd ();
+				// console.groupCollapsed (title);
+				// console.log ('scope.capabilities', scope.capabilities);
+				// console.log ('scope.capabilitySkills', scope.capabilitySkills);
+				// console.log ('scope.iCapabilities', scope.iCapabilities);
+				// console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
+				// console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
+				// console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
+				// console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
+				// console.groupEnd ();
 			},
 			// -------------------------------------------------------------------------
 			//

@@ -77,7 +77,6 @@ var getOrgById = function (id) {
 // -------------------------------------------------------------------------
 var saveUser = function (user) {
 	return new Promise (function (resolve, reject) {
-		// console.log ('saving user', user);
 		user.save (function (err, newuser) {
 			if (err) {reject (err);}
 			else {resolve (newuser);}
@@ -111,7 +110,6 @@ var getUsers = function (terms) {
 // -------------------------------------------------------------------------
 var addUserTo = function (org, fieldName) {
 	return function (user) {
-		// console.log ('add user', user._id, 'to ', fieldName, 'in org:', org._id);
 		org[fieldName].addToSet (user._id);
 		org.markModified (fieldName);
 		if (fieldName === 'admins') {
@@ -121,7 +119,6 @@ var addUserTo = function (org, fieldName) {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
 		}
-		// console.log ('org[fieldName]:',org[fieldName]);
 		return user;
 	};
 };
@@ -133,7 +130,6 @@ var addUserTo = function (org, fieldName) {
 // -------------------------------------------------------------------------
 var removeUserFrom = function (org, fieldName) {
 	return function (user) {
-		// console.log ('removing user', user._id, 'from ', fieldName);
 		org[fieldName].pull (user._id);
 		org.markModified (fieldName);
 		if (fieldName === 'admins') {
@@ -203,7 +199,6 @@ var checkCapabilities = function (org) {
 	return collapseCapabilities (org)
 	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
-		console.log (capabilities);
 		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
 		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
 		return org;
@@ -216,13 +211,11 @@ var checkCapabilities = function (org) {
 // -------------------------------------------------------------------------
 var resolveOrg = function (org) {
 	return function () {
-		// console.log ('resolving org', org._id);
 		return org;
 	};
 };
 var saveOrg = function (req, res) {
 	return function (org) {
-		console.log ('saving org', org);
 		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
@@ -306,7 +299,6 @@ var addAdmins = function (org) {
 //
 // -------------------------------------------------------------------------
 var removeMember = function (user, org) {
-	// console.log ('removing member:', user._id);
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
 	// .then (saveUser)
@@ -375,7 +367,6 @@ exports.update = function (req, res) {
 	var list = null;
 	if (req.body.additions) {
 		list = req.body.additions.split (/[ ,]+/);
-		// console.log ('users to be added:', list);
 	}
 	//
 	// copy over everything passed in. This will overwrite the
@@ -439,7 +430,6 @@ exports.list = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.orgByID = function (req, res, next, id) {
-	// console.log ('get by id');
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
 			message: 'Org is invalid'

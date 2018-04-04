@@ -451,7 +451,6 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
-	// console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op

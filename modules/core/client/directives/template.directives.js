@@ -21,14 +21,12 @@
 					var fullPath;
 					if (!url) fullPath = '';
 					else fullPath = ((url.substr(0,1) === '/' || url.substr(0,4) === 'http') ? '' : '/') + url;
-					// console.log ('full path', fullPath);
 					avat.fullurl = fullPath;
 				};
 				avat.size = $scope.size || 50;
 				avat.text = $scope.text || '';
 				seturl ();
 				$scope.$watch('url', function (newValue, oldValue) {
-					// console.log ('CHANGE CHANGE');
 					if (newValue) {
 						seturl ();
 					}
@@ -47,7 +45,6 @@
 			restrict: 'EAC',
 			template : function (elem, attrs) {
 				var badges = attrs.badges;
-				// console.log ('badges', badges);
 				var isarray = false;
 				var isarrayofobjects = false;
 				var outarray;

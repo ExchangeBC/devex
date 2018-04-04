@@ -44,15 +44,12 @@
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {
-				console.log (vm.orgForm);
 				$scope.$broadcast('show-errors-check-validity', 'vm.orgForm');
 				return false;
 			}
 			vm.orgForm.$setPristine ();
-			console.log ('here');
 			vm.org.createOrUpdate ()
 			.then (function (result) {
-				console.log ('kjhasd');
 				vm.orgForm.$setPristine ();
 				newId = result._id;
 				Notification.success ({
@@ -97,7 +94,6 @@
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 
 		vm.org        = org;
-		// console.log (org);
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
 		// vm.previousState  = previousState;
@@ -120,7 +116,6 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		$rootScope.$on('orgImageUpdated', function (evt, data) {
-			// console.log ('event data = ', data);
 			vm.org.orgImageURL = data;
 
 		});
@@ -131,7 +126,6 @@
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
 			if ($window.confirm('Are you sure you want to delete?')) {
-				// console.log ('deleting');
 				vm.org.$remove(function() {
 					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
@@ -238,7 +232,6 @@
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
-		// console.log ('whatcaps', capabilities);
 		CapabilitiesMethods.init (vm, vm.org, capabilities);
 		// -------------------------------------------------------------------------
 		//
@@ -259,7 +252,6 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
-			// console.log ('add People');
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
