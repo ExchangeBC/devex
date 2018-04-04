@@ -176,8 +176,12 @@ a.breadcrumb-nav {
 // Containers
 .container {
 	max-width: 1040px;
-  padding: 0;
+  padding: 0 10px;
   > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  > .navbar-header {
     margin-left: 0;
     margin-right: 0;
   }
@@ -416,7 +420,7 @@ h4.edit-form-header {
 }
 
 .navbar-brand {
-  padding: 3px 15px 3px 0px;
+  padding: 3px 20px 3px 0px;
   height: 50px;
 }
 
@@ -475,9 +479,6 @@ h4.edit-form-header {
 		font-size: 32px;
 		display: block;
 	}
-  .navbar-brand {
-    padding-left: 20px;
-  }
 }
 
 @media (min-width: 768px) {
