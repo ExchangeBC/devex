@@ -1,0 +1,110 @@
+<section class="edit-form-background">
+	<div class="container edit-form" role="main">
+		<div class="edit-form-header">
+			<div class="row">
+				<div class="col-xs-12">
+					Register Your Company on the BCDevExchange
+				</div>
+			</div>
+		</div>
+		<div class="edit-form-body">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="alert alert-info">
+						Registering your company means that any site viewer will be able to see:
+								<ul>
+									<li>Your company name</li>
+									<li>A link to your website if you choose to share it</li>
+									<li>A list of the <a href="/capabilities" target="_blank">Sprint With Us capabilities</a> your company possesses by virtue of its members&#42;</li>
+								</ul>
+						<br>
+						<span class="light">&#42;The individual members you associate to your company profile will NOT be seen by site viewers; they will only be seen by the issuer of a government opportunity to which you've put those members forward in a proposal.</span>
+					</div>
+				</div>
+			</div>
+			<hr>
+			<form>
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<!-- // I think these can all be blank text fields for now. We just want to be able to capture the information so that the Government Product Manager could manually verify the company if they choose to.  // -->
+						<fieldset>
+							<form-input
+								ng-model="vm.org.name"
+								class="col-xs-12"
+								x-form="orgForm"
+								x-options='{
+									"title":"Legal Name of Company",
+									"id":"companyname",
+									"name":"companyname",
+									"placeholder":"The legal name of your company",
+									"required":"A name is required"
+								}'>
+							</form-input>
+						</fieldset>
+						<fieldset>
+							<form-input
+								ng-model=""
+								class="col-xs-12"
+								x-form="orgForm"
+								x-options='{
+									"title":"Jurisdiction",
+									"id":"",
+									"name":"",
+									"placeholder":"Where your company is registered (e.g. British Columbia)",
+									"required":"This information is required"
+								}'>
+							</form-input>
+						</fieldset>
+						<fieldset>
+							<form-input
+								ng-model=""
+								class="col-xs-12"
+								x-form="orgForm"
+									x-options='{
+									"title":"Business ID",
+									"id":"",
+									"name":"",
+									"placeholder":"Your company&#39;s unique Business ID or Business Number",
+									"required":"This information is required"
+								}'>
+							</form-input>
+						</fieldset>
+					</div>
+					<div class="hidden-xs col-sm-1"></div>
+					<div class="col-xs-12 col-sm-5 pull pull-right">
+						<br><br><br>
+						<label class="light">
+							<input type="checkbox">&nbsp;
+							&#42;By clicking Continue, I swear that the information I provide is truthful and that I have authority to act on behalf of this company for the purposes of listing basic information, associating members to the company, and submitting proposals on behalf of those individuals and the company.
+						</label>
+					</div>
+				</div>	
+			</form>
+		</div>
+		<div class="edit-form-footer">
+			<div class="row">
+				<div class="col-xs-12">
+					<!-- // The Continue button should be disabled until: information has been entered into all of the three fields, AND the checkbox has been checked // -->
+					<button type="submit" class="btn btn-primary pull-right disabled"><i class="fa fa-arrow-circle-right"></i> Continue</button>
+					<button class="btn btn-default pull-right" ng-click="vm.delete()">Cancel</button>
+				</div>
+			</div>
+		</div>	
+	</div>
+	
+	<br>
+	
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="alert">
+					<span class="strong">Collection Notice</span>
+					<br>
+					We're collecting this information through the Ministry of Technology, Innovation and Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA) for the purpose of communicating with you! If you have any questions about the collection of this personal information please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Technology, Innovation and Citizens’ Services, 250-514-2739.
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
+
