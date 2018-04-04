@@ -177,6 +177,10 @@ a.breadcrumb-nav {
 .container {
 	max-width: 1040px;
   padding: 0;
+  > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .detail-view {
@@ -386,7 +390,10 @@ h4.edit-form-header {
   padding: 2.5em 0 0;
 }
 
-// Navigation
+//--------------------
+// Navs
+//--------------------
+
 .navbar {
   border: none;
 }
@@ -403,11 +410,12 @@ h4.edit-form-header {
   border: none;
 }
 
-
 .navbar-brand {
   padding: 3px 15px 3px 0px;
   height: 50px;
 }
+
+
 
 .navbar-nav {
   > li {
@@ -462,6 +470,9 @@ h4.edit-form-header {
 		font-size: 32px;
 		display: block;
 	}
+  .navbar-brand {
+    padding-left: 20px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -475,13 +486,12 @@ h4.edit-form-header {
 	}
 }
 
-// NAV
-// -------------------------
+.navbar-collapse {
+  margin-right: 0;
+  margin-left: 0;
+  text-align: right;
+}
 
-// Tabs
-// -------------------------
-
-// Give the tabs something to sit on
 .nav-tabs {
   border-bottom: none;
   margin: 0 0 30px;
@@ -1688,6 +1698,7 @@ form-title {
 }
 
 .card-company {
+  margin: 5px 0;
   > .card-header {
     padding-top: 5px;
     padding-bottom: 5px;
