@@ -19,6 +19,9 @@
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
+		// console.log ('user org admins' , vm.user.orgAdmin);
+		// console.log (' org admins' , vm.org.admins);
+		// console.log (' org owner' , vm.org.owner);
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
