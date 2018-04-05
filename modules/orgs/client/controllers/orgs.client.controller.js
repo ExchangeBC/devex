@@ -44,6 +44,7 @@
 		vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
+		vm.user = Authentication.user;
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {
@@ -60,7 +61,18 @@
 				})
 			})
 			.then (function () {
-				UsersService.resetMe ();
+				vm.user.orgsMember.push (newId);
+				vm.user.orgsAdmin.push (newId);
+				var user = new UsersService (vm.user);
+				return new Promise (function (resolve, reject) {
+					user.$update (function (response) {
+						Authentication.user = response;
+						resolve ();
+					}, function (err) {
+						reject (err);
+					});
+				});
+				// UsersService.resetMe ();
 			})
 			.then (function () {
 				$state.go ('orgadmin.profile', {orgId:newId});
