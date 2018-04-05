@@ -457,7 +457,7 @@
 			ProposalsService.submit (ppp.proposal).$promise
 			.then (
 				function (response) {
-					ppp.proposal = response;
+					// ppp.proposal = response;
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
 				},
 				function (error) {
@@ -479,7 +479,7 @@
 			})
 			.then(
 				function (response) {
-					ppp.proposal = response.data;
+					ppp.proposal = new ProposalsService (response.data);
 					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
@@ -497,7 +497,7 @@
 			}).$promise
 			.then (function (doc) {
 				ppp.proposal = doc;
-				$scope.$apply();
+				// $scope.$apply();
 			});
 		};
 		ppp.subscribe = function (state) {

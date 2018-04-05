@@ -534,7 +534,7 @@
 			})
 			.then(
 				function (response) {
-					ppp.proposal = response.data;
+					ppp.proposal = new ProposalsService (response.data);
 					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
