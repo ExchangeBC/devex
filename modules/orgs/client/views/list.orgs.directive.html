@@ -12,12 +12,12 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-4" ng-repeat="org in vm.orgs">
 		<div class="card card-company">
-			<div class="card-header" ng-if="org.canEdit || org.isOrgMember">
+			<div class="card-header">
 				<!--
 				<label ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-default">Admin</label>
 				-->
-				<label ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default">Member</label>
 				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-lg fa-gear"></i></a>
+				<label ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default pull-right">Member</label>
 			</div>
 			
 			<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">

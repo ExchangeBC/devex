@@ -4,7 +4,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<p><span class="strong"><i class="fa fa-check-circle"></i> Your proposal has been submitted!</span> &nbsp;&nbsp; You can make updates or withdraw your proposal until <strong> 16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>.</p>
+				<span class="strong"><i class="fa fa-check-circle"></i> This proposal has been submitted!</span> &nbsp;&nbsp; You can make updates or withdraw your proposal until <strong> 16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>.
 			</div>
 		</div>
 	</div>
@@ -15,8 +15,8 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<p><span class="strong"><i class="fa fa-file"></i> Your proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span> to be considered for this opportunity!</p>
-				<p ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your proposal, you must agree to the Terms.</p>
+				<p><span class="strong"><i class="fa fa-file"></i> This proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <strong>16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong> to be considered for this opportunity!</p>
+				<p class="danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your proposal, you must agree to the Terms.</p>
 			</div>
 		</div>
 	</div>
@@ -34,7 +34,7 @@
 						<h4 class="edit-form-header"><span class="small light">MY PROPOSAL TO WORK ON:</span> {{ppp.opportunity.name}}</h4>
 					</div>
 					<div class="col-xs-4">
-						<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-times"></i> CLOSE</a>
+						<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-2x fa-times"></i></a>
 					</div>
 				</div>
 			</div>

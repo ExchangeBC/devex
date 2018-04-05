@@ -176,7 +176,15 @@ a.breadcrumb-nav {
 // Containers
 .container {
 	max-width: 1040px;
-  padding: 0;
+  padding: 0 10px;
+  > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  > .navbar-header {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .detail-view {
@@ -236,13 +244,7 @@ h4.opp-detail {
   box-shadow: 0 4px 6px #777, 0 1px 3px #777;
 }
 
-.proposal-admin-view {
-  background: @theme-important;
-  color: @gray-dark;
-  padding: 2em;
-  border-radius: 3px;
-  border: 1px solid #ddd;
-}
+
 
 // Capability detail views
 
@@ -251,8 +253,19 @@ h1.capability-detail {
   font-size: 2em;
 }
 
+//--------------------
+// CWU Evaluation
+//--------------------
 
+.cwu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 1em;
+}
+
+//--------------------
 // SWU Evaluation
+//--------------------
 
 .swu-evaluation {
   border: 1px solid #ddd;
@@ -386,7 +399,10 @@ h4.edit-form-header {
   padding: 2.5em 0 0;
 }
 
-// Navigation
+//--------------------
+// Navs
+//--------------------
+
 .navbar {
   border: none;
 }
@@ -403,11 +419,12 @@ h4.edit-form-header {
   border: none;
 }
 
-
 .navbar-brand {
-  padding: 3px 15px 3px 0px;
+  padding: 3px 20px 3px 0px;
   height: 50px;
 }
+
+
 
 .navbar-nav {
   > li {
@@ -475,13 +492,12 @@ h4.edit-form-header {
 	}
 }
 
-// NAV
-// -------------------------
+.navbar-collapse {
+  margin-right: 0;
+  margin-left: 0;
+  text-align: right;
+}
 
-// Tabs
-// -------------------------
-
-// Give the tabs something to sit on
 .nav-tabs {
   border-bottom: none;
   margin: 0 0 30px;
@@ -1688,16 +1704,18 @@ form-title {
 }
 
 .card-company {
+  margin: 5px 0;
   > .card-header {
-    padding-top: 5px;
-    padding-bottom: 5px;
     border-bottom: none;
+    height: 20px;
     > .btn {
       margin: -4px -15px;
     }
   }
   > .card-body {
     padding: 15px;
+    height: 75px;
+    overflow-y: hidden;
   }
 }
 

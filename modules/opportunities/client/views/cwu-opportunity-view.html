@@ -34,9 +34,9 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<!-- // Admin View for Proposals // -->
-	<div class="container proposal-admin-view" ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished">
+	<div class="container cwu-evaluation" ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished">
 
 		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
 
@@ -114,7 +114,7 @@
 			<button type="button" class="btn btn-sm btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})" title="Edit this Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
 
 			<!-- UNPUBLISH (if opportunity is PUBLISHED) -->
-			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
+			<a href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-sm btn-text-only pull-right" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></a>
 
 		<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
 
