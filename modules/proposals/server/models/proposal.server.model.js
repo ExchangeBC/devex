@@ -78,7 +78,7 @@ var ProposalSchema = new Schema ({
 		total           : {type: Number, default: 0}
 
 	}
-});
+}, { usePushEach: true });
 
 
 mongoose.model('Proposal', ProposalSchema);

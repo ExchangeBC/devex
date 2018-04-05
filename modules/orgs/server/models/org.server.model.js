@@ -47,7 +47,7 @@ var OrgSchema = new Schema ({
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
 	members              : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]},
 	admins               : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]}
-});
+}, { usePushEach: true });
 
 OrgSchema.pre ('save', function (next) {
 	this.fullAddress = this.address + (this.address?', '+this.address:'') + ', ' + this.city + ', ' + this.province+ ', ' + this.postalcode

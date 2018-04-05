@@ -28,7 +28,7 @@ var Endorsement = new Schema ({
 	createdBy   : {type: 'ObjectId', ref: 'User', default: null },
 	updated     : {type: Date, default: null },
 	updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
-});
+}, { usePushEach: true });
 
 // -------------------------------------------------------------------------
 //
@@ -39,7 +39,7 @@ var UserCapabilities = new Schema ({
 	code       : {type: String, default: ''},
 	experience : {type: String, default:''},
 	years      : {type: Number, default:0 }
-});
+}, { usePushEach: true });
 
 /**
  * A Validation function for local strategy properties
@@ -154,7 +154,7 @@ var UserSchema = new Schema({
 	capabilityDetails : {type:[UserCapabilities], default:[]}
 
 
-});
+}, { usePushEach: true });
 
 /**
  * Hook a pre save method to hash the password

@@ -65,7 +65,7 @@ var ProjectSchema = new Schema({
   },
   activity: {type: Number, default:1},
   tags: [String]
-});
+}, { usePushEach: true });
 
 ProjectSchema.statics.findUniqueCode = function (title, suffix, callback) {
   var _this = this;
