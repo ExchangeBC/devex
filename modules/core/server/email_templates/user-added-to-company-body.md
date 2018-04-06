@@ -3,11 +3,11 @@
 
 ### Hi {{data.username}}!
 
-**Company Admin Name** has just added you to **Company Name**.
+**{{data.adminname}}** has just added you to **{{data.companyname}}**.
 
 This is for the purpose of putting you forward on _Sprint With Us_ opportunities.
 
-If you think this is an error, please contact: **companyadmin's email address** and ask them to remove you.
+If you think this is an error, please contact: **{{data.adminemail}}** and ask them to remove you.
 
 ---
 

@@ -83,11 +83,16 @@ var saveUser = function (user) {
 		});
 	});
 };
-var notifyUser = function (user) {
-	return Notifications.notifyUserAdHoc ('user-added-to-company', {
-		username : user.displayName,
-		useremail : user.email
-	});
+var notifyUser = function (org) {
+	return function (user) {
+		return Notifications.notifyUserAdHoc ('user-added-to-company', {
+			username    : user.displayName,
+			useremail   : user.email,
+			adminname   : org.adminName,
+			adminemail  : org.adminEmail,
+			companyname : org.name
+		});
+	};
 };
 // -------------------------------------------------------------------------
 //
@@ -263,7 +268,7 @@ var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
-	.then (notifyUser)
+	.then (notifyUser (org))
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
@@ -373,6 +378,8 @@ exports.update = function (req, res) {
 	// audit fields, but they get updated in the following step
 	//
 	var org = _.assign (req.org, req.body);
+	org.adminName = req.user.displayName;
+	org.adminEmail = req.user.email;
 
 	var p = (list) ? inviteMembers (list, org) : Promise.resolve (org);
 

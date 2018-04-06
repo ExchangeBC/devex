@@ -303,6 +303,7 @@
 		vm.save = function () {
 			vm.org.createOrUpdate ()
 			.then (function () {
+				vm.refresh ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
 				});
