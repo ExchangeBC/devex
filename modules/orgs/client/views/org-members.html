@@ -21,7 +21,7 @@
 					</tbody>
 				</table>
 			</div>
-			
+
 			<div class="col-sm-1"></div>
 
 			<div class="col-sm-6">
@@ -30,7 +30,7 @@
 					<p>Associate individuals to your company with the email address they're using for their personal profile.</p>
 					<p>(We'll notify them when you add them.)</p>
 					<div class="input-group">
-					  <input type="text" class="form-control" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
+					  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
 					  <span class="input-group-btn">
 						<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
 					  </span>
@@ -47,7 +47,7 @@
 						</label-list>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
 
 		<br/>
