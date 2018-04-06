@@ -457,8 +457,10 @@
 			ProposalsService.submit (ppp.proposal).$promise
 			.then (
 				function (response) {
-					// ppp.proposal = response;
+					ppp.proposal = response;
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+					_init ();
+					setSkills ();
 				},
 				function (error) {
 					 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
