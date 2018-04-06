@@ -12,6 +12,7 @@ var _ = require('lodash'),
 	config = require(path.resolve('./config/config')),
 	User = mongoose.model('User'),
 	validator = require('validator'),
+	orgController = require(path.resolve('./modules/orgs/server/controllers/orgs.server.controller')),
 	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
@@ -65,6 +66,12 @@ var whitelistedFields = [
 
 ];
 
+var updateOrgs = function (orglist) {
+	return Promise.all (orglist.map (function (orgid) {
+		return orgController.updateOrgCapabilities (orgid);
+	}));
+};
+
 /**
  * Update user details
  */
@@ -98,6 +105,7 @@ exports.update = function (req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
+					updateOrgs (user.orgsMember);
 					req.login(user, function (err) {
 						if (err) {
 							res.status(400).send(err);

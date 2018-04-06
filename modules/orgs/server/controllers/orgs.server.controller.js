@@ -70,6 +70,7 @@ var getOrgById = function (id) {
 		});
 	});
 };
+exports.getOrgById = getOrgById;
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -209,6 +210,19 @@ var checkCapabilities = function (org) {
 		return org;
 	})
 };
+var minisave = function (org) {
+	return new Promise (function (resolve, reject) {
+		org.save (function (err, model) {
+			if (err) reject (err);
+			else resolve (model);
+		});
+	});
+};
+exports.updateOrgCapabilities = function (orgId) {
+	return getOrgById (orgId)
+	.then (checkCapabilities)
+	.then (minisave);
+};
 // -------------------------------------------------------------------------
 //
 // just to make things easier to read later on
@@ -249,7 +263,7 @@ var saveOrg = function (req, res) {
 					})
 					.catch (function (err) {
 						res.status (422).send ({
-							message: 'Error popuilating organization'
+							message: 'Error populating organization'
 						});
 					});
 				}
