@@ -22,7 +22,15 @@
 				var uid      = isUser ? Authentication.user._id : 'none';
 				vm.isAdmin = isAdmin;
 				vm.isGov   = isGov;
-				vm.userCanAdd = isUser && (isAdmin || !isGov);
+				//
+				// HACK HACK HACK : TBD: To Be Removed!!!!!!!
+				// at some point a use rcan have multiple compnaies or be the admin
+				// for multiple, but not for now.  remove this when that full implementation
+				// happens
+				//
+				var alreadyHasCompanies = user.orgsAdmin.length > 0;
+
+				vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
 				vm.trust = $sce.trustAsHtml;
 				$scope.orgs.forEach (function (org) {
 					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
