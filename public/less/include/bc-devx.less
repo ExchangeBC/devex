@@ -1341,13 +1341,21 @@ form-title {
 // .panel-warning  { .panel-heading-lighten(@theme-warning); }
 // .panel-danger   { .panel-heading-lighten(@theme-danger); }
 //
-//
+//---------------------
 // Custom panel styles
-//
+//---------------------
+
 .panel-default {
   > .panel-heading, .panel-footer {
     background-color: @gray-lighter;
   }
+}
+
+.panel-primary {
+  > .panel-heading, .panel-footer {
+    background-color: @theme-primary;
+  }
+  border-color: @theme-primary;
 }
 
 .panel-group {
