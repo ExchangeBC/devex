@@ -404,20 +404,54 @@ exports.update = function (req, res) {
 //
 // delete the org
 //
-// TBD : locate all members and admins and remove the org from thier
-// orgsAdmin and orgsMember arrays. Not a problem if they stay as the populate
-// will just ignore them, but it would be cleaner if it happens
+// TBD : In future we should NOT allow deletion of companies that have
+// submitted proposals as we may need the data and linkage for public record
 //
 // -------------------------------------------------------------------------
+var getAllAffectedMembers = function (orgId) {
+	return new Promise (function (resolve, reject) {
+		User.find ({
+			$or : [
+				{orgsAdmin : {$in: [orgId]}},
+				{orgsMember : {$in: [orgId]}},
+				{orgsPending : {$in: [orgId]}}
+			]
+		}, function (err, users) {
+			if (err) reject (err);
+			else resolve (users);
+		});
+	});
+};
+var removeAllCompanyReferences = function (orgId) {
+	return function (users) {
+		return Promise.resolve (users.map (function (user) {
+			user.orgsAdmin.pull (orgId);
+			user.orgsMember.pull (orgId);
+			user.orgsPending.pull (orgId);
+			user.markModified ('orgsAdmin');
+			user.markModified ('orgsMember');
+			user.markModified ('orgsPending');
+			return user.save ();
+		}));
+	};
+};
 exports.delete = function (req, res) {
 	var org = req.org;
+	var orgId = org._id;
 	org.remove(function (err) {
 		if (err) {
 			return res.status(422).send ({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (org);
+			getAllAffectedMembers (orgId)
+			.then (removeAllCompanyReferences (orgId))
+			.then (function () {
+				res.json (org);
+			})
+			.catch (function (err) {
+				res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+			})
 		}
 	});
 };
