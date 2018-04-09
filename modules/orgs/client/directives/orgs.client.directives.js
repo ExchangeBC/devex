@@ -28,7 +28,7 @@
 				// for multiple, but not for now.  remove this when that full implementation
 				// happens
 				//
-				var alreadyHasCompanies = user.orgsAdmin.length > 0;
+				var alreadyHasCompanies = isUser && Authentication.user.orgsAdmin.length > 0;
 
 				vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
 				vm.trust = $sce.trustAsHtml;

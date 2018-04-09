@@ -72,21 +72,6 @@ var updateOrgs = function (orglist) {
 	}));
 };
 
-var ensureOrgs = function (orglist, user) {
-	var Org = mongoose.model ('Org');
-	return Promise.all (orglist.map (function (orgid) {
-		Org.findById (orgid).exec (function (err, org) {
-			if (err || !org) {
-				user.orgsAdmin.pull (orgId);
-				user.orgsMember.pull (orgId);
-				user.orgsPending.pull (orgId);
-			}
-		})
-	}))
-	.then (function () {
-		user.save ();
-	});
-};
 
 
 /**
