@@ -60,7 +60,7 @@ section.intro {
   width: 100%;
   min-height: auto;
   overflow-y: hidden;
-  background: url('/modules/core/client/img/headers/homepage-banner.jpg') no-repeat center;
+  background: url('/modules/core/client/img/photos/laughing-blue.jpg') no-repeat center;
   background-size: cover;
   padding-top: 20px;
   padding-bottom: 40px;
@@ -202,20 +202,6 @@ section.detail dt {
 	font-weight: 100;
 	color: #a6a6a6;
 }
-
-
-@media (max-width: 767px) {
-	.img-responsive {
-		max-width: 70px;
-		min-height: 50px;
-	}
-}
-@media (min-width: 768px) {
-	.img-responsive {
-		max-width: 50%;
-	}
-}
-
 
 
 .vcenter {

@@ -14,7 +14,6 @@ body {
 p {
   font-size: 14px;
   font-weight: 300;
-  color: #676767;
   margin: 0 0 14px;
 }
 
@@ -1671,6 +1670,19 @@ form-title {
   }
 }
 
+.card-flat {
+  &:active, &:hover {
+    border-color: transparent;
+    transition: none;
+    cursor: default;
+  }
+  img.img-responsive {
+    height: 125px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .card-header {
   padding: .25em 1em;
 }
@@ -1945,6 +1957,22 @@ form-title {
   margin-bottom: 0;
   border-left: 0;
 }
+
+//----------------------------
+// Images for Testimonials
+//----------------------------
+
+.img-testimonial {
+  max-height: 85px;
+  @media (max-width: 767px) {
+    max-width: 70px;
+    min-height: 50px;
+  }
+  @media (min-width: 768px) {
+    max-width: 50%;
+  }
+}
+
 
 // Card image
 .card-img {
