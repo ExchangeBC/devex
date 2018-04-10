@@ -120,12 +120,12 @@ var addUserTo = function (org, fieldName) {
 		if (fieldName === 'admins') {
 			user.orgsAdmin.addToSet (org._id);
 			user.markModified ('orgsAdmin');
-			org.admins.addToSet (user._id.toString());
+			org.admins.addToSet (user._id);
 			org.markModified ('admins');
 		} else {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
-			org.members.addToSet (user._id.toString());
+			org.members.addToSet (user._id);
 			org.markModified ('members');
 		}
 		return user;
@@ -142,12 +142,12 @@ var removeUserFrom = function (org, fieldName) {
 		if (fieldName === 'admins') {
 			user.orgsAdmin.pull (org._id);
 			user.markModified ('orgsAdmin');
-			org.admins.pull (user._id.toString());
+			org.admins.pull (user._id);
 			org.markModified ('admins');
 		} else {
 			user.orgsMember.pull (org._id);
 			user.markModified ('orgsMember');
-			org.members.pull (user._id.toString());
+			org.members.pull (user._id);
 			org.markModified ('members');
 		}
 		return user;
@@ -348,6 +348,12 @@ var removeAdmin = function (user, org) {
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
 	if (!emaillist) return null;
+	//
+	// flatten out the members and admins arrays so that later on the
+	// addToSet function truly works on duplicates
+	//
+	org.admins = org.admins.map (function (obj) {return obj.id;});
+	org.members = org.members.map (function (obj) {return obj.id;});
 	var list = {
 		found    : [],
 		notfound : []
