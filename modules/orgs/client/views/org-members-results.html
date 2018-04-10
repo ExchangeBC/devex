@@ -6,7 +6,7 @@
 	</div>
 </div>
 <div class="modal-body">
-	<div class="row">
+	<div class="row" ng-if="data.found.length > 0">
 		<div class="col-sm-12">
 			<div class="panel panel-success">
 				<div class="panel-heading">
@@ -22,12 +22,12 @@
 		</div>
 	</div>
 	<br><br>
-	<div class="row">
+	<div class="row" ng-if="data.notfound.length > 0">
 		<div class="col-sm-12">
 			<div class="panel panel-danger">
 				<div class="panel-heading">
 					<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;<strong>Some members weren't found!</strong> <br>We couldn't find users in our system associated to these emails:
-				</div>	
+				</div>
 				<div class="panel-body">
 					<p class="strong" ng-repeat="p in data.notfound | orderBy:'email'" >
 						{{p.email}}
@@ -35,17 +35,17 @@
 					<div class="alert alert-info">
 						<h4>What to do</h4>
 						<p>Ask people you want to add to make sure they:
-							<ol> 
+							<ol>
 								<li><strong>Sign in</strong> to the BCDevExchange with their GitHub credentials</li>
 								<li><strong>Claim the capabilities</strong> they possess (in the <strong>My Capabilities &amp; Skills</strong> tab in their Profile)</li>
 								<li>Confirm the email address that's associated with their Profile (in the <strong>Privacy and Notifications</strong> tab)</li>
 							</ol>
-						</p> 
+						</p>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
 </div>
 <div class="modal-footer text-right">
 	<button class="btn btn-primary" data-ng-click="close()">Close</button>

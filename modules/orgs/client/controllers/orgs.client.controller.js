@@ -282,7 +282,7 @@
 				//
 				.then (function () {
 					vm.emaillist = '';
-
+					CapabilitiesMethods.init (vm, vm.org, capabilities);
 					// vm.refresh ();
 				})
 				.catch (function (res) {
