@@ -254,6 +254,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.refresh = function () {
+			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
 			OrgsService.get ({orgId: vm.org._id}).$promise
 			.then (function (org) {
@@ -267,6 +268,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
+			vm.orgForm.$setPristine ();
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
@@ -284,6 +286,7 @@
 					vm.emaillist = '';
 					CapabilitiesMethods.init (vm, vm.org, capabilities);
 					// vm.refresh ();
+					vm.orgForm.$setPristine ();
 				})
 				.catch (function (res) {
 					Notification.error ({
@@ -307,9 +310,12 @@
 			});
 		};
 		vm.save = function () {
+			vm.orgForm.$setPristine ();
 			vm.org.createOrUpdate ()
 			.then (function () {
-				vm.refresh ();
+				vm.emaillist = '';
+				CapabilitiesMethods.init (vm, vm.org, capabilities);
+				vm.orgForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
 				});

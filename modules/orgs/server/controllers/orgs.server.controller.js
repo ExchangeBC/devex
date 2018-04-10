@@ -347,7 +347,7 @@ var removeAdmin = function (user, org) {
 //
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
-	if (!emaillist) return null;
+	if (!emaillist) return Promise.resolve (null);
 	//
 	// flatten out the members and admins arrays so that later on the
 	// addToSet function truly works on duplicates
@@ -371,7 +371,7 @@ var inviteMembers = function (emaillist, org) {
 	})
 	.then (addMembers (org))
 	.then (function () {
-		return list;
+		return Promise.resolve (list);
 	});
 };
 
