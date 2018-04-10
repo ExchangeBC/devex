@@ -34,9 +34,9 @@
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- // Admin View for Proposals // -->
-	<div class="container cwu-evaluation" ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished">
+	<div class="container cwu-evaluation" ng-if="vm.canEdit && vm.opportunity.isPublished">
 
 		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
 
@@ -84,7 +84,7 @@
 
 	<div class="container">
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
+		<div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
 			<div class="alert alert-important">
 				<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
 				<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
@@ -92,7 +92,7 @@
 		</div>
 
 		<!-- // Proposal Application Directive // -->
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+		<div class="row" ng-if="vm.closing !== 'CLOSED'">
 			<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
 		</div>
 
