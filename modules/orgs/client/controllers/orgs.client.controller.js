@@ -243,7 +243,7 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask) {
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
@@ -270,18 +270,24 @@
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
-				.then (function () {
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> Member added and notified'
-					});
-					vm.refresh ();
-				})
+				.then (vm.displayResults)
+				// .then (function () {
+				// 	Notification.success ({
+				// 		message : '<i class="glyphicon glyphicon-ok"></i> Member added and notified'
+				// 	});
+				// 	vm.refresh ();
+				// })
 				//
 				// fail, notify and stay put
 				//
+				.then (function () {
+					vm.emaillist = '';
+
+					// vm.refresh ();
+				})
 				.catch (function (res) {
 					Notification.error ({
-						message : res.data.message,
+						message : res.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> invitations send error!'
 					});
 				});
@@ -309,6 +315,27 @@
 				});
 			})
 		};
+		vm.displayResults = function (result) {
+			if (!result.emaillist) return Promise.resolve ();
+			return new Promise (function (resolve, reject) {
+				modalService.showModal ({
+					size: 'lg',
+					templateUrl: '/modules/orgs/client/views/org-members-results.html',
+					controller: function ($scope, $uibModalInstance) {
+						$scope.data = {
+							found    : result.emaillist.found,
+							notfound : result.emaillist.notfound
+						};
+						$scope.close = function () {
+							$uibModalInstance.close ();
+						};
+					}
+				}, {
+				})
+				.then (resolve, reject);
+			});
+		};
+
 	})
 	// =========================================================================
 	//

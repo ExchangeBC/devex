@@ -1,0 +1,36 @@
+<div class="modal-header">
+	<h3>Add Member Results</h3>
+	<p>
+		Some added, some not, you must contact those not added
+	</p>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-warning">
+				<div class="panel-heading text-center">
+					THese ones were not added, do such and such.
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="p in data.notfound | orderBy:'email'" >
+						{{p.email}}
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<div class="panel panel-default">
+				<div class="panel-heading text-center">
+					THese ones were added, cool.
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="p in data.found | orderBy:'displayName'" >
+						{{p.displayName}} {{p.email}}
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer text-right">
+	<button class="btn btn-primary" data-ng-click="close()">Close</button>
+</div>

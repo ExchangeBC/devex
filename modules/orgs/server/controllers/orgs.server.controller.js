@@ -85,6 +85,7 @@ var saveUser = function (user) {
 	});
 };
 var notifyUser = function (org) {
+	console.log ('notifyuser');
 	return function (user) {
 		return Notifications.notifyUserAdHoc ('user-added-to-company', {
 			username    : user.displayName,
@@ -102,7 +103,7 @@ var notifyUser = function (org) {
 // -------------------------------------------------------------------------
 var getUsers = function (terms) {
 	return new Promise (function (resolve, reject) {
-		User.find (terms).exec (function (err, user) {
+		User.find (terms, '_id email displayName username').exec (function (err, user) {
 			if (err) reject (err);
 			else resolve (user);
 		});
@@ -229,12 +230,15 @@ exports.updateOrgCapabilities = function (orgId) {
 //
 // -------------------------------------------------------------------------
 var resolveOrg = function (org) {
+	console.log ('resolve org');
 	return function () {
 		return org;
 	};
 };
 var saveOrg = function (req, res) {
 	return function (org) {
+		var additionsList = org.additionsList;
+		if (additionsList && additionsList.found.length === 0 && additionsList.notfound.length === 0) additionsList = null;
 		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
@@ -259,7 +263,11 @@ var saveOrg = function (req, res) {
 					});
 					getOrgById (neworg._id)
 					.then (function (o) {
-						res.json (org);
+						o = o.toObject ();
+						o.emaillist = additionsList;
+	console.log ('additionsList:', additionsList);
+						console.log ('what', o);
+						res.json (o);
 					})
 					.catch (function (err) {
 						res.status (422).send ({
@@ -338,8 +346,29 @@ var removeAdmin = function (user, org) {
 //
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
+	console.log ('emaillist', emaillist);
+	if (!emaillist) return null;
+	var list = {
+		found    : [],
+		notfound : []
+	};
 	return getUsers ({email : {$in : emaillist}})
-	.then (addMembers (org));
+	.then (function (users) {
+		console.log ('users found', users);
+		if (users) {
+			list.found = users;
+			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
+			emaillist.forEach (function (email) {
+				if (!usersIndex[email]) list.notfound.push ({email:email});
+			});
+		}
+		return users;
+	})
+	.then (addMembers (org))
+	.then (function () {
+		console.log ('list', list);
+		return list;
+	});
 };
 
 exports.removeUserFromMemberList = function (req, res) {
@@ -391,13 +420,22 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var org = _.assign (req.org, req.body);
-	org.adminName = req.user.displayName;
+	var org        = _.assign (req.org, req.body);
+	org.adminName  = req.user.displayName;
 	org.adminEmail = req.user.email;
 
-	var p = (list) ? inviteMembers (list, org) : Promise.resolve (org);
-
-	p.then (saveOrg (req, res));
+	var additionsList = {
+		found : [],
+		notfound : []
+	};
+	inviteMembers (list, org)
+	.then (function (newlist) {
+		additionsList.found = newlist.found;
+		additionsList.notfound = newlist.notfound;
+		org.additionsList = additionsList;
+		return org;
+	})
+	.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------
