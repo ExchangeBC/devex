@@ -85,7 +85,6 @@ var saveUser = function (user) {
 	});
 };
 var notifyUser = function (org) {
-	console.log ('notifyuser');
 	return function (user) {
 		Notifications.notifyUserAdHoc ('user-added-to-company', {
 			username    : user.displayName,
@@ -231,7 +230,6 @@ exports.updateOrgCapabilities = function (orgId) {
 //
 // -------------------------------------------------------------------------
 var resolveOrg = function (org) {
-	console.log ('resolve org');
 	return function () {
 		return org;
 	};
@@ -266,8 +264,6 @@ var saveOrg = function (req, res) {
 					.then (function (o) {
 						o = o.toObject ();
 						o.emaillist = additionsList;
-	console.log ('additionsList:', additionsList);
-						console.log ('what', o);
 						res.json (o);
 					})
 					.catch (function (err) {
@@ -292,7 +288,6 @@ var addMember = function (user, org) {
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
 	.then (notifyUser (org))
-	.then (function () {console.log ('got here man!');})
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
@@ -308,7 +303,6 @@ var addAdmin = function (user, org) {
 var addMembers = function (org) {
 	return function (users) {
 		return Promise.all (users.map (function (user) {
-			console.log ('adding memner');
 			return addMember (user, org);
 		}))
 		.then (resolveOrg (org));
@@ -349,7 +343,6 @@ var removeAdmin = function (user, org) {
 //
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
-	console.log ('emaillist', emaillist);
 	if (!emaillist) return null;
 	var list = {
 		found    : [],
@@ -357,7 +350,6 @@ var inviteMembers = function (emaillist, org) {
 	};
 	return getUsers ({email : {$in : emaillist}})
 	.then (function (users) {
-		console.log ('users found', users);
 		if (users) {
 			list.found = users;
 			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
@@ -369,7 +361,6 @@ var inviteMembers = function (emaillist, org) {
 	})
 	.then (addMembers (org))
 	.then (function () {
-		console.log ('list', list);
 		return list;
 	});
 };
