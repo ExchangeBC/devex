@@ -117,14 +117,16 @@ var getUsers = function (terms) {
 // -------------------------------------------------------------------------
 var addUserTo = function (org, fieldName) {
 	return function (user) {
-		org[fieldName].addToSet (user._id);
-		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.addToSet (org._id);
 			user.markModified ('orgsAdmin');
+			org.admins.addToSet (user._id.toString());
+			org.markModified ('admins');
 		} else {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
+			org.members.addToSet (user._id.toString());
+			org.markModified ('members');
 		}
 		return user;
 	};
@@ -137,14 +139,16 @@ var addUserTo = function (org, fieldName) {
 // -------------------------------------------------------------------------
 var removeUserFrom = function (org, fieldName) {
 	return function (user) {
-		org[fieldName].pull (user._id);
-		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.pull (org._id);
 			user.markModified ('orgsAdmin');
+			org.admins.pull (user._id.toString());
+			org.markModified ('admins');
 		} else {
 			user.orgsMember.pull (org._id);
 			user.markModified ('orgsMember');
+			org.members.pull (user._id.toString());
+			org.markModified ('members');
 		}
 		return user;
 	};
