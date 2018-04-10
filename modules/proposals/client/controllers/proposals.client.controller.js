@@ -564,7 +564,7 @@
 				}).catch (function () {
 				});
 			}
-			else {
+			else if (!state) {
 				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
 				.then (function () {
 					ppp.notifyMe = false;

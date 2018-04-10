@@ -263,12 +263,12 @@
 			//
 			// go through each capability and set the flag if any team member
 			// has the capability
-			// also tally up the bolleans in isMetAllCapabilities. if they are all true
+			// also tally up the booleans in isMetAllCapabilities. if they are all true
 			// then the user can submit their proposal
 			//
 			ppp.isMetAllCapabilities = true;
 			var haveanyatall = false;
-			ppp.inp.capabilities.forEach (function (c) {
+			if (ppp.oinp.isInception) ppp.inp.capabilities.forEach (function (c) {
 				haveanyatall = true;
 				var code = c.code;
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
@@ -277,7 +277,7 @@
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
 			});
-			ppp.prp.capabilities.forEach (function (c) {
+			if (ppp.prp.isPrototype) ppp.prp.capabilities.forEach (function (c) {
 				haveanyatall = true;
 				var code = c.code;
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
@@ -286,7 +286,7 @@
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
 			});
-			ppp.imp.capabilities.forEach (function (c) {
+			if (ppp.oimp.isImplementation) ppp.imp.capabilities.forEach (function (c) {
 				haveanyatall = true;
 				var code = c.code;
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
@@ -299,21 +299,21 @@
 			//
 			// now skills
 			//
-			ppp.inp.capabilitySkills.forEach (function (c) {
+			if (ppp.oinp.isInception) ppp.inp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_inp.iPropCapabilitySkills[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.prp.capabilitySkills.forEach (function (c) {
+			if (ppp.prp.isPrototype) ppp.prp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_prp.iPropCapabilitySkills[code] = ppp.members.proto.map (function (member) {
 					if (!ppp.prTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.imp.capabilitySkills.forEach (function (c) {
+			if (ppp.oimp.isImplementation) ppp.imp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_imp.iPropCapabilitySkills[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;

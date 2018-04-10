@@ -25,6 +25,10 @@
 	//
 	// =========================================================================
 	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
+		if (!opportunity) {
+			console.error ('no opportunity provided');
+			$state.go('opportunities.list');
+		}
 		var vm                    = this;
 		vm.features = window.features;
 		//
