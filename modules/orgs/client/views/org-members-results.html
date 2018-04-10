@@ -24,7 +24,7 @@
 					THese ones were added, cool.
 				<ul class="list-group">
 					<li class="list-group-item" ng-repeat="p in data.found | orderBy:'displayName'" >
-						{{p.displayName}} {{p.email}}
+						<avatar-display url="p.profileImageURL" text="p.displayName"></avatar-display>
 					</li>
 				</ul>
 			</div>

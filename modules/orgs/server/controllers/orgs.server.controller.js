@@ -87,13 +87,14 @@ var saveUser = function (user) {
 var notifyUser = function (org) {
 	console.log ('notifyuser');
 	return function (user) {
-		return Notifications.notifyUserAdHoc ('user-added-to-company', {
+		Notifications.notifyUserAdHoc ('user-added-to-company', {
 			username    : user.displayName,
 			useremail   : user.email,
 			adminname   : org.adminName,
 			adminemail  : org.adminEmail,
 			companyname : org.name
 		});
+		return Promise.resolve ();
 	};
 };
 // -------------------------------------------------------------------------
@@ -103,7 +104,7 @@ var notifyUser = function (org) {
 // -------------------------------------------------------------------------
 var getUsers = function (terms) {
 	return new Promise (function (resolve, reject) {
-		User.find (terms, '_id email displayName username').exec (function (err, user) {
+		User.find (terms, '_id email displayName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
 			if (err) reject (err);
 			else resolve (user);
 		});
@@ -291,6 +292,7 @@ var addMember = function (user, org) {
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
 	.then (notifyUser (org))
+	.then (function () {console.log ('got here man!');})
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
@@ -306,6 +308,7 @@ var addAdmin = function (user, org) {
 var addMembers = function (org) {
 	return function (users) {
 		return Promise.all (users.map (function (user) {
+			console.log ('adding memner');
 			return addMember (user, org);
 		}))
 		.then (resolveOrg (org));
