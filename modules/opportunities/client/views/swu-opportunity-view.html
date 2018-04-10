@@ -6,12 +6,10 @@
 		</div>
 	</div>
 
-	<!-- // If user is not signed in // -->
-	<div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
+	<!-- // If user does not have a proposal in DRAFT or SUBMITTED // -->
+	<div class="container" ng-if="vm.closing != 'CLOSED'">
 		<div class="alert alert-warning">
-			<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
-				</div>
-			</div>
+			<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href="/sprintwithus"> follow these steps</a>.
 		</div>
 	</div>
 
@@ -565,9 +563,9 @@
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
-				<!-- // If user is not signed in // -->
-				<div class="alert alert-warning" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
-					<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
+				<!-- // If user does not have a proposal in DRAFT or SUBMITTED // -->
+				<div class="alert alert-warning" ng-if="vm.closing != 'CLOSED'">
+					<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href="/sprintwithus"> follow these steps</a>.
 				</div>
 			</div>
 		</div>

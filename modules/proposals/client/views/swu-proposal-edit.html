@@ -354,18 +354,17 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-4 text-center">
 								<div class="panel panel-default">
-									<div class="panel-heading">
-										Click on team members to add them to the proposal:
-									</div>
 									<div class="panel-body">
-									<!-- Put Inception Team selection here -->
-
-									
-										
-
 										<p><i class="fa fa-map"></i> &nbsp;Inception</p>
-										<p class="strong"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
-										<hr>
+										<!-- If Phase not included -->
+										<div class="alert alert-info text-center" ng-if="!ppp.oinp.isInception">This phase is not required
+										</div>
+										<!-- If Phase is included -->
+										<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+									</div>
+
+									<!-- If Phase is included -->
+									<div class="panel-body" ng-if="ppp.oinp.isInception">
 										<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
 											<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
 										</div>
@@ -377,11 +376,6 @@
 											</div>
 										</div>
 									</div>
-								<!--
-									<div class="panel-footer">
-										Price: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
-									</div>
-								-->
 								</div>
 							</div>
 
@@ -389,9 +383,15 @@
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<p><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
-										<p class="strong"><i class="fa fa-calendar"></i> &nbsp;
+										<!-- If Phase not included -->
+										<div class="alert alert-info" ng-if="!ppp.oprp.isPrototype">This phase is not required
+										</div>
+										<!-- If Phase is included -->
+										<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> &nbsp;
 										{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
-										<hr>
+									</div>
+									<!-- If Phase is included -->
+									<div class="panel-body" ng-if="ppp.oprp.isPrototype">
 										<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
 											<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
 										</div>
@@ -403,11 +403,6 @@
 											</div>
 										</div>
 									</div>
-								<!--
-									<div class="panel-footer">
-										Price: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
-									</div>
-								-->
 								</div>
 							</div>
 
@@ -416,8 +411,14 @@
 									<div class="panel-body">
 										<p><i class="fa fa-gears"></i> &nbsp;Implementation Phase
 										</p>
-										<p class="strong"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
-										<hr>
+										<!-- If Phase not included -->
+										<div class="alert alert-info" ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
+										<!-- If Phase is included -->
+										<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
+									</div>
+									
+									<!-- If Phase is included -->
+									<div class="panel-body" ng-if="ppp.oimp.isImplementation">
 										<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
 											<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
 										</div>
@@ -428,11 +429,6 @@
 											  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
 											</div>
 										</div>
-								<!--
-									<div class="panel-footer">
-										Price: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
-									</div>
-								-->
 									</div>
 								</div>
 							</div>
