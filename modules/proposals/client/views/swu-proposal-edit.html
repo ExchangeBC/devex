@@ -44,7 +44,7 @@
 
 					<uib-tab index="0">
 						<uib-tab-heading>
-							<i class="fa fa-handshake-o"></i> Accept Contract
+							<i class="fa fa-handshake-o"></i> Accept Terms
 						</uib-tab-heading>
 
 						<div class="form-group">
@@ -97,24 +97,24 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-4">
 								<h5 class="text-center gray-light"><i class="fa fa-map"></i> Inception</h5>
-								
+
 								<div ng-if="!ppp.oinp.isInception" class="alert alert-info text-center">
 									This phase is not required
-								</div>	
-									
+								</div>
+
 								<div ng-if="ppp.oinp.isInception" class="text-center gray-light">
 									<i class="fa fa-calendar"></i> &nbsp;
 									{{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}
 								</div>
-								<br>	
+								<br>
 								<div class="panel panel-primary" ng-if="ppp.oinp.isInception">
-									
+
 									<div class="panel-heading">
 										Click on member(s) to add them to team:
 									</div>
 
 									<div class="panel-body">
-										
+
 										<div class="team-selection-list" >
 											<div ng-repeat="member in ppp.members.inception" class="team-member" ng-class="{'selected':ppp.inTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.inTeam)">
 												<avatar-display url="member.profileImageURL"></avatar-display>
@@ -123,8 +123,8 @@
 										</div>
 									</div>
 								</div>
-								
-								<div class="panel panel-default">		
+
+								<div class="panel panel-default">
 									<div class="panel-body">
 										<div class="text-center gray-light">Required Capabilities</div>
 										<table class="table capabilities-list">
@@ -163,7 +163,7 @@
 
 								<br>
 
-								<div class="panel panel-primary" ng-if="ppp.oprp.isPrototype">	
+								<div class="panel panel-primary" ng-if="ppp.oprp.isPrototype">
 									<div class="panel-heading">
 										Click on member(s) to add them to team:
 									</div>
@@ -232,7 +232,7 @@
 								</div>
 
 								<div class="panel panel-default">
-									<div class="panel-body">	
+									<div class="panel-body">
 										<div class="text-center gray-light">Required Capabilities</div>
 										<table class="table capabilities-list">
 											<tbody>
@@ -416,7 +416,7 @@
 										<!-- If Phase is included -->
 										<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
 									</div>
-									
+
 									<!-- If Phase is included -->
 									<div class="panel-body" ng-if="ppp.oimp.isImplementation">
 										<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
