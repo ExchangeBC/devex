@@ -277,7 +277,7 @@
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
 			});
-			if (ppp.prp.isPrototype) ppp.prp.capabilities.forEach (function (c) {
+			if (ppp.oprp.isPrototype) ppp.prp.capabilities.forEach (function (c) {
 				haveanyatall = true;
 				var code = c.code;
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
@@ -306,7 +306,7 @@
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			if (ppp.prp.isPrototype) ppp.prp.capabilitySkills.forEach (function (c) {
+			if (ppp.oprp.isPrototype) ppp.prp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_prp.iPropCapabilitySkills[code] = ppp.members.proto.map (function (member) {
 					if (!ppp.prTeam[member.email]) return false;
