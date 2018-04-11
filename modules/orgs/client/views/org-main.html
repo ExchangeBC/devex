@@ -50,17 +50,16 @@
 					}'>
 				</form-input>
 
-				<form-display
+				<form-input
 					class="col-sm-12"
+					ng-model="vm.org.city"
+					x-form="vm.orgForm"
 					x-options='{
 						"title":"City",
 						"id":"city",
 						"name":"city"
 					}'>
-					<select name="city" ng-model="vm.org.city" id="city" class="form-control"  ng-options="v as v for v in vm.cities">
-						<option value="">Select Location</option>
-					</select>
-				</form-display>
+				</form-input>
 
 				<form-input
 					class="col-sm-6"
