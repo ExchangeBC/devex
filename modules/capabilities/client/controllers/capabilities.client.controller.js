@@ -28,7 +28,7 @@
 	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('CapabilityEditController', function ($scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS, CapabilitySkillsService) {
+	.controller ('CapabilityEditController', function ($window, $scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS, CapabilitySkillsService) {
 		var qqq            = this;
 		qqq.capability     = capability;
 		qqq.auth           = Authentication.permissions ();
@@ -180,7 +180,7 @@
 		};
 		// -------------------------------------------------------------------------
 		//
-		// delete a skillr
+		// delete a skillz
 		//
 		// -------------------------------------------------------------------------
 		qqq.deleteSkill = function (capabilitySkill) {
@@ -198,6 +198,22 @@
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Error Removing Skill'
 				});
 			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// remove the program with some confirmation
+		//
+		// -------------------------------------------------------------------------
+		qqq.remove = function () {
+			if ($window.confirm('Are you sure you want to delete?')) {
+				qqq.capability.skills.forEach (function (capabilitySkill) {
+					(new CapabilitySkillsService (capabilitySkill)).$remove ();
+				});
+				qqq.capability.$remove(function() {
+					$state.go('capabilities.list');
+					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> deleted successfully!' });
+				});
+			}
 		};
 	})
 	;
