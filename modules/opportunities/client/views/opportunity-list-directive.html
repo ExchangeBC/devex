@@ -40,7 +40,7 @@
 
 	<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 		<div class="label-list">
-			<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Sprint With Us</label>
+			<label class="label label-swu" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Sprint With Us</label>
 			<label class="label label-price" ng-if="opportunity.opportunityTypeCd==='code-with-us'"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
 			<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
 			<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}} /

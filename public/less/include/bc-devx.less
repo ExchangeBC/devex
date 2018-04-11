@@ -941,12 +941,13 @@ form-title {
 .btn-filter-selected {
   transition: none;
   color: #fff;
-  background: @theme-primary;
-  border: none;
+  background: @gray;
+  border: 1px solid;
+  border-color: transparent;
   box-shadow: none;
   &:hover, &:focus, &:active {
     color: #fff;
-    background: @theme-primary;
+    background: @gray;
     border: none;
     box-shadow: none;
   }
@@ -956,11 +957,13 @@ form-title {
   transition: none;
   color: @gray;
   background: transparent;
-  border: none;
+  border: 1px solid;
+  border-color: @gray-light;
   &:hover, &:focus, &:active {
     color: @gray;
     background: transparent;
-    border: none;
+    border: 1px solid;
+    border-color: @gray-light;
     box-shadow: none;
   }
 }
@@ -1104,6 +1107,10 @@ form-title {
   background: @theme-orange;
   color: #fff;
   border: 1px solid @theme-orange;
+}
+
+.label-swu {
+  background: @gray-darker;
 }
 
 // Capability Labels
