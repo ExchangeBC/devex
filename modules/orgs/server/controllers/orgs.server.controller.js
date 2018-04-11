@@ -347,17 +347,17 @@ var removeAdmin = function (user, org) {
 //
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
-	if (!emaillist) return Promise.resolve (null);
+	var list = {
+		found    : [],
+		notfound : []
+	};
+	if (!emaillist) return Promise.resolve (list);
 	//
 	// flatten out the members and admins arrays so that later on the
 	// addToSet function truly works on duplicates
 	//
 	org.admins = org.admins.map (function (obj) {return obj.id;});
 	org.members = org.members.map (function (obj) {return obj.id;});
-	var list = {
-		found    : [],
-		notfound : []
-	};
 	return getUsers ({email : {$in : emaillist}})
 	.then (function (users) {
 		if (users) {
