@@ -937,6 +937,20 @@ form-title {
   }
 }
 
+//------------------------
+// Filter
+//------------------------
+
+.list-filter {
+  padding: 10px;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+  > .btn {
+    font-size: 13px;
+    padding: 3px 5px;
+    vertical-align: top;
+  }
+}
 
 .btn-filter-selected {
   transition: none;
@@ -948,7 +962,6 @@ form-title {
   &:hover, &:focus, &:active {
     color: #fff;
     background: @gray;
-    border: none;
     box-shadow: none;
   }
 }
@@ -962,7 +975,6 @@ form-title {
   &:hover, &:focus, &:active {
     color: @gray;
     background: transparent;
-    border: 1px solid;
     border-color: @gray-light;
     box-shadow: none;
   }

@@ -5,13 +5,12 @@
 	<div class="col-xs-4">
 		<button ng-if="vm.userCanAdd && vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
 		<button ng-if="vm.userCanAdd && !vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createcwu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
-
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-sm-12">
-		Showing: &nbsp;
+<div class="list-filter">
+	
+		<i class="fa fa-lg fa-filter"></i> Show/Hide: &nbsp;&nbsp;&nbsp;
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.sprint" ng-model="vm.filter.sprint" uib-btn-checkbox><i class="fa fa-group"></i> Sprint With Us</button>
 
@@ -23,9 +22,9 @@
 
 		<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 		<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
-	</div>
-</div>
 
+</div>
+<br>
 <div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
 
 	<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
