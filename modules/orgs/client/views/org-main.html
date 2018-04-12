@@ -1,5 +1,5 @@
-<div class="edit-form-tab-content">
-	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
+<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
+	<div class="edit-form-tab-content">
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
 				<fieldset>
@@ -191,14 +191,15 @@
 			</div>
 		</div>
 	-->
-		<br/>
-		<div class="edit-form-footer">
-			<div class="row">
-				<div class="col-xs-12">
-					<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-					<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
-				</div>
+	</div>
+
+	<div class="edit-form-footer">
+		<div class="row">
+			<div class="col-xs-12">
+				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
+				<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+
+</form>

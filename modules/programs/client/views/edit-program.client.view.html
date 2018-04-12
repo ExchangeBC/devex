@@ -1,6 +1,6 @@
 <section class="edit-form-background" role="main">
 	<form id="programForm" warn-on-exit name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
-		<div class="container container-edit-form">
+		<div class="edit-form">
 			
 			<div class="edit-form-header">
 				<span ng-if="vm.editing">
@@ -10,7 +10,7 @@
 				<span ng-if="!vm.editing">
 					New Program
 				</span>
-				<a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fa fa-2x fa-times"></i></a>
+				<a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fa fa-lg fa-times"></i></a>
 			</div>
 			
 			<div class="edit-form-body">  

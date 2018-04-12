@@ -248,15 +248,6 @@ h4.opp-detail {
   font-size: 1.1em;
 }
 
-// Remove this one later
-.container-edit-form {
-  background: #fff;
-  padding: 15px;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
-}
-
-
 
 // Capability detail views
 
@@ -370,26 +361,36 @@ tr.screened-out {
 // Edit form
 
 .edit-form {
+  max-width: 1040px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
-  padding: 1em 1.5em; 
-  box-shadow: 0 4px 6px #000, 0 1px 3px #000;
+  border-radius: 4px;
+  padding: 0; 
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .edit-form-header {
-  color: @gray-dark;
-  font-size: 1.1em;
-  padding: 0 0 1.5em;
+  padding: 10px 15px 10px 20px;
+  background: #e2e2e2;
+  border-radius: 3px 3px 0 0;
   > .btn {
     margin: -.75em -1em;
   }
 }
 
+.edit-form-tabs {
+  padding: 10px 15px 0;
+  background: #f8f8f8;
+}
+
 .edit-form-tab-content {
-  padding: 1em 0;
+  margin-top: 10px;
+  padding: 10px 15px;
 }
 
 .edit-form-body {
-  padding: 1em 0;
+  padding: 10px 15px;
 }
 
 // Remove this one later
@@ -408,7 +409,9 @@ h4.edit-form-header {
 
 
 .edit-form-footer {
-  padding: 2.5em 0 0;
+  padding: 5px 15px;
+  background: #e2e2e2;
+  border-radius: 0 0 3px 3px;  
 }
 
 //--------------------
@@ -417,6 +420,9 @@ h4.edit-form-header {
 
 .navbar {
   border: none;
+  > li {
+    font-weight: 400;
+  }
 }
 
 
@@ -512,12 +518,16 @@ h4.edit-form-header {
 }
 
 .nav-tabs {
-  border-bottom: none;
-  margin: 0 0 30px;
+  border-bottom: 2px solid #f26925;
+  margin-left: -15px;
+  margin-right: -15px;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
     margin-bottom: -1px;
+    > :first-child {
+        margin-left: 17px;
+      }
 
     // Actual tabs (as links)
     > a {
@@ -532,7 +542,7 @@ h4.edit-form-header {
       &:hover {
         color: @gray-dark;
         background: none;
-        transition: none;
+        transition:all 0.3s ease;
       }
     }
 
@@ -541,11 +551,10 @@ h4.edit-form-header {
       &,
       &:hover,
       &:focus {
-        color: #111;
+        color: #fff;
         font-weight: 700;
         border: none;
-        border-bottom: 4px solid #f26925;
-        background: none;
+        background: #f26925;
         transition: none;
         cursor: default;
       }
@@ -1269,7 +1278,7 @@ form-title {
 .alert {
   max-width: 1040px;
   padding: 10px;
-  margin: 10px 0 25px;
+  margin: 10px 0;
   font-weight: 400;
   font-size: 14px;
   border: none;
@@ -1421,6 +1430,7 @@ form-title {
 .panel-primary {
   > .panel-heading, .panel-footer {
     background-color: @theme-primary;
+    color: #fff;
   }
   border-color: @theme-primary;
 }
