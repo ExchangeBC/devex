@@ -381,7 +381,7 @@
 				ppp.proposal.createOrUpdate ()
 				.then (
 					function (response) {
-						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i> Changes saved'});
+						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'});
 						ppp.subscribe (true);
 						resolve ();
 					},
@@ -436,7 +436,7 @@
 		};
 		var performwithdrawal = function (txt) {
 			ppp.proposal.status = 'Draft';
-			saveproposal ('Your proposal has been withdrawn.');
+			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -471,7 +471,7 @@
 			.then (
 				function (response) {
 					ppp.proposal = response;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
 					_init ();
 					setSkills ();
 				},

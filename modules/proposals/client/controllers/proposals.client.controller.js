@@ -419,7 +419,7 @@
 			copyteam();
 			return ppp.proposal.createOrUpdate()
 				.then (function(proposal) {
-					Notification.success({message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i> Changes Saved'});
+					Notification.success({message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br><h4>Changes Saved</h4>'});
 					ppp.proposal = proposal;
 					ppp.subscribe(true);
 					ppp.form.proposalform.$setPristine();
@@ -463,7 +463,7 @@
 				.then(function(r) {
 					if (r) {
 						ppp.proposal.$remove(function() {
-							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i> Your proposal has been deleted'});
+							Notification.success({message: '<i class="fa fa-3x fa-trash"></i><br> <h4>Your proposal has been deleted</h4>'});
 							ppp.subscribe(false);
 							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
@@ -481,7 +481,7 @@
 			ppp.proposal.status = 'Draft';
 			saveuser()
 				.then(function() {
-					saveproposal('Your proposal has been withdrawn.');
+					saveproposal('<h4>Your proposal has been withdrawn</h4>');
 				});
 		};
 		// -------------------------------------------------------------------------
@@ -513,7 +513,7 @@
 						.then (function(proposal) {
 							ppp.proposal = proposal;
 							ppp.form.proposalform.$setPristine();
-							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i> Your proposal has been submitted!'});
+							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
 						}, function(error) {
 
 							Notification.error ({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Submitting Proposal'});
