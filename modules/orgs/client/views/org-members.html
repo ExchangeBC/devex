@@ -2,49 +2,57 @@
 	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
 		<div class="row">
 
-			<div class="col-sm-5">
-				<div class="well well-warning" ng-if="!vm.org.metRFQ">
-					<h4>Capabilities</h4>
-					<p>To qualify to apply on <label class="label label-danger"><i class="fa fa-group"></i> Sprint With Us</label> opportunities, your company needs members who collectively cover off <span class="strong">all</span> of the following capabilities.</p>
-					<p><strong>Note:</strong> Capabilities can only be claimed by individuals in their personal profile.</p>
-				</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="alert alert-info" ng-if="!vm.org.metRFQ">
+							<p>To qualify to apply on <strong><i class="fa fa-group"></i> Sprint With Us</strong> opportunities, your company needs members who collectively cover off all of the following capabilities.</p>
+							<p>(Capabilities are claimed by individuals in their profile.)</p>
+						</div>
 
-				<div class="alert alert-success" ng-if="vm.org.metRFQ"><i class="fa fa-check-circle-o"></i> <span class="strong">Bingo!</span> Your company has all of the capabilities needed to apply for <i>Sprint With Us</i> opportunities! <br><a href="/opportunities">Browse opportunities</a></div>
+						<div class="alert alert-success" ng-if="vm.org.metRFQ"> 
+							<p><strong>Bingo!</strong> Your company has all of the capabilities needed to apply for <strong><i class="fa fa-group"></i> Sprint With Us</strong> opportunities!</p>
+						</div>
 
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities">
-							<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
-							<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<div class="col-sm-1"></div>
-
-			<div class="col-sm-6">
-				<div class="well">
-					<h4>Add Members</h4>
-					<p>Associate individuals to your company with the email address they're using for their personal profile.</p>
-					<p>(We'll notify them when you add them.)</p>
-					<div class="input-group">
-					  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
-					  <span class="input-group-btn">
-						<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
-					  </span>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities">
+									<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
+									<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
-				<br>
-				<div class="card card-user" ng-repeat="member in vm.org.members">
-					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)"><i class="fa fa-lg fa-times"></i></button>
-					<div class="card-body">
-						<label-list>
-							<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
-							<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-						</label-list>
+			</div>
+
+
+			<div class="col-xs-12 col-sm-8">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="well well-warning">
+							<h4>Add Members</h4>
+							<p>Associate individuals to your company with the email address they're using for their BCDevExchange profile. (We'll notify them when you add them.)</p>
+							<div class="input-group">
+							  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
+							  <span class="input-group-btn">
+								<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
+							  </span>
+							</div>
+							<span class="small gray-light">Add multiple emails separated with a comma.</span>
+						</div>
+						<h5>My Members:</h5>
+						<div class="card card-user" ng-repeat="member in vm.org.members">
+							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
+							<div class="card-body">
+								<label-list>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</label-list>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

@@ -175,7 +175,7 @@
 			.then (function () {
 				vm.orgForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> org saved successfully!'
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
 				});
 				// .then (function () {
 				// 	$state.go('orgs.view', {orgId:vm.org._id});
@@ -304,7 +304,7 @@
 			}
 		};
 		vm.removeMember = function (member) {
-			ask.yesNo ('Are you sure you wish to remove this user from your company?')
+			ask.yesNo ('Are you sure you want to remove this user from your company? If you have added them to a proposal, you may not longer qualify to apply on the opportunity.')
 			.then (function (yes) {
 				if (yes) {
 					OrgsService.removeUser ({

@@ -56,7 +56,7 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Update logo</button>',
+			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
 			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
