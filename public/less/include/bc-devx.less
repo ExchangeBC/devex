@@ -23,6 +23,12 @@ p.subtitle {
   margin: 0 0 17px;
 }
 
+ol,ul {
+  > li {
+    font-weight: 300;
+  }
+}
+
 h1,
 h2,
 h3,
@@ -97,15 +103,15 @@ a.secondary {
 }
 
 a.accordion-toggle {
-  color: @gray-dark;
+  color: @theme-primary;
   &:hover, &:active, &:visited, &:focus {
-  color: @gray-dark;
+  color: darken(@theme-primary; 10%);
   outline: none;
   }
 }
 
 a.breadcrumb-nav {
-  font-size: 1.05em;
+  font-size: 15px;
   color: @gray;
   &:hover,&:active:hover {
     color: @gray-darker;
@@ -115,8 +121,11 @@ a.breadcrumb-nav {
   }
 }
 
-.breadcrumb-nav {
-  margin: 5px 0px 20px;
+.sub-nav {
+  height: 50px;
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #e2e2e2;
 }
 
 .page-header {
@@ -170,6 +179,10 @@ a.breadcrumb-nav {
 
 .gray-light {
   color: @gray-light;
+}
+
+.gray {
+  color: @gray;
 }
 
 // Containers
@@ -420,6 +433,7 @@ h4.edit-form-header {
 
 .navbar-brand {
   padding: 3px 20px 3px 0px;
+  margin-left: -5px;
   height: 50px;
 }
 
@@ -931,17 +945,32 @@ form-title {
   }
 }
 
+//------------------------
+// Filter
+//------------------------
+
+.list-filter {
+  background: #ced9e4;
+  padding: 10px;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
+  > .btn {
+    font-size: 13px;
+    padding: 3px 5px;
+    vertical-align: top;
+  }
+}
 
 .btn-filter-selected {
   transition: none;
   color: #fff;
-  background: @theme-primary;
-  border: none;
+  background: @gray;
+  border: 1px solid;
+  border-color: transparent;
   box-shadow: none;
   &:hover, &:focus, &:active {
     color: #fff;
-    background: @theme-primary;
-    border: none;
+    background: @gray;
     box-shadow: none;
   }
 }
@@ -950,11 +979,12 @@ form-title {
   transition: none;
   color: @gray;
   background: transparent;
-  border: none;
+  border: 1px solid;
+  border-color: @gray-light;
   &:hover, &:focus, &:active {
     color: @gray;
     background: transparent;
-    border: none;
+    border-color: @gray-light;
     box-shadow: none;
   }
 }
@@ -1040,6 +1070,10 @@ form-title {
   font-size: .95em;
 }
 
+.label-orange {
+  background: @theme-orange;
+}
+
 // Project labels
 
 .label-project-tags {
@@ -1094,6 +1128,10 @@ form-title {
   background: @theme-orange;
   color: #fff;
   border: 1px solid @theme-orange;
+}
+
+.label-swu {
+  background: @gray-darker;
 }
 
 // Capability Labels
@@ -1230,7 +1268,7 @@ form-title {
 // Common styles
 .alert {
   max-width: 1040px;
-  padding: 15px;
+  padding: 10px;
   margin: 10px 0 25px;
   font-weight: 400;
   font-size: 14px;
@@ -1241,7 +1279,7 @@ form-title {
 }
 
 .alert-info {
-  background: @gray-lighter;
+  background: @theme-info;
   color: @gray-dark;
 }
 
@@ -1267,6 +1305,35 @@ form-title {
   background: @gray-lighter;
   border: none;
 }
+
+.alert-outline-primary {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-primary;
+  border-radius: 3px;
+}
+
+.alert-outline-info {
+  background: transparent;
+  border: 3px solid; 
+  border-color: @theme-info;
+  border-radius: 3px;
+}
+
+.alert-outline-warning {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-yellow;
+  border-radius: 3px;
+}
+
+.alert-outline-success {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-success;
+  border-radius: 3px;
+}
+
 
 // Progress bars
 
@@ -1668,20 +1735,21 @@ form-title {
 .card {
   position: relative;
   margin: 1em 0;
-  border: 2px solid transparent;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   &:active, &:hover {
-  border-color: @gray-dark;
-  transition: border .4s ease-in-out;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   cursor: pointer;
   }
 }
 
 .card-flat {
+  box-shadow: none;
+  transition: none;
   &:active, &:hover {
-    border-color: transparent;
-    transition: none;
+    box-shadow: none;
     cursor: default;
   }
   img.img-responsive {
@@ -1910,8 +1978,8 @@ form-title {
   border-color: transparent;
 }
 .card-warning {
-  background-color: @brand-warning;
-  border-color: @brand-warning;
+  background-color: @theme-warning;
+  border-color: transparent;
 }
 .card-danger {
   background-color: @brand-danger;
@@ -2134,7 +2202,7 @@ form-title {
 // Banners
 
 .banner {
-  padding: .75em;
+  padding: 10px;
   margin: 0px;
   text-align: center;
 }

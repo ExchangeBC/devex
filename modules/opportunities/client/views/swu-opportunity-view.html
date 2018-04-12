@@ -1,17 +1,23 @@
-<section class="detail-page-background">
-
+<div class="sub-nav">
 	<div class="container">
 		<div class="breadcrumb-nav">
 			<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
 		</div>
 	</div>
+</div>
 
-	<!-- // If user does not have a proposal in DRAFT or SUBMITTED // -->
-	<div class="container" ng-if="vm.closing != 'CLOSED'">
+<div class="banner banner-important">
+  <i class="fa fa-lg fa-flask"></i> &nbsp; We're experimenting with a new Agile procurement model - <strong>Sprint With Us</strong>. &nbsp;To apply on this opportunity, <a href="/sprintwithus"> follow these steps</a>. 
+</div>
+
+<section class="detail-page-background">
+
+	<!-- // If user is not signed in // -->
+	<div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
 		<div class="alert alert-warning">
-			<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href="/sprintwithus"> follow these steps</a>.
+			<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
 		</div>
-	</div>
+ 	</div>
 
 	<!-- // If user doesn't have an email address in their profile // -->
 	<div class="container" ng-if="vm.notifyMe && !vm.hasEmail">
@@ -20,8 +26,7 @@
 		</div>
 	</div>
 
-
-<!-- Admin View for Evaluation -->
+	<!-- Admin View for Proposal Evaluation -->
 	<div class="container swu-evaluation" ng-if="vm.canEdit && vm.opportunity.isPublished">
 
 		<div class="row" ng-if="vm.closing !== 'CLOSED'">
@@ -253,7 +258,7 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Budget</h3>
-				<div class="alert alert-important">We have potential to spend <span class="strong">{{vm.opportunity.budget|currency}}</span> on this opportunity if work proceeds successfully through all phases.</div>
+				<p>We have the potential to spend up to <strong>{{vm.opportunity.budget|currency}}</strong> on a team to pursue this product. </p>
 			</div>
 		</div>
 
@@ -270,276 +275,129 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
 <!-- // BA-175 // Chris: Please wire so that Phases only show up if that phase is included in the opportunity -->
-				<uib-accordion class="panel-default">
-					<div uib-accordion-group class="panel-default">
-						<uib-accordion-heading>
-							<i class="fa fa-map"></i> Inception
-						</uib-accordion-heading>
-						<div>During Inception, you'll take our business goals and discovery research and help us explore the potential value that a new digital product can bring. Then we'll work together to prioritize the features of a Proof of Concept and scope out what will be required to get to an Alpha release.</div>
-						<hr>
-						<div>
-			    			<i class="fa fa-cubes"></i>
-			    			<span class="strong">Deliverables</span><br>
-			    			At the end of Inception, we should have:
-			    			<ul>
-				    			<li>Happy stakeholders with a shared vision for a Proof of Concept</li>
-								<li>A product backlog for the Alpha release</li>
-				    		</ul>
-			    		</div>
-					</div>
-				</uib-accordion>
-			</div>
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
-				<uib-accordion>
-					<div uib-accordion-group class="panel-default">
-						<uib-accordion-heading>
-							<i class="fa fa-rocket"></i> Proof of Concept
-						</uib-accordion-heading>
-						<div>In the Proof of Concept phase, we'll make our value propositions tangible and validate them. You'll code the core features we scoped out in Inception, working towards our Alpha release. By the end of this phase, we should have a plan for what it will take to fully implement and maintain the product long-term.</div>
-						<hr>
-						<div>
-				    		<i class="fa fa-cubes"></i>
-				    		<span class="strong">Deliverables</span><br>
-				    		At the end of Proof of Concept, we should have:
-				    		<ul>
-				    			<li>Alpha release of the product</li>
-				    			<li>A build/buy/licence decision</li>
-				    			<li>A product roadmap</li>
-				    			<li>A resourcing plan for Implementation</li>
-				    		</ul>
-			    		</div>
-					</div>
-				</uib-accordion>
-			</div>
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
-				<uib-accordion>
-					<div uib-accordion-group class="panel-default">
-						<uib-accordion-heading>
-							<i class="fa fa-gears"></i> Implementation
-						</uib-accordion-heading>
-						<div>If we proceed with your team into Implementation, we'll be fully invested in our new product and have a clear intention to continuously improve it. Now we'll need your expertise to carefully architect and automate the delivery pipeline for stability and continuous deployment.</div>
-						<hr>
-						<div>
-				    		<i class="fa fa-cubes"></i>
-				    		<span class="strong">Deliverables</span><br>
-				    		<ul>
-				    			<li>Functional components in the product roadmap</li>
-				    		</ul>
-			    		</div>
-					</div>
-				</uib-accordion>
-			</div>
-		</div>
-
-<!-- // This was the original expression of Phases & Dates // -->
-<!--
-				<table class="table table-striped">
-					<thead>
-						<td></td>
-						<td>Phase Start Date</td>
-						<td>Phase End Date</td>
-					</thead>
-					<tr ng-if="vm.opportunity.phases.inception.isInception">
-						<td>Inception</td>
-						<td>
-							<form-input
-								ng-model="vm.opportunity.phases.inception.startDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"inceptionStartDate",
-									"name":"inceptionStartDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td><td>
-							<form-input
-								ng-model="vm.opportunity.phases.inception.endDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"inceptionEndDate",
-									"name":"inceptionEndDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td>
-					</tr>
-					<tr ng-if="vm.opportunity.phases.proto.isPrototype">
-						<td>Prototype</td>
-						<td>
-							<form-input
-								ng-model="vm.opportunity.phases.proto.startDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"prototypeStartDate",
-									"name":"prototypeStartDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td><td>
-							<form-input
-								ng-model="vm.opportunity.phases.proto.endDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"prototypeEndDate",
-									"name":"prototypeEndDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td>
-					</tr>
-					<tr ng-if="vm.opportunity.phases.implementation.isImplementation">
-						<td>Implementation</td>
-						<td>
-							<form-input
-								ng-model="vm.opportunity.phases.implementation.startDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"implementationStartDate",
-									"name":"implementationStartDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td><td>
-							<form-input
-								ng-model="vm.opportunity.phases.implementation.endDate"
-								x-form="vm.opportunityForm"
-								x-options='{
-									"disabled":"true",
-									"id":"implementationEndDate",
-									"name":"implementationEndDate",
-									"format":"MMMM dd, yyyy",
-									"type":"date"
-								}'>
-							</form-input>
-						</td>
-					</tr>
-				</table>
-			-->
-
-<!-- // This was the original expression of Capabilities & Skills //  -->
-<!--
-				<div class="panel panel-default" ng-repeat="capability in vm.capabilities" ng-if="vm.iOppCapabilities[capability.code]">
-					<div class="panel-heading text-right" >
-						<h4 class="panel-title pull-left" ng-bind="capability.name"></h4>
-						<span class="label label-success" ng-if="capability.isInception">Inception</span>
-						<span class="label label-success" ng-if="capability.isPrototype">Prototype</span>
-						<span class="label label-success" ng-if="capability.isImplementation">Implementation</span>
-					</div>
+				<div class="panel panel-default">
 					<div class="panel-body">
-						<div class="row">
-							<div class="col-sm-8">
-								<p ng-bind-html="vm.trust(capability.description)"></p>
+						<uib-accordion class="panel-default">
+							<div uib-accordion-group class="panel-default">
+								<uib-accordion-heading>
+									<i class="fa fa-map"></i> Inception
+								</uib-accordion-heading>
+								<div>During Inception, you'll take our business goals and discovery research and help us explore the potential value that a new digital product can bring. Then we'll work together to create the initial backlog for a Proof of Concept or Minimum Viable Product.</div>
+								<hr>
+								<div>
+					    			<i class="fa fa-cubes"></i>
+					    			<span class="strong">Deliverables</span><br>
+					    			At the end of Inception, we should have happy stakeholders with a shared vision and a product backlog for a Proof of Concept, and maybe some updates to our Product Roadmap.
+						    		</ul>
+					    		</div>
 							</div>
-							<div class="col-sm-4" ng-if="capability.skills.length > 0">
-								<div class="panel panel-success">
-									<div class="panel-heading">
-										<strong>Specific Skills</strong>
-									</div>
-									<ul class="list-group">
-										<li class="list-group-item" ng-repeat="skill in capability.skills" ng-if="vm.iOppCapabilitySkills[skill.code]">{{skill.name}}</li>
-									</ul>
-								</div>
-							</div>
+						</uib-accordion>
+						<h5>Schedule</h5>
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
 						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
--->
-
-<!-- // Schedule // -->
-		<div class="row">
-			<div class="col-xs-12">
-				<h4>Schedule</h4>
-				<p>We want to complete phases within these timeframes:</p>
-			</div>
-		</div>
-		<div class="row">
-<!-- // BA-177 // Chris: Please wire these up so that Start and End dates for each applicable phase show up. // -->
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
-				<div class="alert alert-important text-center">
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
-				</div>
 			</div>
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
-				<div class="alert alert-important text-center">
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<uib-accordion>
+							<div uib-accordion-group class="panel-default">
+								<uib-accordion-heading>
+									<i class="fa fa-rocket"></i> Proof of Concept
+								</uib-accordion-heading>
+								<div>In the Proof of Concept phase, we'll make our value propositions tangible and validate them. You'll code the core features we scoped out in Inception, working towards our Alpha release. By the end of this phase, we should have a plan for what it will take to fully implement and maintain the product long-term.</div>
+								<hr>
+								<div>
+						    		<i class="fa fa-cubes"></i>
+						    		<span class="strong">Deliverables</span><br>
+						    		At the end of Proof of Concept, we should have:
+						    		<ul>
+						    			<li>Alpha release of the product</li>
+						    			<li>A build/buy/licence decision</li>
+						    			<li>A product roadmap</li>
+						    			<li>A resourcing plan for Implementation</li>
+						    		</ul>
+					    		</div>
+							</div>
+						</uib-accordion>
+						<h5>Schedule</h5>
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
+						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
 			</div>
+			
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
-				<div class="alert alert-important text-center">
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<uib-accordion>
+							<div uib-accordion-group class="panel-default">
+								<uib-accordion-heading>
+									<i class="fa fa-gears"></i> Implementation
+								</uib-accordion-heading>
+								<div>If we proceed with your team into Implementation, we'll be fully invested in our new product and have a clear intention to continuously improve it. Now we'll need your expertise to carefully architect and automate the delivery pipeline for stability and continuous deployment.</div>
+								<hr>
+								<div>
+						    		<i class="fa fa-cubes"></i>
+						    		<span class="strong">Deliverables</span><br>
+						    		<ul>
+						    			<li>Functional components in the product roadmap</li>
+						    		</ul>
+					    		</div>
+							</div>
+						</uib-accordion>
+						<h5>Schedule</h5>
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
+						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-
-		</div>
-
-		<!-- // Capabilites Required // -->
-		<div class="row">
-			<div class="col-xs-12">
-				<h4>Required Capabilities&#42;</h4>
-				<p>In each phase, we need the team you put forward to have the following capabilities:</p>
-			</div>
-		</div>
-		<div class="row">
-
-<!-- // BA-179 // Chris: Please wire up the following tables to populate with the CAPABILITIES and FULL-TIME labels where appropriate. // -->
-
-			<!-- Inception Phase, if applicable -->
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Proof of Concept Phase, if applicable -->
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-
-			<!-- Implementation Phase -->
-			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		</div>
 
 		<div class="alert alert-info">
-			&#42;Capabilities are claimed by individuals in their personal profile. View our capability definitions <a href="/capabilities" target="_blank">here</a>.
+			&#42;Capabilities are claimed by individuals in their personal profile. View all our capability definitions <a href="/capabilities" target="_blank">here</a>.
 		</div>
 
 		<hr>
@@ -558,14 +416,23 @@
 
 		<!-- // How to Apply // -->
 		<div class="row">
-			<div class="col-xs-12">
+			<div class="col-xs-12 col-sm-8">
 				<h4>How to Apply</h4>
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
-				<!-- // If user does not have a proposal in DRAFT or SUBMITTED // -->
-				<div class="alert alert-warning" ng-if="vm.closing != 'CLOSED'">
-					<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href="/sprintwithus"> follow these steps</a>.
+				<!-- // If user is not signed in // -->
+				<div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
+					<div class="alert alert-warning">
+						<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
+					</div>
+			 	</div>
+			</div>
+			<div class="col-xs-12 col-sm-4">
+				<div class="well well-warning">
+					<h4>Got Questions?</h4>
+					<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.<br><br>
+					<i class="fa fa-comments fa-2x"></i>
 				</div>
 			</div>
 		</div>
@@ -642,11 +509,6 @@
 				</div>
 			</div>
 		</div>
-		<hr>
-		<div class="row text-center">
-			<h4 class="opp-detail"><i class="fa fa-comments fa-lg"></i>&nbsp; Questions?&nbsp;&nbsp;<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.</h4>
-		</div>
-
 	</div>
 
 </section>
