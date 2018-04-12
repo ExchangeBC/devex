@@ -230,11 +230,23 @@ var saveProposal = function (proposal) {
 		});
 	});
 };
+exports.saveProposal = saveProposal;
 var saveProposalRequest = function (req, res, proposal) {
 	return saveProposal (proposal)
 	.then (function () { res.json (proposal); })
 	.catch (function (e) { res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
 };
+// -------------------------------------------------------------------------
+//
+// remove a user from a proposal and save it
+//
+// -------------------------------------------------------------------------
+exports.removeUserFromProposal = function (proposal, userid) {
+	proposal.phases.implementation.team.pull (userid);
+	proposal.phases.inception.team.pull (userid);
+	proposal.phases.proto.team.pull (userid);
+	return saveProposal (proposal);
+}
 /**
  * Create a Proposal
  */

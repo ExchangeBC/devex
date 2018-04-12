@@ -28,7 +28,9 @@ var path = require('path'),
 	Org = mongoose.model('Org'),
 	User = mongoose.model('User'),
 	Capability = mongoose.model('Capability'),
+	Proposal = mongoose.model('Proposal'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	multer = require('multer'),
@@ -280,7 +282,37 @@ var saveOrg = function (req, res) {
 		});
 	};
 };
-
+// -------------------------------------------------------------------------
+//
+// remove a user from all open proposals
+//
+// -------------------------------------------------------------------------
+var removeUserFromProposals = function (user) {
+	return function (org) {
+		var rightNow = new Date ();
+		var userid = user.id;
+		return new Promise (function (resolve, reject) {
+			Proposal.find ({org:org._id})
+			.populate ('opportunity', 'opportunityTypeCd deadline')
+			.exec (function (err, proposals) {
+				Promise.all (proposals.map (function (proposal) {
+					var deadline       = new Date (proposal.opportunity.deadline);
+					var isSprintWithUs = (proposal.opportunity.opportunityTypeCd === 'sprint-with-us');
+					//
+					// if sprint with us and the opportunity is still open
+					// remove the user and save the proposal
+					//
+					if (isSprintWithUs && 0 < (deadline - rightNow)) {
+						return Proposals.removeUserFromProposal (proposal, userid);
+					} else {
+						return Promise.resolve ();
+					}
+				}))
+				.then (resolve, reject);
+			});
+		});
+	};
+};
 // -------------------------------------------------------------------------
 //
 // given a user and an org, associate the two by updatying their respective
@@ -329,8 +361,8 @@ var addAdmins = function (org) {
 var removeMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
-	// .then (saveUser)
-	.then (function () {return org;});
+	.then (removeUserFromProposals (user))
+	.then (resolveOrg (org));
 };
 var removeAdmin = function (user, org) {
 	return Promise.resolve (user)
