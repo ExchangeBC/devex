@@ -7,7 +7,6 @@ body {
 
 body {
     .body-font;
-    padding-top: 50px;
     padding-bottom: 30px;
     font-size: 14px;
 }
@@ -104,15 +103,15 @@ a.secondary {
 }
 
 a.accordion-toggle {
-  color: @gray-dark;
+  color: @theme-primary;
   &:hover, &:active, &:visited, &:focus {
-  color: @gray-dark;
+  color: darken(@theme-primary; 10%);
   outline: none;
   }
 }
 
 a.breadcrumb-nav {
-  font-size: 1.05em;
+  font-size: 15px;
   color: @gray;
   &:hover,&:active:hover {
     color: @gray-darker;
@@ -122,8 +121,11 @@ a.breadcrumb-nav {
   }
 }
 
-.breadcrumb-nav {
-  margin: 5px 0px 20px;
+.sub-nav {
+  height: 50px;
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #e2e2e2;
 }
 
 .page-header {
@@ -177,6 +179,10 @@ a.breadcrumb-nav {
 
 .gray-light {
   color: @gray-light;
+}
+
+.gray {
+  color: @gray;
 }
 
 // Containers
@@ -427,6 +433,7 @@ h4.edit-form-header {
 
 .navbar-brand {
   padding: 3px 20px 3px 0px;
+  margin-left: -5px;
   height: 50px;
 }
 
@@ -943,9 +950,10 @@ form-title {
 //------------------------
 
 .list-filter {
+  background: #ced9e4;
   padding: 10px;
-  border-top: 1px solid #d3d3d3;
-  border-bottom: 1px solid #d3d3d3;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
   > .btn {
     font-size: 13px;
     padding: 3px 5px;
@@ -1260,7 +1268,7 @@ form-title {
 // Common styles
 .alert {
   max-width: 1040px;
-  padding: 15px;
+  padding: 10px;
   margin: 10px 0 25px;
   font-weight: 400;
   font-size: 14px;
@@ -1271,7 +1279,7 @@ form-title {
 }
 
 .alert-info {
-  background: @gray-lighter;
+  background: @theme-info;
   color: @gray-dark;
 }
 
@@ -2194,7 +2202,7 @@ form-title {
 // Banners
 
 .banner {
-  padding: .75em;
+  padding: 10px;
   margin: 0px;
   text-align: center;
 }
