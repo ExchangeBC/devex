@@ -102,7 +102,7 @@
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -136,14 +136,21 @@
 		});
 		// -------------------------------------------------------------------------
 		//
-		// remove the program with some confirmation
+		// remove the org with some confirmation
 		//
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
+			var orgId = vm.org._id.toString ();
 			if ($window.confirm('Are you sure you want to delete?')) {
 				vm.org.$remove(function() {
-					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
+					vm.user.orgsMember = vm.user.orgsMember.filter (function (el) {return el !== orgId;});
+					vm.user.orgsAdmin  = vm.user.orgsAdmin.filter (function (el) {return el !== orgId;});
+					var user = new UsersService (vm.user);
+					user.$update (function (response) {
+						Authentication.user = response;
+						$state.go('orgs.list');
+					});
 				});
 			}
 		};

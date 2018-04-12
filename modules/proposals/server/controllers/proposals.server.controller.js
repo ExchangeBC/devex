@@ -158,6 +158,25 @@ exports.myopp = function (req, res) {
 		}
 	});
 };
+exports.myorgopp = function (req, res) {
+	if (!req.user) return res.json ({});
+	if (!req.org) return res.json ({});
+	if (!req.opportunity) return res.json ({});
+	Proposal.findOne ({org:req.org._id, opportunity:req.opportunity._id})
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('opportunity')
+	.populate('user', userfields)
+	.exec (function (err, proposals) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (proposals);
+		}
+	});
+};
 var getUserCapabilities = function (users) {
 	return new Promise (function (resolve, reject) {
 		var userids = users.map (function (o) {if (o._id) return o._id; else return o;});
@@ -401,7 +420,22 @@ exports.delete = function (req, res) {
 		}
 	});
 };
-
+exports.deleteForOrg = function (orgid) {
+	return new Promise (function (resolve, reject) {
+		Propsal.find ({org:orgid}, function (err, proposals) {
+			if (err) reject (err);
+			else {
+				if (proposals) {
+					Promise.all (proposals.map (function (proposal) {
+						// return proposal.remove ();
+						return Promise.resolve ();
+					})).then (resolve, reject);
+				}
+				else resolve ();
+			}
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // return a list of all proposals

@@ -54,6 +54,10 @@
         method: 'GET',
         url: '/api/myopp/proposal/:opportunityId'
       },
+      myOrgOpp: {
+        method: 'GET',
+        url: '/api/myorgopp/:orgId/proposal/:opportunityId'
+      },
       getPotentialResources: {
         method: 'GET',
         url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',

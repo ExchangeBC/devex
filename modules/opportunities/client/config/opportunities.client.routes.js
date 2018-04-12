@@ -111,19 +111,21 @@
 				subscriptions: function (NotificationsService) {
 					return NotificationsService.subscriptions().$promise;
 				},
-				myproposal: function ($stateParams, ProposalsService, Authentication) {
-					if (!Authentication.user) return {};
-					return ProposalsService.myopp ({
-						opportunityId: $stateParams.opportunityId
-					}).$promise;
-				},
 				org: function (Authentication, OrgsService) {
 					if (!Authentication.user) return {};
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
 					if (org) return OrgsService.get ({orgId:org}).$promise;
 					else return {};
-				}
+				},
+				myproposal: function ($stateParams, ProposalsService, Authentication, org) {
+					if (!Authentication.user) return {};
+					if (!org || !org._id) return {};
+					return ProposalsService.myOrgOpp ({
+						orgId : org._id,
+						opportunityId: $stateParams.opportunityId
+					}).$promise;
+				},
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'

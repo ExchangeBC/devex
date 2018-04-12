@@ -40,6 +40,8 @@ module.exports = function(app) {
 		.get(proposals.my);
 	app.route('/api/myopp/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
 		.get(proposals.myopp);
+	app.route('/api/myorgopp/:orgId/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
+		.get(proposals.myorgopp);
 
 	app.route ('/api/proposals/stats/opportunity/:opportunityId')
 		.get (proposals.stats);

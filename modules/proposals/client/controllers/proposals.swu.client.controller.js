@@ -266,35 +266,48 @@
 			// also tally up the booleans in isMetAllCapabilities. if they are all true
 			// then the user can submit their proposal
 			//
+			// console.log (ppp.prp);
 			ppp.isMetAllCapabilities = true;
 			var haveanyatall = false;
-			if (ppp.oinp.isInception) ppp.inp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oinp.isInception', ppp.oinp.isInception);
+			if (ppp.oinp.isInception) ppp.inp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
+				// console.log ('ppp.p_inp.iPropCapabilities[code]', ppp.p_inp.iPropCapabilities[code]);
 			});
-			if (ppp.oprp.isPrototype) ppp.prp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oprp.isPrototype', ppp.oprp.isPrototype);
+			if (ppp.oprp.isPrototype) ppp.prp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
+					// console.log ('member', member);
 					if (!ppp.prTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
+				// console.log ('ppp.p_prp.iPropCapabilities[code]', ppp.p_prp.iPropCapabilities[code]);
 			});
-			if (ppp.oimp.isImplementation) ppp.imp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oimp.isImplementation', ppp.oimp.isImplementation);
+			if (ppp.oimp.isImplementation) ppp.imp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_imp.iPropCapabilities[code];
+				// console.log ('ppp.p_imp.iPropCapabilities[code]', ppp.p_imp.iPropCapabilities[code]);
 			});
+			// console.log ('haveanyatall', haveanyatall);
+			// console.log ('isMetAllCapabilities', ppp.isMetAllCapabilities);
 			ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && haveanyatall;
 			//
 			// now skills

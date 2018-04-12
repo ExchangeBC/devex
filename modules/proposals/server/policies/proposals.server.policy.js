@@ -72,6 +72,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/myopp/proposal/:opportunityId',
       permissions: ['get']
     }, {
+      resources: '/api/myorgopp/:orgId/proposal/:opportunityId',
+      permissions: ['get']
+    }, {
       resources: '/api/proposals/members/:proposalId/confirm/:userId',
       permissions: ['get']
     }, {

@@ -498,7 +498,7 @@ var getAllAffectedMembers = function (orgId) {
 };
 var removeAllCompanyReferences = function (orgId) {
 	return function (users) {
-		return Promise.resolve (users.map (function (user) {
+		return Promise.all (users.map (function (user) {
 			user.orgsAdmin.pull (orgId);
 			user.orgsMember.pull (orgId);
 			user.orgsPending.pull (orgId);
@@ -509,6 +509,15 @@ var removeAllCompanyReferences = function (orgId) {
 		}));
 	};
 };
+var removeAllProposals = function (orgId) {
+	//
+	// this actually needs a bit of thinking. Do we want to delete all proposals, or are
+	// some of them needed for a matter of public record ?
+	//
+	return function () {
+		return Proposals.deleteForOrg ();
+	};
+}
 exports.delete = function (req, res) {
 	var org = req.org;
 	var orgId = org._id;
@@ -520,6 +529,7 @@ exports.delete = function (req, res) {
 		} else {
 			getAllAffectedMembers (orgId)
 			.then (removeAllCompanyReferences (orgId))
+			// .then (removeAllProposals (orgId))
 			.then (function () {
 				res.json (org);
 			})
