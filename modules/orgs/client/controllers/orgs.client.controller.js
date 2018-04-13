@@ -324,7 +324,7 @@
 				CapabilitiesMethods.init (vm, vm.org, capabilities);
 				vm.orgForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Congrats! Your company is now qualified for Sprint With Us.</h4>'
 				});
 			})
 		};
