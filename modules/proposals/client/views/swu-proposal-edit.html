@@ -117,7 +117,7 @@
 
 							<div class="panel panel-default" ng-if="ppp.oinp.isInception">
 								<div class="panel-body">
-									<div class="text-center">Required Capabilities</div>
+									<h5 class="text-center">Required Capabilities</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
@@ -128,7 +128,8 @@
 											</tr>
 										</tbody>
 									</table>
-									<div class="text-center">Preferred Skills</div>
+									<hr>
+									<h5 class="text-center">Preferred Skills</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -171,7 +172,7 @@
 
 							<div class="panel panel-default" ng-if="ppp.oprp.isPrototype">
 								<div class="panel-body">
-									<div class="text-center">Required Capabilities</div>
+									<h5 class="text-center">Required Capabilities</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
@@ -182,7 +183,8 @@
 											</tr>
 										</tbody>
 									</table>
-									<div class="text-center">Preferred Skills</div>
+									<hr>
+									<h5 class="text-center">Preferred Skills</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -224,7 +226,7 @@
 
 							<div class="panel panel-default" ng-if="ppp.oimp.isImplementation">
 								<div class="panel-body">
-									<div class="text-center">Required Capabilities</div>
+									<h5 class="text-center">Required Capabilities</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
@@ -235,7 +237,8 @@
 											</tr>
 										</tbody>
 									</table>
-									<div class="text-center">Preferred Skills</div>
+									<hr>
+									<h5 class="text-center">Preferred Skills</h5>
 									<table class="table capabilities-list">
 										<tbody>
 											<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
