@@ -136,7 +136,7 @@
 			});
 		}
 		vm.delete = function () {
-			if ((confirm('Are you sure that you want to be removed from the Developer\'s Exchange?')) && (confirm('Are you really sure?'))) {
+			if ((confirm('Are you sure that you want to be removed from the BCDevExchange?')) && (confirm('Are you really sure?'))) {
 					window.location = '/api/users/delete';
 			}
 		}
