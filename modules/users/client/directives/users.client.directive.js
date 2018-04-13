@@ -34,7 +34,7 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Upload new picture</button>',
+			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Upload new picture</button>',
 			controller: function ($scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
 				var uploadurl = '/api/users/picture';

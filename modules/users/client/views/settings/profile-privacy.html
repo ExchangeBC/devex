@@ -1,67 +1,70 @@
 <form name="vm.userForm" id="vm.userForm" novalidate autocomplete="off">
-	<div class="row">
-		<div class="col-xs-12">
-			<fieldset>
-				<div class="col-sm-5">
-					<h4><i class="fa fa-envelope-o"></i> Notifications</h4>	
-					<hr>
-					<div class="checkbox">
-						<label>
-						<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-						Tell me about new opportunities
-						</label>
-						<span class="checkbox-subtext">Get an instant email notification whenever a new opportunity is published.</span>
+	<div class="edit-form-tab-content">
+		<div class="row">
+			<div class="col-xs-12">
+				<fieldset>
+					<div class="col-sm-5">
+						<h5><i class="fa fa-envelope-o"></i> Notifications</h5>	
+						<hr>
+						<div class="checkbox">
+							<label>
+							<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+							Tell me about new opportunities
+							</label>
+							<span class="checkbox-subtext">Get an instant email notification whenever a new opportunity is published.</span>
+						</div>
+						<br><br>
+						<form-input
+							ng-model="vm.user.email"
+							class="col-sm-12"
+							x-form="vm.userForm"
+							x-options='{
+								"title":"Email Address",
+								"id":"email",
+								"name":"email",
+								"placeholder":"Email Address",
+								"required":"Email Address is required"
+									}'>
+						</form-input>
 					</div>
-					<br><br>
-					<form-input
-					ng-model="vm.user.email"
-					class="col-sm-12"
-					x-form="vm.userForm"
-					x-options='{
-						"title":"Email Address",
-						"id":"email",
-						"name":"email",
-						"placeholder":"Email Address",
-						"required":"Email Address is required"
-							}'>
-					</form-input>
-				</div>
-				<div class="hidden-xs col-sm-2"></div>
-				<div class="col-sm-5">
-					<h4><i class="fa fa-user-secret"></i> Privacy</h4>
-					<hr>	
-				<!--
-					<div class="checkbox" ng-if="vm.features.swu">
-						<label>
-						<input type="checkbox" ng-model="vm.user.isPublicProfile" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-						Make my basic profile public
-						</label>
-						<span class="checkbox-subtext">Allow anyone to see your basic profile information. (Your <span class="strong">capabilities</span> will be kept private.)</span>
+					<div class="hidden-xs col-sm-2"></div>
+					<div class="col-sm-5">
+						<h5><i class="fa fa-user-secret"></i> Privacy</h5>
+						<hr>	
+					<!--
+						<div class="checkbox" ng-if="vm.features.swu">
+							<label>
+							<input type="checkbox" ng-model="vm.user.isPublicProfile" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+							Make my basic profile public
+							</label>
+							<span class="checkbox-subtext">Allow anyone to see your basic profile information. (Your <span class="strong">capabilities</span> will be kept private.)</span>
+						</div>
+						<br>
+					-->
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+								Allow people to see my email address
+							</label>
+							<br/>
+							<span class="checkbox-subtext">If you're listed as a program or project member, or if you're assigned to an opportunity, anyone will be able to see your name and profile picture. Check this box to also allow them to see you email address.</span>
+						</div>
+					<!--
+						<br>
+						<div class="checkbox" ng-if="vm.features.swu">
+							<label>
+							<input type="checkbox" ng-model="vm.user.isAutoAdd" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+							Allow companies I've trusted to put me forward on opportunities
+							</label>
+							<span class="checkbox-subtext">If you check this box, companies you have trusted can put you forward on a team opportunity without first getting your approval. Your consent will always be required for companies you haven't trusted yet.</span>
+						</div>
+					-->
 					</div>
-					<br>
-				-->
-					<div class="checkbox">
-						<label>
-							<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-							Allow people to see my email address
-						</label>
-						<br/>
-						<span class="checkbox-subtext">If you're listed as a program or project member, or if you're assigned to an opportunity, anyone will be able to see your name and profile picture. Check this box to also allow them to see you email address.</span>
-					</div>
-				<!--
-					<br>
-					<div class="checkbox" ng-if="vm.features.swu">
-						<label>
-						<input type="checkbox" ng-model="vm.user.isAutoAdd" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-						Allow companies I've trusted to put me forward on opportunities
-						</label>
-						<span class="checkbox-subtext">If you check this box, companies you have trusted can put you forward on a team opportunity without first getting your approval. Your consent will always be required for companies you haven't trusted yet.</span>
-					</div>
-				-->
-				</div>
-			</fieldset>
+				</fieldset>
+			</div>
 		</div>
 	</div>
+
 	<div class="edit-form-footer">
 		<div class="row">
 			<div class="col-xs-12">
