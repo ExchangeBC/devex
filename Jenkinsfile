@@ -178,7 +178,7 @@ stage('deploy-test') {
 	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin'
   }
   node('master') {
-	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_THASH}"
+	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
           sleep 5
 	  openshiftVerifyDeployment depCfg: TST_DEPLOYMENT_NAME, namespace: TST_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
