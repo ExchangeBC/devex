@@ -98,14 +98,13 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
     resourceLimitCpu: '1000m',
     resourceRequestMemory: '3Gi',
     resourceLimitMemory: '4Gi',
-    workingDir: '/tmp',
+    workingDir: '/home/jenkins',
     command: '',
     args: '${computer.jnlpmac} ${computer.name}'
   )
 ]) {
-     node('owasp-zap') {
+     node('owasp-zap security scan') {
        stage('Scan Web Application') {
-	 sleep 10
          dir('/zap') {
            def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
