@@ -107,9 +107,9 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
        stage('Scan Web Application') {
 	 sleep 10
          dir('/zap') {
-                def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
-                publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
-                echo "Return value is: ${retVal}"
+           def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
+           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
+           echo "Return value is: ${retVal}"
          }
        }
      }
@@ -169,8 +169,8 @@ stage('Functional Test Dev') {
                           ])  
 	    }
         }
-     }
-  }
+     }}
+   }
 }
 	
 stage('deploy-test') {	
