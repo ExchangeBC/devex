@@ -80,7 +80,7 @@ node('maven') {
             echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 
 	    echo ">>>> Build Complete"
- 	    openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: DEV_TAG_NAME, srcStream: 'devxp', srcTag: "${IMAGE_HASH}"
+ 	    openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
 	    openshiftVerifyDeployment depCfg: DEV_DEPLOYMENT_NAME, namespace: DEV_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
@@ -178,7 +178,7 @@ stage('deploy-test') {
 	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin'
   }
   node('master') {
-	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: 'devxp', srcTag: "${IMAGE_THASH}"
+	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_THASH}"
           sleep 5
 	  openshiftVerifyDeployment depCfg: TST_DEPLOYMENT_NAME, namespace: TST_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
