@@ -103,8 +103,8 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
     args: '${computer.jnlpmac} ${computer.name}'
   )
 ]) {
-     node('owasp-zap security scan') {
-       stage('Scan Web Application') {
+     node('owasp-zap') {
+       stage('ZAP Security Scan') {
          dir('/zap') {
            def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
