@@ -60,7 +60,7 @@ node('maven') {
     stage('dependency check') {
           dir('owasp') {
             // sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
-            sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan package.json --enableExperimental --enableRetired'
+            sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan ../package.json --enableExperimental --enableRetired'
             publishHTML (target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
