@@ -21,6 +21,8 @@ module.exports = function(app) {
 		.put(proposals.submit);
 	app.route('/api/assign/proposal/:proposalId').all(proposalsPolicy.isAllowed)
 		.put(proposals.assign);
+	app.route('/api/assign/proposalswu/:proposalId').all(proposalsPolicy.isAllowed)
+		.put(proposals.assignswu);
 	//
 	// proposals for opportunity
 	//
@@ -38,6 +40,8 @@ module.exports = function(app) {
 		.get(proposals.my);
 	app.route('/api/myopp/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
 		.get(proposals.myopp);
+	app.route('/api/myorgopp/:orgId/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
+		.get(proposals.myorgopp);
 
 	app.route ('/api/proposals/stats/opportunity/:opportunityId')
 		.get (proposals.stats);

@@ -82,9 +82,6 @@
 						(vm.filter.open && vm.rightNow < d) ||
 						(vm.filter.closed && vm.rightNow >= d)
 					);
-					// console.log ('filter:', vm.filter);
-					// console.log ('filter:', r.opportunityTypeCd, vm.rightNow, d);
-					// console.log ('result:', result);
 					return result;
 				};
 				vm.publish = function (opportunity, state) {

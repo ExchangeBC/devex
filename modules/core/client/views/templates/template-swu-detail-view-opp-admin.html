@@ -1,14 +1,9 @@
-
 <section class="detail-page-background">
 
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<div class="breadcrumb-nav">
-					<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
-				</div>
-			</div>
-		</div>
+		<div class="breadcrumb-nav">
+			<a href="/opportunities" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Opportunities</a>
+		</div>	
 	</div>
 
 	<!-- Admin View for Evaluation -->
@@ -33,26 +28,18 @@
 		</div>
 	</div>
 
+	<!-- Alerts about being able to publish (Opp Admin) or apply (Companies) -->
 	<div class="container">	
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-		<div class="row" ng-if="!vm.canPublish && vm.canEdit">
-			<div class="col-xs-12">
-				<div class="alert alert-important">
-					<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
-					<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
-				</div>
-			</div>
-		</div>
-		<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
-		<div class="row" ng-if="vm.canEdit && !vm.opportunity.isPublished">
-			<div class="col-xs-12">
-				<div class="pull-right" role="group">
-					<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"><i class="fa fa-pencil"></i> EDIT</button>
-					<a href="javascript:void(0);" ng-if="vm.canPublish && vm.opportunity.project.isPublished && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-sm btn-primary" ng-click="vm.publish(vm.opportunity, true)"><i class="fa fa-bullhorn"></i> PUBLISH</a>
-				</div>
-			</div>
+		<div class="alert alert-important">
+			<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
+			<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 		</div>
 		
+		<!-- Admin View if opportunity is COMPLETE but not published -->
+		<div class="alert alert-success">
+			<i class="fa fa-thumbs-o-up"></i>&nbsp; Your opportunity is complete and ready to be published!
+		</div>
 	</div>
 
 	<br>
@@ -62,9 +49,15 @@
 		<div class="opp-detail-header">
 			Published on Feb 12, 2018. Last updated on Feb 15, 2018.
 
-			<!-- Opportunity Admin control buttons -->
-			<button  type="button" class="btn btn-lg btn-text-only pull-right" title="Edit Opportunity"><i class="fa fa-pencil"></i></button>
-			<button type="button" class="btn btn-lg btn-text-only pull-right" title="Unpublish Opportunity"><i class="fa fa-ban"></i></button>
+			
+			<!-- Opportunity Admin // PUBLISH button if opportunity is DRAFT and COMPLETE -->
+			<a href="/" class="btn btn-sm btn-primary pull-right" title="Publish Opportunity"><i class="fa fa-bullhorn"></i> PUBLISH</a>
+
+			<!-- Opportunity Admin // EDIT button if opportunity is DRAFT or PUBLISHED -->
+			<button  type="button" class="btn btn-sm btn-text-only pull-right" title="Edit Opportunity"><i class="fa fa-lg fa-pencil"></i></button>
+			
+			<!-- Opportunity Admin // UNPUBLISH button if opportunity is PUBLISHED -->
+			<button type="button" class="btn btn-sm btn-text-only pull-right" title="Unpublish Opportunity"><i class="fa fa-lg fa-ban"></i></button>
 
 		</div>
 

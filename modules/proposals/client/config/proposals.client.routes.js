@@ -212,7 +212,8 @@
 					else return null;
 				},
 				resources: function (Authentication, ProposalsService, $stateParams) {
-					var orgs = Authentication.user.orgsAdmin || [null];
+					// console.log ('Authentication.user.orgsAdmin', Authentication.user.orgsAdmin);
+					var orgs = Authentication.user.orgsAdmin && Authentication.user.orgsAdmin.length > 0 ? Authentication.user.orgsAdmin : [null];
 					var org = orgs[0];
 					if (org) return ProposalsService.getPotentialResources ({
 						opportunityId : $stateParams.opportunityId,

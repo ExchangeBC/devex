@@ -23,7 +23,7 @@ var ProgramSchema = new Schema({
 	createdBy   : {type: 'ObjectId', ref: 'User', default: null },
 	updated     : {type: Date, default: null },
 	updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
-});
+}, { usePushEach: true });
 
 ProgramSchema.statics.findUniqueCode = function (title, suffix, callback) {
 	var _this = this;

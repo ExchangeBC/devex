@@ -3,8 +3,8 @@
 		<h3 class="list-page-title list-page-hide">Companies</h3>
 	</div>
 	<div class="col-xs-4">
-		<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="orgs.create()" title="New">
-			<i class="fa fa-plus"></i> REGISTER YOUR COMPANY
+		<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="orgs.create()" title="Register a Company">
+			<i class="fa fa-plus"></i> Register a Company
 		</button>
 	</div>
 </div>
@@ -12,12 +12,12 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-4" ng-repeat="org in vm.orgs">
 		<div class="card card-company">
-			<div class="card-header" ng-if="org.canEdit || org.isOrgMember">
-				<span ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-default">Admin</span>
-				&nbsp;
-				<span ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default">Member</span>
-				&nbsp;
-				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" uib-tooltip="Edit"><i class="fa fa-lg fa-gear"></i></a>
+			<div class="card-header">
+				<!--
+				<label ng-if="vm.isAdmin || org.isOrgAdmin || org.isOrgOwner" class="label label-default">Admin</label>
+				-->
+				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-lg fa-gear"></i></a>
+				<label ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default pull-right">Member</label>
 			</div>
 			
 			<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">

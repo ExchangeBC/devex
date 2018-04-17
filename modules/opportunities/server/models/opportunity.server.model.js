@@ -129,7 +129,7 @@ var OpportunitySchema = new Schema({
 		interview           : {type: Number, default: 0.5},
 		price               : {type: Number, default: 0.1}
 	}
-});
+}, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {
 	var closing = 'CLOSED';

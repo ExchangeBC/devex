@@ -1,9 +1,12 @@
-<section class="detail-page-background">
+<div class="sub-nav">
 	<div class="container">
 		<div class="breadcrumb-nav">
 			<a class="breadcrumb-nav" ui-sref="capabilities.list()"><i class="fa fa-chevron-left"></i> All Capabilities</a>
 		</div>
 	</div>
+</div>
+
+<section class="detail-page-background">
 
 	<div class="container detail-view">
 		<div class="row" ng-if="vm.canEdit">
@@ -57,6 +60,11 @@
 						<li class="list-group-item">Openshift</li>
 					-->
 					</ul>
+				</div>
+				<br>
+				<div class="alert alert-warning">
+					<h4>Got this capabiltiy?</h4>
+					Claim it in your <a href="/settings/skills">personal profile</a>.
 				</div>
 			</div>
 		</div>

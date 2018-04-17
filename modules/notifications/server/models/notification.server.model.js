@@ -21,14 +21,14 @@ var NotificationSchema = new Schema({
 	target          : {type: String, default: 'None', enum: ['None', 'Opportunity', 'Program', 'Project', 'User']},
 	event           : {type: String, default: 'None', enum: ['Add', 'Update', 'Delete', 'UpdateAny']},
 	isActive        : {type: Boolean, default: false}
-});
+}, { usePushEach: true });
 
 var SubscriptionSchema = new Schema({
 	subscriptionId   : {type: String, unique: true, required: 'A subscription Id is a requirement'},
 	notification     : {type: Schema.ObjectId, ref: 'Notification', required: 'Please select a program'},
 	notificationCode : {type: String},   // notification code
 	user             : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true}
-});
+}, { usePushEach: true });
 
 SubscriptionSchema.index ({user: 1, notificationCode: 1}, {unique: true});
 

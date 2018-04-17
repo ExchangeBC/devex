@@ -104,6 +104,14 @@
 					pageTitle: 'Accessibility'
 				}
 			})
+			.state('workwithus', {
+				url: '/workwithus',
+				templateUrl: '/modules/core/client/views/workwithus.view.html',
+				data: {
+					ignoreState: true,
+					pageTitle: 'Work With Us'
+				}
+			})
 			.state('codewithus', {
 				url: '/codewithus',
 				templateUrl: '/modules/core/client/views/codewithus.view.html',
@@ -134,6 +142,22 @@
 				data: {
 					ignoreState: true,
 					pageTitle: 'Code With Us'
+				}
+			})
+			.state('sprintwithus', {
+				url: '/sprintwithus',
+				templateUrl: '/modules/core/client/views/sprintwithus.view.html',
+				data: {
+					ignoreState: true,
+					pageTitle: 'Sprint With Us'
+				}
+			})
+			.state('sprintwithusps', {
+				url: '/sprintwithusps',
+				templateUrl: '/modules/core/client/views/sprintwithus-ps.view.html',
+				data: {
+					ignoreState: true,
+					pageTitle: 'Sprint With Us'
 				}
 			})
 			.state('about', {

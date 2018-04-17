@@ -15,21 +15,17 @@
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 
 
-		<div class="container edit-form">
+		<div class="edit-form">
 
 			<div class="edit-form-header">
-				<span ng-if="vm.editing">
-					<span class="light small">EDITING:</span> 
-					{{vm.opportunity.name}}
-				</span>
-				<span ng-if="!vm.editing">
-					New Opportunity {{vm.opportunity.name}}
-				</span>
-				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
-				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a>
+				<span class="gray"><i class="fa fa-tag"></i> Code With Us Opportunity:</span> &nbsp;
+				<span ng-if="vm.editing">{{vm.opportunity.name}}</span>
+				<span ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</span>
+				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-lg fa-times"></i></a>
+				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-lg fa-times" title="Close"></i></a>
 			</div>
 
-			<uib-tabset active>
+			<uib-tabset active class="edit-form-tabs">
 				<uib-tab index="0">
 					<uib-tab-heading>
 						Header

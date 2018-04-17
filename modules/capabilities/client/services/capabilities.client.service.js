@@ -66,15 +66,15 @@
 			// -------------------------------------------------------------------------
 			dump: function (scope, title) {
 				title = (title || 'capabilities') + ':';
-				console.groupCollapsed (title);
-				console.log ('scope.capabilities', scope.capabilities);
-				console.log ('scope.capabilitySkills', scope.capabilitySkills);
-				console.log ('scope.iCapabilities', scope.iCapabilities);
-				console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
-				console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
-				console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
-				console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
-				console.groupEnd ();
+				// console.groupCollapsed (title);
+				// console.log ('scope.capabilities', scope.capabilities);
+				// console.log ('scope.capabilitySkills', scope.capabilitySkills);
+				// console.log ('scope.iCapabilities', scope.iCapabilities);
+				// console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
+				// console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
+				// console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
+				// console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
+				// console.groupEnd ();
 			},
 			// -------------------------------------------------------------------------
 			//
@@ -115,6 +115,11 @@
 				scope.iOppCapabilities = {};
 				scope.iOppCapabilitiesCore = {};
 				scope.iOppCapabilitySkills = {};
+				//
+				// also make a list of required capability codes and skill codes
+				//
+				scope.oppCapabilityCodes = [];
+				scope.oppCapabilitySkillCodes = [];
 				//
 				// a pair of objects linking _ids to codes
 				//
@@ -157,6 +162,7 @@
 				//
 				model.capabilities.forEach (function (capability) {
 					scope.iOppCapabilities[capability.code] = true;
+					scope.oppCapabilityCodes.push (capability.code);
 					//
 					// only set skills for which we have capabilities, this is becuase
 					// we just happen to magically know that skills become disjoint
@@ -166,6 +172,7 @@
 					var c = scope.iCapabilities[capability.code];
 					c.skills.forEach (function (capabilitySkill) {
 						scope.iOppCapabilitySkills[capabilitySkill.code] = listedSkills[capabilitySkill.code] || false;
+						if (scope.iOppCapabilitySkills[capabilitySkill.code]) scope.oppCapabilitySkillCodes.push (capabilitySkill.code);
 					});
 				});
 				// model.capabilitySkills.forEach (function (capabilitySkill) {

@@ -23,6 +23,10 @@
         method: 'PUT',
         url: '/api/assign/proposal/:proposalId'
       },
+      assignswu: {
+        method: 'PUT',
+        url: '/api/assign/proposalswu/:proposalId'
+      },
       forOpportunity: {
         method: 'GET',
         url: '/api/proposals/for/opportunity/:opportunityId',
@@ -49,6 +53,10 @@
       myopp: {
         method: 'GET',
         url: '/api/myopp/proposal/:opportunityId'
+      },
+      myOrgOpp: {
+        method: 'GET',
+        url: '/api/myorgopp/:orgId/proposal/:opportunityId'
       },
       getPotentialResources: {
         method: 'GET',

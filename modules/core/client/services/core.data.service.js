@@ -11,11 +11,11 @@
 		return {
 			cities: citylist,
 			questions : [
-				'When you are old, what do you think children will ask you to tell stories about?',
-				'If your job gave you a surprise three day paid break to rest and recuperate, what would you do with those three days?',
-				'What’s the best / worst practical joke that you’ve played on someone or that was played on you?',
-				'If you were moving to another country, but could only pack one carry-on sized bag, what would you pack?',
-				'What’s something that everyone, absolutely everyone, in the entire world can agree on?'
+				'What is your favourite project your team has delivered? Why?',
+				'What steps does your team take to understand the business and prioritize what should be delivered?',
+				'What tools and practices does your team find most effective to collaborate and deliver a new digital product?',
+				'How do you evaluate the working relationships on the team and resolve conflicts?',
+				'Why is your company interested in this project?'
 			]
 		};
 	})

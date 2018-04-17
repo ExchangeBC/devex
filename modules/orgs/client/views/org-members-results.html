@@ -1,0 +1,52 @@
+<div class="modal-header">
+	<div class="row">
+		<div class="col-xs-12">
+			<h3>Add Member Results</h3>
+		</div>
+	</div>
+</div>
+<div class="modal-body">
+	<div class="row" ng-if="data.found.length > 0">
+		<div class="col-sm-12">
+			<div class="panel panel-success">
+				<div class="panel-heading">
+					<i class="fa fa-lg fa-check-circle"></i> &nbsp;<strong>These members were found and are now associated to your company!</strong>
+					<br> (And we've sent them a notification so they know you added them.)
+				</div>
+				<div class="panel-body" style="margin: 10px 0;">
+					<div col-xs-12 col-sm-4" ng-repeat="p in data.found | orderBy:'displayName'" >
+						<avatar-display url="p.profileImageURL" text="p.displayName"></avatar-display>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br><br>
+	<div class="row" ng-if="data.notfound.length > 0">
+		<div class="col-sm-12">
+			<div class="panel panel-danger">
+				<div class="panel-heading">
+					<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;<strong>Some members weren't found!</strong> <br>We couldn't find users in our system associated to these emails:
+				</div>
+				<div class="panel-body">
+					<p class="strong" ng-repeat="p in data.notfound | orderBy:'email'" >
+						{{p.email}}
+					</p>
+					<div class="alert alert-info">
+						<h4>What to do</h4>
+						<p>Ask people you want to add to make sure they:
+							<ol>
+								<li><strong>Sign in</strong> to the BCDevExchange with their GitHub credentials</li>
+								<li><strong>Claim the capabilities</strong> they possess (in the <strong>My Capabilities &amp; Skills</strong> tab in their Profile)</li>
+								<li>Confirm the email address that's associated with their Profile (in the <strong>Privacy and Notifications</strong> tab)</li>
+							</ol>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer text-right">
+	<button class="btn btn-primary" data-ng-click="close()">Close</button>
+</div>

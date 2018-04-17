@@ -11,11 +11,76 @@ body {
     font-size: 14px;
 }
 
-p.subtitle {
-  color: @gray;
-  font-size: 16px;
+p {
+  font-size: 14px;
   font-weight: 300;
-  margin: 15px 0px;
+  margin: 0 0 14px;
+}
+
+p.subtitle {
+  font-size: 17px;
+  font-weight: 300;  
+  margin: 0 0 17px;
+}
+
+ol,ul {
+  > li {
+    font-weight: 300;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  .heading-font;
+  padding: 0;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 40px 0 30px;
+}
+
+h2 {
+  font-size: 24px;
+  margin: 34px 0 24px;
+}
+
+h3 {
+  font-size: 21px;
+  margin: 30px 0 21px;
+}
+
+h4 {
+  font-size: 18px;
+  margin: 25px 0 18px;
+}
+
+h5 {
+  font-size: 15px;
+  margin: 21px 0 15px;
+}
+
+//---------------------------------------------
+// Grid
+//---------------------------------------------
+
+// Remove the negative margin for rows
+.row {
+  margin: 0;
+}
+
+// Reduce the spacing between columns
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+  position: relative;
+  min-height: 1px;
+  padding: 0 .25em; 
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a {
@@ -37,9 +102,17 @@ a.secondary {
     }
 }
 
+a.accordion-toggle {
+  color: @theme-primary;
+  &:hover, &:active, &:visited, &:focus {
+  color: darken(@theme-primary; 10%);
+  outline: none;
+  }
+}
+
 a.breadcrumb-nav {
-  font-size: 1.05em;
-  color: @gray-light;
+  font-size: 15px;
+  color: @gray;
   &:hover,&:active:hover {
     color: @gray-darker;
   }
@@ -48,21 +121,20 @@ a.breadcrumb-nav {
   }
 }
 
-.breadcrumb-nav {
-  margin: 5px 0px 20px;
+.sub-nav {
+  height: 50px;
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #e2e2e2;
+}
+
+.page-header {
+  padding: 0;
+  margin: 15px 0 30px;
+  border: none;
 }
 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    .heading-font;
-    padding: 0;
-    margin-bottom: 0.25em;
-}
 
 .list-page-title {
   margin-top: 3px;
@@ -105,15 +177,30 @@ h6 {
   color: @theme-success;
 }
 
-// Container
+.gray-light {
+  color: @gray-light;
+}
+
+.gray {
+  color: @gray;
+}
+
+// Containers
 .container {
 	max-width: 1040px;
-  padding: 0 5px;
+  padding: 0 10px;
+  > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  > .navbar-header {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .detail-view {
   background: #fff;
-  color: @gray;
   padding: 1.5em 2em;
   border-radius: 3px;
   border: 1px solid #ddd;
@@ -124,13 +211,18 @@ h6 {
       padding: 0;
       margin: 0;
     }
+    > button {
+      padding: 0;
+      margin: 0;
+    }
   }
 }
 
 // Opportunity detail views
 
 .opp-detail-header {
-  font-size: .75em;
+  font-size: .85em;
+  font-weight: 300;
   color: @gray-light;
   padding-bottom: 3em;
   > .btn {
@@ -156,21 +248,6 @@ h4.opp-detail {
   font-size: 1.1em;
 }
 
-// Remove this one later
-.container-edit-form {
-  background: #fff;
-  padding: 15px;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
-}
-
-.proposal-admin-view {
-  background: @theme-important;
-  color: @gray-dark;
-  padding: 2em;
-  border-radius: 3px;
-  border: 1px solid #ddd;
-}
 
 // Capability detail views
 
@@ -179,8 +256,19 @@ h1.capability-detail {
   font-size: 2em;
 }
 
+//--------------------
+// CWU Evaluation
+//--------------------
 
+.cwu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 1em;
+}
+
+//--------------------
 // SWU Evaluation
+//--------------------
 
 .swu-evaluation {
   border: 1px solid #ddd;
@@ -273,26 +361,35 @@ tr.screened-out {
 // Edit form
 
 .edit-form {
+  max-width: 1040px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
-  padding: 1em 1.5em; 
-  box-shadow: 0 4px 6px #000, 0 1px 3px #000;
+  border-radius: 4px;
+  padding: 0; 
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .edit-form-header {
-  color: @gray-light;
-  font-size: 1.1em;
-  padding: 0 0 1.5em;
+  padding: 10px 15px 10px 20px;
+  background: #e2e2e2;
+  border-radius: 3px 3px 0 0;
   > .btn {
     margin: -.75em -1em;
   }
 }
 
+.edit-form-tabs {
+  padding: 10px 15px 0;
+  background: #f8f8f8;
+}
+
 .edit-form-tab-content {
-  padding: 1em 0;
+  padding: 10px 15px;
 }
 
 .edit-form-body {
-  padding: 1em 0;
+  padding: 10px 15px;
 }
 
 // Remove this one later
@@ -311,12 +408,20 @@ h4.edit-form-header {
 
 
 .edit-form-footer {
-  padding: 2.5em 0 0;
+  padding: 5px 15px;
+  background: #e2e2e2;
+  border-radius: 0 0 3px 3px;  
 }
 
-// Navigation
+//--------------------
+// Navs
+//--------------------
+
 .navbar {
   border: none;
+  > li {
+    font-weight: 400;
+  }
 }
 
 
@@ -331,12 +436,13 @@ h4.edit-form-header {
   border: none;
 }
 
-
 .navbar-brand {
-  padding: 3px 15px 3px 0px;
-  margin-left: 25px;
+  padding: 3px 20px 3px 0px;
+  margin-left: -5px;
   height: 50px;
 }
+
+
 
 .navbar-nav {
   > li {
@@ -404,24 +510,27 @@ h4.edit-form-header {
 	}
 }
 
-// NAV
-// -------------------------
+.navbar-collapse {
+  margin-right: 0;
+  margin-left: 0;
+  text-align: right;
+}
 
-// Tabs
-// -------------------------
-
-// Give the tabs something to sit on
 .nav-tabs {
-  border-bottom: none;
-  margin: 1.25em 0;
+  border-bottom: 2px solid #f26925;
+  margin-left: -15px;
+  margin-right: -15px;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
     margin-bottom: -1px;
+    > :first-child {
+        margin-left: 17px;
+      }
 
     // Actual tabs (as links)
     > a {
-      color: @gray-light;
+      color: @gray;
       font-weight: 500;
       background: none;
       padding: 5px 15px;
@@ -432,7 +541,7 @@ h4.edit-form-header {
       &:hover {
         color: @gray-dark;
         background: none;
-        transition: none;
+        transition:all 0.3s ease;
       }
     }
 
@@ -441,10 +550,11 @@ h4.edit-form-header {
       &,
       &:hover,
       &:focus {
-        color: @gray-dark;
+        color: #fff;
+        font-weight: 700;
         border: none;
-        border-bottom: 4px solid #f26925;
-        background: none;
+        background: #f26925;
+        border-radius: 4px 4px 0 0;
         transition: none;
         cursor: default;
       }
@@ -506,6 +616,11 @@ section.list-page {
 
 section.form-page {
   background: @gray-lighter;
+}
+
+section.signup {
+  background: #fff;
+  padding: 2em 0 7em;
 }
 
 // Forms / Might use these later to simplify html
@@ -575,7 +690,7 @@ form-title {
   white-space: nowrap;
   border-radius: 3px;
   font-size: 14px;
-//  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: none;
   .transition-all(0.15s);
   text-decoration: none;
   margin-left: 2px;
@@ -734,11 +849,13 @@ form-title {
     color: #fff;
     background-color: darken(@theme-primary, 8%);
     border-color: darken(@theme-primary, 8%);
+    box-shadow: none;
   }
   &:active,&:focus {
     color: #fff;
     background-color: darken(@theme-primary, 10%);
     border-color: darken(@theme-primary, 10%);
+    box-shadow: none;
   }
 }
 
@@ -767,17 +884,17 @@ form-title {
 }
 
 .btn-warning {
-  background-color: @theme-warning;
-  border-color: @theme-warning;
+  background-color: @theme-yellow;
+  border-color: @theme-yellow;
   color: @gray-dark;
   &:hover,&:active:hover {
-    background-color: lighten(@theme-warning, 8%);
-    border-color: lighten(@theme-warning, 8%);
+    background-color: darken(@theme-yellow, 8%);
+    border-color: darken(@theme-yellow, 8%);
     color: @gray-dark;
   }
   &:active,&:focus {
-    background-color: lighten(@theme-warning, 8%);
-    border-color: lighten(@theme-warning, 8%);
+    background-color: darken(@theme-yellow, 8%);
+    border-color: darken(@theme-yellow, 8%);
     color: @gray-dark;
   }
 }
@@ -804,18 +921,20 @@ form-title {
 }
 
 .btn-text-only {
-  color: @gray-light;
+  color: @gray;
   background: transparent;
   border-color: none;
   &:hover,&:active:hover {
     color: @gray-darker;
     background: transparent;
     border-color: none;
+    box-shadow: none;
   }
   &:active,&:focus {
     color: @gray-darker;
     background: transparent;
     border-color: none;
+    box-shadow: none;
   }
 }
 
@@ -835,28 +954,46 @@ form-title {
   }
 }
 
+//------------------------
+// Filter
+//------------------------
+
+.list-filter {
+  background: #ced9e4;
+  padding: 10px;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
+  > .btn {
+    font-size: 13px;
+    padding: 3px 5px;
+    vertical-align: top;
+  }
+}
 
 .btn-filter-selected {
   transition: none;
   color: #fff;
   background: @gray;
-  border: 1px solid @gray;
-  &:hover, &:focus {
+  border: 1px solid;
+  border-color: transparent;
+  box-shadow: none;
+  &:hover, &:focus, &:active {
     color: #fff;
     background: @gray;
-    border: 1px solid @gray;
+    box-shadow: none;
   }
 }
 
 .btn-filter-unselected {
   transition: none;
-  color: @gray-light;
-  background: @gray-lighter;
-  border: 1px solid #e3e3e3;
-  &:hover, &:focus {
-    color: @gray-light;
-    background: @gray-lighter;
-    border: 1px solid #e3e3e3;
+  color: @gray;
+  background: transparent;
+  border: 1px solid;
+  border-color: @gray-light;
+  &:hover, &:focus, &:active {
+    color: @gray;
+    background: transparent;
+    border-color: @gray-light;
     box-shadow: none;
   }
 }
@@ -896,21 +1033,16 @@ form-title {
 //Sizes
 
 .label-lg {
-  font-size: .85em;
+  font-size: 1em;
   padding: .6em .8em .5em;
 }
 
 
 // Generic classes
 
-.label-cap-default {
-  color: @gray-dark;
-  background: transparent;
-}
-
 .label-default {
-  color: @gray-dark;
-  background: @gray-lighter;
+  color: @gray;
+  background: transparent;
 }
 
 .label-primary {
@@ -939,13 +1071,16 @@ form-title {
 
 .label-text-only {
   background: transparent;
-  color: @gray-dark;
-  font-weight: bold;
+  color: @gray;
 }
 
 .label-input {
   font-weight: normal;
   font-size: .95em;
+}
+
+.label-orange {
+  background: @theme-orange;
 }
 
 // Project labels
@@ -1000,13 +1135,26 @@ form-title {
 
 .label-preferred-skill-selected {
   background: @theme-orange;
+  color: #fff;
+  border: 1px solid @theme-orange;
+}
+
+.label-swu {
+  background: @gray-darker;
 }
 
 // Capability Labels
 
+.label-cap-default {
+  color: @gray-dark;
+  background: transparent;
+  letter-spacing: -0.02em;
+}
+
 .label-agilecoaching {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
     color: black;
   }
@@ -1015,6 +1163,7 @@ form-title {
 .label-deliverymgmt {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
     color: black;
   }
@@ -1023,6 +1172,7 @@ form-title {
 .label-uxresearch {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: violet;
   } 
@@ -1031,6 +1181,7 @@ form-title {
 .label-uxdesign {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: violet;
   }
@@ -1039,6 +1190,7 @@ form-title {
 .label-frontend {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1047,6 +1199,7 @@ form-title {
 .label-backend {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1055,6 +1208,7 @@ form-title {
 .label-devops {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: red;
   }
@@ -1063,6 +1217,7 @@ form-title {
 .label-technicalarch {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: blue;
   }
@@ -1071,6 +1226,7 @@ form-title {
 .label-securityeng {
   background: transparent;
   color: @gray-dark;
+  letter-spacing: -0.02em;
   > i {
   color: red;
   }
@@ -1120,28 +1276,34 @@ form-title {
 
 // Common styles
 .alert {
+  max-width: 1040px;
   padding: 10px;
-  margin: 10px;
+  margin: 10px 0;
   font-weight: 400;
   font-size: 14px;
-  border: 2px solid;
+  border: none;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .alert-info {
-  background: #fff;
-  border-color: @gray-lighter;
+  background: @theme-info;
   color: @gray-dark;
 }
 
 .alert-important {
-  background: #fff;
-  border-color: @theme-yellow;
+  background: @theme-important;
+  color: @gray-dark;
+}
+
+.alert-warning {
+  background: @theme-warning;
   color: @gray-dark;
 }
 
 .alert-danger {
   background: #fddece;
-  border-color: @theme-danger;
   color: @theme-danger;
 }
 
@@ -1153,11 +1315,33 @@ form-title {
   border: none;
 }
 
-//.alert-info {
-//  background: @theme-light-blue;
-//  border-color: @theme-primary;
-//  color: @gray-dark;
-//}
+.alert-outline-primary {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-primary;
+  border-radius: 3px;
+}
+
+.alert-outline-info {
+  background: transparent;
+  border: 3px solid; 
+  border-color: @theme-info;
+  border-radius: 3px;
+}
+
+.alert-outline-warning {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-yellow;
+  border-radius: 3px;
+}
+
+.alert-outline-success {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-success;
+  border-radius: 3px;
+}
 
 
 // Progress bars
@@ -1233,13 +1417,26 @@ form-title {
 // .panel-warning  { .panel-heading-lighten(@theme-warning); }
 // .panel-danger   { .panel-heading-lighten(@theme-danger); }
 //
-//
+//---------------------
 // Custom panel styles
-//
+//---------------------
+
 .panel-default {
   > .panel-heading, .panel-footer {
     background-color: @gray-lighter;
   }
+}
+
+.panel-primary {
+  > .panel-heading, .panel-footer {
+    background-color: @theme-primary;
+    color: #fff;
+  }
+  border-color: @theme-primary;
+}
+
+.panel-group {
+  margin-bottom: 0;
 }
 
 .panel-title {
@@ -1469,7 +1666,15 @@ form-title {
     }
   }
   > .selected {
-    background-color: @gray-lighter;
+    background-color: @theme-primary;
+    > name {
+      color: #fff;
+    }
+    > .label-list {
+      > label {
+        color: #fff;
+      }
+    }
   }
 }
 
@@ -1540,19 +1745,32 @@ form-title {
 .card {
   position: relative;
   margin: 1em 0;
-  border: 1px solid #ddd;
   border-radius: 3px;
   background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   &:active, &:hover {
-  border-color: #999999;
-  transition: border .4s ease-in-out;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   cursor: pointer;
   }
 }
 
+.card-flat {
+  box-shadow: none;
+  transition: none;
+  &:active, &:hover {
+    box-shadow: none;
+    cursor: default;
+  }
+  img.img-responsive {
+    height: 125px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .card-header {
-  border-bottom: 1px solid #ddd;
-  padding: .75em 1em;
+  padding: .25em 1em;
 }
 
 .card-body {
@@ -1566,9 +1784,10 @@ form-title {
 }
 
 .card-user {
-  padding: 10px 5px;
+  padding: 10px;
   margin: .5em 0;
-  border-radius: 0px;
+  border: 1px solid;
+  border-color: #e3e3e3;
   > img.card-img-left {
     height: 50px;
     width: 50px;
@@ -1583,16 +1802,18 @@ form-title {
 }
 
 .card-company {
+  margin: 5px 0;
   > .card-header {
-    padding-top: 5px;
-    padding-bottom: 5px;
     border-bottom: none;
+    height: 20px;
     > .btn {
       margin: -4px -15px;
     }
   }
   > .card-body {
     padding: 15px;
+    height: 75px;
+    overflow-y: hidden;
   }
 }
 
@@ -1672,7 +1893,7 @@ form-title {
 
 .card-title {
   font-size: 1.15em;
-  font-weight: 500;
+  font-weight: 700;
   margin: .75em 0 .5em;
 }
 
@@ -1713,29 +1934,6 @@ form-title {
   }
 }
 
-
-//
-// Optional textual caps
-//
-
-.card-header {
-  padding: @panel-heading-padding;
-  background-color: @panel-default-heading-bg;
-  /*border-bottom: 1px solid @panel-default-border;*/
-
-  &:first-child {
-    border-radius: (@border-radius-base - 1) (@border-radius-base - 1) 0 0;
-  }
-}
-
-.card-flat {
-	.card-header {
-		border-bottom: none;
-	}
-	.card-footer {
-		border-top: none;
-	}
-}
 
 .card-header-tabs {
   margin-right: -.625rem;
@@ -1786,12 +1984,12 @@ form-title {
   border-color: @brand-success;
 }
 .card-info {
-  background-color: @brand-info;
-  border-color: @brand-info;
+  background-color: @theme-info;
+  border-color: transparent;
 }
 .card-warning {
-  background-color: @brand-warning;
-  border-color: @brand-warning;
+  background-color: @theme-warning;
+  border-color: transparent;
 }
 .card-danger {
   background-color: @brand-danger;
@@ -1800,12 +1998,9 @@ form-title {
 
 .card-greyed {
 	color: #999;
-	border-color: #ddd;
+	border-color: transparent;
 	.card-img, .list-img {
 		opacity: 0.6;
-	}
-	a:not(:hover) {
-		color: lighten(desaturate(@theme-primary, 25%), 15%);
 	}
 }
 
@@ -1848,6 +2043,22 @@ form-title {
   margin-bottom: 0;
   border-left: 0;
 }
+
+//----------------------------
+// Images for Testimonials
+//----------------------------
+
+.img-testimonial {
+  max-height: 85px;
+  @media (max-width: 767px) {
+    max-width: 70px;
+    min-height: 50px;
+  }
+  @media (min-width: 768px) {
+    max-width: 50%;
+  }
+}
+
 
 // Card image
 .card-img {
@@ -1969,17 +2180,27 @@ form-title {
 .well {
   max-width: 1040px;
   padding: 20px;
-  margin: 20px 0px;
-  border: 2px solid;
+  margin: 10px 0px;
+  border: none;
   border-radius: 4px;
   box-shadow: none;
   background: @gray-lighter;
-  border-color: #e3e3e3;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .well-important {
-  background: #fff;
-  border-color: @theme-yellow;
+  background: @theme-important;
+}
+
+.well-warning {
+  background: @theme-warning;
+}
+
+.well-transparent {
+  background: transparent;
+  border: 1px solid #b3b3b3;
 }
 
 .instructions-for-dev {
@@ -1991,7 +2212,7 @@ form-title {
 // Banners
 
 .banner {
-  padding: .75em;
+  padding: 10px;
   margin: 0px;
   text-align: center;
 }

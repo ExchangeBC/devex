@@ -112,17 +112,20 @@
 					return NotificationsService.subscriptions().$promise;
 				},
 				org: function (Authentication, OrgsService) {
+					if (!Authentication.user) return {};
 					var orgs = Authentication.user.orgsAdmin || [null];
 					var org = orgs[0];
 					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
+					else return {};
 				},
-				myproposal: function ($stateParams, ProposalsService, Authentication) {
+				myproposal: function ($stateParams, ProposalsService, Authentication, org) {
 					if (!Authentication.user) return {};
-					return ProposalsService.myopp ({
+					if (!org || !org._id) return {};
+					return ProposalsService.myOrgOpp ({
+						orgId : org._id,
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				}
+				},
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'

@@ -416,11 +416,7 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		// console.log ('updating', opportunity.opportunityTypeCd);
-		//
-		// CC: TBD:SWU once sprint with us is active we can remove this restriction
-		//
-		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-us') {
+		if (opportunity.isPublished) {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({
@@ -437,7 +433,7 @@ exports.update = function (req, res) {
 			})
 			.catch (function () {
 				res.status(422).send({
-					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+					message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 				});
 			});
 		}
@@ -455,7 +451,6 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
-	// console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op
@@ -581,6 +576,60 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 			else {
 				opportunity.status = 'Assigned';
 				opportunity.proposal = proposalId;
+				updateSave (opportunity)
+				.then (function (opp) {
+					opportunity = opp;
+					var data = setNotificationData (opportunity);
+					Notifications.notifyObject ('not-updateany-opportunity', data);
+					Notifications.notifyObject ('not-update-'+opportunity.code, data);
+					data.username = proposalUser.displayName;
+					data.useremail = proposalUser.email;
+					//
+					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
+					//
+					data.assignor = user.displayName;
+					data.assignoremail = opportunity.proposalEmail;
+					Notifications.notifyUserAdHoc ('assignopp', data);
+					return github.addCommentToIssue ({
+						comment : 'This opportunity has been assigned',
+						repo    : opportunity.github,
+						number  : opportunity.issueNumber
+					})
+					.then (function () {
+						return github.lockIssue ({
+							repo   : opportunity.github,
+							number : opportunity.issueNumber
+						});
+					});
+				})
+				.then (resolve, reject);
+			}
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// assign the passed in swu proposal
+// TBD : in futre we should likely send an email to ALL the admins of the
+// winning org, but for now, let's just do the one who created it.
+//
+// -------------------------------------------------------------------------
+exports.assignswu = function (opportunityId, proposalId, proposalUser, user) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.findById (opportunityId)
+		.exec (function (err, opportunity) {
+			if (err) {
+				reject (err);
+			}
+			else if (!opportunity) {
+				reject (new Error ({
+					message: 'No opportunity with that identifier has been found'
+				}));
+			}
+			else {
+				opportunity.status = 'Assigned';
+				opportunity.proposal = proposalId;
+				opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
 				updateSave (opportunity)
 				.then (function (opp) {
 					opportunity = opp;

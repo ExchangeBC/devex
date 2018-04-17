@@ -4,7 +4,7 @@
   </div> 
   <div class="col-sm-4">
     <button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="projectadmin.create({programId:vm.programId, programTitle:vm.programTitle, context:vm.context})" title="New">
-      <i class="fa fa-plus"></i> LIST YOUR PROJECT
+      <i class="fa fa-plus"></i> List a Project
     </button>
   </div>
 </div>
@@ -13,30 +13,17 @@
 
 <div class="card card-project" ng-class="{'card-greyed': !project.isPublished}" ng-repeat="project in vm.projects | slice:column.start:column.end">
 
-  <div class="card-header" ng-if="vm.isAdmin || project.userIs.admin" style="text-align: right">
-    <span ng-if="!project.isPublished" class="label label-danger"><i class="fa fa-exclamation-triangle" ></i> UNPUBLISHED</span>
-    &nbsp;
-    <span ng-if="vm.isAdmin || project.userIs.admin"   class="label label-primary">Admin</span>
-    &nbsp;
-    <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-primary">Member</span>
-    &nbsp;
-    <span ng-if="project.userIs.request" class="label label-primary">Pending Member</span>
-    &nbsp;
-    <a ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);"  id="projectadmin.edit" ui-sref="projectadmin.edit({ projectId: project.code, programId: project.program.code, context:vm.context})" ng-click="$event.stopPropagation()" uib-tooltip="Edit">
-    <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    &nbsp;
-    <a ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish" uib-tooltip="Unpublish">
-    <i class="glyphicon glyphicon-ban-circle"></i>
-    </a>
-    &nbsp;
-    <a ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish" uib-tooltip="Publish">
-    <i class="glyphicon glyphicon-check"></i>
-    </a>
-    &nbsp;
-    <a ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership" uib-tooltip="Request Membership">
-    <i class="glyphicon glyphicon-user"></i>
-    </a>
+  <div class="card-header text-right" ng-if="vm.isAdmin || project.userIs.admin">
+    <span ng-if="!project.isPublished" class="label label-default"><i class="fa fa-exclamation-triangle" ></i> Unpublished</span>
+    <span ng-if="project.userIs.member && !project.userIs.admin"  class="label label-default">Member</span>
+    <span ng-if="project.userIs.request" class="label label-primary" title="Your membership request is pending">Pending Member</span>
+    <a class="btn btn-text-only" ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish">
+    <i class="fa fa-ban"></i></a>
+    <a class="btn btn-text-only" ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && !project.isPublished" href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish">
+    <i class="fa fa-bullhorn"></i></a>
+    <a class="btn btn-text-only"  ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request" href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership">
+    <i class="fa fa-user"></i></a>
+    <a class="btn btn-text-only" ng-if="vm.isAdmin || project.userIs.admin" href="javascript:void(0);"  id="projectadmin.edit" ui-sref="projectadmin.edit({ projectId: project.code, programId: project.program.code, context:vm.context})" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-pencil"></i></a>
   </div>
 
   <div class="card-body" ui-sref="projects.view({ projectId: project.code, programId: project.program.code })">

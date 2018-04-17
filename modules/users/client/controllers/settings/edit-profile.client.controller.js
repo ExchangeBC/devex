@@ -109,33 +109,34 @@
 				vm.user.isDeveloper = false;
 			}
 			var govRequest = vm.user.addRequest;
-			var successMessage = '<h4>Edit profile successful</h4>';
-			if (govRequest) {
-				successMessage += '<p>You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.</p>';
-			}
-			if (vm.user.notifyOpportunities) {
-				successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
-			}
-			if (vm.user.notifyEvents) {
-				successMessage += '<p>We will notify you of upcoming events.</p>';
-			}
-			if (vm.user.notifyBlogs) {
-				successMessage += '<p>We will notify you of new blog posts.</p>';
-			}
+			var successMessage = '<h4>Changes Saved</h4>';
+			// Seeing if I can comment these details out without breaking anything. These details are just extra noise that's not needed.
+		//	if (govRequest) {
+		//		successMessage += '<p>You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.</p>';
+		//	}
+		//	if (vm.user.notifyOpportunities) {
+		//		successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
+		//	}
+		//	if (vm.user.notifyEvents) {
+		//		successMessage += '<p>We will notify you of upcoming events.</p>';
+		//	}
+		//	if (vm.user.notifyBlogs) {
+		//		successMessage += '<p>We will notify you of new blog posts.</p>';
+		//	}
 			var user = new UsersService(vm.user);
 			user.$update(function (response) {
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');
 
-				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
+				Notification.success({ delay:2000, message: '<i class="fa fa-3x fa-check-circle"></i> '+successMessage});
 				Authentication.user = response;
 				vm.user = angular.copy(Authentication.user);
 				pristineUser = angular.toJson(Authentication.user);
 			}, function (response) {
-				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+				Notification.error({ message: response.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 			});
 		}
 		vm.delete = function () {
-			if ((confirm('Are you sure that you want to be removed from the Developer\'s Exchange?')) && (confirm('Are you really sure?'))) {
+			if ((confirm('Are you sure that you want to be removed from the BCDevExchange?')) && (confirm('Are you really sure?'))) {
 					window.location = '/api/users/delete';
 			}
 		}

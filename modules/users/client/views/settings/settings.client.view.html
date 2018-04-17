@@ -1,25 +1,28 @@
 <section class="edit-form-background">	
 	
-	<div class="container edit-form" role="main">
+	<div class="edit-form" role="main">
+		<div class="edit-form-header">
+			My Profile
+		</div>
 		<div class="edit-form-body">
 			<uib-tabset active>
 				<li ui-sref-active="active">
-					<a  id="settings.profile" ui-sref="settings.profile">Basic Profile</a>
+					<a  id="settings.profile" ui-sref="settings.profile">About Me</a>
 				</li>
 				<li ui-sref-active="active">
-					<a  id="settings.privacy" ui-sref="settings.privacy">Privacy & Notifications</a>
+					<a  id="settings.privacy" ui-sref="settings.privacy">Notifications & Privacy</a>
 				</li>
 				<li ui-sref-active="active" ng-if="vm.features.swu">
-					<a  id="settings.skills" ui-sref="settings.skills">Capabilities & Skills</a>
+					<a  id="settings.skills" ui-sref="settings.skills">My Capabilities & Skills</a>
 				</li>
+			<!--
 				<li ui-sref-active="active" ng-if="vm.features.swu">
 					<a  id="settings.messages" ui-sref="settings.messages">Messages <span class="badge">42</span></a>
 				</li>
+			-->
 			</uib-tabset>
 		</div>
-		
-		<div ui-view></div>
-			
+		<div ui-view></div>		
 	</div>
 	<br>
 	<div class="container">

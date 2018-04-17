@@ -2,6 +2,7 @@
 
 The [BCDevExchange](https://bcdevexchange.org) is a platform that provides new ways for British Columbia's public sector to connect with developers and other IT professionals.
 
+
 The latest version is a mean.js application running in OpenShift using Docker.
 
 ***

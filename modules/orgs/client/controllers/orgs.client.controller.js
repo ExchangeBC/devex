@@ -19,6 +19,9 @@
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
+		// console.log ('user org admins' , vm.user.orgAdmin);
+		// console.log (' org admins' , vm.org.admins);
+		// console.log (' org owner' , vm.org.owner);
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
@@ -36,15 +39,16 @@
 	// create a new org
 	//
 	// =========================================================================
-	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm = this;
 		vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
+		vm.user = Authentication.user;
 		var newId;
 		vm.add = function (isValid) {
 			if (!isValid) {
-				$scope.$broadcast('show-errors-check-validity', 'vm.orgaddForm');
+				$scope.$broadcast('show-errors-check-validity', 'vm.orgForm');
 				return false;
 			}
 			vm.orgForm.$setPristine ();
@@ -55,6 +59,20 @@
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> Company saved successfully!'
 				})
+			})
+			.then (function () {
+				vm.user.orgsMember.push (newId);
+				vm.user.orgsAdmin.push (newId);
+				var user = new UsersService (vm.user);
+				return new Promise (function (resolve, reject) {
+					user.$update (function (response) {
+						Authentication.user = response;
+						resolve ();
+					}, function (err) {
+						reject (err);
+					});
+				});
+				// UsersService.resetMe ();
 			})
 			.then (function () {
 				$state.go ('orgadmin.profile', {orgId:newId});
@@ -84,14 +102,13 @@
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 
 		vm.org        = org;
-		// console.log (org);
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
 		// vm.previousState  = previousState;
@@ -114,21 +131,26 @@
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
 		$rootScope.$on('orgImageUpdated', function (evt, data) {
-			// console.log ('event data = ', data);
 			vm.org.orgImageURL = data;
 
 		});
 		// -------------------------------------------------------------------------
 		//
-		// remove the program with some confirmation
+		// remove the org with some confirmation
 		//
 		// -------------------------------------------------------------------------
 		vm.remove = function () {
+			var orgId = vm.org._id.toString ();
 			if ($window.confirm('Are you sure you want to delete?')) {
-				// console.log ('deleting');
 				vm.org.$remove(function() {
-					$state.go('orgs.list');
 					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> org deleted successfully!' });
+					vm.user.orgsMember = vm.user.orgsMember.filter (function (el) {return el !== orgId;});
+					vm.user.orgsAdmin  = vm.user.orgsAdmin.filter (function (el) {return el !== orgId;});
+					var user = new UsersService (vm.user);
+					user.$update (function (response) {
+						Authentication.user = response;
+						$state.go('orgs.list');
+					});
 				});
 			}
 		};
@@ -153,7 +175,7 @@
 			.then (function () {
 				vm.orgForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> org saved successfully!'
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
 				});
 				// .then (function () {
 				// 	$state.go('orgs.view', {orgId:vm.org._id});
@@ -228,11 +250,10 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask) {
+	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
-		// console.log ('whatcaps', capabilities);
 		CapabilitiesMethods.init (vm, vm.org, capabilities);
 		// -------------------------------------------------------------------------
 		//
@@ -240,6 +261,7 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.refresh = function () {
+			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
 			OrgsService.get ({orgId: vm.org._id}).$promise
 			.then (function (org) {
@@ -253,29 +275,36 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
-			// console.log ('add People');
+			vm.orgForm.$setPristine ();
 			if (vm.emaillist !== '') {
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
-				.then (function () {
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> invitations sent successfully!'
-					});
-					vm.refresh ();
-				})
+				.then (vm.displayResults)
+				// .then (function () {
+				// 	Notification.success ({
+				// 		message : '<i class="glyphicon glyphicon-ok"></i> Member added and notified'
+				// 	});
+				// 	vm.refresh ();
+				// })
 				//
 				// fail, notify and stay put
 				//
+				.then (function () {
+					vm.emaillist = '';
+					CapabilitiesMethods.init (vm, vm.org, capabilities);
+					// vm.refresh ();
+					vm.orgForm.$setPristine ();
+				})
 				.catch (function (res) {
 					Notification.error ({
-						message : res.data.message,
+						message : res.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> invitations send error!'
 					});
 				});
 			}
 		};
 		vm.removeMember = function (member) {
-			ask.yesNo ('Are you sure you wish to remove this user from your company?')
+			ask.yesNo ('Are you sure you want to remove this user from your company? If you have added them to a proposal, you may not longer qualify to apply on the opportunity.')
 			.then (function (yes) {
 				if (yes) {
 					OrgsService.removeUser ({
@@ -288,13 +317,38 @@
 			});
 		};
 		vm.save = function () {
+			vm.orgForm.$setPristine ();
 			vm.org.createOrUpdate ()
 			.then (function () {
+				vm.emaillist = '';
+				CapabilitiesMethods.init (vm, vm.org, capabilities);
+				vm.orgForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> Company Updated'
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Congrats! Your company is now qualified for Sprint With Us.</h4>'
 				});
 			})
 		};
+		vm.displayResults = function (result) {
+			if (!result.emaillist) return Promise.resolve ();
+			return new Promise (function (resolve, reject) {
+				modalService.showModal ({
+					size: 'lg',
+					templateUrl: '/modules/orgs/client/views/org-members-results.html',
+					controller: function ($scope, $uibModalInstance) {
+						$scope.data = {
+							found    : result.emaillist.found,
+							notfound : result.emaillist.notfound
+						};
+						$scope.close = function () {
+							$uibModalInstance.close ();
+						};
+					}
+				}, {
+				})
+				.then (resolve, reject);
+			});
+		};
+
 	})
 	// =========================================================================
 	//

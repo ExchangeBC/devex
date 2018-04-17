@@ -34,7 +34,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		// console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -87,7 +86,7 @@
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company Assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {
@@ -95,7 +94,7 @@
 							}
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - Assignment failed!' });
 						}
 					);
 				}
@@ -125,6 +124,7 @@
 			ppp.proposal     = proposal;
 			ppp.user         = Authentication.user;
 			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+			ppp.proposal.org = org;
 			//
 			// this is all the people in the org
 			//
@@ -223,7 +223,6 @@
 					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
 				}
 			}
-			// console.log ('questions', ppp.proposal.questions);
 
 			ppp.totals = {};
 			ppp.tinymceOptions = TINYMCE_OPTIONS;
@@ -264,57 +263,70 @@
 			//
 			// go through each capability and set the flag if any team member
 			// has the capability
-			// also tally up the bolleans in isMetAllCapabilities. if they are all true
+			// also tally up the booleans in isMetAllCapabilities. if they are all true
 			// then the user can submit their proposal
 			//
+			// console.log (ppp.prp);
 			ppp.isMetAllCapabilities = true;
 			var haveanyatall = false;
-			ppp.inp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oinp.isInception', ppp.oinp.isInception);
+			if (ppp.oinp.isInception) ppp.inp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
+				// console.log ('ppp.p_inp.iPropCapabilities[code]', ppp.p_inp.iPropCapabilities[code]);
 			});
-			ppp.prp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oprp.isPrototype', ppp.oprp.isPrototype);
+			if (ppp.oprp.isPrototype) ppp.prp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
+					// console.log ('member', member);
 					if (!ppp.prTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
+				// console.log ('ppp.p_prp.iPropCapabilities[code]', ppp.p_prp.iPropCapabilities[code]);
 			});
-			ppp.imp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oimp.isImplementation', ppp.oimp.isImplementation);
+			if (ppp.oimp.isImplementation) ppp.imp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_imp.iPropCapabilities[code];
+				// console.log ('ppp.p_imp.iPropCapabilities[code]', ppp.p_imp.iPropCapabilities[code]);
 			});
+			// console.log ('haveanyatall', haveanyatall);
+			// console.log ('isMetAllCapabilities', ppp.isMetAllCapabilities);
 			ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && haveanyatall;
 			//
 			// now skills
 			//
-			ppp.inp.capabilitySkills.forEach (function (c) {
+			if (ppp.oinp.isInception) ppp.inp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_inp.iPropCapabilitySkills[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.prp.capabilitySkills.forEach (function (c) {
+			if (ppp.oprp.isPrototype) ppp.prp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_prp.iPropCapabilitySkills[code] = ppp.members.proto.map (function (member) {
 					if (!ppp.prTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.imp.capabilitySkills.forEach (function (c) {
+			if (ppp.oimp.isImplementation) ppp.imp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_imp.iPropCapabilitySkills[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
@@ -369,12 +381,12 @@
 				ppp.proposal.createOrUpdate ()
 				.then (
 					function (response) {
-						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'});
 						ppp.subscribe (true);
 						resolve ();
 					},
 					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
+						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved' });
 						 reject ();
 					}
 				);
@@ -411,12 +423,12 @@
 				if (r) {
 					ppp.proposal.$remove (
 						function () {
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Proposal deleted'});
 							ppp.subscribe (false);
 							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - could not delete your proposal'});
 						}
 					);
 				}
@@ -424,7 +436,7 @@
 		};
 		var performwithdrawal = function (txt) {
 			ppp.proposal.status = 'Draft';
-			saveproposal ('Your proposal has been withdrawn.');
+			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -459,7 +471,9 @@
 			.then (
 				function (response) {
 					ppp.proposal = response;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
+					_init ();
+					setSkills ();
 				},
 				function (error) {
 					 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
@@ -480,11 +494,11 @@
 			})
 			.then(
 				function (response) {
-					ppp.proposal = response.data;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
+					ppp.proposal = new ProposalsService (response.data);
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
+					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
 				},
 				function (evt) {
 					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
@@ -498,7 +512,7 @@
 			}).$promise
 			.then (function (doc) {
 				ppp.proposal = doc;
-				$scope.$apply();
+				// $scope.$apply();
 			});
 		};
 		ppp.subscribe = function (state) {
