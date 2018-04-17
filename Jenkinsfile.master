@@ -172,7 +172,7 @@ stage('deploy-prod') {
 	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
     }
     node('master'){
-     openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: ${$IMAGE_HASH}"
+     openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${$IMAGE_HASH}"
      sleep 5
      openshiftVerifyDeployment depCfg: PROD_DEPLOYMENT_NAME, namespace: PROD_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
      echo ">>>> Deployment Complete"
