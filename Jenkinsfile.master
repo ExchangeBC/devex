@@ -62,7 +62,7 @@ node('maven') {
     }
     stage('build') {
 	    echo "Building..."
-	    openshiftBuild bldCfg: BUILDCFG_NAME, verbose: true, showBuildLogs: 'true'
+	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
             sleep 5
 	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
 
