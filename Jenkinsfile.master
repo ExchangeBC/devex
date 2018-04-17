@@ -57,7 +57,7 @@ node('maven') {
                returnStdout: true).trim()
            echo "SONARQUBE_URL: ${SONARQUBE_URL}"
            dir('sonar-runner') {
-            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.M -Dsonar.branch=master -Dsonar.projectKey=org.sonarqube:bcgov-devex-master -Dsonar.sources=.."
+            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.Master -Dsonar.branch=master -Dsonar.projectKey=org.sonarqube:bcgov-devex-master -Dsonar.sources=.."
            }
     }
     stage('build') {
@@ -128,9 +128,9 @@ stage('Functional Test Staging') {
         resourceLimitMemory: '4Gi',
         workingDir: '/home/jenkins',
         command: '',
-        args: '${computer.jnlpmac} ${computer.name}'
+        args: '${computer.jnlpmac} ${computer.name}',
         envVars: [
-            envVar(key:'BASEURL', value: 'https://devex-platform-staging.pathfinder.gov.bc.ca/')
+            envVar(key:'BASEURL', value: 'https://platform-staging.pathfinder.gov.bc.ca/')
         ]
       )
     ]) {
