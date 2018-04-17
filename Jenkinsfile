@@ -57,6 +57,20 @@ node('maven') {
        echo "Build: ${BUILD_ID}"
        checkout scm
     }
+    stage('dependency check') {
+           sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
+           sh 'gunzip dependency-check-3.1.2-release.zip'
+           sh 'ls dependency-check/'
+           sh 'dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan package.json --enableExperimental --enableRetired'
+           publishHTML (target: [
+                                allowMissing: false,
+                                alwaysLinkToLastBuild: false,
+                                keepAll: true,
+                                reportDir: ./',
+                                reportFiles: 'dependency-check-report.html',
+                                reportName: "OWASP Dependency Check Report"
+                          ])
+    }
     stage('code quality check') {
            SONARQUBE_URL = sh (
                script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
@@ -75,6 +89,7 @@ node('maven') {
 	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
 
             echo ">>> Get Image Hash"
+
             IMAGE_HASH = sh (
               script: """oc get istag ${IMAGE_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
                 returnStdout: true).trim()
