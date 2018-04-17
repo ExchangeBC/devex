@@ -67,6 +67,7 @@ node('maven') {
             sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.Dev -Dsonar.branch=develop -Dsonar.projectKey=org.sonarqube:bcgov-devex-dev -Dsonar.sources=.."
            }
     }
+
     stage('build') {
 	    echo "Building..."
 	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'

@@ -40,7 +40,6 @@ test {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'org.owasp:dependency-check-gradle:3.1.2'
 }
 
 repositories {
