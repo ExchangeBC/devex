@@ -66,7 +66,7 @@ node('maven') {
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
-                                reportDir: ./',
+                                reportDir: './',
                                 reportFiles: 'dependency-check-report.html',
                                 reportName: "OWASP Dependency Check Report"
                           ])
