@@ -6,7 +6,7 @@ def DEV_TAG_NAME = 'dev'
 def DEV_NS = 'devex-platform-dev'
 def TST_DEPLOYMENT_NAME = 'platform-test'
 def TST_TAG_NAME = 'test'
-def TST_BCK_TAG_NAME = 'test'
+def TST_BCK_TAG_NAME = 'test-previous'
 def TST_NS = 'devex-platform-test'
 
 
