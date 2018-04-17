@@ -58,11 +58,10 @@ node('maven') {
        checkout scm
     }
     stage('dependency check') {
-           sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
-           sh 'gunzip dependency-check-3.1.2-release.zip'
-           sh 'ls dependency-check/'
-           sh 'dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan package.json --enableExperimental --enableRetired'
-           publishHTML (target: [
+          dir('owasp') {
+            // sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
+            sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan package.json --enableExperimental --enableRetired'
+            publishHTML (target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
                                 keepAll: true,
@@ -70,6 +69,7 @@ node('maven') {
                                 reportFiles: 'dependency-check-report.html',
                                 reportName: "OWASP Dependency Check Report"
                           ])
+          }
     }
     stage('code quality check') {
            SONARQUBE_URL = sh (
