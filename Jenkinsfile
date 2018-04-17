@@ -136,6 +136,9 @@ stage('Functional Test Dev') {
         workingDir: '/home/jenkins',
         command: '',
         args: '${computer.jnlpmac} ${computer.name}'
+        envVars: [
+            envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
+        ]
       )
     ]) {
       node('bddstack') {
