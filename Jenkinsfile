@@ -87,20 +87,18 @@ node('maven') {
 	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
             sleep 5
 	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
-
             echo ">>> Get Image Hash"
-
             IMAGE_HASH = sh (
               script: """oc get istag ${IMAGE_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
                 returnStdout: true).trim()
             echo ">> IMAGE_HASH: ${IMAGE_HASH}"
-
 	    echo ">>>> Build Complete"
+    }
+    stage('Dev deploy') {
  	    openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
 	    openshiftVerifyDeployment depCfg: DEV_DEPLOYMENT_NAME, namespace: DEV_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
-
 	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
