@@ -6,8 +6,9 @@
 	// Controller for the master list of orgs
 	//
 	// =========================================================================
-	.controller('OrgsListController', function (orgs) {
+	.controller('OrgsListController', function (orgs, Authentication) {
 		var vm      = this;
+		vm.isLoggedIn      = !!Authentication.user;
 		vm.orgs = orgs;
 	})
 	// =========================================================================
@@ -22,6 +23,7 @@
 		// console.log ('user org admins' , vm.user.orgAdmin);
 		// console.log (' org admins' , vm.org.admins);
 		// console.log (' org owner' , vm.org.owner);
+		vm.isLoggedIn      = !!vm.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
 		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
