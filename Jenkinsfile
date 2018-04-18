@@ -6,6 +6,7 @@ def DEV_TAG_NAME = 'dev'
 def DEV_NS = 'devex-platform-dev'
 def TST_DEPLOYMENT_NAME = 'platform-test'
 def TST_TAG_NAME = 'test'
+def TST_BCK_TAG_NAME = 'test-previous'
 def TST_NS = 'devex-platform-test'
 
 
@@ -61,6 +62,7 @@ node('maven') {
           dir('owasp') {
             // sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
             sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan ../package.json --enableExperimental --enableRetired'
+            sh 'rm -rf ./dependency-check/data/'
             publishHTML (target: [
                                 allowMissing: false,
                                 alwaysLinkToLastBuild: false,
@@ -87,20 +89,18 @@ node('maven') {
 	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
             sleep 5
 	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
-
             echo ">>> Get Image Hash"
-
             IMAGE_HASH = sh (
               script: """oc get istag ${IMAGE_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
                 returnStdout: true).trim()
             echo ">> IMAGE_HASH: ${IMAGE_HASH}"
-
 	    echo ">>>> Build Complete"
+    }
+    stage('Dev deploy') {
  	    openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
 	    openshiftVerifyDeployment depCfg: DEV_DEPLOYMENT_NAME, namespace: DEV_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
-
 	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
@@ -194,6 +194,7 @@ stage('deploy-test') {
 	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin'
   }
   node('master') {
+	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: TST_TAG_NAME
 	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
           sleep 5
 	  openshiftVerifyDeployment depCfg: TST_DEPLOYMENT_NAME, namespace: TST_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
