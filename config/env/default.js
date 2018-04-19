@@ -44,6 +44,11 @@ module.exports = {
 			path: 'public/terms-bc-developers-exchange-2018-04-19.pdf',
 			name: 'terms-bc-developers-exchange-2018-04-19.pdf',
 			type: 'application/pdf'
+		},
+		'rfq1': {
+			path: 'public/rfq-sprint-with-us-company-2018-04-19.pdf',
+			name: 'rfq-sprint-with-us-company-2018-04-19.pdf',
+			type: 'application/pdf'
 		}
 	},
 	//

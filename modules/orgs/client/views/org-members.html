@@ -10,7 +10,7 @@
 							<p>(Capabilities are claimed by individuals in their profile.)</p>
 						</div>
 
-						<div class="alert alert-success" ng-if="vm.org.metRFQ"> 
+						<div class="alert alert-success" ng-if="vm.org.metRFQ">
 							<p><strong>Bingo!</strong> Your company has all of the capabilities needed to apply for <strong><i class="fa fa-group"></i> Sprint With Us</strong> opportunities!</p>
 						</div>
 
@@ -63,13 +63,13 @@
 			<div class="well well-lg well-info well-left-align pre-scrollable">
 				<h4>Sprint With Us Terms and Conditions RFQ</h4>
 				<p>To submit a proposal to work on any Sprint With Us opportunity you must agree to the terms of the Sprint With Us Terms and Conditions RFQ.</p>
-				<iframe class="col-sm-12" src="/sprint-with-us-rfq.pdf" ng-if="!vm.org.isAcceptedTerms"></iframe>
+				<iframe class="col-sm-12" src="/rfq-sprint-with-us-company-2018-04-19.pdf" ng-if="!vm.org.isAcceptedTerms"></iframe>
 				<div class="col-sm-12">
 					<br/>
 					<label class="checkbox-inline">
 						<input type="checkbox" name="isInception" ng-disabled="vm.org.isAcceptedTerms" ng-model="vm.org.isAcceptedTerms" ng-click="vm.save()"> I acknowledge that I have read and fully understand and agree to the terms and conditions.
 					</label>
-					<a class="btn btn-default pull-right" href="/api/proposals/download/terms/swurfq1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
+					<a class="btn btn-default pull-right" href="/api/proposals/download/terms/rfq1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
 				</div>
 			</div>
 		</div>
