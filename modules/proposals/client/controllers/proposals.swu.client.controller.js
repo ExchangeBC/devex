@@ -125,6 +125,7 @@
 			ppp.user         = Authentication.user;
 			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 			ppp.proposal.org = org;
+			ppp.orgHasMetRFQ = org.metRFQ;
 			//
 			// this is all the people in the org
 			//

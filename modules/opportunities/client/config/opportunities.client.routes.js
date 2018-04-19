@@ -125,7 +125,7 @@
 						orgId : org._id,
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
+				}
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'
