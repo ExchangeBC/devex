@@ -98,7 +98,7 @@ var UserSchema = new Schema({
 	profileImageURL          : {type: String, default: 'img/default.png'},
 	provider                 : {type: String, required: 'Provider is required'},
 	government               : {type: String, default: ''},
-	isDisplayEmail           : {type: Boolean, default:true},
+	isDisplayEmail           : {type: Boolean, default:false},
 	notifyOpportunities      : {type: Boolean, default:false},
 	subscribeOpportunitiesId : {type: String, default: null},
 	convertedNotifications   : {type: Boolean, default:false},
