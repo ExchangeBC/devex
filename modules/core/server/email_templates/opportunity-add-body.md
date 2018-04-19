@@ -3,7 +3,7 @@ We've just posted a new opportunity:
 
 **{{ data.name }}**
 
-### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
+### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
 
 
 
@@ -14,4 +14,5 @@ Have a great day!
 ---
 
 If you don't want these alerts, [unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage your notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
+
 {{/markdown}}
