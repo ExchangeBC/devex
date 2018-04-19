@@ -4,16 +4,7 @@
 			<div class="col-xs-12">
 				<fieldset>
 					<div class="col-sm-5">
-						<h5><i class="fa fa-envelope-o"></i> Notifications</h5>	
-						<hr>
-						<div class="checkbox">
-							<label>
-							<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-							Tell me about new opportunities
-							</label>
-							<span class="checkbox-subtext">Get an instant email notification whenever a new opportunity is published.</span>
-						</div>
-						<br><br>
+						<h4><i class="fa fa-envelope-o"></i> Notifications</h4>	
 						<form-input
 							ng-model="vm.user.email"
 							class="col-sm-12"
@@ -26,11 +17,31 @@
 								"required":"Email Address is required"
 									}'>
 						</form-input>
+						<br>
+						<div class="checkbox">
+							<label>
+							<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+							Tell me about new opportunities
+							</label>
+							<span class="checkbox-subtext">Get an instant email notification whenever a new opportunity is published.</span>
+						</div>
+						<div class="checkbox">
+							<label>
+								<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+								Allow people to see my email address
+							</label>
+							<br/>
+							<span class="checkbox-subtext">Check this box to allow your email address to be public.</span>
+						</div>
 					</div>
 					<div class="hidden-xs col-sm-2"></div>
 					<div class="col-sm-5">
-						<h5><i class="fa fa-user-secret"></i> Privacy</h5>
-						<hr>	
+						<h4>Terms of Use &amp; Privacy Notice</h4>
+						<div class="alert alert-info gray-light small">
+							Your personal information is being collected by the Ministry of Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA). The collection, use and disclosure of your personal information is for the purpose of notifying, applying and awarding opportunities on the BCDevExchange. If you have any questions, please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Citizens’ Services, 250-514-2739.
+						</div>
+						<h5><a href="">Read the Terms of Use</a></h5>
+
 					<!--
 						<div class="checkbox" ng-if="vm.features.swu">
 							<label>
@@ -41,14 +52,7 @@
 						</div>
 						<br>
 					-->
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-								Allow people to see my email address
-							</label>
-							<br/>
-							<span class="checkbox-subtext">If you're listed as a program or project member, or if you're assigned to an opportunity, anyone will be able to see your name and profile picture. Check this box to also allow them to see you email address.</span>
-						</div>
+						
 					<!--
 						<br>
 						<div class="checkbox" ng-if="vm.features.swu">
