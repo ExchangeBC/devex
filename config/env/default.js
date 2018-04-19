@@ -39,6 +39,11 @@ module.exports = {
 			path: 'public/code-with-us-terms-2018-01-23.pdf',
 			name: 'sprint-with-us-terms.pdf',
 			type: 'application/pdf'
+		},
+		'user1': {
+			path: 'public/terms-bc-developers-exchange-2018-04-19.pdf',
+			name: 'terms-bc-developers-exchange-2018-04-19.pdf',
+			type: 'application/pdf'
 		}
 	},
 	//
