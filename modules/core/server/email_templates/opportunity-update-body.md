@@ -7,7 +7,7 @@ An opportunity you followed has been updated:
 
 ### {{ data.name }}
 
-### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
+### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
 
 ---
 

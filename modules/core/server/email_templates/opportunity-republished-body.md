@@ -5,9 +5,9 @@
 
 An opportunity you followed, {{ data.name }} has been republished!
 
-### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
+### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
 
-[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) to stop receiving alerts. 
+[Unfollow this opportunity]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) to stop receiving alerts.
 
 ---
 
