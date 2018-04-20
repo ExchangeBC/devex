@@ -1619,7 +1619,13 @@ form-title {
 
 // Badges
 .nav-pills {
-  > li.active {
+  margin: 0 0 2em;
+  > li {
+    > a {
+      padding: .3em .7em;
+    }
+  }
+  > li.active, li.active:hover {
     > a {
       background-color: @theme-primary;
     }

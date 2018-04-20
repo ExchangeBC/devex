@@ -1,1 +1,1 @@
-New Code With Us opportunity has just been posted!
+A new opportunity has just been posted!

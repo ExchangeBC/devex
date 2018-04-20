@@ -422,7 +422,7 @@ exports.delete = function (req, res) {
 };
 exports.deleteForOrg = function (orgid) {
 	return new Promise (function (resolve, reject) {
-		Propsal.find ({org:orgid}, function (err, proposals) {
+		Proposal.find ({org:orgid}, function (err, proposals) {
 			if (err) reject (err);
 			else {
 				if (proposals) {

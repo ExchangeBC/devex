@@ -125,6 +125,7 @@
 			ppp.user         = Authentication.user;
 			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 			ppp.proposal.org = org;
+			ppp.orgHasMetRFQ = org.metRFQ;
 			//
 			// this is all the people in the org
 			//
@@ -467,18 +468,21 @@
 			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
 			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
 			setTeams ();
-			ProposalsService.submit (ppp.proposal).$promise
-			.then (
-				function (response) {
-					ppp.proposal = response;
-					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
-					_init ();
-					setSkills ();
-				},
-				function (error) {
-					 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-				}
-			);
+			ppp.proposal.status = 'Submitted';
+			saveproposal ('<h4>Your proposal has been submitted</h4>');
+			// ProposalsService.submit (ppp.proposal).$promise
+			// .then (
+			// 	function (response) {
+			// 		console.log ('response', response);
+			// 		ppp.proposal = response;
+			// 		Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
+			// 		_init ();
+			// 		setSkills ();
+			// 	},
+			// 	function (error) {
+			// 		 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
+			// 	}
+			// );
 		}
 		// -------------------------------------------------------------------------
 		//

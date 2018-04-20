@@ -174,6 +174,7 @@ var setNotificationData = function (opportunity) {
 		deadline_format_time : helpers.formatTime (new Date(opportunity.deadline)),
 		updatenotification   : 'not-update-'+opportunity.code,
 		code                 : opportunity.code,
+		opptype              : opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu',
 		skills               : opportunity.skills.join (', ')
 	};
 };

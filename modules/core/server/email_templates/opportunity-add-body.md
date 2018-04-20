@@ -1,31 +1,18 @@
 {{#markdown this}}
-![BC Dev Exchange](https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png)
+We've just posted a new opportunity:
 
-### Hi {{data.username}}!
+**{{ data.name }}**
 
-We've just posted a new *Code With Us* opportunity:
-
-### {{ data.name }}
-
-- Posted: **{{ data.datePublished }}**
-- Value: **{{ data.earn }}**
-- Required Skills: **{{ data.skills }}**
-- Closes on: **{{ data.deadline_format_date }}**
-
-### [See the details]({{ data.domain }}/opportunities/{{ data.code }})
+### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
 
 
-[Follow this opportunity]({{ data.domain }}/api/subscribe/{{ data.subscriptionId }}/{{ data.updatenotification }}) to get alerts.
+
+Have a great day!
+**The BCDevExchange Team**
+![BCDevExchange](https://bcdevexchange.org/modules/core/client/img/logo/logo-150px.png)
 
 ---
 
-### Use your skills to make a difference!
+If you don't want these alerts, [unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) or manage your notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
 
-Contribute to this government open source project in GitHub. Get paid a fixed fee that meets the acceptance criteria.
-
----
-
-**Want to stop receiving these emails?**
-
-[Unsubscribe now]({{ data.domain }}/api/unsubscribe/{{ data.subscriptionId }}) from notifications of new opportunities or manage notification preferences in your profile at [bcdevexchange.org](http://bcdevexchange.org).
 {{/markdown}}

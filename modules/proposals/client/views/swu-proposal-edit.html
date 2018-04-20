@@ -32,12 +32,12 @@
 				<span class="gray">Proposal from:</span> {{ppp.org.name}}
 				<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-lg fa-times"></i></a>
 			</div>
-		
+
 			<uib-tabset active class="edit-form-tabs">
 
 				<uib-tab index="0">
 					<uib-tab-heading>
-						1. Accept Terms <i class="fa fa-handshake-o"></i> 
+						1. Accept Terms <i class="fa fa-handshake-o"></i>
 					</uib-tab-heading>
 
 					<div class="alert alert-info">
@@ -263,8 +263,11 @@
 						3. Questionnaire <i class="fa fa-pencil"></i>
 					</uib-tab-heading>
 					<div class="alert alert-info">
-						Provide a response to each of the following questions. Your answers will be anonymized and ranked against the responses from other companies and may be used to screen out.<br><br>
-						Please be thorough but concise. Each response should be no more than about <strong>1000 words.</strong>.
+						Please provide a thorough but concise response to each of the following questions.<br><br>
+						<span class="danger"><strong><i class="fa fa-exclamation-triangle"></i> Important!</strong> Don't include anything in your responses that would reveal the identity of your company!</span>
+						<br><br>
+						<strong>Why?</strong> Our interview screening-in process requires the evaluation committee to rank companies' responses from strongest to weakest, <strong>without being able to see the names of the companies or team members who are being put forward</strong>. If you include information in your questionnaire responses that obviously tips us off to your identify, your proposal may be disqualified.<br><br>
+
 					</div>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[0].question}}</label>
@@ -549,8 +552,16 @@
 								</div>
 
 								<div class="row">
-									<div class="col-xs-12 pull-right">
-										<button type="button" class="btn btn-lg btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									<div class="col-xs-12 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
+										<button type="button" class="btn btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									</div>
+									<div class="col-xs-12 pull-right" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
+										You cannot yet submit your proposal. You must first:
+										<ul>
+											<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the terms of the opportunity</li>
+											<li ng-if="!ppp.isMetAllCapabilities">Build a team that meets all qualification requirements for each phase</li>
+											<li ng-if="!ppp.orgHasMetRFQ">Your Organization must meet the minimum requirements of the RFQ <a ui-sref="orgs.view({orgId:ppp.org._id})">(check here)</a></li>
+										</ul>
 									</div>
 								</div>
 							</div>
