@@ -176,7 +176,7 @@ stage('deploy-prod') {
     }
     node('master') {
       openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: PROD_TAG_NAME
-      openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${$IMAGE_HASH}"
+      openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
       sleep 5
       openshiftVerifyDeployment depCfg: PROD_DEPLOYMENT_NAME, namespace: PROD_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
       echo ">>>> Deployment Complete"
