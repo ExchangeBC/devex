@@ -12,20 +12,6 @@
 
 <section class="detail-page-background">
 
-	<!-- // If user is not signed in // -->
-	<div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
-		<div class="alert alert-warning">
-			<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
-		</div>
- 	</div>
-
-	<!-- // If user doesn't have an email address in their profile // -->
-	<div class="container" ng-if="vm.notifyMe && !vm.hasEmail">
-		<div class="alert alert-warning">
-			<p>Want <span class="hidden-sm hidden-xs">to get </span>updates about this opportunity? <a href  id="settings.profile" ui-sref="settings.profile">  Add your email address.</a></p>
-		</div>
-	</div>
-
 	<!-- Admin View for Proposal Evaluation -->
 	<div class="container swu-evaluation" ng-if="vm.canEdit && vm.opportunity.isPublished">
 
@@ -421,12 +407,6 @@
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
-				<!-- // If user is not signed in // -->
-				<div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
-					<div class="alert alert-warning">
-						<i class="fa fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to <a href ui-sref="authentication.signin"> Sign In</a>
-					</div>
-			 	</div>
 			</div>
 			<div class="col-xs-12 col-sm-4">
 				<div class="well well-warning">

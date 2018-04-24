@@ -1,12 +1,14 @@
-<!-- // If user is signed in but hasn't started a proposal yet // -->
+<!-- // Sprint With Us // -->
 <div ng-if="qaz.isSprintWithUs">
+	<!-- // User is signed in an has a company that meets RFQ requirements // -->
 	<div class="row" ng-if="qaz.case === 'canadd'">
 		<button id="proposaladmin.create" ui-sref="proposaladmin.createswu({opportunityId:qaz.opportunity._id})" class="btn btn-primary pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> Start a Proposal</button>
 	</div>
 
+	<!-- // All other cases (user not signed in; no company; company doesn't meet RFQ requirements) // -->
+	<div class="row" ng-if="qaz.case !== 'canadd'">
+		<a class="btn btn-primary" style="margin-bottom: 10px" href="/sprintwithus-howtoapply"><i class="fa fa-lg fa-info-circle"></i> &nbsp;How to Apply</a>
 
-	<div class="row" ng-if="qaz.case === 'needscompany'">
-		<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> To apply on this opportunity you need to <a href="/orgs">register your company</a> and add members who collectively possess <a href="/capabilities">these capabilities</a>.</div>
 	</div>
 
 
@@ -21,16 +23,18 @@
 	</div>
 </div>
 
+<!-- // Code With Us // -->
 <div ng-if="!qaz.isSprintWithUs">
 	<div class="row" ng-if="qaz.case === 'canadd'">
 		<button id="proposaladmin.create" ui-sref="proposaladmin.createcwu({opportunityId:qaz.opportunity._id})" class="btn btn-primary pull-right" style="margin-bottom: 5px;"><i class="fa fa-paper-plane"></i> Start a Proposal</button>
 	</div>
 
 	<!-- // Chris, I'm wondering if this one shouldn't be here? // -->
+	<!--
 	<div class="row" ng-if="qaz.case === 'needscompany'">
 		<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> You must be the administrator of a company to submit a proposal for this opportunity.</div>
 	</div>
-
+	-->
 
 	<!-- // If user has started a proposal // -->
 	<div class="row" ng-if="qaz.case === 'canedit'">
