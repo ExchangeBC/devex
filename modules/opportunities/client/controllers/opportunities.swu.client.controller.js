@@ -69,6 +69,7 @@
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
 		vm.canApply = org && org.metRFQ;
+		vm.opportunity.hasOrg = vm.canApply;
 		vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
 		//
 		// set up the structures for capabilities
