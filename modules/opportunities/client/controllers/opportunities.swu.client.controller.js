@@ -482,7 +482,7 @@
 			].reduce (function (t, c) {return t + c;});
 			return proposal.scores.total;
 		};
-		vm.calculatePriceScores = function () {
+		vm.calculatePriceScoresOld = function () {
 			var maxDistance = 0;
 			var minDistance = 30000000;
 			vm.proposals.forEach (function (p) {
@@ -499,6 +499,27 @@
 					p.distance -= minDistance;
 					var distanceFromMax = maxDistance - p.distance;
 					p.scores.price = (distanceFromMax) / maxDistance * 100;
+				}
+			});
+		};
+		vm.calculatePriceScores = function () {
+			//
+			// get the lowest price
+			//
+			var p = vm.proposals[0];
+			var lowestPrice = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
+			var i;
+			for (i=0; i<vm.proposals.length; i++) {
+				p = vm.proposals[i];
+				p.cost = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
+				if (p.cost < lowestPrice) lowestPrice = p.cost;
+			}
+			//
+			// now for each do Lowest price / Your Price
+			//
+			vm.proposals.forEach (function (p) {
+				if (p.interviewComplete) {
+					p.scores.price = lowestPrice / p.cost;
 				}
 			});
 		};
