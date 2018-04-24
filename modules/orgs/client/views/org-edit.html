@@ -13,15 +13,15 @@
 				<i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Bingo!</strong> &nbsp;Your company is now qualified to apply on <strong>Sprint With Us</strong> opportunities!
 			</div>
 			<!-- // Show this alert if just missing a 2nd team member OR 1 or more capabilities // -->
-			<div class="alert alert-warning" ng-if="!vm.org.isCapable && vm.org.isAcceptedTerms">
+			<div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && vm.org.isAcceptedTerms">
 				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to fill out your <strong>Team Members</strong> <i class="fa fa-group"></i>
 			</div>
 			<!-- // Show this alert if missing a 2nd team member OR 1 or more capabilities AND accepting the Terms // -->
-			<div class="alert alert-warning" ng-if="!vm.org.isCapable && !vm.org.isAcceptedTerms">
+			<div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
 				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to fill out your <strong>Team Members</strong> <i class="fa fa-group"></i> and accept the <strong>Terms</strong> <i class="fa fa-handshake-o"></i>
 			</div>
 			<!-- // Show this alert if only missing accepting the Terms // -->
-			<div class="alert alert-warning" ng-if="vm.org.isCapable && !vm.org.isAcceptedTerms">
+			<div class="alert alert-warning" ng-if="(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
 				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to accept the <strong>Terms</strong> <i class="fa fa-handshake-o"></i>
 			</div>
 		</div>
@@ -41,7 +41,7 @@
 
 				<!-- // Add logic to this tab and create a new Terms tab // -->
 				<li ui-sref-active="active">
-					<a id="" ui-sref="">Terms <i class="fa fa-handshake-o"></i></a>
+					<a id="orgadmin.terms" ui-sref="orgadmin.terms">Terms <i class="fa fa-handshake-o"></i></a>
 				</li>
 
 	<!-- 			<li ui-sref-active="active" ng-if="0">
