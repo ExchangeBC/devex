@@ -203,6 +203,7 @@
 			//
 			// if we have proposals, are we through the interview process yet?
 			//
+			if (vm.opportunity.numberOfInterviews > vm.proposals.length) vm.opportunity.numberOfInterviews = vm.proposals.length;
 			vm.canCloseInterviews = false;
 			var ninterviewcomplete = 0;
 			vm.proposals.forEach (function (p) {
