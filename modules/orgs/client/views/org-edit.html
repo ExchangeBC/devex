@@ -13,15 +13,15 @@
 				<i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Bingo!</strong> &nbsp;Your company is now qualified to apply on <strong>Sprint With Us</strong> opportunities!
 			</div>
 			<!-- // Show this alert if just missing a 2nd team member OR 1 or more capabilities // -->
-			<div class="alert alert-warning" ng-if="!vm.org.metRFQ">
+			<div class="alert alert-warning" ng-if="!vm.org.isCapable && vm.org.isAcceptedTerms">
 				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to fill out your <strong>Team Members</strong> <i class="fa fa-group"></i>
 			</div>
 			<!-- // Show this alert if missing a 2nd team member OR 1 or more capabilities AND accepting the Terms // -->
-			<div class="alert alert-warning" ng-if="!vm.org.metRFQ">
-				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to fill out your <strong>Team Members</strong> <i class="fa fa-group"></i> and accept the <strong>Terms</strong> <i class="fa fa-handshake-o"></i> 
+			<div class="alert alert-warning" ng-if="!vm.org.isCapable && !vm.org.isAcceptedTerms">
+				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to fill out your <strong>Team Members</strong> <i class="fa fa-group"></i> and accept the <strong>Terms</strong> <i class="fa fa-handshake-o"></i>
 			</div>
 			<!-- // Show this alert if only missing accepting the Terms // -->
-			<div class="alert alert-warning" ng-if="!vm.org.metRFQ">
+			<div class="alert alert-warning" ng-if="vm.org.isCapable && !vm.org.isAcceptedTerms">
 				<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to accept the <strong>Terms</strong> <i class="fa fa-handshake-o"></i>
 			</div>
 		</div>
