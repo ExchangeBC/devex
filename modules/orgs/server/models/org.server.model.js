@@ -39,6 +39,7 @@ var OrgSchema = new Schema ({
 	capabilities         : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},
 	capabilitySkills     : {type: [{type:Schema.ObjectId, ref: 'CapabilitySkill'}], default:[]},
 	metRFQ               : {type: Boolean, default:false},
+	isCapable            : {type: Boolean, default:false},
 	isAcceptedTerms      : {type: Boolean, default:false},
 	owner                : {type: 'ObjectId', ref: 'User', default: null },
 	created              : {type: Date, default: null},

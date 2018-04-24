@@ -213,7 +213,8 @@ var checkCapabilities = function (org) {
 	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
 		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
-		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
+		org.isCapable = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
+		org.metRFQ = org.isCapable && org.isAcceptedTerms && org.members.length >= 2;
 		return org;
 	})
 };
