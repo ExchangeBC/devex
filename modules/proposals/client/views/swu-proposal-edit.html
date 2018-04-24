@@ -452,7 +452,7 @@
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-xs-12">
-										<h4>Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a href="/orgs">company profile</a>.</span></h4>
+										<h4>Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h4>
 										<p><strong>{{ppp.org.name}}</strong><br>
 										{{ppp.org.fullAddress}}<br>
 										Contact: {{ppp.org.contactName}}<br>
@@ -560,7 +560,7 @@
 										<ul>
 											<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the terms of the opportunity</li>
 											<li ng-if="!ppp.isMetAllCapabilities">Build a team that meets all qualification requirements for each phase</li>
-											<li ng-if="!ppp.orgHasMetRFQ">Your Organization must meet the minimum requirements of the RFQ <a ui-sref="orgs.view({orgId:ppp.org._id})">(check here)</a></li>
+											<li ng-if="!ppp.orgHasMetRFQ">Your Organization must meet the minimum requirements of the RFQ <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">(check here)</a></li>
 										</ul>
 									</div>
 								</div>

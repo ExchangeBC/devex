@@ -26,8 +26,8 @@
 		vm.isLoggedIn      = !!vm.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-		vm.isOrgOwner      = org.owner && (vm.user._id === org.owner._id);
+		vm.isOrgAdmin      = vm.user && vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+		vm.isOrgOwner      = vm.user && org.owner && (vm.user._id === org.owner._id);
 		vm.canEdit         = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
 		vm.trust           = $sce.trustAsHtml;
 
