@@ -1,64 +1,53 @@
 <div class="edit-form-tab-content">
 	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
 		<div class="row">
-
-			<div class="col-xs-12 col-sm-4">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="alert alert-info" ng-if="!vm.org.metRFQ">
-							<p>To qualify to apply on <strong><i class="fa fa-group"></i> Sprint With Us</strong> opportunities, your company needs members who collectively cover off all of the following capabilities.</p>
-							<p>(Capabilities are claimed by individuals in their profile.)</p>
-						</div>
-
-						<div class="alert alert-success" ng-if="vm.org.metRFQ">
-							<p><strong>Bingo!</strong> Your company has all of the capabilities needed to apply for <strong><i class="fa fa-group"></i> Sprint With Us</strong> opportunities!</p>
-						</div>
-
-						<table class="table capabilities-list">
-							<tbody>
-								<tr ng-repeat="capability in vm.capabilities">
-									<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
-									<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
-									<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-								</tr>
-							</tbody>
-						</table>
+			<div class="col-xs-12 col-sm-7">
+				<p>Make sure your team members have <strong>signed in</strong> on the BCDevExchange and <strong>claimed their capabilities</strong> in their BCDevExchange profile. Once they've done this, you can add them to your company using the email address in their profile</p>
+				<h4>Add team members</h4>
+				<div class="input-group">
+				  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
+				  <span class="input-group-btn">
+					<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
+				  </span>
+				</div>
+				<span class="small gray-light">Add multiple emails separated with a comma.</span>
+				<h5>My Members:</h5>
+				<!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
+				<div class="alert alert-warning" ng-if="!vm.org.metRFQ">		
+					<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
+				</div>
+				<div class="card card-user" ng-repeat="member in vm.org.members">
+					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
+					<div class="card-body">
+						<label-list>
+							<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+							<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+						</label-list>
 					</div>
 				</div>
 			</div>
-
-
-			<div class="col-xs-12 col-sm-8">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<div class="well well-warning">
-							<h4>Add Members</h4>
-							<p>Associate individuals to your company with the email address they're using for their BCDevExchange profile. (We'll notify them when you add them.)</p>
-							<div class="input-group">
-							  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
-							  <span class="input-group-btn">
-								<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
-							  </span>
-							</div>
-							<span class="small gray-light">Add multiple emails separated with a comma.</span>
-						</div>
-						<h5>My Members:</h5>
-						<div class="card card-user" ng-repeat="member in vm.org.members">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-							<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
-							<div class="card-body">
-								<label-list>
-									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
-									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-								</label-list>
-							</div>
-						</div>
-					</div>
+			<div class="hidden-xs col-sm-1"></div>
+			<div class="col-xs-12 col-sm-4">
+				<h4>Team Capabilities</h4>
+				<!-- // Update logic about when this alert appears if necessary .... should appear until all capabilities are covered, then disappear when they're covered // -->
+				<div class="alert alert-warning" ng-if="!vm.org.metRFQ">
+					<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;Your team members must cover all these capabilities:
 				</div>
+				<table class="table capabilities-list">
+					<tbody>
+						<tr ng-repeat="capability in vm.capabilities">
+							<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
+							<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
 		<br/>
+		<!-- // Please move this to the Terms tab // -->
 		<div class="row" ng-if="vm.org.isCapable">
 			<div class="well well-lg well-info well-left-align pre-scrollable">
 				<h4>Sprint With Us Terms and Conditions RFQ</h4>

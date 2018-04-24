@@ -371,7 +371,7 @@ tr.screened-out {
 }
 
 .edit-form-header {
-  padding: 10px 15px 10px 20px;
+  padding: 10px 15px;
   background: #e2e2e2;
   border-radius: 3px 3px 0 0;
   > .btn {
@@ -390,6 +390,16 @@ tr.screened-out {
 
 .edit-form-body {
   padding: 10px 15px;
+}
+
+h4.edit-form-body {
+  margin: 5px 0 15px;
+  padding: 0;
+}
+
+h5.edit-form-body {
+  margin: 5px 0 14px;
+  padding: 0;
 }
 
 // Remove this one later
@@ -1293,12 +1303,16 @@ form-title {
 }
 
 .alert-important {
-  background: @theme-important;
+  border: 1px solid @theme-important;
   color: @gray-dark;
 }
 
+.alert-success {
+  border: 1px solid @theme-success;
+}
+
 .alert-warning {
-  background: @theme-warning;
+  border: 1px solid @theme-warning;
   color: @gray-dark;
 }
 
@@ -1340,6 +1354,13 @@ form-title {
   background: transparent;
   border: 3px solid;
   border-color: @theme-success;
+  border-radius: 3px;
+}
+
+.alert-outline-orange {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-orange;
   border-radius: 3px;
 }
 
