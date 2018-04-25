@@ -1,10 +1,15 @@
 {{#markdown this}}
+
+### Hi {{data.username}}!
+
 We've just posted a new opportunity:
 
 **{{ data.name }}**
 
-### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
+- Value: **{{ data.earn }}**
+- Closes on: **{{ data.deadline_format_date }}**
 
+### [See the details]({{ data.domain }}/opportunities/{{ data.opptype }}/{{ data.code }})
 
 
 Have a great day!
