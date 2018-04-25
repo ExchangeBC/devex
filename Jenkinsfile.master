@@ -174,6 +174,9 @@ stage('deploy-prod') {
     timeout(time: 3, unit: 'DAYS') {
 	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
     }
+    timeout(time: 3, unit: 'DAYS') {
+	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
+    }
     node('master') {
       openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: PROD_TAG_NAME
       openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
