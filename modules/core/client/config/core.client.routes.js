@@ -152,6 +152,14 @@
 					pageTitle: 'Sprint With Us'
 				}
 			})
+			.state('sprintwithus-howtoapply', {
+				url: '/sprintwithus-howtoapply',
+				templateUrl: '/modules/core/client/views/sprintwithus-howtoapply.view.html',
+				data: {
+					ignoreState: true,
+					pageTitle: 'Sprint With Us'
+				}
+			})
 			.state('sprintwithusps', {
 				url: '/sprintwithusps',
 				templateUrl: '/modules/core/client/views/sprintwithus-ps.view.html',

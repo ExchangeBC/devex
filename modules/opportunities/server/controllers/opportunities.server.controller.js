@@ -163,8 +163,8 @@ var setNotificationData = function (opportunity) {
 		name                 : opportunity.name,
 		short                : opportunity.short,
 		description          : opportunity.description,
-		earn_format_mnoney   : helpers.formatMoney (opportunity.earn, 2),
-		earn                 : helpers.formatMoney (opportunity.earn, 2),
+		earn_format_mnoney   : helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2),
+		earn                 : helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2),
 		dateDeadline         : helpers.formatDate (new Date(opportunity.deadline)),
 		timeDeadline         : helpers.formatTime (new Date(opportunity.deadline)),
 		dateAssignment       : helpers.formatDate (new Date(opportunity.assignment)),
@@ -238,21 +238,31 @@ var oppBody = function (opp) {
 		onsite  : 'In-person work required',
 		mixed   : 'Some in-person work required'
 	}
+	var opptype = 'cwu';
+	if (opp.opportunityTypeCd === 'sprint-with-us') {
+		opptype = 'swu';
+		earn = helpers.formatMoney (opp.phases.aggregate.target, 2);
+	}
 	var ret = '';
-	ret += 'Value: '+earn;
-	ret += 'Closes: '+deadline;
-	ret += 'Location: '+opp.location+' '+locs[opp.onsite];
-	ret += '<h2>Opportunity Description</h2>';
-	ret += opp.description;
-	ret += '<h2>Acceptance Criteria</h2>';
-	ret += opp.criteria;
-	ret += '<h2>How to Apply</h2>';
-	ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
-	ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
-	// ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
-	ret += '<h2>Proposal Evaluation Criteria</h2>';
-	ret += opp.evaluation;
+	// ret += 'Value: '+earn;
+	// ret += 'Closes: '+deadline;
+	// ret += 'Location: '+opp.location+' '+locs[opp.onsite];
+	// ret += '<h2>Opportunity Description</h2>';
+	// ret += opp.description;
+	// ret += '<h2>Acceptance Criteria</h2>';
+	// ret += opp.criteria;
+	// ret += '<h2>How to Apply</h2>';
+	// ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
+	// ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
+	// // ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
+	// ret += '<h2>Proposal Evaluation Criteria</h2>';
+	// ret += opp.evaluation;
+
+	ret += '<p>This is a paid opportunity through the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
+	ret += '<br/>';
+	ret += '<p>To apply, visit the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">opportunity page</a> and submit a proposal before '+deadline+'</p>';
 	return ret;
+
 };
 // -------------------------------------------------------------------------
 //

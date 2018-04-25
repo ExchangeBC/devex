@@ -151,6 +151,22 @@
 				}
 			}
 		})
+		.state ('orgadmin.terms', {
+			url: '/terms',
+			templateUrl: '/modules/orgs/client/views/org-terms.html',
+			controller: 'OrgTermsController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Terms'
+			},
+			resolve: {
+				org: function ($stateParams, OrgsService) {
+					return OrgsService.get({
+						orgId: $stateParams.orgId
+					}).$promise;
+				}
+			}
+		})
 		// .state ('orgadmin.teams', {
 		// 	url: '/teams',
 		// 	templateUrl: '/modules/orgs/client/views/org-teams.html',

@@ -36,6 +36,7 @@
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
 				qaz.isSprintWithUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
 				var hasCompany        = isUser && Authentication.user.orgsAdmin.length > 0;
+				hasCompany = qaz.opportunity.hasOrg;
 				qaz.case               = 'nothing';
 				if (!isUser) qaz.case = 'guest';
 				//

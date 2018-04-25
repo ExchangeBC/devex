@@ -26,8 +26,8 @@
 		vm.isLoggedIn      = !!vm.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
-		vm.isOrgAdmin      = vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-		vm.isOrgOwner      = org.owner && (vm.user._id === org.owner._id);
+		vm.isOrgAdmin      = vm.user && vm.org.admins.map (function (u) { return (vm.user._id === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+		vm.isOrgOwner      = vm.user && org.owner && (vm.user._id === org.owner._id);
 		vm.canEdit         = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
 		vm.trust           = $sce.trustAsHtml;
 
@@ -95,9 +95,14 @@
 	// top level of the edit
 	//
 	// =========================================================================
-	.controller('OrgAdminController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgAdminController', function ($rootScope, org, OrgsService) {
 		var vm = this;
 		vm.org = org;
+		$rootScope.$on('updateOrg', function () {
+			OrgsService.get({orgId: org._id}).$promise.then (function (result) {
+				vm.org = result;
+			});
+		});
 	})
 	// =========================================================================
 	//
@@ -252,7 +257,7 @@
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
+	.controller('OrgMembersController', function ($scope, $rootScope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
@@ -263,12 +268,14 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.refresh = function () {
+			$rootScope.$broadcast('updateOrg', 'done');
 			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
 			OrgsService.get ({orgId: vm.org._id}).$promise
 			.then (function (org) {
 				vm.org = org;
 				CapabilitiesMethods.init (vm, vm.org, capabilities);
+				$rootScope.$broadcast('updateOrg', 'done');
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -296,6 +303,7 @@
 					CapabilitiesMethods.init (vm, vm.org, capabilities);
 					// vm.refresh ();
 					vm.orgForm.$setPristine ();
+					$rootScope.$broadcast('updateOrg', 'done');
 				})
 				.catch (function (res) {
 					Notification.error ({
@@ -328,6 +336,7 @@
 				Notification.success ({
 					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Congrats! Your company is now qualified for Sprint With Us.</h4>'
 				});
+				$rootScope.$broadcast('updateOrg', 'done');
 			})
 		};
 		vm.displayResults = function (result) {
@@ -351,6 +360,26 @@
 			});
 		};
 
+	})
+	// =========================================================================
+	//
+	// accept terms
+	//
+	// =========================================================================
+	.controller('OrgTermsController', function ($rootScope, $state, org, Notification) {
+		var vm = this;
+		vm.org = org;
+		vm.save = function () {
+			vm.orgForm.$setPristine ();
+			vm.org.createOrUpdate ()
+			.then (function () {
+				vm.orgForm.$setPristine ();
+				Notification.success ({
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Congrats! Your company is now qualified for Sprint With Us.</h4>'
+				});
+				$rootScope.$broadcast('updateOrg', 'done');
+			})
+		};
 	})
 	// =========================================================================
 	//

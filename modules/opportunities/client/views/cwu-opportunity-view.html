@@ -23,22 +23,20 @@
 	</div>
 
 	<!-- // Admin View for Proposal Evaluation // -->
-	<div class="container cwu-evaluation" ng-if="vm.opportunity.isPublished">
+	<div class="container cwu-evaluation" ng-if="vm.opportunity.isPublished && vm.canEdit">
 
 		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
 
 		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
 			<div class="col-xs-12 text-center">
-				<p>
-					<span class="light">OPPORTUNITY ASSIGNED TO:</span>
-					&nbsp;
-					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
-					&nbsp;
-					{{vm.opportunity.proposal.user.displayName}}
-					&nbsp;&nbsp;&nbsp;
-					<a  id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.viewcwu({ proposalId: vm.opportunity.proposal._id })">View Proposal</a>&nbsp;&nbsp;
-					<button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fa fa-ban"></i> UNASSIGN</button>
-				</p>
+				<span class="light">Opportunity assigned to:</span>
+				&nbsp;
+				<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+				&nbsp;
+				{{vm.opportunity.proposal.user.displayName}}
+				&nbsp;&nbsp;&nbsp;
+				<a  id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.viewcwu({ proposalId: vm.opportunity.proposal._id })">View Proposal</a>&nbsp;&nbsp;
+				<button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fa fa-ban"></i> Unassign</button>
 
 				<!--
 				<div class="card card-block">
@@ -61,7 +59,7 @@
 				-->
 			</div>
 		</div>
-
+		<br>
 		<div class="row">
 			<div class="col-xs-12 text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
 				<a class="btn btn-sm btn-secondary" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
@@ -112,11 +110,22 @@
 
 		</div>
 
-		<!-- // Status and Follow // -->
+		<!-- // Status // -->
 		<div class="row">
+			<!-- // Closing deadline while opportunity is still open // -->
 			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
 				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
 			</div>
+			
+			<!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
+			<div class="col-xs-12 text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
+				<span class="light">Opportunity assigned to:</span>
+				&nbsp;
+				<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+				&nbsp;
+				{{vm.opportunity.proposal.user.displayName}}
+			</div>
+
 		</div>
 
 		<!-- // Title and Teaser // -->
