@@ -375,7 +375,7 @@
 			.then (function () {
 				vm.orgForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Congrats! Your company is now qualified for Sprint With Us.</h4>'
+					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your company has accepted the terms of the RFQ.</h4>'
 				});
 				$rootScope.$broadcast('updateOrg', 'done');
 			})
