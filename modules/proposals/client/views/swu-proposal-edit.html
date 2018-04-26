@@ -22,11 +22,11 @@
 	</div>
 </div>
 
-<section class="edit-form-background" role="main">
+<section class="edit-form-background" style="min-height: 750px; padding: 10px 70px;" role="main">
 
-	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
+	<form id="proposalform" name="ppp.form.proposalform" class="form swu-proposal" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
 
-		<div class="edit-form">
+		<div class="edit-form swu-proposal">
 
 			<div class="edit-form-header">
 				<span class="gray">Proposal from:</span> {{ppp.org.name}}
@@ -37,20 +37,32 @@
 
 				<uib-tab index="0">
 					<uib-tab-heading>
+						Instructions
+					</uib-tab-heading>
+					<div>
+						Instructions about the whole process will go here...
+					</div>
+				</uib-tab>
+
+				<uib-tab index="1">
+					<uib-tab-heading>
 						1. Accept Terms <i class="fa fa-handshake-o"></i>
 					</uib-tab-heading>
-
-					<div class="alert alert-info">
-						To submit a proposal, you must agree that if your company is chosen, you will enter into a contract that looks like this:
+					
+					<div class="row">
+						<h5>To submit a proposal on this opportunity, you must agree to the terms contained in this Request for Proposals.</h5>
 					</div>
+					<!--
 					<iframe class="row" style="height: 400px;" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
+					-->
 					<br>
-					<a class="btn btn-sm btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
-					<div class="alert alert-warning">
-						<label class="checkbox-inline checkbox-alone">
-							<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
-						</label>
-					</div>
+
+					<a class="btn btn-lg btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Request for Proposals</a>
+					<br><br><br>
+					<label class="checkbox-inline checkbox-alone">
+						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the terms of the Request for Proposals.
+					</label>
+					
 
 						<!-- // No point showing business info here if user can't edit it from here // -->
 						<!--
@@ -78,13 +90,21 @@
 
 				</uib-tab>
 
-				<uib-tab index="1">
+				<uib-tab index="2">
 					<uib-tab-heading>
 						2. Select Team <i class="fa fa-group"></i>
 					</uib-tab-heading>
-					<div class="alert alert-info">
-						<strong>Select the team members</strong> you want to put forward for each phase.
-					</div>
+					<uib-accordion>
+						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Selecting Your Team
+							</uib-accordion-heading>
+							<div class="row">
+								<p>Content from Loren and links to relevant sections of RFP go in here...</p>
+								<p>Your team must cover off all the <span class="strong">Required Capabilities</span>. Capabilities labelled &nbsp;<label class="label label-fulltime-selected">F/T</label>&nbsp; are expected to be available full-time for the duration of the phase. <span class="strong">Preferred Skills</span> are not required, but the more of them your team members have, the higher they'll score.</p>
+							</div>
+						</div>
+					</uib-accordion>					
 					<div class="row">
 						<div class="col-xs-12 col-sm-4">
 							<h5 class="text-center"><i class="fa fa-map"></i> Inception</h5>
@@ -115,31 +135,29 @@
 								</div>
 							</div>
 
-							<div class="panel panel-default" ng-if="ppp.oinp.isInception">
-								<div class="panel-body">
-									<h5 class="text-center">Required Capabilities</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
-												<th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-												<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
-												<td><label class="label label-lg label-cap-default {{capability.labelClass}}"></i> {{capability.name}}</label></td>
-												<td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-											</tr>
-										</tbody>
-									</table>
-									<hr>
-									<h5 class="text-center">Preferred Skills</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
-												<th scope="row" ng-if="ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-												<th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"></th>
-												<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+							<div ng-if="ppp.oinp.isInception">
+								<h5>Required Capabilities</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
+											<th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
+											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<td><label class="label label-lg label-cap-default {{capability.labelClass}}"></i> {{capability.name}}</label></td>
+											<td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
+										</tr>
+									</tbody>
+								</table>
+								<hr>
+								<h5>Preferred Skills</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
+											<th scope="row" ng-if="ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4">
@@ -170,31 +188,29 @@
 								</div>
 							</div>
 
-							<div class="panel panel-default" ng-if="ppp.oprp.isPrototype">
-								<div class="panel-body">
-									<h5 class="text-center">Required Capabilities</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
-												<th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-												<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
-												<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-												<td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-											</tr>
-										</tbody>
-									</table>
-									<hr>
-									<h5 class="text-center">Preferred Skills</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
-												<th scope="row" ng-if="ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-												<th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"></th>
-												<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-											</tr>
-										</tbody>
-									</table>
-								</div>
+							<div ng-if="ppp.oprp.isPrototype">
+								<h5>Required Capabilities</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
+											<th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
+											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+											<td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
+										</tr>
+									</tbody>
+								</table>
+								<hr>
+								<h5>Preferred Skills</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
+											<th scope="row" ng-if="ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
+										</tr>
+									</tbody>
+								</table>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4">
@@ -224,51 +240,157 @@
 								</div>
 							</div>
 
-							<div class="panel panel-default" ng-if="ppp.oimp.isImplementation">
-								<div class="panel-body">
-									<h5 class="text-center">Required Capabilities</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
-												<th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-												<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-question-circle fa-2x gray-light"></i></th>
-												<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-												<td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-											</tr>
-										</tbody>
-									</table>
-									<hr>
-									<h5 class="text-center">Preferred Skills</h5>
-									<table class="table capabilities-list">
-										<tbody>
-											<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
-												<th scope="row" ng-if="ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-												<th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"></th>
-												<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-											</tr>
-										</tbody>
-									</table>
+							<div ng-if="ppp.oimp.isImplementation">
+								<h5>Required Capabilities</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
+											<th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
+											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+											<td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
+										</tr>
+									</tbody>
+								</table>
+								<hr>
+								<h5>Preferred Skills</h5>
+								<table class="table capabilities-list">
+									<tbody>
+										<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
+											<th scope="row" ng-if="ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
+											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</uib-tab>
+
+				<uib-tab index="3">
+					<uib-tab-heading>
+						3. Pricing <i class="fa fa-usd"></i>
+					</uib-tab-heading>
+					<uib-accordion>
+						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Providing a price for your team
+							</uib-accordion-heading>
+							<div class="row">
+								<p>Here's the team you're putting forward. Please enter a <strong>fixed price</strong> for which you can supply the team members for the dates stated.</p>
+							</div>
+						</div>
+					</uib-accordion>
+					
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 text-center">
+							<h5><i class="fa fa-map"></i> &nbsp;Inception</h5>
+							<!-- If Phase not included -->
+							<div ng-if="!ppp.oinp.isInception">This phase is not required
+							</div>
+							<!-- If Phase is included -->
+							<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+
+							<!-- If Phase is included -->
+							<div ng-if="ppp.oinp.isInception">
+								<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
+									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+								</div>
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										Enter a fixed-price for your team for this phase:
+									</div>
+									<div class="panel-body">
+										<div class="input-group">
+										  <span class="input-group-addon">$</span>
+										  <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 text-center">
+							<h5><i class="fa fa-rocket"></i> &nbsp;Proof of Concept</h5>
+							<!-- If Phase not included -->
+							<div ng-if="!ppp.oprp.isPrototype">This phase is not required
+							</div>
+							<!-- If Phase is included -->
+							<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> &nbsp;
+							{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
+							
+							<!-- If Phase is included -->
+							<div ng-if="ppp.oprp.isPrototype">
+								<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
+									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+								</div>
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										Enter a fixed-price for your team for this phase:
+									</div>
+									<div class="panel-body">
+										<div class="input-group">
+										  <span class="input-group-addon">$</span>
+										  <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 text-center">
+							<h5><i class="fa fa-gears"></i> &nbsp;Implementation</h5>
+							<!-- If Phase not included -->
+							<div ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
+							<!-- If Phase is included -->
+							<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
+
+							<!-- If Phase is included -->
+							<div ng-if="ppp.oimp.isImplementation">
+								<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
+									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+								</div>
+								<div class="panel panel-primary">
+									<div class="panel-heading">
+										Enter a fixed-price for your team for this phase:
+									</div>
+									<div class="panel-body">
+										<div class="input-group">
+										  <span class="input-group-addon">$</span>
+										  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="alert alert-info">
-						Your team must cover off all the <span class="strong">Required Capabilities</span>. Capabilities labelled &nbsp;<label class="label label-fulltime-selected">F/T</label>&nbsp; are expected to be available full-time for the duration of the phase. <span class="strong">Preferred Skills</span> are not required, but the more of them your team members have, the higher they'll score.
+
+					<div class="row">
+						<div class="col-sm-4 pull-right">
+							<h4 style="text-align: center;"><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+						</div>
 					</div>
 
 				</uib-tab>
 
-				<uib-tab index="2">
+				<uib-tab index="4">
 					<uib-tab-heading>
-						3. Questionnaire <i class="fa fa-pencil"></i>
+						4. Questionnaire <i class="fa fa-pencil"></i>
 					</uib-tab-heading>
-					<div class="alert alert-info">
-						Please provide a thorough but concise response to each of the following questions.<br><br>
-						<span class="danger"><strong><i class="fa fa-exclamation-triangle"></i> Important!</strong> Don't include anything in your responses that would reveal the identity of your company!</span>
-						<br><br>
-						<strong>Why?</strong> Our interview screening-in process requires the evaluation committee to rank companies' responses from strongest to weakest, <strong>without being able to see the names of the companies or team members who are being put forward</strong>. If you include information in your questionnaire responses that obviously tips us off to your identify, your proposal may be disqualified.<br><br>
-
-					</div>
+					<uib-accordion>
+						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Responding to the questionnaire
+							</uib-accordion-heading>
+							<div class="row">
+								<p>Please provide a thorough but concise response to each of the following questions.</p>
+								<p><span class="danger"><strong><i class="fa fa-exclamation-triangle"></i> Important!</strong> Don't include anything in your responses that would reveal the identity of your company!</span></p>
+								<p><strong>Why?</strong> Our interview screening-in process requires the evaluation committee to rank companies' responses from strongest to weakest, <strong>without being able to see the names of the companies or team members who are being put forward</strong>. If you include information in your questionnaire responses that obviously tips us off to your identify, your proposal may be disqualified.</p>
+							</div>
+						</div>
+					</uib-accordion>
+					<br>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[0].question}}</label>
 						<textarea
@@ -316,7 +438,8 @@
 					</div>
 				</uib-tab>
 
-
+				<!-- // Hiding the Attachments tab because we don't need or want proponents to upload stuff on the first SWU opportunity // -->
+				<!--
 				<uib-tab index="3" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
 					<uib-tab-heading>
 						4. Attachments <i class="fa fa-file"></i>
@@ -341,108 +464,14 @@
 						</tr>
 					</table>
 				</uib-tab>
-				<uib-tab>
-					<uib-tab-heading>
-						5. Pricing <i class="fa fa-usd"></i>
-					</uib-tab-heading>
-					<div class="alert alert-info">
-						Here's the team you're putting forward. Please enter a <strong>fixed price</strong> for which you can supply the team members for the dates stated.
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-4 text-center">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<p><i class="fa fa-map"></i> &nbsp;Inception</p>
-									<!-- If Phase not included -->
-									<div ng-if="!ppp.oinp.isInception">This phase is not required
-									</div>
-									<!-- If Phase is included -->
-									<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
-								</div>
+				-->
 
-								<!-- If Phase is included -->
-								<div class="panel-body" ng-if="ppp.oinp.isInception">
-									<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
-										<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-									</div>
-									<div class="alert alert-important">
-										<label class="label-input" for="budget-inception"><strong>Price:</strong></label>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-xs-12 col-sm-4 text-center">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<p><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
-									<!-- If Phase not included -->
-									<div ng-if="!ppp.oprp.isPrototype">This phase is not required
-									</div>
-									<!-- If Phase is included -->
-									<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> &nbsp;
-									{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
-								</div>
-								<!-- If Phase is included -->
-								<div class="panel-body" ng-if="ppp.oprp.isPrototype">
-									<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
-										<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-									</div>
-									<div class="alert alert-important">
-										<label class="label-input" for="budget-poc"><strong>Price:</strong></label>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-xs-12 col-sm-4 text-center">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<p><i class="fa fa-gears"></i> &nbsp;Implementation Phase
-									</p>
-									<!-- If Phase not included -->
-									<div ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
-									<!-- If Phase is included -->
-									<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
-								</div>
-
-								<!-- If Phase is included -->
-								<div class="panel-body" ng-if="ppp.oimp.isImplementation">
-									<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
-										<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-									</div>
-									<div class="alert alert-important">
-										<label class="label-input" for="budget-imp"><strong>Price:</strong></label>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-sm-4 pull-right">
-							<h4 style="text-align: center;"><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
-						</div>
-					</div>
-
-				</uib-tab>
+				
 
 				<!-- // New Review & Submit tab // -->
-				<uib-tab>
+				<uib-tab index="5">
 					<uib-tab-heading>
-						6. Review &amp; Submit <i class="fa fa-paper-plane"></i>
+						5. Review &amp; Submit <i class="fa fa-paper-plane"></i>
 					</uib-tab-heading>
 					<div class="alert alert-warning">
 						Here's your complete proposal. Make sure it all looks right before submitting. Good luck!
