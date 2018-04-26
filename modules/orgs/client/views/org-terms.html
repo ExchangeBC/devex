@@ -1,21 +1,18 @@
 <div class="edit-form-tab-content">
 	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
 		<div class="row">
-				<div class="alert alert-warning" ng-if="!vm.org.isAcceptedTerms">
-					<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to accept these terms
+			<div class="col-xs-12">
+				<div class="alert alert-warning" style="display: inline-block;" ng-if="!vm.org.isAcceptedTerms">
+					<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to agree to the terms of the Request for Qualifications
 				</div>
-				<div class="well well-lg well-info well-left-align pre-scrollable">
-					<h4>Sprint With Us Terms and Conditions RFQ</h4>
-					<p>To submit a proposal to work on any Sprint With Us opportunity you must agree to the terms of the Sprint With Us Terms and Conditions RFQ.</p>
-					<iframe class="col-sm-12" src="/rfq-sprint-with-us-company-2018-04-19.pdf" ng-if="!vm.org.isAcceptedTerms"></iframe>
-					<div class="col-sm-12">
-						<br/>
-						<label class="checkbox-inline">
-							<input type="checkbox" name="isInception" ng-disabled="vm.org.isAcceptedTerms" ng-model="vm.org.isAcceptedTerms" ng-click="vm.save()"> I acknowledge that I have read and fully understand and agree to the terms and conditions.
-						</label>
-						<a class="btn btn-default pull-right" href="/api/proposals/download/terms/rfq1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
-					</div>
-				</div>
+				<br><br>
+				<a class="btn btn-primary" href="/api/proposals/download/terms/rfq1" target="_blank"><i class="fa fa-download"></i> &nbsp;Download the <span class="light italic">Sprint With Us</span> Request for Qualifications</a>
+				<br><br>
+				<label class="checkbox-inline">
+					<input type="checkbox" name="isInception" ng-disabled="vm.org.isAcceptedTerms" ng-model="vm.org.isAcceptedTerms" ng-click="vm.save()"> I acknowledge that I have read, fully understand, and agree to the terms in the Request for Qualifications.
+				</label>
+				<br><br>
+			</div>
 		</div>
 	</form>
 </div>

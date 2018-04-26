@@ -45,32 +45,5 @@
 				</table>
 			</div>
 		</div>
-
-		<br/>
-		<!-- // Please move this to the Terms tab // -->
-		<div class="row" ng-if="vm.org.isCapable">
-			<div class="well well-lg well-info well-left-align pre-scrollable">
-				<h4>Sprint With Us Terms and Conditions RFQ</h4>
-				<p>To submit a proposal to work on any Sprint With Us opportunity you must agree to the terms of the Sprint With Us Terms and Conditions RFQ.</p>
-				<iframe class="col-sm-12" src="/rfq-sprint-with-us-company-2018-04-19.pdf" ng-if="!vm.org.isAcceptedTerms"></iframe>
-				<div class="col-sm-12">
-					<br/>
-					<label class="checkbox-inline">
-						<input type="checkbox" name="isInception" ng-disabled="vm.org.isAcceptedTerms" ng-model="vm.org.isAcceptedTerms" ng-click="vm.save()"> I acknowledge that I have read and fully understand and agree to the terms and conditions.
-					</label>
-					<a class="btn btn-default pull-right" href="/api/proposals/download/terms/rfq1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
-				</div>
-			</div>
-		</div>
-
-<!-- 		<div class="edit-form-footer">
-			<div class="row">
-				<div class="col-xs-12">
-					<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-					<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
-				</div>
-			</div>
-		</div>
- -->
 	</form>
 </div>
