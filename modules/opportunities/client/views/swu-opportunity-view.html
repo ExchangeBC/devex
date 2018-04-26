@@ -175,9 +175,14 @@
 		</div>
 		-->
 
-		<div class="row">
-			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
-				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
+		<div class="row" ng-if="vm.opportunity.isPublished">
+			<div class="col-xs-12 text-center">
+				<div ng-if="vm.closing !== 'CLOSED'">
+					<p><label class="label label-lg label-success">OPEN</label> &nbsp; <i class="fa fa-lg fa-clock-o"></i> &nbsp;Proposals must be received through this website before <strong>{{vm.deadline}}</strong>.</p>
+				</div>
+				<div ng-if="vm.closing === 'CLOSED'">
+					<p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{vm.deadline}}</strong>.</p>
+				</div>
 			</div>
 		</div>
 
@@ -193,6 +198,19 @@
 
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
+				<dl class="dl-horizontal">
+					<dt>Location:</dt>
+					<dd><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</dd>
+					<dt>On-site requirements:</dt>
+					<dd>
+						<span ng-if="vm.opportunity.onsite == 'offsite'">In-person work NOT required</span>
+						<span ng-if="vm.opportunity.onsite == 'onsite'">In-person work required</span>
+						<span ng-if="vm.opportunity.onsite == 'mixed'">Some in-person work required</span>
+						<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+					</dd>
+				</dl>
+
+				<!--
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
 					<span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'offsite'"><i class="fa fa-user"></i>&nbsp;In-person work NOT required</span>
@@ -200,6 +218,7 @@
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
 					<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
 				</div>
+			-->
 			</div>
 
 			<div class="col-xs-12 col-sm-6">
