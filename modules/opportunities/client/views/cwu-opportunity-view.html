@@ -140,6 +140,21 @@
 		<br>
 		<div class="row">
 			<div class="col-xs-12 col-sm-6">
+				<dl class="dl-horizontal">
+					<dt>Value:</dt>
+					<dd>{{vm.opportunity.earn|currency}}</span></dd>
+					<dt>Location:</dt>
+					<dd><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</dd>
+					<dt>On-site requirements:</dt>
+					<dd>
+						<span ng-if="vm.opportunity.onsite == 'offsite'">In-person work NOT required</span>
+						<span ng-if="vm.opportunity.onsite == 'onsite'">In-person work required</span>
+						<span ng-if="vm.opportunity.onsite == 'mixed'">Some in-person work required</span>
+						<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+					</dd>
+				</dl>
+
+				<!--
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
 					<span class="label label-lg label-price"><i class="fa fa-tag"></i>&nbsp;{{vm.opportunity.earn|currency}}</span>
 					<span class="label label-location"><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</span>
@@ -148,6 +163,7 @@
 					<span class="label label-location" ng-if="vm.opportunity.onsite == 'mixed'"><i class="fa fa-user"></i>&nbsp;Some in-person work required</span>
 					<span class="label label-skill" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
 				</div>
+				-->
 			</div>
 
 			<div class="col-xs-12 col-sm-6">
