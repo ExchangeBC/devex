@@ -505,9 +505,9 @@
 							</div>
 						</div>
 					</uib-accordion>
-					<div class="alert alert-warning">
-						Here's your complete proposal. Make sure it all looks right before submitting. Good luck!
-					</div>
+					<h5>
+						Here's a summary of your complete proposal. Make sure it all looks right before you submit. Good luck!
+					</h5>
 					<div class="row">
 						<div class="panel panel-primary">
 							<div class="panel-body">
@@ -613,8 +613,14 @@
 								</div>
 
 								<div class="row">
-									<div class="col-xs-12 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
-										<button type="button" class="btn btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
+										<div class="panel panel-success">
+											<div class="panel-body">
+												<p class="small">Submission of a proposal indicates your company's acceptance of all the terms and conditions set out in the RFP, its appendices and its addenda. These terms and conditions also include any terms and conditions included on the Opportunity's webpage and the tabs of your Proposal.</p>
+												<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
+												<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+											</div>
+										</div>
 									</div>
 									<div class="col-xs-12 pull-right" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
 										You cannot yet submit your proposal. You must first:
