@@ -11,16 +11,12 @@
 		return {
 			cities: citylist,
 			questions : [
-				'What is your favourite project your team has delivered? Why?',
-				'What steps does your team take to understand the business and prioritize what should be delivered?',
-				'What tools and practices does your team find most effective to collaborate and deliver a new digital product?',
-				'How do you evaluate the working relationships on the team and resolve conflicts?',
-				'Why is your company interested in this project?'
+				'What performance metrics does your team measure?',
+				'How do the developers and UX people on your team interact?',
+				'What is your team’s biggest organizational challenge right now?',
+				'As a team, how do you discuss user stories?',
+				'At what point in the development cycle does your team start to talk about testing?'
 			]
 		};
-	})
-
-
-	;
+	});
 }());
-
