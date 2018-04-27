@@ -438,17 +438,22 @@
 					</div>
 				</uib-tab>
 
-				<!-- // Hiding the Attachments tab because we don't need or want proponents to upload stuff on the first SWU opportunity // -->
-				<!--
-				<uib-tab index="3" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
+				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
+				<uib-tab index="5" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
 					<uib-tab-heading>
-						4. Attachments <i class="fa fa-file"></i>
+						5. References
 					</uib-tab-heading>
-					<div class="alert alert-info">
-						You can upload any supporting material here as an attachment.
+					<div class="row">
+						<div class="col-xs-12">
+							<h5>Zach's text to go here....</h5>
+							<span class="danger">If we can get Chris, this would make more sense as text field inputs than downloading than uploading a document....</span>
+						</div>
 					</div>
+					<br>
 					<div class="col-xs-12">
-						<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> Upload a file</a>
+						<a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download References Template</a>
+						<br><br><br>
+						<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> Upload your references file</a>
 					</div>
 					<table class="table table-striped">
 						<tr ng-repeat="file in ppp.proposal.attachments">
@@ -464,15 +469,42 @@
 						</tr>
 					</table>
 				</uib-tab>
-				-->
+				
 
-
+				<uib-tab index="6">
+					<uib-tab-heading>
+						The Interview
+					</uib-tab-heading>
+					<uib-accordion>
+						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - About the interview process
+							</uib-accordion-heading>
+							<div class="row">
+								<p>Content from Loren and links to relevant sections of RFP go in here...</p>
+							</div>
+						</div>
+					</uib-accordion>
+					<div>
+						Information about the team simulation and interview process will go here...
+					</div>
+				</uib-tab>
 
 				<!-- // New Review & Submit tab // -->
-				<uib-tab index="5">
+				<uib-tab index="7">
 					<uib-tab-heading>
-						5. Review &amp; Submit <i class="fa fa-paper-plane"></i>
+						6. Review &amp; Submit <i class="fa fa-paper-plane"></i>
 					</uib-tab-heading>
+					<uib-accordion>
+						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Submitting your proposal
+							</uib-accordion-heading>
+							<div class="row">
+								<p>Content from Loren and links to relevant sections of RFP go in here...</p>
+							</div>
+						</div>
+					</uib-accordion>
 					<div class="alert alert-warning">
 						Here's your complete proposal. Make sure it all looks right before submitting. Good luck!
 					</div>
