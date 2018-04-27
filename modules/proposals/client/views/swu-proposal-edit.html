@@ -48,7 +48,7 @@
 					<uib-tab-heading>
 						1. Accept Terms <i class="fa fa-handshake-o"></i>
 					</uib-tab-heading>
-					
+
 					<div class="row">
 						<h5>To submit a proposal on this opportunity, you must agree to the terms contained in this Request for Proposals.</h5>
 					</div>
@@ -62,7 +62,7 @@
 					<label class="checkbox-inline checkbox-alone">
 						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the terms of the Request for Proposals.
 					</label>
-					
+
 
 						<!-- // No point showing business info here if user can't edit it from here // -->
 						<!--
@@ -104,7 +104,7 @@
 								<p>Your team must cover off all the <span class="strong">Required Capabilities</span>. Capabilities labelled &nbsp;<label class="label label-fulltime-selected">F/T</label>&nbsp; are expected to be available full-time for the duration of the phase. <span class="strong">Preferred Skills</span> are not required, but the more of them your team members have, the higher they'll score.</p>
 							</div>
 						</div>
-					</uib-accordion>					
+					</uib-accordion>
 					<div class="row">
 						<div class="col-xs-12 col-sm-4">
 							<h5 class="text-center"><i class="fa fa-map"></i> Inception</h5>
@@ -141,7 +141,7 @@
 									<tbody>
 										<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
 											<th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
 											<td><label class="label label-lg label-cap-default {{capability.labelClass}}"></i> {{capability.name}}</label></td>
 											<td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 										</tr>
@@ -194,7 +194,7 @@
 									<tbody>
 										<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
 											<th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
 											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
 											<td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 										</tr>
@@ -246,7 +246,7 @@
 									<tbody>
 										<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
 											<th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-circle-0 fa-2x gray-light"></i></th>
+											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
 											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
 											<td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
 										</tr>
@@ -282,7 +282,7 @@
 							</div>
 						</div>
 					</uib-accordion>
-					
+
 					<div class="row">
 						<div class="col-xs-12 col-sm-4 text-center">
 							<h5><i class="fa fa-map"></i> &nbsp;Inception</h5>
@@ -319,7 +319,7 @@
 							<!-- If Phase is included -->
 							<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> &nbsp;
 							{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
-							
+
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oprp.isPrototype">
 								<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
@@ -466,7 +466,7 @@
 				</uib-tab>
 				-->
 
-				
+
 
 				<!-- // New Review & Submit tab // -->
 				<uib-tab index="5">
