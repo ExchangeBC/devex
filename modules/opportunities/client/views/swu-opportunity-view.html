@@ -7,7 +7,7 @@
 </div>
 
 <div class="banner banner-important">
-  <i class="fa fa-lg fa-flask"></i> &nbsp; We're experimenting with a new Agile procurement model - <strong>Sprint With Us</strong>. &nbsp;To apply on this opportunity, <a href="/sprintwithus"> follow these steps</a>.
+  <i class="fa fa-lg fa-flask"></i> &nbsp; We're experimenting with a new Agile procurement model - <strong>Sprint With Us</strong>. &nbsp;To apply on this opportunity, <a href="/sprintwithus-howtoapply"> follow these steps</a>.
 </div>
 
 <section class="detail-page-background">
@@ -247,12 +247,18 @@
 				</dl>
 			</div>
 		</div>
-
+		<hr>
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Proponents' Meeting</h3> 
+				<p>A Proponents' meeting will not be held.</p>
+			</div>
+		</div>
 		<hr>
 
 		<div class="row">
 			<div class="col-xs-12">
-				<h4>Background</h4>
+				<h3 class="opp-detail">Background</h3>
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
 		</div>
@@ -272,7 +278,7 @@
 		<!-- // Phases // -->
 		<div class="row">
 			<div class="col-xs-12">
-				<h3>Phases of Work &amp; Deliverables</h3>
+				<h3 class="opp-detail">Phases of Work &amp; Deliverables</h3>
 				<p>We need to carry out the following phases of work:</p>
 			</div>
 		</div>
@@ -410,7 +416,7 @@
 		<!-- // Terms & Conditions // -->
 		<div class="row">
 			<div class="col-xs-12">
-				<h4>Terms &amp; Conditions</h4>
+				<h3 class="opp-detail">Terms &amp; Conditions</h3>
 				<p>This is a <i>Sprint With Us</i> opportunity governed by <a href="">these terms</a>.</p>
 				<p><span class="small">Additional terms:</span><br>
 				<span ng-bind-html="vm.trust(vm.opportunity.terms)"></span></p>
@@ -422,7 +428,7 @@
 		<!-- // How to Apply // -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-8">
-				<h4>How to Apply</h4>
+				<h3 class="opp-detail">How to Apply</h3>
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
@@ -448,7 +454,7 @@
 		<!-- // Proposal Evaluation Criteria // -->
 		<div class="row">
 			<div class="col-xs-12">
-				<h4>Proposal Evaluation Criteria</h4>
+				<h3 class="opp-detail">Proposal Evaluation Criteria</h3>
 				<p>Here's how your proposal will be scored:</p>
 
 				<uib-accordion>
@@ -482,16 +488,29 @@
 				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
-							<i class="fa fa-comments"></i> &nbsp;
-							Coding Challenge and Team Scenario <span class="pull-right">50 points</span>
+							<i class="fa fa-code"></i> &nbsp;
+							Code Challenge<span class="pull-right">25 points</span>
 						</uib-accordion-heading>
 						<div class="row">
-							<p>Depending on how your team scores on capabilities and skills and the questionnaire, your team may be screened in for an interview.</p>
+							<p>Depending upon your proposal score, your team may be screened in for a Code Challenge.</p>
 							<p>Either way, you'll be notified promptly whether your team is in the running.</p>
-							<p>If your team screens in, they'll be asked to demonstrate their teamwork, capabilities and skills.</p>
-							<p>First, your technical resources will be required to complete a coding challenge.</p>
-							<p>Next, the entire team will be invited to participate in a 3-hour interview. The team will be presented with a scenario where they can demonstrate their capabilities and how they work as a team under pressure. This will be followed by questions of your team from the evaluation panel, including follow up questions on both the scenario and coding challenge.</p>
-							<p>Interviews can be facilitated in person or by video conference.</p>
+							<p>A maximum of 4 teams will be invited to complete the Code Challenge. Teams will be given 5 (five) business days to complete the Code Challenge in GitHub.</p>
+							<p>The challenge will be evaluated by two independent evaluators and a static code evaluator. Those who complete the Code Challenge and meet the evaluation requirements will then proceed to the In-person Scenario.</p>
+						</div>
+					</div>
+				</uib-accordion>
+
+				<uib-accordion>
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-comments"></i> &nbsp;
+							In-Person Scenario<span class="pull-right">25 points</span>
+						</uib-accordion-heading>
+						<div class="row">
+							<p>Teams that successfully complete the Code Challenge will be invited to participate in a 3-hour In-Person Scenario.</p>
+							<p>At the start of the meeting, your team will be presented with a scenario where they can demonstrate their capabilities and how they work as a team under pressure.</p>
+							<p>This will be followed by questions of your team from the evaluation panel, including follow up questions on both the Scenario and Code Challenge.</p>
+							<p>Your entire team should participate in the In-Person Scenario. This can be arranged either in person or by video conference.</p>
 						</div>
 					</div>
 				</uib-accordion>
@@ -512,7 +531,7 @@
 				</uib-accordion>
 
 				<div class="panel-default panel-body">
-					<h4 style="margin-top: 0">Total<span class="pull-right">/100 points</span></h4>
+					<h5 style="margin-top: 0">Total<span class="pull-right">/100 points</span></h5>
 				</div>
 			</div>
 		</div>
