@@ -285,129 +285,116 @@
 
 		<div class="row">
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
-<!-- // BA-175 // Chris: Please wire so that Phases only show up if that phase is included in the opportunity -->
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<uib-accordion class="panel-default">
-							<div uib-accordion-group class="panel-default">
-								<uib-accordion-heading>
-									<i class="fa fa-map"></i> Inception
-								</uib-accordion-heading>
-								<div>During Inception, you'll take our business goals and discovery research and help us explore the potential value that a new digital product can bring. Then we'll work together to create the initial backlog for a Proof of Concept or Minimum Viable Product.</div>
-								<hr>
-								<div>
-					    			<i class="fa fa-cubes"></i>
-					    			<span class="strong">Deliverables</span><br>
-					    			At the end of Inception, we should have happy stakeholders with a shared vision and a product backlog for a Proof of Concept, and maybe some updates to our Product Roadmap.
-						    		</ul>
-					    		</div>
-							</div>
-						</uib-accordion>
-						<h5>Schedule</h5>
-						<div>
-							<i class="fa fa-calendar"></i> &nbsp;
-							<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
-							to
-							<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
-						</div>
+				<uib-accordion class="panel-default">
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-map"></i> Inception
+						</uib-accordion-heading>
+						<div>During Inception, you'll take our business goals and discovery research and help us explore the potential value that a new digital product can bring. Then we'll work together to create the initial backlog for a Proof of Concept or Minimum Viable Product.</div>
 						<hr>
-						<h5>Required Capabilities&#42;</h5>
-						<table class="table capabilities-list">
-							<tbody>
-								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
-									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-								</tr>
-							</tbody>
-						</table>
+						<div>
+			    			<i class="fa fa-cubes"></i>
+			    			<span class="strong">Deliverables</span><br>
+			    			At the end of Inception, we should have happy stakeholders with a shared vision and a product backlog for a Proof of Concept, and maybe some updates to our Product Roadmap.
+				    		</ul>
+			    		</div>
 					</div>
+				</uib-accordion>
+				<h5>Schedule</h5>
+				<div>
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
 				</div>
+				<hr>
+				<h5>Required Capabilities&#42;</h5>
+				<table class="table capabilities-list">
+					<tbody>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<uib-accordion>
-							<div uib-accordion-group class="panel-default">
-								<uib-accordion-heading>
-									<i class="fa fa-rocket"></i> Proof of Concept
-								</uib-accordion-heading>
-								<div>In the Proof of Concept phase, we'll make our value propositions tangible and validate them. You'll code the core features we scoped out in Inception, working towards our Alpha release. By the end of this phase, we should have a plan for what it will take to fully implement and maintain the product long-term.</div>
-								<hr>
-								<div>
-						    		<i class="fa fa-cubes"></i>
-						    		<span class="strong">Deliverables</span><br>
-						    		At the end of Proof of Concept, we should have:
-						    		<ul>
-						    			<li>Alpha release of the product</li>
-						    			<li>A build/buy/licence decision</li>
-						    			<li>A product roadmap</li>
-						    			<li>A resourcing plan for Implementation</li>
-						    		</ul>
-					    		</div>
-							</div>
-						</uib-accordion>
-						<h5>Schedule</h5>
-						<div>
-							<i class="fa fa-calendar"></i> &nbsp;
-							<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
-							to
-							<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
-						</div>
+				<uib-accordion>
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-rocket"></i> Proof of Concept
+						</uib-accordion-heading>
+						<div>In the Proof of Concept phase, we'll make our value propositions tangible and validate them. You'll code the core features we scoped out in Inception, working towards our Alpha release. By the end of this phase, we should have a plan for what it will take to fully implement and maintain the product long-term.</div>
 						<hr>
-						<h5>Required Capabilities&#42;</h5>
-						<table class="table capabilities-list">
-							<tbody>
-								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
-									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-								</tr>
-							</tbody>
-						</table>
+						<div>
+				    		<i class="fa fa-cubes"></i>
+				    		<span class="strong">Deliverables</span><br>
+				    		At the end of Proof of Concept, we should have:
+				    		<ul>
+				    			<li>Alpha release of the product</li>
+				    			<li>A build/buy/licence decision</li>
+				    			<li>A product roadmap</li>
+				    			<li>A resourcing plan for Implementation</li>
+				    		</ul>
+			    		</div>
 					</div>
+				</uib-accordion>
+				<h5>Schedule</h5>
+				<div>
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
 				</div>
+				<hr>
+				<h5>Required Capabilities&#42;</h5>
+				<table class="table capabilities-list">
+					<tbody>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
-				<div class="panel panel-default">
-					<div class="panel-body">
-						<uib-accordion>
-							<div uib-accordion-group class="panel-default">
-								<uib-accordion-heading>
-									<i class="fa fa-gears"></i> Implementation
-								</uib-accordion-heading>
-								<div>If we proceed with your team into Implementation, we'll be fully invested in our new product and have a clear intention to continuously improve it. Now we'll need your expertise to carefully architect and automate the delivery pipeline for stability and continuous deployment.</div>
-								<hr>
-								<div>
-						    		<i class="fa fa-cubes"></i>
-						    		<span class="strong">Deliverables</span><br>
-						    		<ul>
-						    			<li>Functional components in the product roadmap</li>
-						    		</ul>
-					    		</div>
-							</div>
-						</uib-accordion>
-						<h5>Schedule</h5>
-						<div>
-							<i class="fa fa-calendar"></i> &nbsp;
-							<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
-							to
-							<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
-						</div>
+				<uib-accordion>
+					<div uib-accordion-group class="panel-default">
+						<uib-accordion-heading>
+							<i class="fa fa-gears"></i> Implementation
+						</uib-accordion-heading>
+						<div>If we proceed with your team into Implementation, we'll be fully invested in our new product and have a clear intention to continuously improve it. Now we'll need your expertise to carefully architect and automate the delivery pipeline for stability and continuous deployment.</div>
 						<hr>
-						<h5>Required Capabilities&#42;</h5>
-						<table class="table capabilities-list">
-							<tbody>
-								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
-									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-								</tr>
-							</tbody>
-						</table>
+						<div>
+				    		<i class="fa fa-cubes"></i>
+				    		<span class="strong">Deliverables</span><br>
+				    		<ul>
+				    			<li>Functional components in the product roadmap</li>
+				    		</ul>
+			    		</div>
 					</div>
+				</uib-accordion>
+				<h5>Schedule</h5>
+				<div>
+					<i class="fa fa-calendar"></i> &nbsp;
+					<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+					to
+					<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
 				</div>
+				<hr>
+				<h5>Required Capabilities&#42;</h5>
+				<table class="table capabilities-list">
+					<tbody>
+						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
+							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
-		<div class="alert alert-info">
+		<div>
 			&#42;Capabilities are claimed by individuals in their personal profile. View all our capability definitions <a href="/capabilities" target="_blank">here</a>.
 		</div>
 
