@@ -22,7 +22,7 @@
 	</div>
 </div>
 
-<section class="edit-form-background" style="min-height: 750px; padding: 10px 70px;" role="main">
+<section class="edit-form-background" style="min-height: 750px" role="main">
 
 	<form id="proposalform" name="ppp.form.proposalform" class="form swu-proposal" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
 
@@ -34,17 +34,6 @@
 			</div>
 
 			<uib-tabset active class="edit-form-tabs">
-
-				<uib-tab index="0">
-					<uib-tab-heading>
-						Instructions
-					</uib-tab-heading>
-					<div class="row">
-						<div class="col-xs-12">
-							<h5>Insert plain language overview of the entire proposal and evaluation process on this tab...</h5>
-						</div>
-					</div>
-				</uib-tab>
 
 				<uib-tab index="1">
 					<uib-tab-heading>
@@ -59,12 +48,12 @@
 					-->
 					<br>
 
-					<a class="btn btn-lg btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Request for Proposals</a>
-					<br><br><br>
+					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Request for Proposals</a>
+					<br><br>
 					<label class="checkbox-inline checkbox-alone">
 						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the terms of the Request for Proposals.
 					</label>
-
+					<br><br>
 
 						<!-- // No point showing business info here if user can't edit it from here // -->
 						<!--
@@ -99,13 +88,14 @@
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Selecting Your Team
+								<i class="fa fa-lg fa-info-circle"></i> How your team will be evaluated
 							</uib-accordion-heading>
 							<div class="row">
+								<p>The team members you put forward must collectively possess all the <span class="strong">required capabilities</span> and be available for the time periods stated for each phase.</p>
+								<p>You may also see a list of <span class="strong">preferred skills</span>. The more of these your team has, the higher they'll score.</p>
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									<strong>First Gate: Technical skills screening</strong><br><br>
 									The Province will evaluate and rank proposals based on the technical skills of Resources claimed by Proponents against the requirements set forth in tab @@@.
 									<br><br>
@@ -115,19 +105,17 @@
 						</div>
 					</uib-accordion>
 					<div class="row">
-						<div class="col-xs-12 col-sm-4">
+						<div class="col-xs-12 col-sm-4" ng-if="ppp.oinp.isInception">
 							<h5 class="text-center"><i class="fa fa-map"></i> Inception</h5>
 
-							<div ng-if="!ppp.oinp.isInception" class="text-center">
-								This phase is not required
-							</div>
+							
 
-							<div ng-if="ppp.oinp.isInception" class="text-center">
+							<div class="strong text-center">
 								<i class="fa fa-calendar"></i> &nbsp;
 								{{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}
 							</div>
 							<br>
-							<div class="panel panel-primary" ng-if="ppp.oinp.isInception">
+							<div class="panel panel-primary">
 
 								<div class="panel-heading">
 									Click on member(s) to add them to team:
@@ -144,7 +132,7 @@
 								</div>
 							</div>
 
-							<div ng-if="ppp.oinp.isInception">
+							<div >
 								<h5>Required Capabilities</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -156,7 +144,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<hr>
+								
 								<h5>Preferred Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -169,20 +157,17 @@
 								</table>
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4">
+						<div class="col-xs-12 col-sm-4" ng-if="ppp.oprp.isPrototype">
 							<h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept</h5>
 
-							<div ng-if="!ppp.oprp.isPrototype" class="text-center">
-								This phase is not required
-							</div>
-
-							<div ng-if="ppp.oprp.isPrototype" class="text-center">
+							
+							<div class="strong text-center">
 								<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}
 							</div>
 
 							<br>
 
-							<div class="panel panel-primary" ng-if="ppp.oprp.isPrototype">
+							<div class="panel panel-primary">
 								<div class="panel-heading">
 									Click on member(s) to add them to team:
 								</div>
@@ -197,7 +182,7 @@
 								</div>
 							</div>
 
-							<div ng-if="ppp.oprp.isPrototype">
+							<div>
 								<h5>Required Capabilities</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -209,7 +194,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<hr>
+								
 								<h5>Preferred Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -222,20 +207,18 @@
 								</table>
 							</div>
 						</div>
-						<div class="col-xs-12 col-sm-4">
+						<div class="col-xs-12 col-sm-4" ng-if="ppp.oimp.isImplementation">
 							<h5 class="text-center"><i class="fa fa-gears"></i> Implementation</h5>
 
-							<div ng-if="!ppp.oimp.isImplementation" class="text-center">
-								This phase is not required
-							</div>
+							
 
-							<div ng-if="ppp.oimp.isImplementation" class="text-center">
+							<div class="strong text-center">
 								<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}
 							</div>
 
 							<br>
 
-							<div class="panel panel-primary" ng-if="ppp.oimp.isImplementation">
+							<div class="panel panel-primary">
 								<div class="panel-heading">
 									Click on member(s) to add them to team:
 								</div>
@@ -249,7 +232,7 @@
 								</div>
 							</div>
 
-							<div ng-if="ppp.oimp.isImplementation">
+							<div>
 								<h5>Required Capabilities</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -261,7 +244,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<hr>
+
 								<h5>Preferred Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
@@ -284,13 +267,15 @@
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Providing a price for your team
+								<i class="fa fa-lg fa-info-circle"></i> How pricing will be evaluated
 							</uib-accordion-heading>
 							<div class="row">
+								<p>In your proposal, for each phase submit a fixed price for your team to meet the deliverables in the time period. Depending upon the capabilities and phase, some of your team members will be needed full-time. </p>
+								<p>There are incentives in the contract to deliver early for a phase.</p>
+								<p>Your pricing will be evaluated based on a formula that compares your bid in relation to the lowest and highest bids.</p>
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									<strong>Fourth Gate: Price</strong><br><br>
 									Prices quoted will be taken to mean and deemed to be:
 									<ol type="i">
@@ -316,12 +301,12 @@
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-map"></i> &nbsp;Inception</h5>
+							<h5><i class="fa fa-map"></i> Inception</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oinp.isInception">This phase is not required
 							</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+							<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
 
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oinp.isInception">
@@ -343,13 +328,12 @@
 						</div>
 
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-rocket"></i> &nbsp;Proof of Concept</h5>
+							<h5><i class="fa fa-rocket"></i> Proof of Concept</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oprp.isPrototype">This phase is not required
 							</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> &nbsp;
-							{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
+							<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
 
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oprp.isPrototype">
@@ -371,11 +355,11 @@
 						</div>
 
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-gears"></i> &nbsp;Implementation</h5>
+							<h5><i class="fa fa-gears"></i> Implementation</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> &nbsp; {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
+							<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
 
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oimp.isImplementation">
@@ -412,13 +396,13 @@
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Responding to the questionnaire
+								<i class="fa fa-lg fa-info-circle"></i> How your responses to the questionnaire will be evaluated
 							</uib-accordion-heading>
 							<div class="row">
+								<p>The evaluation committee will rank companies' responses to the questionnaire from strongest to weakest, <strong>without being able to see the identity of the company</strong>.</p>
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									<strong>Second Gate: Team-based questions</strong><br><br>
 									The Province will then rank the Proponent responses to the Team-based questions contained in tab @@@ that are specific to the Opportunity and are intended to (i) demonstrate a Proponent’s Resource experience working as a team; (ii) a Proponent’s experience with Agile software development; and (iii) demonstrate a Proponent’s experience working on a similar Product, with a similar scope and technical background.  The top four ranked Proponents (the “Shortlisted Proponents”) will then proceed to the Third Gate of the RFP process.
 								</div>
@@ -428,6 +412,9 @@
 					<br>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[0].question}}</label>
+						&nbsp;&nbsp;
+						<span class="input-help-source" ng-click="sq0 = !sq0"><i class="fa fa-lg fa-info-circle"></i> How to answer this question</span> 
+						<div class="input-help alert alert-info" ng-show="sq0">Here's what we want you to cover in your answer to this question...</div>
 						<textarea
 							name="q1"
 							id="q1"
@@ -437,6 +424,9 @@
 					</div>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[1].question}}</label>
+						&nbsp;&nbsp;
+						<span class="input-help-source" ng-click="sq1 = !sq1"><i class="fa fa-lg fa-info-circle"></i> How to answer this question</span> 
+						<div class="input-help alert alert-info" ng-show="sq1">Here's what we want you to cover in your answer to this question...</div>
 						<textarea
 							name="q2"
 							id="q1"
@@ -446,6 +436,9 @@
 					</div>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[2].question}}</label>
+						&nbsp;&nbsp;
+						<span class="input-help-source" ng-click="sq2 = !sq2"><i class="fa fa-lg fa-info-circle"></i> How to answer this question</span> 
+						<div class="input-help alert alert-info" ng-show="sq2">Here's what we want you to cover in your answer to this question...</div>
 						<textarea
 							name="q3"
 							id="q1"
@@ -455,6 +448,9 @@
 					</div>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[3].question}}</label>
+						&nbsp;&nbsp;
+						<span class="input-help-source" ng-click="sq3 = !sq3"><i class="fa fa-lg fa-info-circle"></i> How to answer this question</span> 
+						<div class="input-help alert alert-info" ng-show="sq3">Here's what we want you to cover in your answer to this question...</div>
 						<textarea
 							name="q4"
 							id="q1"
@@ -464,6 +460,9 @@
 					</div>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[4].question}}</label>
+						&nbsp;&nbsp;
+						<span class="input-help-source" ng-click="sq4 = !sq4"><i class="fa fa-lg fa-info-circle"></i> How to answer this question</span> 
+						<div class="input-help alert alert-info" ng-show="sq4">Here's what we want you to cover in your answer to this question...</div>
 						<textarea
 							name="q5"
 							id="q1"
@@ -481,13 +480,12 @@
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Providing references
+								<i class="fa fa-lg fa-info-circle"></i> How your references will be evaluated
 							</uib-accordion-heading>
 							<div class="row">
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									The Province may require Proponents to support their claims of over-all experience by supplying references who can verify the quality of work provided specific to the relevant experience of the Proponent.  References from the Proponent’s own organization or from named subcontractors are not acceptable for the Proponent.<br><br>
 									The Province may in its sole discretion, but is under no obligation to, check Proponent references without first notifying the Proponent.  The Province reserves the right to seek additional references independent of those supplied by the Proponent, including internal references in relation to the Proponent’s performance under any past or current contracts with the Province or other verifications as are deemed necessary by it to verify the information contained in the proposal and to confirm the suitability of the Proponent.
 									<br><br>
@@ -498,11 +496,9 @@
 					</uib-accordion>
 					<div class="row">
 						<div class="col-xs-12">
-							<h5>Insert plain language call to action about what we want the user to do on this tab...</h5>
+							<h5>Please upload a document with 3 references. Include name, position, and contact information.</h5>
 							<br><br>
-							<a href="" class="btn btn-primary"><i class="fa fa-download"></i> Download References Template</a>
-							<br><br><br>
-							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> Upload your references file</a>
+							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-upload"></i> Upload your references document</a>
 						
 							<table class="table table-striped">
 								<tr ng-repeat="file in ppp.proposal.attachments">
@@ -524,18 +520,26 @@
 
 				<uib-tab index="6">
 					<uib-tab-heading>
-						The Interview
+						Code Challenge &amp; In-Person Scenario
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - About the interview process
+								<i class="fa fa-lg fa-info-circle"></i> About the Code Challenge &amp; In-Person Scenario
 							</uib-accordion-heading>
 							<div class="row">
+								<h5 class="opp-detail">Code Challenge</h5>
+								<p>Depending upon your proposal score, your team may be screened in for a Code Challenge.</p>
+								<p>A maximum of 4 teams will be invited to complete the Code Challenge. Teams will be given 5 (five) business days to complete the Code Challenge in GitHub.</p>
+								<p>The challenge will be evaluated by two independent evaluators and a static code evaluator. Those who complete the Code Challenge and meet the evaluation requirements will then proceed to the In-person Scenario.</p>
+								<h5 class="opp-detail">In-Person Scenario</h5>
+								<p>Teams that successfully complete the Code Challenge will be invited to participate in a 3-hour In-Person Scenario.</p>
+								<p>At the start of the meeting, your team will be presented with a scenario where they can demonstrate their capabilities and how they work as a team under pressure.</p>
+								<p>This will be followed by questions of your team from the evaluation panel, including follow up questions on both the Scenario and Code Challenge.</p>
+								<p>Your entire team should participate in the In-Person Scenario. This can be arranged either in person or by video conference.</p>
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									<strong>Third Gate: Code Challenge and in-person scenario</strong><br>
 									Following the initial evaluation in the First and Second Gate, the Product Manager for the Opportunity will select and notify Proponents, based on the top four scores ‌from the First and Second Gate, to move forward to the Code Challenge and in-person scenario. Proponents will be provided a Code Challenge with a deadline provided for submission of the completed work. The Code Challenge will be made available on GitHub and remain open for 5 business days. The submitted code will be reviewed by two independent evaluators and a static code evaluator, in accordance with the Contract included here.
 									<br><br>
@@ -546,9 +550,10 @@
 					</uib-accordion>
 					<div class="row">
 						<div class="col-xs-12">
-							<h5>Describe the Interview process in plain language here.....</h5>
+							<h5>After your submit your proposal and the closing deadline passes, your team and questionnaire responses will be evaluated. Depending upon your score, your team may be screened in to proceed to the next phases of the procurement process.</h5>
 						</div>
 					</div>
+					<br><br><br><br>
 				</uib-tab>
 
 				<!-- // New Review & Submit tab // -->
@@ -559,13 +564,12 @@
 					<uib-accordion>
 						<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> <strong>Help</strong> - Submitting your proposal
+								<i class="fa fa-lg fa-info-circle"></i> How your proposal will be evaluated
 							</uib-accordion-heading>
 							<div class="row">
 								<hr>
-								<div class="gray-light">Relevant sections from the RFP <i class="fa fa-file-o"></i></div>
-								<br>
 								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
 									<strong>Evaluation – General Terms</strong><br>
 									<ol type="a">
 										<li>Evaluation of proposals will be by a committee formed by the Province and may include the Product Manager, employees and contractors of the Province and other appropriate participants and stakeholders.</li>
@@ -592,30 +596,42 @@
 					<h5>
 						Here's a summary of your complete proposal. Make sure it all looks right before you submit. Good luck!
 					</h5>
+					
 					<div class="row">
 						<div class="panel panel-primary">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-12">
-										<h4>Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h4>
+									<div class="col-xs-12 col-sm-6">
+										<h3 class="opp-detail">Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h3>
 										<p><strong>{{ppp.org.name}}</strong><br>
 										{{ppp.org.fullAddress}}<br>
 										Contact: {{ppp.org.contactName}}<br>
 										{{ppp.org.contactPhone}}<br>
 										{{ppp.org.contactEmail}}</p>
 									</div>
+									<div class="col-xs-12 col-sm-6" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
+										<div class="alert alert-danger">
+											<i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
+											You won't be able to submit this proposal until you:
+											<ul>
+												<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
+												<li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in each phase</li>
+												<li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
+											</ul>
+										</div>
+									</div>
 								</div>
 								<hr>
 								<div class="row">
 									<div class="col-xs-12">
-										<h4>Team</h4>
+										<h3 class="opp-detail">Team &amp; Price</h3>
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-xs-12 col-sm-4 text-center">
+									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oinp.isInception">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p><i class="fa fa-map"></i> &nbsp;Inception Phase</p>
+												<p class="strong"><i class="fa fa-map"></i> &nbsp;Inception Phase</p>
 												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;{{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
@@ -623,15 +639,15 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Price: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
+												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
 
-									<div class="col-xs-12 col-sm-4 text-center">
+									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oprp.isPrototype">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
+												<p class="strong"><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
 												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;
 												{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
 												<hr>
@@ -640,15 +656,15 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Price: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
+												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
 
-									<div class="col-xs-12 col-sm-4 text-center">
+									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oimp.isImplementation">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p><i class="fa fa-gears"></i> &nbsp;Implementation Phase</p>
+												<p class="strong"><i class="fa fa-gears"></i> &nbsp;Implementation Phase</p>
 												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;
 												{{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
 												<hr>
@@ -657,15 +673,15 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Price: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
+												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-sm-4 pull-right">
-										<h4 style="text-align: center;"><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+									<div class="col-xs-12">
+										<h4><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
 									</div>
 								</div>
 
@@ -673,29 +689,56 @@
 
 								<div class="row">
 									<div class="col-xs-12">
-										<h4>Questionnaire Responses</h4>
-										<p><strong>{{ppp.proposal.questions[0].question}}</strong><br>
-										{{ppp.proposal.questions[0].response}}
-										</p>
-										<hr>
-										<p><strong>{{ppp.proposal.questions[1].question}}</strong><br>
-										{{ppp.proposal.questions[1].response}}
-										</p>
-										<hr>
-										<p><strong>{{ppp.proposal.questions[2].question}}</strong><br>
-										{{ppp.proposal.questions[2].response}}
-										</p>
-										<hr>
-										<p><strong>{{ppp.proposal.questions[3].question}}</strong><br>
-										{{ppp.proposal.questions[3].response}}
-										</p>
-										<hr>
-										<p><strong>{{ppp.proposal.questions[4].question}}</strong><br>
-										{{ppp.proposal.questions[4].response}}
-										</p>
+										<h3 class="opp-detail">Questionnaire Responses</h3>	
+										<uib-accordion>
+											<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+												<uib-accordion-heading>
+													1. {{ppp.proposal.questions[0].question}}
+												</uib-accordion-heading>
+												<div class="row">
+													<p>{{ppp.proposal.questions[0].response}}</p>
+												</div>
+											</div>
+										</uib-accordion>
+										<uib-accordion>
+											<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+												<uib-accordion-heading>
+													2. {{ppp.proposal.questions[1].question}}
+												</uib-accordion-heading>
+												<div class="row">{{ppp.proposal.questions[1].response}}
+												</div>
+											</div>
+										</uib-accordion>
+										<uib-accordion>
+											<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+												<uib-accordion-heading>
+													3. {{ppp.proposal.questions[2].question}}
+												</uib-accordion-heading>
+												<div class="row">{{ppp.proposal.questions[2].response}}
+												</div>
+											</div>
+										</uib-accordion>
+										<uib-accordion>
+											<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+												<uib-accordion-heading>
+													4. {{ppp.proposal.questions[3].question}}
+												</uib-accordion-heading>
+												<div class="row">{{ppp.proposal.questions[3].response}}
+												</div>
+											</div>
+										</uib-accordion>
+										<uib-accordion>
+											<div uib-accordion-group class="panel-default" style="border: none; box-shadow: none;">
+												<uib-accordion-heading>
+													5. {{ppp.proposal.questions[4].question}}
+												</uib-accordion-heading>
+												<div class="row">{{ppp.proposal.questions[4].response}}
+												</div>
+											</div>
+										</uib-accordion>
 									</div>
 								</div>
-
+								<br>
 								<div class="row">
 									<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
 										<div class="panel panel-success">
@@ -705,14 +748,6 @@
 												<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
 											</div>
 										</div>
-									</div>
-									<div class="col-xs-12 pull-right" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
-										You cannot yet submit your proposal. You must first:
-										<ul>
-											<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the terms of the opportunity</li>
-											<li ng-if="!ppp.isMetAllCapabilities">Build a team that meets all qualification requirements for each phase</li>
-											<li ng-if="!ppp.orgHasMetRFQ">Your Organization must meet the minimum requirements of the RFQ <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">(check here)</a></li>
-										</ul>
 									</div>
 								</div>
 							</div>
