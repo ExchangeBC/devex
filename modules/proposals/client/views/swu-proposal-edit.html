@@ -607,17 +607,6 @@
 										<li>Proposals will not be reviewed unless the Proponent meets the mandatory criteria for the RFP referenced below.</li>
 										<li>The Province’s intent is to enter into a Contract with the Proponent who has met all minimum scores (if any) and who has the highest overall ranking.</li>
 									</ol>
-									<strong>Mandatory Criteria</strong><br>
-									The Mandatory Criteria for this RFP is divided into (i) procedural; and (ii) Team requirements, as per the following table.  Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.
-									<br><br>
-									<strong>Mandatory Criteria</strong>
-									<ul>
-										<li>The proposal must be received at the Closing Location before the Closing Time.</li>
-										<li>The proposal must be in English.</li>
-										<li>The proposal must be submitted using the submission method described in section 1.3 of the RFP Terms and Conditions in tab 2@@@.</li>
-										<li>For each the Phases and Phase Windows specified in tab @@@, the Proponent must identify each of its proposed Resources, in accordance with the specifications set forth in tab @@@ as to required number of personnel, their required Capabilities and, if applicable, whether the Resource can fulfill a Full-Time commitment.</li>
-										<li>The Proponent must meet the requirements for each Phase indicated in tabs 3, 4, and 5@@@. Proponents must also indicate that they will provide the required Resources within the time frames indicated for each of the Inception, Prototype and Implementation Phases of the Opportunity.</li>
-									</ul>
 								</div>
 							</div>
 						</div>
@@ -627,7 +616,7 @@
 					</h5>
 
 					<div class="row">
-						<div class="panel panel-primary">
+						<div class="panel panel-primary" style="border-width: 3px; border-radius: 0;">
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
@@ -768,16 +757,73 @@
 									</div>
 								</div>
 								<br>
-								<div class="row">
-									<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
-										<div class="panel panel-success">
-											<div class="panel-body">
-												<p class="small">Submission of a proposal indicates your company's acceptance of all the terms and conditions set out in the RFP, its appendices and its addenda. These terms and conditions also include any terms and conditions included on the Opportunity's webpage and the tabs of your Proposal.</p>
-												<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
-												<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
-											</div>
-										</div>
-									</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-8">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<h5 class="small">Mandatory Criteria</h5>
+									<p class="small">The proposal must be received at the Closing Location before the Closing Time.</p>
+									<p class="small">The proposal must be in English.</p>
+									<p class="small">The proposal must be submitted using the submission method described in section 1.3 of the RFP and on the Opportunity page on the Review &amp; Submit tab.</p>
+									<p class="small">For each of the Phases and Phase Windows specified on the Select Team tab, the Proponent must identify each of its proposed Resources (a minimum of two for each Phase), in accordance with the specifications set forth on the Select Team tab as to required number of personnel, their required Capabilities and, if applicable, whether the Resource can fulfill a Full-Time commitment.</p>
+									<p class="small">The automated BC Developer’s Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.</p>
+									<h5 class="small">Evaluation Criteria</h5>
+									<table class="table table-bordered small">
+										<tr>
+											<th></th>
+											<th>Score Range</th>
+											<th>Weightings</th>
+											<th>Minimum Score</th>	
+										</tr>
+										<tr>
+											<td>Technical Skills</td>
+											<td>0 - 20</td>
+											<td>20&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>Questionnaire</td>
+											<td>0 - 20</td>
+											<td>20&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>Code Challenge</td>
+											<td>0 - 25</td>
+											<td>25&#37;</td>
+											<td>20</td>
+										</tr>
+										<tr>
+											<td>Team Scenario</td>
+											<td>0 - 25</td>
+											<td>25&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>Price</td>
+											<td>0 - 10</td>
+											<td>10&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="strong">TOTAL</td>
+											<td class="strong">100</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
+							<div class="panel panel-success">
+								<div class="panel-body">
+									<p class="small">Submission of a proposal indicates your company's acceptance of all the terms and conditions set out in the RFP, its appendices and its addenda. These terms and conditions also include any terms and conditions included on the Opportunity's webpage and the tabs of your Proposal.</p>
+									<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
+									<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
 								</div>
 							</div>
 						</div>
