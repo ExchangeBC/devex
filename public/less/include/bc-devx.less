@@ -616,6 +616,7 @@ section.edit-form-background {
 
 section.detail-page-background {
   background: @gray-lighter;
+  padding-bottom: 30px;
 }
 
 section.list-page {
@@ -1818,6 +1819,13 @@ form-title {
   margin: .5em 0;
   border: 1px solid;
   border-color: #e3e3e3;
+   > .card-header {
+    border-bottom: none;
+    height: 20px;
+    > .btn {
+      margin: -4px -15px;
+    }
+  }
   > img.card-img-left {
     height: 50px;
     width: 50px;
@@ -1828,6 +1836,28 @@ form-title {
   }
   > .card-body {
   padding: .25em 0 0;
+  }
+}
+
+.card-user-transparent {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin: .5em 0;
+  > img.card-img-left {
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  > .card-body {
+    padding: .25em 0 0;
+    > .btn-remove {
+      margin-top: 2px;
+    }
+    > .card-title {
+      margin: 10px 0;
+    }
   }
 }
 

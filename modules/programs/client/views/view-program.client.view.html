@@ -8,19 +8,21 @@
 
 <section class="detail-page-background">
 
-	<div class="container">
-
+	<div class="container detail-view">
 		<div class="row">
 			<div class="col-xs-12 text-right">
-				<button type="button" class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" uib-tooltip="Edit this page"><i class="fa fa-pencil"></i> EDIT
-				</button>
+			<!-- // Admin Control Buttons // -->
+				<!-- // Edit // -->
+				<button type="button" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
+				<!-- // Unpublish // -->
+				<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-text-only" ng-click="vm.publish(false)" title="Unpublish program">
+				<i class="fa fa-lg fa-ban"></i></a>
+				<!-- // Publish // -->
+				<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this program page"><i class="fa fa-bullhorn"></i> Publish</a>
+			<!-- // If user is not a member, request membership // -->
+				<button type="button" class="btn btn-lg btn-text-only" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-lg fa-user"></i></button>					
 			</div>
 		</div>
-
-	</div>
-
-	<div class="container container-detail-view">
-		
 		<div class="row">
 			<div class="col-xs-12 text-center">
 				<img style="max-height: 50px;" src="/{{vm.program.logo}}"/>
@@ -29,8 +31,8 @@
 
 		<div class="row">
 			<div class="col-xs-12 text-center">
-				<h1 ng-bind="vm.program.title"></h1>
-				<p class="subtitle" ng-bind="vm.program.short"></p>
+				<h1 class="opp-detail" ng-bind="vm.program.title"></h1>
+				<p ng-bind="vm.program.short"></p>
 				<h4 ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></h4>
 			</div>
 		</div>
@@ -43,15 +45,15 @@
 	</div>
 
 	<div class="container">
-		
-		<core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Program Members"></core-member-list>
+		<core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Members"></core-member-list>
 		<br>
 		<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.canEdit"></core-member-requests>
 		<br>
 		<project-list program="vm.program" title="Projects" context="program"></project-list>
+	<!-- // Hiding Opportunity list on this page because there is formatting funkiness going on I don't know how to fix right now // -->
+	<!--
 		<br>
-		<opportunity-list program="vm.program" context="program" title="Program Opportunities"></opportunity-list>
-	
+		<opportunity-list program="vm.program" title="Opportunities" context="program"></opportunity-list>
 	</div>
-
+	-->
 </section>
