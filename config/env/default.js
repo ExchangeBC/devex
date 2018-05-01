@@ -46,7 +46,7 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'swu1': {
-			path: 'public/code-with-us-terms-2018-01-23.pdf',
+			path: 'public/sprint-with-us-terms-2018-05-01.pdf',
 			name: 'sprint-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
