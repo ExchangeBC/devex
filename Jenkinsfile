@@ -88,7 +88,7 @@ node('maven') {
 	    echo "Building..."
 	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
             sleep 5
-	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
+	    // openshiftVerifyBuild bldCfg: BUILDCFG_NAME
             echo ">>> Get Image Hash"
             IMAGE_HASH = sh (
               script: """oc get istag ${IMAGE_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
