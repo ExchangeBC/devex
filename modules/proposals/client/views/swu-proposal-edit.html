@@ -418,7 +418,7 @@
 						<label>{{ppp.proposal.questions[0].question}}</label>
 						&nbsp;&nbsp;
 						<span class="input-help-source" ng-click="sq0 = !sq0"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq0">click to hide details</span><span ng-if="!sq0">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq0">Tell us about your experience to demonstrate your knowledge and skill with: 
+						<div class="input-help alert alert-info" ng-show="sq0">Tell us about your experience to demonstrate your knowledge and skill with:
 							<ul>
 								<li>Performance metrics</li>
 								<li>The role of measurement in software development</li>
@@ -501,10 +501,48 @@
 					</div>
 				</uib-tab>
 
-				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
-				<uib-tab index="5" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
+				<uib-tab index="5">
 					<uib-tab-heading>
-						5. References
+						5. Code Challenge &amp; Team Scenario
+					</uib-tab-heading>
+					<uib-accordion>
+						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
+							<uib-accordion-heading>
+								<i class="fa fa-lg fa-info-circle"></i> About the Code Challenge &amp; Team Scenario <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+							</uib-accordion-heading>
+							<div class="row">
+								<h5 class="opp-detail">Code Challenge</h5>
+								<p>Depending upon your proposal score, your team may be screened in for a Code Challenge.</p>
+								<p>A maximum of 4 teams will be invited to complete the Code Challenge. Teams will be given 5 (five) business days to complete the Code Challenge in GitHub.</p>
+								<p>The challenge will be evaluated by two independent evaluators and a static code evaluator. Those who complete the Code Challenge and meet the evaluation requirements will then proceed to the Team Scenario.</p>
+								<h5 class="opp-detail">Team Scenario</h5>
+								<p>Teams that successfully complete the Code Challenge will be invited to participate in a 3-hour Team Scenario.</p>
+								<p>At the start of the meeting, your team will be presented with a scenario where they can demonstrate their capabilities and how they work as a team under pressure.</p>
+								<p>This will be followed by questions of your team from the evaluation panel, including follow up questions on both the Scenario and Code Challenge.</p>
+								<p>Your entire team should participate in the Team Scenario. This can be arranged either in person or by video conference.</p>
+								<hr>
+								<div style="font-size: .85em;">
+									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
+									<strong>Third Gate: Code Challenge and Team Scenario</strong><br>
+									Following the initial evaluation in the First and Second Gate, the Product Manager for the Opportunity will select and notify Proponents, based on the top four scores ‌from the First and Second Gate, to move forward to the Code Challenge and Team Scenario. Proponents will be provided a Code Challenge with a deadline provided for submission of the completed work. The Code Challenge will be made available on GitHub and remain open for 5 business days. The submitted code will be reviewed by two independent evaluators and a static code evaluator, in accordance with the Contract included here.
+									<br><br>
+									Following the Code Challenge, an Team Scenario will be held where the Proponents Team will demonstrate their approach to a Scenario which will be provided at the start of the session.
+								</div>
+							</div>
+						</div>
+					</uib-accordion>
+					<div class="row">
+						<div class="col-xs-12">
+							<h5>After you submit your proposal and the closing deadline passes, your team and questionnaire responses will be evaluated. Depending upon your score, your team may be screened in to proceed to the next phases of the procurement process.</h5>
+						</div>
+					</div>
+					<br><br><br><br>
+				</uib-tab>
+
+				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
+				<uib-tab index="6" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
+					<uib-tab-heading>
+						6. References
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
@@ -544,45 +582,6 @@
 							</table>
 						</div>
 					</div>
-				</uib-tab>
-
-
-				<uib-tab index="6">
-					<uib-tab-heading>
-						6. Code Challenge &amp; Team Scenario
-					</uib-tab-heading>
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> About the Code Challenge &amp; Team Scenario <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<h5 class="opp-detail">Code Challenge</h5>
-								<p>Depending upon your proposal score, your team may be screened in for a Code Challenge.</p>
-								<p>A maximum of 4 teams will be invited to complete the Code Challenge. Teams will be given 5 (five) business days to complete the Code Challenge in GitHub.</p>
-								<p>The challenge will be evaluated by two independent evaluators and a static code evaluator. Those who complete the Code Challenge and meet the evaluation requirements will then proceed to the Team Scenario.</p>
-								<h5 class="opp-detail">Team Scenario</h5>
-								<p>Teams that successfully complete the Code Challenge will be invited to participate in a 3-hour Team Scenario.</p>
-								<p>At the start of the meeting, your team will be presented with a scenario where they can demonstrate their capabilities and how they work as a team under pressure.</p>
-								<p>This will be followed by questions of your team from the evaluation panel, including follow up questions on both the Scenario and Code Challenge.</p>
-								<p>Your entire team should participate in the Team Scenario. This can be arranged either in person or by video conference.</p>
-								<hr>
-								<div style="font-size: .85em;">
-									<span class="gray-light"><i class="fa fa-file-o"></i> From the RFP:</span><br><br>
-									<strong>Third Gate: Code Challenge and Team Scenario</strong><br>
-									Following the initial evaluation in the First and Second Gate, the Product Manager for the Opportunity will select and notify Proponents, based on the top four scores ‌from the First and Second Gate, to move forward to the Code Challenge and Team Scenario. Proponents will be provided a Code Challenge with a deadline provided for submission of the completed work. The Code Challenge will be made available on GitHub and remain open for 5 business days. The submitted code will be reviewed by two independent evaluators and a static code evaluator, in accordance with the Contract included here.
-									<br><br>
-									Following the Code Challenge, an Team Scenario will be held where the Proponents Team will demonstrate their approach to a Scenario which will be provided at the start of the session.
-								</div>
-							</div>
-						</div>
-					</uib-accordion>
-					<div class="row">
-						<div class="col-xs-12">
-							<h5>After you submit your proposal and the closing deadline passes, your team and questionnaire responses will be evaluated. Depending upon your score, your team may be screened in to proceed to the next phases of the procurement process.</h5>
-						</div>
-					</div>
-					<br><br><br><br>
 				</uib-tab>
 
 				<!-- // New Review & Submit tab // -->
@@ -776,7 +775,7 @@
 											<th></th>
 											<th>Score Range</th>
 											<th>Weightings</th>
-											<th>Minimum Score</th>	
+											<th>Minimum Score</th>
 										</tr>
 										<tr>
 											<td>Technical Skills</td>
