@@ -116,7 +116,7 @@
 			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
 				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
 			</div>
-			
+
 			<!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
 			<div class="col-xs-12 text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
 				<span class="light">Opportunity assigned to:</span>
@@ -143,7 +143,7 @@
 				<dl class="dl-horizontal">
 					<dt>Value:</dt>
 					<dd>{{vm.opportunity.earn|currency}}</span></dd>
-					<dt>Location:</dt>
+					<dt>Work Location:</dt>
 					<dd><i class="fa fa-map-marker"></i>&nbsp;{{vm.opportunity.location}}</dd>
 					<dt>On-site requirements:</dt>
 					<dd>
@@ -168,7 +168,7 @@
 
 			<div class="col-xs-12 col-sm-6">
 				<dl class="dl-horizontal">
-					<dt>Posted by:</dt>
+					<dt>Government Contact:</dt>
 					<dd>
 						<i class="fa fa-user-circle-o"></i>
 						<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
