@@ -35,11 +35,6 @@ module.exports = {
 			name: 'code-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
-		'swu1': {
-			path: 'public/code-with-us-terms-2018-01-23.pdf',
-			name: 'sprint-with-us-terms.pdf',
-			type: 'application/pdf'
-		},
 		'user1': {
 			path: 'public/terms-bc-developers-exchange-2018-04-19.pdf',
 			name: 'terms-bc-developers-exchange-2018-04-19.pdf',
@@ -48,6 +43,16 @@ module.exports = {
 		'rfq1': {
 			path: 'public/rfq-sprint-with-us-company-2018-04-19.pdf',
 			name: 'rfq-sprint-with-us-company-2018-04-19.pdf',
+			type: 'application/pdf'
+		},
+		'swu1': {
+			path: 'public/code-with-us-terms-2018-01-23.pdf',
+			name: 'sprint-with-us-terms.pdf',
+			type: 'application/pdf'
+		},
+		'serviceagreement': {
+			path: 'public/code-with-us-terms-2018-01-23.pdf',
+			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		}
 	},
