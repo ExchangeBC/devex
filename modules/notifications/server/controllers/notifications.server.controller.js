@@ -538,10 +538,11 @@ exports.unsubscribeExternal = function (req, res) {
 	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> to manage your notifications.</p>';
 	message += '<p>Thanks for using the BCDevExchange!</p>';
 	if (!req.subscription) return res.send (message);
-	message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are no longer following:</h4><h4>'+req.subscription.notification.name+'</h4>';
-	message += '<p>Please sign in on the ';
-	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> to manage your notifications.</p>';
-	message += '<p>Thanks for using the BCDevExchange!</p>';
+	message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"/>'
+	message += '<h3>You&#39;re now unsubscribed</h3';
+	message += '<p>We won&#39;t send you any more notifications about new opportunities.</p>'
+	message += '<p>If you change your mind, Sign In at ';
+	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> and manage preferences in your profile.</p>';
 	exports.unsubscribe (req.subscription)
 	.then (function () {
 		res.send (message);
@@ -551,6 +552,8 @@ exports.unsubscribeExternal = function (req, res) {
 	});
 };
 
+// MW - I have removed the follow opportunity link from the new opportunity notification 
+// emails - so this template isn't needed right now
 exports.subscribeExternal = function (req, res) {
 	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are now following this oppoprtunity:</h4><h4>'+req.notification.name+'</h4>';
 	message += '<p>Please sign in on the ';
