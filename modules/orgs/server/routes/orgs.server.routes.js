@@ -12,6 +12,11 @@ module.exports = function (app) {
 		.get(orgs.list)
 		.post(orgs.create);
 
+	app.route('/api/my/orgs').all(orgsPolicy.isAllowed)
+		.get(orgs.my);
+	app.route('/api/myadmin/orgs').all(orgsPolicy.isAllowed)
+		.get(orgs.myadmin);
+
 	// Single org routes
 	app.route('/api/orgs/:orgId').all(orgsPolicy.isAllowed)
 		.get(orgs.read)

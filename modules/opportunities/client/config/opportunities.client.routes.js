@@ -113,10 +113,14 @@
 				},
 				org: function (Authentication, OrgsService) {
 					if (!Authentication.user) return {};
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return {};
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return {};
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return {};
 				},
 				myproposal: function ($stateParams, ProposalsService, Authentication, org) {
 					if (!Authentication.user) return {};
