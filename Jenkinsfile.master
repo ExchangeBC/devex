@@ -64,7 +64,7 @@ node('maven') {
     }
     stage('build') {
 	    echo "Building..."
-	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
+	    openshiftBuild bldCfg: BUILDCFG_NAME, verbose: 'false', showBuildLogs: 'true'
             sleep 5
 	    //openshiftVerifyBuild bldCfg: BUILDCFG_NAME
 
@@ -77,8 +77,10 @@ node('maven') {
 	    echo ">>>> Build Complete"
     }
     stage('Staging Deploy') {
-            openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: STAGING_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: STAGING_TAG_NAME
-            openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: STAGING_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
+            echo ">>> Tag ${STAGING_TAG_NAME} with ${STAGING_BCK_TAG_NAME}"
+            openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: STAGING_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: STAGING_TAG_NAME
+            echo ">>> Tag ${IMAGE_HASH} with ${STAGING_TAG_NAME}"
+            openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: STAGING_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
             openshiftVerifyDeployment depCfg: STAGING_DEPLOYMENT_NAME, namespace: STAGING_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
             echo ">>>> Deployment Complete"
@@ -172,14 +174,16 @@ stage('Functional Test Staging') {
 
 stage('deploy-prod') {
     timeout(time: 3, unit: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
+	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin,sutherlanda-admin'
     }
     timeout(time: 3, unit: 'DAYS') {
-	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin'
+	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin,sutherlanda-admin'
     }
     node('master') {
-      openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: PROD_TAG_NAME
-      openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
+      echo ">>> Tag ${PROD_TAG_NAME} with ${PROD_BCK_TAG_NAME}"
+      openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: PROD_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: PROD_TAG_NAME
+      echo ">>> Tag ${IMAGE_HASH} with ${PROD_TAG_NAME}"
+      openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: PROD_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
       sleep 5
       openshiftVerifyDeployment depCfg: PROD_DEPLOYMENT_NAME, namespace: PROD_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
       echo ">>>> Deployment Complete"
