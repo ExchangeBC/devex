@@ -22,23 +22,24 @@
 				var uid      = isUser ? Authentication.user._id : 'none';
 				vm.isAdmin = isAdmin;
 				vm.isGov   = isGov;
-				//
-				// HACK HACK HACK : TBD: To Be Removed!!!!!!!
-				// at some point a use rcan have multiple compnaies or be the admin
-				// for multiple, but not for now.  remove this when that full implementation
-				// happens
-				//
-				var alreadyHasCompanies = isUser && Authentication.user.orgsAdmin.length > 0;
+				OrgsService.myadmin ().$promise.then (function (orgs) {
+					//
+					// the user must be listed as the admin for at least one org.
+					// for now, we only care about the first one, but in future they
+					// may be able to be admins of multiple
+					//
+					var alreadyHasCompanies = isUser && (orgs && orgs.length > 0);
 
-				vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
-				vm.trust = $sce.trustAsHtml;
-				$scope.orgs.forEach (function (org) {
-					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgOwner      = org.owner && (uid === org.owner._id);
-					org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+					vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
+					vm.trust = $sce.trustAsHtml;
+					$scope.orgs.forEach (function (org) {
+						org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+						org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+						org.isOrgOwner      = org.owner && (uid === org.owner._id);
+						org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+					});
+					vm.orgs = $scope.orgs;
 				});
-				vm.orgs = $scope.orgs;
 			}
 		}
 	})
