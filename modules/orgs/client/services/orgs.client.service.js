@@ -7,6 +7,11 @@
 			update: {
 				method: 'PUT'
 			},
+			list: {
+				method: 'GET',
+				url: '/api/orgs',
+				isArray: true
+			},
 			my: {
 				method: 'GET',
 				url: '/api/my/orgs',
