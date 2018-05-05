@@ -22,24 +22,34 @@
 				var uid      = isUser ? Authentication.user._id : 'none';
 				vm.isAdmin = isAdmin;
 				vm.isGov   = isGov;
-				OrgsService.myadmin ().$promise.then (function (orgs) {
-					//
-					// the user must be listed as the admin for at least one org.
-					// for now, we only care about the first one, but in future they
-					// may be able to be admins of multiple
-					//
-					var alreadyHasCompanies = isUser && (orgs && orgs.length > 0);
 
-					vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
-					vm.trust = $sce.trustAsHtml;
-					$scope.orgs.forEach (function (org) {
-						org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-						org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-						org.isOrgOwner      = org.owner && (uid === org.owner._id);
-						org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+				if (isUser) {
+					OrgsService.myadmin ().$promise.then (function (orgs) {
+						//
+						// the user must be listed as the admin for at least one org.
+						// for now, we only care about the first one, but in future they
+						// may be able to be admins of multiple
+						//
+						var alreadyHasCompanies = isUser && (orgs && orgs.length > 0);
+
+						vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
+						vm.trust = $sce.trustAsHtml;
+						$scope.orgs.forEach (function (org) {
+							org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+							org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+							org.isOrgOwner      = org.owner && (uid === org.owner._id);
+							org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+						});
+						vm.orgs = $scope.orgs;
 					});
-					vm.orgs = $scope.orgs;
-				});
+				}
+				else {
+					OrgsService.list().$promise.then(function (orgs) {
+						vm.userCanAdd = false;
+						vm.trust = $sce.trustAsHtml;
+						vm.orgs = $scope.orgs;
+					})
+				}
 			}
 		}
 	})
