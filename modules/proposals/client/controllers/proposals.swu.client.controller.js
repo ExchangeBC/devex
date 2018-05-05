@@ -106,7 +106,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources, $filter) {
 		var ppp                                   = this;
 		var _init = function () {
 			ppp.features = window.features;
@@ -245,6 +245,31 @@
 			//
 			ppp.isSprintWithUs = true;
 			ppp.proposal.isCompany = true;
+
+			ppp.buildPager();
+		}
+		// -------------------------------------------------------------------------
+		//
+		// logic for paginating team member pickers for each phase
+		//
+		// -------------------------------------------------------------------------
+		ppp.buildPager = function () {
+			ppp.pagedItems = [];
+			ppp.itemsPerPage = 5;
+			ppp.currentPage = 1;
+			ppp.figureOutItemsToDisplay();
+		}
+		ppp.figureOutItemsToDisplay = function () {
+			console.log("called");
+			//ppp.filteredItems = $filter('filter')(ppp.members.inception, ppp.inceptionSearch);
+
+			ppp.filteredItems = (ppp.inceptionSearch) ? ppp.members.inception : ppp.members.inception.filter(function (member) {
+				return member.displayName.startsWith (ppp.inceptionSearch);
+			});
+			ppp.filterLength = ppp.filteredItems.length;
+			var begin = ((ppp.currentPage - 1) * ppp.itemsPerPage);
+			var end = begin + ppp.itemsPerPage;
+			ppp.pagedItems = ppp.filteredItems.slice(begin, end);
 		}
 		// -------------------------------------------------------------------------
 		//

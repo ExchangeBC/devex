@@ -111,18 +111,41 @@
 							<div class="panel panel-primary">
 
 								<div class="panel-heading">
-									Click on member(s) to add them to team:
+									Select a member from the list to add them to team:
 								</div>
+
+								<!-- Team member filter box -->
+								<div>
+									<!-- <input 	type="text" 
+											ng-model="selected" 
+											uib-typeahead="member.displayName for member in ppp.members.inception" 
+											class="form-control"> -->
+									<input 	class="form-control col-md-4"
+											type="text"
+											ng-model="ppp.inceptionSearch"
+											placeholder="Enter a name to find team members:"
+											ng-change="ppp.figureOutItemsToDisplay()"
+											data-ng-minlength="1"/>
+								</div>
+
+								<!-- <div class="list-group">
+									<a ng-repeat="user in ppp.pagedItems"  id="admin.user" ui-sref="admin.user({userId: user._id})" class="list-group-item">
+										<h4 class="list-group-item-heading" ng-bind="user.username"></h4>
+										<p class="list-group-item-text pull-right small" ng-bind="user.roles"></p>
+										<p class="list-group-item-text" ng-bind="user.email"></p>
+									</a>
+								</div> -->
 
 								<div class="panel-body">
-
 									<div class="team-selection-list" >
-										<div ng-repeat="member in ppp.members.inception" class="team-member" ng-class="{'selected':ppp.inTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.inTeam)">
+										<a ng-repeat="member in ppp.pagedItems" class="team-member" ng-class="{'selected':ppp.inTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.inTeam)">
 											<avatar-display url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
-										</div>
+										</a>
 									</div>
 								</div>
+
+								<uib-pagination boundary-links="true" max-size="8" items-per-page="ppp.itemsPerPage" total-items="ppp.filterLength" ng-model="ppp.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
 							</div>
 
 							<div >
