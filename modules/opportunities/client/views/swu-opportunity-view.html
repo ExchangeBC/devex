@@ -225,9 +225,8 @@
 				<dl class="dl-horizontal">
 					<dt>Government Contact:</dt>
 					<dd>
-						<i class="fa fa-user-circle-o"></i>
-						<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-						<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+						<a ng-if"vm.opportunity.createdBy" href="mailto:{{vm.opportunity.createdBy.email}}" analytics-on><i class="fa fa-user-circle-o"></i> {{vm.opportunity.createdBy.displayName}}</a>
+						<span ng-if="!vm.opportunity.createdBy"><i class="fa fa-user-circle-o"></i> Deleted User</span>
 					</dd>
 					<dt>Program:</dt>
 					<dd>
