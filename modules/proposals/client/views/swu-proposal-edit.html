@@ -114,14 +114,34 @@
 									Click on member(s) to add them to team:
 								</div>
 
-								<div class="panel-body">
-
+								<!-- Team member filter box (inception) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.inception.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.inception.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list Iinception) -->
+								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div ng-repeat="member in ppp.members.inception" class="team-member" ng-class="{'selected':ppp.inTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.inTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+										<div 	ng-repeat="member in ppp.inception.pagedItems" 
+												class="team-member"
+												ng-class="{'selected':ppp.inTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.inTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (inception) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.inception.itemsPerPage"
+													total-items="ppp.inception.filterLength"
+													ng-model="ppp.inception.currentPage"
+													ng-change="ppp.inception.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
@@ -165,13 +185,34 @@
 									Click on member(s) to add them to team:
 								</div>
 
-								<div class="panel-body">
-									<div class="team-selection-list">
-										<div ng-repeat="member in ppp.members.proto" class="team-member" class="team-member" ng-class="{'selected':ppp.prTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.prTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+								<!-- Team member filter box (poc) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.poc.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.poc.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list (poc) -->
+								<div class="panel-body team-selection-wrapper">
+									<div class="team-selection-list" >
+										<div 	ng-repeat="member in ppp.poc.pagedItems" 
+												class="team-member"
+												ng-class="{'selected':ppp.prTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.prTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (poc) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.poc.itemsPerPage"
+													total-items="ppp.poc.filterLength"
+													ng-model="ppp.poc.currentPage"
+													ng-change="ppp.poc.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
@@ -215,13 +256,34 @@
 								<div class="panel-heading">
 									Click on member(s) to add them to team:
 								</div>
-								<div class="panel-body">
-									<div class="team-selection-list">
-										<div ng-repeat="member in ppp.members.implementation" class="team-member" class="team-member" ng-class="{'selected':ppp.imTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.imTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+								<!-- Team member filter box (implementation) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.implementation.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.implementation.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list (implementation) -->
+								<div class="panel-body team-selection-wrapper">
+									<div class="team-selection-list" >
+										<div 	ng-repeat="member in ppp.implementation.pagedItems" 
+												class="team-member"
+												ng-class="{'selected':ppp.imTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.imTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (implementation) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.implementation.itemsPerPage"
+													total-items="ppp.implementation.filterLength"
+													ng-model="ppp.implementation.currentPage"
+													ng-change="ppp.implementation.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
