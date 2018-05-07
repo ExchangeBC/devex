@@ -566,6 +566,50 @@ exports.list = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
+// get a list of orgs that the user is an Admin for
+//
+// -------------------------------------------------------------------------
+exports.my = function (req, res) {
+	Org.find ({
+		members: {$in: [req.user._id]}
+	})
+	.populate ('owner', '_id lastName firstName displayName profileImageURL')
+	.populate ('createdBy', 'displayName')
+	.populate ('updatedBy', 'displayName')
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
+	.exec (function (err, orgs) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (orgs);
+		}
+	});
+};
+exports.myadmin = function (req, res) {
+	Org.find ({
+		admins: {$in: [req.user._id]}
+	})
+	.populate ('owner', '_id lastName firstName displayName profileImageURL')
+	.populate ('createdBy', 'displayName')
+	.populate ('updatedBy', 'displayName')
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
+	.exec (function (err, orgs) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (orgs);
+		}
+	});
+};
+
+// -------------------------------------------------------------------------
+//
 // magic that populates the org on the request
 //
 // -------------------------------------------------------------------------

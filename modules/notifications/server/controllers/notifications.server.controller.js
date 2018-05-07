@@ -551,6 +551,8 @@ exports.unsubscribeExternal = function (req, res) {
 	});
 };
 
+// MW - I have removed the follow opportunity link from the new opportunity notification
+// emails - so this template isn't needed right now
 exports.subscribeExternal = function (req, res) {
 	var message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are now following this oppoprtunity:</h4><h4>'+req.notification.name+'</h4>';
 	message += '<p>Please sign in on the ';
