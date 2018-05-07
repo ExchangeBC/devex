@@ -25,7 +25,7 @@
 	<!-- // Admin View for Proposal Evaluation // -->
 	<div class="container cwu-evaluation" ng-if="vm.opportunity.isPublished && vm.canEdit">
 
-		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
+		<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity"></proposal-list>
 
 		<div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
 			<div class="col-xs-12 text-center">
@@ -66,6 +66,8 @@
 			</div>
 		</div>
 	</div>
+
+	<br>
 
 	<div class="container">
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->

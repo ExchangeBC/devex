@@ -538,10 +538,10 @@ exports.unsubscribeExternal = function (req, res) {
 	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> to manage your notifications.</p>';
 	message += '<p>Thanks for using the BCDevExchange!</p>';
 	if (!req.subscription) return res.send (message);
-	message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo.png"/><h4>You are no longer following:</h4><h4>'+req.subscription.notification.name+'</h4>';
-	message += '<p>Please sign in on the ';
-	message += '<a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> to manage your notifications.</p>';
-	message += '<p>Thanks for using the BCDevExchange!</p>';
+	message = '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"/>'
+	message += '<h3>You&#39;re now unsubscribed</h3>';
+	message += '<p>We won&#39;t send you any more notifications about new opportunities.</p>'
+	message += '<p>If you change your mind, sign in at <a href=\'https://bcdevexchange.org\'>BCDevExchange.org</a> and manage preferences in your profile.</p>';
 	exports.unsubscribe (req.subscription)
 	.then (function () {
 		res.send (message);

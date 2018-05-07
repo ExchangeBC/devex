@@ -7,31 +7,26 @@
 </div>
 
 <div class="row">
-<div class="col-md-6" ng-if="! vm.members.length">
-	<div class="panel panel-default panel-body">
-		<span class="text-muted">No members found.</span>
+	<div class="col-md-6" ng-if="! vm.members.length">
+		<div class="panel panel-default panel-body">
+			<span class="text-muted">No members found.</span>
+		</div>
 	</div>
-</div>
-<div class="col-sm-6" ng-repeat="column in vm.columns">
-	<div class="card card-block" ng-repeat="member in vm.members | slice:column.start:column.end">
-		<div class="card-tools" ng-if="vm.isAdmin || vm.model.userIs.admin">
-			<a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username, 'admin')" title="Remove" uib-tooltip="Remove">
-				<i class="glyphicon glyphicon-remove"></i>
-			</a>
-		</div>
-		<div class="card-tools" ng-if="vm.isUser && member.username == vm.userid">
-			<a href="javascript:void(0);" ng-click="vm.delete(member._id, member.username, 'member')" title="Remove Me" uib-tooltip="Remove Me from this membership list">
-				<i class="glyphicon glyphicon-remove"></i>
-			</a>
-		</div>
-		<div class="card-img">
+	<div class="col-sm-4" ng-repeat="column in vm.columns">
+		
+		<!-- NEW card format -->
+		<div class="card-user-transparent" ng-repeat="member in vm.members | slice:column.start:column.end">
 			<img class="card-img-left" src="{{((member.profileImageURL.substr(0,1) == '/' || member.profileImageURL.substr(0,4) == 'http') ? '' : '/') + member.profileImageURL}}"/>
-		</div>
-		<div>
-			<h4 class="card-title" style="font-size: 17px; padding-top: 6px; margin-bottom: 4px;">{{member.firstName}} {{member.lastName}}</h4>
-			<p class="card-subtitle">{{member.userTitle}}<br/><a ng-if="member.email && member.isDisplayEmail" href="mailto:{{member.email}}">Email</a></p>
-			<!-- p class="card-subtitle"><small><em class="text-muted">Member Since: {{member.created | date:'mediumDate'}}</em></small></p -->
+			<div class="card-body">
+				<!-- // Admin can remove any member // -->
+				<a href="javascript:void(0);" class="btn btn-remove btn-text-only pull-right" ng-if="vm.isAdmin || vm.model.userIs.admin" ng-click="vm.delete(member._id, member.username, 'admin')" title="Remove"><i class="fa fa-lg fa-times"></i></a>
+				<!-- // User can remove themself // -->
+				<a href="javascript:void(0);" class="btn btn-remove btn-text-only pull-right" ng-if="vm.isUser && member.username == vm.userid" ng-click="vm.delete(member._id, member.username, 'member')" title="Remove Me"><i class="fa fa-lg fa-times"></i></a>
+				<div class="card-title">
+					{{member.firstName}} {{member.lastName}}
+					<span ng-if="member.email && member.isDisplayEmail"><br><a class="small" href="mailto:{{member.email}}"><i class="fa fa-envelope"></i> Email</a></span>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
 </div>

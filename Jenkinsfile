@@ -86,9 +86,9 @@ node('maven') {
 
     stage('build') {
 	    echo "Building..."
-	    openshiftBuild bldCfg: BUILDCFG_NAME, showBuildLogs: 'true'
+	    openshiftBuild bldCfg: BUILDCFG_NAME, verbose: 'false', showBuildLogs: 'true'
             sleep 5
-	    openshiftVerifyBuild bldCfg: BUILDCFG_NAME
+	    // openshiftVerifyBuild bldCfg: BUILDCFG_NAME
             echo ">>> Get Image Hash"
             IMAGE_HASH = sh (
               script: """oc get istag ${IMAGE_NAME}:latest -o template --template=\"{{.image.dockerImageReference}}\"|awk -F \":\" \'{print \$3}\'""",
@@ -97,7 +97,8 @@ node('maven') {
 	    echo ">>>> Build Complete"
     }
     stage('Dev deploy') {
- 	    openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
+	    echo ">>> Tag ${IMAGE_HASH} with ${DEV_TAG_NAME}"
+ 	    openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
 	    openshiftVerifyDeployment depCfg: DEV_DEPLOYMENT_NAME, namespace: DEV_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
@@ -191,11 +192,13 @@ stage('Functional Test Dev') {
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin,sutherlanda-admin'
   }
   node('master') {
-	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: TST_TAG_NAME
-	  openshiftTag destStream: IMAGE_NAME, verbose: 'true', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
+	  echo ">>> Tag ${TST_TAG_NAME} with ${TST_BCK_TAG_NAME}"
+	  openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: TST_BCK_TAG_NAME, srcStream: IMAGE_NAME, srcTag: TST_TAG_NAME
+          echo ">>> Tag ${IMAGE_HASH} with ${TST_TAG_NAME}"
+	  openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: TST_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
           sleep 5
 	  openshiftVerifyDeployment depCfg: TST_DEPLOYMENT_NAME, namespace: TST_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	  echo ">>>> Deployment Complete"
