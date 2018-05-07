@@ -880,7 +880,7 @@ exports.new = function (req, res) {
 exports.opportunityByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'opp' ) {
 		Opportunity.findOne({code:id})
-		.populate('createdBy', 'displayName')
+		.populate('createdBy', 'displayName email')
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')
