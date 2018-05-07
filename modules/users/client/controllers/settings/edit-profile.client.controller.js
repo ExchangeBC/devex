@@ -13,13 +13,15 @@
 		var isUser           = Authentication.user;
 		var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var wasGovRequest    = isUser && !!~Authentication.user.roles.indexOf ('gov-request');
+		vm.hasCompany = isUser && Authentication.user.orgsAdmin.length > 0;
 		//
 		// deep copy the model, as we don't want to update until saved
 		//
 		vm.user              = angular.copy(Authentication.user);
 		vm.updateUserProfile = updateUserProfile;
 		vm.isgov = (wasGov || wasGovRequest);
-		vm.goveditable = !wasGov;
+		vm.goveditable = !wasGov && !vm.hasCompany;
+		
 		var pristineUser = angular.toJson(Authentication.user);
 		vm.cities           = dataService.cities;
 		vm.tinymceOptions = {
