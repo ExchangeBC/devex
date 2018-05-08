@@ -21,7 +21,6 @@
 		vm.updateUserProfile = updateUserProfile;
 		vm.isgov = (wasGov || wasGovRequest);
 		vm.goveditable = !wasGov && !vm.hasCompany;
-		
 		var pristineUser = angular.toJson(Authentication.user);
 		vm.cities           = dataService.cities;
 		vm.tinymceOptions = {
