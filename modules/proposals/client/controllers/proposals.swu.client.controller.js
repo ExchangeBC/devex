@@ -134,20 +134,17 @@
 					implementation : {
 						isImplementation : false,
 						team             : [],
-						cost             : 0,
-						maxAmount		 : 2000000
+						cost             : 0
 					},
 					inception : {
 						isInception : false,
 						team        : [],
-						cost        : 0,
-						maxAmount	: 100000
+						cost        : 0
 					},
 					proto : {
 						isPrototype : false,
 						team        : [],
-						cost        : 0,
-						maxAmount	: 500000
+						cost        : 0
 					},
 					aggregate : {
 						team : [],
@@ -182,9 +179,8 @@
 			ppp.proposal.phases.proto.invalidAmount = false;
 			ppp.proposal.phases.implementation.invalidAmount = false;
 			ppp.validateInceptionAmount = function() {
-				console.log(Number(ppp.proposal.phases.inception.cost));
-				if (ppp.proposal.phases.inception.cost < 0 || 
-					Number(ppp.proposal.phases.inception.cost) > ppp.proposal.phases.inception.maxAmount) {
+				ppp.inceptionMax = 100000;
+				if (ppp.proposal.phases.inception.cost < 0 || ppp.proposal.phases.inception.cost > ppp.inceptionMax) {
 					ppp.proposal.phases.inception.invalidAmount = true;
 				}
 				else {
@@ -198,8 +194,8 @@
 				}
 			}
 			ppp.validatePrototypeAmount = function() {
-				if (ppp.proposal.phases.proto.cost < 0 ||
-					ppp.proposal.phases.proto.cost > ppp.proposal.phases.proto.maxAmount) {
+				ppp.protoMax = 500000;
+				if (ppp.proposal.phases.proto.cost < 0 || ppp.proposal.phases.proto.cost > ppp.protoMax) {
 					ppp.proposal.phases.proto.invalidAmount = true;
 				}
 				else {
@@ -213,8 +209,8 @@
 				}
 			}
 			ppp.validateImplementationAmount = function() {
-				if (ppp.proposal.phases.implementation.cost < 0 ||
-					ppp.proposal.phases.implementation.cost > ppp.proposal.phases.implementation.maxAmount) {
+				ppp.implMax = 2000000;
+				if (ppp.proposal.phases.implementation.cost < 0 || ppp.proposal.phases.implementation.cost > ppp.implMax) {
 					ppp.proposal.phases.implementation.invalidAmount = true;
 				}
 				else {
@@ -506,7 +502,7 @@
 			console.log(validPriceAmounts);
 			if (!validPriceAmounts) {
 				Notification.error({
-					message: "Invalid price amounts entered",
+					message: 'Invalid price amounts entered',
 					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
 				});
 				return;
@@ -605,7 +601,7 @@
 			console.log(validPriceAmounts);
 			if (!validPriceAmounts) {
 				Notification.error({
-					message: "Invalid price amounts entered",
+					message: 'Invalid price amounts entered',
 					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
 				});
 				return;

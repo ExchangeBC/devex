@@ -374,8 +374,9 @@
 									</div>
 								</div>
 							</div>
-							<div>
-								<span class="proposal-amount-error" ng-if="ppp.proposal.phases.inception.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.inception.maxAmount | currency}}</span>
+							<div class="proposal-amount-wrapper">
+								<span 	class="proposal-amount-error"
+										ng-if="ppp.proposal.phases.inception.invalidAmount">Invalid entry - cost not to exceed {{ppp.inceptionMax | currency}}</span>
 							</div>
 						</div>
 
@@ -412,8 +413,9 @@
 									</div>
 								</div>
 							</div>
-							<div>
-								<span class="proposal-amount-error" ng-if="ppp.proposal.phases.proto.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.proto.maxAmount | currency}}</span>
+							<div class="proposal-amount-wrapper">
+								<span 	class="proposal-amount-error"
+										ng-if="ppp.proposal.phases.proto.invalidAmount">Invalid entry - cost not to exceed {{ppp.protoMax | currency}}</span>
 							</div>
 						</div>
 
@@ -450,8 +452,9 @@
 								</div>
 							</div>
 						</div>
-						<div>
-							<span class="proposal-amount-error" ng-if="ppp.proposal.phases.implementation.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.implementation.maxAmount | currency}}</span>
+						<div class="proposal-amount-wrapper">
+							<span 	class="proposal-amount-error"
+									ng-if="ppp.proposal.phases.implementation.invalidAmount">Invalid entry - cost not to exceed {{ppp.implMax | currency}}</span>
 						</div>
 					</div>
 
@@ -459,7 +462,8 @@
 						<div class="col-sm-4 pull-right">
 							<h4 style="text-align: center;"><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
 							<div height="35px" class="proposal-total-amount-wrapper">
-								<span class="proposal-amount-error" ng-if="ppp.exceededOpportunityAmount">Invalid entry - total cost not to exceed {{ppp.opportunity.budget | currency}}</span>
+								<span 	class="proposal-amount-error"
+										ng-if="ppp.exceededOpportunityAmount">Invalid entry - total cost not to exceed {{ppp.opportunity.budget | currency}}</span>
 							</div>
 						</div>
 					</div>
