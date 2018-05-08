@@ -502,6 +502,15 @@
 		//
 		// -------------------------------------------------------------------------
 		var saveproposal = function (goodmessage, badmessage) {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: "Invalid price amounts entered",
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -592,6 +601,15 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: "Invalid price amounts entered",
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
