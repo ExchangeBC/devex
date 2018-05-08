@@ -34,7 +34,7 @@
 								</div>
 
 								<div class="well well-warning" ng-if="capability.skills.length > 0">
-									<p>Select all the <strong>preferred skills</strong> you possess:</p>
+									<p>Select all the <strong>preferred technical skills</strong> you possess:</p>
 									<div class="label-list">
 										<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
 											<span ng-bind="skill.name"></span>

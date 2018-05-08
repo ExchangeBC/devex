@@ -51,7 +51,7 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'serviceagreement': {
-			path: 'public/sprint-with-us-service-agreement-2018-05-01.pdf',
+			path: 'public/sprint-with-us-service-agreement-2018-05-08.pdf',
 			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		}

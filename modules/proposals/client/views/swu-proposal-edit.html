@@ -41,7 +41,7 @@
 					</uib-tab-heading>
 
 					<div class="row">
-						<h5>To submit a proposal on this opportunity, you must agree to the terms contained in this Request for Proposals.</h5>
+						<h5>To submit a Proposal on this Opportunity, you must agree to the terms contained in this Request for Proposals that include the RFP process rules set forth below.  Proponents should note that there are other terms and conditions applicable to this Request for Proposals described throughout the Opportunity Webpage.</h5>
 					</div>
 					<!--
 					<iframe class="row" style="height: 400px;" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
@@ -49,7 +49,10 @@
 					<br>
 
 					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Terms &amp; Conditions</a>
+				<!-- Moved Service Agreement to the Opportunity detail page -->
+				<!--
 					<a class="btn btn-primary" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Download the Service Agreement</a>
+				-->
 					<br><br>
 					<label class="checkbox-inline checkbox-alone">
 						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the <strong>Terms &amp; Conditions</strong>.
@@ -92,8 +95,9 @@
 								<i class="fa fa-lg fa-info-circle"></i> How your team will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Province will evaluate proposals based on the preferred technical skills of Resources claimed by Proponents against the requirements set forth on the Opportunity Webpage.</p>
-								<p>The BC Developers’ Exchange automated system will automatically populate the Proponent’s proposal for Preferred Skills on the Select Team tab with the technical skills identified as part of the capabilities in the Resource profiles. It is the responsibility of the Proponent to ensure that the Resource profiles included in their RFP proposal are fully accurate and up-to-date.  Resource profiles can be updated at any time before the Closing Time.</p>
+								<p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.</p>
+ 								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.</p>
+								<p>For the Preferred Technical Skills portion of the Team selection, this system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s proposal will not receive full points for that category set forth in the evaluation criteria scoring table.</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -125,7 +129,7 @@
 								<!-- Team member list Iinception) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.inception.pagedItems" 
+										<div 	ng-repeat="member in ppp.inception.pagedItems"
 												class="team-member"
 												ng-class="{'selected':ppp.inTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.inTeam)">
@@ -158,7 +162,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -196,7 +200,7 @@
 								<!-- Team member list (poc) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.poc.pagedItems" 
+										<div 	ng-repeat="member in ppp.poc.pagedItems"
 												class="team-member"
 												ng-class="{'selected':ppp.prTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.prTeam)">
@@ -229,7 +233,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -267,7 +271,7 @@
 								<!-- Team member list (implementation) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.implementation.pagedItems" 
+										<div 	ng-repeat="member in ppp.implementation.pagedItems"
 												class="team-member"
 												ng-class="{'selected':ppp.imTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.imTeam)">
@@ -300,7 +304,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -325,10 +329,13 @@
 								<i class="fa fa-lg fa-info-circle"></i> How pricing will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Total Proponent Cost will be calculated and will be evaluated according to the following methodology:</p>
-								<p>The Proponent will provide, in the Pricing tab, the Total Proponent Cost that reflects the Proponent’s overall Resource costs that would be incurred by the Proponent across the Opportunity Phases.  Pricing will be evaluated as set out below:</p>
-								<p><strong>The Province will calculate the number of points to award based on the following formula:</strong></p>
-								<p>(Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage / The eligible Proponent’s Total Proponent Cost) * Maximum Number of Points allocated to this section.</p>
+								<p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.</p>
+								<p>The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.</p>
+								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.</p>
+								<p>How Pricing Will be evaluated:</p>
+								<p>The Total Proponent Cost will be evaluated and scored according to the following formula:</p>
+								<p>Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage divided by The eligible Proponent’s Total Proponent Cost multiplied by Maximum Number of Points allocated to the Pricing component.</p>
+								<p>Example: $100,000 / $125,000 \* 10% = 8 out of 10</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -810,6 +817,8 @@
 						<div class="col-xs-12 col-sm-8">
 							<div class="panel panel-default">
 								<div class="panel-body">
+									<h5 class="small">Contract</h5>
+									<a class="small" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Click here to download a draft of the Service Agreement</a>
 									<h5 class="small">Mandatory Criteria</h5>
 									<p class="small">The Mandatory Criteria are set forth in the following table.  Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.</p>
 									<table class="table table-bordered small">
@@ -827,10 +836,11 @@
 										Proposals that meet the mandatory criteria will be evaluated with respect to the weighted criteria described in this RFP, based on the following steps:
 										<br><br>
 										<ol type="a">
-											<li> 
-												Technical skills screening (Step 1)<br><br>
-												The Province will evaluate proposals based on the preferred technical skills of Resources claimed by Proponents against the requirements set forth on the Opportunity Webpage.<br><br>
-												The BC Developers’ Exchange automated system will automatically populate the Proponent’s proposal for Preferred Skills on the Select Team tab with the technical skills identified as part of the capabilities in the Resource profiles. It is the responsibility of the Proponent to ensure that the Resource profiles included in their RFP proposal are fully accurate and up-to-date.  Resource profiles can be updated at any time before the Closing Time.<br><br>Proposals that have satisfied this step move on to Step 2 below.
+											<li>
+												For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.<br><br>
+												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.<br><br> 
+												For the Preferred Technical Skills portion of the Team selection, _this_ system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s proposal will not receive full points for that category set forth in the evaluation criteria scoring table.<br><br>
+												Proposals that have satisfied this step move on to Step 2 below.
 											</li><br><br>
 											<li>
 												Team-based questionnaire (Step 2)<br><br>
@@ -864,8 +874,13 @@
 											</li><br><br>
 											<li>
 												Price (Step 6)<br><br>
-												The Total Proponent Cost will be evaluated according to the following formula:<br><br>
-												Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage divided by The eligible Proponent’s Total Proponent Cost multiplied by Maximum Number of Points allocated to the Pricing component.
+												In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.<br><br>
+												The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.<br><br>
+												The automated BC Developer’s Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.<br><br>
+												How Pricing Will be evaluated:<br><br>
+												The Total Proponent Cost will be evaluated and scored according to the following formula:<br><br>
+												Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage divided by The eligible Proponent’s Total Proponent Cost multiplied by Maximum Number of Points allocated to the Pricing component.<br><br>
+												Example: $100,000 / $125,000 \* 10% = 8 out of 10
 											</li>
 										</ol>
 									</div>
@@ -879,7 +894,7 @@
 											<th>Minimum Score</th>
 										</tr>
 										<tr>
-											<td>a) Select Team - Technical Skills</td>
+											<td>a) Select Team - Preferred Technical Skills</td>
 											<td>0 - 20</td>
 											<td>20&#37;</td>
 											<td></td>
