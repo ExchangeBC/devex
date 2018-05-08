@@ -664,6 +664,10 @@
 				// $scope.$apply();
 			});
 		};
+		ppp.termsDownloaded = false;
+		ppp.downloadTermsClicked = function() {
+			ppp.termsDownloaded = true;
+		}
 		ppp.subscribe = function (state) {
 			var notificationCode = 'not-update-'+ppp.opportunity.code;
 			if (!editing && !ppp.proposal._id && state) {
