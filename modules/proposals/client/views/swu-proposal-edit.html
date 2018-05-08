@@ -354,10 +354,21 @@
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input 	type="text"
+													ng-model="ppp.proposal.phases.inception.cost"
+													model-format="currency"
+													id="budget-inception"
+													class="form-control text-right"
+													aria-label="Amount (to the nearest dollar)"
+													placeholder=0.00
+													ng-blur="ppp.validateInceptionAmount()"
+													select-on-click>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div>
+								<span class="proposal-amount-error" ng-if="ppp.proposal.phases.inception.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.inception.maxAmount | currency}}</span>
 							</div>
 						</div>
 
@@ -381,10 +392,21 @@
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input 	type="text"
+													  ng-model="ppp.proposal.phases.proto.cost"
+													  model-format="currency"
+													  id="budget-poc"
+													  class="form-control text-right"
+													  aria-label="Amount (to the nearest dollar)"
+													  ng-blur="ppp.validatePrototypeAmount()"
+													  placeholder=0.00
+													  select-on-click>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div>
+								<span class="proposal-amount-error" ng-if="ppp.proposal.phases.proto.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.proto.maxAmount | currency}}</span>
 							</div>
 						</div>
 
@@ -407,17 +429,31 @@
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input type="text"
+										  ng-model="ppp.proposal.phases.implementation.cost"
+										  model-format="currency"
+										  id="budget-imp"
+										  class="form-control text-right"
+										  aria-label="Amount (to the nearest dollar)"
+										  placeholder=0.00
+										  select-on-click
+										  ng-blur="ppp.validateImplementationAmount()">
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+						<div>
+							<span class="proposal-amount-error" ng-if="ppp.proposal.phases.implementation.invalidAmount">Invalid entry - cost not to exceed {{ppp.proposal.phases.implementation.maxAmount | currency}}</span>
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="col-sm-4 pull-right">
 							<h4 style="text-align: center;"><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+							<div height="35px" class="proposal-total-amount-wrapper">
+								<span class="proposal-amount-error" ng-if="ppp.exceededOpportunityAmount">Invalid entry - total cost not to exceed {{ppp.opportunity.budget | currency}}</span>
+							</div>
 						</div>
 					</div>
 

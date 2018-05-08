@@ -134,17 +134,20 @@
 					implementation : {
 						isImplementation : false,
 						team             : [],
-						cost             : 0
+						cost             : 0,
+						maxAmount		 : 2000000
 					},
 					inception : {
 						isInception : false,
 						team        : [],
-						cost        : 0
+						cost        : 0,
+						maxAmount	: 100000
 					},
 					proto : {
 						isPrototype : false,
 						team        : [],
-						cost        : 0
+						cost        : 0,
+						maxAmount	: 500000
 					},
 					aggregate : {
 						team : [],
@@ -171,6 +174,59 @@
 			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
 			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
 			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
+			//
+			// set up validators for currency amount validators for each phase
+			//
+			ppp.exceededOpportunityAmount = false;
+			ppp.proposal.phases.inception.invalidAmount = false;
+			ppp.proposal.phases.proto.invalidAmount = false;
+			ppp.proposal.phases.implementation.invalidAmount = false;
+			ppp.validateInceptionAmount = function() {
+				console.log(Number(ppp.proposal.phases.inception.cost));
+				if (ppp.proposal.phases.inception.cost < 0 || 
+					Number(ppp.proposal.phases.inception.cost) > ppp.proposal.phases.inception.maxAmount) {
+					ppp.proposal.phases.inception.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.inception.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validatePrototypeAmount = function() {
+				if (ppp.proposal.phases.proto.cost < 0 ||
+					ppp.proposal.phases.proto.cost > ppp.proposal.phases.proto.maxAmount) {
+					ppp.proposal.phases.proto.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.proto.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validateImplementationAmount = function() {
+				if (ppp.proposal.phases.implementation.cost < 0 ||
+					ppp.proposal.phases.implementation.cost > ppp.proposal.phases.implementation.maxAmount) {
+					ppp.proposal.phases.implementation.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.implementation.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
 			//
 			// set up the structures for capabilities
 			// each little bucket continas the capabilities required for that phase
