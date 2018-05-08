@@ -49,7 +49,10 @@
 					<br>
 
 					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Terms &amp; Conditions</a>
+				<!-- Moved Service Agreement to the Opportunity detail page -->
+				<!--
 					<a class="btn btn-primary" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Download the Service Agreement</a>
+				-->
 					<br><br>
 					<label class="checkbox-inline checkbox-alone">
 						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the <strong>Terms &amp; Conditions</strong>.
@@ -774,6 +777,8 @@
 						<div class="col-xs-12 col-sm-8">
 							<div class="panel panel-default">
 								<div class="panel-body">
+									<h5 class="small">Contract</h5>
+									<a class="small" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Click here to download a draft of the Service Agreement</a>
 									<h5 class="small">Mandatory Criteria</h5>
 									<p class="small">The Mandatory Criteria are set forth in the following table.  Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.</p>
 									<table class="table table-bordered small">
