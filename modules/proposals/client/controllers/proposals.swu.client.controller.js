@@ -573,6 +573,7 @@
 			});
 		};
 		var performwithdrawal = function (txt) {
+			ppp.agreeConfirm = false;
 			ppp.proposal.status = 'Draft';
 			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
 		};
