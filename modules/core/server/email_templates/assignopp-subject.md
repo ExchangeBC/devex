@@ -1,1 +1,1 @@
-Your proposal has been selected!
+Your Proposal has been selected!

@@ -17,19 +17,19 @@
 
 <div class="row">
 	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
-		<div class="alert alert-warning">You'll be able to view submitted proposals here when the opportunity closes.</div>
+		<div class="alert alert-warning">You'll be able to view submitted Proposals here when the opportunity closes.</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="alert alert-warning" style="display: inline-block;"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
+		<div class="alert alert-warning" style="display: inline-block;"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No Proposals were submitted!</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="alert alert-success" style="display: inline-block;"><i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Sweet!</strong> You've got proposals!</div><br>
+		<div class="alert alert-success" style="display: inline-block;"><i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Sweet!</strong> You've got Proposals!</div><br>
 		<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
 	</div>
 </div>

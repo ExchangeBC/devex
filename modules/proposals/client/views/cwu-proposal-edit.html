@@ -1,22 +1,22 @@
 
-<!-- // Banner if proposal is Submitted // -->
+<!-- // Banner if Proposal is Submitted // -->
 <div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<span class="strong"><i class="fa fa-check-circle"></i> This proposal has been submitted!</span> &nbsp;&nbsp; You can make updates or withdraw your proposal until <strong> 16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>.
+				<span class="strong"><i class="fa fa-check-circle"></i> This Proposal has been submitted!</span> &nbsp;&nbsp; You can make updates or withdraw your Proposal until <strong> 16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>.
 			</div>
 		</div>
 	</div>
 </div>
 
-<!-- // Banner if proposal is in Draft // -->
+<!-- // Banner if Proposal is in Draft // -->
 <div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<p><span class="strong"><i class="fa fa-file"></i> This proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <strong>16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong> to be considered for this opportunity!</p>
-				<p class="danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your proposal, you must agree to the Terms.</p>
+				<p><span class="strong"><i class="fa fa-file"></i> This Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <strong>16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong> to be considered for this opportunity!</p>
+				<p class="danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your Proposal, you must agree to the Terms.</p>
 			</div>
 		</div>
 	</div>
@@ -107,7 +107,7 @@
 					</uib-tab-heading>
 					<div>
 						<div class="edit-form-tab-content">
-							<div class="alert alert-info">Draft your complete proposal here, or write a short message and upload your proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation Criteria</span>:</div>
+							<div class="alert alert-info">Draft your complete Proposal here, or write a short message and upload your Proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation Criteria</span>:</div>
 							<div class="well" ng-bind-html="ppp.display.evaluation"></div>
 
 							<label class="control-label" for="detail">My Proposal</label>
@@ -166,7 +166,7 @@
 					</uib-tab-heading>
 					<div class="edit-form-tab-content">
 						<div class="alert alert-info">
-							To submit a proposal, you must agree to the following terms:
+							To submit a Proposal, you must agree to the following terms:
 						</div>
 						<iframe class="row" style="height: 400px;" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
 						<br>
