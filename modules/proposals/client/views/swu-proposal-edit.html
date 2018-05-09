@@ -905,9 +905,12 @@
 						<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
 							<div class="panel panel-success">
 								<div class="panel-body">
-									<p class="small">Submission of a proposal indicates your company's acceptance of all the terms and conditions set out in the RFP, its appendices and its addenda. These terms and conditions also include any terms and conditions included on the Opportunity's webpage and the tabs of your Proposal.</p>
-									<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
+									<label class="small">
+										<input type="checkbox">&nbsp;
+										&#42;By pushing Submit the Proponent is confirming it is submitting its Proposal to the RFP and agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully read and examined the entire Opportunity Webpage and the RFP; (b) the Proponent has conducted such other investigations as were prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the statements and representations made in its Proposal.
+									</label>
 									<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
 								</div>
 							</div>
 						</div>
