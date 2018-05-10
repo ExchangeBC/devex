@@ -1,4 +1,10 @@
 #!/bin/bash
+if [[ "$OSTYPE" == 'msys' ]]; then
+    pwdPath="/${PWD}"
+else
+    pwdPath=`pwd`
+fi
+echo "Current working directory is " $pwdPath
 docker stop db_devex
 docker start db_devex
 docker stop mean_devex
@@ -6,10 +12,10 @@ docker run \
 -p 3030:3000 \
 -p 5858:5858 \
 -p 35729:35729 \
--v `pwd`/config:/opt/mean.js/config \
--v `pwd`/modules:/opt/mean.js/modules \
--v `pwd`/public:/opt/mean.js/public \
--v `pwd`/uploads:/opt/mean.js/uploads \
+-v $pwdPath/config:/opt/mean.js/config \
+-v $pwdPath/modules:/opt/mean.js/modules \
+-v $pwdPath/public:/opt/mean.js/public \
+-v $pwdPath/uploads:/opt/mean.js/uploads \
 -e "MAILER_SERVICE_PROVIDER=gggmail" \
 -e "MAILER_FROM=<Email>" \
 -e "MAILER_EMAIL_ID=<Email>" \

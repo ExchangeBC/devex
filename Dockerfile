@@ -8,7 +8,7 @@
 # docker-compose up -d
 
 FROM ubuntu:latest
-MAINTAINER MEAN.JS
+LABEL maintainer=MEAN.JS
 
 # 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 35729 = livereload
 EXPOSE 80 443 3000 35729
@@ -75,6 +75,7 @@ RUN npm install && npm cache clean
 # Install bower packages
 COPY bower.json /opt/mean.js/bower.json
 COPY .bowerrc /opt/mean.js/.bowerrc
+
 RUN bower install --quiet --allow-root --config.interactive=false
 
 COPY . /opt/mean.js
