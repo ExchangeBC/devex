@@ -45,6 +45,7 @@
 		vm.opportunity.assignment = new Date (vm.opportunity.assignment);
 		vm.opportunity.start      = new Date (vm.opportunity.start);
 		vm.opportunity.endDate    = new Date (vm.opportunity.endDate);
+		vm.org					  = org;
 
 		vm.opportunity.phases.inception.startDate      = new Date (vm.opportunity.phases.inception.startDate);
 		vm.opportunity.phases.inception.endDate        = new Date (vm.opportunity.phases.inception.endDate);

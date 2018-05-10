@@ -149,7 +149,7 @@
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 
 			<!-- // If user IS following the opportunity // -->
-			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)"><i class="fa fa-bullhorn"></i> Following</button>
 		</div>
 
 		<!-- // Sprint With Us Terms // -->
@@ -224,8 +224,8 @@
 
 			<div class="col-xs-12 col-sm-6">
 				<dl class="dl-horizontal">
-					<dt>Government Contact:</dt>
-					<dd>
+					<dt ng-if="vm.canApply">Government Contact:</dt>
+					<dd ng-if="vm.canApply">
 						<a ng-if="vm.opportunity.createdBy" href="mailto:bcdevexchange@gov.bc.ca" analytics-on><i class="fa fa-user-circle-o"></i> {{vm.opportunity.createdBy.displayName}}</a>
 						<span ng-if="!vm.opportunity.createdBy"><i class="fa fa-user-circle-o"></i> Deleted User</span>
 					</dd>
