@@ -224,8 +224,8 @@
 
 			<div class="col-xs-12 col-sm-6">
 				<dl class="dl-horizontal">
-					<dt ng-if="vm.org.isAcceptedTerms">Government Contact:</dt>
-					<dd ng-if="vm.org.isAcceptedTerms">
+					<dt ng-if="vm.canApply">Government Contact:</dt>
+					<dd ng-if="vm.canApply">
 						<a ng-if="vm.opportunity.createdBy" href="mailto:bcdevexchange@gov.bc.ca" analytics-on><i class="fa fa-user-circle-o"></i> {{vm.opportunity.createdBy.displayName}}</a>
 						<span ng-if="!vm.opportunity.createdBy"><i class="fa fa-user-circle-o"></i> Deleted User</span>
 					</dd>
@@ -265,6 +265,29 @@
 		</div>
 
 		<hr>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Scope &amp; Contract</h3>
+				<p>Proponents should be sure to review all the defined terms set out in the Terms and Conditions on the Terms tab.</p>
+
+				<p>The purpose of this RFP is to invite Qualified Suppliers to submit a proposal to the RFP, that in addition to satisfying the other requirements of the RFP, nominates a Team comprised of Resources possessing the Capabilities, skills and other requirements described below for use in the development of the software Product described in the Background section above.</p>
+				<p>On the Select Team tab of the Proposal, Proponents are asked to propose the exact number of Resources they wish to allocate to their Team, based on their analysis of the Opportunity.</p>
+				<p>Proponents should note that this RFP is not intended to create an exclusive service deal in favour of the Contractor and that the use of the Contractor’s services for any one or more Phases of the Opportunity is not guaranteed.  This RFP is not intended to fetter the right of the Province to procure the same or similar services described in connection with the Opportunity by whatever means its deems necessary or desirable; and the Province reserves the right to source any Teams, Resources or related services by other means, or do nothing.</p>
+				<p><strong>Contract</strong></p>
+				<p><strong>1.	Form of Contract</strong></p>
+				<p>Proponents should review carefully all of the terms and conditions of the <a href="/api/proposals/download/terms/serviceagreement" target="_blank"> Contract </a>.</p>
+				<p>Proponents should also refer to section 1.13 of the Terms and Conditions set out on the Terms tab.</p>
+				<p><strong>2.	Service Requirements</strong></p>
+				<p>Without overshadowing any of the Contract content, Proponents should note the following:</p>
+				<p>If the Proponent becomes the Contractor pursuant to the RFP, such Team will work collaboratively with the Province by delivering services to develop the Product using the Agile scrum process as set out in the Contract.  An Opportunity may include one or more of the following Phases during which the Team will help develop the Product iteratively.  If included in the Opportunity, the Team will work from an initial Product Roadmap during the first Inception Phase, and create an initial Product Backlog for the ensuing second Prototype Phase. The outcomes for the Prototype Phase will be a working alpha release of the Product, an updated Product Roadmap and a resourcing plan for the final (third) Implementation Phase.  During the Implementation Phase, the Contractor will work with the Province to accomplish the business goals described in the Product Roadmap.</p>
+				<p><strong>3.	Select Contract Terms</strong></p>
+				<p>The Province may terminate the Contract for any reason by giving 14 days’ written notice of termination to the Contractor at any time after the completion of at least three Sprints in any of the Inception, Prototype or Implementation Phases.</p>
+				<p>Proponents should note that the Province will issue payment of 90% the fixed price amount for each Phase in monthly payments over the number of months identified on the pricing tab in the RFP, which will be distributed with a 10% holdback to be released upon completion of deliverables, all according to the terms set out in the Contract.</p>
+				<p>Early completion of the Inception or Prototype Phases: Should the Province issue either the Inception Completion Notice or the Prototype Completion Notice, as applicable, prior to the end of the applicable Phase, as identified in the Contract, the Province will pay the Contractor both the holdback for that phase as well as the total remaining monthly fees that would have been paid had the deliverables been completed over the number of months for that Phase identified on the pricing tab in the RFP.</p>
+				<p>Early completion of the Implementation Phase only:  Should the Province issue the Final Acceptance Notice for the Product prior to the end of the timeframe for the Implementation Phase, as identified in the Contract, the Province will pay the Contractor both the Implementation Phase Holdback as well as an additional fee equal to twenty (20) percent of the total remaining monthly fees that would have been paid had the deliverables been completed over the number of months for that Phase identified on the pricing tab in the RFP.</p>
+			</div>
+		</div>
 
 		<!-- // Budget // -->
 		<div class="row">
@@ -397,7 +420,6 @@
 
 		<div>
 			<p>&#42;Capabilities are claimed by individuals in their personal profile. View all our capability definitions <a href="/capabilities" target="_blank">here</a>.</p>
-			<p>&#42;The scheduled dates below are tentative and subject to change at the Province’s discretion.</p>
 		</div>
 
 		<hr>
@@ -416,14 +438,6 @@
 		<hr>
 		-->
 
-		<!-- // Contract // -->
-		<div class="row">
-			<div class="col-xs-12">
-				<h3 class="opp-detail">Contract</h3>
-				<a href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Click here to download a draft of the Service Agreement</a>
-			</div>
-		</div>
-		<hr>
 		<!-- // How to Apply // -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-8">
