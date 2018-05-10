@@ -6,3 +6,21 @@
 .proposal-form-container p {
 	text-align: left;
 }
+.proposal-searchbox-wrapper {
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+}
+.proposal-searchbox {
+	width: 40%;
+	margin-top: 1em;
+	min-width: 160px;
+}
+.team-selection-wrapper {
+	height: 235px;
+}
+.pagination-wrapper {
+	display: flex;
+	flex-flow: column wrap;
+	align-items: center;
+}

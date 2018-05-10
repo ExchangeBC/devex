@@ -126,6 +126,7 @@
 			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 			ppp.proposal.org = org;
 			ppp.orgHasMetRFQ = org.metRFQ;
+			ppp.agreeConfirm = false;
 			//
 			// this is all the people in the org
 			//
@@ -171,6 +172,58 @@
 			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
 			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
 			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
+			//
+			// set up validators for currency amount validators for each phase
+			//
+			ppp.exceededOpportunityAmount = false;
+			ppp.proposal.phases.inception.invalidAmount = false;
+			ppp.proposal.phases.proto.invalidAmount = false;
+			ppp.proposal.phases.implementation.invalidAmount = false;
+			ppp.validateInceptionAmount = function() {
+				ppp.inceptionMax = 100000;
+				if (ppp.proposal.phases.inception.cost < 0 || ppp.proposal.phases.inception.cost > ppp.inceptionMax) {
+					ppp.proposal.phases.inception.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.inception.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validatePrototypeAmount = function() {
+				ppp.protoMax = 500000;
+				if (ppp.proposal.phases.proto.cost < 0 || ppp.proposal.phases.proto.cost > ppp.protoMax) {
+					ppp.proposal.phases.proto.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.proto.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validateImplementationAmount = function() {
+				ppp.implMax = 2000000;
+				if (ppp.proposal.phases.implementation.cost < 0 || ppp.proposal.phases.implementation.cost > ppp.implMax) {
+					ppp.proposal.phases.implementation.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.implementation.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
 			//
 			// set up the structures for capabilities
 			// each little bucket continas the capabilities required for that phase
@@ -245,6 +298,81 @@
 			//
 			ppp.isSprintWithUs = true;
 			ppp.proposal.isCompany = true;
+
+			ppp.buildPager();
+		}
+		// -------------------------------------------------------------------------
+		//
+		// logic for paginating team member pickers for each phase
+		//
+		// -------------------------------------------------------------------------
+		ppp.inception = {};
+		ppp.poc = {};
+		ppp.implementation = {};
+		ppp.buildPager = function () {
+			ppp.inception.pagedItems = [];
+			ppp.inception.itemsPerPage = 5;
+			ppp.inception.currentPage = 1;
+			ppp.inception.figureOutItemsToDisplay();
+			ppp.poc.pagedItems = [];
+			ppp.poc.itemsPerPage = 5;
+			ppp.poc.currentPage = 1;
+			ppp.poc.figureOutItemsToDisplay();
+			ppp.implementation.pagedItems = [];
+			ppp.implementation.itemsPerPage = 5;
+			ppp.implementation.currentPage = 1;
+			ppp.implementation.figureOutItemsToDisplay();
+		}
+		ppp.inception.figureOutItemsToDisplay = function () {
+
+			ppp.inception.filteredItems = (!ppp.inception.search || ppp.inception.search.length === 0) ?
+				ppp.members.inception :
+				ppp.members.inception.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.inception.search.toUpperCase()) ||
+							(ppp.inTeam[member.email] === true));
+				});
+			var begin = ((ppp.inception.currentPage - 1) * ppp.inception.itemsPerPage);
+			var end = begin + ppp.inception.itemsPerPage;
+			var items = ppp.inception.filteredItems.slice(begin, end);
+			ppp.inception.filterLength = ppp.inception.filteredItems.length;
+			ppp.inception.pagedItems = items;
+		}
+		ppp.inception.pageChanged = function () {
+			ppp.inception.figureOutItemsToDisplay();
+		}
+		ppp.poc.figureOutItemsToDisplay = function () {
+
+			ppp.poc.filteredItems = (!ppp.poc.search || ppp.poc.search.length === 0) ?
+				ppp.members.proto :
+				ppp.members.proto.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.poc.search.toUpperCase()) ||
+							(ppp.prTeam[member.email] === true));
+				});
+			var begin = ((ppp.poc.currentPage - 1) * ppp.poc.itemsPerPage);
+			var end = begin + ppp.poc.itemsPerPage;
+			var items = ppp.poc.filteredItems.slice(begin, end);
+			ppp.poc.filterLength = ppp.poc.filteredItems.length;
+			ppp.poc.pagedItems = items;
+		}
+		ppp.poc.pageChanged = function () {
+			ppp.poc.figureOutItemsToDisplay();
+		}
+		ppp.implementation.figureOutItemsToDisplay = function () {
+
+			ppp.implementation.filteredItems = (!ppp.implementation.search || ppp.implementation.search.length === 0) ?
+				ppp.members.implementation :
+				ppp.members.implementation.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.implementation.search.toUpperCase()) ||
+							(ppp.imTeam[member.email] === true));
+				});
+			var begin = ((ppp.implementation.currentPage - 1) * ppp.implementation.itemsPerPage);
+			var end = begin + ppp.implementation.itemsPerPage;
+			var items = ppp.implementation.filteredItems.slice(begin, end);
+			ppp.implementation.filterLength = ppp.implementation.filteredItems.length;
+			ppp.implementation.pagedItems = items;
+		}
+		ppp.implementation.pageChanged = function () {
+			ppp.implementation.figureOutItemsToDisplay();
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -371,6 +499,15 @@
 		//
 		// -------------------------------------------------------------------------
 		var saveproposal = function (goodmessage, badmessage) {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: 'Invalid price amounts entered',
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -436,6 +573,7 @@
 			});
 		};
 		var performwithdrawal = function (txt) {
+			ppp.agreeConfirm = false;
 			ppp.proposal.status = 'Draft';
 			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
 		};
@@ -461,6 +599,15 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: 'Invalid price amounts entered',
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -519,6 +666,10 @@
 				// $scope.$apply();
 			});
 		};
+		ppp.termsDownloaded = false;
+		ppp.downloadTermsClicked = function() {
+			ppp.termsDownloaded = true;
+		}
 		ppp.subscribe = function (state) {
 			var notificationCode = 'not-update-'+ppp.opportunity.code;
 			if (!editing && !ppp.proposal._id && state) {

@@ -160,10 +160,12 @@
 					<p>If you're a public sector employee in British Columbia, you can use this site to pay for code and hire Agile product teams through our lightweight procurement processes, <i class="fa fa-tag"></i> <strong>Code With Us</strong> and <i class="fa fa-group"></i> <strong>Sprint With Us</strong>.</p>
 				</div>
 				<div class="checkbox">
-					<label>
-					<input ng-if="!vm.goveditable" type="checkbox"  ng-model="vm.isgov" disabled>
-					<input ng-if="vm.goveditable" type="checkbox"  ng-model="vm.isgov" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-					Verify me as a B.C. public sector employee so I can post opportunities!
+					<label ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
+						<input 	type="checkbox"  
+								ng-model="vm.isgov" 
+								ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
+						<span ng-if="vm.goveditable">Verify me as a B.C. public sector employee so I can post opportunities!</span>
+						<span ng-if="!vm.goveditable" style="color: gray">Verify me as a B.C. public sector employee so I can post opportunities!</span>
 					</label>
 					<p class="small" style="margin-top: 10px; margin-left: 15px;">&nbsp;&nbsp;<i class="fa fa-envelope gray-light"></i> We'll notify you by email when we've approved your request.</p>
 				</div>

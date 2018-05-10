@@ -7,7 +7,7 @@
 </div>
 
 <div class="banner banner-important">
-  <i class="fa fa-lg fa-flask"></i> &nbsp; We're experimenting with a new Agile procurement model - <strong>Sprint With Us</strong>. &nbsp;To apply on this opportunity, <a href="/sprintwithus-howtoapply"> follow these steps</a>.
+	<i class="fa fa-lg fa-flask"></i> &nbsp;<a href="mailto:bcdevexchange@gov.bc.ca?" analytics-on>Give us feedback</a> on Sprint With Us.
 </div>
 
 <section class="detail-page-background">
@@ -131,7 +131,7 @@
 
 		<div class="opp-detail-header">
 			Published on <span class="strong" ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>&nbsp; &nbsp;Last updated on <span class="strong" ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy" ng-bind=" vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
-
+			<br>This RFP is restricted to Proponents that have become Qualified Suppliers pursuant to RFQ No. ON‌-003166.
 			<!-- // Opportunity Admin control buttons // -->
 			<!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
 			<!-- PUBLISH -->
@@ -149,7 +149,7 @@
 			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 
 			<!-- // If user IS following the opportunity // -->
-			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)"><i class="fa fa-bullhorn"></i> Following</button>
 		</div>
 
 		<!-- // Sprint With Us Terms // -->
@@ -224,11 +224,10 @@
 
 			<div class="col-xs-12 col-sm-6">
 				<dl class="dl-horizontal">
-					<dt>Government Contact:</dt>
-					<dd>
-						<i class="fa fa-user-circle-o"></i>
-						<span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-						<span ng-if="!vm.opportunity.createdBy">Deleted User</span>
+					<dt ng-if="vm.canApply">Government Contact:</dt>
+					<dd ng-if="vm.canApply">
+						<a ng-if="vm.opportunity.createdBy" href="mailto:bcdevexchange@gov.bc.ca" analytics-on><i class="fa fa-user-circle-o"></i> {{vm.opportunity.createdBy.displayName}}</a>
+						<span ng-if="!vm.opportunity.createdBy"><i class="fa fa-user-circle-o"></i> Deleted User</span>
 					</dd>
 					<dt>Program:</dt>
 					<dd>
@@ -261,16 +260,40 @@
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Background</h3>
 				<p ng-bind-html="vm.display.description"></p>
+				<p>Proponents should be sure to review all the defined terms set out in the Terms and Conditions on the Terms tab.</p>
 			</div>
 		</div>
 
 		<hr>
 
+		<div class="row">
+			<div class="col-xs-12">
+				<h3 class="opp-detail">Scope &amp; Contract</h3>
+				<p>Proponents should be sure to review all the defined terms set out in the Terms and Conditions on the Terms tab.</p>
+
+				<p>The purpose of this RFP is to invite Qualified Suppliers to submit a proposal to the RFP, that in addition to satisfying the other requirements of the RFP, nominates a Team comprised of Resources possessing the Capabilities, skills and other requirements described below for use in the development of the software Product described in the Background section above.</p>
+				<p>On the Select Team tab of the Proposal, Proponents are asked to propose the exact number of Resources they wish to allocate to their Team, based on their analysis of the Opportunity.</p>
+				<p>Proponents should note that this RFP is not intended to create an exclusive service deal in favour of the Contractor and that the use of the Contractor’s services for any one or more Phases of the Opportunity is not guaranteed.  This RFP is not intended to fetter the right of the Province to procure the same or similar services described in connection with the Opportunity by whatever means its deems necessary or desirable; and the Province reserves the right to source any Teams, Resources or related services by other means, or do nothing.</p>
+				<p><strong>Contract</strong></p>
+				<p><strong>1.	Form of Contract</strong></p>
+				<p>Proponents should review carefully all of the terms and conditions of the <a href="/api/proposals/download/terms/serviceagreement" target="_blank"> Contract </a>.</p>
+				<p>Proponents should also refer to section 1.13 of the Terms and Conditions set out on the Terms tab.</p>
+				<p><strong>2.	Service Requirements</strong></p>
+				<p>Without overshadowing any of the Contract content, Proponents should note the following:</p>
+				<p>If the Proponent becomes the Contractor pursuant to the RFP, such Team will work collaboratively with the Province by delivering services to develop the Product using the Agile scrum process as set out in the Contract.  An Opportunity may include one or more of the following Phases during which the Team will help develop the Product iteratively.  If included in the Opportunity, the Team will work from an initial Product Roadmap during the first Inception Phase, and create an initial Product Backlog for the ensuing second Prototype Phase. The outcomes for the Prototype Phase will be a working alpha release of the Product, an updated Product Roadmap and a resourcing plan for the final (third) Implementation Phase.  During the Implementation Phase, the Contractor will work with the Province to accomplish the business goals described in the Product Roadmap.</p>
+				<p><strong>3.	Select Contract Terms</strong></p>
+				<p>The Province may terminate the Contract for any reason by giving 14 days’ written notice of termination to the Contractor at any time after the completion of at least three Sprints in any of the Inception, Prototype or Implementation Phases.</p>
+				<p>Proponents should note that the Province will issue payment of 90% the fixed price amount for each Phase in monthly payments over the number of months identified on the pricing tab in the RFP, which will be distributed with a 10% holdback to be released upon completion of deliverables, all according to the terms set out in the Contract.</p>
+				<p>Early completion of the Inception or Prototype Phases: Should the Province issue either the Inception Completion Notice or the Prototype Completion Notice, as applicable, prior to the end of the applicable Phase, as identified in the Contract, the Province will pay the Contractor both the holdback for that phase as well as the total remaining monthly fees that would have been paid had the deliverables been completed over the number of months for that Phase identified on the pricing tab in the RFP.</p>
+				<p>Early completion of the Implementation Phase only:  Should the Province issue the Final Acceptance Notice for the Product prior to the end of the timeframe for the Implementation Phase, as identified in the Contract, the Province will pay the Contractor both the Implementation Phase Holdback as well as an additional fee equal to twenty (20) percent of the total remaining monthly fees that would have been paid had the deliverables been completed over the number of months for that Phase identified on the pricing tab in the RFP.</p>
+			</div>
+		</div>
+
 		<!-- // Budget // -->
 		<div class="row">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Budget</h3>
-				<p>We have the potential to spend up to <strong>{{vm.opportunity.budget|currency}}</strong> on a team to pursue this product. </p>
+				<p>The Total Proponent Cost set out in the Proponent’s proposal must not exceed <strong>{{vm.opportunity.budget|currency}} Cdn</strong> (exclusive of applicable taxes) on the Pricing tab. The automated BC Developers' Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.</p>
 			</div>
 		</div>
 
@@ -396,12 +419,13 @@
 		</div>
 
 		<div>
-			&#42;Capabilities are claimed by individuals in their personal profile. View all our capability definitions <a href="/capabilities" target="_blank">here</a>.
+			<p>&#42;Capabilities are claimed by individuals in their personal profile. View all our capability definitions <a href="/capabilities" target="_blank">here</a>.</p>
 		</div>
 
 		<hr>
 
 		<!-- // Terms & Conditions // -->
+		<!--
 		<div class="row">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Terms &amp; Conditions</h3>
@@ -412,11 +436,12 @@
 		</div>
 
 		<hr>
+		-->
 
 		<!-- // How to Apply // -->
 		<div class="row">
 			<div class="col-xs-12 col-sm-8">
-				<h3 class="opp-detail">How to Apply</h3>
+				<h3 class="opp-detail">Request for Proposals</h3>
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know shortly after the closing date whether or not your team has been shortlisted for an interview. Our aim is to conduct interviews and choose a proponent by <span class="strong">{{vm.assignment}}</span>.</p>
 				<p>Thanks for your interest!</p>
@@ -439,7 +464,9 @@
 
 		<hr>
 
+
 		<!-- // Proposal Evaluation Criteria // -->
+		<!--
 		<div class="row">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Proposal Evaluation Criteria</h3>
@@ -455,7 +482,7 @@
 							<p>In order for your company to submit a proposal, first you must qualify by building an interdisciplinary team of 2 or more people with all of the capabilities.</p>
 							<p>When applying for this opportunity, the team members you put forward must collectively possess all the <span class="strong">required capabilities</span> and be available for the time periods stated for each phase.</p>
 							<p>Your proposed team will be evaluated based upon their capabilities.</p>
-							<p>You may also see a list of <span class="strong">preferred skills</span>. The more of these your team has, the higher they'll score.</p>
+							<p>You may also see a list of <span class="strong">preferred technical skills</span>. The more of these your team has, the higher they'll score.</p>
 						</div>
 					</div>
 				</uib-accordion>
@@ -523,6 +550,8 @@
 				</div>
 			</div>
 		</div>
+		-->
 	</div>
+
 
 </section>

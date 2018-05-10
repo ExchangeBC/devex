@@ -1,5 +1,5 @@
 
-<!-- // Banner if proposal is Submitted // -->
+<!-- // Banner if Proposal is Submitted // -->
 <div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'">
 	<div class="container">
 		<div class="row">
@@ -10,13 +10,13 @@
 	</div>
 </div>
 
-<!-- // Banner if proposal is in Draft // -->
+<!-- // Banner if Proposal is in Draft // -->
 <div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
 	<div class="container">
 		<div class="row">
 			<div class="col-xs-12">
-				<span class="strong"><i class="fa fa-file"></i> Your proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong">16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></span> to be considered for this opportunity!
-				<span ng-if="!ppp.proposal.isAcceptedTerms"><br>Before you can submit your proposal, you must agree to the Terms.</span>
+				<span class="strong"><i class="fa fa-file"></i> Your Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong">16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></span> to be considered for this opportunity!
+				<span ng-if="!ppp.proposal.isAcceptedTerms"><br>Before you can submit your Proposal, you must agree to the Terms.</span>
 			</div>
 		</div>
 	</div>
@@ -37,22 +37,155 @@
 
 				<uib-tab index="1">
 					<uib-tab-heading>
-						1. Terms <i class="fa fa-handshake-o"></i>
+						1. Evaluation
+					</uib-tab-heading>
+					<br/>
+					<br/>
+					<div class="row">
+						<div class="col-xs-12 col-sm-8">
+							<div class="panel panel-default">
+								<div class="panel-body">
+									<h4>Evaluation Process</h4>
+									<p class="small">The Mandatory Criteria are set forth in the following table.  Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.</p>
+									<table class="table table-bordered small">
+										<tr><th>Mandatory Criteria</th></tr>
+										<tr><td>The Proponent must be a Qualified Supplier pursuant to the RFQ.</td></tr>
+										<tr><td>The Proposal must be received at the Closing Location before the Closing Time.</td></tr>
+										<tr><td>The Proposal must be in English.</td></tr>
+										<tr><td>The Proposal must be submitted using the submission method described in section 1.3 of the RFP and on the Opportunity page on the Review &amp; Submit tab.</td></tr>
+										<tr><td>For each of the Phases and Phase Windows specified on the Select Team tab, the Proponent must identify each of its proposed Resources (a minimum of two for each Phase), in accordance with the specifications set forth on the Select Team tab as to required number of personnel, their required Capabilities and, if applicable, whether the Resource can fulfill a Full-Time commitment.<br><br>The automated BC Developers' Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</td></tr>
+										<tr><td>The Total Proponent Cost must not exceed the maximum budgeted amount for any individual Phase (if indicated) or the maximum budget in the aggregate.<br><br>The automated BC Developers' Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</td></tr>
+										<tr><td>On the References tab, the Proponent must submit three References including company name, contact name, phone number and email address.</td></tr>
+										<tr><td>The team questions submitted in the proposProposalal must not identify Organization name, Resource name, past project name or specific company software./td></tr>
+									</table>
+
+									<div class="small">
+										Proposals that meet the mandatory criteria will be evaluated with respect to the weighted criteria described in this RFP, based on the following steps:
+										<br><br>
+										<ol type="a">
+											<li>
+												For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.<br><br>
+												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.<br><br> 
+												For the Preferred Technical Skills portion of the Team selection, _this_ system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.<br><br>
+												Proposals that have satisfied this step move on to Step 2 below.
+											</li><br><br>
+											<li>
+												Team-based questionnaire (Step 2)<br><br>
+												The Province will then evaluate the Proponent responses to the Team-based questions contained in this Questionnaire tab that are specific to the Opportunity and are intended to (i) demonstrate a Proponent’s Resource experience working as a team; (ii) a Proponent’s experience with Agile software development; and (iii) demonstrate a Proponent’s experience working on a similar Product, with a similar scope and technical background.<br><br>
+												The Proponent’s responses should not contain any reference or identifier that would suggest to the evaluation committee the identity of the Proponent. This includes, but is not limited to, organization name, Resource name, past projects or specific company software.  The Province reserves the right to reject a Proponent Proposal should the response fail to meet this expectation of anonymity.<br><br>
+												Only those Proponents that have met the minimum score for step 2 will be eligible to proceed to step 3.<br><br>
+												Failure to meet the minimum score will mean that the Proponent’s Proposal will receive no further consideration and the Proponent will be eliminated from the competition.
+											</li><br><br>
+											<li>
+												Shortlisting (Step 3)<br><br>
+												Based on their cumulative scores for steps 1 and 2, only the top four ranked Proponents (the “Shortlisted Proponents”) will then proceed to Step 4 of the RFP process.  The Shortlisted Proponents will be notified that they will be eligible to participate in the code challenge set out in step 4 below.  The notification will explain the nature of the code challenge and any associated rules.
+											</li><br><br>
+											<li>
+												Code Challenge (Step 4)<br><br>
+												This step consists of a code challenge, which will be provided on GitHub, providing the Proponents with 5 (five) business days to complete. The code will be evaluated according to criteria assessing Proponent’s:
+												<ol type="A">
+													<li>approach to the problem;</li>
+													<li>knowledge of the technology;</li>
+													<li>functionality of the app;</li>
+													<li>code quality;</li>
+													<li>code maintainability; and</li>
+													<li>code organization.</li>
+												</ol><br><br>
+												Upon being notified of being shortlisted for this code challenge step, Shortlisted Proponents will receive the applicable evaluation criteria and other instructions regarding this step.<br><br>
+												Only those Shortlisted Proponents that have met the minimum score for step 4 will be eligible to participate in the in-person scenario described in step 5 below.<br><br>
+												Failure to meet the minimum score will mean that the Proponent’s Proposal will receive no further consideration and the Proponent will be eliminated from the competition.
+											</li><br><br>
+											<li>
+												Team Scenario (Step 5)<br><br>
+												This step consists of an in-person scenario. Shortlisted Proponents, who have progressed to this step will be notified of the date, time and place of the exercise.  At the exercise, Proponents will be provided with a scenario designed to permit Proponents to demonstrate their capabilities and demonstrate how they work as a team under pressure.  Qualities to be evaluated will be leadership, teamwork and approach. This will be followed by questions for the Proponent from the evaluation committee, including follow up questions for both the scenario and the Coding Challenge. The in-person scenario can be facilitated in person or by video conference.
+											</li><br><br>
+											<li>
+												Price (Step 6)<br><br>
+												In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.<br><br>
+												The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.<br><br>
+												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.												
+											</li>
+										</ol>
+									</div>
+
+									<h5 class="small">Scoring Table</h5>
+									<table class="table table-bordered small">
+										<tr>
+											<th>Evaluation Criteria</th>
+											<th>Score Range</th>
+											<th>Weightings</th>
+											<th>Minimum Score</th>
+										</tr>
+										<tr>
+											<td>a) Select Team - Preferred Technical Skills</td>
+											<td>0 - 20</td>
+											<td>20&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>b) Team Questions</td>
+											<td>0 - 20</td>
+											<td>20&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>Shortlisting</td>
+											<td></td>
+											<td></td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>c) Code Challenge</td>
+											<td>0 - 25</td>
+											<td>25&#37;</td>
+											<td>20</td>
+										</tr>
+										<tr>
+											<td>d) Team Scenario</td>
+											<td>0 - 25</td>
+											<td>25&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td>e) Price</td>
+											<td>0 - 10</td>
+											<td>10&#37;</td>
+											<td></td>
+										</tr>
+										<tr>
+											<td class="strong">TOTAL</td>
+											<td class="strong">100</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+				</uib-tab>
+
+				<uib-tab index="2">
+					<uib-tab-heading>
+						2. Terms <i class="fa fa-handshake-o"></i>
 					</uib-tab-heading>
 
 					<div class="row">
-						<h5>To submit a proposal on this opportunity, you must agree to the terms contained in this Request for Proposals.</h5>
+						<h5>To submit a Proposal on this Opportunity, you must agree to the terms contained in this Request for Proposals that include the RFP process rules set forth below.  Proponents should note that there are other terms and conditions applicable to this Request for Proposals described throughout the Opportunity Webpage.</h5>
 					</div>
 					<!--
 					<iframe class="row" style="height: 400px;" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
 					-->
 					<br>
 
-					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download the Terms &amp; Conditions</a>
+					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank" ng-click="ppp.downloadTermsClicked()"><i class="fa fa-download"></i> Download the Terms &amp; Conditions</a>
+				<!-- Moved Service Agreement to the Opportunity detail page -->
+				<!--
 					<a class="btn btn-primary" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Download the Service Agreement</a>
+				-->
 					<br><br>
 					<label class="checkbox-inline checkbox-alone">
-						<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the <strong>Terms &amp; Conditions</strong>.
+						<input type="checkbox" name="isInception" ng-disabled="!ppp.termsDownloaded || ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to the <strong>Terms &amp; Conditions</strong>.
 					</label>
 					<br><br>
 
@@ -82,18 +215,19 @@
 
 				</uib-tab>
 
-				<uib-tab index="2">
+				<uib-tab index="3">
 					<uib-tab-heading>
-						2. Select Team <i class="fa fa-group"></i>
+						3. Select Team <i class="fa fa-group"></i>
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> How your team will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> Things you should know as you compose your team <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Province will evaluate proposals based on the preferred technical skills of Resources claimed by Proponents against the requirements set forth on the Opportunity Webpage.</p>
-								<p>The BC Developers’ Exchange automated system will automatically populate the Proponent’s proposal for Preferred Skills on the Select Team tab with the technical skills identified as part of the capabilities in the Resource profiles. It is the responsibility of the Proponent to ensure that the Resource profiles included in their RFP proposal are fully accurate and up-to-date.  Resource profiles can be updated at any time before the Closing Time.</p>
+								<p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.</p>
+ 								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.</p>
+								<p>For the Preferred Technical Skills portion of the Team selection, this system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -114,14 +248,34 @@
 									Click on member(s) to add them to team:
 								</div>
 
-								<div class="panel-body">
-
+								<!-- Team member filter box (inception) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.inception.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.inception.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list Iinception) -->
+								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div ng-repeat="member in ppp.members.inception" class="team-member" ng-class="{'selected':ppp.inTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.inTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+										<div 	ng-repeat="member in ppp.inception.pagedItems"
+												class="team-member"
+												ng-class="{'selected':ppp.inTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.inTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (inception) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.inception.itemsPerPage"
+													total-items="ppp.inception.filterLength"
+													ng-model="ppp.inception.currentPage"
+													ng-change="ppp.inception.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
@@ -138,7 +292,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -165,13 +319,34 @@
 									Click on member(s) to add them to team:
 								</div>
 
-								<div class="panel-body">
-									<div class="team-selection-list">
-										<div ng-repeat="member in ppp.members.proto" class="team-member" class="team-member" ng-class="{'selected':ppp.prTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.prTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+								<!-- Team member filter box (poc) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.poc.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.poc.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list (poc) -->
+								<div class="panel-body team-selection-wrapper">
+									<div class="team-selection-list" >
+										<div 	ng-repeat="member in ppp.poc.pagedItems"
+												class="team-member"
+												ng-class="{'selected':ppp.prTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.prTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (poc) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.poc.itemsPerPage"
+													total-items="ppp.poc.filterLength"
+													ng-model="ppp.poc.currentPage"
+													ng-change="ppp.poc.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
@@ -188,7 +363,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -215,13 +390,34 @@
 								<div class="panel-heading">
 									Click on member(s) to add them to team:
 								</div>
-								<div class="panel-body">
-									<div class="team-selection-list">
-										<div ng-repeat="member in ppp.members.implementation" class="team-member" class="team-member" ng-class="{'selected':ppp.imTeam[member.email]}" ng-click="ppp.clickMember(member, ppp.imTeam)">
-											<avatar-display url="member.profileImageURL"></avatar-display>
+								<!-- Team member filter box (implementation) -->
+								<div class="proposal-searchbox-wrapper">
+									<input 	class="form-control proposal-searchbox"
+											type="text"
+											ng-model="ppp.implementation.search"
+											placeholder="Start typing to filter:"
+											ng-change="ppp.implementation.figureOutItemsToDisplay()"/>
+								</div>
+								<!-- Team member list (implementation) -->
+								<div class="panel-body team-selection-wrapper">
+									<div class="team-selection-list" >
+										<div 	ng-repeat="member in ppp.implementation.pagedItems"
+												class="team-member"
+												ng-class="{'selected':ppp.imTeam[member.email]}"
+												ng-click="ppp.clickMember(member, ppp.imTeam)">
+											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
+								</div>
+								<!-- Page controls (implementation) -->
+								<div class="pagination-wrapper">
+									<uib-pagination boundary-links="false"
+													items-per-page="ppp.implementation.itemsPerPage"
+													total-items="ppp.implementation.filterLength"
+													ng-model="ppp.implementation.currentPage"
+													ng-change="ppp.implementation.pageChanged()"
+													maxSize="5"/>
 								</div>
 							</div>
 
@@ -238,7 +434,7 @@
 									</tbody>
 								</table>
 
-								<h5>Preferred Skills</h5>
+								<h5>Preferred Technical Skills</h5>
 								<table class="table capabilities-list">
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
@@ -253,20 +449,23 @@
 					</div>
 				</uib-tab>
 
-				<uib-tab index="3">
+				<uib-tab index="4">
 					<uib-tab-heading>
-						3. Pricing <i class="fa fa-usd"></i>
+						4. Pricing <i class="fa fa-usd"></i>
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> How pricing will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> Things you should know about proposed pricing <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Total Proponent Cost will be calculated and will be evaluated according to the following methodology:</p>
-								<p>The Proponent will provide, in the Pricing tab, the Total Proponent Cost that reflects the Proponent’s overall Resource costs that would be incurred by the Proponent across the Opportunity Phases.  Pricing will be evaluated as set out below:</p>
-								<p><strong>The Province will calculate the number of points to award based on the following formula:</strong></p>
-								<p>(Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage / The eligible Proponent’s Total Proponent Cost) * Maximum Number of Points allocated to this section.</p>
+								<p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.</p>
+								<p>The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.</p>
+								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</p>
+								<p>How Pricing Will be evaluated:</p>
+								<p>The Total Proponent Cost will be evaluated and scored according to the following formula:</p>
+								<p>Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage divided by The eligible Proponent’s Total Proponent Cost multiplied by Maximum Number of Points allocated to the Pricing component.</p>
+								<p>Example: $100,000(lowest price) divided by $125,000(your price) times 10(available points for pricing) equals 8 out of 10</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -287,15 +486,28 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-heading">
-										Enter a fixed-price for your team for this phase:
+										Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input 	type="text"
+													ng-model="ppp.proposal.phases.inception.cost"
+													model-format="currency"
+													id="budget-inception"
+													class="form-control text-right"
+													aria-label="Amount (to the nearest dollar)"
+													placeholder=0.00
+													ng-blur="ppp.validateInceptionAmount()"
+													select-on-click>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div class="proposal-amount-wrapper">
+								<span 	class="proposal-amount-error alert alert-danger"
+										ng-if="ppp.proposal.phases.inception.invalidAmount">
+										<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.inceptionMax | currency}}</strong></span>
 							</div>
 						</div>
 
@@ -314,15 +526,27 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-heading">
-										Enter a fixed-price for your team for this phase:
+										Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input 	type="text"
+													  ng-model="ppp.proposal.phases.proto.cost"
+													  model-format="currency"
+													  id="budget-poc"
+													  class="form-control text-right"
+													  aria-label="Amount (to the nearest dollar)"
+													  ng-blur="ppp.validatePrototypeAmount()"
+													  placeholder=0.00
+													  select-on-click>
 										</div>
 									</div>
 								</div>
+							</div>
+							<div class="proposal-amount-wrapper">
+								<span 	class="proposal-amount-error alert alert-danger"
+										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency}}</strong></span>
 							</div>
 						</div>
 
@@ -340,39 +564,56 @@
 								</div>
 								<div class="panel panel-primary">
 									<div class="panel-heading">
-										Enter a fixed-price for your team for this phase:
+										Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
-										  <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency"  id="budget-imp" class="form-control text-right" aria-label="Amount (to the nearest dollar)">
+										  <input type="text"
+										  ng-model="ppp.proposal.phases.implementation.cost"
+										  model-format="currency"
+										  id="budget-imp"
+										  class="form-control text-right"
+										  aria-label="Amount (to the nearest dollar)"
+										  placeholder=0.00
+										  select-on-click
+										  ng-blur="ppp.validateImplementationAmount()">
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<div class="proposal-amount-wrapper">
+							<span 	class="proposal-amount-error alert alert-danger"
+									ng-if="ppp.proposal.phases.implementation.invalidAmount">
+									<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency}}</strong></span>
+						</div>
 					</div>
 
 					<div class="row">
-						<div class="col-sm-4 pull-right">
-							<h4 style="text-align: center;"><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+						<div class="col-xs-12 text-right">
+							<h4><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+							<div height="35px" class="proposal-total-amount-wrapper">
+								<span 	class="proposal-amount-error alert alert-danger"
+										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency}}</strong></span>
+							</div>
 						</div>
 					</div>
 
 				</uib-tab>
 
-				<uib-tab index="4">
+				<uib-tab index="5">
 					<uib-tab-heading>
-						4. Team Questions <i class="fa fa-pencil"></i>
+						5. Team Questions <i class="fa fa-pencil"></i>
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> How your responses to the team questions will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> How to compose your team-based questions <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Province will then evaluate the Proponent responses to the Team-based questions contained in this Team Questions tab that are specific to the Opportunity and are intended to (i) demonstrate a Proponent’s Resource experience working as a team; (ii) a Proponent’s experience with Agile software development; and (iii) demonstrate a Proponent’s experience working on a similar Product, with a similar scope and technical background.</p>
-								<p>The Proponent’s responses should not contain any reference or identifier that would suggest to the evaluation committee the identity of the Proponent. This includes, but is not limited to, organization name, Resource name, past projects or specific company software.  The Province reserves the right to reject a Proponent proposal should the response fail to meet this expectation of anonymity.</p>
+								<p>The Proponent will provide responses to the Team-based questions contained in this tab.  The Team-based questions are specific to the Opportunity and are intended to demonstrate the Team's: (i) experience working as a team; (ii) experience with Agile software development; and (iii) experience working on a similar Product, with a similar scope and technical background.</p>
+								<p>The Proponent’s responses should not reference Organization name, Resource name, past projects or specific company software.  The Province reserves the right to reject a Proponent Proposal should the response fail to meet this expectation of anonymity.</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -380,12 +621,15 @@
 					<div class="alert alert-danger">
 						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the identity of the Organization, Resources, specific software or past projects!
 					</div>
+					<h5>
+						All responses are limited to 300 words.
+					</h5>
 					<br>
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[0].question}}</label>
 						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq0 = !sq0"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq0">click to hide details</span><span ng-if="!sq0">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq0">Tell us about your experience to demonstrate your knowledge and skill with:
+						<span class="input-help-source" ng-click="sq0 = !sq0"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq0">click to hide details</span><span ng-if="sq0">click to show details</span>)</i></span>
+						<div class="input-help alert alert-info" ng-show="!sq0">Tell us about your experience to demonstrate your knowledge and skill with:
 							<ul>
 								<li>Performance metrics</li>
 								<li>The role of measurement in software development</li>
@@ -401,8 +645,8 @@
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[1].question}}</label>
 						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq1 = !sq1"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq1">click to hide details</span><span ng-if="!sq1">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq1">
+						<span class="input-help-source" ng-click="sq1 = !sq1"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq1">click to hide details</span><span ng-if="sq1">click to show details</span>)</i></span>
+						<div class="input-help alert alert-info" ng-show="!sq1">
 							Tell us about your experience to demonstrate your knowledge and skill with:
 							<ul>
 								<li>The role of UX in software development</li>
@@ -419,8 +663,8 @@
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[2].question}}</label>
 						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq2 = !sq2"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq2">click to hide details</span><span ng-if="!sq2">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq2">
+						<span class="input-help-source" ng-click="sq2 = !sq2"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq2">click to hide details</span><span ng-if="sq2">click to show details</span>)</i></span>
+						<div class="input-help alert alert-info" ng-show="!sq2">
 							Tell us about your company’s experience so we understand your company culture.
 						</div>
 						<textarea
@@ -433,8 +677,8 @@
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[3].question}}</label>
 						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq3 = !sq3"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq3">click to hide details</span><span ng-if="!sq3">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq3">Tell us about your experience to demonstrate your knowledge and skill with:
+						<span class="input-help-source" ng-click="sq3 = !sq3"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq3">click to hide details</span><span ng-if="sq3">click to show details</span>)</i></span>
+						<div class="input-help alert alert-info" ng-show="!sq3">Tell us about your experience to demonstrate your knowledge and skill with:
 							<ul>
 								<li>User stories</li>
 								<li>Teamwork</li>
@@ -450,8 +694,8 @@
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[4].question}}</label>
 						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq4 = !sq4"><i class="fa fa-lg fa-info-circle"></i> How this question will be evaluated <i>(<span ng-if="sq4">click to hide details</span><span ng-if="!sq4">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="sq4">
+						<span class="input-help-source" ng-click="sq4 = !sq4"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq4">click to hide details</span><span ng-if="sq4">click to show details</span>)</i></span>
+						<div class="input-help alert alert-info" ng-show="!sq4">
 							Tell us about your experience to demonstrate your knowledge of and skill with:
 							<ul>
 								<li>The developyment life cycle</li>
@@ -468,57 +712,27 @@
 					</div>
 				</uib-tab>
 
-				<uib-tab index="5">
-					<uib-tab-heading>
-						5. Code Challenge &amp; Team Scenario
-					</uib-tab-heading>
-					<div class="row">
-						<div class="col-xs-12">
-							<h4><i class="fa fa-lg fa-info-circle"></i> About the Code Challenge &amp; Team Scenario</h4>
-							<h5>Shortlisting</h5>
-							<p>Based on their cumulative scores for steps a) and b), only the top four ranked Proponents (the “<strong>Shortlisted Proponents</strong>”) will then proceed to the next stage of the RFP process.  The Shortlisted Proponents will be notified that they will be eligible to participate in the code challenge set out in step d) below.  The notification will explain the nature of the code challenge.</p>
-							<h5>Code Challenge</h5>
-							<p>This step consists of a Code Challenge, which will be provided on GitHub, providing the Proponents with 5 (five) business days to complete.  The code will be evaluated according to criteria assessing Proponent’s:
-								<ol type="A">
-									<li>approach to the problem;</li>
-									<li>knowledge of the technology;</li>
-									<li>functionality of the app;</li>
-									<li>code quality;</li>
-									<li>code maintainability; and</li>
-									<li>code organization.</li>
-								</ol>
-							</p>
-							<p>Upon being notified of being shortlisted for this Code Challenge step, shortlisted proponents will receive the applicable evaluation criteria and other instructions regarding this step.</p>
-							<p>Only those Proponents that have met the minimum score for above step d) will be eligible to participate in the Team Scenario described in step e) below.</p>
-							<p>Failure to meet the minimum score will mean that the Proponent’s proposal will receive no further consideration and the Proponent will be eliminated from the competition.</p>
-							<h5>Team Scenario</h5>
-							<p>Shortlisted Proponents, who have progressed to this step will be notified of the date, time and place of the exercise.  At the exercise, Proponents will be provided with a scenario designed to permit Proponents to demonstrate their capabilities and demonstrate how they work as a team under pressure.  Qualities to be evaluated will be leadership, teamwork and approach.  This will be followed by questions for the Proponent from the evaluation committee, including follow up questions for both the scenario and the Coding Challenge.  The Team scenario can be facilitated in person or by video conference.</p>
-						</div>
-					</div>
-				</uib-tab>
-
 				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
-				<uib-tab index="6" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
+				<uib-tab index="6">
 					<uib-tab-heading>
 						6. References
 					</uib-tab-heading>
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Collection of references <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> Things to know about your proposed references <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
 								<p>The Province will require Proponents to support their claims of over-all experience by supplying references who can verify the quality of work provided specific to the relevant experience of the Proponent.  On the References tab, the Proponent must submit three References including company name, contact name, phone number and email address. References from the Proponent’s own organization or from named subcontractors are not acceptable for the Proponent.</p>
-								<p>The Province may in its sole discretion, but is under no obligation to, check Proponent references without first notifying the Proponent.  The Province reserves the right to seek additional references independent of those supplied by the Proponent, including internal references in relation to the Proponent’s performance under any past or current contracts with the Province or other verifications as are deemed necessary by it to verify the information contained in the proposal and to confirm the suitability of the Proponent.</p>
-								<p>The Province may only check the lead shortlisted Proponent’s references but reserves the right to check the references of other shortlisted Proponents in the event the lead Proponent is deemed unsatisfactory.  If the Proponent is deemed unsuitable by the Province in its sole discretion due to unsatisfactory references, or if the proposal is found to contain material errors, omissions or misrepresentations, the Proponent’s proposal may be rejected.</p>
+								<p>The Province may in its sole discretion, but is under no obligation to, check Proponent references without first notifying the Proponent.  The Province reserves the right to seek additional references independent of those supplied by the Proponent, including internal references in relation to the Proponent’s performance under any past or current contracts with the Province or other verifications as are deemed necessary by it to verify the information contained in the Proposal and to confirm the suitability of the Proponent.</p>
+								<p>The Province may only check the lead shortlisted Proponent’s references but reserves the right to check the references of other shortlisted Proponents in the event the lead Proponent is deemed unsatisfactory.  If the Proponent is deemed unsuitable by the Province in its sole discretion due to unsatisfactory references, or if the Proposal is found to contain material errors, omissions or misrepresentations, the Proponent’s Proposal may be rejected.</p>
 							</div>
 						</div>
 					</uib-accordion>
 					<div class="row">
 						<div class="col-xs-12">
-							<h5>Please upload a document with 3 references. Include name, position, and contact information.</h5>
-							<br><br>
-							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-upload"></i> Upload your references document</a>
+							<h5>You must save your Proposal before uploading references.</h5>
+							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)" ng-disabled="!ppp.proposal._id"><i class="fa fa-upload"></i> Upload your references document</a>
 
 							<table class="table table-striped">
 								<tr ng-repeat="file in ppp.proposal.attachments">
@@ -542,25 +756,11 @@
 					<uib-tab-heading>
 						7. Review &amp; Submit <i class="fa fa-paper-plane"></i>
 					</uib-tab-heading>
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> How your proposal will be evaluated <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<h5>Evaluation – General Terms</h5>
-								<ol type="a">
-									<li>Evaluation of proposals will be by a committee formed by the Province and may include the Product Manager, employees and contractors of the Province and other appropriate participants and stakeholders.</li>
-									<li>Proposals will be assessed in accordance with the evaluation criteria.  The Province will be under no obligation to receive further information, whether written or oral, from any Proponent.  The Province is under no obligation to perform any investigations or to otherwise verify any statements or representations made in a proposal.  Proposals from not-for-profit agencies or entities will be evaluated against the same criteria as those received from any other Proponents.</li>
-									<li>The Province may consider and evaluate any proposals from other jurisdictions on the same basis that the government purchasing authorities in those jurisdictions would treat a similar proposal from a British Columbia supplier.</li>
-									<li>Proposals will not be reviewed unless the Proponent meets the mandatory criteria for the RFP referenced below.</li>
-									<li> The Province’s intent is to enter into a Contract with the Proponent who has met all minimum scores (if any) and who has the highest overall ranking.</li>
-								</ol>
-							</div>
-						</div>
-					</uib-accordion>
+					<h4>
+						Review and Submit Your Proposal
+					</h4>
 					<h5>
-						Here's a summary of your complete proposal. Make sure it all looks right before you submit. Good luck!
+						Here's a summary of your complete Proposal. Make sure it all looks right before you submit. Good luck!
 					</h5>
 
 					<div class="row">
@@ -578,7 +778,7 @@
 									<div class="col-xs-12 col-sm-6" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
 										<div class="alert alert-danger">
 											<i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
-											You won't be able to submit this proposal until you:
+											You won't be able to submit this Proposal until you:
 											<ul>
 												<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
 												<li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in each phase</li>
@@ -605,7 +805,7 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
+												Enter your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
@@ -622,7 +822,7 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
+												Enter your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
@@ -639,7 +839,7 @@
 												</div>
 											</div>
 											<div class="panel-footer">
-												Fixed price for phase: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
+												Enter your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
 											</div>
 										</div>
 									</div>
@@ -712,78 +912,20 @@
 						<div class="col-xs-12 col-sm-8">
 							<div class="panel panel-default">
 								<div class="panel-body">
-									<h5 class="small">Mandatory Criteria</h5>
-									<p class="small">The Mandatory Criteria are set forth in the following table.  Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.</p>
-									<table class="table table-bordered small">
-										<tr><th>Mandatory Criteria</th></tr>
-										<tr><td>The proposal must be received at the Closing Location before the Closing Time.</td></tr>
-										<tr><td>The proposal must be in English.</td></tr>
-										<tr><td>The proposal must be submitted using the submission method described in section 1.3 of the RFP and on the Opportunity page on the Review &amp; Submit tab.</td></tr>
-										<tr><td>For each of the Phases and Phase Windows specified on the Select Team tab, the Proponent must identify each of its proposed Resources (a minimum of two for each Phase), in accordance with the specifications set forth on the Select Team tab as to required number of personnel, their required Capabilities and, if applicable, whether the Resource can fulfill a Full-Time commitment.<br><br>The automated BC Developer’s Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.</td></tr>
-										<tr><td>The Total Proponent Cost must not exceed the maximum budgeted amount for any individual Phase (if indicated) or the maximum budget in the aggregate.<br><br>The automated BC Developer’s Exchange system will not permit a Proponent to submit a proposal unless this mandatory requirement is satisfied.</td></tr>
-										<tr><td>On the References tab, the Proponent must submit three References including company name, contact name, phone number and email address.</td></tr>
-									</table>
-
-									<h5 class="small">Scoring Table</h5>
-									<table class="table table-bordered small">
-										<tr>
-											<th>Evaluation Criteria</th>
-											<th>Score Range</th>
-											<th>Weightings</th>
-											<th>Minimum Score</th>
-										</tr>
-										<tr>
-											<td>a) Select Team - Technical Skills</td>
-											<td>0 - 20</td>
-											<td>20&#37;</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>b) Team Questions</td>
-											<td>0 - 20</td>
-											<td>20&#37;</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>Shortlisting</td>
-											<td></td>
-											<td></td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>c) Code Challenge</td>
-											<td>0 - 25</td>
-											<td>25&#37;</td>
-											<td>20</td>
-										</tr>
-										<tr>
-											<td>d) Team Scenario</td>
-											<td>0 - 25</td>
-											<td>25&#37;</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td>e) Price</td>
-											<td>0 - 10</td>
-											<td>10&#37;</td>
-											<td></td>
-										</tr>
-										<tr>
-											<td class="strong">TOTAL</td>
-											<td class="strong">100</td>
-											<td></td>
-											<td></td>
-										</tr>
-									</table>
+									<h5 class="small">Contract</h5>
+									<a class="small" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Click here to download a draft of the Service Agreement</a>
 								</div>
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
 							<div class="panel panel-success">
 								<div class="panel-body">
-									<p class="small">Submission of a proposal indicates your company's acceptance of all the terms and conditions set out in the RFP, its appendices and its addenda. These terms and conditions also include any terms and conditions included on the Opportunity's webpage and the tabs of your Proposal.</p>
-									<p class="small">After you submit, you can still make updates to your proposal until the closing deadline.</p>
-									<button type="button" class="btn btn-block btn-lg btn-success pull-right" data-ng-click="ppp.submit()"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									<label class="small">
+										<input type="checkbox" ng-model="ppp.agreeConfirm">&nbsp;
+										&#42;By pushing Submit the Proponent is confirming it is submitting its Proposal to the RFP and agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully read and examined the entire Opportunity Webpage and the RFP; (b) the Proponent has conducted such other investigations as were prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the statements and representations made in its Proposal.
+									</label>
+									<button type="button" class="btn btn-block btn-lg btn-success pull-right" ng-click="ppp.submit()" ng-disabled="!ppp.agreeConfirm"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+									<p class="small">After you submit, you can still make updates to your Proposal until the Closing Time.</p>
 								</div>
 							</div>
 						</div>
@@ -814,7 +956,7 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
-							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Save Updates</button>
+							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
 							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> Delete This Proposal</button>
 							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" "><i class="fa fa-ban"></i> Withdraw Proposal</button>
