@@ -123,7 +123,7 @@
 			ppp.title        = editing ? 'Edit' : 'Create' ;
 			ppp.proposal     = proposal;
 			ppp.user         = Authentication.user;
-			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address2?', '+ppp.org.address2:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 			ppp.proposal.org = org;
 			ppp.orgHasMetRFQ = org.metRFQ;
 			ppp.agreeConfirm = false;
