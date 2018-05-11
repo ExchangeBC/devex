@@ -945,6 +945,20 @@
 					</div>
 				</uib-tab>
 
+				<uib-tab index="8">
+					<uib-tab-heading>
+						8. Addendum
+					</uib-tab-heading>
+					<h4>
+						Addendums
+					</h4>
+					<h5 ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
+						There are currently no addendums for this RFP.
+					</h5>
+					<ul ng-repeat="addendum in ppp.proposal.addendums">
+						<li>{{addendum.descrption}} (added {{addendum.created}})</li>
+					</ul>
+
 			</uib-tabset>
 
 			<!-- // This is where the Terms originally sat at the bottom of the page // -->
