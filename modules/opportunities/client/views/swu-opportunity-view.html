@@ -324,6 +324,7 @@
 
 		<div class="row">
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.inception.isInception">
+				<!--
 				<uib-accordion class="panel-default">
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
@@ -339,25 +340,34 @@
 			    		</div>
 					</div>
 				</uib-accordion>
-				<h5>Schedule</h5>
-				<div>
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
+			-->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="panel-title"><i class="fa fa-map"></i> Inception</div>
+					</div>
+					<div class="panel-body">
+						Schedule:
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
+						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<hr>
-				<h5>Required Capabilities&#42;</h5>
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.proto.isPrototype">
+				<!--
 				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
@@ -377,26 +387,35 @@
 			    		</div>
 					</div>
 				</uib-accordion>
-				<h5>Schedule</h5>
-				<div>
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
+			-->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="panel-title"><i class="fa fa-rocket"></i> Proof of Concept</div>
+					</div>
+					<div class="panel-body">
+						Schedule:
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
+						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<hr>
-				<h5>Required Capabilities&#42;</h5>
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 
 
 			<div class="col-xs-12 col-sm-4" ng-if="vm.opportunity.phases.implementation.isImplementation">
+				<!--
 				<uib-accordion>
 					<div uib-accordion-group class="panel-default">
 						<uib-accordion-heading>
@@ -413,22 +432,30 @@
 			    		</div>
 					</div>
 				</uib-accordion>
-				<h5>Schedule</h5>
-				<div>
-					<i class="fa fa-calendar"></i> &nbsp;
-					<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
-					to
-					<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
+			-->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="panel-title"><i class="fa fa-gears"></i> Implementation</div>
+					</div>
+					<div class="panel-body">
+						Schedule:
+						<div>
+							<i class="fa fa-calendar"></i> &nbsp;
+							<span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+							to
+							<span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
+						</div>
+						<hr>
+						<h5>Required Capabilities&#42;</h5>
+						<table class="table capabilities-list">
+							<tbody>
+								<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
+									<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-				<hr>
-				<h5>Required Capabilities&#42;</h5>
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">full time</label></td>
-						</tr>
-					</tbody>
-				</table>
 			</div>
 		</div>
 
