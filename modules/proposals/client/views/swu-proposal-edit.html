@@ -64,9 +64,9 @@
 										<br><br>
 										<ol type="a">
 											<li>
-												For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.<br><br>
-												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.<br><br>
-												For the Preferred Technical Skills portion of the Team selection, this system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.<br><br>
+												Technical Skills Screening (Step 1)<br><br>
+												The Province will evaluate proposals based on the preferred technical skills of Resources claimed by Proponents against the requirements set forth on the Opportunity Webpage.<br><br>
+												The BC Developers’ Exchange automated system will automatically populate the Proponent’s proposal for Preferred Skills on the Select Team tab with the technical skills identified as part of the capabilities in the Resource profiles. It is the responsibility of the Proponent to ensure that the Resource profiles included in their RFP proposal are fully accurate and up-to-date. Resource profiles can be updated at any time before the Closing Time.<br><br>
 												Proposals that have satisfied this step move on to Step 2 below.
 											</li><br><br>
 											<li>
@@ -103,7 +103,7 @@
 												Price (Step 6)<br><br>
 												In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.<br><br>
 												The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.<br><br>
-												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.												
+												The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.
 											</li>
 										</ol>
 									</div>
@@ -666,7 +666,7 @@
 						<span class="input-help-source" ng-click="sq2 = !sq2"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq2">click to hide details</span><span ng-if="sq2">click to show details</span>)</i></span>
 						<div class="input-help alert alert-info" ng-show="!sq2">
 							Tell us about why you assigned the named Resources to your team, including considerations on:
-							<ul>	
+							<ul>
 								<li>Availability</li>
 								<li>Resource experience, skills and capability</li>
 								<li>Experience working together</li>
@@ -775,11 +775,18 @@
 								<div class="row">
 									<div class="col-xs-12 col-sm-6">
 										<h3 class="opp-detail">Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h3>
-										<p><strong>{{ppp.org.name}}</strong><br>
-										{{ppp.org.fullAddress}}<br>
-										Contact: {{ppp.org.contactName}}<br>
-										{{ppp.org.contactPhone}}<br>
-										{{ppp.org.contactEmail}}</p>
+										<p>
+											<strong>{{ppp.org.name}}</strong><br/>
+											{{ppp.org.address}} <span ng-if="ppp.org.address2"><br/>{{ppp.org.address2}}</span><br/>
+											{{ppp.org.city}}<span ng-if="ppp.org.province">, {{ppp.org.province}}</span><br/>
+											<span ng-if="ppp.org.postalcode">{{ppp.org.postalcode}}<br/></span>
+											<span ng-if="ppp.org.contactName">
+												<strong>Contact: {{ppp.org.contactName}}</strong><br/>
+												<span ng-if="ppp.org.contactPhone"><i>{{ppp.org.contactPhone}}</i><br/></span>
+												<span ng-if="ppp.org.contactEmail"><i>{{ppp.org.contactEmail}}</i></span>
+											</span>
+										</p>
+
 									</div>
 									<div class="col-xs-12 col-sm-6" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
 										<div class="alert alert-danger">
@@ -937,6 +944,20 @@
 						</div>
 					</div>
 				</uib-tab>
+
+				<uib-tab index="8">
+					<uib-tab-heading>
+						8. Addendum
+					</uib-tab-heading>
+					<h4>
+						Addendums
+					</h4>
+					<h5 ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
+						There are currently no addendums for this RFP.
+					</h5>
+					<ul ng-repeat="addendum in ppp.proposal.addendums">
+						<li>{{addendum.descrption}} (added {{addendum.created}})</li>
+					</ul>
 
 			</uib-tabset>
 
