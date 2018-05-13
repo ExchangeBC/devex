@@ -10,7 +10,7 @@
     vm.isUser = Authentication.user;
     if (sessionStorage.prevState) {
       var prevState = sessionStorage.prevState;
-      sessionStorage.prevState = null;
+      delete sessionStorage.prevState;
       $state.go(prevState);
     }
   }
