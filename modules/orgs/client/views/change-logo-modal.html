@@ -7,7 +7,7 @@
 			<div ng-show="qqq.fileSelected" class="text-center">
 				<p>Crop your picture then press upload below:</p>
 				<div ngf-drop ng-model="picFile" ngf-pattern="image/*" class="cropArea text-center">
-					<img-crop image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="rectangle">
+					<img-crop crossOrigin="Anonymous" image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="rectangle">
 					</img-crop>
 				</div>
 			</div>
