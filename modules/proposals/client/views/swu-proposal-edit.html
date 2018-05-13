@@ -171,7 +171,7 @@
 					</uib-tab-heading>
 
 					<div class="row">
-						<h5>To submit a Proposal on this Opportunity, you must agree to the terms contained in this Request for Proposals that include the RFP process rules set forth below.  Proponents should note that there are other terms and conditions applicable to this Request for Proposals described throughout the Opportunity Webpage.</h5>
+						<h5>To submit a Proposal to this RFP, you must agree to the terms and conditions that are set forth below and incorporated herein by this reference.  Proponents should note that, apart from the terms and conditions set out below, there are other terms and conditions that apply to this RFP and are described throughout the RFP.</h5>
 					</div>
 					<!--
 					<iframe class="row" style="height: 400px;" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
@@ -224,16 +224,17 @@
 							<uib-accordion-heading>
 								<i class="fa fa-lg fa-info-circle"></i> Things you should know as you compose your team <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
-							<div class="row">
-								<p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfying the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.</p>
- 								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.</p>
-								<p>For the Preferred Technical Skills portion of the Team selection, this system will automatically populate the Proponent’s Proposal with the technical skills identified as part of the Capabilities in the Resource Profiles on the BC Developer’s Exchange. It is the responsibility of the Proponent to ensure that the Resource Profiles are fully accurate and up-to-date.  Resource Profiles can be updated at any time before the Closing Time.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.</p>
+							<div class="row">								
+								<p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfy the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.</p>
+								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.</p>
+								<p>The RFP system will also automatically populate the Proponent’s Proposal for the preferred technical skills identified below.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.</p>
+								<p>Proponents should note that both Resource Capabilities and preferred technical skills are claimed as part of the Resource profile.  It is the responsibility of the Proponent to ensure that the Resource profiles for a Proponent’s Team are fully accurate and up-to-date.  Resource profiles can be updated at any time before the Closing Time.</p>							
 							</div>
 						</div>
 					</uib-accordion>
 					<div class="row">
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oinp.isInception">
-							<h5 class="text-center"><i class="fa fa-map"></i> Inception</h5>
+							<h5 class="text-center"><i class="fa fa-map"></i> Inception Phase</h5>
 
 
 
@@ -305,7 +306,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oprp.isPrototype">
-							<h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept</h5>
+							<h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
 
 
 							<div class="strong text-center">
@@ -376,7 +377,7 @@
 							</div>
 						</div>
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oimp.isImplementation">
-							<h5 class="text-center"><i class="fa fa-gears"></i> Implementation</h5>
+							<h5 class="text-center"><i class="fa fa-gears"></i> Implementation Phase</h5>
 
 
 
@@ -456,16 +457,12 @@
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Things you should know about proposed pricing <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> Things you should know about proposing pricing <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed that amount.  The automated system will add the sum of the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must be within the maximum budget amounts specified on this tab.</p>
-								<p>The Proponent is free to nominate a Team with as many of Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.</p>
-								<p>The automated BC Developer’s Exchange system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</p>
-								<p>How Pricing Will be evaluated:</p>
-								<p>The Total Proponent Cost will be evaluated and scored according to the following formula:</p>
-								<p>Lowest Total Proponent Cost of all Shortlisted Proponents that have progressed to this stage divided by The eligible Proponent’s Total Proponent Cost multiplied by Maximum Number of Points allocated to the Pricing component.</p>
-								<p>Example: $100,000(lowest price) divided by $125,000(your price) times 10(available points for pricing) equals 8 out of 10</p>
+								<p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed the maximum amount for that Phase.  The automated system will add the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must also be within the total maximum budget amount specified on this tab.</p>
+								<p>The Proponent is free to nominate a Team with as many of its Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.</p>
+								<p>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</p>
 							</div>
 						</div>
 					</uib-accordion>
@@ -609,20 +606,20 @@
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> How to compose your team-based questions <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+								<i class="fa fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
-							<div class="row">
+							<div class="row">								
 								<p>The Proponent will provide responses to the Team-based questions contained in this tab.  The Team-based questions are specific to the Opportunity and are intended to demonstrate the Team's: (i) experience working as a team; (ii) experience with Agile software development; and (iii) experience working on a similar Product, with a similar scope and technical background.</p>
-								<p>The Proponent’s responses should not reference Organization name, Resource name, past projects or specific company software.  The Province reserves the right to reject a Proponent Proposal should the response fail to meet this expectation of anonymity.</p>
+								<p>The Proponent’s responses should not reference Organization name, Resource name, or specific company software.  The Province reserves the right to reject a Proponent Proposal should the response fail to meet this expectation of anonymity.</p>							
 							</div>
 						</div>
 					</uib-accordion>
 					<br>
 					<div class="alert alert-danger">
-						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the identity of the Organization, Resources, specific software or past projects!
+						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the Organization name, Resource name, or specific company software!
 					</div>
 					<h5>
-						All responses are limited to 300 words.
+						The response for each question is limited to 300 words. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
 					</h5>
 					<br>
 					<div class="form-group">
@@ -729,9 +726,10 @@
 								<i class="fa fa-lg fa-info-circle"></i> Things to know about your proposed references <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
 							</uib-accordion-heading>
 							<div class="row">
-								<p>The Province will require Proponents to support their claims of over-all experience by supplying references who can verify the quality of work provided specific to the relevant experience of the Proponent.  On the References tab, the Proponent must submit three References including company name, contact name, phone number and email address. References from the Proponent’s own organization or from named subcontractors are not acceptable for the Proponent.</p>
+								<p>The Province will require Proponents to support their claims of over-all experience by supplying references who can verify the quality of work provided specific to the relevant experience of the Proponent.  Using the upload function below, the Proponent must submit three references setting forth company name, contact name, phone number and email address for each reference. References from the Proponent’s own organization or Team are not acceptable for the Proponent.</p>
 								<p>The Province may in its sole discretion, but is under no obligation to, check Proponent references without first notifying the Proponent.  The Province reserves the right to seek additional references independent of those supplied by the Proponent, including internal references in relation to the Proponent’s performance under any past or current contracts with the Province or other verifications as are deemed necessary by it to verify the information contained in the Proposal and to confirm the suitability of the Proponent.</p>
-								<p>The Province may only check the lead shortlisted Proponent’s references but reserves the right to check the references of other shortlisted Proponents in the event the lead Proponent is deemed unsatisfactory.  If the Proponent is deemed unsuitable by the Province in its sole discretion due to unsatisfactory references, or if the Proposal is found to contain material errors, omissions or misrepresentations, the Proponent’s Proposal may be rejected.</p>
+								<p>Further to the Province’s reservation of rights under section 1.21 of the terms and conditions set out on the Terms tab, if the Proponent is deemed unsuitable by the Province in its sole discretion due to any unsatisfactory reference, or if the Proposal is found to contain material errors, omissions or misrepresentations, the Proponent’s proposal will receive no further consideration and the Proponent will be eliminated from the competition.</p>
+								<p>The Province may only check the lead shortlisted Proponent’s references but reserves the right to check the references of other shortlisted Proponents in the event the lead Proponent is deemed unsatisfactory.</p>						
 							</div>
 						</div>
 					</uib-accordion>
@@ -811,7 +809,7 @@
 										<div class="panel panel-default">
 											<div class="panel-body">
 												<p class="strong"><i class="fa fa-map"></i> &nbsp;Inception Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;{{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -827,8 +825,7 @@
 										<div class="panel panel-default">
 											<div class="panel-body">
 												<p class="strong"><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;
-												{{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
+												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -844,8 +841,7 @@
 										<div class="panel panel-default">
 											<div class="panel-body">
 												<p class="strong"><i class="fa fa-gears"></i> &nbsp;Implementation Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;
-												{{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
+												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -921,21 +917,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-8">
-							<div class="panel panel-default">
-								<div class="panel-body">
-									<h5 class="small">Contract</h5>
-									<a class="small" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Click here to download a draft of the Service Agreement</a>
-								</div>
-							</div>
-						</div>
+					<div class="row">						
 						<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
 							<div class="panel panel-success">
 								<div class="panel-body">
 									<label class="small">
 										<input type="checkbox" ng-model="ppp.agreeConfirm">&nbsp;
-										&#42;By pushing Submit the Proponent is confirming it is submitting its Proposal to the RFP and agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully read and examined the entire Opportunity Webpage and the RFP; (b) the Proponent has conducted such other investigations as were prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the statements and representations made in its Proposal.
+										&#42;By pushing Submit the Proponent is confirming it is submitting its Proposal to the RFP and agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully read and examined the entire RFP; (b) the Proponent has conducted such other investigations as were prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the statements and representations made in its Proposal.
 									</label>
 									<button type="button" class="btn btn-block btn-lg btn-success pull-right" ng-click="ppp.submit()" ng-disabled="!ppp.agreeConfirm"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
 									<p class="small">After you submit, you can still make updates to your Proposal until the Closing Time.</p>
