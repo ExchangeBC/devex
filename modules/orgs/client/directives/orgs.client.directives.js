@@ -113,7 +113,8 @@
 								// Show success message
 								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
 								// Populate user object
-								qqq.user = Authentication.user = response;
+								// qqq.user = Authentication.user = response;
+								qqq.user = response;
 								// Reset form
 								qqq.fileSelected = false;
 								qqq.progress = 0;
