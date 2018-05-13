@@ -595,7 +595,7 @@
 							<h4><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
 							<div height="35px" class="proposal-total-amount-wrapper">
 								<span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the program's maximum budget of <strong>{{ppp.opportunity.budget | currency}}</strong></span>
+										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency}}</strong></span>
 							</div>
 						</div>
 					</div>
