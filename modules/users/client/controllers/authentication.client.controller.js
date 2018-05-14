@@ -65,7 +65,8 @@ $window.location.href = '/authentication/government?role=gov';
     // OAuth provider request
     function callOauthProvider(url) {
       if ($state.previous && $state.previous.href) {
-        url += '?redirect_to=' + encodeURIComponent($state.previous.href);
+        // url += '?redirect_to=' + encodeURIComponent($state.previous.href);
+        sessionStorage.setItem('prevState', $state.previous.state.name);
       }
       $rootScope.authRole = $location.search().role;
       // Effectively call OAuth authentication route:

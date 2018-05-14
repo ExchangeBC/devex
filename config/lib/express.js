@@ -125,18 +125,20 @@ module.exports.initSession = function (app, db) {
   // Express MongoDB session storage
   app.use(session({
     saveUninitialized: true,
-    resave: true,
+    resave: false,
+    unset: 'destroy',
     secret: config.sessionSecret,
     cookie: {
-      maxAge: config.sessionCookie.maxAge,
+      // maxAge: config.sessionCookie.maxAge,
       httpOnly: config.sessionCookie.httpOnly,
       secure: config.sessionCookie.secure && config.secure.ssl
     },
-    name: config.sessionKey,
-    store: new MongoStore({
-      mongooseConnection: db.connection,
-      collection: config.sessionCollection
-    })
+    name: config.sessionKey
+    // Removed this for now, as it was causing sessions to persist after browsers were closed.  Re-enable to have sessions persist in the database.
+    // store: new MongoStore({
+    //   mongooseConnection: db.connection,
+    //   collection: config.sessionCollection
+    // })
   }));
 
   // Add Lusca CSRF Middleware

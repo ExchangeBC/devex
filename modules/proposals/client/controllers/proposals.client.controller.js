@@ -138,7 +138,7 @@
 		}
 		ppp.opportunity   = opportunity;
 		ppp.org                                   = org;
-		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address2?', '+ppp.org.address2:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 		ppp.members = [];
 		if (org) ppp.members                      = org.members.concat (org.admins);
 		ppp.title                                 = editing ? 'Edit' : 'Create' ;

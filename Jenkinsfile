@@ -51,6 +51,8 @@ def getChangeString() {
 // oc policy add-role-to-user view system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-test
 // oc policy add-role-to-user view system:serviceaccount:devex-platform-tools:jenkins -n devex-platform-prod
 
+properties([[$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '10']]])
+
 node('maven') {
 
     stage('checkout') {

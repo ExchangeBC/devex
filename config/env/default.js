@@ -18,8 +18,9 @@ module.exports = {
 	// URL. For example: https://www.myapp.com (including port if required).
 	// Session Cookie settings
 	sessionCookie: {
-		// session expiration is set by default to 24 hours
+		// session expiration is set by default to 1 year (TODO: this is a temporary fix, and needs to be set to a reasonable value, and we need to implement proper timeout handling)
 		maxAge: 24 * (60 * 60 * 1000),
+		// maxAge: 2000,
 		// httpOnly flag makes sure the cookie is only accessed
 		// through the HTTP protocol and not JS/browser
 		httpOnly: true,
@@ -51,7 +52,7 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'serviceagreement': {
-			path: 'public/sprint-with-us-service-agreement-2018-05-08.pdf',
+			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
 			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		}

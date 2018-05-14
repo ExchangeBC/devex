@@ -301,7 +301,7 @@
 				.then (function () {
 					vm.emaillist = '';
 					CapabilitiesMethods.init (vm, vm.org, capabilities);
-					// vm.refresh ();
+					vm.refresh ();
 					vm.orgForm.$setPristine ();
 					$rootScope.$broadcast('updateOrg', 'done');
 				})

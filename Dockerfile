@@ -7,8 +7,8 @@
 # Compose:
 # docker-compose up -d
 
-FROM ubuntu:latest
-MAINTAINER MEAN.JS
+FROM ubuntu:17.10
+LABEL maintainer=MEAN.JS
 
 # 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 35729 = livereload
 EXPOSE 80 443 3000 35729
@@ -50,7 +50,7 @@ RUN dpkg -i dumb-init_*.deb
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-RUN sudo apt-get install -yq nodejs \
+RUN sudo apt-get install -yq nodejs npm \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -75,6 +75,7 @@ RUN npm install && npm cache clean
 # Install bower packages
 COPY bower.json /opt/mean.js/bower.json
 COPY .bowerrc /opt/mean.js/.bowerrc
+
 RUN bower install --quiet --allow-root --config.interactive=false
 
 COPY . /opt/mean.js
