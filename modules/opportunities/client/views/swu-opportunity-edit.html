@@ -94,7 +94,7 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> Delete this Opportunity</a>
+						<a href="javascript:void(0);" ng-if="vm.editing && vm.closing == 'OPEN'" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> Delete this Opportunity</a>
 					</div>
 				</div>
 			</div>
