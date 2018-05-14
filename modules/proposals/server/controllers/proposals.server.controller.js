@@ -158,6 +158,25 @@ exports.myopp = function (req, res) {
 		}
 	});
 };
+exports.myorgopp = function (req, res) {
+	if (!req.user) return res.json ({});
+	if (!req.org) return res.json ({});
+	if (!req.opportunity) return res.json ({});
+	Proposal.findOne ({org:req.org._id, opportunity:req.opportunity._id})
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('opportunity')
+	.populate('user', userfields)
+	.exec (function (err, proposals) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (proposals);
+		}
+	});
+};
 var getUserCapabilities = function (users) {
 	return new Promise (function (resolve, reject) {
 		var userids = users.map (function (o) {if (o._id) return o._id; else return o;});
@@ -230,11 +249,23 @@ var saveProposal = function (proposal) {
 		});
 	});
 };
+exports.saveProposal = saveProposal;
 var saveProposalRequest = function (req, res, proposal) {
 	return saveProposal (proposal)
 	.then (function () { res.json (proposal); })
 	.catch (function (e) { res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
 };
+// -------------------------------------------------------------------------
+//
+// remove a user from a proposal and save it
+//
+// -------------------------------------------------------------------------
+exports.removeUserFromProposal = function (proposal, userid) {
+	proposal.phases.implementation.team.pull (userid);
+	proposal.phases.inception.team.pull (userid);
+	proposal.phases.proto.team.pull (userid);
+	return saveProposal (proposal);
+}
 /**
  * Create a Proposal
  */
@@ -342,6 +373,18 @@ exports.assign = function (req, res) {
 	.then (function () {res.json (proposal); })
 	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
 };
+exports.assignswu = function (req, res) {
+	var proposal = req.proposal;
+	proposal.status = 'Assigned';
+	proposal.isAssigned = true;
+	helpers.applyAudit (proposal, req.user);
+	saveProposal (proposal)
+	.then (function () {
+		return Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+	})
+	.then (function () {res.json (proposal); })
+	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+};
 // -------------------------------------------------------------------------
 //
 // unassign gets called from the opportunity side, so just do the work
@@ -377,7 +420,22 @@ exports.delete = function (req, res) {
 		}
 	});
 };
-
+exports.deleteForOrg = function (orgid) {
+	return new Promise (function (resolve, reject) {
+		Proposal.find ({org:orgid}, function (err, proposals) {
+			if (err) reject (err);
+			else {
+				if (proposals) {
+					Promise.all (proposals.map (function (proposal) {
+						// return proposal.remove ();
+						return Promise.resolve ();
+					})).then (resolve, reject);
+				}
+				else resolve ();
+			}
+		});
+	});
+};
 // -------------------------------------------------------------------------
 //
 // return a list of all proposals
@@ -440,7 +498,6 @@ exports.getPotentialResources = function (req, res) {
 	var org         = req.org;
 	var opportunity = req.opportunity;
 	var allMembers  = _.uniq (org.members.concat (org.admins));
-	console.log ('whatall', allMembers);
 
 	//
 	// if the user is not an admin of the org then bail out
@@ -481,7 +538,6 @@ exports.getPotentialResources = function (req, res) {
 			users[i] = user;
 			for (j=0; j<opportunity.phases.inception.capabilities.length; j++) {
 				c = opportunity.phases.inception.capabilities[j].code;
-				console.log ('code:', c);
 				if (user.iCapabilities[c]) {
 					ret.inception.push (user);
 					break;

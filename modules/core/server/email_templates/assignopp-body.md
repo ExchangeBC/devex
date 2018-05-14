@@ -3,6 +3,6 @@
 
 ### Congratulations, {{data.username}}!
 
-The proposal you submitted to work on {{ data.name }} ({{ data.domain }}/opportunities/{{ data.code }}) has been selected! {{data.assignor}} is offering the assignment to you.
+The Proposal you submitted to work on {{ data.name }} ({{ data.domain }}/opportunities/{{ data.code }}) has been selected! {{data.assignor}} is offering the assignment to you.
 
 {{/markdown}}

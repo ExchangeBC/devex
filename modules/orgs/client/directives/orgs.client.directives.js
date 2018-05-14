@@ -22,23 +22,34 @@
 				var uid      = isUser ? Authentication.user._id : 'none';
 				vm.isAdmin = isAdmin;
 				vm.isGov   = isGov;
-				vm.userCanAdd = isUser && (isAdmin || !isGov);
-				// console.log (isUser, isAdmin, isGov);
-				vm.trust = $sce.trustAsHtml;
-				$scope.orgs.forEach (function (org) {
-					org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
-					org.isOrgOwner      = org.owner && (uid === org.owner._id);
-					org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
-					// console.log ('org', org.name);
-					// console.log ('uid', uid);
-					// console.log ('owner', org.owner);
-					// console.log ('admin', org.isOrgAdmin);
-					// console.log ('member', org.isOrgMember);
-					// console.log ('owner', org.isOrgOwner);
-					// console.log ('canedit', org.canEdit);
-				});
-				vm.orgs = $scope.orgs;
+
+				if (isUser) {
+					OrgsService.myadmin ().$promise.then (function (orgs) {
+						//
+						// the user must be listed as the admin for at least one org.
+						// for now, we only care about the first one, but in future they
+						// may be able to be admins of multiple
+						//
+						var alreadyHasCompanies = isUser && (orgs && orgs.length > 0);
+
+						vm.userCanAdd = isUser && !alreadyHasCompanies && (isAdmin || !isGov);
+						vm.trust = $sce.trustAsHtml;
+						$scope.orgs.forEach (function (org) {
+							org.isOrgAdmin      = org.admins.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+							org.isOrgMember     = org.members.map (function (u) { return (uid === u._id); }).reduce (function (accum, curr) {return (accum || curr);}, false);
+							org.isOrgOwner      = org.owner && (uid === org.owner._id);
+							org.canEdit         = vm.isAdmin || org.isOrgOwner || org.isOrgAdmin;
+						});
+						vm.orgs = $scope.orgs;
+					});
+				}
+				else {
+					OrgsService.list().$promise.then(function (orgs) {
+						vm.userCanAdd = false;
+						vm.trust = $sce.trustAsHtml;
+						vm.orgs = $scope.orgs;
+					})
+				}
 			}
 		}
 	})
@@ -56,13 +67,11 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Update logo</button>',
+			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
 			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
 				var wsx = this;
-				// console.log (wsx);
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
-					// console.log ('what');
 					$uibModal.open ({
 						size: 'lg',
 						templateUrl: '/modules/orgs/client/views/change-logo-modal.html',
@@ -86,7 +95,6 @@
 										orgImageURL: Upload.dataUrltoBlob(dataUrl, name)
 									}
 								}).then(function (response) {
-									// console.log (response);
 									wsx.org.orgImageURL = response.data.orgImageURL;
 									$rootScope.$broadcast('orgImageUpdated', response.data.orgImageURL);
 									$uibModalInstance.dismiss('cancel');
@@ -105,7 +113,8 @@
 								// Show success message
 								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
 								// Populate user object
-								qqq.user = Authentication.user = response;
+								// qqq.user = Authentication.user = response;
+								qqq.user = response;
 								// Reset form
 								qqq.fileSelected = false;
 								qqq.progress = 0;

@@ -1,31 +1,35 @@
 <div class="row">
 	<div class="col-xs-12 text-center">
 			<div class="proposal-stats">
-				<span><i class="fa fa-eye"></i> {{vm.pageViews}}</span> Views &nbsp;&nbsp;&nbsp;
-				<span><i class="fa fa-user"></i> {{vm.stats.following}}</span> Followers &nbsp;&nbsp;&nbsp;
-				<span><i class="fa fa-file-o"></i> {{vm.stats.draft}}</span> Proposals started &nbsp;&nbsp;&nbsp;
-				<span><i class="fa fa-inbox"></i> {{vm.stats.submitted}}</span> Proposals submitted
+				<!-- // Hiding Views until we can hook this up to display unique visitors // -->
+				<!--
+				<span><i class="fa fa-eye"></i> {{vm.pageViews}}</span> Views 
+				&nbsp;&nbsp;&nbsp;
+				-->
+				<span uib-tooltip="People following this opportunity"><i class="fa fa-user"></i> {{vm.stats.following}} Followers</span>
+				&nbsp;&nbsp;&nbsp;
+				<span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals started</span> 
+				&nbsp;&nbsp;&nbsp;
+				<span uib-tooltip="Proposal submitted"><i class="fa fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
 			</div>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
-		<div class="well well-important">You'll be able to view submitted proposals here when the opportunity closes.</div>
+		<div class="alert alert-warning">You'll be able to view submitted Proposals here when the opportunity closes.</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="well well-important"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No proposals were submitted!</div>
+		<div class="alert alert-warning" style="display: inline-block;"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No Proposals were submitted!</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="well well-important">
-			<p class="strong">You've got proposals!</p>
-			<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
-		</div>
+		<div class="alert alert-success" style="display: inline-block;"><i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Sweet!</strong> You've got Proposals!</div><br>
+		<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
 	</div>
 </div>

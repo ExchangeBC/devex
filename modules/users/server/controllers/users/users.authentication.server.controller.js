@@ -50,6 +50,29 @@ exports.signup = function (req, res) {
   });
 };
 
+var ensureOrgs = function (user, orglist) {
+  var Org = mongoose.model ('Org');
+  var plist = orglist.map (function (orgid) {
+    return new Promise (function (resolve, reject) {
+      Org.findById (orgid).exec (function (err, org) {
+        if (err || !org) {
+          user.orgsAdmin.pull (orgid);
+          user.orgsMember.pull (orgid);
+          user.orgsPending.pull (orgid);
+        }
+        resolve ();
+      });
+    });
+  });
+  Promise.all (plist)
+  .then (function () {
+    user.markModified ('orgsAdmin');
+    user.markModified ('orgsMember');
+    user.markModified ('orgsPending');
+    user.save ();
+  });
+};
+
 /**
  * Signin after passport authentication
  */
@@ -59,16 +82,15 @@ exports.signin = function (req, res, next) {
       res.status(422).send(info);
     } else {
       // Remove sensitive data before login
-      user.password = undefined;
-      user.salt = undefined;
-
-      req.login(user, function (err) {
-        if (err) {
-          res.status(400).send(err);
-        } else {
-          res.json(user);
-        }
-      });
+        user.password = undefined;
+        user.salt = undefined;
+        req.login(user, function (err) {
+          if (err) {
+            res.status(400).send(err);
+          } else {
+            res.json(user);
+          }
+        });
     }
   })(req, res, next);
 };
@@ -77,6 +99,7 @@ exports.signin = function (req, res, next) {
  * Signout
  */
 exports.signout = function (req, res) {
+  // ensureOrgs (req.user, req.user.orgsAdmin.concat (req.user.orgsMember, req.user.orgsPending))
   req.logout();
   res.redirect('/');
 };

@@ -1,20 +1,27 @@
-<section class="detail-page-background">
-
+<div class="sub-nav">
 	<div class="container">
 		<div class="breadcrumb-nav">
 			<a href="/projects" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Projects</a>
 		</div>
 	</div>
+</div>
+
+<section class="detail-page-background">
 
 	<div class="container detail-view">
-		
+
 		<div class="opp-detail-header">
 			Created on <span class="strong" ng-bind="vm.project.created | date:'mediumDate'"></span> by <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span><span ng-if="!vm.project.createdBy">Deleted User</span>&nbsp;&nbsp; Last updated on <span class="strong" ng-bind="vm.project.updated | date:'mediumDate'"></span> by <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span><span ng-if="!vm.project.updatedBy">Deleted User</span>
-			
-			<button type="button" class="btn btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
-			<button type="button" class="btn btn-text-only pull-right" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-lg fa-user" title="Request Membership"></i></button>
-			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(false)" title="Unpublish this project"><i class="fa fa-lg fa-ban"></i></a>
-			<a href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(true)" title="Publish this page"><i class="fa fa-lg fa-bullhorn"></i></a>
+		<!-- // Admin control buttons // -->
+
+			<!-- // Unpublish // -->
+			<a data-automation-id="button-project-unpublish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-text-only pull-right" ng-click="vm.publish(false)" title="Unpublish this project"><i class="fa fa-lg fa-ban"></i></a>
+			<!-- // Publish // -->
+			<a data-automation-id="button-project-publish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this page"><i class="fa fa-bullhorn"></i> Publish</a>
+			<!-- // Edit // -->
+			<button type="button-project-edit" class="btn btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
+		<!-- // If user is not a member, request membership // -->
+			<button type="button-project-request-membership" class="btn btn-lg btn-text-only pull-right" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-lg fa-user" title="Request Membership"></i></button>
 		</div>
 
 		<div class="row">
@@ -23,7 +30,7 @@
 				<p ng-bind="vm.project.short"></p>
 			</div>
 		</div>
-		
+
 		<hr>
 
 
@@ -61,8 +68,11 @@
 		<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
 		<br>
 		<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
+	<!-- // Hiding Opportunity list on this page because there is formatting funkiness going on I don't know how to fix right now // -->
+	<!--
 		<br>
 		<opportunity-list project="vm.project" program="vm.project.program" context="project" title="Project Opportunities"></opportunity-list>
+	-->
 	</div>
 
 </section>

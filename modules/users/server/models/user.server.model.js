@@ -28,7 +28,7 @@ var Endorsement = new Schema ({
 	createdBy   : {type: 'ObjectId', ref: 'User', default: null },
 	updated     : {type: Date, default: null },
 	updatedBy   : {type: 'ObjectId', ref: 'User', default: null }
-});
+}, { usePushEach: true });
 
 // -------------------------------------------------------------------------
 //
@@ -39,7 +39,7 @@ var UserCapabilities = new Schema ({
 	code       : {type: String, default: ''},
 	experience : {type: String, default:''},
 	years      : {type: Number, default:0 }
-});
+}, { usePushEach: true });
 
 /**
  * A Validation function for local strategy properties
@@ -90,15 +90,15 @@ var UserSchema = new Schema({
 		lowercase: true,
 		trim: true
 	},
-	orgsAdmin                : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
-	orgsMember               : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
-	orgsPending              : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[]},
+	orgsAdmin                : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[],index:true},
+	orgsMember               : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[],index:true},
+	orgsPending              : {type:[{type:Schema.ObjectId, ref:'Org'}], default:[],index:true},
 	password                 : {type: String, default: ''},
 	salt                     : {type: String },
 	profileImageURL          : {type: String, default: 'img/default.png'},
 	provider                 : {type: String, required: 'Provider is required'},
 	government               : {type: String, default: ''},
-	isDisplayEmail           : {type: Boolean, default:true},
+	isDisplayEmail           : {type: Boolean, default:false},
 	notifyOpportunities      : {type: Boolean, default:false},
 	subscribeOpportunitiesId : {type: String, default: null},
 	convertedNotifications   : {type: Boolean, default:false},
@@ -154,7 +154,7 @@ var UserSchema = new Schema({
 	capabilityDetails : {type:[UserCapabilities], default:[]}
 
 
-});
+}, { usePushEach: true });
 
 /**
  * Hook a pre save method to hash the password

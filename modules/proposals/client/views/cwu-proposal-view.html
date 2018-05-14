@@ -2,23 +2,72 @@
 
 	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
 
-		<div class="container container-edit-form">
+		<div class="edit-form">
 
 			<div class="edit-form-header">
 				<div class="row">
 					<div class="col-xs-12">
-						<h4>
-							<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fa fa-times"></i> CLOSE</a>
+						
+							<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fa fa-lg fa-times"></i></a>
 							&nbsp; <span class="light small">PROPOSAL FROM:</span>
 							<img class="img-avatar-flat img-avatar-sm" src="{{ppp.proposal.user.profileImageURL}}">
 							&nbsp;
 							{{ppp.proposal.user.displayName}}
-						</h4>
 					</div>
 				</div>
 			</div>
 
-			<div class="row" ng-if="!ppp.isSprintWithUs">
+			<div class="edit-form-body">
+				<div class="row">
+					<div class="col-xs-12 col-sm-6">
+						<h4 class="edit-form-body">Applicant</h4>
+						<span class="strong">{{ppp.user.firstName}} {{ppp.user.lastName}}</span><br>
+						<span>{{ppp.user.email}}</span>
+						<span ng-if="!ppp.proposal.isCompany"><br>{{ppp.user.address}}<br></span>
+						<span><br>{{ppp.user.phone}}</span>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div ng-if="ppp.proposal.isCompany">
+							<h4 class="edit-form-body">Company</h4>
+							<span class="strong">{{ppp.proposal.businessName}}</span><br>
+							<span>{{ppp.proposal.businessAddress}}</span><br>
+							<span>Contact: &nbsp;{{ppp.proposal.businessContactName}}</span><br>
+							<span>{{ppp.proposal.businessContactPhone}}</span><br>
+							<span>{{ppp.proposal.businessContactEmail}}</span>
+						</div>		
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-xs-12">
+						<h4 class="edit-form-body">Proposal</h4>
+						<p ng-bind-html="ppp.detail"></p>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-xs-12">
+						<h5 class="edit-form-body">Attachments</h5>
+						<table class="table table-striped">
+							<tr ng-repeat="file in ppp.proposal.attachments">
+								<td class=" text-right">
+									<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+								</td>
+								<td class="text-left">
+									{{file.name}}
+								</td>
+								<td class=" text-left">
+									<a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- // Old UI - Tabbed view // -->
+			<!--
+			<div class="row">
 				<uib-tabset active>
 					<uib-tab index="0">
 						<uib-tab-heading>
@@ -117,13 +166,13 @@
 					</uib-tab>
 				</uib-tabset>
 			</div>
-
+			-->
 
 
 			<div class="edit-form-footer">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-primary pull-right" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> ASSIGN THIS APPLICANT</button>
+						<button type="button" class="btn btn-lg btn-success pull-right" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> Assign this Applicant</button>
 					</div>
 				</div>
 			</div>

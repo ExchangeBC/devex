@@ -113,6 +113,11 @@
 				pageTitle: 'Company Settings'
 			},
 			resolve: {
+				org: function ($stateParams, OrgsService) {
+					return OrgsService.get({
+						orgId: $stateParams.orgId
+					}).$promise;
+				},
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
 				}
@@ -148,6 +153,22 @@
 				},
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
+				}
+			}
+		})
+		.state ('orgadmin.terms', {
+			url: '/terms',
+			templateUrl: '/modules/orgs/client/views/org-terms.html',
+			controller: 'OrgTermsController',
+			controllerAs: 'vm',
+			data: {
+				pageTitle: 'Company Terms'
+			},
+			resolve: {
+				org: function ($stateParams, OrgsService) {
+					return OrgsService.get({
+						orgId: $stateParams.orgId
+					}).$promise;
 				}
 			}
 		})

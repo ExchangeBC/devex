@@ -1,44 +1,54 @@
-<section id="intro" class="intro">
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-12" style="text-align: center;">
-				<br><br>
-				<h2>We’re building better ways for government and developers to work together.</h2>
-				<h5 style="color: #bbe4f7;">Meaningful opportunity for tech talent lives here. Join us!</h5>
-				<a ng-if="!vm.isUser" id="authentication.gov" ui-sref="authentication.gov" class="btn btn-default">Sign Up</a>
-			</div>
+<section class="gray-lighter">
+	<div class="container-fluid">
+		<div class="banner">
+			<h2>Better ways for government and developers to work together.</h2>
 		</div>
 	</div>
 </section>
 
-<section id="code-with-us" class="audience" style="background-color: #f2f2f2;">
+<section id="workwithus" class="gray-lighter">
 	<div class="container">
-		<div class="row" style="padding-top: 10px; padding-bottom: 30px">
-			<div class="col-xs-12" style="text-align: center;">
-				<h4 style="font-size: 12px; color: #595959; letter-spacing: 2px;"><i class="fa fa-github fa-lg"></i> Code With Us</h4>
-			</div>
-		</div>
 		<div class="row">
-			<div class="col-sm-6" style="text-align: center; padding-right: 40px;">
-				<h3 style="color: #262626">Work directly in GitHub and get paid a fixed fee for code that meets the acceptance criteria.</h3>
-				<br>
-				<div>
-					<a href="/opportunities" class="btn btn-lg btn-primary">Find work</a>
-					<a href="/codewithus" class="btn btn-lg btn-text-only">Learn more</a><br>
-					<br><br><br>
+			<div class="col-sm-6">
+				<div class="card card-flat text-center">
+				  <img class="card-img-top img-responsive" src="/modules/core/client/img/photos/cwu.png" alt="Developer">
+				  <div class="card-body">
+				    <h2>Code With Us</h2>
+				    <p class="subtitle"><strong>Commit code.<br>Get paid.</strong></p>
+					<p class="subtitle">Opportunities up to <strong>$70,000</strong></p>
+				    <h4><a data-automation-id="button-codewithus" href="/codewithus" title="Learn more about Code With Us">Learn More &nbsp;<i class="fa fa-lg fa-arrow-circle-right"></i></a></h4>
+				  </div>
 				</div>
 			</div>
 			<div class="col-sm-6">
+				<div class="card card-flat text-center">
+				  <img class="card-img-top img-responsive" src="/modules/core/client/img/photos/agile-team.png" alt="Agile Team">
+				  <div class="card-body">
+				    <h2>Sprint With Us</h2>
+				    <p class="subtitle">Supply an <span class="strong">Agile team</span> to work with a government product manager in a modern DevOps environment.</p>
+					<p class="subtitle">Opportunities up to <strong>$2 million</strong></p>
+				    <h4><a data-automation-id="button-sprintwithus" href="/sprintwithus" title="Learn more about Sprint With Us">Learn More &nbsp;<i class="fa fa-lg fa-arrow-circle-right"></i></a></h4>
+				  </div>
+				</div>
+			</div>
+		</div>
+		<br><br>
+		<div class="row text-center"><a href="/opportunities" class="btn btn-lg btn-primary">Browse Opportunities</a></div>
+
+		<hr>
+
+		<div class="row">
+			<div class="col-xs-12">
 				<div class="row">
 					<div class="col-sm-12 col-md-6">
-						<img src="/modules/core/client/img/photos/andy.jpg" class="img-circle img-responsive" style="max-height: 85px; align-content: center;">
+						<img src="/modules/core/client/img/photos/andy.jpg" class="img-circle img-responsive img-testimonial" style="align-content: center;">
 						<blockquote>
 						<p>"We quickly found a qualified developer, worked collaboratively in the open, and got a great final product!"</p>
 						<footer><em>Andy</em> | <span style="font-weight: 500;">Environmental Analyst</span>, Province of B.C.</footer>
 					</blockquote>
 					</div>
 					<div class="col-sm-12 col-md-6">
-						<img src="/modules/core/client/img/photos/wayne.jpg" class="img-circle img-responsive" style="max-height: 85px;">
+						<img src="/modules/core/client/img/photos/wayne.jpg" class="img-circle img-responsive img-testimonial">
 						<blockquote>
 						<p>"I think this platform could be a game changer for matching government agencies with the best talent in this province."</p>
 						<footer><em>Wayne</em> | <span style="font-weight: 500;">Developer</span>, Vancouver</footer>
@@ -47,93 +57,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
-
-<section id="open projects" class="audience">
-	<div class="container">
-		<div class="row" style="padding-top: 10px; padding-bottom: 30px">
-			<div class="col-xs-12" style="text-align: center;">
-				<h4 style="color: #595959; font-size: 12px; letter-spacing: 2px;"><i class="fa fa-pie-chart fa-lg"></i> Open Projects</h4>
-				<br>
-				<h3>Explore open-source public sector projects that are making a difference for British Columbians. Find something that inspires you and get involved.</h3>
-				<br><br>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-4">
-				<div class="card">
-					<img class="card-img-top" src="/modules/core/client/img/photos/epic.jpg" title="Flickr image by feral rogue used under licence (CC BY-ND 2.0)"alt="EPIC Project" style="width:100%">
-					<div class="card-block">
-						<p class="card-text">The Environmental Assessment Office's Project Information & Collaboration system makes it easier for the public and stakeholders to find important information and comment on environmental reviews. It has been released as a beta application – a fully-functional starting point upon which to build continuous improvements.</p>
-						<a href="https://bcdevexchange.org/projects/589d72e509b2ba001d06289c" class="btn btn-block">View Project</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<img class="card-img-top" src="/modules/core/client/img/photos/schoolbus.jpg" alt="Transportation Fuels Reporting System Project" title="Flickr image by dhendirx72 used under licence (CC BY-ND 2.0)" style="width:100%;">
-					<div class="card-block">
-						<p class="card-text">The Ministry of Transportation and Infrastructure is modernizing the way vehicle inspectors conduct and track school bus inspections by decommissioning the existing mainframe application and replacing it with an Open Source solution that will help ensure the continued safety of the 3000+ school buses that are in operation in British Columbia today.</p>
-						<a href="https://bcdevexchange.org/projects/prj-school-bus-inspection-system-replacement-project" class="btn btn-block">View Project</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-4">
-				<div class="card">
-					<img class="card-img-top" src="/modules/core/client/img/photos/datavis.jpg" title="Flickr image by yashima used under licence (CC BY-SA 2.0)" alt="Major Mines Transparency Initiative Project" style="width: 100%;">
-					<div class="card-block">
-						<p class="card-text">B.C. innovators and data visualization experts are creating prototoypes to demonstrate the value of government and other sources of data. In this example, the challenge is being applied to B.C. Housing market data.</p>
-						<a href="https://bcdevexchange.org/projects/589a5c3f178691001cddb9ca" class="btn btn-block">View Project</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
-<section id="events" class="events">
-	<div class="container">
-		<div class="row" style="padding-top: 10px; padding-bottom: 30px">
-			<div class="col col-xs-12" style="text-align: center;">
-				<h4 style="font-size: 12px; color: white; letter-spacing: 2px;"><i class="fa fa-calendar fa-lg"></i> Events</h4>
-			</div>
-		</div>
-		<br>
-
-		<div class="row">
-  			<div class="col-xs-10 col-sm-6 col-centered">
-    			<div class="panel panel-default panel-body text-center">
-      			<span>No upcoming events right now.</span>
-    			</div>
-  			</div>
-		</div>
-
-		<div class="container" ng-if="!vm.isUser">
-		  <div class="row">
-		    <div class="col-xs-12" style="text-align: center; line-height: 1.5em;">
-		      <h3 style="color: white; padding-bottom: 30px;">Want to hear about meetups and events?<br><br><a  id="authentication.gov" ui-sref="authentication.gov" class="btn btn-default">Sign Up</a>
-		    </div>
-		  </div>
-		</div>
-		<!--
-		<div class="row">
-			<div class="col-sm-5">
-	 				<h5>SEPTEMBER <span style="font-size: 23px;">25-29</span></h5>
-					<h2 style="color: #fdb917;">Vancouver Startup Week</h2>
-					<p style="color: #d2edf9">Bringing together entrepreneurs, investors, community leaders, and friends for one engaging week, celebrating Greater Vancouver’s innovation and technology communities. See you there!</p><br>
-					<a href="http://vanstartupweek.ca/" class="btn btn-default">LEARN MORE</a>
-					<br><br><br><br>
-			</div>
-			<div class="col-sm-2"></div>
-			<div class="col-sm-5">
-	 				<h5>SEPTEMBER <span style="font-size: 23px;">25-28</span></h5>
-					<p>Victoria Conference Centre</p>
-					<h2 style="color: #fdb917;">MISA Fall Conference</h2>
-					<p style="color: #d2edf9;">The 2017 conference of the Municipal Information Systems Association of BC will explore what it takes to make IT happen and move its vision forward in all areas including foundation, people, framework, tools and technology. We’ll have a booth to talk about our work.</p><br>
-					<a href="https://event.crowdcompass.com/misabcfall17/" class="btn btn-default">LEARN MORE</a>
-			</div>
-		</div>
-	-->
 	</div>
 </section>

@@ -1,7 +1,7 @@
 <section class="edit-form-background" role="main">
 	<form name="qqq.capabilityForm" id="qqq.capabilityForm" warn-on-exit novalidate autocomplete="off">
-		<div class="container edit-form">
-			
+		<div class="edit-form">
+
 			<div class="edit-form-body">
 				<div class="row">
 					<div class="col-sm-8">
@@ -38,7 +38,7 @@
 							<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}" ng-class={><i class="fa fa-circle"></i> {{qqq.capability.name}}</label>
 							<label class="label">{{qqq.capability.name}}</label>
 						</form-display>
-						
+
 						<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
 						<!--
 						<form-display
@@ -90,7 +90,7 @@
 					<div class="col-sm-4">
 						<div class="panel panel-default">
 							<div class="panel-heading">
-								<strong>Preferred Skills</strong>
+								<strong>Preferred Technical Skills</strong>
 							</div>
 							<ul class="list-group">
 								<li class="list-group-item">
@@ -120,6 +120,7 @@
 
 			<div class="edit-form-footer">
 				<div class="row form-foot text-right">
+					<button class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
 					<button class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})"> Cancel</button>
 				<!--
 					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>

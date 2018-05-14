@@ -1,39 +1,37 @@
-<!-- Persistent banner for Opportunity Creators -->
-<div class="banner banner-important" >
+<!-- Persistent banners for Opportunity Creators -->
+<!-- // Code With Us // -->
+<div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd !== 'sprint-with-us'">
-				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
-			</div>
-			<div class="col-xs-12" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
-				<p>By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a></p>
-			</div>
-		</div>
+		By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our lightweight procurement model, Code With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a><
 	</div>
 </div>
 
+<!-- // Sprint With Us // Hide this until we have content for it -->
+<!--
+<div class="banner banner-important" ng-if="vm.opportunity.opportunityTypeCd === 'sprint-with-us'">
+	<div class="container">
+		By posting an opportunity on the BCDevExchange, you are agreeing to follow the <a href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> terms</a> of our streamlined procurement model, Sprint With Us. Make sure you're familiar with the process and understand your responsibilities for managing an opportunity. <a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">Read the guide</a>
+	</div>
+</div>
+-->
 
 <section class="edit-form-background" role="main">
 
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 
 
-		<div class="container edit-form">
+		<div class="edit-form">
 
 			<div class="edit-form-header">
-				<span ng-if="vm.editing">
-					<span class="light small">EDITING:</span> 
-					{{vm.opportunity.name}}
-				</span>
-				<span ng-if="!vm.editing">
-					New Opportunity {{vm.opportunity.name}}
-				</span>
-				<a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
-				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
+				<span class="gray"><i class="fa fa-group"></i> Sprint With Us Opportunity:</span> &nbsp;
+				<span ng-if="vm.editing">{{vm.opportunity.name}}</span>
+				<span ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</span>
+				<a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-lg fa-times"></i></a>
+				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-lg fa-times"></i></a>
 			</div>
 
 			
-			<uib-tabset active>
+			<uib-tabset active class="edit-form-tabs">
 				<uib-tab index="0">
 					<uib-tab-heading>
 						Header
@@ -60,7 +58,7 @@
 				</uib-tab>
 				<uib-tab index="12" select="vm.selectSkills()">
 					<uib-tab-heading>
-						Preferred Skills
+						Preferred Technical Skills
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-skills.html'"></div>
 				</uib-tab>

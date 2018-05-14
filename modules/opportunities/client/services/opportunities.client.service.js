@@ -155,7 +155,7 @@
 						[(o.start), 'Proposed Start Date']
 					],
 					swu: [
-						[(o.terms), 'Additional Terms and Conditions'],
+						// [(o.terms), 'Additional Terms and Conditions'],
 						[(o.budget > 0), 'Total Opportunity Budget'],
 						[(o.phases.implementation.isImplementation || o.phases.inception.isInception || o.phases.proto.isPrototype), 'Phase Selection and Information'],
 						// [((!o.phases.implementation.isImplementation) || (o.phases.implementation.isImplementation && o.phases.implementation.contract)), 'Implementation Phase Contract Model'],

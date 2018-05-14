@@ -28,6 +28,9 @@ var path = require('path'),
 	Org = mongoose.model('Org'),
 	User = mongoose.model('User'),
 	Capability = mongoose.model('Capability'),
+	Proposal = mongoose.model('Proposal'),
+	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	multer = require('multer'),
@@ -69,6 +72,7 @@ var getOrgById = function (id) {
 		});
 	});
 };
+exports.getOrgById = getOrgById;
 // -------------------------------------------------------------------------
 //
 // save a user once membership has been updated
@@ -76,12 +80,23 @@ var getOrgById = function (id) {
 // -------------------------------------------------------------------------
 var saveUser = function (user) {
 	return new Promise (function (resolve, reject) {
-		// console.log ('saving user', user);
 		user.save (function (err, newuser) {
 			if (err) {reject (err);}
 			else {resolve (newuser);}
 		});
 	});
+};
+var notifyUser = function (org) {
+	return function (user) {
+		Notifications.notifyUserAdHoc ('user-added-to-company', {
+			username    : user.displayName,
+			useremail   : user.email,
+			adminname   : org.adminName,
+			adminemail  : org.adminEmail,
+			companyname : org.name
+		});
+		return Promise.resolve ();
+	};
 };
 // -------------------------------------------------------------------------
 //
@@ -90,7 +105,7 @@ var saveUser = function (user) {
 // -------------------------------------------------------------------------
 var getUsers = function (terms) {
 	return new Promise (function (resolve, reject) {
-		User.find (terms).exec (function (err, user) {
+		User.find (terms, '_id email displayName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
 			if (err) reject (err);
 			else resolve (user);
 		});
@@ -104,17 +119,17 @@ var getUsers = function (terms) {
 // -------------------------------------------------------------------------
 var addUserTo = function (org, fieldName) {
 	return function (user) {
-		// console.log ('add user', user._id, 'to ', fieldName, 'in org:', org._id);
-		org[fieldName].addToSet (user._id);
-		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.addToSet (org._id);
 			user.markModified ('orgsAdmin');
+			org.admins.addToSet (user._id);
+			org.markModified ('admins');
 		} else {
 			user.orgsMember.addToSet (org._id);
 			user.markModified ('orgsMember');
+			org.members.addToSet (user._id);
+			org.markModified ('members');
 		}
-		// console.log ('org[fieldName]:',org[fieldName]);
 		return user;
 	};
 };
@@ -126,15 +141,16 @@ var addUserTo = function (org, fieldName) {
 // -------------------------------------------------------------------------
 var removeUserFrom = function (org, fieldName) {
 	return function (user) {
-		// console.log ('removing user', user._id, 'from ', fieldName);
-		org[fieldName].pull (user._id);
-		org.markModified (fieldName);
 		if (fieldName === 'admins') {
 			user.orgsAdmin.pull (org._id);
 			user.markModified ('orgsAdmin');
+			org.admins.pull (user._id);
+			org.markModified ('admins');
 		} else {
 			user.orgsMember.pull (org._id);
 			user.markModified ('orgsMember');
+			org.members.pull (user._id);
+			org.markModified ('members');
 		}
 		return user;
 	};
@@ -196,11 +212,24 @@ var checkCapabilities = function (org) {
 	return collapseCapabilities (org)
 	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
-		console.log (capabilities);
 		var c = org.capabilities.map (function (c) {return c}).reduce (function (a, c) {a[c]=true;return a;}, {});
-		org.metRFQ = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
+		org.isCapable = capabilities.map (function (ca) {return c[ca._id.toString()] || false}).reduce (function (a, c) {return a && c;});
+		org.metRFQ = org.isCapable && org.isAcceptedTerms && org.members.length >= 2;
 		return org;
 	})
+};
+var minisave = function (org) {
+	return new Promise (function (resolve, reject) {
+		org.save (function (err, model) {
+			if (err) reject (err);
+			else resolve (model);
+		});
+	});
+};
+exports.updateOrgCapabilities = function (orgId) {
+	return getOrgById (orgId)
+	.then (checkCapabilities)
+	.then (minisave);
 };
 // -------------------------------------------------------------------------
 //
@@ -209,13 +238,13 @@ var checkCapabilities = function (org) {
 // -------------------------------------------------------------------------
 var resolveOrg = function (org) {
 	return function () {
-		// console.log ('resolving org', org._id);
 		return org;
 	};
 };
 var saveOrg = function (req, res) {
 	return function (org) {
-		console.log ('saving org', org);
+		var additionsList = org.additionsList;
+		if (additionsList && additionsList.found.length === 0 && additionsList.notfound.length === 0) additionsList = null;
 		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
@@ -240,11 +269,13 @@ var saveOrg = function (req, res) {
 					});
 					getOrgById (neworg._id)
 					.then (function (o) {
-						res.json (org);
+						o = o.toObject ();
+						o.emaillist = additionsList;
+						res.json (o);
 					})
 					.catch (function (err) {
 						res.status (422).send ({
-							message: 'Error popuilating organization'
+							message: 'Error populating organization'
 						});
 					});
 				}
@@ -252,7 +283,37 @@ var saveOrg = function (req, res) {
 		});
 	};
 };
-
+// -------------------------------------------------------------------------
+//
+// remove a user from all open proposals
+//
+// -------------------------------------------------------------------------
+var removeUserFromProposals = function (user) {
+	return function (org) {
+		var rightNow = new Date ();
+		var userid = user.id;
+		return new Promise (function (resolve, reject) {
+			Proposal.find ({org:org._id})
+			.populate ('opportunity', 'opportunityTypeCd deadline')
+			.exec (function (err, proposals) {
+				Promise.all (proposals.map (function (proposal) {
+					var deadline       = new Date (proposal.opportunity.deadline);
+					var isSprintWithUs = (proposal.opportunity.opportunityTypeCd === 'sprint-with-us');
+					//
+					// if sprint with us and the opportunity is still open
+					// remove the user and save the proposal
+					//
+					if (isSprintWithUs && 0 < (deadline - rightNow)) {
+						return Proposals.removeUserFromProposal (proposal, userid);
+					} else {
+						return Promise.resolve ();
+					}
+				}))
+				.then (resolve, reject);
+			});
+		});
+	};
+};
 // -------------------------------------------------------------------------
 //
 // given a user and an org, associate the two by updatying their respective
@@ -263,6 +324,7 @@ var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
+	.then (notifyUser (org))
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {
@@ -298,11 +360,10 @@ var addAdmins = function (org) {
 //
 // -------------------------------------------------------------------------
 var removeMember = function (user, org) {
-	// console.log ('removing member:', user._id);
 	return Promise.resolve (user)
 	.then (removeUserFrom (org, 'members'))
-	// .then (saveUser)
-	.then (function () {return org;});
+	.then (removeUserFromProposals (user))
+	.then (resolveOrg (org));
 };
 var removeAdmin = function (user, org) {
 	return Promise.resolve (user)
@@ -319,8 +380,32 @@ var removeAdmin = function (user, org) {
 //
 // -------------------------------------------------------------------------
 var inviteMembers = function (emaillist, org) {
+	var list = {
+		found    : [],
+		notfound : []
+	};
+	if (!emaillist) return Promise.resolve (list);
+	//
+	// flatten out the members and admins arrays so that later on the
+	// addToSet function truly works on duplicates
+	//
+	org.admins = org.admins.map (function (obj) {return obj.id;});
+	org.members = org.members.map (function (obj) {return obj.id;});
 	return getUsers ({email : {$in : emaillist}})
-	.then (addMembers (org));
+	.then (function (users) {
+		if (users) {
+			list.found = users;
+			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
+			emaillist.forEach (function (email) {
+				if (!usersIndex[email]) list.notfound.push ({email:email});
+			});
+		}
+		return users;
+	})
+	.then (addMembers (org))
+	.then (function () {
+		return Promise.resolve (list);
+	});
 };
 
 exports.removeUserFromMemberList = function (req, res) {
@@ -367,37 +452,91 @@ exports.update = function (req, res) {
 	var list = null;
 	if (req.body.additions) {
 		list = req.body.additions.split (/[ ,]+/);
-		// console.log ('users to be added:', list);
 	}
 	//
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var org = _.assign (req.org, req.body);
+	var org        = _.assign (req.org, req.body);
+	org.adminName  = req.user.displayName;
+	org.adminEmail = req.user.email;
 
-	var p = (list) ? inviteMembers (list, org) : Promise.resolve (org);
-
-	p.then (saveOrg (req, res));
+	var additionsList = {
+		found : [],
+		notfound : []
+	};
+	inviteMembers (list, org)
+	.then (function (newlist) {
+		additionsList.found = newlist.found;
+		additionsList.notfound = newlist.notfound;
+		org.additionsList = additionsList;
+		return org;
+	})
+	.then (saveOrg (req, res));
 };
 
 // -------------------------------------------------------------------------
 //
 // delete the org
 //
-// TBD : locate all members and admins and remove the org from thier
-// orgsAdmin and orgsMember arrays. Not a problem if they stay as the populate
-// will just ignore them, but it would be cleaner if it happens
+// TBD : In future we should NOT allow deletion of companies that have
+// submitted proposals as we may need the data and linkage for public record
 //
 // -------------------------------------------------------------------------
+var getAllAffectedMembers = function (orgId) {
+	return new Promise (function (resolve, reject) {
+		User.find ({
+			$or : [
+				{orgsAdmin : {$in: [orgId]}},
+				{orgsMember : {$in: [orgId]}},
+				{orgsPending : {$in: [orgId]}}
+			]
+		}, function (err, users) {
+			if (err) reject (err);
+			else resolve (users);
+		});
+	});
+};
+var removeAllCompanyReferences = function (orgId) {
+	return function (users) {
+		return Promise.all (users.map (function (user) {
+			user.orgsAdmin.pull (orgId);
+			user.orgsMember.pull (orgId);
+			user.orgsPending.pull (orgId);
+			user.markModified ('orgsAdmin');
+			user.markModified ('orgsMember');
+			user.markModified ('orgsPending');
+			return user.save ();
+		}));
+	};
+};
+var removeAllProposals = function (orgId) {
+	//
+	// this actually needs a bit of thinking. Do we want to delete all proposals, or are
+	// some of them needed for a matter of public record ?
+	//
+	return function () {
+		return Proposals.deleteForOrg ();
+	};
+}
 exports.delete = function (req, res) {
 	var org = req.org;
+	var orgId = org._id;
 	org.remove(function (err) {
 		if (err) {
 			return res.status(422).send ({
 				message: errorHandler.getErrorMessage(err)
 			});
 		} else {
-			res.json (org);
+			getAllAffectedMembers (orgId)
+			.then (removeAllCompanyReferences (orgId))
+			// .then (removeAllProposals (orgId))
+			.then (function () {
+				res.json (org);
+			})
+			.catch (function (err) {
+				res.status(422).send ({ message: errorHandler.getErrorMessage(err) });
+			})
 		}
 	});
 };
@@ -427,11 +566,54 @@ exports.list = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
+// get a list of orgs that the user is an Admin for
+//
+// -------------------------------------------------------------------------
+exports.my = function (req, res) {
+	Org.find ({
+		members: {$in: [req.user._id]}
+	})
+	.populate ('owner', '_id lastName firstName displayName profileImageURL')
+	.populate ('createdBy', 'displayName')
+	.populate ('updatedBy', 'displayName')
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
+	.exec (function (err, orgs) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (orgs);
+		}
+	});
+};
+exports.myadmin = function (req, res) {
+	Org.find ({
+		admins: {$in: [req.user._id]}
+	})
+	.populate ('owner', '_id lastName firstName displayName profileImageURL')
+	.populate ('createdBy', 'displayName')
+	.populate ('updatedBy', 'displayName')
+	.populate ('members', popfields)
+	.populate ('admins', popfields)
+	.exec (function (err, orgs) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			res.json (orgs);
+		}
+	});
+};
+
+// -------------------------------------------------------------------------
+//
 // magic that populates the org on the request
 //
 // -------------------------------------------------------------------------
 exports.orgByID = function (req, res, next, id) {
-	// console.log ('get by id');
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
 			message: 'Org is invalid'

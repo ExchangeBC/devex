@@ -34,7 +34,6 @@
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		// console.log (ppp.proposal);
 		ppp.capabilities                          = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
@@ -87,7 +86,7 @@
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company Assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {
@@ -95,7 +94,7 @@
 							}
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - Assignment failed!' });
 						}
 					);
 				}
@@ -124,7 +123,10 @@
 			ppp.title        = editing ? 'Edit' : 'Create' ;
 			ppp.proposal     = proposal;
 			ppp.user         = Authentication.user;
-			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+			if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address2?', '+ppp.org.address2:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+			ppp.proposal.org = org;
+			ppp.orgHasMetRFQ = org.metRFQ;
+			ppp.agreeConfirm = false;
 			//
 			// this is all the people in the org
 			//
@@ -170,6 +172,58 @@
 			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
 			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
 			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
+			//
+			// set up validators for currency amount validators for each phase
+			//
+			ppp.exceededOpportunityAmount = false;
+			ppp.proposal.phases.inception.invalidAmount = false;
+			ppp.proposal.phases.proto.invalidAmount = false;
+			ppp.proposal.phases.implementation.invalidAmount = false;
+			ppp.validateInceptionAmount = function() {
+				ppp.inceptionMax = 100000;
+				if (ppp.proposal.phases.inception.cost < 0 || ppp.proposal.phases.inception.cost > ppp.inceptionMax) {
+					ppp.proposal.phases.inception.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.inception.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validatePrototypeAmount = function() {
+				ppp.protoMax = 500000;
+				if (ppp.proposal.phases.proto.cost < 0 || ppp.proposal.phases.proto.cost > ppp.protoMax) {
+					ppp.proposal.phases.proto.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.proto.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
+			ppp.validateImplementationAmount = function() {
+				ppp.implMax = 2000000;
+				if (ppp.proposal.phases.implementation.cost < 0 || ppp.proposal.phases.implementation.cost > ppp.implMax) {
+					ppp.proposal.phases.implementation.invalidAmount = true;
+				}
+				else {
+					ppp.proposal.phases.implementation.invalidAmount = false;
+				}
+				if ((ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost) > ppp.opportunity.budget) {
+					ppp.exceededOpportunityAmount = true;
+				}
+				else {
+					ppp.exceededOpportunityAmount = false;
+				}
+			}
 			//
 			// set up the structures for capabilities
 			// each little bucket continas the capabilities required for that phase
@@ -223,7 +277,6 @@
 					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
 				}
 			}
-			// console.log ('questions', ppp.proposal.questions);
 
 			ppp.totals = {};
 			ppp.tinymceOptions = TINYMCE_OPTIONS;
@@ -245,6 +298,81 @@
 			//
 			ppp.isSprintWithUs = true;
 			ppp.proposal.isCompany = true;
+
+			ppp.buildPager();
+		}
+		// -------------------------------------------------------------------------
+		//
+		// logic for paginating team member pickers for each phase
+		//
+		// -------------------------------------------------------------------------
+		ppp.inception = {};
+		ppp.poc = {};
+		ppp.implementation = {};
+		ppp.buildPager = function () {
+			ppp.inception.pagedItems = [];
+			ppp.inception.itemsPerPage = 5;
+			ppp.inception.currentPage = 1;
+			ppp.inception.figureOutItemsToDisplay();
+			ppp.poc.pagedItems = [];
+			ppp.poc.itemsPerPage = 5;
+			ppp.poc.currentPage = 1;
+			ppp.poc.figureOutItemsToDisplay();
+			ppp.implementation.pagedItems = [];
+			ppp.implementation.itemsPerPage = 5;
+			ppp.implementation.currentPage = 1;
+			ppp.implementation.figureOutItemsToDisplay();
+		}
+		ppp.inception.figureOutItemsToDisplay = function () {
+
+			ppp.inception.filteredItems = (!ppp.inception.search || ppp.inception.search.length === 0) ?
+				ppp.members.inception :
+				ppp.members.inception.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.inception.search.toUpperCase()) ||
+							(ppp.inTeam[member.email] === true));
+				});
+			var begin = ((ppp.inception.currentPage - 1) * ppp.inception.itemsPerPage);
+			var end = begin + ppp.inception.itemsPerPage;
+			var items = ppp.inception.filteredItems.slice(begin, end);
+			ppp.inception.filterLength = ppp.inception.filteredItems.length;
+			ppp.inception.pagedItems = items;
+		}
+		ppp.inception.pageChanged = function () {
+			ppp.inception.figureOutItemsToDisplay();
+		}
+		ppp.poc.figureOutItemsToDisplay = function () {
+
+			ppp.poc.filteredItems = (!ppp.poc.search || ppp.poc.search.length === 0) ?
+				ppp.members.proto :
+				ppp.members.proto.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.poc.search.toUpperCase()) ||
+							(ppp.prTeam[member.email] === true));
+				});
+			var begin = ((ppp.poc.currentPage - 1) * ppp.poc.itemsPerPage);
+			var end = begin + ppp.poc.itemsPerPage;
+			var items = ppp.poc.filteredItems.slice(begin, end);
+			ppp.poc.filterLength = ppp.poc.filteredItems.length;
+			ppp.poc.pagedItems = items;
+		}
+		ppp.poc.pageChanged = function () {
+			ppp.poc.figureOutItemsToDisplay();
+		}
+		ppp.implementation.figureOutItemsToDisplay = function () {
+
+			ppp.implementation.filteredItems = (!ppp.implementation.search || ppp.implementation.search.length === 0) ?
+				ppp.members.implementation :
+				ppp.members.implementation.filter(function (member) {
+					return 	(member.displayName.toUpperCase().includes(ppp.implementation.search.toUpperCase()) ||
+							(ppp.imTeam[member.email] === true));
+				});
+			var begin = ((ppp.implementation.currentPage - 1) * ppp.implementation.itemsPerPage);
+			var end = begin + ppp.implementation.itemsPerPage;
+			var items = ppp.implementation.filteredItems.slice(begin, end);
+			ppp.implementation.filterLength = ppp.implementation.filteredItems.length;
+			ppp.implementation.pagedItems = items;
+		}
+		ppp.implementation.pageChanged = function () {
+			ppp.implementation.figureOutItemsToDisplay();
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -264,57 +392,70 @@
 			//
 			// go through each capability and set the flag if any team member
 			// has the capability
-			// also tally up the bolleans in isMetAllCapabilities. if they are all true
+			// also tally up the booleans in isMetAllCapabilities. if they are all true
 			// then the user can submit their proposal
 			//
+			// console.log (ppp.prp);
 			ppp.isMetAllCapabilities = true;
 			var haveanyatall = false;
-			ppp.inp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oinp.isInception', ppp.oinp.isInception);
+			if (ppp.oinp.isInception) ppp.inp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
+				// console.log ('ppp.p_inp.iPropCapabilities[code]', ppp.p_inp.iPropCapabilities[code]);
 			});
-			ppp.prp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oprp.isPrototype', ppp.oprp.isPrototype);
+			if (ppp.oprp.isPrototype) ppp.prp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
+					// console.log ('member', member);
 					if (!ppp.prTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
+				// console.log ('ppp.p_prp.iPropCapabilities[code]', ppp.p_prp.iPropCapabilities[code]);
 			});
-			ppp.imp.capabilities.forEach (function (c) {
+			// console.log ('ppp.oimp.isImplementation', ppp.oimp.isImplementation);
+			if (ppp.oimp.isImplementation) ppp.imp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
-				var code = c.code;
+				var code = c;
+				// console.log ('code', code);
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
-					else return member.iCapabilities[code];
+					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_imp.iPropCapabilities[code];
+				// console.log ('ppp.p_imp.iPropCapabilities[code]', ppp.p_imp.iPropCapabilities[code]);
 			});
+			// console.log ('haveanyatall', haveanyatall);
+			// console.log ('isMetAllCapabilities', ppp.isMetAllCapabilities);
 			ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && haveanyatall;
 			//
 			// now skills
 			//
-			ppp.inp.capabilitySkills.forEach (function (c) {
+			if (ppp.oinp.isInception) ppp.inp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_inp.iPropCapabilitySkills[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.prp.capabilitySkills.forEach (function (c) {
+			if (ppp.oprp.isPrototype) ppp.prp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_prp.iPropCapabilitySkills[code] = ppp.members.proto.map (function (member) {
 					if (!ppp.prTeam[member.email]) return false;
 					else return member.iCapabilitySkills[code];
 				}).reduce (function (accum, el) {return accum || el}, false);
 			});
-			ppp.imp.capabilitySkills.forEach (function (c) {
+			if (ppp.oimp.isImplementation) ppp.imp.capabilitySkills.forEach (function (c) {
 				var code = c.code;
 				ppp.p_imp.iPropCapabilitySkills[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
@@ -358,6 +499,15 @@
 		//
 		// -------------------------------------------------------------------------
 		var saveproposal = function (goodmessage, badmessage) {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: 'Invalid price amounts entered',
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -369,12 +519,12 @@
 				ppp.proposal.createOrUpdate ()
 				.then (
 					function (response) {
-						Notification.success({ message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'});
 						ppp.subscribe (true);
 						resolve ();
 					},
 					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!' });
+						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved' });
 						 reject ();
 					}
 				);
@@ -411,20 +561,21 @@
 				if (r) {
 					ppp.proposal.$remove (
 						function () {
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Proposal deleted'});
 							ppp.subscribe (false);
 							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - could not delete your proposal'});
 						}
 					);
 				}
 			});
 		};
 		var performwithdrawal = function (txt) {
+			ppp.agreeConfirm = false;
 			ppp.proposal.status = 'Draft';
-			saveproposal ('Your proposal has been withdrawn.');
+			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -448,6 +599,15 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+			console.log(validPriceAmounts);
+			if (!validPriceAmounts) {
+				Notification.error({
+					message: 'Invalid price amounts entered',
+					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
+				});
+				return;
+			}
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -455,16 +615,21 @@
 			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
 			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
 			setTeams ();
-			ProposalsService.submit (ppp.proposal).$promise
-			.then (
-				function (response) {
-					ppp.proposal = response;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
-				},
-				function (error) {
-					 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-				}
-			);
+			ppp.proposal.status = 'Submitted';
+			saveproposal ('<h4>Your proposal has been submitted</h4>');
+			// ProposalsService.submit (ppp.proposal).$promise
+			// .then (
+			// 	function (response) {
+			// 		console.log ('response', response);
+			// 		ppp.proposal = response;
+			// 		Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
+			// 		_init ();
+			// 		setSkills ();
+			// 	},
+			// 	function (error) {
+			// 		 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
+			// 	}
+			// );
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -480,11 +645,11 @@
 			})
 			.then(
 				function (response) {
-					ppp.proposal = response.data;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
+					ppp.proposal = new ProposalsService (response.data);
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
+					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
 				},
 				function (evt) {
 					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
@@ -498,9 +663,13 @@
 			}).$promise
 			.then (function (doc) {
 				ppp.proposal = doc;
-				$scope.$apply();
+				// $scope.$apply();
 			});
 		};
+		ppp.termsDownloaded = false;
+		ppp.downloadTermsClicked = function() {
+			ppp.termsDownloaded = true;
+		}
 		ppp.subscribe = function (state) {
 			var notificationCode = 'not-update-'+ppp.opportunity.code;
 			if (!editing && !ppp.proposal._id && state) {

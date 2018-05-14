@@ -13,7 +13,7 @@ var mongoose = require ('mongoose'),
 var CapabilitySkillSchema = new Schema ({
 	code             : {type: String, default: ''},
 	name             : {type: String, required:'Capability Skill Name Is Required'}
-});
+}, { usePushEach: true });
 /**
  * Capability Schema
  */
@@ -30,7 +30,7 @@ var CapabilitySchema = new Schema ({
 	// for UI purposes
 	//
 	labelClass : {type: String, default: ''}
-});
+}, { usePushEach: true });
 
 CapabilitySchema.statics.findUniqueCode = function (title, suffix, callback) {
 	return helpers.modelFindUniqueCode (this, 'capability', title, suffix, callback);

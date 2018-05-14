@@ -15,40 +15,36 @@
 	<form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)" novalidate>
 
 
-		<div class="container edit-form">
+		<div class="edit-form">
 
 			<div class="edit-form-header">
-				<span ng-if="vm.editing">
-					<span class="light small">EDITING:</span> 
-					{{vm.opportunity.name}}
-				</span>
-				<span ng-if="!vm.editing">
-					New Opportunity {{vm.opportunity.name}}
-				</span>
-				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-2x fa-times"></i></a>
-				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-2x fa-times" title="Close"></i></a>
+				<span class="gray"><i class="fa fa-tag"></i> Code With Us Opportunity:</span> &nbsp;
+				<span ng-if="vm.editing">{{vm.opportunity.name}}</span>
+				<span ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</span>
+				<a ui-sref="opportunities.viewcwu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-lg fa-times"></i></a>
+				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right"><i class="fa fa-lg fa-times" title="Close"></i></a>
 			</div>
 
-			<uib-tabset active>
+			<uib-tabset active class="edit-form-tabs">
 				<uib-tab index="0">
-					<uib-tab-heading>
+					<uib-tab-heading data-automation-id="tab-cwu-header">
 						Header
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-title.html'"></div>
 				</uib-tab>
 				<uib-tab index="2">
-					<uib-tab-heading>
+					<uib-tab-heading data-automation-id="tab-cwu-background">
 						Background
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-description.html'"></div>
 				</uib-tab>
-				<uib-tab index="4">
+				<uib-tab index="4"  data-automation-id="tab-cwu-details">
 					<uib-tab-heading>
 						Details
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-details.html'"></div>
 				</uib-tab>
-				<uib-tab index="5">
+				<uib-tab index="5" data-automation-id="tab-cwu-acceptance">
 					<uib-tab-heading>
 						Acceptance and Evaluation
 					</uib-tab-heading>
@@ -59,8 +55,8 @@
 			<div class="edit-form-footer">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-						<a href="javascript:void(0);" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> Delete this Opportunity</a>
+						<button data-automation-id="button-cwu-save" type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
+						<a data-automation-id="button-cwu-delete" href="javascript:void(0);" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> Delete this Opportunity</a>
 					</div>
 				</div>
 			</div>

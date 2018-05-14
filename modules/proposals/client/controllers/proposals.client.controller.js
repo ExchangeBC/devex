@@ -105,7 +105,7 @@
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Proposal Assignment successful!'});
+							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {
@@ -138,7 +138,7 @@
 		}
 		ppp.opportunity   = opportunity;
 		ppp.org                                   = org;
-		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address?', '+ppp.org.address:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
+		if (org) ppp.org.fullAddress = ppp.org.address + (ppp.org.address2?', '+ppp.org.address2:'') + ', ' + ppp.org.city + ', ' + ppp.org.province+ ', ' + ppp.org.postalcode ;
 		ppp.members = [];
 		if (org) ppp.members                      = org.members.concat (org.admins);
 		ppp.title                                 = editing ? 'Edit' : 'Create' ;
@@ -368,7 +368,7 @@
 							resolve ();
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 							 reject ();
 						}
 					);
@@ -419,12 +419,12 @@
 			copyteam();
 			return ppp.proposal.createOrUpdate()
 				.then (function(proposal) {
-					Notification.success({message: goodmessage || '<i class="glyphicon glyphicon-ok"></i> Your changes have been saved.'});
+					Notification.success({message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br><h4>Changes Saved</h4>'});
 					ppp.proposal = proposal;
 					ppp.subscribe(true);
 					ppp.form.proposalform.$setPristine();
 				}, function (error) {
-					Notification.error ({message: badmessage || error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit Proposal failed!'});
+					Notification.error ({message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit Proposal failed!'});
 				});
 		};
 		// -------------------------------------------------------------------------
@@ -463,7 +463,7 @@
 				.then(function(r) {
 					if (r) {
 						ppp.proposal.$remove(function() {
-							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Remove Proposal successful'});
+							Notification.success({message: '<i class="fa fa-3x fa-trash"></i><br> <h4>Your proposal has been deleted</h4>'});
 							ppp.subscribe(false);
 							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
@@ -472,7 +472,7 @@
 								$state.go ('opportunities.viewcwu', {opportunityId:ppp.opportunity.code});
 							}
 						}, function(error) {
-							Notification.error({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Remove Proposal failed!'});
+							Notification.error({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Remove Proposal failed!'});
 						});
 					}
 				});
@@ -481,7 +481,7 @@
 			ppp.proposal.status = 'Draft';
 			saveuser()
 				.then(function() {
-					saveproposal('Your proposal has been withdrawn.');
+					saveproposal('<h4>Your proposal has been withdrawn</h4>');
 				});
 		};
 		// -------------------------------------------------------------------------
@@ -513,9 +513,10 @@
 						.then (function(proposal) {
 							ppp.proposal = proposal;
 							ppp.form.proposalform.$setPristine();
-							Notification.success({message: '<i class="glyphicon glyphicon-ok"></i> Your proposal has been submitted!'});
+							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
 						}, function(error) {
-							Notification.error ({message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal'});
+
+							Notification.error ({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Submitting Proposal'});
 						});
 				});
 		}
@@ -533,11 +534,11 @@
 			})
 			.then(
 				function (response) {
-					ppp.proposal = response.data;
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Attachment Uploaded'});
+					ppp.proposal = new ProposalsService (response.data);
+					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
 				},
 				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="glyphicon glyphicon-remove"></i> Error Uploading Attachment' });
+					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
 				},
 				function (evt) {
 					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
@@ -563,7 +564,7 @@
 				}).catch (function () {
 				});
 			}
-			else {
+			else if (!state) {
 				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
 				.then (function () {
 					ppp.notifyMe = false;

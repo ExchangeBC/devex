@@ -1,7 +1,8 @@
 <section class="signup">
   <div class="container">
     <div class="row">
-      <div class="hidden-xs col-sm-5 text-center inverse">
+      <div class="hidden-xs col-sm-5 text-center">
+        <br><br>
         <p class="subtitle">Join a community of developers, entrepreneurs, and public service innovators who are making public services better.</p>
         <br><br>
         <h4><i class="fa fa-university"></i> &nbsp; Public Sector Employees</h4>
@@ -9,19 +10,18 @@
         <p>Raise your profile with developers and build a community around your open source project. Hire talent fast.</p>
         <br><br>
         <h4><i class="fa fa-user-circle-o"></i> &nbsp; Developers</h4>
-        <p>Get notified about new opportunities and events in your area.</p>
+        <p>Discover paid opportunities to contribute to public sector digital projects.</p>
       </div>
       
       <div class="hidden-xs col-sm-2"></div>
 
       <div class="col-xs-12 col-sm-5 text-center">
-        <div class="card" ng-click="vm.callOauthProvider('/api/auth/github')">
-          <div class="card-body">
-            <h3>Sign in with your GitHub credentials</h3>
-            <h2><i class="fa fa-github fa-3x"></i></h2>
-            <p>Don't have one yet? It only takes a minute.</p>
-          </div>
-        </div>
+        <h2><i class="fa fa-github fa-3x"></i></h2>
+        <h3>You need a GitHub account to Sign In</h3>
+        
+        <div class="btn btn-lg btn-primary" ng-click="vm.callOauthProvider('/api/auth/github')">Sign in with your GitHub account</div>
+        <br><br>
+        <p>Don't have a GitHub account? <a href="https://github.com">Creating one</a> only takes a minute.</p> 
       </div>
 
     </div>

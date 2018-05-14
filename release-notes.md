@@ -43,7 +43,7 @@
 * **Homepage**: Added blue banner images; changed styling of sections.
 * **Fonts**: globally replaced light font with standard weight. 
 * **Spacing**: Fixed margins and line-height of text on program, project and opportunity detail pages.
-* **Create opportunity form**: Updated boilerplate wording about proposal evaluation criteria and added field for email address for receiving proposals.
+* **Create opportunity form**: Updated boilerplate wording about Proposal evaluation criteria and added field for email address for receiving Proposals.
 * **Page IDs**: Changed from numeric to human-readable for ease of reading web analytics.
 
 ### Fixed

@@ -138,10 +138,15 @@
 				},
 				editing: function () { return true; },
 				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
+					if (!Authentication.user) return {};
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return null;
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return null;
 				}
 			}
 		})
@@ -170,10 +175,15 @@
 					}).$promise;
 				},
 				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
+					if (!Authentication.user) return {};
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return null;
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return null;
 				},
 				editing: function () { return false; }
 			}
@@ -206,19 +216,36 @@
 				},
 				editing: function () { return true; },
 				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
+					if (!Authentication.user) return null;
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return null;
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return null;
 				},
-				resources: function (Authentication, ProposalsService, $stateParams) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return ProposalsService.getPotentialResources ({
-						opportunityId : $stateParams.opportunityId,
-						orgId         : org
-					}).$promise;
-					else return null;
+				resources: function (OrgsService, Authentication, ProposalsService, $stateParams) {
+					if (!Authentication.user) return null;
+					else return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) {
+							var org = orgs[0];
+							return ProposalsService.getPotentialResources ({
+								opportunityId : $stateParams.opportunityId,
+								orgId         : org._id
+							}).$promise;
+						}
+						else return null;
+					});
+					// // console.log ('Authentication.user.orgsAdmin', Authentication.user.orgsAdmin);
+					// var orgs = Authentication.user.orgsAdmin && Authentication.user.orgsAdmin.length > 0 ? Authentication.user.orgsAdmin : [null];
+					// var org = orgs[0];
+					// if (org) return ProposalsService.getPotentialResources ({
+					// 	opportunityId : $stateParams.opportunityId,
+					// 	orgId         : org
+					// }).$promise;
+					// else return null;
 				}
 			}
 		})
@@ -247,19 +274,35 @@
 					}).$promise;
 				},
 				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
+					if (!Authentication.user) return null;
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return null;
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return null;
 				},
-				resources: function (Authentication, ProposalsService, $stateParams) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return ProposalsService.getPotentialResources ({
-						opportunityId : $stateParams.opportunityId,
-						orgId         : org
-					}).$promise;
-					else return null;
+				resources: function (Authentication, ProposalsService, $stateParams, OrgsService) {
+					if (!Authentication.user) return null;
+					else return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) {
+							var org = orgs[0];
+							return ProposalsService.getPotentialResources ({
+								opportunityId : $stateParams.opportunityId,
+								orgId         : org._id
+							}).$promise;
+						}
+						else return null;
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return ProposalsService.getPotentialResources ({
+					// 	opportunityId : $stateParams.opportunityId,
+					// 	orgId         : org
+					// }).$promise;
+					// else return null;
 				},
 				editing: function () { return false; }
 			}

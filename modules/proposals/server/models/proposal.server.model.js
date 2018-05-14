@@ -16,6 +16,11 @@ var QuestionSchema = new Schema ({
 	response : {type: String},
 	rank     : {type: Number, default: 0}
 });
+var AddendumSchema = new Schema ({
+	description : {type: String},
+	createdBy 	: {type: 'ObjectId', ref: 'User', default: null},
+	created		: {type: Date, default: null}
+});
 /**
  * Proposal Schema
  */
@@ -37,13 +42,14 @@ var ProposalSchema = new Schema ({
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
 	isAcceptedTerms      : {type: Boolean, default: false},
 	//
-	// for CWU we just have an individual, we still link the cretor of a SWU here, but we
+	// for CWU we just have an individual, we still link the creator of a SWU here, but we
 	// focus on the following fields for SWU primarily
 	//
 	user                 : {type: Schema.ObjectId, ref: 'User', required: 'Please select a user', index: true},
 	//
 	// SWU is averything below
 	//
+	org                  : {type: Schema.ObjectId, ref: 'Org', index: true},
 	phases : {
 		implementation : {
 			isImplementation : {type: Boolean, default: false},
@@ -76,8 +82,9 @@ var ProposalSchema = new Schema ({
 		price           : {type: Number, default: 0},
 		total           : {type: Number, default: 0}
 
-	}
-});
+	},
+	addendums			: {type: [AddendumSchema], default: []}
+}, { usePushEach: true });
 
 
 mongoose.model('Proposal', ProposalSchema);

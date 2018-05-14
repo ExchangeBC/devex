@@ -1,54 +1,55 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" novalidate autocomplete="off">
-	<div class="alert alert-warning">
-		<h5>Let us know what you can do!</h5>
-		<label class="label label-danger"><i class="fa fa-group"> Sprint With Us</i></label> opportunities call for teams with these capabilities and skills. <strong>Claim the ones you have</strong>, and let the companies you trust know.
-	</div>
-	
-	<fieldset>
-		<div class="form-group">
-			<uib-accordion close-others="true">
-				<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities">
-					<uib-accordion-heading>
-						<i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>
-						&nbsp; 
-						{{capability.name}}
-					</uib-accordion-heading>
-					<div class="row">
-						
-						<div class="col-xs-12 col-sm-7">
-							<h5>Definition:</h5>
-							<p ng-bind-html="vm.trust(capability.description)"></p>
-						</div>
-
-						<div class="hidden-xs col-sm-1"></div>
-
-						<div class="col-xs-12 col-sm-4">
-							<div class="alert alert-warning">
-								<div class="checkbox">
-								
-								<label>
-									<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
-										<strong>Claim this capability</strong>
-								</label>
-								</div>
-							</div>
-
-							<div class="well well-warning" ng-if="capability.skills.length > 0">
-								<p>Select all the <strong>preferred skills</strong> you possess:</p>
-								<div class="label-list">
-									<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
-										<span ng-bind="skill.name"></span>
-									</label>
-								</div>
-							</div>
-						</div>
-
-					</div>
-				</div>
-			</uib-accordion>
+	<div class="edit-form-tab-content">
+		<div class="alert alert-warning">
+			<p><strong>Let us know what you can do!</strong> &nbsp;<i class="fa fa-group"></i> <strong>Sprint With Us</strong> opportunities call for teams with these capabilities and skills. <strong>Claim the ones you have</strong>, and let the companies you trust know.</p>
 		</div>
-	</fieldset>
 		
+		<fieldset>
+			<div class="form-group">
+				<uib-accordion close-others="true">
+					<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities">
+						<uib-accordion-heading>
+							<i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>
+							&nbsp; 
+							{{capability.name}}
+						</uib-accordion-heading>
+						<div class="row">
+							
+							<div class="col-xs-12 col-sm-7">
+								<h5>Definition:</h5>
+								<p ng-bind-html="vm.trust(capability.description)"></p>
+							</div>
+
+							<div class="hidden-xs col-sm-1"></div>
+
+							<div class="col-xs-12 col-sm-4">
+								<div class="alert alert-warning">
+									<div class="checkbox">
+									
+									<label>
+										<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
+											<strong>Claim this capability</strong>
+									</label>
+									</div>
+								</div>
+
+								<div class="well well-warning" ng-if="capability.skills.length > 0">
+									<p>Select all the <strong>preferred technical skills</strong> you possess:</p>
+									<div class="label-list">
+										<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
+											<span ng-bind="skill.name"></span>
+										</label>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</uib-accordion>
+			</div>
+		</fieldset>
+	</div>
+			
 	<div class="edit-form-footer">
 		<div class="row">
 			<div class="col-xs-12">

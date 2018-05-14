@@ -1,6 +1,19 @@
 (function () {
 	'use strict';
 	angular.module ('proposals')
+	.directive('selectOnClick', ['$window', function ($window) {
+		return {
+			restrict: 'A',
+			link: function (scope, element, attrs) {
+				element.on('click', function () {
+					if (!$window.getSelection().toString()) {
+						// Required for mobile Safari
+						this.setSelectionRange(0, this.value.length)
+					}
+				});
+			}
+		};
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// directive for the button to apply, edit, or review proposal
@@ -35,9 +48,9 @@
 				var isProposal        = qaz.proposal && qaz.proposal._id;
 				var canedit           = !(isAdmin || isGov || isMemberOrWaiting);
 				qaz.isSprintWithUs    = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
-				console.log (Authentication.user);
 				var hasCompany        = isUser && Authentication.user.orgsAdmin.length > 0;
-				qaz.case               = 'nothing';
+				hasCompany            = qaz.opportunity.hasOrg;
+				qaz.case              = 'nothing';
 				if (!isUser) qaz.case = 'guest';
 				//
 				// if the user is even allowed to add proposals
@@ -184,7 +197,6 @@
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				vm.userCanAdd = vm.isAdmin;
-				// console.log ('user can add', vm.userCanAdd);
 				if ($scope.title) vm.title = $scope.title;
 			}
 		}

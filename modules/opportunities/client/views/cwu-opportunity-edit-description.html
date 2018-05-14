@@ -10,12 +10,17 @@
 			<textarea
 				name="description"
 				id="description"
+        data-automation-id="text-cwu-description"
 				class="form-control input-sm"
 				ui-tinymce="vm.tinymceOptions"
 				placeholder="A full description of the opportunity"
 				ng-model="vm.opportunity.description">
 			</textarea>
 		</form-display>
+		<br/>
+		<p>
+			Number of Chanracters = {{vm.opportunity.description.length}}
+		</p>
 
 <!--
 		<form-display

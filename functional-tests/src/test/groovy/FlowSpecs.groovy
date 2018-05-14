@@ -11,6 +11,7 @@ import pages.app.AuthenticationGovernmentPage
 import pages.app.AuthenticationSigninPage
 import pages.app.AuthenticationSigninadminPage
 import pages.app.CodewithusPage
+import pages.app.SprintwithusPage
 import pages.app.CopyrightPage
 import pages.app.DisclaimerPage
 import pages.app.HomePage
@@ -49,14 +50,11 @@ class FlowSpecs extends GebReportingSpec {
     HomePage  | "ProgramsNavbar"        || ProgramsPage
     HomePage  | "ProjectsNavbar"        || ProjectsPage
     HomePage  | "OpportunitiesNavBar"   || OpportunitiesPage
-    HomePage  | "SignUpNavBar"          || AuthenticationGovernmentPage
     HomePage  | "SigninLink"            || AuthenticationSigninPage 
-    HomePage  | "SignUpMidPageLink"     || AuthenticationGovernmentPage
-    HomePage  | "FindWorkButton"        || OpportunitiesPage
-    HomePage  | "learnMoreLink"         || CodewithusPage
     HomePage  | "AboutLink"             || AboutPage
     HomePage  | "AccessibilityLink"     || AccessibilityPage
     HomePage  | "CodewithusLink"        || CodewithusPage
+    HomePage  | "SprintwithusLink"        || SprintwithusPage
     HomePage  | "DisclaimerLink"        || DisclaimerPage
     HomePage  | "PrivacyLink"           || PrivacyPage
     HomePage  | "RoadmapLink"           || RoadmapPage

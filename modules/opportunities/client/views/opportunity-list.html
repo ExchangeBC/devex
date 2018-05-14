@@ -1,23 +1,22 @@
 <div class="banner banner-important" ng-if="!vm.isUser">
+	<i class="fa fa-lg fa-envelope-o"></i>&nbsp;&nbsp;Get notified as soon as new opportunities are posted! <a href ui-sref="authentication.signin">Sign In</a> and select notifications in your Profile.
+</div>
+
+<div class="container">
 	<div class="row">
-		<div class="col-xs-12">
-			<i class="fa fa-lg fa-envelope-o"></i>&nbsp;&nbsp;To get notified when new opportunities are posted, or post an opportunity yourself, <a href ui-sref="authentication.signin">Sign In</a> or <a href  id="authentication.gov" ui-sref="authentication.gov">Sign Up</a>
+		<div class="col-xs-12 col-sm-6">
+			<div class="alert alert-outline-info">
+				<i class="fa fa-tag"></i> <strong>Code With Us</strong> opportunities pay a <strong>fixed-price</strong> for meeting acceptance criteria. &nbsp;<a href="/codewithus">Learn more</a>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="alert alert-outline-info">
+				<i class="fa fa-group"></i> <strong>Sprint With Us</strong> opportunities are for registered companies who can supply <strong>teams</strong>. &nbsp;<a href="/sprintwithus">Learn more</a>
+			</div>
 		</div>
 	</div>
 </div>
+	
+<opportunity-list context="allopportunities"></opportunity-list>
+	
 
-<section class="list-page">
-	<div class="container">
-		<div class="alert alert-important">
-			<label class="label label-price"><i class="fa fa-tag"></i> Code With Us</label> opportunities pay a <strong>fixed-price</strong> for meeting acceptance criteria.
-			<br>
-			<label class="label label-danger"><i class="fa fa-group"></i> Sprint With Us</label> opportunities are for <a href="/orgs">registered companies</a> who can supply <strong>teams</strong> with <a href="/capabilities">these capabilities</a>.
-		</div>
-	</div>
-
-	<br>
-
-	<div class="container" role="main">
-		<opportunity-list context="allopportunities"></opportunity-list>
-	</div>
-</section>

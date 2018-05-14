@@ -163,8 +163,8 @@ var setNotificationData = function (opportunity) {
 		name                 : opportunity.name,
 		short                : opportunity.short,
 		description          : opportunity.description,
-		earn_format_mnoney   : helpers.formatMoney (opportunity.earn, 2),
-		earn                 : helpers.formatMoney (opportunity.earn, 2),
+		earn_format_mnoney   : helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2),
+		earn                 : helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2),
 		dateDeadline         : helpers.formatDate (new Date(opportunity.deadline)),
 		timeDeadline         : helpers.formatTime (new Date(opportunity.deadline)),
 		dateAssignment       : helpers.formatDate (new Date(opportunity.assignment)),
@@ -174,6 +174,7 @@ var setNotificationData = function (opportunity) {
 		deadline_format_time : helpers.formatTime (new Date(opportunity.deadline)),
 		updatenotification   : 'not-update-'+opportunity.code,
 		code                 : opportunity.code,
+		opptype              : opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu',
 		skills               : opportunity.skills.join (', ')
 	};
 };
@@ -237,21 +238,31 @@ var oppBody = function (opp) {
 		onsite  : 'In-person work required',
 		mixed   : 'Some in-person work required'
 	}
+	var opptype = 'cwu';
+	if (opp.opportunityTypeCd === 'sprint-with-us') {
+		opptype = 'swu';
+		earn = helpers.formatMoney (opp.phases.aggregate.target, 2);
+	}
 	var ret = '';
-	ret += 'Value: '+earn;
-	ret += 'Closes: '+deadline;
-	ret += 'Location: '+opp.location+' '+locs[opp.onsite];
-	ret += '<h2>Opportunity Description</h2>';
-	ret += opp.description;
-	ret += '<h2>Acceptance Criteria</h2>';
-	ret += opp.criteria;
-	ret += '<h2>How to Apply</h2>';
-	ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
-	ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
-	// ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
-	ret += '<h2>Proposal Evaluation Criteria</h2>';
-	ret += opp.evaluation;
+	// ret += 'Value: '+earn;
+	// ret += 'Closes: '+deadline;
+	// ret += 'Location: '+opp.location+' '+locs[opp.onsite];
+	// ret += '<h2>Opportunity Description</h2>';
+	// ret += opp.description;
+	// ret += '<h2>Acceptance Criteria</h2>';
+	// ret += opp.criteria;
+	// ret += '<h2>How to Apply</h2>';
+	// ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 PST on '+deadline+'</b>.</p>';
+	// ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
+	// // ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
+	// ret += '<h2>Proposal Evaluation Criteria</h2>';
+	// ret += opp.evaluation;
+
+	ret += '<p>This is a paid opportunity through the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
+	ret += '<br/>';
+	ret += '<p>To apply, visit the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">opportunity page</a> and submit a proposal before '+deadline+'</p>';
 	return ret;
+
 };
 // -------------------------------------------------------------------------
 //
@@ -416,11 +427,7 @@ exports.update = function (req, res) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		// console.log ('updating', opportunity.opportunityTypeCd);
-		//
-		// CC: TBD:SWU once sprint with us is active we can remove this restriction
-		//
-		if (opportunity.isPublished && opportunity.opportunityTypeCd === 'code-with-us') {
+		if (opportunity.isPublished) {
 			Notifications.notifyObject ('not-updateany-opportunity', data);
 			Notifications.notifyObject ('not-update-'+opportunity.code, data);
 			github.createOrUpdateIssue ({
@@ -437,7 +444,7 @@ exports.update = function (req, res) {
 			})
 			.catch (function () {
 				res.status(422).send({
-					message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+					message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 				});
 			});
 		}
@@ -455,7 +462,6 @@ exports.update = function (req, res) {
 //
 // -------------------------------------------------------------------------
 var pub = function (req, res, isToBePublished) {
-	// console.log ('publishinfg', isToBePublished);
 	var opportunity = req.opportunity;
 	//
 	// if no change or we dont have permission to do this just return as a no-op
@@ -581,6 +587,60 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 			else {
 				opportunity.status = 'Assigned';
 				opportunity.proposal = proposalId;
+				updateSave (opportunity)
+				.then (function (opp) {
+					opportunity = opp;
+					var data = setNotificationData (opportunity);
+					Notifications.notifyObject ('not-updateany-opportunity', data);
+					Notifications.notifyObject ('not-update-'+opportunity.code, data);
+					data.username = proposalUser.displayName;
+					data.useremail = proposalUser.email;
+					//
+					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
+					//
+					data.assignor = user.displayName;
+					data.assignoremail = opportunity.proposalEmail;
+					Notifications.notifyUserAdHoc ('assignopp', data);
+					return github.addCommentToIssue ({
+						comment : 'This opportunity has been assigned',
+						repo    : opportunity.github,
+						number  : opportunity.issueNumber
+					})
+					.then (function () {
+						return github.lockIssue ({
+							repo   : opportunity.github,
+							number : opportunity.issueNumber
+						});
+					});
+				})
+				.then (resolve, reject);
+			}
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// assign the passed in swu proposal
+// TBD : in futre we should likely send an email to ALL the admins of the
+// winning org, but for now, let's just do the one who created it.
+//
+// -------------------------------------------------------------------------
+exports.assignswu = function (opportunityId, proposalId, proposalUser, user) {
+	return new Promise (function (resolve, reject) {
+		Opportunity.findById (opportunityId)
+		.exec (function (err, opportunity) {
+			if (err) {
+				reject (err);
+			}
+			else if (!opportunity) {
+				reject (new Error ({
+					message: 'No opportunity with that identifier has been found'
+				}));
+			}
+			else {
+				opportunity.status = 'Assigned';
+				opportunity.proposal = proposalId;
+				opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
 				updateSave (opportunity)
 				.then (function (opp) {
 					opportunity = opp;
@@ -820,7 +880,7 @@ exports.new = function (req, res) {
 exports.opportunityByID = function (req, res, next, id) {
 	if (id.substr (0, 3) === 'opp' ) {
 		Opportunity.findOne({code:id})
-		.populate('createdBy', 'displayName')
+		.populate('createdBy', 'displayName email')
 		.populate('updatedBy', 'displayName')
 		.populate('project', 'code name _id isPublished')
 		.populate('program', 'code title _id logo isPublished')

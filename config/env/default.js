@@ -18,8 +18,9 @@ module.exports = {
 	// URL. For example: https://www.myapp.com (including port if required).
 	// Session Cookie settings
 	sessionCookie: {
-		// session expiration is set by default to 24 hours
+		// session expiration is set by default to 1 year (TODO: this is a temporary fix, and needs to be set to a reasonable value, and we need to implement proper timeout handling)
 		maxAge: 24 * (60 * 60 * 1000),
+		// maxAge: 2000,
 		// httpOnly flag makes sure the cookie is only accessed
 		// through the HTTP protocol and not JS/browser
 		httpOnly: true,
@@ -35,9 +36,24 @@ module.exports = {
 			name: 'code-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
+		'user1': {
+			path: 'public/terms-bc-developers-exchange-2018-04-19.pdf',
+			name: 'terms-bc-developers-exchange-2018-04-19.pdf',
+			type: 'application/pdf'
+		},
+		'rfq1': {
+			path: 'public/rfq-sprint-with-us-company-2018-04-19.pdf',
+			name: 'rfq-sprint-with-us-company-2018-04-19.pdf',
+			type: 'application/pdf'
+		},
 		'swu1': {
-			path: 'public/code-with-us-terms-2018-01-23.pdf',
+			path: 'public/sprint-with-us-terms-2018-05-01.pdf',
 			name: 'sprint-with-us-terms.pdf',
+			type: 'application/pdf'
+		},
+		'serviceagreement': {
+			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
+			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		}
 	},

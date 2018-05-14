@@ -21,6 +21,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/my/orgs',
       permissions: ['*']
      }, {
+      resources: '/api/myadmin/orgs',
+      permissions: ['*']
+     }, {
       resources: '/api/orgs/:orgId/user/:userId/remove',
       permissions: ['*']
     }, {
@@ -34,6 +37,9 @@ exports.invokeRolesPolicies = function () {
       permissions: ['*']
      }, {
       resources: '/api/my/orgs',
+      permissions: ['*']
+    }, {
+      resources: '/api/myadmin/orgs',
       permissions: ['*']
     }, {
       resources: '/api/upload/logo/org/:orgId',

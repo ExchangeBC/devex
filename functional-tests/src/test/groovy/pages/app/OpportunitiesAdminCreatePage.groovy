@@ -7,60 +7,54 @@ import geb.Browser
 import extensions.AngularJSAware
 import modules.CheckboxModule
 
-class FrameDescribingPage extends Page {
-    static content = {
-        mceBody { $("body", id:"tinymce") }
-    }
-}
-
 class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
     
 	static at = { angularReady && title == "BCDevExchange - New Opportunity" }
 	static url = "opportunityadmin/createcwu"
 	static content = {
-            HeaderTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Header")]'), 0).click() }
-            BackgroundTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Background")]'), 0).click() }
-            DetailsTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Details")]'), 0).click() }
-            AcceptanceTabClick { $(By.xpath('//a[@class="nav-link" and contains(.,"Acceptance and Evaluation")]'), 0).click() }
-  
-            SaveChangesButton { $("Button", type:"submit", 0) }
-            CloseButton { $(By.xpath('//a[i[@title="Close"]]'), 0) }
+            HeaderTabClick { $('[data-automation-id ~= "tab-cwu-header"]').click() }
+            BackgroundTabClick { $('[data-automation-id ~= "tab-cwu-background"]').click() }
+            AcceptanceTabClick { $('[data-automation-id ~= "tab-cwu-acceptance"]').click() }
+            DetailsTabClick { $('[data-automation-id ~= "tab-cwu-details"]').click() }
+           
+           descriptionFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-description"]//@id,"_ifr")]'), 0) }
 
-            propiFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="criteria"]//following-sibling::p//iframe'), 0) }
-            desciFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="description"]//following-sibling::p//iframe'), 0) }
-            aciFrame(page: FrameDescribingPage) { $(By.xpath('//div[@data-field="evaluation"]//following-sibling::p//iframe'), 0) }
-            oppTeaser { $(name: "short").module(Textarea) }
+            evaluationFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-evaluation"]//@id,"_ifr")]'), 0) }
+
+            acceptanceFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-acceptance"]//@id,"_ifr")]'), 0) }
+
+        
+            SaveButton { $('button[data-automation-id ~= "button-cwu-save"]') }
+            DeleteButton { $('a[data-automation-id ~= "button-cwu-delete"]') }
+            
             oppTitle { $("input",id:"title") }
+            oppTeaser { $("#short") }
             selectProject { $("#opportunityForm") }
             oppEmail { $("input", id:"proposalEmail") }
             oppGithub { $("input",id:"github") }
             oppSkills { $("input", id:"skilllist") }
-            //oppRole { waitFor { angularReady } 
-            //$("input", "ng-model":"vm.opportunity.c01_flag").module(Checkbox) 
-            //}
             selectEarn { $("#opportunityForm") }
             selectLocation { $("#opportunityForm") }
             selectOnsite { $("#opportunityForm") }
-            textArea { $("#ui-tinymce-7") }
         }
 
     void "Add Description"(String desc){
             waitFor { angularReady }
-            withFrame( waitFor { desciFrame } ) {
+            withFrame( waitFor { descriptionFrame } ) {
               mceBody << desc
           }
     }
     
     void "Add Acceptance Criteria"(String desc){
             waitFor { angularReady }
-            withFrame( waitFor { aciFrame } ) {
+            withFrame( waitFor { acceptanceFrame } ) {
               mceBody << desc
           }
     }
 
     void "Add Proposal Criteria"(String desc){
             waitFor { angularReady }
-            withFrame( waitFor { propiFrame } ) {
+            withFrame( waitFor { evaluationFrame } ) {
               mceBody << desc
           }
     }
@@ -96,11 +90,4 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
         $("input", type:"date", name:"start").jquery.val(dDate)
         }
 
-   //@todo deprecated?
-	 //Hard wait function, sometimes useful to sync up the application when you cannot use waitFor.
-   Boolean sleepForNSeconds(int n) {
-    	def originalMilliseconds = System.currentTimeMillis()
-    	waitFor(n + 1, 0.5) { (System.currentTimeMillis() - originalMilliseconds) > (n * 1000) }
-        return true
-    	}
 }

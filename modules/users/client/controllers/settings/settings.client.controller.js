@@ -24,29 +24,29 @@
 		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 		vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
-			// console.log ('runing');
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 				return false;
 			}
-			var successMessage = '<h4>Edit profile successful</h4>';
-			if (vm.user.notifyOpportunities) {
-				successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
-			}
-			if (vm.user.isPublicProfile) {
-				successMessage += '<p>Your profile will be made public.</p>';
-			}
-			if (vm.user.isAutoAdd) {
-				successMessage += '<p>You may be automatically added to teams under your organizations.</p>';
-			}
+			var successMessage = '<h4>Changes Saved</h4>';
+			// Don't need these extras to pop up
+		//	if (vm.user.notifyOpportunities) {
+		//		successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
+		//	}
+		//	if (vm.user.isPublicProfile) {
+		//		successMessage += '<p>Your profile will be made public.</p>';
+		//	}
+		//	if (vm.user.isAutoAdd) {
+		//		successMessage += '<p>You may be automatically added to teams under your organizations.</p>';
+		//	}
 			var user = new UsersService(vm.user);
 			user.$update(function (response) {
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');
-				Notification.success({ delay:5000, message: '<i class="glyphicon glyphicon-ok"></i> '+successMessage});
+				Notification.success({ delay:2000, message: '<i class="fa fa-3x fa-check-circle"></i> '+successMessage});
 				Authentication.user = response;
 				vm.user = angular.copy(Authentication.user);
 			}, function (response) {
-				Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Edit profile failed!' });
+				Notification.error({ message: response.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 			});
 		}
 	})
@@ -88,6 +88,7 @@
 					vm.user             = angular.copy(Authentication.user);
 					$scope.$broadcast ('show-errors-reset', 'vm.userForm');
 					Notification.success ({ delay:2000, message: '<i class="fa fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'});
+					CapabilitiesMethods.init (vm, vm.user, capabilities);
 				}, function (response) {
 					Notification.error ({ message: response.data.message, title: '<i class="fa fa-alert-triangle"></i> Changes were not saved!' });
 			});

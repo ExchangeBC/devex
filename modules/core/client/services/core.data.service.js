@@ -11,16 +11,12 @@
 		return {
 			cities: citylist,
 			questions : [
-				'When you are old, what do you think children will ask you to tell stories about?',
-				'If your job gave you a surprise three day paid break to rest and recuperate, what would you do with those three days?',
-				'What’s the best / worst practical joke that you’ve played on someone or that was played on you?',
-				'If you were moving to another country, but could only pack one carry-on sized bag, what would you pack?',
-				'What’s something that everyone, absolutely everyone, in the entire world can agree on?'
+				'What performance metrics does your team measure?',
+				'How do the developers and UX people on your team interact?',
+				'Describe the level of detail your team generally needs in order to start work on a task or feature.',
+				'As a team, how do you discuss user stories?',
+				'At what point in the development cycle does your team start to talk about testing?'
 			]
 		};
-	})
-
-
-	;
+	});
 }());
-

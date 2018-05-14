@@ -13,6 +13,7 @@ body {
 
 p {
   font-size: 14px;
+  font-weight: 300;
   margin: 0 0 14px;
 }
 
@@ -20,6 +21,12 @@ p.subtitle {
   font-size: 17px;
   font-weight: 300;  
   margin: 0 0 17px;
+}
+
+ol,ul {
+  > li {
+    font-weight: 300;
+  }
 }
 
 h1,
@@ -30,6 +37,7 @@ h5,
 h6 {
   .heading-font;
   padding: 0;
+  font-weight: 700;
 }
 
 h1 {
@@ -95,15 +103,15 @@ a.secondary {
 }
 
 a.accordion-toggle {
-  color: @gray-dark;
+  color: @theme-primary;
   &:hover, &:active, &:visited, &:focus {
-  color: @gray-dark;
+  color: darken(@theme-primary; 10%);
   outline: none;
   }
 }
 
 a.breadcrumb-nav {
-  font-size: 1.05em;
+  font-size: 15px;
   color: @gray;
   &:hover,&:active:hover {
     color: @gray-darker;
@@ -113,8 +121,11 @@ a.breadcrumb-nav {
   }
 }
 
-.breadcrumb-nav {
-  margin: 5px 0px 20px;
+.sub-nav {
+  height: 50px;
+  padding: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #e2e2e2;
 }
 
 .page-header {
@@ -170,15 +181,26 @@ a.breadcrumb-nav {
   color: @gray-light;
 }
 
+.gray {
+  color: @gray;
+}
+
 // Containers
 .container {
 	max-width: 1040px;
-  padding: 0;
+  padding: 0 10px;
+  > .navbar-collapse {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  > .navbar-header {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .detail-view {
   background: #fff;
-  color: @gray;
   padding: 1.5em 2em;
   border-radius: 3px;
   border: 1px solid #ddd;
@@ -199,7 +221,8 @@ a.breadcrumb-nav {
 // Opportunity detail views
 
 .opp-detail-header {
-  font-size: .75em;
+  font-size: .85em;
+  font-weight: 300;
   color: @gray-light;
   padding-bottom: 3em;
   > .btn {
@@ -214,32 +237,15 @@ h1.opp-detail {
 }
 
 h3.opp-detail {
-  padding: .75em 0;
-  margin: .5em 0 .75em;
+  margin: .25em 0 .75em;
   font-size: 1.2em;
 }
 
 h4.opp-detail {
-  padding: .5em 0;
-  margin-top: .5em;
+  margin-top: .25em;
   font-size: 1.1em;
 }
 
-// Remove this one later
-.container-edit-form {
-  background: #fff;
-  padding: 15px;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px #777, 0 1px 3px #777;
-}
-
-.proposal-admin-view {
-  background: @theme-important;
-  color: @gray-dark;
-  padding: 2em;
-  border-radius: 3px;
-  border: 1px solid #ddd;
-}
 
 // Capability detail views
 
@@ -248,8 +254,19 @@ h1.capability-detail {
   font-size: 2em;
 }
 
+//--------------------
+// CWU Evaluation
+//--------------------
 
+.cwu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 1em;
+}
+
+//--------------------
 // SWU Evaluation
+//--------------------
 
 .swu-evaluation {
   border: 1px solid #ddd;
@@ -342,26 +359,45 @@ tr.screened-out {
 // Edit form
 
 .edit-form {
+  max-width: 1040px;
+  margin-left: auto;
+  margin-right: auto;
   background: #fff;
-  padding: 1em 1.5em; 
-  box-shadow: 0 4px 6px #000, 0 1px 3px #000;
+  border-radius: 4px;
+  padding: 0; 
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 }
 
 .edit-form-header {
-  color: @gray-dark;
-  font-size: 1.1em;
-  padding: 0 0 1.5em;
+  padding: 10px 15px;
+  background: #e2e2e2;
+  border-radius: 3px 3px 0 0;
   > .btn {
     margin: -.75em -1em;
   }
 }
 
+.edit-form-tabs {
+  padding: 10px 15px 0;
+  background: #f8f8f8;
+}
+
 .edit-form-tab-content {
-  padding: 1em 0;
+  padding: 10px 15px;
 }
 
 .edit-form-body {
-  padding: 1em 0;
+  padding: 10px 15px;
+}
+
+h4.edit-form-body {
+  margin: 5px 0 15px;
+  padding: 0;
+}
+
+h5.edit-form-body {
+  margin: 5px 0 14px;
+  padding: 0;
 }
 
 // Remove this one later
@@ -380,12 +416,20 @@ h4.edit-form-header {
 
 
 .edit-form-footer {
-  padding: 2.5em 0 0;
+  padding: 5px 15px;
+  background: #e2e2e2;
+  border-radius: 0 0 3px 3px;  
 }
 
-// Navigation
+//--------------------
+// Navs
+//--------------------
+
 .navbar {
   border: none;
+  > li {
+    font-weight: 400;
+  }
 }
 
 
@@ -400,12 +444,13 @@ h4.edit-form-header {
   border: none;
 }
 
-
 .navbar-brand {
-  padding: 3px 15px 3px 0px;
-  margin-left: 25px;
+  padding: 3px 20px 3px 0px;
+  margin-left: -5px;
   height: 50px;
 }
+
+
 
 .navbar-nav {
   > li {
@@ -473,20 +518,23 @@ h4.edit-form-header {
 	}
 }
 
-// NAV
-// -------------------------
+.navbar-collapse {
+  margin-right: 0;
+  margin-left: 0;
+  text-align: right;
+}
 
-// Tabs
-// -------------------------
-
-// Give the tabs something to sit on
 .nav-tabs {
-  border-bottom: none;
-  margin: 0 0 30px;
+  border-bottom: 2px solid #f26925;
+  margin-left: -15px;
+  margin-right: -15px;
   > li {
     float: left;
     // Make the list-items overlay the bottom border
     margin-bottom: -1px;
+    > :first-child {
+        margin-left: 17px;
+      }
 
     // Actual tabs (as links)
     > a {
@@ -501,7 +549,7 @@ h4.edit-form-header {
       &:hover {
         color: @gray-dark;
         background: none;
-        transition: none;
+        transition:all 0.3s ease;
       }
     }
 
@@ -510,10 +558,11 @@ h4.edit-form-header {
       &,
       &:hover,
       &:focus {
-        color: @gray-dark;
+        color: #fff;
+        font-weight: 700;
         border: none;
-        border-bottom: 4px solid #f26925;
-        background: none;
+        background: #f26925;
+        border-radius: 4px 4px 0 0;
         transition: none;
         cursor: default;
       }
@@ -567,6 +616,7 @@ section.edit-form-background {
 
 section.detail-page-background {
   background: @gray-lighter;
+  padding-bottom: 30px;
 }
 
 section.list-page {
@@ -578,8 +628,8 @@ section.form-page {
 }
 
 section.signup {
-  background: @theme-primary;
-  padding: 2em 0 14em;
+  background: #fff;
+  padding: 2em 0 7em;
 }
 
 // Forms / Might use these later to simplify html
@@ -618,6 +668,24 @@ form-title {
   border-radius: 0px 0px 4px 4px;
 }
 
+// Wider form for SWU proposal
+.swu-proposal {
+  max-width: 1360px;
+}
+
+// Formatting for proposal amount error messages
+.proposal-amount-error {
+  font-size: 9pt;
+  color: red;
+}
+.proposal-amount-wrapper {
+  height: 35px;
+  text-align: right;
+}
+.proposal-total-amount-wrapper {
+  text-align: right;
+  padding-bottom: 2.5em;
+}
 
 // Bootstrap Overrides
 
@@ -913,17 +981,32 @@ form-title {
   }
 }
 
+//------------------------
+// Filter
+//------------------------
+
+.list-filter {
+  background: #ced9e4;
+  padding: 10px;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
+  > .btn {
+    font-size: 13px;
+    padding: 3px 5px;
+    vertical-align: top;
+  }
+}
 
 .btn-filter-selected {
   transition: none;
   color: #fff;
-  background: @theme-primary;
-  border: none;
+  background: @gray;
+  border: 1px solid;
+  border-color: transparent;
   box-shadow: none;
   &:hover, &:focus, &:active {
     color: #fff;
-    background: @theme-primary;
-    border: none;
+    background: @gray;
     box-shadow: none;
   }
 }
@@ -932,11 +1015,12 @@ form-title {
   transition: none;
   color: @gray;
   background: transparent;
-  border: none;
+  border: 1px solid;
+  border-color: @gray-light;
   &:hover, &:focus, &:active {
     color: @gray;
     background: transparent;
-    border: none;
+    border-color: @gray-light;
     box-shadow: none;
   }
 }
@@ -967,8 +1051,8 @@ form-title {
   display: inline-block;
   font-size: .75em;
   font-weight: normal;
-  padding: .5em .7em;
-  border-radius: 5px;
+  padding: .6em .7em .5em;
+  border-radius: 3px;
   letter-spacing: .08em;
   margin: 3px 3px 3px 0px;
 }
@@ -1022,6 +1106,10 @@ form-title {
   font-size: .95em;
 }
 
+.label-orange {
+  background: @theme-orange;
+}
+
 // Project labels
 
 .label-project-tags {
@@ -1048,6 +1136,7 @@ form-title {
   background: transparent;
   color: @gray-dark;
   font-weight: bold;
+  font-size: .9em;
 }
 
 .label-fulltime {
@@ -1076,6 +1165,10 @@ form-title {
   background: @theme-orange;
   color: #fff;
   border: 1px solid @theme-orange;
+}
+
+.label-swu {
+  background: @gray-darker;
 }
 
 // Capability Labels
@@ -1212,25 +1305,32 @@ form-title {
 // Common styles
 .alert {
   max-width: 1040px;
-  padding: 15px;
+  padding: 10px;
   margin: 10px 0;
   font-weight: 400;
   font-size: 14px;
   border: none;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .alert-info {
-  background: @gray-lighter;
+  background: @theme-info;
   color: @gray-dark;
 }
 
 .alert-important {
-  background: @theme-important;
+  border: 1px solid @theme-important;
   color: @gray-dark;
 }
 
+.alert-success {
+  border: 1px solid @theme-success;
+}
+
 .alert-warning {
-  background: @theme-warning;
+  border: 1px solid @theme-warning;
   color: @gray-dark;
 }
 
@@ -1246,6 +1346,42 @@ form-title {
   background: @gray-lighter;
   border: none;
 }
+
+.alert-outline-primary {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-primary;
+  border-radius: 3px;
+}
+
+.alert-outline-info {
+  background: transparent;
+  border: 3px solid; 
+  border-color: @theme-info;
+  border-radius: 3px;
+}
+
+.alert-outline-warning {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-yellow;
+  border-radius: 3px;
+}
+
+.alert-outline-success {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-success;
+  border-radius: 3px;
+}
+
+.alert-outline-orange {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-orange;
+  border-radius: 3px;
+}
+
 
 // Progress bars
 
@@ -1320,13 +1456,22 @@ form-title {
 // .panel-warning  { .panel-heading-lighten(@theme-warning); }
 // .panel-danger   { .panel-heading-lighten(@theme-danger); }
 //
-//
+//---------------------
 // Custom panel styles
-//
+//---------------------
+
 .panel-default {
   > .panel-heading, .panel-footer {
     background-color: @gray-lighter;
   }
+}
+
+.panel-primary {
+  > .panel-heading, .panel-footer {
+    background-color: @theme-primary;
+    color: #fff;
+  }
+  border-color: @theme-primary;
 }
 
 .panel-group {
@@ -1513,7 +1658,13 @@ form-title {
 
 // Badges
 .nav-pills {
-  > li.active {
+  margin: 0 0 2em;
+  > li {
+    > a {
+      padding: .3em .7em;
+    }
+  }
+  > li.active, li.active:hover {
     > a {
       background-color: @theme-primary;
     }
@@ -1560,7 +1711,15 @@ form-title {
     }
   }
   > .selected {
-    background-color: @gray-lighter;
+    background-color: @theme-primary;
+    > name {
+      color: #fff;
+    }
+    > .label-list {
+      > label {
+        color: #fff;
+      }
+    }
   }
 }
 
@@ -1631,13 +1790,27 @@ form-title {
 .card {
   position: relative;
   margin: 1em 0;
-  border: 2px solid transparent;
-  border-radius: 4px;
+  border-radius: 3px;
   background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   &:active, &:hover {
-  border-color: @gray-dark;
-  transition: border .4s ease-in-out;
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
   cursor: pointer;
+  }
+}
+
+.card-flat {
+  box-shadow: none;
+  transition: none;
+  &:active, &:hover {
+    box-shadow: none;
+    cursor: default;
+  }
+  img.img-responsive {
+    height: 125px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -1660,6 +1833,13 @@ form-title {
   margin: .5em 0;
   border: 1px solid;
   border-color: #e3e3e3;
+   > .card-header {
+    border-bottom: none;
+    height: 20px;
+    > .btn {
+      margin: -4px -15px;
+    }
+  }
   > img.card-img-left {
     height: 50px;
     width: 50px;
@@ -1673,17 +1853,48 @@ form-title {
   }
 }
 
+.card-user-transparent {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin: .5em 0;
+  > img.card-img-left {
+    height: 50px;
+    width: 50px;
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 25px;
+  }
+  > .card-body {
+    padding: .25em 0 0;
+    > .btn-remove {
+      margin-top: 2px;
+    }
+    > .card-title {
+      margin: 10px 0;
+    }
+  }
+}
+
 .card-company {
+  margin: 5px 0;
+  > img.card-img-left {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin: 15px;
+    }
   > .card-header {
-    padding-top: 5px;
-    padding-bottom: 5px;
     border-bottom: none;
+    height: 20px;
     > .btn {
       margin: -4px -15px;
     }
   }
   > .card-body {
     padding: 15px;
+    height: 85px;
+    overflow-y: hidden;
   }
 }
 
@@ -1763,7 +1974,7 @@ form-title {
 
 .card-title {
   font-size: 1.15em;
-  font-weight: 500;
+  font-weight: 700;
   margin: .75em 0 .5em;
 }
 
@@ -1854,12 +2065,12 @@ form-title {
   border-color: @brand-success;
 }
 .card-info {
-  background-color: @brand-info;
-  border-color: @brand-info;
+  background-color: @theme-info;
+  border-color: transparent;
 }
 .card-warning {
-  background-color: @brand-warning;
-  border-color: @brand-warning;
+  background-color: @theme-warning;
+  border-color: transparent;
 }
 .card-danger {
   background-color: @brand-danger;
@@ -1913,6 +2124,22 @@ form-title {
   margin-bottom: 0;
   border-left: 0;
 }
+
+//----------------------------
+// Images for Testimonials
+//----------------------------
+
+.img-testimonial {
+  max-height: 85px;
+  @media (max-width: 767px) {
+    max-width: 70px;
+    min-height: 50px;
+  }
+  @media (min-width: 768px) {
+    max-width: 50%;
+  }
+}
+
 
 // Card image
 .card-img {
@@ -2039,6 +2266,9 @@ form-title {
   border-radius: 4px;
   box-shadow: none;
   background: @gray-lighter;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
 }
 
 .well-important {
@@ -2063,7 +2293,7 @@ form-title {
 // Banners
 
 .banner {
-  padding: .75em;
+  padding: 10px;
   margin: 0px;
   text-align: center;
 }

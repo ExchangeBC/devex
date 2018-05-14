@@ -1,14 +1,14 @@
-<div class="edit-form-tab-content">
-	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
+<form name="vm.orgForm" warn-on-exit id="vm.orgForm" class="signin" novalidate autocomplete="off">
+	<div class="edit-form-tab-content">
 		<div class="row">
-			<div class="col-sm-7">
+			<div class="col-xs-12 col-sm-6">
 				<fieldset>
 				<form-input
 					ng-model="vm.org.name"
 					class="col-sm-12"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"Legal Name",
+						"title":"Legal Name of Company",
 						"id":"companyname",
 						"name":"companyname",
 						"placeholder":"Enter your company name"
@@ -20,10 +20,10 @@
 					ng-model="vm.org.dba"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"DBA",
+						"title":"Doing Business As",
 						"id":"dba",
 						"name":"dba",
-						"placeholder":"DBA"
+						"placeholder":"e.g. Aurelius"
 					}'>
 				</form-input>
 
@@ -50,28 +50,26 @@
 					}'>
 				</form-input>
 
-				<form-display
+				<form-input
 					class="col-sm-12"
+					ng-model="vm.org.city"
+					x-form="vm.orgForm"
 					x-options='{
 						"title":"City",
 						"id":"city",
 						"name":"city"
 					}'>
-					<select name="city" ng-model="vm.org.city" id="city" class="form-control"  ng-options="v as v for v in vm.cities">
-						<option value="">Select Location</option>
-					</select>
-				</form-display>
+				</form-input>
 
 				<form-input
 					class="col-sm-6"
 					ng-model="vm.org.province"
 					x-form="vm.orgForm"
 					x-options='{
-						"title":"Province",
+						"title":"Province/State/Other",
 						"id":"province",
 						"name":"province",
-						"placeholder":"BC",
-						"disabled":"true"
+						"placeholder":"e.g. BC"
 					}'>
 				</form-input>
 
@@ -87,6 +85,30 @@
 					}'>
 				</form-input>
 
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.businessNumber"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Business Registration Number",
+						"id":"businessNumber",
+						"name":"businessNumber",
+						"placeholder":"Business Number"
+					}'>
+				</form-input>
+
+				<form-input
+					class="col-sm-6"
+					ng-model="vm.org.businessJurisdiction"
+					x-form="vm.orgForm"
+					x-options='{
+						"title":"Registration Jurisdiction",
+						"id":"businessJurisdiction",
+						"name":"businessJurisdiction",
+						"placeholder":"Registered In"
+					}'>
+				</form-input>
+
 
 				<form-input
 					class="col-sm-12"
@@ -96,17 +118,18 @@
 						"title":"Website",
 						"id":"website",
 						"name":"website",
-						"placeholder":"website"
+						"placeholder":"https://mycompany.com"
 					}'>
 				</form-input>
 
 				</fieldset>
 			</div>
-			<div class="col-sm-5">
+			<div class="hidden-xs col-sm-1"></div>
+			<div class="col-xs-12 col-sm-5">
 				<fieldset>
 				<h3><avatar-display url="vm.org.orgImageURL" text="vm.org.name" size="70"></avatar-display></h3>
 				<div><edit-org-image org="vm.org"></edit-org-image></div>
-				<br/>
+				<br><br>
 				<form-input
 					class="col-sm-12"
 					ng-model="vm.org.contactName"
@@ -115,7 +138,7 @@
 						"title":"Contact Name",
 						"id":"contactName",
 						"name":"contactName",
-						"placeholder":"contactName"
+						"placeholder":"Jane Smith"
 					}'>
 				</form-input>
 
@@ -127,7 +150,7 @@
 						"title":"Contact Phone",
 						"id":"contactPhone",
 						"name":"contactPhone",
-						"placeholder":"contactPhone"
+						"placeholder":"e.g. 250-288-0999"
 					}'>
 				</form-input>
 
@@ -139,7 +162,7 @@
 						"title":"Contact Email",
 						"id":"contactEmail",
 						"name":"contactEmail",
-						"placeholder":"contactEmail"
+						"placeholder":"jane.smith@domain.com"
 					}'>
 				</form-input>
 				</fieldset>
@@ -168,14 +191,15 @@
 			</div>
 		</div>
 	-->
-		<br/>
-		<div class="edit-form-footer">
-			<div class="row">
-				<div class="col-xs-12">
-					<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-					<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
-				</div>
+	</div>
+
+	<div class="edit-form-footer">
+		<div class="row">
+			<div class="col-xs-12">
+				<button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
+				<button class="btn btn-text-only" ng-click="vm.remove()"><i class="fa fa-trash"></i> Delete Company Profile</button>
 			</div>
 		</div>
-	</form>
-</div>
+	</div>
+
+</form>

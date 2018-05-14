@@ -13,7 +13,7 @@ var PropsalQuestionSchema = new Schema ({
 	code        : {type: String, default: ''},
 	name        : {type: String, required:'PropsalQuestion Name Is Required'},
 	description : {type: String, default: ''}
-});
+}, { usePushEach: true });
 
 PropsalQuestionSchema.statics.findUniqueCode = function (title, suffix, callback) {
 	var _this = this;

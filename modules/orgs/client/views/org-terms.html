@@ -1,0 +1,18 @@
+<div class="edit-form-tab-content">
+	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="alert alert-warning" style="display: inline-block;" ng-if="!vm.org.isAcceptedTerms">
+					<i class="fa fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you need to agree to the terms of the Request for Qualifications
+				</div>
+				<br><br>
+				<a class="btn btn-primary" href="/api/proposals/download/terms/rfq1" target="_blank"><i class="fa fa-download"></i> &nbsp;Download the <span class="light italic">Sprint With Us</span> Request for Qualifications</a>
+				<br><br>
+				<label class="checkbox-inline">
+					<input type="checkbox" name="isInception" ng-disabled="vm.org.isAcceptedTerms" ng-model="vm.org.isAcceptedTerms" ng-click="vm.save()"> I, the Respondent, acknowledge that I have read, fully understand, and agree to all the terms, conditions and procedures, in the Request for Qualifications.
+				</label>
+				<br><br>
+			</div>
+		</div>
+	</form>
+</div>

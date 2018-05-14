@@ -36,6 +36,9 @@ exports.invokeRolesPolicies = function () {
       resources: '/api/assign/proposal/:proposalId',
       permissions: ['put']
     }, {
+      resources: '/api/assign/proposalswu/:proposalId',
+      permissions: ['put']
+    }, {
       resources: '/api/proposals/:proposalId',
       permissions: '*'
     }]
@@ -67,6 +70,9 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }, {
       resources: '/api/myopp/proposal/:opportunityId',
+      permissions: ['get']
+    }, {
+      resources: '/api/myorgopp/:orgId/proposal/:opportunityId',
       permissions: ['get']
     }, {
       resources: '/api/proposals/members/:proposalId/confirm/:userId',

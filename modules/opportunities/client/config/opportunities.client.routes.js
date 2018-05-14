@@ -112,14 +112,21 @@
 					return NotificationsService.subscriptions().$promise;
 				},
 				org: function (Authentication, OrgsService) {
-					var orgs = Authentication.user.orgsAdmin || [null];
-					var org = orgs[0];
-					if (org) return OrgsService.get ({orgId:org}).$promise;
-					else return null;
-				},
-				myproposal: function ($stateParams, ProposalsService, Authentication) {
 					if (!Authentication.user) return {};
-					return ProposalsService.myopp ({
+					return OrgsService.myadmin ().$promise.then (function (orgs) {
+						if (orgs && orgs.length > 0) return orgs[0];
+						else return {};
+					});
+					// var orgs = Authentication.user.orgsAdmin || [null];
+					// var org = orgs[0];
+					// if (org) return OrgsService.get ({orgId:org}).$promise;
+					// else return {};
+				},
+				myproposal: function ($stateParams, ProposalsService, Authentication, org) {
+					if (!Authentication.user) return {};
+					if (!org || !org._id) return {};
+					return ProposalsService.myOrgOpp ({
+						orgId : org._id,
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				}
