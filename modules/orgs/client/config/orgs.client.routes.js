@@ -113,6 +113,11 @@
 				pageTitle: 'Company Settings'
 			},
 			resolve: {
+				org: function ($stateParams, OrgsService) {
+					return OrgsService.get({
+						orgId: $stateParams.orgId
+					}).$promise;
+				},
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
 				}
