@@ -129,7 +129,7 @@ module.exports.initSession = function (app, db) {
     unset: 'destroy',
     secret: config.sessionSecret,
     cookie: {
-      maxAge: config.sessionCookie.maxAge,
+      // maxAge: config.sessionCookie.maxAge,
       httpOnly: config.sessionCookie.httpOnly,
       secure: config.sessionCookie.secure && config.secure.ssl
     },
