@@ -7,7 +7,7 @@
 # Compose:
 # docker-compose up -d
 
-FROM ubuntu:latest
+FROM ubuntu:17.10
 LABEL maintainer=MEAN.JS
 
 # 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 35729 = livereload
@@ -50,7 +50,7 @@ RUN dpkg -i dumb-init_*.deb
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-RUN sudo apt-get install -yq nodejs \
+RUN sudo apt-get install -yq nodejs npm \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

@@ -14,7 +14,6 @@
     vm.isCollapsed = false;
     vm.menu = menuService.getMenu('topbar');
 
-
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
     $scope.isHomePage = function() {
         var path = $location.path();
