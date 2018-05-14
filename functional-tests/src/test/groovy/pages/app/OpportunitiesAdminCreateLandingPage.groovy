@@ -11,7 +11,7 @@ class OpportunitiesAdminCreateLandingPage extends Page implements AngularJSAware
 	static at = { angularReady && title == "BCDevExchange - New Opportunity" }
 	static url = "opportunityadmin/createlanding"
 	static content = {
-    	createCWUOpportunityClick{ $(By.xpath('//button[contains(., "Post a Code With Us Opportunity")]'), 0).click() }
-  //    createSWUOpportunityClick{  } 
-  }
+    	createCWUOpportunityClick{ $(('button[data-automation-id ~= "button-create-codewithus"]'), 0).click() }
+    	createSWUOpportunityClick{ $(('button[data-automation-id ~= "button-create-sprintwithus"]'), 0).click() }
+}
 }
