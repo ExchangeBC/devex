@@ -24,7 +24,8 @@ class LoginModule extends Module {
       userDisplayPicture { $("img", class:"header-profile-image") }
       gitHubLink { $("a", "ng-click":"vm.callOauthProvider('/api/auth/github')")[0] }
     }
-    
+   
+    //@todo deprecate
     Boolean "Login as an adminstrator"(String userName, String passWord, String fullUserName){
         // Since the targeted link is not yet visible, Chrome will fail, so we forcefully do stuff
         js.exec('window.scrollTo(0, document.body.scrollHeight);')
@@ -42,6 +43,10 @@ class LoginModule extends Module {
             return true
         else
             return false
+    }
+
+    Boolean "Login"(String username, String password, String fullName) {
+       "Login as an adminstrator"(username, password, fullName) 
     }
 
     Boolean adminLogout(){

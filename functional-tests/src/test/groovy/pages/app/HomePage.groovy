@@ -8,7 +8,8 @@ import org.openqa.selenium.Keys
 import extensions.AngularJSAware
 
 class HomePage extends Page implements AngularJSAware {
-    
+
+  
 	static at = { angularReady && title == "BCDevExchange" }
     static url = ""
     static content = {

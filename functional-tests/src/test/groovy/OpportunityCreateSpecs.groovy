@@ -29,15 +29,20 @@ import geb.spock.GebReportingSpec
 @Title("Create and publish projects, programs, and opportunities")
 class OpportunityCreateSpecs extends GebReportingSpec {
 
+      static def RandomID = UUID.randomUUID().toString()
+
+
+      def setup() {
+        withNoAlert{to HomePage}
+
+        // Need to login as an admin
+        def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
+        assert loginOK
+      }
+
       @Unroll
       def "Create Program: '#ProgramTitleValue'" () {
           given:
-              to HomePage
-
-              // Need to login as an admin
-              def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
-              assert loginOK
-
               waitFor { to ProgramsPage }
 
               when: "I choose to create a new program"
@@ -49,11 +54,12 @@ class OpportunityCreateSpecs extends GebReportingSpec {
               when: "I enter the details for the new program"
               ProgramTitle.value(ProgramTitleValue)
               ShortDescription.value(ShortDescriptionValue)
-  //            Description.value(DescriptionValue)
+              "Set Description" DescriptionValue
               Website.value(WebsiteValue)
 
               and: "I click the 'save changes' button for the program: '#ProgramTitleValue'"
               SaveButton.click()
+
 
               then:
               at ProgramViewPage
@@ -63,23 +69,19 @@ class OpportunityCreateSpecs extends GebReportingSpec {
               PublishButton.click()
 
               then:
-              at ProgramViewPage
+              waitFor {at ProgramViewPage }
               assert UnpublishButton
               assert UnpublishButton.isDisplayed()
 
          where:
           ProgramTitleValue | ShortDescriptionValue | DescriptionValue | WebsiteValue
-          "Test Program" | "Short Descriptive Text" | "Longer descriptive text" | "https://www.google.com"
+          "Automation Test Program" | "Short Descriptive Text" | "Longer descriptive text" | "https://www.google.com"
       }
 
   @Unroll
   def "Create Project: '#ProjectNameValue'" () {
       given:
           to HomePage
-
-          // Need to login as an admin
-          def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
-          assert loginOK
 
           waitFor { to ProjectsPage }
 
@@ -89,7 +91,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           then:
           at ProjectCreatePage
 
-          when: "I enter the details for the new program"
+          when: "I enter the details for the new project"
           Program = ProgramValue
           ProjectName.value(ProjectNameValue)
           ShortDescription.value(ShortDescriptionValue)
@@ -101,8 +103,9 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           and: "I click the 'save changes' button for the project: '#ProjectNameValue'"
           SaveButton.click()
 
+
           then:
-          at ProjectViewPage
+          waitFor {at ProjectViewPage}
           assert PublishButton
 
           when: "I click the publish button"
@@ -115,18 +118,13 @@ class OpportunityCreateSpecs extends GebReportingSpec {
 
      where:
       ProjectNameValue | ShortDescriptionValue | DescriptionValue | GithubValue | TagsValue | ActivityLevelValue | ProgramValue
-      "Test Project" | "Short Descriptive Text" | "Longer descriptive text" | "https://github.com/BCDevExchange" | "javascript,html,mongo" | "" | "Test Program"
+      "Automation Test Project" | "Short Descriptive Text" | "Longer descriptive text" | "https://github.com/BCDevExchange" | "javascript,html,mongo" | "" | "Automation Test Program"
   }
 
 
   def "Publish Opportunity: '#TitleData'" () {
       given: "I have created an opportunity"
           to HomePage
-
-          // Need to login as an admin
-          def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
-          //js.exec('window.scrollTo(document.body.scrollHeight,0);')
-          assert loginOK
 
           waitFor { to OpportunitiesPage }
 
@@ -141,8 +139,8 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           at OpportunitiesAdminCreatePage
 
           // Fill in initial details
+          //@todo if there is only one project in the DB, there will not be a dropdown.
           selectProject.project = Project //Project
-          def RandomID = UUID.randomUUID().toString()
           TitleData = TitleData + ": " + RandomID
           oppTitle.value(TitleData) //Title
           oppTeaser.value(Teaser) //teaser
@@ -180,10 +178,10 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           then: "all information on the proposal page has been saved to the relevant database locations"
           waitFor { at OpportunityDetailPage }
 
-          then: "the proposal is in the unpublished state"
+          then: "the proposal is in the unpublished state and has the title #TitleData"
           assert { unPublished }
 
-          //js.exec('window.scrollTo(document.body.scrollHeight,0);')
+          assert { oppDetailTitle.contains(TitleData) }
 
           and: "when published, a confirmation window is displayed"
           oppPublishClick
@@ -191,6 +189,6 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           assert { published }
      where:
       Project | TitleData | Teaser | Description | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
-      "Test Project" | "Opportunity Creation/Publish/Deletion Test" | "Short Description" | "Some Description" | "https://github.com/rstens/devex.git" | "Victoria" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria" | "\$20,000.00" | "Proposal Evaluation Criteria" | "roland.stens@gmail.com"
+      "Automation Test Project" | "Opportunity Creation/Publish/Deletion Test" | "Short Description" | "Some Description" | "https://github.com/rstens/devex.git" | "Victoria" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria" | "\$20,000.00" | "Proposal Evaluation Criteria" | "roland.stens@gmail.com"
   }
 }
