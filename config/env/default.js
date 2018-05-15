@@ -47,13 +47,23 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'swu1': {
-			path: 'public/sprint-with-us-terms-2018-05-01.pdf',
+			path: 'public/sprint-with-us-terms-2018-05-14.pdf',
 			name: 'sprint-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
 		'serviceagreement': {
 			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
 			name: 'service-agreement.pdf',
+			type: 'application/pdf'
+		},
+		'codechallenge': {
+			path: 'public/code-challenge-rules-2018-05-14.pdf',
+			name: 'code-challenge.pdf',
+			type: 'application/pdf'
+		},
+		'teamscenario': {
+			path: 'public/team-scenario-rules-2018-05-14.pdf',
+			name: 'team-scenario.pdf',
 			type: 'application/pdf'
 		}
 	},
