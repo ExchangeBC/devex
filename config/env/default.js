@@ -60,6 +60,11 @@ module.exports = {
 			path: 'public/code-challenge-rules-2018-05-14.pdf',
 			name: 'code-challenge.pdf',
 			type: 'application/pdf'
+		},
+		'teamscenario': {
+			path: 'public/team-scenario-rules-2018-05-14.pdf',
+			name: 'team-scenario.pdf',
+			type: 'application/pdf'
 		}
 	},
 	//
