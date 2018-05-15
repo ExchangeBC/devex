@@ -42,8 +42,8 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'rfq1': {
-			path: 'public/rfq-sprint-with-us-company-2018-04-19.pdf',
-			name: 'rfq-sprint-with-us-company-2018-04-19.pdf',
+			path: 'public/rfq-sprint-with-us-company-2018-05-15.pdf',
+			name: 'rfq-sprint-with-us-company.pdf',
 			type: 'application/pdf'
 		},
 		'swu1': {
