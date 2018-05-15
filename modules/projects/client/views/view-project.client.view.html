@@ -19,9 +19,9 @@
 			<!-- // Publish // -->
 			<a data-automation-id="button-project-publish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this page"><i class="fa fa-bullhorn"></i> Publish</a>
 			<!-- // Edit // -->
-			<button type="button-project-edit" class="btn btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
+			<button type="button" data-automation-id="button-project-edit" class="btn btn-text-only pull-right" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
 		<!-- // If user is not a member, request membership // -->
-			<button type="button-project-request-membership" class="btn btn-lg btn-text-only pull-right" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-lg fa-user" title="Request Membership"></i></button>
+			<button type="button" data-automation-id="button-project-request-membership" class="btn btn-lg btn-text-only pull-right" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-lg fa-user" title="Request Membership"></i></button>
 		</div>
 
 		<div class="row">
