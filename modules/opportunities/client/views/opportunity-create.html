@@ -9,7 +9,7 @@
 						<p class="subtitle">Post an opportunity, evaluate Proposals, assign a developer, and get to work!</p>
 						<br>
 						<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" class="btn btn-lg btn-block btn-default">Read the Guide</a>
-						<button ng-if="vm.userCanAdd" class="btn btn-lg btn-block btn-primary" ui-sref="opportunityadmin.createcwu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="Create Code With Us Opportunity">Get Started &nbsp;<i class="fa fa-lg fa-arrow-circle-o-right"></i></button>
+						<button data-automation-id="button-create-codewithus" ng-if="vm.userCanAdd" class="btn btn-lg btn-block btn-primary" ui-sref="opportunityadmin.createcwu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="Create Code With Us Opportunity">Get Started &nbsp;<i class="fa fa-lg fa-arrow-circle-o-right"></i></button>
 					</div>
 				</div>
 			</div>
@@ -21,7 +21,7 @@
 						<p class="subtitle">Quickly <span class="strong">acquire an Agile product team</span> for your digital service.</p>
 						<p class="subtitle">Sprint With Us is designed to rapidly procure a team with the modern capabilities to do Inception, Proof of Concept and Implementation work.</p>
 						<br><br>
-						<button ng-if="vm.userCanAdd" class="btn btn-lg btn-block btn-primary" ui-sref="opportunityadmin.createswu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="Create Sprint With Us Opportunity">Get Started &nbsp;<i class="fa fa-lg fa-arrow-circle-o-right"></i></button>
+						<button data-automation-id="button-create-sprintwithus" ng-if="vm.userCanAdd" class="btn btn-lg btn-block btn-primary" ui-sref="opportunityadmin.createswu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="Create Sprint With Us Opportunity">Get Started &nbsp;<i class="fa fa-lg fa-arrow-circle-o-right"></i></button>
 					</div>
 				</div>
 			</div>

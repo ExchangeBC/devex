@@ -1,11 +1,11 @@
 <section class="edit-form-background" role="main">
-	
+
 	<form id="projectForm" warn-on-exit name="vm.form.projectForm" class="form" ng-submit="vm.save(vm.form.projectForm.$valid)" novalidate>
-		
+
 		<div class="edit-form">
-	  
+
 			<div class="edit-form-header">
-				
+
 				<span ng-if="vm.editing">
 					<span class="light small">EDITING:</span>
 					{{::vm.project.name}}
@@ -30,7 +30,7 @@
 								<div class="input-help alert alert-info" data-field="title" ng-show="sprogram">
 									Select the program that is the owner/sponsor of this project.
 								</div>
-								<select name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
+								<select data-automation-id="select-project-program" name="program" ng-model="vm.programId" id="program" class="form-control" ng-options="obj._id as obj.title for obj in vm.programs">
 								</select>
 							</div>
 							<div class="form-group" show-errors>
@@ -39,7 +39,7 @@
 								<div class="input-help alert alert-info" data-field="title" ng-show="sname">
 									Enter a name for your project. It's best if the name matches the name of your GitHub repo.
 								</div>
-								<input name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>
+								<input data-automation-id="text-project-name" name="title" type="text" ng-model="vm.project.name" id="title" class="form-control" placeholder="Name" required>
 								<div ng-messages="vm.form.projectForm.title.$error" role="alert">
 									<p class="help-block error-text" ng-message="required">Project name is required.</p>
 								</div>
@@ -50,7 +50,7 @@
 								<div class="input-help alert alert-info" data-field="title" ng-show="ssdesc">
 									This is a teaser to interest developers in contributing to your project. Summarize the goals, end-user benefits and value for British Columbians!
 								</div>
-								<textarea name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the project" ng-required="true"></textarea>
+								<textarea data-automation-id="text-project-short-description" name="short" data-ng-model="vm.project.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of the project" ng-required="true"></textarea>
 							</div>
 							<div class="form-group" show-errors>
 								<label class="control-label" for="description">Description</label>
@@ -61,6 +61,7 @@
 								<!-- <textarea name="description" data-ng-model="vm.project.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the project" ng-required="true"></textarea> -->
 								<textarea
 									name="description"
+                  data-automation-id="text-project-description"
 									id="description"
 									class="form-control input-sm"
 									ui-tinymce="vm.tinymceOptions"
@@ -74,7 +75,7 @@
 								<div class="input-help alert alert-info" data-field="title" ng-show="sgit">
 									Paste the URL of the GitHub repo for this project.
 								</div>
-								<input ng-if="vm.isAdmin || vm.isProjectAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo">
+								<input data-automation-id="text-project-github" ng-if="vm.isAdmin || vm.isProjectAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo">
 								<input ng-if="!vm.isAdmin && !vm.isProjectAdmin" name="github" type="text" ng-model="vm.project.github" id="github" class="form-control" placeholder="Project github repo" readonly>
 							</div>
 							<div class="form-group">
@@ -83,11 +84,11 @@
 								<div class="input-help alert alert-info" data-field="title" ng-show="stags">
 									Create tags as quick cues for interested developers. For example, the code language, or other keywords that indicate what’s involved in the work.
 								</div>
-								<input type="text" name="taglist" ng-model="vm.project.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
+								<input data-automation-id="text-project-tags" type="text" name="taglist" ng-model="vm.project.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 							</div>
 							<div class="form-group" ng-if="vm.isAdmin">
 								<label class="control-label" for="activity">Activity Level Indicator</label>
-								<input type="text" name="activity" ng-model="vm.project.activity" id="activity" class="form-control" placeholder="Tag List"></input>
+								<input data-automation-id="text-project-activity-level" type="text" name="activity" ng-model="vm.project.activity" id="activity" class="form-control" placeholder="Tag List"></input>
 							</div>
 						</fieldset>
 					</div>
@@ -97,13 +98,13 @@
 	  		<div class="edit-form-footer">
 	  			<div class="row">
 	  				<div class="col-xs-12">
-				  		<button type="submit" class="btn btn-primary pull-right" title="Save">
-						<i class="fa fa-save"></i> Save &amp; Close</button>		
-					  	<a ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Delete"><i class="fa fa-trash"></i> Delete this Project</a>
+				  		<button data-automation-id="button-project-save" type="submit" class="btn btn-primary pull-right" title="Save">
+						<i class="fa fa-save"></i> Save &amp; Close</button>
+					  	<a data-automation-id="button-project-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Delete"><i class="fa fa-trash"></i> Delete this Project</a>
 				  	</div>
 			  	</div>
-		  	</div>	
-		
+		  	</div>
+
 		</div>
 
 	</form>
