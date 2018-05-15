@@ -705,6 +705,8 @@
 		vm.authentication         = Authentication;
 		vm.form                   = {};
 		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
+		vm.closing				  = 'CLOSED';
+		vm.closing = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//

@@ -55,6 +55,11 @@ module.exports = {
 			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
 			name: 'service-agreement.pdf',
 			type: 'application/pdf'
+		},
+		'codechallenge': {
+			path: 'public/code-challenge-rules-2018-05-14.pdf',
+			name: 'code-challenge.pdf',
+			type: 'application/pdf'
 		}
 	},
 	//
