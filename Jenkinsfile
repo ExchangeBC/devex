@@ -148,9 +148,9 @@ stage('Functional Test Dev') {
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
         resourceRequestCpu: '500m',
-        resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1Gi',
-        resourceLimitMemory: '4Gi',
+        resourceLimitCpu: '2000m',
+        resourceRequestMemory: '2Gi',
+        resourceLimitMemory: '8Gi',
         workingDir: '/home/jenkins',
         command: '',
         args: '${computer.jnlpmac} ${computer.name}',
@@ -163,10 +163,10 @@ stage('Functional Test Dev') {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
-	sleep 6000
+	sleep 1000
         dir('functional-tests') {
             try {
-              sh './gradlew chromeHeadlessTest'
+              sh './gradlew --debug chromeHeadlessTest'
             } finally { 
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
