@@ -163,6 +163,7 @@ stage('Functional Test Dev') {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
+	sleep 6000
         dir('functional-tests') {
             try {
               sh './gradlew chromeHeadlessTest'
