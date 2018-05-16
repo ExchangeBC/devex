@@ -11,7 +11,7 @@ class HomePage extends Page implements AngularJSAware {
 
   
 	static at = { angularReady && title == "BCDevExchange" }
-    static url = ""
+    static url = "/"
     static content = {
         login { module LoginModule  }
         

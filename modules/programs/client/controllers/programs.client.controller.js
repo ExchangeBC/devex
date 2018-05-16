@@ -15,7 +15,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', function ($window, $scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
@@ -33,6 +33,7 @@
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || program.userIs.admin;
+		$window.onbeforeunload = null;
 		// -------------------------------------------------------------------------
 		//
 		// issue a request for membership

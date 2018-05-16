@@ -71,7 +71,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
               then:
               waitFor { at ProgramViewPage }
               assert UnpublishButton
-              //assert UnpublishButton.isDisplayed()
+              assert UnpublishButton.isDisplayed()
 
          where:
           ProgramTitleValue | ShortDescriptionValue | DescriptionValue | WebsiteValue
