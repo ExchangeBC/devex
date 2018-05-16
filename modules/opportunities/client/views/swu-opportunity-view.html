@@ -252,7 +252,8 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Enquiries</h3>
-				<p>Direct enquiries regarding this RFP to the Government Contact and see also section 1.4 of the terms and conditions located on the Terms tab.</p>
+				<p ng-if="user has qualified for RFQ">Direct enquiries regarding this RFP to the Government Contact and see also section 1.4 of the terms and conditions located on the Terms tab.</p>
+				<p ng-if="user is not signed in, or user is signed in but has not qualified for the RFQ">To enquire regarding this RFP, your company must first respond to the Sprint With Us Request for Qualifications. <a href="/sprintwithus-howtoapply">Follow these instructions</a>.</p>
 			</div>
 		</div>
 		<hr>
