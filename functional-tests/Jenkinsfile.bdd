@@ -1,5 +1,4 @@
 stage('Functional Test Dev') {
-  echo ("BDD Test Run: "+userInput)
     podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
       containerTemplate(
         name: 'jnlp',
