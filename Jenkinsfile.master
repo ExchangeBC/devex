@@ -103,7 +103,7 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
   )
 ]) {
      stage('ZAP Security Scan') {
-        node('owasp-zap') {
+        node(owaspPodLabel) {
           sleep 60
           def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t https://platform-staging.pathfinder.gov.bc.ca/'
           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
@@ -145,7 +145,7 @@ stage('Functional Test Staging') {
         ]
       )
     ]) {
-      node('bddstack') {
+      node(podlabel) {
         //the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
