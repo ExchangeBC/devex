@@ -1,5 +1,5 @@
 stage('Functional Test Dev') {
-    podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+    podTemplate(label: 'devxp-bdd', name: 'devxp-bdd', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
       containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
@@ -18,11 +18,11 @@ stage('Functional Test Dev') {
 	]
       )
     ]) {
-      node('bddstack') {
+      node('devxp-bdd') {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
-	sleep 1000
+	//sleep 600
         dir('functional-tests') {
             try {
               sh './gradlew --debug chromeHeadlessTest'
