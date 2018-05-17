@@ -62,14 +62,14 @@ class OpportunityCreateSpecs extends GebReportingSpec {
 
 
               then:
-              at ProgramViewPage
+              waitFor { at ProgramViewPage }
               assert PublishButton
 
               when: "I click the publish button"
               PublishButton.click()
 
               then:
-              waitFor {at ProgramViewPage }
+              waitFor { at ProgramViewPage }
               assert UnpublishButton
               assert UnpublishButton.isDisplayed()
 

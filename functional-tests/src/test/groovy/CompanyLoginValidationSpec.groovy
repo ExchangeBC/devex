@@ -38,10 +38,10 @@ class CompanyLoginValidationSpec extends GebReportingSpec {
           to HomePage
 
           when: "I login as dev"
-          def loginOK = login."Login"("dev","devdev","Test Developer")
+          def loginOK = login."Login"("admin","adminadmin","Admin Local")
           assert loginOK
           
-          and: "I go to the companies page as an unauthenticated user"
+          and: "I go to the companies page as an authenticated user"
           waitFor { to CompaniesPage }
 
           then: "I should see a 'register company' button"
