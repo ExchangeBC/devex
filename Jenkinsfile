@@ -143,7 +143,7 @@ stage('Functional Test Dev') {
   } catch(err) {}
   echo ("BDD Test Run: "+userInput)
   if ( userInput == 'y' ) {
-    podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+    podTemplate(label: 'devxp-bddstack', name: 'devxp-bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
       containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
@@ -159,7 +159,7 @@ stage('Functional Test Dev') {
         ]
       )
     ]) {
-      node('bddstack') {
+      node('devxp-bddstack') {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
