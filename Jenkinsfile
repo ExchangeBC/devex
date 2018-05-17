@@ -108,7 +108,8 @@ node('maven') {
     }
 }
 
-podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+def owaspPodLabel = "owasp-zap-${UUID.randomUUID().toString()}"
+podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
     image: '172.50.0.2:5000/openshift/jenkins-slave-zap',
@@ -122,7 +123,7 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
   )
 ]) {
      stage('ZAP Security Scan') {
-        node('owasp-zap') {
+        node(owaspPodLabel) {
           sleep 60
           def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
@@ -133,6 +134,7 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
 
 stage('Functional Test Dev') {
   def userInput = 'y'
+  def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
   try {
     timeout(time: 1, unit: 'DAYS') {
       userInput = input(
@@ -143,7 +145,11 @@ stage('Functional Test Dev') {
   } catch(err) {}
   echo ("BDD Test Run: "+userInput)
   if ( userInput == 'y' ) {
-    podTemplate(label: 'devxp-bddstack', name: 'devxp-bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+    podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
+    volumes: [
+	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
+    ],
+    containers: [
       containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
@@ -159,11 +165,11 @@ stage('Functional Test Dev') {
         ]
       )
     ]) {
-      node('devxp-bddstack') {
-	//the checkout is mandatory, otherwise functional test would fail
+      node(podlabel) {
+	      //the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
-	//sleep 1000
+	      //sleep 1000
         dir('functional-tests') {
             try {
               sh './gradlew --debug chromeHeadlessTest'
