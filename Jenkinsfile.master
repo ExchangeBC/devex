@@ -88,7 +88,8 @@ node('maven') {
     }
 }
 
-podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+def owaspPodLabel = "owasp-zap-${UUID.randomUUID().toString()}"
+podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
     image: '172.50.0.2:5000/openshift/jenkins-slave-zap',
@@ -112,18 +113,23 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
   }
 
 stage('Functional Test Staging') {
-  def userInput = 'y'
-  try {
-    timeout(time: 1, unit: 'DAYS') {
-      userInput = input(
-                    id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?',
-                    parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
-                  ])
-    }
-  } catch(err) {}
-  echo ("BDD Test Run: "+userInput)
-  if ( userInput == 'y' ) {
-    podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+  // def userInput = 'y'
+  def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
+  // try {
+  //   timeout(time: 1, unit: 'DAYS') {
+  //     userInput = input(
+  //                id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?',
+  //                parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
+  //              ])
+  // }
+  // } catch(err) {}
+  // echo ("BDD Test Run: "+userInput)
+  // if ( userInput == 'y' ) {
+    podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
+    volumes: [
+	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
+    ],
+    containers: [
       containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
@@ -169,12 +175,12 @@ stage('Functional Test Staging') {
             }
         }
      }}
-   }
+  // }
 }
 
 stage('deploy-prod') {
     timeout(time: 3, unit: 'DAYS') {
-	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin,sutherlanda-admin'
+	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,sutherlanda-admin'
     }
     timeout(time: 3, unit: 'DAYS') {
 	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin,sutherlanda-admin'
