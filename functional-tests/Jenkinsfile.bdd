@@ -25,7 +25,9 @@ stage('Functional Test Dev') {
 	//sleep 600
         dir('functional-tests') {
             try {
-              sh './gradlew --debug chromeHeadlessTest'
+	      sh 'df -h'
+	      sh './gradlew chromeHeadlessTest'
+              //sh './gradlew --debug chromeHeadlessTest'
             } finally { 
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
