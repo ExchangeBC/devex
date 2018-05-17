@@ -1,6 +1,10 @@
 stage('Functional Test Dev') {
-    podTemplate(label: 'devxp-bdd', name: 'devxp-bdd', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
-      containerTemplate(
+    def podlabel = "devxp-bdd-${UUID.randomUUID().toString()}"
+    podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
+      volumes: [
+	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
+      ],
+      containers: [ containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
         resourceRequestCpu: '500m',
@@ -12,13 +16,9 @@ stage('Functional Test Dev') {
         args: '${computer.jnlpmac} ${computer.name}',
         envVars: [
             envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
-        ],
-	volumes: [
-	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
-	]
-      )
+        ])
     ]) {
-      node('devxp-bdd') {
+      node(podlabel) {
 	//the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
