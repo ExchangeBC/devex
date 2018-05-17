@@ -201,7 +201,7 @@ stage('Functional Test Dev') {
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin,sutherlanda-admin'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,sutherlanda-admin'
   }
   node('master') {
 	  echo ">>> Tag ${TST_TAG_NAME} with ${TST_BCK_TAG_NAME}"
