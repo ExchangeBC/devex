@@ -12,7 +12,15 @@ stage('Functional Test Dev') {
         args: '${computer.jnlpmac} ${computer.name}',
         envVars: [
             envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
-        ]
+        ],
+	volumes: [
+			{
+				name: 'dshm',
+				emptyDir: {
+				medium: 'Memory',
+				sizeLimit: '256Mi'
+    			}
+		}]
       )
     ]) {
       node('bddstack') {
