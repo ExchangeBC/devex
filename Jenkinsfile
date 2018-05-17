@@ -133,18 +133,18 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
   }
 
 stage('Functional Test Dev') {
-  def userInput = 'y'
+  // def userInput = 'y'
   def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
-  try {
-    timeout(time: 1, unit: 'DAYS') {
-      userInput = input(
-                    id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?', 
-	            parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
-                  ])
-    }
-  } catch(err) {}
-  echo ("BDD Test Run: "+userInput)
-  if ( userInput == 'y' ) {
+  // try {
+  //   timeout(time: 1, unit: 'DAYS') {
+  //     userInput = input(
+  //                   id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?', 
+	//             parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
+  //                 ])
+  //   }
+  // } catch(err) {}
+  // echo ("BDD Test Run: "+userInput)
+  // if ( userInput == 'y' ) {
     podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
     volumes: [
 	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
@@ -172,7 +172,7 @@ stage('Functional Test Dev') {
 	      //sleep 1000
         dir('functional-tests') {
             try {
-              sh './gradlew --debug chromeHeadlessTest'
+              sh './gradlew chromeHeadlessTest'
             } finally { 
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
@@ -196,7 +196,7 @@ stage('Functional Test Dev') {
 	    }
         }
      }}
-   }
+  //  }
 }
 	
 stage('deploy-test') {	
