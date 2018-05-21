@@ -49,7 +49,7 @@ gulp.task('env:prod', function () {
 gulp.task('nodemon', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--inspect'],
+    nodeArgs: ['--inspect', '-r', 'dotenv/config'],
     ext: 'js,html',
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
   });
@@ -567,7 +567,7 @@ gulp.task('default', function (done) {
 
 // Run the project in debug mode
 gulp.task('debug', function (done) {
-  runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
+  runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon-debug', 'watch'], done);
   // runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
 });
 
