@@ -75,7 +75,7 @@ gulp.task('nodemon', function () {
 gulp.task('nodemon-debug', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--inspect'],
+    nodeArgs: ['--inspect-brk', '-r', 'dotenv/config'],
     ext: 'js,html',
     verbose: true,
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
