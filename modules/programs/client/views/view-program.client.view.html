@@ -13,14 +13,14 @@
 			<div class="col-xs-12 text-right">
 			<!-- // Admin Control Buttons // -->
 				<!-- // Edit // -->
-				<button type="button" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
+				<button data-automation-id="button-program-edit" type="button" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
 				<!-- // Unpublish // -->
-				<a href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-text-only" ng-click="vm.publish(false)" title="Unpublish program">
+				<a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-text-only" ng-click="vm.publish(false)" title="Unpublish program">
 				<i class="fa fa-lg fa-ban"></i></a>
 				<!-- // Publish // -->
-				<a href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this program page"><i class="fa fa-bullhorn"></i> Publish</a>
+				<a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this program page"><i class="fa fa-bullhorn"></i> Publish</a>
 			<!-- // If user is not a member, request membership // -->
-				<button type="button" class="btn btn-lg btn-text-only" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-lg fa-user"></i></button>					
+				<button data-automation-id="button-program-request-membership" type="button" class="btn btn-lg btn-text-only" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-lg fa-user"></i></button>
 			</div>
 		</div>
 		<div class="row">
@@ -38,7 +38,7 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<p ng-bind-html="vm.display.description"></p>			
+				<p ng-bind-html="vm.display.description"></p>
 			</div>
 		</div>
 

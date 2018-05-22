@@ -108,7 +108,8 @@ node('maven') {
     }
 }
 
-podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+def owaspPodLabel = "owasp-zap-${UUID.randomUUID().toString()}"
+podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins', cloud: 'openshift', containers: [
   containerTemplate(
     name: 'jnlp',
     image: '172.50.0.2:5000/openshift/jenkins-slave-zap',
@@ -122,7 +123,7 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
   )
 ]) {
      stage('ZAP Security Scan') {
-        node('owasp-zap') {
+        node(owaspPodLabel) {
           sleep 60
           def retVal = sh returnStatus: true, script: '/zap/zap-baseline.py -r baseline.html -t http://platform-dev.pathfinder.gov.bc.ca/'
           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: '/zap/wrk', reportFiles: 'baseline.html', reportName: 'ZAP Baseline Scan', reportTitles: 'ZAP Baseline Scan'])
@@ -132,25 +133,30 @@ podTemplate(label: 'owasp-zap', name: 'owasp-zap', serviceAccount: 'jenkins', cl
   }
 
 stage('Functional Test Dev') {
-  def userInput = 'y'
-  try {
-    timeout(time: 1, unit: 'DAYS') {
-      userInput = input(
-                    id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?', 
-	            parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
-                  ])
-    }
-  } catch(err) {}
-  echo ("BDD Test Run: "+userInput)
-  if ( userInput == 'y' ) {
-    podTemplate(label: 'bddstack', name: 'bddstack', serviceAccount: 'jenkins', cloud: 'openshift', containers: [
+  // def userInput = 'y'
+  def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
+  // try {
+  //   timeout(time: 1, unit: 'DAYS') {
+  //     userInput = input(
+  //                   id: 'userInput', message: 'Run Functional Tests (y/n - Default: y) ?', 
+	//             parameters: [[$class: 'TextParameterDefinition', defaultValue: 'y', description: 'BDDTest', name: 'BDDTest']
+  //                 ])
+  //   }
+  // } catch(err) {}
+  // echo ("BDD Test Run: "+userInput)
+  // if ( userInput == 'y' ) {
+    podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
+    volumes: [
+	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
+    ],
+    containers: [
       containerTemplate(
         name: 'jnlp',
         image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
         resourceRequestCpu: '500m',
-        resourceLimitCpu: '1000m',
-        resourceRequestMemory: '1Gi',
-        resourceLimitMemory: '4Gi',
+        resourceLimitCpu: '2000m',
+        resourceRequestMemory: '2Gi',
+        resourceLimitMemory: '8Gi',
         workingDir: '/home/jenkins',
         command: '',
         args: '${computer.jnlpmac} ${computer.name}',
@@ -159,10 +165,11 @@ stage('Functional Test Dev') {
         ]
       )
     ]) {
-      node('bddstack') {
-	//the checkout is mandatory, otherwise functional test would fail
+      node(podlabel) {
+	      //the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
+	      //sleep 1000
         dir('functional-tests') {
             try {
               sh './gradlew chromeHeadlessTest'
@@ -189,12 +196,12 @@ stage('Functional Test Dev') {
 	    }
         }
      }}
-   }
+  //  }
 }
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
-	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,ccoldwell-admin,sutherlanda-admin'
+	  input message: "Deploy to test?", submitter: 'mark-a-wilson-view,paulroberts68-view,agehlers-admin,scchapma-admin,sutherlanda-admin'
   }
   node('master') {
 	  echo ">>> Tag ${TST_TAG_NAME} with ${TST_BCK_TAG_NAME}"

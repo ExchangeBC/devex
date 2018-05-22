@@ -3,7 +3,7 @@
 		<h3 class="list-page-title list-page-hide">Companies</h3>
 	</div>
 	<div class="col-xs-4">
-		<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="orgs.create()" title="Register a Company">
+		<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="orgs.create()" data-automation-id="button-register-a-company" title="Register a Company">
 			<i class="fa fa-plus"></i> Register a Company
 		</button>
 	</div>
@@ -19,12 +19,9 @@
 				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-lg fa-gear"></i></a>
 				<label ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default pull-right">Member</label>
 			</div>
-			
+			<img class="card-img-left" src="{{org.orgImageURL}}" alt="Company Logo">
 			<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
-				<avatar-display url="org.orgImageURL" text="org.name"></avatar-display>
-			<!--
-				<p ng-bind-html="vm.trust(org.description)"></p>
-			-->
+				<div class="card-title">{{org.name}}</div>
 			</div>
 		</div>
 	</div>

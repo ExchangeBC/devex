@@ -96,5 +96,5 @@ println "BaseURL: ${baseUrl}"
 println "--------------------------"
 
 cacheDriverPerThread = true
-quitCachedDriverOnShutdown = true
+quitCachedDriverOnShutdown = false 
 
