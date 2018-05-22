@@ -72,7 +72,7 @@ var ensureAdmin = function (opportunity, user) {
 };
 var countStatus = function (id) {
 	return new Promise (function (resolve, reject) {
-		Proposal.aggregate ([
+		var cursor = Proposal.aggregate ([
 			{
 				$match: {
 					opportunity: id
@@ -84,14 +84,9 @@ var countStatus = function (id) {
 					count: {$sum: 1}
 				}
 			}
-		]).exec();
-		// {
-		// 	cursor: { batchSize: 0 }
-		// },
-		// function (err, result) {
-		// 	if (err) reject (err);
-		// 	else resolve (result);
-		// })
+		]).cursor({}).exec();
+
+		resolve( cursor );
 	});
 };
 // -------------------------------------------------------------------------
