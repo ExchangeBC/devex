@@ -84,10 +84,14 @@ var countStatus = function (id) {
 					count: {$sum: 1}
 				}
 			}
-		], function (err, result) {
-			if (err) reject (err);
-			else resolve (result);
-		});
+		]).exec();
+		// {
+		// 	cursor: { batchSize: 0 }
+		// },
+		// function (err, result) {
+		// 	if (err) reject (err);
+		// 	else resolve (result);
+		// })
 	});
 };
 // -------------------------------------------------------------------------

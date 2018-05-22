@@ -159,11 +159,12 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.stages = {
-			new        : 0,
-			questions  : 1,
-			interview  : 2,
-			price      : 3,
-			assigned   : 4
+			new        		: 0,
+			questions  		: 1,
+			questions_saved : 2,
+			interview  		: 3,
+			price      		: 4,
+			assigned   		: 5
 		};
 		//
 		// this returns true if the current stage is on or past the indicated stage
