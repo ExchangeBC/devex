@@ -181,7 +181,7 @@ function seedTestMessageTemplate () {
 				linkTemplate  : '{{domain}}/accept/{{org._id}}'
 			}]
 		})
-	]);
+	].map (saveT));
 };
 
 //

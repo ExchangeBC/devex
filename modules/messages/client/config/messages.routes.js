@@ -5,7 +5,8 @@
 // =========================================================================
 (function () {
 	'use strict';
-	angular.module ('messages.routes').config (['$stateProvider', function ($stateProvider) {
+
+	if (window.features.messages) angular.module ('messages.routes').config (['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		.state ('messagetemplates', {
 			abstract : true,
