@@ -102,15 +102,17 @@ exports.stats = function (req, res) {
 	Notifications.countFollowingOpportunity (op.code)
 	.then (function (result) {
 		ret.following = result;
+		ret.submitting = 0;
+		ret.draft = 0;
 		return countStatus (op._id);
 	})
 	.then (function (result) {
-		for (var i=0; i<result.length; i++) {
-			ret[result[i]._id.toLowerCase()] = result[i].count;
-		}
-	})
-	.then (function () {
-		res.json (ret);
+		result.each(function(error, doc) {
+			if (doc) {
+				ret[doc._id.toLowerCase()] = doc.count;
+			}
+			res.json(ret);
+		});
 	})
 	.catch (function (err) {
 		res.status(422).send ({
