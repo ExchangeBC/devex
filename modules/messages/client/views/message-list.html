@@ -1,0 +1,33 @@
+<section class="list-page" style="min-height: 380px; padding-top: 0;">
+	<div class="list-filter">
+		<div class="container">
+			<i class="fa fa-lg fa-filter"></i> View: &nbsp;&nbsp;&nbsp;
+
+			<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox ng-change="vm.changeFilterO()">Open</button>
+			<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.open" ng-model="vm.filter.open" uib-btn-checkbox ng-change="vm.changeFilterO()">Open</button>
+
+			<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.archived" ng-model="vm.filter.archived" uib-btn-checkbox ng-change="vm.changeFilter()">Archived</button>
+			<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.archived" ng-model="vm.filter.archived" uib-btn-checkbox ng-change="vm.changeFilter()">Archived</button>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="card" ng-class="{'card-greyed': !message.isOpen}" ng-repeat="message in vm.messages | orderBy:'dateSent':false">
+			<div class="card-body" >
+				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)" id="messages.view" ui-sref="messages.view({ messageId: message._id })"></div>
+				<div class="card-teaser" ng-bind-html="vm.trust(message.messageShort)"></div>
+				<div class="btn-group text-right" ng-if="!message.isArchived">
+					<button class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{vm.trust(action.linkTitle)}}</button>
+				</div>
+				<div ng-if="message.isArchived">
+					Action Taken: <button class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-if="action.actionCd === message.actionTaken">{{vm.trust(action.linkTitle)}}</button>
+				</div>
+			</div>
+			<div class="row" ng-if="!vm.messages.length">
+				<div class="col-xs-12">
+					<div class="well well-transparent">Your Inbox in Empty!</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

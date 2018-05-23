@@ -69,6 +69,8 @@ module.exports = function (app) {
 	// -------------------------------------------------------------------------
 	app.route('/api/my/messages').get (isAllowed ('user'), messages.list);
 	app.route('/api/my/archivedmessages').get (isAllowed ('user'), messages.listarchived);
+	app.route('/api/my/messages/count').get (isAllowed ('user'), messages.mycount);
+	app.route('/api/my/archivedmessages/count').get (isAllowed ('user'), messages.myarchivedcount);
 	// -------------------------------------------------------------------------
 	//
 	// for the logged in user,
@@ -92,10 +94,11 @@ module.exports = function (app) {
 	//
 	// maintenance routes
 	// these will likely be run as admin and by a scheduler to auto-archive
-	// old messages
+	// old messages and to retry sending failed emails
 	//
 	// -------------------------------------------------------------------------
 	app.route('/api/adminmessages/archiveold').get (isAllowed ('admin'), messages.archiveold);
+	app.route('/api/adminmessages/emailretry').get (isAllowed ('admin'), messages.emailRetry);
 	// -------------------------------------------------------------------------
 	//
 	// external call to send messages - this will ONLY be used when the message
@@ -114,4 +117,32 @@ module.exports = function (app) {
 	//
 	// -------------------------------------------------------------------------
 	app.route('/api/messages/sendmessage/:messagecd').put (isAllowed ('admin'), messages.send);
+	// =========================================================================
+	//
+	// Templates
+	//
+	// =========================================================================
+	app.param('templateId', function (req, res, next, id) {
+		if (!mongoose.Types.ObjectId.isValid (id)) return res.status (400).send ({message: 'Invalid Message Template Id'});
+		else {
+			require ('mongoose').model ('MessageTemplate').findById (id).exec (function (err, template) {
+				if (err) return next (err);
+				else if (!template) return res.status (400).send ({message: 'Message not found'});
+				else {
+					req.template = template;
+					next ();
+				}
+			});
+		}
+	});
+	app.route('/api/messagetemplates')
+		.all (isAllowed ('admin'))
+		.get (messages.listTemplates)
+		.post (messages.createTemplate);
+	app.route('/api/messagetemplates/:templateId')
+		.all (isAllowed ('admin'))
+		.get (function (req, res) { return res.json (req.template); })
+		.put (messages.updateTemplate)
+		.delete (messages.removeTemplate);
+
 };

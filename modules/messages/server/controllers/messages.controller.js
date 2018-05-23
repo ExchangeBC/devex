@@ -18,6 +18,7 @@ var config          = require (path.resolve ('./config/config'));
 var nodemailer      = require('nodemailer');
 var smtpTransport   = nodemailer.createTransport (config.mailer.options);
 var chalk           = require('chalk');
+var helpers         = require(path.resolve('./modules/core/server/controllers/core.server.helpers'));
 
 // =========================================================================
 //
@@ -30,6 +31,7 @@ var chalk           = require('chalk');
 //
 // -------------------------------------------------------------------------
 var query = function (table, q) {
+	console.log ('query:', table, q)
 	return new Promise (function (resolve, reject) {
 		table.find (q)
 		.sort ({dateSent:-1, dateExpired: 1})
@@ -40,6 +42,20 @@ var query = function (table, q) {
 		});
 	});
 };
+var count = function (table, q) {
+	console.log ('query:', table, q)
+	return new Promise (function (resolve, reject) {
+		table.count (q, function (err, c) {
+			if (err) reject (errorHandler.getErrorMessage(err));
+			else resolve (c);
+		});
+	});
+};
+var appendNotificationLink = function (messagebody) {
+	var link = '<a href="{{domain}}/messages/{{messageid}}">BC Developer\'s Exchange</a>';
+	var m = 'Sign in to the '+link+' to respond to this message. This message will expire on {{date2Archive}}';
+	return messagebody+'<p><br/>'+m+'<br/></p>';
+}
 // -------------------------------------------------------------------------
 //
 // archive a message
@@ -48,8 +64,10 @@ var query = function (table, q) {
 var archiveMessage = function (message) {
 	message.dateArchived = Date.now ();
 	var archive = new MessageArchive (message.toObject ());
+	console.log ('archive' , archive);
 	return new Promise (function (resolve, reject) {
-		archive.save (function (err, message) {
+		archive.save (function (err, amessage) {
+			console.log ('saved', err, amessage);
 			if (err) reject (errorHandler.getErrorMessage(err));
 			else {
 				message.remove (function (err) {
@@ -91,19 +109,24 @@ var sendmail = function (message) {
 		html    : message.emailBody,
 		text    : htmlToText.fromString ( message.emailBody, { wordwrap: 130 })
 	}
+	var result = {
+		dateSent : Date.now (),
+		isOk     : true,
+		error    : {}
+	};
 	return new Promise (function (resolve, reject) {
 		smtpTransport.sendMail (opts, function (err) {
 			if (err) {
 				console.error (chalk.red ('+++ Error sending email: '));
 				console.error (err);
-				message.emailError = err;
-				resolve (message);
-			}
-			else {
-				message.dateSent = Date.now ();
-				resolve (message);
+				result.error = err;
+				result.isOk  = false;
 			}
 		});
+		message.emailSent    = result.isOk;
+		message.emailRetries = message.emailRetries+1;
+		message.emails.push (result);
+		resolve (message);
 	});
 };
 // -------------------------------------------------------------------------
@@ -131,19 +154,46 @@ var getDomain = function () {
 //
 // -------------------------------------------------------------------------
 var prepareMessage = function (template, data) {
+	//
+	// deal with archive and current dates
+	//
+	var datePosted = Date.now ();
+	var date2Archive = new Date (datePosted);
+	date2Archive.setDate(date2Archive.getDate() + template.daysToArchive);
+	//
+	// put them in the data as well
+	//
+	data.datePosted   = helpers.formatDate (datePosted);
+	data.date2Archive = helpers.formatDate (date2Archive);
+	//
+	// make the new message by applying the templates with data
+	//
 	var message = new Message ({
 		messageCd    : template.messageCd,
 		user         : data.user,
-		messageBody  : template.messageBody (data),
-		messageShort : template.messageShort (data),
-		messageTitle : template.messageTitle (data),
-		emailBody    : template.emailBody (data),
-		emailSubject : template.emailSubject (data)
+		userEmail    : data.user.email,
+		datePosted   : Date.now ()
 	});
+	//
+	// include the id in the data so the links can be built
+	//
+	data.messageid = message._id;
+	//
+	// run the templates
+	//
+	message.messageBody  = template.messageBody (data);
+	message.messageShort = template.messageShort (data);
+	message.messageTitle = template.messageTitle (data);
+	message.emailBody    = template.emailBody (data);
+	message.emailSubject = template.emailSubject (data);
+	//
+	// now run the action tempaltes
+	//
 	template.actions.forEach (function (action) {
 		message.actions.push ({
 			actionCd  : action.actionCd,
 			link      : action.link (data),
+			linkTitle : action.linkTitle (data),
 			isDefault : action.isDefault
 		})
 	});
@@ -155,11 +205,11 @@ var prepareMessage = function (template, data) {
 // returns a promise
 //
 // -------------------------------------------------------------------------
-var sendMessage = function (template, user, data) {
-	data.user = user;
+var sendMessage = function (template, user, email, data) {
+	data.user = (user && user._id) ? user : null;
 	var message = prepareMessage (template, data);
 	var emailOptions = {
-		to      : user.email,
+		to      : email,
 		subject : message.emailSubject,
 		html    : message.emailBody
 	}
@@ -204,16 +254,17 @@ exports.sendMessages = function (messageCd, users, data) {
 			template.messageBody  = handlebars.compile(template.messageBodyTemplate);
 			template.messageShort = handlebars.compile(template.messageShortTemplate);
 			template.messageTitle = handlebars.compile(template.messageTitleTemplate);
-			template.emailBody    = handlebars.compile(template.emailBodyTemplate);
+			template.emailBody    = handlebars.compile(appendNotificationLink (template.emailBodyTemplate));
 			template.emailSubject = handlebars.compile(template.emailSubjectTemplate);
 			template.actions.forEach (function (action) {
-				action.link = handlebars.compile(action.linkTemplate);
+				action.link      = handlebars.compile(action.linkTemplate);
+				action.linkTitle = handlebars.compile(action.linkTitleTemplate);
 			});
 			//
 			// send messages to each user
 			//
 			Promise.all (users.map (function (user) {
-				return sendMessage (template, user, data);
+				return sendMessage (template, user, user.email, data);
 			}))
 			.then (resolve, reject);
 		});
@@ -234,7 +285,7 @@ var resError = function (res) {
 };
 var resResults = function (res) {
 	return function (messages) {
-		return res.json (res, messages);
+		return res.status (200).json (messages);
 	};
 };
 // -------------------------------------------------------------------------
@@ -246,14 +297,32 @@ var resResults = function (res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
+	console.log ('listing!');
 	if (!req.user) return sendError (res, 'No user context supplied');
-	query (Message, {user: req.user_id})
+	query (Message, {user: req.user._id})
 	.then (resResults (res))
 	.catch (resError (res));
 };
 exports.listarchived = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
-	query (MessageArchive, {user: req.user_id})
+	query (MessageArchive, {user: req.user._id})
+	.then (resResults (res))
+	.catch (resError (res));
+};
+// -------------------------------------------------------------------------
+//
+// count the number of messages for the curent user
+//
+// -------------------------------------------------------------------------
+exports.mycount = function (req, res) {
+	if (!req.user) return sendError (res, 'No user context supplied');
+	count (Message, {user: req.user._id})
+	.then (resResults (res))
+	.catch (resError (res));
+};
+exports.myarchivedcount = function (req, res) {
+	if (!req.user) return sendError (res, 'No user context supplied');
+	count (MessageArchive, {user: req.user._id})
 	.then (resResults (res))
 	.catch (resError (res));
 };
@@ -277,7 +346,9 @@ exports.viewed = function (req, res) {
 // -------------------------------------------------------------------------
 exports.actioned = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
-	if (req.user.id !== req.message.user) return sendError (res, 'Not owner of message');
+	console.log ('message', req.message.user);
+	console.log ('usaer', req.user._id.toString ());
+	if (req.user._id.toString () !== req.message.user.toString ()) return sendError (res, 'Not owner of message');
 	req.message.actionTaken  = req.params.action
 	req.message.dateActioned = Date.now ();
 	archiveMessage (req.message)
@@ -292,7 +363,7 @@ exports.actioned = function (req, res) {
 // -------------------------------------------------------------------------
 exports.archive = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
-	if (req.user.id !== req.message.user) return sendError (res, 'Not owner of message');
+	if (req.user._id.toString () !== req.message.user) return sendError (res, 'Not owner of message');
 	archiveMessage (req.message)
 	.then (resResults (res))
 	.catch (resError (res));
@@ -328,3 +399,81 @@ exports.send = function (req, res) {
 	.then (resResults (res))
 	.catch (resError (res));
 };
+// -------------------------------------------------------------------------
+//
+// retry sending failed emails
+//
+// -------------------------------------------------------------------------
+exports.emailRetry = function (req, res) {
+	console.log (req.user);
+	if (!~req.user.roles.indexOf ('admin')) return sendError (res, 'Only admin can send via REST');
+	query ({
+		emailSent : false,
+		emailRetries : { $lt : 3 }
+	})
+	.then (function (messages) {
+		return Promise.all (messages.map (function (message) {
+			return sendmail (message).then (saveMessage);
+		}));
+	})
+	.then (function () { return {ok:true}; })
+	.then (resResults (res))
+	.catch (resError (res));
+}
+// =========================================================================
+//
+// Message Templates CRUD
+//
+// =========================================================================
+exports.listTemplates = function (req, res) {
+	MessageTemplate.find().sort({messageCd:1})
+	.exec ()
+	.then (resResults (res))
+	.catch (resError (res));
+};
+exports.createTemplate = function (req, res) {
+	var template = new MessageTemplate (req.body);
+		template.save (function (err) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (template);
+		}
+	});
+};
+exports.updateTemplate = function (req, res) {
+	//
+	// copy over everything passed in. This will overwrite the
+	// audit fields, but they get updated in the following step
+	//
+	var template = _.assign (req.template, req.body);
+	//
+	// save
+	//
+	template.save (function (err) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (template);
+		}
+	});
+
+};
+exports.removeTemplate = function (req, res) {
+	var template = req.template;
+	template.remove (function (err) {
+		if (err) {
+			return res.status (422).send ({
+				message: errorHandler.getErrorMessage (err)
+			});
+		} else {
+			res.json (template);
+		}
+	});
+
+};
+

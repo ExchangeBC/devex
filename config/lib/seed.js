@@ -108,6 +108,82 @@ function seedTheUser (user) {
 	};
 }
 
+function seedTestMessageTemplate () {
+	var T = mongoose.model ('MessageTemplate');
+	var saveT = function (t) {
+		return new Promise (function (resolve, reject) {
+			t.save (function (err) {
+				resolve ();
+			});
+		});
+	};
+	return Promise.all ([
+	    new T ({
+			messageCd            : 'add-user-to-company-request',
+			description          : 'Ask the user whether they agree to be added to this company' ,
+			isSubscriptionType   : false,
+			messageBodyTemplate  : '<p>Hi {{user.name}}</p><br/>Whazzup about company {{org.name}}?',
+			messageShortTemplate : 'company {{org.name}} wants you dude!',
+			messageTitleTemplate : 'company {{org.name}}?',
+			emailBodyTemplate    : '<p>Hi {{user.name}}</p><br/>Whazzup about company {{org.name}}?',
+			emailSubjectTemplate : 'company {{org.name}}',
+			modelsRequired       : ['org'],
+			daysToArchive        : 7,
+			actions              : [{
+				actionCd      : 'decline',
+				linkTitleTemplate : 'Decline',
+				isDefault     : true
+			},{
+				actionCd      : 'accept',
+				linkTitleTemplate : 'Accept',
+				linkTemplate  : '{{domain}}/accept/{{org._id}}'
+			}]
+		}),
+		new T ({
+			messageCd            : 'invitation-from-company',
+			description          : 'Does the user want to sign up to devex, invited by company' ,
+			isSubscriptionType   : false,
+			messageBodyTemplate  : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
+			messageShortTemplate : 'company {{org.name}} wants you join devex',
+			messageTitleTemplate : 'company {{org.name}} wants you join devex',
+			emailBodyTemplate    : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
+			emailSubjectTemplate : 'company {{org.name}} wants you join devex',
+			modelsRequired       : ['org'],
+			daysToArchive        : 7,
+			actions              : [{
+				actionCd      : 'decline',
+				linkTitleTemplate : 'Decline',
+				isDefault     : true
+			},{
+				actionCd      : 'accept',
+				linkTitleTemplate : 'Accept',
+				linkTemplate  : '{{domain}}/accept/{{org._id}}'
+			}]
+		}),
+		new T ({
+			messageCd            : 'invitation-to-devex',
+			description          : 'Ask person to sign up to devex' ,
+			isSubscriptionType   : false,
+			messageBodyTemplate  : '<p>Hi there</p><br/>Sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
+			messageShortTemplate : 'we wants you dude!',
+			messageTitleTemplate : 'we?',
+			emailBodyTemplate    : 'we wants you dude!',
+			emailSubjectTemplate : 'we',
+			modelsRequired       : ['org'],
+			daysToArchive        : 7,
+			actions              : [{
+				actionCd      : 'decline',
+				linkTitleTemplate : 'Decline',
+				isDefault     : true
+			},{
+				actionCd      : 'accept',
+				linkTitleTemplate : 'Accept',
+				linkTemplate  : '{{domain}}/accept/{{org._id}}'
+			}]
+		})
+	]);
+};
+
 //
 // Seed the default notifications for each object type in the system
 //
@@ -177,6 +253,7 @@ module.exports.start = function start(options) {
 	// Initialize the default seed options
 	seedOptions = _.clone(config.seedDB.options, true);
 
+	seedTestMessageTemplate ();
 	// Check for provided options
 
 	if (_.has(options, 'logResults')) {

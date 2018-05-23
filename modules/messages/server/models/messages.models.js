@@ -36,6 +36,7 @@ mongoose.model ('MessageTemplate', new mongoose.Schema ({
 	actions              : [{
 		actionCd      : { type : String,   default : '' },
 		linkTemplate  : { type : String,   default : '' },
+		linkTitleTemplate  : { type : String,   default : '' },
 		isDefault     : { type : Boolean,  default : false }
 	}]
 }));
@@ -50,10 +51,14 @@ mongoose.model ('MessageTemplate', new mongoose.Schema ({
 // when a message is archived either by the user or automatically it moves
 // into the archive table
 //
+// email is attempted some number of times - incrementing the retries each
+// time. the last error is stored
+//
 // -------------------------------------------------------------------------
 mongoose.model ('Message', new mongoose.Schema ({
 	messageCd    : { type : String,     default : ''},
 	user         : { type : 'ObjectId', default: null, ref: 'User' },
+	userEmail    : { type : String,     default : '' },
 	messageBody  : { type : String,     default : '' },
 	messageShort : { type : String,     default : '' },
 	messageTitle : { type : String,     default : '' },
@@ -62,15 +67,23 @@ mongoose.model ('Message', new mongoose.Schema ({
 	actions              : [{
 		actionCd    : { type : String,  default : '' },
 		link        : { type : String,  default : '' },
+		linkTitle   : { type : String,  default : '' },
 		isDefault   : { type : Boolean, default : false }
 	}],
-	dateSent     : { type : Date,   default : null },
-	emailError   : {},
+	emails : [{
+		dateSent : { type : Date,   default : null },
+		isOk     : { type: Boolean, default: false },
+		error    : {}
+	}],
+	emailSent    : { type: Boolean, default: false },
+	emailRetries : { type : Number, default : 0 },
+	datePosted   : { type : Date,   default : null },
 	date2Archive : { type : Date,   default : null },
 	dateArchived : { type : Date,   default : null },
 	dateViewed   : { type : Date,   default : null },
 	dateActioned : { type : Date,   default : null },
-	actionTaken  : { type : String, default : '' }
+	actionTaken  : { type : String, default : '' },
+	isOpen       : { type: Boolean, default: true }
 }));
 // -------------------------------------------------------------------------
 //
@@ -82,6 +95,7 @@ mongoose.model ('Message', new mongoose.Schema ({
 mongoose.model ('MessageArchive', new mongoose.Schema ({
 	messageCd    : { type : String },
 	user         : { type : 'ObjectId', ref: 'User' },
+	userEmail    : { type : String },
 	messageBody  : { type : String },
 	messageShort : { type : String },
 	messageTitle : { type : String },
@@ -90,13 +104,21 @@ mongoose.model ('MessageArchive', new mongoose.Schema ({
 	actions              : [{
 		actionCd    : { type : String },
 		link        : { type : String },
+		linkTitle   : { type : String,  default : '' },
 		isDefault   : { type : Boolean }
 	}],
-	dateSent     : { type : Date },
-	emailError   : {},
+	emails : [{
+		dateSent : { type : Date,   default : null },
+		isOk     : { type: Boolean, default: false },
+		error    : {}
+	}],
+	emailSent    : { type: Boolean, default: false },
+	emailRetries : { type : Number, default : 0 },
+	datePosted   : { type : Date,   default : null },
 	date2Archive : { type : Date },
 	dateArchived : { type : Date },
 	dateViewed   : { type : Date },
 	dateActioned : { type : Date },
-	actionTaken  : { type : String }
+	actionTaken  : { type : String },
+	isArchived   : { type: Boolean, default: true }
 }));

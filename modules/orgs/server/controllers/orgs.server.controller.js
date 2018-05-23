@@ -607,7 +607,19 @@ exports.myadmin = function (req, res) {
 		}
 	});
 };
-
+// -------------------------------------------------------------------------
+//
+// add the current user to the passed in org
+//
+// -------------------------------------------------------------------------
+exports.addMeToOrg = function (req, res) {
+	var org = req.org;
+	var user = req.user;
+	Promise.resolve (user)
+	.then (addUserTo (org, 'members'))
+	.then (saveUser)
+	.then (saveOrg (req, res));
+}
 // -------------------------------------------------------------------------
 //
 // magic that populates the org on the request
