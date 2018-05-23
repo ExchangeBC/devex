@@ -24,3 +24,15 @@ span.edit-link {
 	overflow: hidden;
 }
 
+tr.spaceUnder>td {
+	padding-bottom: 1em;
+}
+
+input.scoreBox {
+	width: 3.5em;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    display: none;
+}

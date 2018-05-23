@@ -162,15 +162,16 @@
 			new        		: 0,
 			questions  		: 1,
 			questions_saved : 2,
-			interview  		: 3,
-			price      		: 4,
-			assigned   		: 5
+			code_scores		: 3,
+			interview  		: 4,
+			price      		: 5,
+			assigned   		: 6
 		};
-		//
-		// this returns true if the current stage is on or past the indicated stage
-		//
-		vm.stage = function (stage) {
-			return vm.opportunity.evaluationStage >= vm.stages[stage];
+		vm.beforeStage = function (stage) {
+			return vm.opportunity.evaluationStage < vm.stages[stage];
+		}
+		vm.pastStage = function (stage) {
+			return vm.opportunity.evaluationStage > vm.stages[stage];
 		};
 		vm.stageIs = function (stage) {
 			return vm.opportunity.evaluationStage === vm.stages[stage];
@@ -351,9 +352,62 @@
 					//
 					vm.saveProposals ();
 				}
+				if (resp === 'save') {
+					vm.opportunity.evaluationStage = vm.stages.questions_saved;
+				}
 				if (resp === 'commit') {
-					vm.opportunity.evaluationStage = vm.stages.interview;
+					vm.opportunity.evaluationStage = vm.stages.code_scores;
 					vm.saveOpportunity ();
+				}
+			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// Code Challenge Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.codeChallenge = function () {
+			modalService.showModal ({
+				size: 'md',
+				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-code-challenge.html',
+				controller: function ($scope, $uibModalInstance) {
+					$scope.data = {};
+					$scope.data.proposalScores = [];
+					vm.proposals.forEach(function(proposal) {
+						$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+					})
+					$scope.cancel = function () {
+						$uibModalInstance.close ();
+					};
+					$scope.save = function () {
+						$uibModalInstance.close ({
+							action : 'save',
+							proposalScores  : $scope.data.proposalScores
+						});
+					};
+				}
+			}, {
+			})
+			.then (function (resp) {
+				if (resp.action === 'save') {
+					var scoreCount = 0;
+					resp.proposalScores.forEach(function(score) {
+						var match = vm.proposals.find(function(proposal) {
+							return proposal.businessName === score.businessName;
+						});
+						if (match) {
+							match.scores.codechallenge = score.score;
+							scoreCount++;
+						}
+					});
+					vm.saveProposals();
+
+					// if we have scored all proposal for the code challenge stage, move on to the interview stage
+					if (scoreCount === vm.proposals.length) {
+						vm.opportunity.evaluationStage++;
+					}
+
+					vm.saveOpportunity();
 				}
 			});
 		};
@@ -362,53 +416,47 @@
 		// Interview Modal
 		//
 		// -------------------------------------------------------------------------
-		vm.interview = function (proposal) {
+		vm.interview = function () {
 			modalService.showModal ({
-				size: 'lg',
+				size: 'md',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
 				controller: function ($scope, $uibModalInstance) {
-					$scope.data = {
-						score: proposal.scores.interview,
-						name : proposal.businessName
+					$scope.data = {};
+					$scope.data.proposalScores = [];
+					vm.proposals.forEach(function(proposal) {
+						$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+					})
+					$scope.cancel = function () {
+						$uibModalInstance.close ({});
 					};
-					$scope.close = function () {
-						$uibModalInstance.close ();
-					};
-					$scope.ok = function () {
+					$scope.save = function () {
 						$uibModalInstance.close ({
 							action : 'save',
-							score  : $scope.data.score
+							proposalScores  : $scope.data.proposalScores
 						});
 					};
-					$scope.commit = function () {
-						$uibModalInstance.close ({
-							action : 'commit',
-							score  : $scope.data.score
-						});
-					}
 				}
 			}, {
 			})
 			.then (function (resp) {
 				if (resp.action === 'save') {
-					//
-					// calculate scores etc.
-					//
-					proposal.scores.interview = resp.score;
-					vm.saveProposal (proposal);
-				}
-				else if (resp.action === 'commit') {
-					//
-					// calculate scores and close off interview
-					//
-					proposal.scores.interview = resp.score;
-					proposal.interviewComplete = true;
-					vm.saveProposal (proposal);
-					//
-					// if the number of interviews complete match the number of interviews required
-					// then we progress to the pricing stage
-					//
-					vm.canProgress ();
+
+					var scoreCount = 0;
+					resp.proposalScores.forEach(function(score) {
+						var match = vm.proposals.find(function(proposal) {
+							return proposal.businessName === score.businessName;
+						});
+						if (match) {
+							match.scores.interview = score.score;
+							scoreCount++;
+						}
+					});
+					vm.saveProposals();
+
+					// if we have scored all proposal for the interview stage, move on to the code challenge stage
+					if (scoreCount === vm.proposals.length) {
+						vm.opportunity.evaluationStage++;
+					}
 				}
 			});
 		};
