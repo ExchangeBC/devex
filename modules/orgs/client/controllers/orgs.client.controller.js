@@ -347,6 +347,7 @@
 					templateUrl: '/modules/orgs/client/views/org-members-results.html',
 					controller: function ($scope, $uibModalInstance) {
 						$scope.data = {
+							messagesFeature : window.features.messages,
 							found    : result.emaillist.found,
 							notfound : result.emaillist.notfound
 						};

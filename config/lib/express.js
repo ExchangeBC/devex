@@ -140,7 +140,7 @@ module.exports.initSession = function (app, db) {
       secure   : config.sessionCookie.secure && config.secure.ssl
     }
   }
-  if (config.app.domain === 'http://localhost:3030' || process.env.NODE_ENV == 'development') {
+  if (config.app.domain === 'http://localhost:3030' || process.env.NODE_ENV === 'development') {
     sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
     sessionParameters.store = new MongoStore ({
       mongooseConnection : db.connection,
