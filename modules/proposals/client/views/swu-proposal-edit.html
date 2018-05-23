@@ -939,15 +939,24 @@
 
 				<uib-tab index="8">
 					<uib-tab-heading>
-						8. Addendum
+						8. Addenda
 					</uib-tab-heading>
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Addendums</h4>
-							<p>Proponents need to frequently check this tab for any Addenda.</p>
+							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
+						<!--
 							<div class="alert alert-default" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
-								There are currently no addendums for this RFP.
+								There are currently no addenda for this RFP.
 							</div>
+						-->
+							<br>
+							<p class="small" style="border-bottom: 1px dotted #e3e3e3">Posted <strong>Wed May 23, 2018</strong></p>
+							<p><strong>Question:</strong> The opportunity mentions an existing application, <a href="https://mines.empr.gov.bc.ca" target="_blank">https://mines.empr.gov.bc.ca</a>. What (if any) of this existing application can or should be re-used? Would we be expected to determine how much can be re-used through the inception and proof of concept phases?
+							<p><strong>Answer:</strong> The intent is to complete some enhancements to the https://mines.empr.gov.bc.ca application. We do not intent to reuse it in the MDS application.</p>
+							</p>
+							<hr>
+							<p><strong>Question:</strong> The project seems to hint that Angular is preferred (and the existing app is built in angular). Does this preclude other technology solutions from being used (e.g. React or Vue)?</p>
+							<p><strong>Answer:</strong> No, this does not preclude other solutions and we will accept the potential inclusion of other technologies.</p>
 							<ul ng-repeat="addendum in ppp.proposal.addendums">
 								<li>{{addendum.descrption}} (added {{addendum.created}})</li>
 							</ul>
