@@ -85,6 +85,8 @@ var ProposalSchema = new Schema ({
 
 	},
 	ranking				: {type: Number, default: 0},
+	screenedIn			: {type: Boolean, default: false},
+	passedCodeChallenge	: {type: Boolean, default: false},
 	addendums			: {type: [AddendumSchema], default: []}
 }, { usePushEach: true });
 

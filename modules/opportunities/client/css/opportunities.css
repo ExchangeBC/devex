@@ -36,3 +36,11 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     display: none;
 }
+
+span.screened-in {
+	color: green;
+}
+
+span.screened-out {
+	color: red;
+}
