@@ -160,12 +160,13 @@
 		// -------------------------------------------------------------------------
 		vm.stages = {
 			new        		: 0,
-			questions  		: 1,
-			questions_saved : 2,
-			code_scores		: 3,
-			interview  		: 4,
-			price      		: 5,
-			assigned   		: 6
+			pending_review	: 1,
+			questions  		: 2,
+			questions_saved : 3,
+			code_scores		: 4,
+			interview  		: 5,
+			price      		: 6,
+			assigned   		: 7
 		};
 		vm.beforeStage = function (stage) {
 			return vm.opportunity.evaluationStage < vm.stages[stage];
@@ -176,46 +177,58 @@
 		vm.stageIs = function (stage) {
 			return vm.opportunity.evaluationStage === vm.stages[stage];
 		};
+		vm.weights = {
+			price: 0.1,
+			interview: 0.25,
+			question: 0.2,
+			skill: 0.2,
+			codechallenge: 0.25
+		};
+		vm.maxPoints = 100;
+		vm.getTopProposal = function() {
+			vm.totalAndSort();
+			return vm.proposals[0];
+		}
 		// -------------------------------------------------------------------------
 		//
 		// set the number of teams to interview
 		//
 		// -------------------------------------------------------------------------
-		vm.updateNumberOfTeams = function () {
-			vm.opportunity.numberOfInterviews = vm.numberOfInterviews;
-			vm.canProgress ();
-			vm.saveOpportunity ();
-		};
+		// vm.updateNumberOfTeams = function () {
+		// 	vm.opportunity.numberOfInterviews = vm.numberOfInterviews;
+		// 	vm.canProgress ();
+		// 	vm.saveOpportunity ();
+		// };
 		// -------------------------------------------------------------------------
 		//
 		// click here when all done interviewing
 		//
 		// -------------------------------------------------------------------------
-		vm.doneInterviews = function () {
-			vm.opportunity.evaluationStage = vm.stages.price;
-			vm.saveOpportunity ();
-			vm.calculatePriceScores ();
-			vm.saveProposals ();
-		};
+		// vm.doneInterviews = function () {
+		// 	vm.opportunity.evaluationStage = vm.stages.price;
+		// 	vm.saveOpportunity ();
+		// 	vm.calculatePriceScores ();
+		// 	vm.saveProposals ();
+		// };
 		// -------------------------------------------------------------------------
 		//
 		// check if we can progress from interviews
 		//
 		// -------------------------------------------------------------------------
-		vm.canProgress = function () {
-			//
-			// if we have proposals, are we through the interview process yet?
-			//
-			if (vm.opportunity.numberOfInterviews > vm.proposals.length) vm.opportunity.numberOfInterviews = vm.proposals.length;
-			vm.canCloseInterviews = false;
-			var ninterviewcomplete = 0;
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) ninterviewcomplete++;
-			});
-			if (ninterviewcomplete >= vm.opportunity.numberOfInterviews) {
-				vm.canCloseInterviews = true;
-			}
-		};
+		// vm.canProgress = function () {
+		// 	//
+		// 	// if we have proposals, are we through the interview process yet?
+		// 	//
+		// 	if (vm.opportunity.numberOfInterviews > vm.proposals.length) vm.opportunity.numberOfInterviews = vm.proposals.length;
+		// 	vm.canCloseInterviews = false;
+		// 	var ninterviewcomplete = 0;
+		// 	vm.proposals.forEach (function (p) {
+		// 		if (p.interviewComplete) ninterviewcomplete++;
+		// 	});
+		// 	if (ninterviewcomplete >= vm.opportunity.numberOfInterviews) {
+		// 		vm.canCloseInterviews = true;
+		// 	}
+		// };
 		// -------------------------------------------------------------------------
 		//
 		// Evaluate question rankings or calculate skill points
@@ -226,7 +239,7 @@
 			ProposalsService.forOpportunity ({opportunityId:vm.opportunity._id}).$promise
 			.then (function (proposals) {
 				vm.proposals = proposals;
-				vm.canProgress ();
+				// vm.canProgress ();
 				//
 				// removed hack as this is now in the right place in the edit opportunity
 				//
@@ -276,22 +289,23 @@
 						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
 							if (p[skill._id.toString()]) proposal.scores.skill++;
 						});
-						proposal.scores.skill = (proposal.scores.skill / 20) * 400;
+						proposal.scores.skill = (proposal.scores.skill / 20) * (vm.weights.skill * vm.maxPoints);
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
 					// also because this will cause scoring to run on each proposal as well
 					//
 					vm.totalAndSort();
-					vm.opportunity.evaluationStage = vm.stages.questions;
+					vm.opportunity.evaluationStage = vm.stages.pending_review;
 					vm.saveOpportunity ();
 					vm.saveProposals ();
 				}
 			});
 		};
 		buildQuestionPivot ();
-		vm.resetQuestions = function () {
+		vm.resetEvaluation = function () {
 			vm.opportunity.evaluationStage = vm.stages.new;
+			vm.proposal = null;
 			vm.proposals.forEach(function(proposal) {
 				proposal.scores.skill = 0;
 				proposal.scores.question = 0;
@@ -299,12 +313,17 @@
 				proposal.scores.interview = 0;
 				proposal.scores.total = 0;
 				proposal.scores.price = 0;
+				proposal.isAssigned = false;
 			})
 			vm.totalAndSort();
 			vm.saveProposals();
 			vm.saveOpportunity();
 			buildQuestionPivot ();
 		};
+		vm.completeQuestionReview = function() {
+			vm.opportunity.evaluationStage = vm.stages.questions;
+			vm.saveOpportunity();
+		}
 		// -------------------------------------------------------------------------
 		//
 		// Questions Modal
@@ -381,7 +400,7 @@
 		// -------------------------------------------------------------------------
 		vm.totalAndSort = function() {
 			vm.proposals.forEach(function(proposal) {
-				proposal.scores.total = proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price;
+				proposal.scores.total = Math.round((proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price) * 100) / 100;
 			});
 
 			vm.proposals.sort(function(a, b) {
@@ -401,19 +420,14 @@
 					currentRanking++;
 				}
 				proposal.ranking = currentRanking;
+				if (proposal.ranking > 4) {
+					proposal.screenedIn = false;
+				}
+				else {
+					proposal.screenedIn = true;
+				}
 				prevScore = proposal.scores.total;
 			})
-			// for (var i = 0; i < vm.proposals.length; i++) {
-			// 	vm.proposals[i].ranking = i + 1;
-
-			// 	// we need to check the remaining proposal for a tie
-			// 	for (var j = i + 1; j < vm.proposals.length; j++) {
-			// 		var currentRanking = i + 1;
-			// 		if (vm.proposals[i].scores.total === vm.proposals[j].scores.total) {
-			// 			vm.proposals[j].ranking = currentRanking;
-			// 		}
-			// 	}
-			// }
 		}
 		// -------------------------------------------------------------------------
 		//
@@ -428,7 +442,7 @@
 					$scope.data = {};
 					$scope.data.proposalScores = [];
 					vm.proposals.forEach(function(proposal) {
-						if (proposal.ranking <= 4) {
+						if (proposal.screenedIn) {
 							$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
 						}
 					})
@@ -451,22 +465,28 @@
 						var match = vm.proposals.find(function(proposal) {
 							return proposal.businessName === score.businessName;
 						});
+
 						if (match) {
-							match.scores.codechallenge = score.score * 25;
+							if (score.score / 25 >= 0.8) {
+								match.passedCodeChallenge = true;
+								match.scores.codechallenge = (score.score / 25) * (vm.weights.codechallenge * vm.maxPoints) ;
+							}
+							else {
+								match.passedCodeChallenge = false;
+							}
+
 							scoreCount++;
 						}
 					});
 
-					// calculate rankings
-					vm.totalAndSort();
-					vm.calculateRankings();
-					vm.saveProposals();
-
 					// if we have scored all proposal for the code challenge stage, move on to the interview stage
-					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.ranking <= 4; }).length) {
+					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.screenedIn}).length) {
 						vm.opportunity.evaluationStage++;
 					}
 
+					// calculate rankings
+					vm.totalAndSort();
+					vm.saveProposals();
 					vm.saveOpportunity();
 				}
 			});
@@ -484,7 +504,7 @@
 					$scope.data = {};
 					$scope.data.proposalScores = [];
 					vm.proposals.forEach(function(proposal) {
-						if (proposal.ranking <= 4) {
+						if (proposal.screenedIn && proposal.passedCodeChallenge) {
 							$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
 						}
 					})
@@ -509,19 +529,18 @@
 							return proposal.businessName === score.businessName;
 						});
 						if (match) {
-							match.scores.interview = score.score * 25;
+							match.scores.interview = (score.score / 25) * (vm.weights.interview * vm.maxPoints);
 							scoreCount++;
 						}
 					});
-					vm.totalAndSort();
-					vm.calculateRankings();
-					vm.saveProposals();
 
 					// if we have scored all proposal for the interview stage, calculate price scores
-					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.ranking <= 4; }).length) {
+					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.screenedIn && proposal.passedCodeChallenge; }).length) {
 						vm.calculatePriceScores();
 						vm.opportunity.evaluationStage++;
 					}
+					vm.totalAndSort();
+					vm.saveProposals();
 					vm.saveOpportunity();
 				}
 			});
@@ -577,40 +596,30 @@
 				return vm.proposals.length + 1 - q.rank;
 			}).reduce (function (a, b) {
 				return a + b;
-			}) / bestScore * 400 * 100) / 100;
+			}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
 			return proposal.scores.question;
 		};
-		//
-		// this will be a simple distance comparison
-		//
+
 		vm.priceScore = function (proposal) {
-			// var distance = Math.abs (vm.opportunity.totalTarget - proposal.cost);
-			// proposal.scores.price = distance / vm.opportunity.totalTarget * 100;
 			return proposal.scores.price;
-		};
-		vm.calculateProposalScore = function (proposal) {
-			vm.calculatePriceScores();
-			proposal.scores.total = [
-				vm.opportunity.weights.skill     * vm.skillScore     (proposal),
-				vm.opportunity.weights.question  * vm.questionScore  (proposal),
-				vm.opportunity.weights.interview * vm.interviewScore (proposal),
-				vm.opportunity.weights.price     * vm.priceScore     (proposal)
-			].reduce (function (t, c) {return t + c;});
-			return proposal.scores.total;
 		};
 
 		vm.calculatePriceScores = function () {
 			var lowestBidder;
-			vm.proposals.filter(function(proposal) {
-				return proposal.ranking <= 4;
+			var passedProposals = vm.proposals.filter(function(proposal) {
+				return proposal.screenedIn && proposal.passedCodeChallenge;
 			})
-			.forEach(function(proposal) {
+
+			passedProposals.forEach(function(proposal) {
 				proposal.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
 				if (lowestBidder === undefined || proposal.cost < lowestBidder.cost) {
 					lowestBidder = proposal;
 				}
 			})
-			lowestBidder.scores.price = 100;
+
+			passedProposals.forEach(function(proposal) {
+				proposal.scores.price = Math.round((lowestBidder.cost/proposal.cost) * (vm.weights.price * vm.maxPoints) * 100) / 100;
+			})
 		};
 
 		vm.assign = function (proposal) {
@@ -623,6 +632,11 @@
 							vm.proposal = response;
 							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
 							$state.go ('opportunities.viewswu',{opportunityId:vm.opportunity.code});
+							vm.opportunity.evaluationStage = vm.stages.assigned;
+							vm.opportunity.proposal = proposal;
+							vm.saveOpportunity ();
+							proposal.isAssigned = true;
+							vm.saveProposal (proposal);
 						},
 						function (error) {
 							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
@@ -630,11 +644,6 @@
 					);
 				}
 			});
-			// vm.opportunity.evaluationStage = vm.stages.assigned;
-			// vm.opportunity.proposal = proposal;
-			// vm.saveOpportunity ();
-			// proposal.isAssigned = true;
-			// vm.saveProposal (proposal);
 		};
 		// -------------------------------------------------------------------------
 		//
