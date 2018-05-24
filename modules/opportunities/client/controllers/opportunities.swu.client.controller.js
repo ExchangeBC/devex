@@ -166,7 +166,8 @@
 			code_scores		: 4,
 			interview  		: 5,
 			price      		: 6,
-			assigned   		: 7
+			assigned   		: 7,
+			all_fail		: 8
 		};
 		vm.beforeStage = function (stage) {
 			return vm.opportunity.evaluationStage < vm.stages[stage];
@@ -464,6 +465,7 @@
 			.then (function (resp) {
 				if (resp.action === 'save') {
 					var scoreCount = 0;
+					var passCount = 0;
 					resp.proposalScores.forEach(function(score) {
 						var match = vm.proposals.find(function(proposal) {
 							return proposal.businessName === score.businessName;
@@ -473,6 +475,7 @@
 							if (score.score / 25 >= 0.8) {
 								match.passedCodeChallenge = true;
 								match.scores.codechallenge = (score.score / 25) * (vm.weights.codechallenge * vm.maxPoints) ;
+								passCount++;
 							}
 							else {
 								match.passedCodeChallenge = false;
@@ -482,9 +485,14 @@
 						}
 					});
 
-					// if we have scored all proposal for the code challenge stage, move on to the interview stage
+					// if we have scored all proposal for the code challenge stage, and at least 1 company passed, move on
 					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.screenedIn}).length) {
-						vm.opportunity.evaluationStage++;
+						if (passCount > 0) { 
+							vm.opportunity.evaluationStage = vm.stages.interview
+						}
+						else {
+							vm.opportunity.evaluationStage = vm.stages.all_fail;
+						}
 					}
 
 					// calculate rankings

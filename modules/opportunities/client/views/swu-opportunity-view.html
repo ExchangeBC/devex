@@ -86,6 +86,11 @@
 					<p>Assign the top proposal by clicking the Assign button</strong>.</p>
 				</div>
 
+				<!-- Edge case: All proponents failed the code challenge -->
+				<div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('all_fail')">
+					<h4>This evaluation cannot continue as no proponents passed the Code Challenge</h4>
+				</div>
+
 				<!-- Opportunity has been assigned. -->
 				<div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('assigned')">
 					<h4>This opportunity has been assigned</h4>
