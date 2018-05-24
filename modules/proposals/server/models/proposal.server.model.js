@@ -84,6 +84,7 @@ var ProposalSchema = new Schema ({
 		total           : {type: Number, default: 0}
 
 	},
+	ranking				: {type: Number, default: 0},
 	addendums			: {type: [AddendumSchema], default: []}
 }, { usePushEach: true });
 

@@ -218,7 +218,7 @@
 		};
 		// -------------------------------------------------------------------------
 		//
-		// stuff for swu evaluation
+		// Evaluate question rankings or calculate skill points
 		//
 		// -------------------------------------------------------------------------
 		var buildQuestionPivot = function () {
@@ -276,11 +276,13 @@
 						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
 							if (p[skill._id.toString()]) proposal.scores.skill++;
 						});
+						proposal.scores.skill = (proposal.scores.skill / 20) * 400;
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
 					// also because this will cause scoring to run on each proposal as well
 					//
+					vm.totalAndSort();
 					vm.opportunity.evaluationStage = vm.stages.questions;
 					vm.saveOpportunity ();
 					vm.saveProposals ();
@@ -289,7 +291,18 @@
 		};
 		buildQuestionPivot ();
 		vm.resetQuestions = function () {
-			vm.opportunity.evaluationStage === vm.stages.new;
+			vm.opportunity.evaluationStage = vm.stages.new;
+			vm.proposals.forEach(function(proposal) {
+				proposal.scores.skill = 0;
+				proposal.scores.question = 0;
+				proposal.scores.codechallenge = 0;
+				proposal.scores.interview = 0;
+				proposal.scores.total = 0;
+				proposal.scores.price = 0;
+			})
+			vm.totalAndSort();
+			vm.saveProposals();
+			vm.saveOpportunity();
 			buildQuestionPivot ();
 		};
 		// -------------------------------------------------------------------------
@@ -345,22 +358,63 @@
 			}, {
 			})
 			.then (function (resp) {
-				if (resp === 'save' || resp === 'commit') {
-				// vm.responses[0][0].rank = 999;
-					//
-					// TBD: calculate scores etc.
-					//
-					vm.saveProposals ();
-				}
 				if (resp === 'save') {
+					vm.saveProposals ();
 					vm.opportunity.evaluationStage = vm.stages.questions_saved;
 				}
 				if (resp === 'commit') {
+					vm.proposals.forEach(function(proposal) {
+						vm.questionScore(proposal);
+					});
+					vm.totalAndSort();
+					vm.calculateRankings();
+					vm.saveProposals ();
 					vm.opportunity.evaluationStage = vm.stages.code_scores;
 					vm.saveOpportunity ();
 				}
 			});
 		};
+		// -------------------------------------------------------------------------
+		//
+		// Totals and sorts the proposals highest to lowest based on current score
+		//
+		// -------------------------------------------------------------------------
+		vm.totalAndSort = function() {
+			vm.proposals.forEach(function(proposal) {
+				proposal.scores.total = proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price;
+			});
+
+			vm.proposals.sort(function(a, b) {
+				return b.scores.total - a.scores.total;
+			});
+		}
+		// -------------------------------------------------------------------------
+		//
+		// Calculates rankings so that top 4 companies can be screened in - assumes the proposal are sorted by current score
+		//
+		// -------------------------------------------------------------------------
+		vm.calculateRankings = function () {
+			var currentRanking = 1;
+			var prevScore;
+			vm.proposals.forEach(function(proposal) {
+				if (prevScore && prevScore > proposal.scores.total) {
+					currentRanking++;
+				}
+				proposal.ranking = currentRanking;
+				prevScore = proposal.scores.total;
+			})
+			// for (var i = 0; i < vm.proposals.length; i++) {
+			// 	vm.proposals[i].ranking = i + 1;
+
+			// 	// we need to check the remaining proposal for a tie
+			// 	for (var j = i + 1; j < vm.proposals.length; j++) {
+			// 		var currentRanking = i + 1;
+			// 		if (vm.proposals[i].scores.total === vm.proposals[j].scores.total) {
+			// 			vm.proposals[j].ranking = currentRanking;
+			// 		}
+			// 	}
+			// }
+		}
 		// -------------------------------------------------------------------------
 		//
 		// Code Challenge Modal
@@ -374,10 +428,12 @@
 					$scope.data = {};
 					$scope.data.proposalScores = [];
 					vm.proposals.forEach(function(proposal) {
-						$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+						if (proposal.ranking <= 4) {
+							$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+						}
 					})
 					$scope.cancel = function () {
-						$uibModalInstance.close ();
+						$uibModalInstance.close ({});
 					};
 					$scope.save = function () {
 						$uibModalInstance.close ({
@@ -396,14 +452,18 @@
 							return proposal.businessName === score.businessName;
 						});
 						if (match) {
-							match.scores.codechallenge = score.score;
+							match.scores.codechallenge = score.score * 25;
 							scoreCount++;
 						}
 					});
+
+					// calculate rankings
+					vm.totalAndSort();
+					vm.calculateRankings();
 					vm.saveProposals();
 
 					// if we have scored all proposal for the code challenge stage, move on to the interview stage
-					if (scoreCount === vm.proposals.length) {
+					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.ranking <= 4; }).length) {
 						vm.opportunity.evaluationStage++;
 					}
 
@@ -424,7 +484,9 @@
 					$scope.data = {};
 					$scope.data.proposalScores = [];
 					vm.proposals.forEach(function(proposal) {
-						$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+						if (proposal.ranking <= 4) {
+							$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+						}
 					})
 					$scope.cancel = function () {
 						$uibModalInstance.close ({});
@@ -447,16 +509,20 @@
 							return proposal.businessName === score.businessName;
 						});
 						if (match) {
-							match.scores.interview = score.score;
+							match.scores.interview = score.score * 25;
 							scoreCount++;
 						}
 					});
+					vm.totalAndSort();
+					vm.calculateRankings();
 					vm.saveProposals();
 
-					// if we have scored all proposal for the interview stage, move on to the code challenge stage
-					if (scoreCount === vm.proposals.length) {
+					// if we have scored all proposal for the interview stage, calculate price scores
+					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.ranking <= 4; }).length) {
+						vm.calculatePriceScores();
 						vm.opportunity.evaluationStage++;
 					}
+					vm.saveOpportunity();
 				}
 			});
 		};
@@ -467,7 +533,7 @@
 		// -------------------------------------------------------------------------
 		vm.saveProposal = function (proposal) {
 			if (!vm.canEdit) return;
-			vm.calculateProposalScore (proposal);
+			// vm.calculateProposalScore (proposal);
 			return proposal.createOrUpdate ();
 		};
 		vm.saveProposals = function () {
@@ -503,15 +569,15 @@
 		// m = number of questions
 		// Q(r) = question ranking (will be from 1 to n with 1 being the best)
 		//
-		// score = sum ( (n+1)-Q(r) ) / (n * m) * 100
+		// score = sum ( (n+1)-Q(r) ) / (n * m) * 400
 		//
 		vm.questionScore = function (proposal) {
 			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
-			proposal.scores.question = (proposal.questions.map (function (q) {
+			proposal.scores.question = Math.round(proposal.questions.map (function (q) {
 				return vm.proposals.length + 1 - q.rank;
 			}).reduce (function (a, b) {
 				return a + b;
-			})) / bestScore * 100;
+			}) / bestScore * 400 * 100) / 100;
 			return proposal.scores.question;
 		};
 		//
@@ -532,47 +598,21 @@
 			].reduce (function (t, c) {return t + c;});
 			return proposal.scores.total;
 		};
-		vm.calculatePriceScoresOld = function () {
-			var maxDistance = 0;
-			var minDistance = 30000000;
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) {
-					p.cost = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
-					p.distance = Math.abs (vm.opportunity.budget - p.cost);
-					if (p.distance > maxDistance) maxDistance = p.distance;
-					if (p.distance < minDistance) minDistance = p.distance;
-				}
-			});
-			maxDistance -= minDistance;
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) {
-					p.distance -= minDistance;
-					var distanceFromMax = maxDistance - p.distance;
-					p.scores.price = (distanceFromMax) / maxDistance * 100;
-				}
-			});
-		};
+
 		vm.calculatePriceScores = function () {
-			//
-			// get the lowest price
-			//
-			var p = vm.proposals[0];
-			var lowestPrice = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
-			var i;
-			for (i=0; i<vm.proposals.length; i++) {
-				p = vm.proposals[i];
-				p.cost = p.phases.inception.cost + p.phases.proto.cost + p.phases.implementation.cost;
-				if (p.cost < lowestPrice) lowestPrice = p.cost;
-			}
-			//
-			// now for each do Lowest price / Your Price
-			//
-			vm.proposals.forEach (function (p) {
-				if (p.interviewComplete) {
-					p.scores.price = lowestPrice / p.cost;
+			var lowestBidder;
+			vm.proposals.filter(function(proposal) {
+				return proposal.ranking <= 4;
+			})
+			.forEach(function(proposal) {
+				proposal.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
+				if (lowestBidder === undefined || proposal.cost < lowestBidder.cost) {
+					lowestBidder = proposal;
 				}
-			});
+			})
+			lowestBidder.scores.price = 100;
 		};
+
 		vm.assign = function (proposal) {
 			var q = 'Are you sure you want to assign this opportunity to this proponent?';
 			ask.yesNo (q).then (function (r) {
