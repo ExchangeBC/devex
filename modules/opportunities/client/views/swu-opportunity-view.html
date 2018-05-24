@@ -70,13 +70,13 @@
 
 				<!-- Stage 2: Enter Code Challenge Scores -->
 				<div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('code_scores')">
-						<h4>Enter the Code Challenge scores for {{vm.proposals.length}} screened-in companies</h4>
+						<h4>Enter the Code Challenge scores for the screened-in companies</h4>
 						<p><a href="" ng-click="vm.codeChallenge()">Click here to enter the Code Challenge scores for each company</a></strong>.</p>
 				</div>
 
 				<!-- Stage 3: Enter Interview Scores -->
 				<div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('interview')">
-					<h4>Enter the Team Scenario scores for {{vm.proposals.length}} screened-in companies</h4>
+					<h4>Enter the Team Scenario scores for the remaining companies</h4>
 					<p><a href="" ng-click="vm.interview()">Click here to enter the Team Scenario scores for each company</a></strong>.</p>
 				</div>
 

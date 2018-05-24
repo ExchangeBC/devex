@@ -186,8 +186,11 @@
 		};
 		vm.maxPoints = 100;
 		vm.getTopProposal = function() {
-			vm.totalAndSort();
-			return vm.proposals[0];
+			if (vm.proposals && vm.proposals.length > 0) {
+				vm.totalAndSort();
+				return vm.proposals[0];
+			}
+			return null;
 		}
 		// -------------------------------------------------------------------------
 		//
