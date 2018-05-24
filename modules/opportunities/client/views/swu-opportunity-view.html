@@ -116,28 +116,29 @@
 								</td>
 								<td class="text-right">
 									<button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Total (/100)" data-content="This is the total score out of 100%.">
-										Final Score
+										Total Score
 									</button>
 								</td>
 							</tr>
 						</thead>
 						<tbody>
-							<tr ng-repeat="proposal in vm.proposals">
+							<tr ng-repeat="proposal in vm.proposals | orderBy:'ranking'">
 								<td class="text-left">{{proposal.businessName}}</td>
 								<td class="text-center">{{proposal.scores.skill}}</td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.question}}</span></td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.skill + proposal.scores.question}}</span></td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.ranking}}</span></td>
-								<td class="text-center"><span ng-show="vm.pastStage('code_scores')">{{proposal.scores.codechallenge}}</span></td>
-								<td class="text-center"><span ng-show="vm.pastStage('interview')">{{proposal.scores.interview}}</span></td>
-								<td class="text-center"><span ng-show="vm.pastStage('interview')">{{proposal.scores.price}}</span></td>
-								<td class="text-center"><span ng-show="vm.pastStage('interview')">{{vm.calculateFinalScore(proposal)}}</span></td>
+								<td class="text-center"><span ng-show="vm.pastStage('code_scores') && proposal.ranking <= 4">{{proposal.scores.codechallenge}}</span></td>
+								<td class="text-center"><span ng-show="vm.pastStage('interview') && proposal.ranking <= 4">{{proposal.scores.interview}}</span></td>
+								<td class="text-center"><span ng-show="vm.pastStage('interview') && proposal.ranking <= 4">{{proposal.scores.price}}</span></td>
+								<td class="text-right"><span>{{proposal.scores.total}}</span></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
+		<button ng-click="vm.resetQuestions()">Reset</button>
 	</section>
 
 	<!-- Admin View for Proposal Evaluation -->
