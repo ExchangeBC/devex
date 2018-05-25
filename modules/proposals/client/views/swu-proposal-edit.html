@@ -237,12 +237,8 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oinp.isInception">
 							<h5 class="text-center"><i class="fa fa-map"></i> Inception Phase</h5>
-
-
-
-							<div class="strong text-center">
-								<i class="fa fa-calendar"></i> &nbsp;
-								{{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}
+							<div class="text-center">
+								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}
 							</div>
 							<br>
 							<div class="panel panel-primary">
@@ -300,7 +296,7 @@
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
 											<th scope="row" ng-if="ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
 											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
 										</tr>
 									</tbody>
@@ -309,10 +305,8 @@
 						</div>
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oprp.isPrototype">
 							<h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
-
-
-							<div class="strong text-center">
-								<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}
+							<div class="text-center">
+								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}
 							</div>
 
 							<br>
@@ -371,7 +365,7 @@
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
 											<th scope="row" ng-if="ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
 											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
 										</tr>
 									</tbody>
@@ -380,11 +374,8 @@
 						</div>
 						<div class="col-xs-12 col-sm-4" ng-if="ppp.oimp.isImplementation">
 							<h5 class="text-center"><i class="fa fa-gears"></i> Implementation Phase</h5>
-
-
-
-							<div class="strong text-center">
-								<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}
+							<div class="text-center">
+								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}
 							</div>
 
 							<br>
@@ -442,7 +433,7 @@
 									<tbody>
 										<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
 											<th scope="row" ng-if="ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"></th>
+											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
 											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
 										</tr>
 									</tbody>
@@ -471,12 +462,12 @@
 
 					<div class="row">
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-map"></i> Inception</h5>
+							<h5><i class="fa fa-map"></i> Inception Phase</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oinp.isInception">This phase is not required
 							</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oinp.isInception"><i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+							<div ng-if="ppp.oinp.isInception">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}</div>
 
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oinp.isInception">
@@ -512,12 +503,12 @@
 						</div>
 
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-rocket"></i> Proof of Concept</h5>
+							<h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oprp.isPrototype">This phase is not required
 							</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oprp.isPrototype"><i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
+							<div ng-if="ppp.oprp.isPrototype">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
 
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oprp.isPrototype">
@@ -552,12 +543,12 @@
 						</div>
 
 						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-gears"></i> Implementation</h5>
+							<h5><i class="fa fa-gears"></i> Implementation Phase</h5>
 							<!-- If Phase not included -->
 							<div ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
 							<!-- If Phase is included -->
-							<p class="strong" ng-if="ppp.oimp.isImplementation"><i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
-
+							<div ng-if="ppp.oimp.isImplementation">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}</div>
+							<br>
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oimp.isImplementation">
 								<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
@@ -767,6 +758,15 @@
 					<h4>
 						Review and Submit Your Proposal
 					</h4>
+					<div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
+						<i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
+						You won't be able to submit this Proposal until you:
+						<ul>
+							<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
+							<li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in each phase</li>
+							<li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
+						</ul>
+					</div>
 					<h5>
 						Here's a summary of your complete Proposal. Make sure it all looks right before you submit. Good luck!
 					</h5>
@@ -775,7 +775,7 @@
 						<div class="panel panel-primary" style="border-width: 3px; border-radius: 0;">
 							<div class="panel-body">
 								<div class="row">
-									<div class="col-xs-12 col-sm-6">
+									<div class="col-xs-12">
 										<h3 class="opp-detail">Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h3>
 										<p>
 											<strong>{{ppp.org.name}}</strong><br/>
@@ -788,18 +788,6 @@
 												<span ng-if="ppp.org.contactEmail"><i>{{ppp.org.contactEmail}}</i></span>
 											</span>
 										</p>
-
-									</div>
-									<div class="col-xs-12 col-sm-6" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
-										<div class="alert alert-danger">
-											<i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
-											You won't be able to submit this Proposal until you:
-											<ul>
-												<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
-												<li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in each phase</li>
-												<li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
-											</ul>
-										</div>
 									</div>
 								</div>
 								<hr>
@@ -812,8 +800,8 @@
 									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oinp.isInception">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p class="strong"><i class="fa fa-map"></i> &nbsp;Inception Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oinp.f_startDate}} to {{ppp.oinp.f_endDate}}</p>
+												<h5><i class="fa fa-map"></i> Inception Phase</h5>
+												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}</div>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -828,8 +816,8 @@
 									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oprp.isPrototype">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p class="strong"><i class="fa fa-rocket"></i> &nbsp;Proof of Concept Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oprp.f_startDate}} to {{ppp.oprp.f_endDate}}</p>
+												<h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
+												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -844,8 +832,8 @@
 									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oimp.isImplementation">
 										<div class="panel panel-default">
 											<div class="panel-body">
-												<p class="strong"><i class="fa fa-gears"></i> &nbsp;Implementation Phase</p>
-												<p class="strong"><i class="fa fa-calendar"></i> &nbsp;Phase Window: {{ppp.oimp.f_startDate}} to {{ppp.oimp.f_endDate}}</p>
+												<h5 class="strong"><i class="fa fa-gears"></i> Implementation Phase</h5>
+												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}</div>
 												<hr>
 												<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
 														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
@@ -939,15 +927,24 @@
 
 				<uib-tab index="8">
 					<uib-tab-heading>
-						8. Addendum
+						8. Addenda
 					</uib-tab-heading>
 					<div class="row">
 						<div class="col-xs-12">
-							<h4>Addendums</h4>
-							<p>Proponents need to frequently check this tab for any Addenda.</p>
+							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
+						<!--
 							<div class="alert alert-default" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
-								There are currently no addendums for this RFP.
+								There are currently no addenda for this RFP.
 							</div>
+						-->
+							<br>
+							<p class="small" style="border-bottom: 1px dotted #e3e3e3">Posted <strong>Wed May 23, 2018</strong></p>
+							<p><strong>Question:</strong> The opportunity mentions an existing application, <a href="https://mines.empr.gov.bc.ca" target="_blank">https://mines.empr.gov.bc.ca</a>. What (if any) of this existing application can or should be re-used? Would we be expected to determine how much can be re-used through the inception and proof of concept phases?
+							<p><strong>Answer:</strong> The intent is to complete some enhancements to the https://mines.empr.gov.bc.ca application. We do not intent to reuse it in the MDS application.</p>
+							</p>
+							<hr>
+							<p><strong>Question:</strong> The project seems to hint that Angular is preferred (and the existing app is built in angular). Does this preclude other technology solutions from being used (e.g. React or Vue)?</p>
+							<p><strong>Answer:</strong> No, this does not preclude other solutions and we will accept the potential inclusion of other technologies.</p>
 							<ul ng-repeat="addendum in ppp.proposal.addendums">
 								<li>{{addendum.descrption}} (added {{addendum.created}})</li>
 							</ul>
