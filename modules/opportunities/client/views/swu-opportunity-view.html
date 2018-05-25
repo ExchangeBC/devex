@@ -93,10 +93,10 @@
 
 				<!-- Opportunity has been assigned. -->
 				<div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('assigned')">
-					<h4>This opportunity has been assigned</h4>
+					<h4>This opportunity has been assigned to {{vm.opportunity.proposal.businessName}}</h4>
 				</div>
 
-				<div class="swu-evaluation-summary" ng-if="vm.closing === 'CLOSED' && vm.beforeStage('assigned')">
+				<div class="swu-evaluation-summary" ng-if="vm.closing === 'CLOSED'">
 					<div class="table-title">Evaluation Scoring Summary</div>
 					<table class="table table-condensed table-striped">
 						<thead>
@@ -178,8 +178,10 @@
 				</div>
 			</div>
 			<!-- Temporary - for development purposes only-->
-			<button ng-click="vm.resetEvaluation()">Reset</button>
-			<button ng-click="vm.completeQuestionReview()">Complete Vetting</button>
+			<div align="center">
+				<button ng-if="vm.isAdmin" class="btn btn-sm btn-primary" ng-click="vm.resetEvaluation()">Reset Evaluation</button>
+				<button ng-if="vm.isAdmin" ng-disabled="vm.pastStage('pending_review')" class="btn btn-sm btn-primary" ng-click="vm.completeQuestionReview()">Complete Vetting</button>
+			</div>	
 		</div>
 	</section>
 

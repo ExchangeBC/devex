@@ -111,6 +111,7 @@
 		vm.isMember                = opportunity.userIs.member;
 		vm.isSprintWithUs          = (vm.opportunity.opportunityTypeCd === 'sprint-with-us');
 		vm.showProposals           = vm.canEdit && vm.opportunity.isPublished;
+		vm.isAdmin				   = isAdmin;
 		//
 		// dates
 		//
@@ -309,25 +310,38 @@
 		};
 		buildQuestionPivot ();
 		vm.resetEvaluation = function () {
-			vm.opportunity.evaluationStage = vm.stages.new;
-			vm.proposal = null;
-			vm.proposals.forEach(function(proposal) {
-				proposal.scores.skill = 0;
-				proposal.scores.question = 0;
-				proposal.scores.codechallenge = 0;
-				proposal.scores.interview = 0;
-				proposal.scores.total = 0;
-				proposal.scores.price = 0;
-				proposal.isAssigned = false;
-			})
-			vm.totalAndSort();
-			vm.saveProposals();
-			vm.saveOpportunity();
-			buildQuestionPivot ();
+
+			var q = 'WARNING: This will reset the current evaluation and any calculations or entered data will be lost.  Proceed?';
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+					vm.opportunity.evaluationStage = vm.stages.new;
+					vm.proposal = null;
+					vm.proposals.forEach(function(proposal) {
+						proposal.scores.skill = 0;
+						proposal.scores.question = 0;
+						proposal.scores.codechallenge = 0;
+						proposal.scores.interview = 0;
+						proposal.scores.total = 0;
+						proposal.scores.price = 0;
+						proposal.isAssigned = false;
+					})
+					vm.totalAndSort();
+					vm.saveProposals();
+					vm.saveOpportunity();
+					buildQuestionPivot ();
+				}
+			});
 		};
 		vm.completeQuestionReview = function() {
-			vm.opportunity.evaluationStage = vm.stages.questions;
-			vm.saveOpportunity();
+
+			var q = 'WARNING: This will open up the evaluation to the opportunity owner.  Proceed?';
+			ask.yesNo (q).then (function (r) {
+				if (r) {
+
+					vm.opportunity.evaluationStage = vm.stages.questions;
+					vm.saveOpportunity();
+				}
+			});
 		}
 		// -------------------------------------------------------------------------
 		//
