@@ -284,6 +284,7 @@
 					//
 					// and now figure out the team score, hopefully only once
 					//
+					var maxScore = vm.opportunity.phases.aggregate.capabilitySkills.length;
 					vm.proposals.forEach (function (proposal) {
 						var p = {};
 						proposal.phases.aggregate.capabilitySkills.forEach (function (skillid) {
@@ -293,7 +294,7 @@
 						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
 							if (p[skill._id.toString()]) proposal.scores.skill++;
 						});
-						proposal.scores.skill = (proposal.scores.skill / 20) * (vm.weights.skill * vm.maxPoints);
+						proposal.scores.skill = (proposal.scores.skill / maxScore) * (vm.weights.skill * vm.maxPoints);
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
@@ -474,7 +475,7 @@
 						if (match) {
 							if (score.score / 25 >= 0.8) {
 								match.passedCodeChallenge = true;
-								match.scores.codechallenge = (score.score / 25) * (vm.weights.codechallenge * vm.maxPoints) ;
+								match.scores.codechallenge = Math.round((score.score / 25) * (vm.weights.codechallenge * vm.maxPoints));
 								passCount++;
 							}
 							else {
@@ -487,7 +488,7 @@
 
 					// if we have scored all proposal for the code challenge stage, and at least 1 company passed, move on
 					if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.screenedIn}).length) {
-						if (passCount > 0) { 
+						if (passCount > 0) {
 							vm.opportunity.evaluationStage = vm.stages.interview
 						}
 						else {
@@ -540,7 +541,7 @@
 							return proposal.businessName === score.businessName;
 						});
 						if (match) {
-							match.scores.interview = (score.score / 25) * (vm.weights.interview * vm.maxPoints);
+							match.scores.interview = Math.round((score.score / 25)  * (vm.weights.interview * vm.maxPoints));
 							scoreCount++;
 						}
 					});
