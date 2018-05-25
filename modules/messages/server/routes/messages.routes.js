@@ -23,7 +23,7 @@ var mongoose  = require ('mongoose');
 // -------------------------------------------------------------------------
 var isAllowed = function (allowedRole) {
 	return function (req, res, next) {
-		console.log (req.user);
+		// console.log (req.user);
 		var roles = (req.user) ? req.user.roles : ['guest'];
 		if (!!~roles.indexOf (allowedRole)) return next ();
 		else return res.status (403).json ({message: 'User is not authorized'});

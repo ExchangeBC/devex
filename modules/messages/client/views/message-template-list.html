@@ -1,9 +1,7 @@
+<section class="list-page"><div class="container" role="main">
 <div class="row list-head">
-	<div class="col-sm-8">
-		<h3 class="list-page-title list-page-hide" ng-bind="vm.titleclass">Message Templates</h3>
-	</div>
-	<div class="col-sm-4">
-		<button ng-if="vm.canAdd" class="btn btn-primary pull-right" ui-sref="messagetemplates.create()" title="New">
+	<div class="col-sm-12">
+		<button class="btn btn-primary pull-right" ui-sref="messagetemplates.create()" title="New">
 			<i class="glyphicon glyphicon-plus"></i> Add a Message Template
 		</button>
 	</div>
@@ -18,11 +16,12 @@
 </div>
 
 <div class="row" ng-if="vm.templates.length">
-	<div class="col-xs-12 col-sm-4" ng-repeat="template in vm.messagetemplates">
+	<div class="col-xs-12 col-sm-4" ng-repeat="template in vm.templates">
 		<div class="card">
-			<div class="card-header" id="messagetemplates.view" ui-sref="messagetemplates.view({templateId:template.code})">
-				<div class="card-title" ng-bind="template.name"></div>
+			<div class="card-header" id="messagetemplates.edit" ui-sref="messagetemplates.edit({templateId:template.code})">
+				<div class="card-title" ng-bind="template.messageCd"></div>
 			</div>
 		</div>
 	</div>
 </div>
+</div></section>

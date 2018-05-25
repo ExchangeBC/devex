@@ -31,7 +31,6 @@ var helpers         = require(path.resolve('./modules/core/server/controllers/co
 //
 // -------------------------------------------------------------------------
 var query = function (table, q) {
-	console.log ('query:', table, q)
 	return new Promise (function (resolve, reject) {
 		table.find (q)
 		.sort ({dateSent:-1, dateExpired: 1})
@@ -43,7 +42,6 @@ var query = function (table, q) {
 	});
 };
 var count = function (table, q) {
-	console.log ('query:', table, q)
 	return new Promise (function (resolve, reject) {
 		table.count (q, function (err, c) {
 			if (err) reject (errorHandler.getErrorMessage(err));
@@ -64,10 +62,8 @@ var appendNotificationLink = function (messagebody) {
 var archiveMessage = function (message) {
 	message.dateArchived = Date.now ();
 	var archive = new MessageArchive (message.toObject ());
-	console.log ('archive' , archive);
 	return new Promise (function (resolve, reject) {
 		archive.save (function (err, amessage) {
-			console.log ('saved', err, amessage);
 			if (err) reject (errorHandler.getErrorMessage(err));
 			else {
 				message.remove (function (err) {
@@ -103,7 +99,7 @@ var saveMessage = function (message) {
 // -------------------------------------------------------------------------
 var sendmail = function (message) {
 	var opts = {
-		to      : message.user.email,
+		to      : message.userEmail,
 		from    : config.mailer.from,
 		subject : message.emailSubject,
 		html    : message.emailBody,
@@ -157,7 +153,7 @@ var prepareMessage = function (template, data) {
 	//
 	// deal with archive and current dates
 	//
-	var datePosted = Date.now ();
+	var datePosted = new Date (Date.now ());
 	var date2Archive = new Date (datePosted);
 	date2Archive.setDate(date2Archive.getDate() + template.daysToArchive);
 	//
@@ -168,9 +164,10 @@ var prepareMessage = function (template, data) {
 	//
 	// make the new message by applying the templates with data
 	//
+	var messageUser = (!data.user || !data.user._id) ? null : data.user;
 	var message = new Message ({
 		messageCd    : template.messageCd,
-		user         : data.user,
+		user         : messageUser,
 		userEmail    : data.user.email,
 		datePosted   : Date.now ()
 	});
@@ -206,7 +203,7 @@ var prepareMessage = function (template, data) {
 //
 // -------------------------------------------------------------------------
 var sendMessage = function (template, user, email, data) {
-	data.user = (user && user._id) ? user : null;
+	data.user = user;
 	var message = prepareMessage (template, data);
 	var emailOptions = {
 		to      : email,
@@ -270,6 +267,23 @@ exports.sendMessages = function (messageCd, users, data) {
 		});
 	});
 };
+// -------------------------------------------------------------------------
+//
+// if a new user has messages but has just signed up this sets those messages
+// to link to her user account
+//
+// -------------------------------------------------------------------------
+exports.claimMessages = function (user) {
+	return query (Message, {
+		userEmail : user.email
+	})
+	.then (function (messages) {
+		return Promise.all (messages.map (function (message) {
+			message.user = user;
+			return saveMessage (message);
+		}));
+	});
+};
 // =========================================================================
 //
 // REST Handlers and functions
@@ -297,7 +311,6 @@ var resResults = function (res) {
 //
 // -------------------------------------------------------------------------
 exports.list = function (req, res) {
-	console.log ('listing!');
 	if (!req.user) return sendError (res, 'No user context supplied');
 	query (Message, {user: req.user._id})
 	.then (resResults (res))
@@ -333,7 +346,7 @@ exports.myarchivedcount = function (req, res) {
 // -------------------------------------------------------------------------
 exports.viewed = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
-	if (req.user.id !== req.message.user) return sendError (res, 'Not owner of message');
+	if (req.user._id.toString () !== req.message.user.toString ()) return sendError (res, 'Not owner of message');
 	req.message.dateViewed = Date.now ();
 	saveMessage (req.message)
 	.then (resResults (res))
@@ -346,8 +359,6 @@ exports.viewed = function (req, res) {
 // -------------------------------------------------------------------------
 exports.actioned = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
-	console.log ('message', req.message.user);
-	console.log ('usaer', req.user._id.toString ());
 	if (req.user._id.toString () !== req.message.user.toString ()) return sendError (res, 'Not owner of message');
 	req.message.actionTaken  = req.params.action
 	req.message.dateActioned = Date.now ();
@@ -391,7 +402,6 @@ exports.archiveold = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.send = function (req, res) {
-	console.log (req.user);
 	if (!~req.user.roles.indexOf ('admin')) return sendError (res, 'Only admin can send via REST');
 	req.body.users = req.body.users || [];
 	req.body.data  = req.body.data  || {};
@@ -405,7 +415,6 @@ exports.send = function (req, res) {
 //
 // -------------------------------------------------------------------------
 exports.emailRetry = function (req, res) {
-	console.log (req.user);
 	if (!~req.user.roles.indexOf ('admin')) return sendError (res, 'Only admin can send via REST');
 	query ({
 		emailSent : false,
@@ -419,7 +428,7 @@ exports.emailRetry = function (req, res) {
 	.then (function () { return {ok:true}; })
 	.then (resResults (res))
 	.catch (resError (res));
-}
+};
 // =========================================================================
 //
 // Message Templates CRUD

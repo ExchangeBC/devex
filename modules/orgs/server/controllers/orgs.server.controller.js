@@ -653,6 +653,7 @@ exports.addMeToOrg = function (req, res) {
 	Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
+	.then (function () { return org; })
 	.then (saveOrg (req, res));
 }
 // -------------------------------------------------------------------------

@@ -1,0 +1,188 @@
+<section class="edit-form-background" role="main">
+	<form name="qqq.templateForm" id="qqq.templateForm" warn-on-exit novalidate autocomplete="off">
+		<div class="edit-form">
+
+			<div class="edit-form-body">
+				<div class="row">
+					<div class="col-sm-12">
+						<form-input
+							class="col-sm-12"
+							ng-model="qqq.template.messageCd"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Template Code - no spaces please",
+								"id":"messageCd",
+								"name":"messageCd",
+								"placeholder":"a-nice-readable-code",
+								"required":"Must supply a template code"
+							}'>
+						</form-input>
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"id":"isSubscriptionType",
+								"name":"isSubscriptionType"
+							}'>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="qqq.template.isSubscriptionType" />
+										This template is a subscription type of message
+								</label>
+							</div>
+						</form-display>
+
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Message Body Template",
+								"id":"messageBodyTemplate",
+								"name":"messageBodyTemplate"
+							}'>
+							<textarea
+								name="messageBodyTemplate"
+								id="messageBodyTemplate"
+								class="form-control input-sm"
+								ui-tinymce="qqq.tinymceOptions"
+								placeholder="messageBodyTemplate"
+								ng-model="qqq.template.messageBodyTemplate">
+							</textarea>
+						</form-display>
+
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Message Teaser Template",
+								"id":"messageShortTemplate",
+								"name":"messageShortTemplate"
+							}'>
+							<textarea
+								name="messageShortTemplate"
+								id="messageShortTemplate"
+								class="form-control input-sm"
+								ui-tinymce="qqq.tinymceOptions"
+								placeholder="messageShortTemplate"
+								ng-model="qqq.template.messageShortTemplate">
+							</textarea>
+						</form-display>
+
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Message Title Template",
+								"id":"messageTitleTemplate",
+								"name":"messageTitleTemplate"
+							}'>
+							<textarea
+								name="messageTitleTemplate"
+								id="messageTitleTemplate"
+								class="form-control input-sm"
+								ui-tinymce="qqq.tinymceOptions"
+								placeholder="messageTitleTemplate"
+								ng-model="qqq.template.messageTitleTemplate">
+							</textarea>
+						</form-display>
+
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Email Body Template",
+								"id":"emailBodyTemplate",
+								"name":"emailBodyTemplate"
+							}'>
+							<textarea
+								name="emailBodyTemplate"
+								id="emailBodyTemplate"
+								class="form-control input-sm"
+								ui-tinymce="qqq.tinymceOptions"
+								placeholder="emailBodyTemplate"
+								ng-model="qqq.template.emailBodyTemplate">
+							</textarea>
+						</form-display>
+
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"title":"Email Subject Template",
+								"id":"emailSubjectTemplate",
+								"name":"emailSubjectTemplate"
+							}'>
+							<textarea
+								name="emailSubjectTemplate"
+								id="emailSubjectTemplate"
+								class="form-control input-sm"
+								ui-tinymce="qqq.tinymceOptions"
+								placeholder="emailSubjectTemplate"
+								ng-model="qqq.template.emailSubjectTemplate">
+							</textarea>
+						</form-display>
+
+						<form-input
+							class="col-sm-4"
+							ng-model="qqq.template.daysToArchive"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":Number of days until auto archive and default action chosen",
+								"id":"daysToArchive",
+								"name":"daysToArchive",
+								"placeholder":"14"
+							}'>
+						</form-input>
+
+						<form-display
+							class="col-sm-8"
+							x-options='{
+								"id":"flags",
+								"name":"flags"
+							}'>
+							<label class="label label-lg label-cap-default {{qqq.template.labelClass}}" ng-class={><i class="fa fa-circle"></i> {{qqq.template.name}}</label>
+							<label class="label">{{qqq.template.name}}</label>
+						</form-display>
+
+						<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
+						<!--
+						<form-display
+							class="col-sm-12"
+							x-options='{
+								"id":"flags",
+								"name":"flags"
+							}'>
+							<div class="checkbox">
+								<label>
+									<input type="checkbox" ng-model="qqq.template.isRequired" />
+										This template is required for companies to participate in the RFQ process
+								</label>
+								<br/>
+								<label>
+									<input type="checkbox" ng-model="qqq.template.isInception" />
+										This template is part of the inception phase
+								</label>
+								<br/>
+								<label>
+									<input type="checkbox" ng-model="qqq.template.isPrototype" />
+										This template is part of the prototype phase
+								</label>
+								<br/>
+								<label>
+									<input type="checkbox" ng-model="qqq.template.isImplementation" />
+										This template is part of the implementation phase
+								</label>
+							</div>
+						</form-display>
+						-->
+					</div>
+				</div>
+			</div>
+
+			<div class="edit-form-footer">
+				<div class="row form-foot text-right">
+					<button class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
+					<button class="btn btn-text-only" ui-sref="capabilities.view({templateId:qqq.template.code})"> Cancel</button>
+				<!--
+					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.templateForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
+				-->
+					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.templateForm.$valid, true)"><i class="fa fa-save"></i> Save &amp; Close</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</section>

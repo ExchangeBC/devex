@@ -1,0 +1,13 @@
+<section class="detail-page-background">
+	<div class="container detail-view" ng-if="vm.adding">
+		working ...
+	</div>
+	<div class="container detail-view" ng-if="!vm.adding">
+		<div ng-if="vm.isgood">
+			all good! you are added to the company
+		</div>
+		<div ng-if="!vm.isgood">
+			whoops, something went sideways
+		</div>
+	</div>
+</section>

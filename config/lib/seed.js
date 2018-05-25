@@ -120,6 +120,7 @@ function seedTestMessageTemplate () {
 	return Promise.all ([
 	    new T ({
 			messageCd            : 'add-user-to-company-request',
+			messageLevel         : 'request',
 			description          : 'Ask the user whether they agree to be added to this company' ,
 			isSubscriptionType   : false,
 			messageBodyTemplate  : '<p>Hi {{user.name}}</p><br/>Whazzup about company {{org.name}}?',
@@ -136,17 +137,18 @@ function seedTestMessageTemplate () {
 			},{
 				actionCd      : 'accept',
 				linkTitleTemplate : 'Accept',
-				linkTemplate  : '{{domain}}/accept/{{org._id}}'
+				linkTemplate  : '/orgs/{{org._id}}/m/{{messageid}}'
 			}]
 		}),
 		new T ({
 			messageCd            : 'invitation-from-company',
+			messageLevel         : 'request',
 			description          : 'Does the user want to sign up to devex, invited by company' ,
 			isSubscriptionType   : false,
 			messageBodyTemplate  : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
-			messageShortTemplate : 'company {{org.name}} wants you join devex',
+			messageShortTemplate : 'company {{org.name}} wants you join devex and hopefully join their company',
 			messageTitleTemplate : 'company {{org.name}} wants you join devex',
-			emailBodyTemplate    : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
+			emailBodyTemplate    : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a> and join them in doing great work!</p>',
 			emailSubjectTemplate : 'company {{org.name}} wants you join devex',
 			modelsRequired       : ['org'],
 			daysToArchive        : 7,
@@ -157,28 +159,7 @@ function seedTestMessageTemplate () {
 			},{
 				actionCd      : 'accept',
 				linkTitleTemplate : 'Accept',
-				linkTemplate  : '{{domain}}/accept/{{org._id}}'
-			}]
-		}),
-		new T ({
-			messageCd            : 'invitation-to-devex',
-			description          : 'Ask person to sign up to devex' ,
-			isSubscriptionType   : false,
-			messageBodyTemplate  : '<p>Hi there</p><br/>Sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
-			messageShortTemplate : 'we wants you dude!',
-			messageTitleTemplate : 'we?',
-			emailBodyTemplate    : 'we wants you dude!',
-			emailSubjectTemplate : 'we',
-			modelsRequired       : ['org'],
-			daysToArchive        : 7,
-			actions              : [{
-				actionCd      : 'decline',
-				linkTitleTemplate : 'Decline',
-				isDefault     : true
-			},{
-				actionCd      : 'accept',
-				linkTitleTemplate : 'Accept',
-				linkTemplate  : '{{domain}}/accept/{{org._id}}'
+				linkTemplate  : '/orgs/{{org._id}}/m/{{messageid}}'
 			}]
 		})
 	].map (saveT));

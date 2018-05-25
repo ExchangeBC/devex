@@ -13,12 +13,13 @@
 
 	<div class="container">
 		<div class="card" ng-class="{'card-greyed': !message.isOpen}" ng-repeat="message in vm.messages | orderBy:'dateSent':false">
-			<div class="card-body" >
-				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)" id="messages.view" ui-sref="messages.view({ messageId: message._id })"></div>
+			<div class="card-body" ng-if="!message.isArchived" id="messages.view" ui-sref="messages.view({ messageId: message._id })">
+				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)"></div>
 				<div class="card-teaser" ng-bind-html="vm.trust(message.messageShort)"></div>
-				<div class="btn-group text-right" ng-if="!message.isArchived">
-					<button class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{vm.trust(action.linkTitle)}}</button>
-				</div>
+			</div>
+			<div class="card-body" ng-if="message.isArchived" id="messages.view" ui-sref="messages.view({ messageId: message._id })">
+				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)"></div>
+				<div class="card-teaser" ng-bind-html="vm.trust(message.messageShort)"></div>
 				<div ng-if="message.isArchived">
 					Action Taken: <button class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-if="action.actionCd === message.actionTaken">{{vm.trust(action.linkTitle)}}</button>
 				</div>

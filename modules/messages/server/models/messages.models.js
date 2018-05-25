@@ -57,6 +57,7 @@ mongoose.model ('MessageTemplate', new mongoose.Schema ({
 // -------------------------------------------------------------------------
 mongoose.model ('Message', new mongoose.Schema ({
 	messageCd    : { type : String,     default : ''},
+	messageLevel : { type : String,     default : 'info', enum:['info', 'request', 'alert']},
 	user         : { type : 'ObjectId', default: null, ref: 'User' },
 	userEmail    : { type : String,     default : '' },
 	messageBody  : { type : String,     default : '' },

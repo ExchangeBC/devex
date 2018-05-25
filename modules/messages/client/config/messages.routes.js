@@ -19,7 +19,7 @@
 			data         : { pageTitle: 'Message Templates List' },
 			resolve      : {
 				templates: function (MessageTemplatesService) {
-					return MessageTemplatesService.query ();
+					return MessageTemplatesService.query ().$promise;
 				}
 			},
 			controllerAs : 'vm',
@@ -33,10 +33,10 @@
 				template: function (MessageTemplatesService, $stateParams) {
 					return MessageTemplatesService.get ({
 						templateId: $stateParams.templateId
-					});
+					}).$promise;
 				}
 			},
-			controllerAs : 'vm',
+			controllerAs : 'qqq',
 			controller   : 'MessageTemplateViewController'
 		})
 		// -------------------------------------------------------------------------
@@ -58,7 +58,7 @@
 			url          : '/:templateId/edit',
 			templateUrl  : '/modules/messages/client/views/message-template-edit.html',
 			controller   : 'MessageTemplateEditController',
-			controllerAs : 'vm',
+			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
 				template: function ($stateParams, MessageTemplatesService) {
@@ -81,7 +81,7 @@
 			url          : '/create',
 			templateUrl  : '/modules/messages/client/views/message-template-edit.html',
 			controller   : 'MessageTemplateEditController',
-			controllerAs : 'vm',
+			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
 				template: function (MessageTemplatesService) {
@@ -92,6 +92,30 @@
 				roles: ['admin', 'gov'],
 				pageTitle: 'New Superbasic'
 			}
+		})
+		// -------------------------------------------------------------------------
+		//
+		// viewing an actual message
+		//
+		// -------------------------------------------------------------------------
+		.state ('messages', {
+			abstract : true,
+			url      : '/messages',
+			template : '<ui-view/>'
+		})
+		.state ('messages.view', {
+			url          : '/:messageId',
+			templateUrl  : '/modules/messages/client/views/message-view.html',
+			data         : { pageTitle: 'Message View' },
+			resolve      : {
+				message: function (MessagesService, $stateParams) {
+					return MessagesService.get ({
+						messageId: $stateParams.messageId
+					}).$promise;
+				}
+			},
+			controllerAs : 'vm',
+			controller   : 'MessageViewController'
 		})
 		;
 	}]);

@@ -14,6 +14,8 @@ var _ = require('lodash'),
 	validator = require('validator'),
 	orgController = require(path.resolve('./modules/orgs/server/controllers/orgs.server.controller')),
 	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier
+	claimMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).claimMessages,
+	//
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
 	;
 
@@ -83,9 +85,10 @@ exports.update = function (req, res) {
 	console.log (user.orgsMember);
 	if (user) {
 		// Update whitelisted fields only
+		var isClaimMessages = (!user.email && req.body.email);
 
 		user = _.extend(user, _.pick(req.body, whitelistedFields));
-
+		user.email = user.email.toLowerCase ();
 		// Previous state of user
 		//
 		// this deals with marking the user as government or not
@@ -108,6 +111,7 @@ exports.update = function (req, res) {
 						message: errorHandler.getErrorMessage(err)
 					});
 				} else {
+					if (isClaimMessages) claimMessages (user);
 					updateOrgs (user.orgsMember);
 					req.login(user, function (err) {
 						if (err) {
