@@ -278,29 +278,28 @@ h1.capability-detail {
   padding: 1em 0;
   > step {
     display: inline-block;
+    padding: 9px 0;
+    margin-bottom: 5px;
     font-size: .9em;
     > icon {
-        position: relative;
-        z-index: 2;
-        background: #fff;
-        border: 4px solid #222;
-        padding: 2px 3px;
-        border-radius: 18px;
+        color: #fff;
+        background: #333;
+        border: 4px solid #333;
+        border-radius: 50%;
+        padding: 4px 8px;
+        text-align: center;
+        font: 13px Arial, sans-serif;
+        font-weight: bold;
+        margin: 0 2px 0 6px;
     }
     > step-name {
       position: relative;
       z-index: 0;
-      color: #fff;
-      background: #222;
-      padding: 6px 32px 6px 24px;
-      margin-left: -20px;
-      border-radius: 18px 18px 18px 18px;
-    }
+      margin-right: 20px;}
   }
   > step.active {
-    box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
-    > icon {
-      padding: 2px 8px;
+    > step-name {
+      font-weight: bold;
     }
   }
   > step.disabled {
@@ -308,8 +307,7 @@ h1.capability-detail {
       opacity: .2;
     }
     > icon {
-      color: #bbb;
-      border-color: #bbb;
+      opacity: .1;
     }
   }
   > step.complete {
@@ -317,8 +315,7 @@ h1.capability-detail {
       opacity: .2;
     }
     > icon {
-      color: #bbb;
-      border-color: #bbb;
+      opacity: .1;
     }      
   }
 }
