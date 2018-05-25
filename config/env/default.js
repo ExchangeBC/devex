@@ -62,7 +62,7 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'teamscenario': {
-			path: 'public/team-scenario-rules-2018-05-14.pdf',
+			path: 'public/team-scenario-rules-2018-05-25.pdf',
 			name: 'team-scenario.pdf',
 			type: 'application/pdf'
 		}
