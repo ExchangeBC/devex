@@ -414,24 +414,21 @@
 		}
 		// -------------------------------------------------------------------------
 		//
-		// Calculates rankings so that top 4 companies can be screened in - assumes the proposal are sorted by current score
+		// Calculates rankings so that top 4 companies can be screened in - assumes the proposal are already sorted by current score
+		//
+		// * Teams that tie in points are considered to be in the same position
+		// * The highest scoring team following a tie will be considered to be in the position relative to the other teams
+		// * (If two teams tie for 1st, the next team will be in 3rd)
 		//
 		// -------------------------------------------------------------------------
 		vm.calculateRankings = function () {
-			var currentRanking = 1;
+			var currentRanking = 0;
 			var prevScore;
 			vm.proposals.forEach(function(proposal) {
-				if (prevScore && prevScore > proposal.scores.total) {
-					currentRanking++;
-				}
-				proposal.ranking = currentRanking;
-				if (proposal.ranking > 4) {
-					proposal.screenedIn = false;
-				}
-				else {
-					proposal.screenedIn = true;
-				}
+				currentRanking++;
+				proposal.ranking = (proposal.scores.total === prevScore) ? currentRanking -1 : currentRanking;
 				prevScore = proposal.scores.total;
+				proposal.ranking > 4 ? proposal.screenedIn = false : proposal.screenedIn = true;
 			})
 		}
 		// -------------------------------------------------------------------------
