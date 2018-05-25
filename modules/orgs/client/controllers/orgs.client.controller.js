@@ -36,6 +36,27 @@
 		// what can the user do here?
 		//
 	})
+	// -------------------------------------------------------------------------
+	//
+	// user adds themselves to an org
+	//
+	// -------------------------------------------------------------------------
+	.controller('OrgAddSelfController', function ($scope, $state, $sce, org, OrgsService) {
+		var vm = this;
+		vm.adding = true;
+		vm.isgood = true;
+		if (org) {
+			OrgsService.addMeToOrg ({orgId:org._id}).$promise
+			.then (function () {
+				vm.adding = false;
+				vm.isgood = true;
+			})
+			.catch (function () {
+				vm.adding = false;
+				vm.isgood = false;
+			});
+		}
+	})
 	// =========================================================================
 	//
 	// create a new org
@@ -347,6 +368,7 @@
 					templateUrl: '/modules/orgs/client/views/org-members-results.html',
 					controller: function ($scope, $uibModalInstance) {
 						$scope.data = {
+							messagesFeature : window.features.messages,
 							found    : result.emaillist.found,
 							notfound : result.emaillist.notfound
 						};

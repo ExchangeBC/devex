@@ -26,6 +26,11 @@
 				method: 'GET',
 				url: '/api/orgs/:orgId/user/:userId/remove',
 				isArray: false
+			},
+			addMeToOrg: {
+				method: 'GET',
+				url: '/api/addmeto/org/:orgId',
+				isArray: false
 			}
 		});
 		angular.extend (Org.prototype, {

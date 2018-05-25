@@ -123,23 +123,31 @@ module.exports.initViewEngine = function (app) {
  */
 module.exports.initSession = function (app, db) {
   // Express MongoDB session storage
-  app.use(session({
-    saveUninitialized: true,
-    resave: false,
-    unset: 'destroy',
-    secret: config.sessionSecret,
-    cookie: {
-      // maxAge: config.sessionCookie.maxAge,
-      httpOnly: config.sessionCookie.httpOnly,
-      secure: config.sessionCookie.secure && config.secure.ssl
-    },
-    name: config.sessionKey
-    // Removed this for now, as it was causing sessions to persist after browsers were closed.  Re-enable to have sessions persist in the database.
-    // store: new MongoStore({
-    //   mongooseConnection: db.connection,
-    //   collection: config.sessionCollection
-    // })
-  }));
+  //
+  // CC : modified so that session persists in development
+  // an on localhost - makes testing easier - still remove
+  // stored session for production, which would mean all
+  // uses of openshift
+  //
+  var sessionParameters = {
+    saveUninitialized : true,
+    resave            : false,
+    unset             : 'destroy',
+    secret            : config.sessionSecret,
+    name              : config.sessionKey,
+    cookie            : {
+      httpOnly : config.sessionCookie.httpOnly,
+      secure   : config.sessionCookie.secure && config.secure.ssl
+    }
+  }
+  if (config.app.domain === 'http://localhost:3030' || process.env.NODE_ENV === 'development') {
+    sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
+    sessionParameters.store = new MongoStore ({
+      mongooseConnection : db.connection,
+      collection         : config.sessionCollection
+    });
+  }
+  app.use(session(sessionParameters));
 
   // Add Lusca CSRF Middleware
   app.use(lusca(config.csrf));

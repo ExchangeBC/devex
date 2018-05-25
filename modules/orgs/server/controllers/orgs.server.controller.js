@@ -30,6 +30,7 @@ var path = require('path'),
 	Capability = mongoose.model('Capability'),
 	Proposal = mongoose.model('Proposal'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
@@ -379,7 +380,37 @@ var removeAdmin = function (user, org) {
 // list of orgs the user is a member of
 //
 // -------------------------------------------------------------------------
-var inviteMembers = function (emaillist, org) {
+var inviteMembersWithMessages = function (emaillist, org) {
+	var list = {
+		found    : [],
+		notfound : []
+	};
+	if (!emaillist) return Promise.resolve (list);
+	//
+	// flatten out the members and admins arrays so that later on the
+	// addToSet function truly works on duplicates
+	//
+	org.admins = org.admins.map (function (obj) {return obj.id;});
+	org.members = org.members.map (function (obj) {return obj.id;});
+	return getUsers ({email : {$in : emaillist}})
+	.then (function (users) {
+		if (users) {
+			list.found = users;
+			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
+			emaillist.forEach (function (email) {
+				if (!usersIndex[email]) list.notfound.push ({email:email});
+			});
+		}
+	})
+	.then (function () {
+		sendMessages ('add-user-to-company-request', list.found, {org:org});
+		sendMessages ('invitation-from-company', list.notfound, {org:org});
+	})
+	.then (function () {
+		return Promise.resolve (list);
+	});
+};
+var inviteMembersWithNotification = function (emaillist, org) {
 	var list = {
 		found    : [],
 		notfound : []
@@ -407,6 +438,10 @@ var inviteMembers = function (emaillist, org) {
 		return Promise.resolve (list);
 	});
 };
+var inviteMembers = function (emaillist, org) {
+	if (config.feature.messages) return inviteMembersWithMessages (emaillist, org);
+	else return inviteMembersWithNotification (emaillist, org);
+}
 
 exports.removeUserFromMemberList = function (req, res) {
 	removeMember (req.profile, req.org)
@@ -607,7 +642,20 @@ exports.myadmin = function (req, res) {
 		}
 	});
 };
-
+// -------------------------------------------------------------------------
+//
+// add the current user to the passed in org
+//
+// -------------------------------------------------------------------------
+exports.addMeToOrg = function (req, res) {
+	var org = req.org;
+	var user = req.user;
+	Promise.resolve (user)
+	.then (addUserTo (org, 'members'))
+	.then (saveUser)
+	.then (function () { return org; })
+	.then (saveOrg (req, res));
+}
 // -------------------------------------------------------------------------
 //
 // magic that populates the org on the request
