@@ -102,7 +102,7 @@ exports.stats = function (req, res) {
 	Notifications.countFollowingOpportunity (op.code)
 	.then (function (result) {
 		ret.following = result;
-		ret.submitting = 0;
+		ret.submitted = 0;
 		ret.draft = 0;
 		return countStatus (op._id);
 	})
@@ -111,8 +111,8 @@ exports.stats = function (req, res) {
 			if (doc) {
 				ret[doc._id.toLowerCase()] = doc.count;
 			}
-			res.json(ret);
 		});
+		res.json(ret);
 	})
 	.catch (function (err) {
 		res.status(422).send ({
