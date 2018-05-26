@@ -405,6 +405,9 @@ var inviteMembersWithMessages = function (emaillist, org) {
 	.then (function () {
 		sendMessages ('add-user-to-company-request', list.found, {org:org});
 		sendMessages ('invitation-from-company', list.notfound, {org:org});
+
+		// record non-registered users with org, so that only those members are able to self-add
+		org.invited = list.notfound.map(function(entry) { return entry.email; });
 	})
 	.then (function () {
 		return Promise.resolve (list);
@@ -650,11 +653,15 @@ exports.myadmin = function (req, res) {
 exports.addMeToOrg = function (req, res) {
 	var org = req.org;
 	var user = req.user;
-	Promise.resolve (user)
-	.then (addUserTo (org, 'members'))
-	.then (saveUser)
-	.then (function () { return org; })
-	.then (saveOrg (req, res));
+	var orgO = org.toObject();
+	var userO = user.toObject();
+	if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
+		Promise.resolve (user)
+		.then (addUserTo (org, 'members'))
+		.then (saveUser)
+		.then (function () { return org; })
+		.then (saveOrg (req, res));
+	}
 }
 // -------------------------------------------------------------------------
 //
