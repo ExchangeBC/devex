@@ -390,7 +390,12 @@
 						});
 					};
 					$scope.commit = function () {
-						$uibModalInstance.close('commit');
+						var q = 'Are you sure you wish to commmit this ranking session? Ensure you have completed ranking all questions.  This action cannot be undone.';
+						ask.yesNo (q).then (function (r) {
+							if (r) {
+								$uibModalInstance.close('commit');
+							}
+						});
 					}
 				}
 			}, {
