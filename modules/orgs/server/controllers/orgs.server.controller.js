@@ -406,8 +406,17 @@ var inviteMembersWithMessages = function (emaillist, org) {
 		sendMessages ('add-user-to-company-request', list.found, {org:org});
 		sendMessages ('invitation-from-company', list.notfound, {org:org});
 
-		// record non-registered users with org, so that only those members are able to self-add
-		org.invited = list.notfound.map(function(entry) { return entry.email; });
+		// record users so that they have 'permission' to self add
+		if (!org.invited) {
+			org.invited = [];
+		}
+		list.notfound.forEach(function(entry) {
+			org.invited.push(entry.email);
+		});
+
+		list.found.forEach(function(entry) {
+			org.invited.push(entry.email);
+		});
 	})
 	.then (function () {
 		return Promise.resolve (list);
