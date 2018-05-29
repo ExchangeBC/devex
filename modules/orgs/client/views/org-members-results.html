@@ -1,7 +1,7 @@
 <div class="modal-header">
 	<div class="row">
 		<div class="col-xs-12">
-			<h3>Add Member Results</h3>
+			<div class="modal-title">Add Member Results<button class="btn btn-text-only pull-right"><i data-ng-click="close()" class="fa fa-2x fa-times"></i></button></div>
 		</div>
 	</div>
 </div>
@@ -32,6 +32,26 @@
 					<p class="strong" ng-repeat="p in data.notfound | orderBy:'email'" >
 						{{p.email}}
 					</p>
+					<div class="alert alert-info">
+						<h4>What to do</h4>
+						<p>Ask people you want to add to make sure they:
+							<ol>
+								<li><strong>Sign in</strong> to the BCDevExchange with their GitHub credentials</li>
+								<li><strong>Claim the capabilities</strong> they possess (in the <strong>My Capabilities &amp; Skills</strong> tab in their Profile)</li>
+								<li>Confirm the email address that's associated with their Profile (in the <strong>Privacy and Notifications</strong> tab)</li>
+							</ol>
+						</p>
+					</div>
+					<div class="alert alert-info">
+						<h4>What to do</h4>
+						<p>Ask people you want to add to make sure they:
+							<ol>
+								<li><strong>Sign in</strong> to the BCDevExchange with their GitHub credentials</li>
+								<li><strong>Claim the capabilities</strong> they possess (in the <strong>My Capabilities &amp; Skills</strong> tab in their Profile)</li>
+								<li>Confirm the email address that's associated with their Profile (in the <strong>Privacy and Notifications</strong> tab)</li>
+							</ol>
+						</p>
+					</div>
 					<div class="alert alert-info">
 						<h4>What to do</h4>
 						<p>Ask people you want to add to make sure they:
@@ -90,5 +110,5 @@
 	</div>
 </div>
 <div class="modal-footer text-right">
-	<button class="btn btn-primary" data-ng-click="close()">Close</button>
+	<button class="btn btn-primary" data-ng-click="close()">OK</button>
 </div>

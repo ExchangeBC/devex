@@ -1,144 +1,135 @@
-<section class="edit-form-background" role="main">
-
-	<form id="proposalform" name="ppp.form.proposalform" class="form" novalidate>
-
-		<div class="edit-form">
-
-			<div class="edit-form-header">
-				<div class="row">
-					<div class="col-xs-12">
-						<h4>
-							<a class="btn btn-text-only pull-right" data-ng-click="close()" title="Close" aria-label="Close"><i class="fa fa-times"></i> CLOSE</a>
-							&nbsp; <span class="light small">PROPOSAL FROM:</span>
-							{{data.proposal.businessName}}
-						</h4>
-					</div>
-				</div>
-			</div>
-
-			<div class="row">
-				<uib-tabset active>
-					<uib-tab index="0">
-						<uib-tab-heading>
-							<i class="fa fa-group"></i> Company
-						</uib-tab-heading>
-						<div class="proposal-form-container">
-							<h4>Company Information</h4>
-							<div class="form-group" show-errors>
-								<label for="businessName">Legal Name of Company</label>
-								<input  disabled="true" type="text" id="businessName" name="businessName" class="form-control" ng-model="data.proposal.businessName" placeholder="Legal Name">
-							</div>
-							<div class="form-group" show-errors>
-								<label for="businessAddress">Company Mailing Address</label>
-								<input  disabled="true" type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="data.proposal.businessAddress" placeholder="Company Mailing Address">
-							</div>
-							<div class="form-group" show-errors>
-								<label for="businessContactName">Contact Name</label>
-								<input  disabled="true" type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="data.proposal.businessContactName" placeholder="Contact Name">
-							</div>
-							<div class="form-group" show-errors>
-								<label for="businessContactPhone">Contact Phone</label>
-								<input disabled="true"  type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="data.proposal.businessContactPhone" placeholder="Contact Phone">
-							</div>
-							<div class="form-group" show-errors>
-								<label for="businessContactEmail">Contact Email</label>
-								<input  disabled="true" type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="data.proposal.businessContactEmail" placeholder="Contact Email" lowercase>
-							</div>
-						</div>
-					</uib-tab>
-
-					<uib-tab index="1">
-						<uib-tab-heading>
-							Team
-						</uib-tab-heading>
-						<div class="row">
-							<div class="col-xs-12 col-sm-4 text-center">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<i class="fa fa-map"></i> Inception
-									</div>
-									<div class="panel-body">
-										<ul>
-											<li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
-												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-											</li>
-										</ul>
-									</div>
-									<div class="panel-footer">
-										Price: <span class="strong">{{data.proposal.phases.inception.cost | currency}}</span>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-xs-12 col-sm-4 text-center">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<i class="fa fa-rocket"></i> Proof of Concept Phase
-									</div>
-									<div class="panel-body">
-										<ul>
-											<li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
-												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-											</li>
-										</ul>
-									</div>
-									<div class="panel-footer">
-										Price: <span class="strong">{{data.proposal.phases.proto.cost | currency}}</span>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-xs-12 col-sm-4 text-center">
-								<div class="panel panel-default">
-									<div class="panel-heading">
-										<i class="fa fa-gears"></i> Implementation Phase
-									</div>
-									<div class="panel-body">
-										<ul>
-											<li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-												<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-											</li>
-										</ul>
-									</div>
-									<div class="panel-footer">
-										Price: <span class="strong">{{data.proposal.phases.implementation.cost | currency}}</span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-sm-4 pull-right">
-								<h4 style="text-align: center;"><span class="light">Total Price:</span> {{data.proposal.phases.inception.cost + data.proposal.phases.proto.cost + data.proposal.phases.implementation.cost | currency}}</h4>
-							</div>
-						</div>
-
-					</uib-tab>
-
-					<uib-tab index="3" disable="!data.proposal._id">
-						<uib-tab-heading>
-							<i class="fa fa-file"></i> Attachments
-						</uib-tab-heading>
-						<div class="proposal-form-container text-right">
-							<table class="table table-striped">
-								<tr ng-repeat="file in data.proposal.attachments">
-									<td class=" text-right">
-										<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
-									</td>
-									<td class="text-left">
-										{{file.name}}
-									</td>
-									<td class=" text-left">
-										<a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</uib-tab>
-				</uib-tabset>
-			</div>
-
+<div class="modal-header">
+	<div class="row">
+		<div class="col-xs-12">
+			<button class="close"></button>
+			<div class="modal-title">{{data.proposal.businessName}}<button class="btn btn-lg btn-text-only pull-right" data-ng-click="close()"><i class="fa fa-times"></i></button></div>
 		</div>
-	</form>
+	</div>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-xs-12">
+			<dl class="dl-horizontal">
+				<dt>Company:</dt>
+				<dd>{{data.proposal.businessName}}<br>{{data.proposal.businessAddress}}</dd>
+				<dt>Contact:</dt>
+				<dd>{{data.proposal.businessContactName}}<br>{{data.proposal.businessContactPhone}}<br>{{data.proposal.businessContactEmail}}
+				</dd>
+			</dl>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 text-center">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-map"></i> Inception
+				</div>
+				<div class="panel-body">
+					<ul>
+						<li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
+							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+						</li>
+					</ul>
+				</div>
+			<!-- Hiding pricing in case we want to make it viewable later -->
+			<!--
+				<div class="panel-footer">
+					Price: <span class="strong">{{data.proposal.phases.inception.cost | currency}}</span>
+				</div>
+			-->
+			</div>
+		</div>
 
-</section>
+		<div class="col-xs-12 col-sm-4 text-center">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-rocket"></i> Proof of Concept
+				</div>
+				<div class="panel-body">
+					<ul>
+						<li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
+							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+						</li>
+					</ul>
+				</div>
+			<!-- Hiding pricing in case we want to make it viewable later -->
+			<!--
+				<div class="panel-footer">
+					Price: <span class="strong">{{data.proposal.phases.proto.cost | currency}}</span>
+				</div>
+			-->
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-4 text-center">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<i class="fa fa-gears"></i> Implementation
+				</div>
+				<div class="panel-body">
+					<ul>
+						<li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
+							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+						</li>
+					</ul>
+				</div>
+			<!-- Hiding pricing in case we want to make it viewable later -->
+			<!--
+				<div class="panel-footer">
+					Price: <span class="strong">{{data.proposal.phases.implementation.cost | currency}}</span>
+				</div>
+			-->
+			</div>
+		</div>
+	</div>
+	<!-- Hiding pricing in case we want to make it viewable later -->
+	<!--
+	<div class="row">
+		<div class="col-sm-4 pull-right">
+			<h4 style="text-align: center;"><span class="light">Total Price:</span> {{data.proposal.phases.inception.cost + data.proposal.phases.proto.cost + data.proposal.phases.implementation.cost | currency}}</h4>
+		</div>
+	</div>
+	-->
+	<hr>
+	<div class="row">
+		<div class="col-xs-12">
+			<h4>References</h4>
+			<table class="table table-striped">
+				<tr ng-repeat="file in data.proposal.attachments">
+					<td class=" text-right">
+						<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+					</td>
+					<td class="text-left">
+						{{file.name}}
+					</td>
+					<td class=" text-left">
+						<a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<hr>
+	<div class="row">
+		<div class="col-xs-12">
+			<h5>{{data.proposal.questions[0].question}}</h5>
+			{{data.proposal.questions[0].response}}<br>
+			<h5>{{data.proposal.questions[1].question}}</h5>
+			{{data.proposal.questions[1].response}}<br>
+			<h5>{{data.proposal.questions[2].question}}</h5>
+			{{data.proposal.questions[2].response}}<br>
+			<h5>{{data.proposal.questions[3].question}}</h5>
+			{{data.proposal.questions[3].response}}<br>
+			<h5>{{data.proposal.questions[4].question}}</h5>
+			{{data.proposal.questions[4].response}}
+		</div>
+	</div>
+</div> <!-- End of modal-body -->
+<div class="modal-footer">
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-default" data-ng-click="close()">Close</button>
+		</div>
+	</div>
+</div>
