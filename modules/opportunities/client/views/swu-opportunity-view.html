@@ -173,7 +173,7 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="proposal in vm.proposals | orderBy:'-scores.total'">
-								<td class="text-left">{{proposal.businessName}}</td>
+								<td class="text-left"><a href="">{{proposal.businessName}}</a></td>
 								<td class="text-center">{{proposal.scores.skill}}</td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.question}}</span></td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.skill + proposal.scores.question}}</span></td>
