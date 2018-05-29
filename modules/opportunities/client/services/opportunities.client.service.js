@@ -93,6 +93,14 @@
 			denyMember: {
 				method: 'GET',
 				url : '/api/opportunities/requests/deny/:opportunityId/:userId'
+			},
+			addWatch: {
+				method: 'GET',
+				url : '/api/opportunities/watch/add/:opportunityId'
+			},
+			removeWatch: {
+				method: 'GET',
+				url : '/api/opportunities/watch/remove/:opportunityId'
 			}
 		});
 		angular.extend (Opportunity.prototype, {
@@ -114,8 +122,42 @@
 	// functions
 	//
 	// -------------------------------------------------------------------------
-	.factory ('OpportunitiesCommon', function ($sce, Authentication) {
+	.factory ('OpportunitiesCommon', function ($sce, Authentication, OpportunitiesService) {
 		return {
+			// -------------------------------------------------------------------------
+			//
+			// check if the current user is currently watching this opportunity
+			//
+			// -------------------------------------------------------------------------
+			isWatchng : function (o) {
+				if (Authentication.user) return !!~o.watchers.indexOf (Authentication.user._id);
+				else return false;
+			},
+			// -------------------------------------------------------------------------
+			//
+			// add current user to the watchers list - this assumes that ths function could
+			// not be run except if the user was not already on the list
+			//
+			// -------------------------------------------------------------------------
+			addWatch : function (o) {
+				o.watchers.push (Authentication.user._id);
+				OpportunitiesService.addWatch ({
+					opportunityId: o._id;
+				});
+				return true;
+			},
+			// -------------------------------------------------------------------------
+			//
+			// remove the current user from the list
+			//
+			// -------------------------------------------------------------------------
+			removeWatch : function (o) {
+				o.watchers.splice (o.watchers.indexOf (Authentication.user._id), 1);
+				OpportunitiesService.addWatch ({
+					opportunityId: o._id;
+				});
+				return false;
+			},
 			// -------------------------------------------------------------------------
 			//
 			// publishStatus checks for whether or not fields are missing so we can

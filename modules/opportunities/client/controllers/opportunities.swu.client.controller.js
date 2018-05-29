@@ -97,6 +97,12 @@
 			}
 		});
 		//
+		// am I watchng?
+		//
+		vm.isWatching  = OpportunitiesCommon.isWatchng (vm.opportunity);
+		vm.addWatch    = function () {vm.isWatching = OpportunitiesCommon.addWatch (vm.opportunity);};
+		vm.removeWatch = function () {vm.isWatching = OpportunitiesCommon.removeWatch (vm.opportunity);};
+		//
 		// what can the user do here?
 		//
 		var isUser                 = Authentication.user;
