@@ -72,7 +72,7 @@ var ensureAdmin = function (opportunity, user) {
 };
 var countStatus = function (id) {
 	return new Promise (function (resolve, reject) {
-		Proposal.aggregate ([
+		var cursor = Proposal.aggregate ([
 			{
 				$match: {
 					opportunity: id
@@ -84,10 +84,9 @@ var countStatus = function (id) {
 					count: {$sum: 1}
 				}
 			}
-		], function (err, result) {
-			if (err) reject (err);
-			else resolve (result);
-		});
+		]).cursor({}).exec();
+
+		resolve( cursor );
 	});
 };
 // -------------------------------------------------------------------------
@@ -103,15 +102,17 @@ exports.stats = function (req, res) {
 	Notifications.countFollowingOpportunity (op.code)
 	.then (function (result) {
 		ret.following = result;
+		ret.submitted = 0;
+		ret.draft = 0;
 		return countStatus (op._id);
 	})
 	.then (function (result) {
-		for (var i=0; i<result.length; i++) {
-			ret[result[i]._id.toLowerCase()] = result[i].count;
-		}
-	})
-	.then (function () {
-		res.json (ret);
+		result.each(function(error, doc) {
+			if (doc) {
+				ret[doc._id.toLowerCase()] = doc.count;
+			}
+		});
+		res.json(ret);
 	})
 	.catch (function (err) {
 		res.status(422).send ({
@@ -471,7 +472,9 @@ exports.forOpportunity = function (req, res) {
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')
-	.populate('team')
+	.populate('phases.proto.team')
+	.populate('phases.inception.team')
+	.populate('phases.implementation.team')
 	.populate('user', userfields)
 	.exec(function (err, proposals) {
 		if (err) {

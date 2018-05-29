@@ -1,29 +1,27 @@
 <div class="modal-header">
-	<h3>Interview</h3>
+	<h3>Interview Scores</h3>
 </div>
 <div class="modal-body">
 	<div class="container">
 	<div class="row">
 		<div class="cols-md-12">
-			<p>Interview Modal, to be determined</p>
+			<p>Enter interview scores for each company listed below.</p>
 		</div>
 	</div>
 	<div class="row">
-			<form-input
-				class="col-sm-3"
-				ng-model="data.score"
-				x-options='{
-					"title":"Interview Score",
-					"id":"score",
-					"name":"score",
-					"placeholder":"Score"
-				}'>
-			</form-input>
+		<form name="scoreForm">
+			<table>
+				<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
+					<td><input class="scoreBox" name="input" type="number" min="0" max="25" ng-model="proposal.score"/></td>
+					<td>&nbsp;&nbsp;{{proposal.businessName}}</td>
+				</tr>
+			</table>
+		</form>
 	</div>
 	</div>
 </div>
 <div class="modal-footer">
-	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
-	<button class="btn btn-primary" data-ng-click="ok()">Save</button>
-	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
+	<span ng-show="scoreForm.$error.number || !scoreForm.$valid">Scores must be a number between 0 and 25</span>
+	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+	<button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()">Save</button>
 </div>

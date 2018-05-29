@@ -78,11 +78,15 @@ var ProposalSchema = new Schema ({
 	scores : {
 		skill           : {type: Number, default: 0},
 		question        : {type: Number, default: 0},
+		codechallenge	: {type: Number, default: 0},
 		interview       : {type: Number, default: 0},
 		price           : {type: Number, default: 0},
 		total           : {type: Number, default: 0}
 
 	},
+	ranking				: {type: Number, default: 0},
+	screenedIn			: {type: Boolean, default: false},
+	passedCodeChallenge	: {type: Boolean, default: false},
 	addendums			: {type: [AddendumSchema], default: []}
 }, { usePushEach: true });
 
