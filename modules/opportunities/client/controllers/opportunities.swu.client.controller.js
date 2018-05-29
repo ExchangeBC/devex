@@ -521,6 +521,24 @@
 		};
 		// -------------------------------------------------------------------------
 		//
+		// Company Info Modal
+		//
+		// -------------------------------------------------------------------------
+		vm.showCompanyInfo = function(proposal) {
+			modalService.showModal({
+				size: 'md',
+				templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
+				controller: function($scope, $uibModalInstance) {
+					$scope.data = {};
+					$scope.data.proposal = proposal;
+					$scope.close = function() {
+						$uibModalInstance.close({});
+					}
+				}
+			})
+		}
+		// -------------------------------------------------------------------------
+		//
 		// Interview Modal
 		//
 		// -------------------------------------------------------------------------

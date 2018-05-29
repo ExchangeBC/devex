@@ -472,7 +472,9 @@ exports.forOpportunity = function (req, res) {
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')
-	.populate('team')
+	.populate('phases.proto.team')
+	.populate('phases.inception.team')
+	.populate('phases.implementation.team')
 	.populate('user', userfields)
 	.exec(function (err, proposals) {
 		if (err) {
