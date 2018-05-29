@@ -62,7 +62,15 @@ module.exports = function(app) {
 		.get(opportunities.new);
 
 	app.route('/api/request/opportunity/:opportunityId')
-		.get(opportunities.request)
+		.get(opportunities.request);
+
+	//
+	// allow users to watch or unwatch opportunities
+	//
+	app.route('/api/opportunities/watch/add/:opportunityId')
+		.get(opportunities.addWatch);
+	app.route('/api/opportunities/watch/remove/:opportunityId')
+		.get(opportunities.removeWatch);
 
 
 	// Finish by binding the Opportunity middleware
