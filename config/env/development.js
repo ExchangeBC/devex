@@ -22,7 +22,7 @@ module.exports = {
     fileLogger: {
       directoryPath: process.cwd(),
       fileName: 'app.log',
-      maxsize: 10485760,
+      maxsize: 10*1024*1024,
       maxFiles: 2,
       json: false
     }
