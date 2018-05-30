@@ -56,6 +56,9 @@ module.exports = function(app) {
 	app.route ('/api/proposals/archive/opportunity/:opportunityId')
 		.get (proposals.downloadArchive);
 
+	app.route ('/api/proposals/export/opportunity/:opportunityId')
+		.get (proposals.downloadSWUProposal);
+
 	app.route ('/api/proposals/download/terms/:version')
 		.get (proposals.downloadTerms);
 
