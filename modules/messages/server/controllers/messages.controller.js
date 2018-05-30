@@ -7,6 +7,7 @@
 //
 // =========================================================================
 var mongoose        = require ('mongoose');
+var User            = mongoose.model ('User');
 var Message         = mongoose.model ('Message');
 var MessageTemplate = mongoose.model ('MessageTemplate');
 var MessageArchive  = mongoose.model ('MessageArchive');
@@ -19,6 +20,7 @@ var nodemailer      = require('nodemailer');
 var smtpTransport   = nodemailer.createTransport (config.mailer.options);
 var chalk           = require('chalk');
 var helpers         = require(path.resolve('./modules/core/server/controllers/core.server.helpers'));
+var _               = require ('lodash');
 
 // =========================================================================
 //
@@ -123,6 +125,19 @@ var sendmail = function (message) {
 		message.emailRetries = message.emailRetries+1;
 		message.emails.push (result);
 		resolve (message);
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get a user from an id
+//
+// -------------------------------------------------------------------------
+var getUser = function (userid) {
+	return new Promise (function (resolve, reject) {
+		User.findById (userid, '_id firstName lastName displayName email username').exec (function (err, user) {
+			if (err) reject (err);
+			else resolve (user);
+		});
 	});
 };
 // -------------------------------------------------------------------------
@@ -235,6 +250,7 @@ var sendMessage = function (template, user, email, data) {
 //
 // -------------------------------------------------------------------------
 exports.sendMessages = function (messageCd, users, data) {
+	if (users.length === 0) return;
 	//
 	// ensure the domain is set properly
 	//
@@ -257,13 +273,30 @@ exports.sendMessages = function (messageCd, users, data) {
 				action.link      = handlebars.compile(action.linkTemplate);
 				action.linkTitle = handlebars.compile(action.linkTitleTemplate);
 			});
+			var promise;
 			//
-			// send messages to each user
+			// if this is a list of userids
 			//
-			Promise.all (users.map (function (user) {
-				return sendMessage (template, user, user.email, data);
-			}))
-			.then (resolve, reject);
+			if (mongoose.Types.ObjectId.isValid (users[0])) {
+				promise = Promise.all (users.map (function (userid) {
+					return getUser (userid)
+					.then (function (user) {
+						return sendMessage (template, user, user.email, data);
+					});
+				}));
+			}
+			//
+			// or it is a list of user objects already
+			//
+			else {
+				promise = Promise.all (users.map (function (user) {
+					return sendMessage (template, user, user.email, data);
+				}));
+			}
+			//
+			// do it
+			//
+			promise.then (resolve, reject);
 		});
 	});
 };

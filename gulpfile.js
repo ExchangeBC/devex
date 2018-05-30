@@ -341,38 +341,38 @@ gulp.task('mocha', function (done) {
 // it will subscribe the user to notifyBC and save the subscriptionOpportunitiesId
 // to its model
 //
-gulp.task('updateNotifyBC', function (done) {
-  // Open mongoose connections
-  var mg = require('./config/lib/mongoose.js');
-  var mongoose = require('mongoose');
-  mg.loadModels();
-  var subscriptionHandler = require(path.resolve('./modules/users/server/controllers/users.server.controller.js')).subscriptionHandler
-  var subscriptions = [];
-  mongoose.Promise = Promise;
-  // Connect mg
-  mg.connect(function () {
-    var User = mongoose.model('User');
-    var promise = User.find({notifyOpportunities: true}).exec()
+// gulp.task('updateNotifyBC', function (done) {
+//   // Open mongoose connections
+//   var mg = require('./config/lib/mongoose.js');
+//   var mongoose = require('mongoose');
+//   mg.loadModels();
+//   var subscriptionHandler = require(path.resolve('./modules/users/server/controllers/users.server.controller.js')).subscriptionHandler
+//   var subscriptions = [];
+//   mongoose.Promise = Promise;
+//   // Connect mg
+//   mg.connect(function () {
+//     var User = mongoose.model('User');
+//     var promise = User.find({notifyOpportunities: true}).exec()
 
-    promise.then(function(records) {
-      for (var i = 0; i < records.length; i++) {
-        var user = records[i];
-        var promise = subscriptionHandler(user, {})
-          .then(function() {
-            return user.save();
-          });
-        subscriptions.push(promise);
-      }
-      return Promise.all(subscriptions)
-    })
-    .then(function() {
-        console.log('disconnecting');
-        mg.disconnect(function () {
-          done();
-        });
-    });
-  });
-});
+//     promise.then(function(records) {
+//       for (var i = 0; i < records.length; i++) {
+//         var user = records[i];
+//         var promise = subscriptionHandler(user, {})
+//           .then(function() {
+//             return user.save();
+//           });
+//         subscriptions.push(promise);
+//       }
+//       return Promise.all(subscriptions)
+//     })
+//     .then(function() {
+//         console.log('disconnecting');
+//         mg.disconnect(function () {
+//           done();
+//         });
+//     });
+//   });
+// });
 
 //
 // This task will update the lastPublished field to the current

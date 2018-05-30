@@ -11,6 +11,7 @@
 		var Payload = $resource('/api/messages/:messageId', {
 			messageId: '@_id'
 		}, {
+			update: {method: 'PUT'},
 			my: {
 				method: 'GET',
 				url: '/api/my/messages',
@@ -49,11 +50,11 @@
 		});
 		angular.extend (Payload.prototype, {
 			createOrUpdate: function () {
-				var resource = this;
-				if (resource._id) {
-					return resource.$update (function () {}, function (e) {$log.error (e.data);});
+				var message = this;
+				if (message._id) {
+					return message.$update (function () {}, function (e) {$log.error (e.data);});
 				} else {
-					return resource.$save (function () {}, function (e) {$log.error (e.data);});
+					return message.$save (function () {}, function (e) {$log.error (e.data);});
 				}
 			}
 		});
@@ -67,14 +68,15 @@
 	.factory('MessageTemplatesService', function ($resource, $log) {
 		var Payload = $resource('/api/messagetemplates/:templateId', {
 			templateId: '@_id'
-		});
+		}, {update: {method: 'PUT'}});
 		angular.extend (Payload.prototype, {
 			createOrUpdate: function () {
-				var resource = this;
-				if (resource._id) {
-					return resource.$update (function () {}, function (e) {$log.error (e.data);});
+				console.log ('message temaplte = ', this);
+				var messagetemplate = this;
+				if (messagetemplate._id) {
+					return messagetemplate.$update (function () {}, function (e) {$log.error (e.data);});
 				} else {
-					return resource.$save (function () {}, function (e) {$log.error (e.data);});
+					return messagetemplate.$save (function () {}, function (e) {$log.error (e.data);});
 				}
 			}
 		});

@@ -27,11 +27,20 @@
 
 			<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 			<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
+
+			<label class="label label-watching pull-right" ng-if="vm.isUser">
+				<button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to notify me when new Opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not Listening for new Opportunities</button>
+				<button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to no longer notify me when new Opportunities are posted"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new Opportunities</button>
+			</label>
+
+
 		</div>
 	</div>
-	
+
 	<div class="container">
 		<div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
+
+			{{opportunity.isWatching=vm.isWatching(opportunity);""}}
 
 			<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
 					<label class="label label-default" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> Unpublished</label>
@@ -47,16 +56,21 @@
 				<div class="label-list">
 					<label class="label label-swu" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Sprint With Us</label>
 					<label class="label label-price" ng-if="opportunity.opportunityTypeCd==='code-with-us'"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
-					
+
 					<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
 					<label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label>
 
+					<label class="label label-watching pull-right" ng-if="vm.isUser">
+						<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>
+						<button class="button-watching" ng-if="opportunity.isWatching" ng-click="vm.removeWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg text-primary"></i></button>
+					</label>
+
 					<!--
 					<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
 				-->
-					
-					<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}} 
+
+					<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}}
 						<span class="gray-light" ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
 						<span class="gray-light" ng-if="opportunity.onsite == 'onsite'">In-person work required</span>
 						<span class="gray-light" ng-if="opportunity.onsite == 'mixed'">Some in-person work required</span>
@@ -70,7 +84,7 @@
 			<div class="card-body" ng-if="opportunity.opportunityTypeCd==='code-with-us'" id="opportunities.view" ui-sref="opportunities.viewcwu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 				<div class="label-list">
 					<label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label>
-					
+
 					<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
 					<label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label>
@@ -78,9 +92,13 @@
 					<!--
 					<label class="label label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span class="light">Closing in:</span><span class="danger"> {{vm.closing(opportunity)}}</span></label>
 					-->
-					
+					<label class="label label-watching pull-right" ng-if="vm.isUser">
+						<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>
+						<button class="button-watching" ng-if="opportunity.isWatching" ng-click="vm.removeWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg text-primary"></i></button>
+					</label>
+
 					<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Team Required </label>
-					<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}} 
+					<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}}
 						<span class="gray-light" ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
 						<span class="gray-light" ng-if="opportunity.onsite == 'onsite'">In-person work required</span>
 						<span class="gray-light" ng-if="opportunity.onsite == 'mixed'">Some in-person work required</span>

@@ -122,7 +122,7 @@
 	// functions
 	//
 	// -------------------------------------------------------------------------
-	.factory ('OpportunitiesCommon', function ($sce, Authentication, OpportunitiesService) {
+	.factory ('OpportunitiesCommon', function ($sce, Authentication, OpportunitiesService, Notification) {
 		return {
 			// -------------------------------------------------------------------------
 			//
@@ -142,8 +142,9 @@
 			addWatch : function (o) {
 				o.watchers.push (Authentication.user._id);
 				OpportunitiesService.addWatch ({
-					opportunityId: o._id;
+					opportunityId: o._id
 				});
+				Notification.success({ message: '<i class="fa fa-eye fa-3x"></i><br/><br/>You are now watching<br/>'+o.name });
 				return true;
 			},
 			// -------------------------------------------------------------------------
@@ -153,9 +154,10 @@
 			// -------------------------------------------------------------------------
 			removeWatch : function (o) {
 				o.watchers.splice (o.watchers.indexOf (Authentication.user._id), 1);
-				OpportunitiesService.addWatch ({
-					opportunityId: o._id;
+				OpportunitiesService.removeWatch ({
+					opportunityId: o._id
 				});
+				Notification.success({ message: '<i class="fa fa-eye-slash fa-3x"></i><br/><br/>You are no longer watching<br/>'+o.name });
 				return false;
 			},
 			// -------------------------------------------------------------------------
