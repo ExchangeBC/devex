@@ -26,6 +26,7 @@ var path = require('path'),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
@@ -177,6 +178,19 @@ var setNotificationData = function (opportunity) {
 		opptype              : opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu',
 		skills               : opportunity.skills.join (', ')
 	};
+};
+var setMessageData = function (opportunity) {
+	opportunity.path                 = '/opportunities/'+(opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu')+'/'+opportunity.code;
+	opportunity.earn_format_mnoney   = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
+	opportunity.earn                 = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
+	opportunity.dateDeadline         = helpers.formatDate (new Date(opportunity.deadline));
+	opportunity.timeDeadline         = helpers.formatTime (new Date(opportunity.deadline));
+	opportunity.dateAssignment       = helpers.formatDate (new Date(opportunity.assignment));
+	opportunity.dateStart            = helpers.formatDate (new Date(opportunity.start));
+	opportunity.datePublished        = helpers.formatDate (new Date(opportunity.lastPublished));
+	opportunity.deadline_format_date = helpers.formatDate (new Date(opportunity.deadline));
+	opportunity.deadline_format_time = helpers.formatTime (new Date(opportunity.deadline));
+	return opportunity;
 };
 // -------------------------------------------------------------------------
 //
@@ -361,13 +375,6 @@ exports.create = function(req, res) {
 			} else {
 				setOpportunityAdmin (opportunity, req.user);
 				req.user.save ();
-				Notifications.addNotification ({
-					code: 'not-update-'+opportunity.code,
-					name: 'Update of Opportunity '+opportunity.name,
-					// description: 'Update of Opportunity '+opportunity.name,
-					target: 'Opportunity',
-					event: 'Update'
-				});
 				res.json(opportunity);
 			}
 		});
@@ -426,10 +433,8 @@ exports.update = function (req, res) {
 	//
 	updateSave (opportunity)
 	.then (function () {
-		var data = setNotificationData (opportunity);
 		if (opportunity.isPublished) {
-			Notifications.notifyObject ('not-updateany-opportunity', data);
-			Notifications.notifyObject ('not-update-'+opportunity.code, data);
+			sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
 			github.createOrUpdateIssue ({
 				title  : opportunity.name,
 				body   : oppBody (opportunity),
@@ -453,6 +458,21 @@ exports.update = function (req, res) {
 	.catch (function (err) {
 		return res.status(422).send({
 			message: errorHandler.getErrorMessage(err)
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get a list of all users who are listening to the add opp event
+//
+// -------------------------------------------------------------------------
+var getSubscribedUsers = function () {
+	return new Promise (function (resolve, reject) {
+	    var User = mongoose.model ('User');
+		User.find ({ notifyOpportunities:true }, '_id email firstName lastName displayName')
+		.exec (function (err, users) {
+			if (err) reject(err);
+			else resolve (users);
 		});
 	});
 };
@@ -488,10 +508,13 @@ var pub = function (req, res, isToBePublished) {
 	updateSave (opportunity)
 	.then (function () {
 		var data = setNotificationData (opportunity);
-		if (firstTime) Notifications.notifyObject ('not-add-opportunity', data);
+		if (firstTime) {
+			getSubscribedUsers ().then (function (users) {
+				sendMessages ('opportunity-add', users, {opportunity: setMessageData (opportunity)});
+			});
+		}
 		else if (isToBePublished) {
-			Notifications.notifyObject ('not-update-'+opportunity.code, data);
-			Notifications.notifyObject ('not-updateany-opportunity', data);
+			sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
 		}
 		github.createOrUpdateIssue ({
 			title  : opportunity.name,
@@ -546,9 +569,7 @@ exports.unassign = function (req, res) {
 	//
 	.then (function (opp) {
 		opportunity = opp;
-		var data = setNotificationData (opportunity);
-		Notifications.notifyObject ('not-updateany-opportunity', data);
-		Notifications.notifyObject ('not-update-'+opportunity.code, data);
+		sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
 		return github.unlockIssue ({
 			repo   : opportunity.github,
 			number : opportunity.issueNumber
@@ -590,17 +611,19 @@ exports.assign = function (opportunityId, proposalId, proposalUser, user) {
 				updateSave (opportunity)
 				.then (function (opp) {
 					opportunity = opp;
-					var data = setNotificationData (opportunity);
-					Notifications.notifyObject ('not-updateany-opportunity', data);
-					Notifications.notifyObject ('not-update-'+opportunity.code, data);
-					data.username = proposalUser.displayName;
-					data.useremail = proposalUser.email;
+					// var data = setNotificationData (opportunity);
+					sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
+					// data.username = proposalUser.displayName;
+					// data.useremail = proposalUser.email;
 					//
 					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
 					//
-					data.assignor = user.displayName;
-					data.assignoremail = opportunity.proposalEmail;
-					Notifications.notifyUserAdHoc ('assignopp', data);
+					// data.assignor = user.displayName;
+					// data.assignoremail = opportunity.proposalEmail;
+					opportunity.assignor = user.displayName;
+					opportunity.assignoremail = opportunity.proposalEmail;
+					sendMessages ('opportunity-assign-cwu', [ proposalUser ], {opportunity: setMessageData (opportunity)});
+					// Notifications.notifyUserAdHoc ('assignopp', data);
 					return github.addCommentToIssue ({
 						comment : 'This opportunity has been assigned',
 						repo    : opportunity.github,
@@ -644,17 +667,19 @@ exports.assignswu = function (opportunityId, proposalId, proposalUser, user) {
 				updateSave (opportunity)
 				.then (function (opp) {
 					opportunity = opp;
-					var data = setNotificationData (opportunity);
-					Notifications.notifyObject ('not-updateany-opportunity', data);
-					Notifications.notifyObject ('not-update-'+opportunity.code, data);
-					data.username = proposalUser.displayName;
-					data.useremail = proposalUser.email;
+					// var data = setNotificationData (opportunity);
+					sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
+					// data.username = proposalUser.displayName;
+					// data.useremail = proposalUser.email;
 					//
 					// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
 					//
-					data.assignor = user.displayName;
-					data.assignoremail = opportunity.proposalEmail;
-					Notifications.notifyUserAdHoc ('assignopp', data);
+					// data.assignor = user.displayName;
+					// data.assignoremail = opportunity.proposalEmail;
+					opportunity.assignor = user.displayName;
+					opportunity.assignoremail = opportunity.proposalEmail;
+					sendMessages ('opportunity-assign-swu', [ proposalUser ], {opportunity: setMessageData (opportunity)});
+					// Notifications.notifyUserAdHoc ('assignopp', data);
 					return github.addCommentToIssue ({
 						comment : 'This opportunity has been assigned',
 						repo    : opportunity.github,
@@ -870,6 +895,22 @@ exports.forProgram = function (req, res) {
 exports.new = function (req, res) {
 	var p = new Opportunity ();
 	res.json(p);
+};
+
+// -------------------------------------------------------------------------
+//
+// Add ro remove watches for the current user
+//
+// -------------------------------------------------------------------------
+exports.addWatch = function (req, res) {
+	req.opportunity.watchers.addToSet (req.user._id);
+	req.opportunity.save ();
+	res.json ({ok:true});
+};
+exports.removeWatch = function (req, res) {
+	req.opportunity.watchers.pull (req.user._id);
+	req.opportunity.save ();
+	res.json ({ok:true});
 };
 
 // -------------------------------------------------------------------------
