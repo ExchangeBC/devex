@@ -680,32 +680,17 @@
 		-->
 
 		<!-- // How to Apply // -->
-		<div class="row">
+		<div class="row" ng-if="true && vm.closing !== 'CLOSED'">
 			<div class="col-xs-12">
 				<h3 class="opp-detail">Request for Proposals</h3>
 				<p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We will let you know after the Closing Time whether or not your Team has been shortlisted.</p>
 				<p>Thanks for your interest!</p>
-			</div>
-		<!--
-			<div class="col-xs-12 col-sm-4">
-				<div class="well well-warning">
-					<h4>Got Questions?</h4>
-					<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.<br><br>
-					<i class="fa fa-comments fa-2x"></i>
-				</div>
-			</div>
-		-->
-		</div>
-
-		<!-- // Proposal Application Directive // -->
-		<div class="row" ng-if="true && vm.closing !== 'CLOSED'" >
-			<div class="col-xs-12">
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-			</div>
-		</div>
-
-		<hr>
+			</div>	
+			<hr>	
+		</div>		
+		
 
 
 		<!-- // Proposal Evaluation Criteria // -->
