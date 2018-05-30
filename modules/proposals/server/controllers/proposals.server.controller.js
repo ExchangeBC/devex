@@ -770,3 +770,80 @@ exports.downloadArchive = function (req, res) {
 	});
 
 };
+
+exports.downloadSWUProposal = function(req, res) {
+	var zip = new (require ('jszip')) ();
+	var fs  = require('fs');
+	//
+	// make sure we are allowed to do this at all
+	//
+	// if (!ensureAdmin (req.opportunity, req.user)) {
+	// 	return res.json ([]);
+	// }
+	//
+	// make the zip name from the opportunity name
+	//
+	var opportunityName = req.opportunity.name.replace(/\W/g,'-').replace(/-+/,'-');
+
+	zip.folder(opportunityName);
+
+	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('opportunity')
+	.populate('user', userfields)
+	.exec (function (err, proposal) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			var proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
+			if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
+			var files = proposal.attachments;
+			var email = proposal.user.email;
+			var proposalHtml = proposal.detail;
+			//
+			// go through the files and build the internal links (reset links first)
+			// also build the index.html content
+			//
+			var links = [];
+			files.forEach (function (file) {
+				links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
+			});
+			var header = '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>';
+			header += email+'<br/>';
+			if (!proposal.isCompany) {
+				header += proposal.user.address+'<br/>';
+				header += proposal.user.phone+'<br/>';
+			}
+			else {
+				header += '<b><i>Company:</i></b>'+'<br/>';
+				header += proposal.user.businessName+'<br/>';
+				header += proposal.user.businessAddress+'<br/>';
+				header += '<b><i>Contact:</i></b>'+'<br/>';
+				header += proposal.user.businessContactName+'<br/>';
+				header += proposal.user.businessContactPhone+'<br/>';
+				header += proposal.user.businessContactEmail+'<br/>';
+			}
+			header += '<h2>Documents</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
+			var content = '<html><body>'+header+'<h2>Proposal</h2>'+proposalHtml+'</body></html>';
+			//
+			// add the directory, content and documents for this proposal
+			//
+			zip.folder (opportunityName).folder (proponentName);
+			zip.folder (opportunityName).folder (proponentName).file ('index.html', content);
+			files.forEach (function (file) {
+				zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
+			});
+
+			res.setHeader ('Content-Type', 'application/zip');
+			res.setHeader ('Content-Type', 'application/octet-stream');
+			res.setHeader ('Content-Description', 'File Transfer');
+			res.setHeader ('Content-Transfer-Encoding', 'binary');
+			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+opportunityName+'.zip'+'"');
+
+			zip.generateNodeStream({base64:false, compression:'DEFLATE',streamFiles:true}).pipe (res);
+		}
+	});
+};
