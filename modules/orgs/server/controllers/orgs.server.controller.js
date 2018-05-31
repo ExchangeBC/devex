@@ -284,6 +284,46 @@ var saveOrg = function (req, res) {
 		});
 	};
 };
+var saveOrgReturnMessage = function (req, res) {
+	return function (org) {
+		helpers.applyAudit (org, req.user);
+		checkCapabilities (org)
+		.then (function (org) {
+			org.save (function (err, neworg) {
+				if (err) {
+					return res.status(422).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					//
+					// TBD: the code following shoudl be nested in here and checked for
+					// failure properly etc.
+					//
+					req.user.save (function (err, user) {
+						req.login (user, function (err) {
+							if (err) {
+								res.status(422).send ({
+									message: errorHandler.getErrorMessage (err)
+								});
+							}
+						});
+					});
+					getOrgById (neworg._id)
+					.then (function (o) {
+						res.status(200).json ({
+							message: '<h4>Success!</h4> You have been added to '+org.name
+						})
+					})
+					.catch (function (err) {
+						res.status (422).send ({
+							message: 'Error populating organization'
+						});
+					});
+				}
+			});
+		});
+	};
+};
 // -------------------------------------------------------------------------
 //
 // remove a user from all open proposals
@@ -671,7 +711,31 @@ exports.addMeToOrg = function (req, res) {
 		.then (function () { return org; })
 		.then (saveOrg (req, res));
 	}
-}
+};
+exports.addUserToOrg = function (req, res) {
+	req.user = req.model;
+	var org = req.org;
+	var user = req.user;
+	var orgO = org.toObject();
+	var userO = user.toObject();
+	if (req.params.actionCode === 'decline') {
+		return res.status (200).json ({
+			message: '<h4>Declined</h4>Thank you, you have not been added to company '+org.name
+		});
+	}
+	else {
+		// return res.status (200).json ({
+		// 	message: '<h4>Accepted</h4>Thank you, you have been added to company '+org.name
+		// });
+		if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
+			Promise.resolve (user)
+			.then (addUserTo (org, 'members'))
+			.then (saveUser)
+			.then (function () { return org; })
+			.then (saveOrgReturnMessage (req, res));
+		}
+	}
+};
 // -------------------------------------------------------------------------
 //
 // magic that populates the org on the request

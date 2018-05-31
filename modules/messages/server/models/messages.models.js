@@ -33,11 +33,11 @@ mongoose.model ('MessageTemplate', new mongoose.Schema ({
 	emailSubjectTemplate : { type : String,   default : '' },
 	modelsRequired       : { type : [String], default : [] },
 	daysToArchive        : { type: Number,    default : 14 },
+	linkTemplate         : { type : String,   default : '' },
 	actions              : [{
-		actionCd      : { type : String,   default : '' },
-		linkTemplate  : { type : String,   default : '' },
-		linkTitleTemplate  : { type : String,   default : '' },
-		isDefault     : { type : Boolean,  default : false }
+		actionCd               : { type : String,   default : '' },
+		linkTitleTemplate      : { type : String,   default : '' },
+		isDefault              : { type : Boolean,  default : false }
 	}]
 }));
 // -------------------------------------------------------------------------
@@ -65,26 +65,26 @@ mongoose.model ('Message', new mongoose.Schema ({
 	messageTitle : { type : String,     default : '' },
 	emailBody    : { type : String,     default : '' },
 	emailSubject : { type : String,     default : '' },
+	link         : { type : String,     default : '' },
 	actions              : [{
-		actionCd    : { type : String,  default : '' },
-		link        : { type : String,  default : '' },
-		linkTitle   : { type : String,  default : '' },
-		isDefault   : { type : Boolean, default : false }
+		actionCd               : { type : String,  default : '' },
+		linkTitle              : { type : String,  default : '' },
+		isDefault              : { type : Boolean, default : false }
 	}],
 	emails : [{
 		dateSent : { type : Date,   default : null },
 		isOk     : { type: Boolean, default: false },
 		error    : {}
 	}],
-	emailSent    : { type: Boolean, default: false },
-	emailRetries : { type : Number, default : 0 },
-	datePosted   : { type : Date,   default : null },
-	date2Archive : { type : Date,   default : null },
-	dateArchived : { type : Date,   default : null },
-	dateViewed   : { type : Date,   default : null },
-	dateActioned : { type : Date,   default : null },
-	actionTaken  : { type : String, default : '' },
-	isOpen       : { type: Boolean, default: true }
+	emailSent      : { type: Boolean, default: false },
+	emailRetries   : { type : Number, default : 0 },
+	datePosted     : { type : Date,   default : null },
+	date2Archive   : { type : Date,   default : null },
+	dateArchived   : { type : Date,   default : null },
+	dateViewed     : { type : Date,   default : null },
+	dateActioned   : { type : Date,   default : null },
+	actionTaken    : { type : String, default : '' },
+	isOpen         : { type: Boolean, default: true }
 }));
 // -------------------------------------------------------------------------
 //
@@ -102,24 +102,24 @@ mongoose.model ('MessageArchive', new mongoose.Schema ({
 	messageTitle : { type : String },
 	emailBody    : { type : String },
 	emailSubject : { type : String },
+	link         : { type : String },
 	actions              : [{
-		actionCd    : { type : String },
-		link        : { type : String },
-		linkTitle   : { type : String,  default : '' },
-		isDefault   : { type : Boolean }
+		actionCd               : { type : String },
+		linkTitle              : { type : String,  default : '' },
+		isDefault              : { type : Boolean }
 	}],
 	emails : [{
 		dateSent : { type : Date,   default : null },
 		isOk     : { type: Boolean, default: false },
 		error    : {}
 	}],
-	emailSent    : { type: Boolean, default: false },
-	emailRetries : { type : Number, default : 0 },
-	datePosted   : { type : Date,   default : null },
-	date2Archive : { type : Date },
-	dateArchived : { type : Date },
-	dateViewed   : { type : Date },
-	dateActioned : { type : Date },
-	actionTaken  : { type : String },
-	isArchived   : { type: Boolean, default: true }
+	emailSent      : { type: Boolean, default: false },
+	emailRetries   : { type : Number, default : 0 },
+	datePosted     : { type : Date,   default : null },
+	date2Archive   : { type : Date },
+	dateArchived   : { type : Date },
+	dateViewed     : { type : Date },
+	dateActioned   : { type : Date },
+	actionTaken    : { type : String },
+	isArchived     : { type: Boolean, default: true }
 }));

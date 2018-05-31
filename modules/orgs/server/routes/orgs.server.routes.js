@@ -35,6 +35,7 @@ module.exports = function (app) {
 		.all (orgsPolicy.isAllowed)
 		.get (orgs.addMeToOrg);
 
+
 	// Finish by binding the org middleware
 	app.param('orgId', orgs.orgByID);
 	app.param('orgSmallId', orgs.orgByIDSmall);
