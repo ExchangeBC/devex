@@ -15,7 +15,7 @@ stage('Functional Test Dev') {
         command: '',
         args: '${computer.jnlpmac} ${computer.name}',
         envVars: [
-            envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
+            envVar(key:'BASEURL', value: 'https://platform-dev.pathfinder.gov.bc.ca/')
         ])
     ]) {
       node(podlabel) {

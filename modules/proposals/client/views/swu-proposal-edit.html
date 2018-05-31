@@ -100,7 +100,7 @@
 							<p>The Total Proponent Cost (price) will be evaluated according to the following formula:</p>
 							<p>The Proposal with the lowest overall Total Proponent Cost of all Proposals will receive the maximum points allocated to price.</p>
 							<p>All other Proposals’ Total Proponent Cost will be evaluated using the following formula:</p>
-							<div class="alert alert-default">
+							<div class="alert">
 								<h5>S = <span style="text-decoration: underline">(Min x M)</span><br><span style="margin-left: 53px">P</span>
 								</h5>
 								S = score<br>
@@ -933,7 +933,7 @@
 						<div class="col-xs-12">
 							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
 						<!--
-							<div class="alert alert-default" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
+							<div class="alert" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
 								There are currently no addenda for this RFP.
 							</div>
 						-->
@@ -977,8 +977,8 @@
 							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
-							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" "><i class="fa fa-trash"></i> Delete This Proposal</button>
-							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" "><i class="fa fa-ban"></i> Withdraw Proposal</button>
+							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" uib-tooltip="This will blow up all the work you've saved in this proposal!"><i class="fa fa-trash"></i> Delete This Proposal</button>
+							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i class="fa fa-ban"></i> Withdraw Proposal</button>
 						</div>
 					</div>
 				</div>
