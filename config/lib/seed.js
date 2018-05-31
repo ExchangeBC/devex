@@ -140,14 +140,14 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'company {{org.name}}',
 				modelsRequired       : ['org'],
 				daysToArchive        : 7,
+				linkTemplate         : '/join/org/{{org._id}}',
 				actions              : [{
 					actionCd      : 'decline',
 					linkTitleTemplate : 'Decline',
 					isDefault     : true
 				},{
 					actionCd      : 'accept',
-					linkTitleTemplate : 'Accept',
-					linkTemplate  : '/orgs/{{org._id}}/m/{{messageid}}'
+					linkTitleTemplate : 'Accept'
 				}]
 			}),
 			new T ({
@@ -162,14 +162,14 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'company {{org.name}} wants you join devex',
 				modelsRequired       : ['org'],
 				daysToArchive        : 7,
+				linkTemplate         : '/join/org/{{org._id}}',
 				actions              : [{
 					actionCd      : 'decline',
 					linkTitleTemplate : 'Decline',
 					isDefault     : true
 				},{
 					actionCd      : 'accept',
-					linkTitleTemplate : 'Accept',
-					linkTemplate  : '/orgs/{{org._id}}/m/{{messageid}}'
+					linkTitleTemplate : 'Accept'
 				}]
 			}),
 			new T ({
@@ -184,6 +184,7 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'Opportunity {{ opportunity.name }} has been updated',
 				modelsRequired       : ['opportunity'],
 				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
 				actions              : [{
 					actionCd      : 'ok',
 					linkTitleTemplate : 'OK',
@@ -202,6 +203,7 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'A new opportunity has just been posted!',
 				modelsRequired       : ['opportunity'],
 				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
 				actions              : [{
 					actionCd      : 'ok',
 					linkTitleTemplate : 'OK',
@@ -220,6 +222,7 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'Your Proposal has been selected!',
 				modelsRequired       : ['opportunity'],
 				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
 				actions              : [{
 					actionCd      : 'ok',
 					linkTitleTemplate : 'OK',
@@ -238,6 +241,7 @@ function seedTestMessageTemplate () {
 				emailSubjectTemplate : 'Your Proposal has been selected!',
 				modelsRequired       : ['opportunity'],
 				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
 				actions              : [{
 					actionCd      : 'ok',
 					linkTitleTemplate : 'OK',

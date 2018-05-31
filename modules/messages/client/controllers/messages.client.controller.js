@@ -37,6 +37,8 @@
 	})
 	.controller ('MessageViewController', function ($sce, $location, $state, $rootScope, message, Authentication, Notification, MessagesService) {
 		var vm        = this;
+		vm.haveresult = false;
+		vm.resultmsg  = '';
 		vm.trust      = $sce.trustAsHtml;
 		vm.message    = message ;
 		vm.auth       = Authentication;
@@ -54,30 +56,39 @@
 		// take some sort of action
 		//
 		vm.takeAction = function (action) {
+			console.log ('taking action:', action);
 			MessagesService.actioned ({
-				messageId: message._id,
-				action : action.actionCd
-			}).$promise.then (function () {
-				if (!action.isDefault) {
-					window.location = action.link;
-					// $location.path (action.link);
-				}
-				else {
-					$rootScope.$broadcast('updateMessages', 'done');
-					$state.go ('settings.messages');
-				}
+				messageId : message._id,
+				action    : action.actionCd
+			}).$promise
+			.then (function (response) {
+				vm.haveresult = true;
+				vm.resultmsg = vm.trust (response.message);
+				console.log ('returned ALL GOOD');
+				$rootScope.$broadcast('updateMessages', 'done');
 			})
-		}
+			.catch (function (response) {
+				vm.haveresult = true;
+				vm.resultmsg = vm.trust (response.message);
+				console.log ('returned BAD');
+				$rootScope.$broadcast('updateMessages', 'done');
+			})
+		};
+	})
+	.controller ('MessageResultController', function ($sce, $rootScope, $state, isGoodResult, message) {
+		var vm        = this;
+		vm.bodyMessage = isGoodResult ? $sce.trustAsHtml (message.successMessage) : $sce.trustAsHtml (message.failureMessage);
 	})
 	// =========================================================================
 	//
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateEditController', function ($scope, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
+	.controller ('MessageTemplateEditController', function ($scope, TINYMCE_OPTIONS, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
 		var qqq        = this;
 		qqq.template = template;
 		qqq.auth       = Authentication;
+		qqq.tinymceOptions = TINYMCE_OPTIONS;
 		qqq.template.defaultActionCd          = '';
 		qqq.template.defaultLinkTitleTemplate = '';
 		qqq.template.action1ActionCd          = '';

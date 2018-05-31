@@ -30,11 +30,14 @@ var _               = require ('lodash');
 // -------------------------------------------------------------------------
 //
 // perform a query on the messages table
+// HIDE THE LINKS - they hsould never get to the front end as they pose a
+// security risk
 //
 // -------------------------------------------------------------------------
 var query = function (table, q) {
 	return new Promise (function (resolve, reject) {
 		table.find (q)
+		.select ('-actions.link')
 		.sort ({dateSent:-1, dateExpired: 1})
 		.populate ('user', 'displayName email')
 		.exec (function (err, messages) {
@@ -148,16 +151,37 @@ var getUser = function (userid) {
 //
 // -------------------------------------------------------------------------
 var getDomain = function () {
-	var domain = 'http://localhost:3030';
+	var domain = 'http://localhost:3000';
 	if (process.env.DOMAIN) {
 		var d = process.env.DOMAIN;
+		//
+		// if http or http, either way just set it
+		//
 		if (d.substr (0,4) === 'http') {
 			domain = d;
-		} else {
+		}
+		//
+		// otherwise no protocol specified so assume http
+		//
+		else {
 			domain = 'http://' + d;
 		}
 	}
 	return domain;
+}
+var getHostInfoFromDomain = function (o) {
+	var domain = getDomain ();
+	var part1 = domain.split ('://');
+	var part2 = part1[1].split (':');
+	var protocol = part1[0];
+	var host     = part2[0];
+	var port = (protocol === 'https') ? 443 : 80;
+	port = part2[1] ? part2[1] : port;
+	o._protocol = protocol;
+	o.host      = host;
+	o.port      = port;
+	o.url       = domain+o.path;
+	return o;
 }
 // -------------------------------------------------------------------------
 //
@@ -198,13 +222,14 @@ var prepareMessage = function (template, data) {
 	message.messageTitle = template.messageTitle (data);
 	message.emailBody    = template.emailBody (data);
 	message.emailSubject = template.emailSubject (data);
+	message.link         = template.link (data);
 	//
 	// now run the action tempaltes
 	//
 	template.actions.forEach (function (action) {
 		message.actions.push ({
 			actionCd  : action.actionCd,
-			link      : action.link (data),
+			// link      : action.link (data),
 			linkTitle : action.linkTitle (data),
 			isDefault : action.isDefault
 		})
@@ -269,8 +294,9 @@ exports.sendMessages = function (messageCd, users, data) {
 			template.messageTitle = handlebars.compile(template.messageTitleTemplate);
 			template.emailBody    = handlebars.compile(appendNotificationLink (template.emailBodyTemplate));
 			template.emailSubject = handlebars.compile(template.emailSubjectTemplate);
+			template.link         = handlebars.compile(template.linkTemplate);
 			template.actions.forEach (function (action) {
-				action.link      = handlebars.compile(action.linkTemplate);
+				// action.link      = handlebars.compile(action.linkTemplate);
 				action.linkTitle = handlebars.compile(action.linkTitleTemplate);
 			});
 			var promise;
@@ -393,11 +419,26 @@ exports.viewed = function (req, res) {
 exports.actioned = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
 	if (req.user._id.toString () !== req.message.user.toString ()) return sendError (res, 'Not owner of message');
-	req.message.actionTaken  = req.params.action
-	req.message.dateActioned = Date.now ();
-	archiveMessage (req.message)
-	.then (resResults (res))
-	.catch (resError (res));
+	//
+	// get the local domain, port, host, protocol info
+	// this gets over a potential risk by disallowing any calls to outside APIs through this
+	// mechanism
+	//
+	var domain = getDomain ();
+	var options = getHostInfoFromDomain ({
+		path : '/api/message/handler/action/'+req.params.action+'/user/'+req.user._id+req.message.link,
+		method : 'GET'
+	});
+	helpers.getJSON (options)
+	.then (function (data) {
+		req.message.actionTaken  = req.params.action
+		req.message.dateActioned = Date.now ();
+		archiveMessage (req.message);
+		return res.status (200).json (data);
+	})
+	.catch (function (data) {
+		return res.status (299).send (data);
+	})
 };
 // -------------------------------------------------------------------------
 //

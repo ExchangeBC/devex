@@ -120,6 +120,20 @@
 							</textarea>
 						</form-display>
 
+						<h4>Action Link</h4>
+
+						<form-input
+							class="col-sm-12"
+							ng-model="qqq.template.linkTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action link: will be appended to: /api/message/handler/action/:actionCode/user/:userId - yours must start with a /",
+								"id":"linkTitleTemplate",
+								"name":"linkTitleTemplate",
+								"placeholder":"My Default Action"
+							}'>
+						</form-input>
+
 						<h4>Default Action (same as archive : no-op)</h4>
 						<form-input
 							class="col-sm-6"
@@ -139,9 +153,9 @@
 							x-form="qqq.templateForm"
 							x-options='{
 								"title":"Default Action Button Title",
-								"id":"linkTitleTemplate",
-								"name":"linkTitleTemplate",
-								"placeholder":"My Default Action"
+								"id":"defaultLinkTitleTemplate",
+								"name":"defaultLinkTitleTemplate",
+								"placeholder":"Default Action Button Title"
 							}'>
 						</form-input>
 
@@ -170,17 +184,6 @@
 							}'>
 						</form-input>
 
-						<form-input
-							class="col-sm-12"
-							ng-model="qqq.template.action1LinkTemplate"
-							x-form="qqq.templateForm"
-							x-options='{
-								"title":"Action Path/Link - meant as a path, so no need to insert the domain in front, just the path portion of the url",
-								"id":"action1LinkTemplate",
-								"name":"action1LinkTemplate",
-								"placeholder":"Action Path"
-							}'>
-						</form-input>
 
 						<h4>Main Action 2 (if required then supply all fields)</h4>
 						<form-input
@@ -207,17 +210,6 @@
 							}'>
 						</form-input>
 
-						<form-input
-							class="col-sm-12"
-							ng-model="qqq.template.action2LinkTemplate"
-							x-form="qqq.templateForm"
-							x-options='{
-								"title":"Action Path/Link - meant as a path, so no need to insert the domain in front, just the path portion of the url",
-								"id":"action2LinkTemplate",
-								"name":"action2LinkTemplate",
-								"placeholder":"Action Path"
-							}'>
-						</form-input>
 <!--
 						<form-input
 							class="col-sm-4"
