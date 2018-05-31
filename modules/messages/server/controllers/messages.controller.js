@@ -37,7 +37,7 @@ var _               = require ('lodash');
 var query = function (table, q) {
 	return new Promise (function (resolve, reject) {
 		table.find (q)
-		.select ('-actions.link')
+		.select ('-link')
 		.sort ({dateSent:-1, dateExpired: 1})
 		.populate ('user', 'displayName email')
 		.exec (function (err, messages) {
