@@ -829,7 +829,6 @@ exports.downloadSWUProposal = function(req, res) {
 			phases += '</ol>';
 			phases += 'Cost: ';
 			phases += '$' + proposal.phases.proto.cost.toFixed(2);
-			
 
 			phases += '<h3>Implementation</h3>';
 			phases += 'Team:<ol>';
