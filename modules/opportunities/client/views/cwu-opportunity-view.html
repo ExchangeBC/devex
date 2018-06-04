@@ -72,7 +72,7 @@
 	<div class="container">
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
 		<div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
-			<div class="alert alert-important">
+			<div class="alert alert-warning">
 				<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
 				<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 			</div>
