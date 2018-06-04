@@ -977,8 +977,8 @@
 							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
 							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
-							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()"><i class="fa fa-trash"></i> Delete This Proposal</button>
-							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()"><i class="fa fa-ban"></i> Withdraw Proposal</button>
+							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" uib-tooltip="This will blow up all the work you've saved in this proposal!"><i class="fa fa-trash"></i> Delete This Proposal</button>
+							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i class="fa fa-ban"></i> Withdraw Proposal</button>
 							<a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/proposals/export/opportunity/{{ppp.opportunity._id}}" target="_blank"><i class="fa fa-file"></i> Export Proposal</a>
 						</div>
 					</div>
