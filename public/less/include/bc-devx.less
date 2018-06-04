@@ -7,6 +7,7 @@ body {
 
 body {
     .body-font;
+    padding-top: 50px;
     padding-bottom: 30px;
     font-size: 14px;
 }
@@ -190,8 +191,8 @@ a.breadcrumb-nav {
 	max-width: 1040px;
   padding: 0 10px;
   > .navbar-collapse {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: -10px;
+    margin-right: -10px;
   }
   > .navbar-header {
     margin-left: 0;
@@ -450,13 +451,10 @@ h4.edit-form-header {
 .navbar-nav {
   > li {
     .dropdown-menu {
-      font-size: 13px;
-      padding: 4px 0px;
-      margin-top: 8px;
+      margin-top: 5px;
       border: none;
-      border-radius: 0px;
-      background-color: @gray-lighter;
-      box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
+      border-radius: 0 0 0 0;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
       > li {
         display: block;
       }
@@ -471,14 +469,6 @@ h4.edit-form-header {
 
 
 @media (max-width: 767px) {
-	.navbar-right {
-		display: block;
-		float: right;
-		margin: 7.5px;
-	}
-	.navbar-right > li {
-		display: inline-block;
-	}
 	.navbar-main {
 		display: table;
 		width: 100%;
@@ -514,9 +504,8 @@ h4.edit-form-header {
 }
 
 .navbar-collapse {
-  margin-right: 0;
-  margin-left: 0;
-  text-align: right;
+  margin-right: -10px;
+  margin-left: -10px;
 }
 
 .nav-tabs {
@@ -1278,6 +1267,10 @@ form-title {
 //
 // Dropdowns
 // --------------------------------------------------
+
+.dropdown-menu {
+  padding: 0;
+}
 
 .dropdown-menu > ul {
   width: 180px;
