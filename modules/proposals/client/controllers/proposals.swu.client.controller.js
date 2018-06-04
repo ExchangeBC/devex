@@ -600,7 +600,7 @@
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
 			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
-			console.log(validPriceAmounts);
+			// console.log(validPriceAmounts);
 			if (!validPriceAmounts) {
 				Notification.error({
 					message: 'Invalid price amounts entered',

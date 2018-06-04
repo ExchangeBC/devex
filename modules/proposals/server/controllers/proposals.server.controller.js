@@ -770,3 +770,124 @@ exports.downloadArchive = function (req, res) {
 	});
 
 };
+
+exports.downloadSWUProposal = function(req, res) {
+	var zip = new (require ('jszip')) ();
+	var fs  = require('fs');
+	//
+	// make the zip name from the opportunity name
+	//
+	var opportunityName = req.opportunity.name.replace(/\W/g,'-').replace(/-+/,'-');
+
+	zip.folder(opportunityName);
+
+	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
+	.populate('createdBy', 'displayName')
+	.populate('updatedBy', 'displayName')
+	.populate('opportunity')
+	.populate('phases.inception.team')
+	.populate('phases.proto.team')
+	.populate('phases.implementation.team')
+	.populate('user', userfields)
+	.exec (function (err, proposal) {
+		if (err) {
+			return res.status(422).send ({
+				message: errorHandler.getErrorMessage(err)
+			});
+		} else {
+			var proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
+			if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
+			var files = proposal.attachments;
+			var email = proposal.user.email;
+			//
+			// go through the files and build the internal links (reset links first)
+			// also build the index.html content
+			//
+			var links = [];
+			files.forEach (function (file) {
+				links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
+			});
+			var questions = '<ol>';
+			proposal.questions.forEach( function (question) {
+				questions += ('<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>');
+			});
+			questions += '</ol>';
+			var phases = '<h3>Inception</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.inception.team.forEach(function(teamMember) {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			})
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.inception.cost.toFixed(2);
+
+			phases += '<h3>Prototype</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.proto.team.forEach(function(teamMember) {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			})
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.proto.cost.toFixed(2);
+
+			phases += '<h3>Implementation</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.implementation.team.forEach(function(teamMember) {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			})
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.implementation.cost.toFixed(2);
+
+			phases += '<br/><br/><b>Total Cost: ';
+			phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
+			phases += '</b><br/>';
+
+			var header = '<h2>Proposal</h2>';
+			header += 'Status: ';
+			header += proposal.status;
+			header += '<br/>';
+			header += 'Accepted Terms: ';
+			header += (proposal.isAcceptedTerms ? 'Yes' : 'No');
+			header += '<br/>';
+			header += 'Created on: ';
+			header += new Date(proposal.created).toDateString();
+			header += '<br/>';
+			header += 'Lasted updated: ';
+			header += new Date(proposal.updated).toDateString();
+			header += '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>';
+			header += email+'<br/>';
+			header += '<b><i>Company:</i></b>'+'<br/>';
+			header += proposal.businessName+'<br/>';
+			header += proposal.businessAddress+'<br/>';
+			header += '<b><i>Contact:</i></b>'+'<br/>';
+			header += proposal.businessContactName+'<br/>';
+			header += proposal.businessContactPhone+'<br/>';
+			header += proposal.businessContactEmail+'<br/>';
+			if (links.length > 0) {
+				header += '<h2>Attachments/References</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
+			}
+			var content = '<html><body>';
+			content += header;
+			content += '<h2>Phases</h2>'+phases;
+			content += '<h2>Team Questions</h2>'+questions;
+			content += '</body></html>';
+			//
+			// add the directory, content and documents for this proposal
+			//
+			zip.folder (opportunityName).folder (proponentName);
+			zip.folder (opportunityName).folder (proponentName).file ('proposal-summary.html', content);
+			files.forEach (function (file) {
+				zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
+			});
+
+			res.setHeader ('Content-Type', 'application/zip');
+			res.setHeader ('Content-Type', 'application/octet-stream');
+			res.setHeader ('Content-Description', 'File Transfer');
+			res.setHeader ('Content-Transfer-Encoding', 'binary');
+			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+opportunityName+'.zip'+'"');
+
+			zip.generateNodeStream({base64:false, compression:'DEFLATE',streamFiles:true}).pipe (res);
+		}
+	});
+};
