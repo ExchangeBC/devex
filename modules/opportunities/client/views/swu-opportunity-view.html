@@ -227,8 +227,8 @@
 
 		<!-- Export button for downloading proposal submitted - visible to proposal submitters only -->
 		<div class="row">
-			<div class="col-xs-12 text-center" ng-if="vm.myproposal._id">
-				<a class="btn btn-sm btn-secondary" href="/api/proposals/export/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Export Your Proposal Data</a>
+			<div class="alert alert-info" ng-if="vm.myproposal._id">
+				You started or submitted a proposal on this opportunity.&nbsp; <a href="/api/proposals/export/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download My Proposal</a>
 			</div>
 		</div>
 
