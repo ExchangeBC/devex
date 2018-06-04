@@ -57,6 +57,8 @@ module.exports.initLocalVariables = function (app) {
     res.locals.url = req.protocol + '://' + req.headers.host + req.originalUrl;
     next();
   });
+
+  app.enable('trust proxy');
 };
 
 /**
