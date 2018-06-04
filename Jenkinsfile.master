@@ -183,7 +183,7 @@ stage('deploy-prod') {
 	  input message: "Deploy to prod?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,sutherlanda-admin'
     }
     timeout(time: 3, unit: 'DAYS') {
-	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,ccoldwell-admin,sutherlanda-admin'
+	  input message: "This will release code to PRODUCTION. OK to go ahead?", submitter: 'scchapma-admin,mark-a-wilson-view,paulroberts68-view,agehlers-admin,sutherlanda-admin'
     }
     node('master') {
       echo ">>> Tag ${PROD_TAG_NAME} with ${PROD_BCK_TAG_NAME}"
