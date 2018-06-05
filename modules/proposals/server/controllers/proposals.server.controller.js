@@ -34,7 +34,9 @@ var path = require('path'),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
 	;
 
-var userfields = '_id displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail roles provider';
+var userfields = '_id displayName firstName lastName email phone address username profileImageURL \
+					businessName businessAddress businessContactName businessContactPhone businessContactEmail \
+					roles provider';
 var streamFile = function (res, file, name, mime) {
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
@@ -476,6 +478,18 @@ exports.forOpportunity = function (req, res) {
 	.populate('phases.inception.team')
 	.populate('phases.implementation.team')
 	.populate('user', userfields)
+	.populate({
+		path: 'phases.proto.team',
+		populate: { path: 'capabilities capabilitySkills'}
+	})
+	.populate({
+		path: 'phases.inception.team',
+		populate: { path: 'capabilities capabilitySkills'}
+	})
+	.populate({
+		path: 'phases.implementation.team',
+		populate: { path: 'capabilities capabilitySkills'}
+	})
 	.exec(function (err, proposals) {
 		if (err) {
 			return res.status(422).send({

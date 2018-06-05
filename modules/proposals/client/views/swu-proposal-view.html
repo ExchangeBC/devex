@@ -31,7 +31,7 @@
 								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
 								<name>{{member.displayName}}</name>
 								<label-list>
-									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><br/>
 									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
 								</label-list>
 							</div>
