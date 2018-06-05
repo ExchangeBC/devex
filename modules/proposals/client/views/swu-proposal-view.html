@@ -1,8 +1,7 @@
 <div class="modal-header">
 	<div class="row">
 		<div class="col-xs-12">
-			<button class="close"></button>
-			<div class="modal-title">{{data.proposal.businessName}}<button class="btn btn-lg btn-text-only pull-right" data-ng-click="close()"><i class="fa fa-times"></i></button></div>
+			<div class="modal-title">{{data.proposal.businessName}}</div>
 		</div>
 	</div>
 </div>
@@ -26,11 +25,18 @@
 					<i class="fa fa-map"></i> Inception
 				</div>
 				<div class="panel-body">
-					<ul>
+					<div>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<label-list>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</label-list>
+							</div>
 						</li>
-					</ul>
+					</div>
 				</div>
 			<!-- Hiding pricing in case we want to make it viewable later -->
 			<!--
@@ -47,11 +53,18 @@
 					<i class="fa fa-rocket"></i> Proof of Concept
 				</div>
 				<div class="panel-body">
-					<ul>
+					<div>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<label-list>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</label-list>
+							</div>
 						</li>
-					</ul>
+					</div>
 				</div>
 			<!-- Hiding pricing in case we want to make it viewable later -->
 			<!--
@@ -68,11 +81,18 @@
 					<i class="fa fa-gears"></i> Implementation
 				</div>
 				<div class="panel-body">
-					<ul>
+					<div>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<label-list>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</label-list>
+							</div>
 						</li>
-					</ul>
+					</div>
 				</div>
 			<!-- Hiding pricing in case we want to make it viewable later -->
 			<!--
