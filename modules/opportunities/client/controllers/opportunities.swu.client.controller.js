@@ -295,7 +295,12 @@
 						vm.opportunity.phases.aggregate.capabilitySkills.forEach (function (skill) {
 							if (p[skill._id.toString()]) proposal.scores.skill++;
 						});
-						proposal.scores.skill = Math.round((proposal.scores.skill / maxScore) * (vm.weights.skill * vm.maxPoints) * 100) / 100;
+						if (maxScore > 0) {
+							proposal.scores.skill = Math.round((proposal.scores.skill / maxScore) * (vm.weights.skill * vm.maxPoints) * 100) / 100;
+						}
+						else {
+							proposal.scores.skill = 0;
+						}
 					});
 					//
 					// save all the proposals now with the new question rankings if applicable
