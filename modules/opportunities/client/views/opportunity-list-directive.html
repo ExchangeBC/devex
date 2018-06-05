@@ -12,7 +12,9 @@
 	</div>
 </section>
 
-<section class="list-page" style="min-height: 380px; padding-top: 0;">
+<section class="list-page">
+
+	<!-- This div can go; don't need the filters anymore -->
 	<div class="list-filter">
 		<div class="container">
 			<i class="fa fa-lg fa-filter"></i> Show/Hide: &nbsp;&nbsp;&nbsp;
@@ -30,6 +32,7 @@
 		</div>
 	</div>
 	
+	<!-- This all stays; just need to match up the new logic to make cards apppear in either the Open or Closed list as appropriate -->
 	<div class="container">
 		<div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
 
@@ -91,6 +94,7 @@
 				<div class="card-teaser" ng-bind="opportunity.short"></div>
 			</div>
 
+			<!-- I made an alert in the template html file to replace this. -->
 			<div class="row" ng-if="! vm.opportunities.length">
 				<div class="col-xs-12">
 					<div class="well well-transparent">No open opportunities right now. Check back soon!</div>
@@ -99,11 +103,13 @@
 
 		</div>
 
+		<!-- This can be repositioned under the Open Opportunities list; we'll never need it for the Closed list -->
 		<div class="row gray" ng-if="results.length==0">
 			<div class="col-xs-12">
 				<br><br>
 				<i class="fa fa-lg fa-frown-o"></i> &nbsp;No opportunities right now that match your search criteria...Check back soon!
 			</div>
 		</div>
+
 	</div>
 </section>

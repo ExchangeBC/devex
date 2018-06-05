@@ -1,0 +1,54 @@
+<style type="text/css">
+	.opportunity-list {
+		padding: 20px 0;
+		margin-bottom: 100px;
+	}
+	.opportunity-list-header {
+		border-bottom: 2px dotted #e3e3e3;
+		font-size: 1.42em;
+		font-weight: 600;
+		padding: 10px 5px;
+	}
+	.opportunity-count {
+		margin-bottom: 5px;
+		margin-left: 5px;
+		font-size: .7em;
+		background-color: #555;
+		font-weight: normal;
+		padding: 4px 9px;
+	}
+	.value-tally {
+		font-size: .8em;
+		margin-top: 1px;
+	}
+</style>
+
+<section class="list-page">
+	<div class="container">
+		<div class="opportunity-list">
+			<div class="opportunity-list-header">
+				Open Opportunities
+				<span class="value-tally pull-right hidden-xs" ">Total value: <!--This should be a totaly $ of all opportunities in the Closed list --></span>
+			</div>
+
+			<!-- Show this alert if no Open opportunities -->
+			<div class="alert">
+				<i class="fa fa-lg fa-frown-o"></i>&nbsp; No open opportunities right now - check back soon, or make sure you're signed up for notifications <a href="/settings/privacy">in your profile</a>
+			</div>
+
+			<!-- Cards for open opportunities that are open stack here; newest on top -->
+
+		</div>
+		
+		<div class="opportunity-list">
+			<div class="opportunity-list-header">
+				Closed Opportunities
+				<span class="badge opportunity-count">28<!-- Total # of opportunities in this list --></span>
+				<span class="value-tally pull-right hidden-xs" ">Total value: <!--This should be a totaly $ of all opportunities in the Closed list --></span>
+			</div>
+			
+			<!-- Cards for closed opportunities that are closed stack here; most recently closed on top -->
+			
+		</div>
+	</div>
+</section>
