@@ -20,15 +20,22 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-map"></i> Inception
 				</div>
 				<div class="panel-body">
 					<ul>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<div>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><br/>
+									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -41,15 +48,22 @@
 			</div>
 		</div>
 
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-rocket"></i> Proof of Concept
 				</div>
 				<div class="panel-body">
 					<ul>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<div>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -62,15 +76,22 @@
 			</div>
 		</div>
 
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-gears"></i> Implementation
 				</div>
 				<div class="panel-body">
 					<ul>
 						<li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-							<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+							<div class="team-member">
+								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
+								<name>{{member.displayName}}</name>
+								<div>
+									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+								</div>
+							</div>
 						</li>
 					</ul>
 				</div>
