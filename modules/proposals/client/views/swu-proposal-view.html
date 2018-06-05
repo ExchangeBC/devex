@@ -19,9 +19,9 @@
 	</div>
 	<hr>
 	<div class="row">
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-map"></i> Inception
 				</div>
 				<div class="panel-body">
@@ -30,10 +30,10 @@
 							<div class="team-member">
 								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
 								<name>{{member.displayName}}</name>
-								<label-list>
+								<div>
 									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label><br/>
 									<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-								</label-list>
+								</div>
 							</div>
 						</li>
 					</div>
@@ -47,9 +47,9 @@
 			</div>
 		</div>
 
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-rocket"></i> Proof of Concept
 				</div>
 				<div class="panel-body">
@@ -58,10 +58,10 @@
 							<div class="team-member">
 								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
 								<name>{{member.displayName}}</name>
-								<label-list>
+								<div>
 									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
 									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-								</label-list>
+								</div>
 							</div>
 						</li>
 					</div>
@@ -75,9 +75,9 @@
 			</div>
 		</div>
 
-		<div class="col-xs-12 col-sm-4 text-center">
+		<div class="col-xs-12 col-sm-4">
 			<div class="panel panel-default">
-				<div class="panel-heading">
+				<div class="panel-heading text-center">
 					<i class="fa fa-gears"></i> Implementation
 				</div>
 				<div class="panel-body">
@@ -86,10 +86,10 @@
 							<div class="team-member">
 								<avatar-display size="35" url="member.profileImageURL"></avatar-display>
 								<name>{{member.displayName}}</name>
-								<label-list>
+								<div>
 									<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
 									<label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-								</label-list>
+								</div>
 							</div>
 						</li>
 					</div>
