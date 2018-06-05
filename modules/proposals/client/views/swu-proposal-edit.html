@@ -779,13 +779,13 @@
 										<h3 class="opp-detail">Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h3>
 										<p>
 											<strong>{{ppp.org.name}}</strong><br/>
-											{{ppp.org.address}} <span ng-if="ppp.org.address2"><br/>{{ppp.org.address2}}</span><br/>
-											{{ppp.org.city}}<span ng-if="ppp.org.province">, {{ppp.org.province}}</span><br/>
+											{{ppp.org.address}} <span ng-if="ppp.org.address2"><br/>{{ppp.org.address2}},</span><br/>
+											{{ppp.org.city}}<span ng-if="ppp.org.province">{{ppp.org.province}}</span><br/>
 											<span ng-if="ppp.org.postalcode">{{ppp.org.postalcode}}<br/></span>
-											<span ng-if="ppp.org.contactName">
-												<strong>Contact: {{ppp.org.contactName}}</strong><br/>
-												<span ng-if="ppp.org.contactPhone"><i>{{ppp.org.contactPhone}}</i><br/></span>
-												<span ng-if="ppp.org.contactEmail"><i>{{ppp.org.contactEmail}}</i></span>
+											<span>
+												<strong ng-if="ppp.org.contactName">Contact: {{ppp.org.contactName}}</strong><br/>
+												<span ng-if="ppp.org.contactPhone"><i>Contact Phone: {{ppp.org.contactPhone}}</i><br/></span>
+												<span ng-if="ppp.org.contactEmail"><i>Contact Email: {{ppp.org.contactEmail}}</i></span>
 											</span>
 										</p>
 									</div>
