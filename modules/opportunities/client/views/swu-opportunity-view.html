@@ -175,7 +175,10 @@
 						</thead>
 						<tbody>
 							<tr ng-repeat="proposal in vm.proposals | orderBy:'-scores.total'">
-								<td class="text-left"><a href="" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName}}</a></td>
+								<td class="text-left">
+									<span ng-show="vm.beforeStage('code_scores')">Company {{$index + 1}}</span>
+									<a href="" ng-show="vm.stageIs('questions_saved') || vm.pastStage('questions_saved')" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName}}</a>
+								</td>
 								<td class="text-center">{{proposal.scores.skill}}</td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.question}}</span></td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.skill + proposal.scores.question}}</span></td>
