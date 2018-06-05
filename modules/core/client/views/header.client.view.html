@@ -1,3 +1,23 @@
+<style type="text/css">
+	.message-list-dropdown {
+		padding: 0;
+		min-width: 400px;
+	}
+	.message {
+		padding: 10px;
+		border-bottom: 1px solid #e3e3e3;
+	}
+	.message:last-child {
+		border-bottom: none;
+	}
+	.message:hover {
+		cursor: pointer;
+		background: blue;
+		color: white;
+	}
+
+</style>
+
 <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container" ng-controller="HeaderController as vm">
 		<!-- Brand and toggle get grouped for better mobile display -->
@@ -35,17 +55,22 @@
 			<!-- Notifications/messages menu, pushed right -->
 			<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
 				<li class="dropdown" uib-dropdown>
-					<a class="dropdown-toggle" id="notifications" role="button" ui-sref="">
+					<a class="dropdown-toggle user-header-dropdown-toggle" id="notifications" uib-dropdown-toggle role="button">
 						<i class="fa fa-lg fa-bell" aria-hidden="true"></i>
 						<!-- This badge should appear if there are unread messages -->
 						<span class="badge badge-unread">&nbsp;</span>
 					</a>
 
-					<ul class="dropdown-menu" role="menu">
-						<li>First message</li>
-						<li class="divider"></li>
-						<li>Second message</li>
-						<li class="divider"></li>
+					<ul class="dropdown-menu message-list-dropdown" role="menu">	
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
 					</ul>
 				</li>
 			
