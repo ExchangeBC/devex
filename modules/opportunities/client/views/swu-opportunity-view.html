@@ -76,7 +76,7 @@
 						<!-- Questionnaire response ranking (modal) has been saved, but not committed -->
 						<h4 ng-if="vm.proposals.length > 1">You still need to finish ranking the responses to the Team Questions.</h4>
 						<h5>When you have all the rankings the way you want them, click the Commit button to lock in your decisions.</h5>
-						<button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 1" ng-click="vm.questions()">Finish and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+						<button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 0" ng-click="vm.questions()">Finish and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
 					</div>
 
 				<!-- Stage 2: Enter Code Challenge Scores -->
@@ -177,7 +177,7 @@
 							<tr ng-repeat="proposal in vm.proposals | orderBy:'-scores.total'">
 								<td class="text-left">
 									<span ng-show="vm.beforeStage('code_scores')">Company {{$index + 1}}</span>
-									<a href="" ng-show="vm.stageIs('questions_saved') || vm.pastStage('questions_saved')" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName}}</a>
+									<a href="" ng-show="vm.stageIs('code_scores') || vm.pastStage('questions_saved')" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName}}</a>
 								</td>
 								<td class="text-center">{{proposal.scores.skill}}</td>
 								<td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.question}}</span></td>
