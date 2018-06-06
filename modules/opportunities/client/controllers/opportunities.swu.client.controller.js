@@ -513,6 +513,29 @@
 		}
 		// -------------------------------------------------------------------------
 		//
+		// Question vetting ranking helper function
+		//
+		// -------------------------------------------------------------------------
+		vm.recalculateRankings = function() {
+			vm.responses.forEach(function(responseArray) {
+				var rejectedResponses = responseArray.filter(function(response) {
+					return response.rejected;
+				});
+
+				rejectedResponses.forEach(function(rejResponse) {
+					responseArray.forEach(function(response) {
+						if (rejResponse === response) {
+							response.rank = 0;
+						}
+						else if (rejResponse.rank < response.rank) {
+							response.rank -= 1;
+						}
+					})
+				});
+			});
+		}
+		// -------------------------------------------------------------------------
+		//
 		// Question vetting modal
 		//
 		// -------------------------------------------------------------------------
@@ -553,10 +576,12 @@
 			.then(function (resp) {
 				if (resp.action === 'save') {
 					// save validations on responses, but do not end vetting stage
+					vm.recalculateRankings();
 					vm.saveProposals();
 				}
 				else if (resp.action === 'commit') {
 					// save validations on responses, and end vetting stage
+					vm.recalculateRankings();
 					vm.opportunity.evaluationStage = vm.stages.questions;
 					vm.saveProposals();
 					buildQuestionPivot();
