@@ -14,7 +14,8 @@ var AttachmentSchema = new Schema ({
 var QuestionSchema = new Schema ({
 	question : {type: String},
 	response : {type: String},
-	rank     : {type: Number, default: 0}
+	rank     : {type: Number, default: 0},
+	rejected : {type: Boolean, default: false}
 });
 var AddendumSchema = new Schema ({
 	description : {type: String},

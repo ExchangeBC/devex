@@ -196,46 +196,6 @@
 		}
 		// -------------------------------------------------------------------------
 		//
-		// set the number of teams to interview
-		//
-		// -------------------------------------------------------------------------
-		// vm.updateNumberOfTeams = function () {
-		// 	vm.opportunity.numberOfInterviews = vm.numberOfInterviews;
-		// 	vm.canProgress ();
-		// 	vm.saveOpportunity ();
-		// };
-		// -------------------------------------------------------------------------
-		//
-		// click here when all done interviewing
-		//
-		// -------------------------------------------------------------------------
-		// vm.doneInterviews = function () {
-		// 	vm.opportunity.evaluationStage = vm.stages.price;
-		// 	vm.saveOpportunity ();
-		// 	vm.calculatePriceScores ();
-		// 	vm.saveProposals ();
-		// };
-		// -------------------------------------------------------------------------
-		//
-		// check if we can progress from interviews
-		//
-		// -------------------------------------------------------------------------
-		// vm.canProgress = function () {
-		// 	//
-		// 	// if we have proposals, are we through the interview process yet?
-		// 	//
-		// 	if (vm.opportunity.numberOfInterviews > vm.proposals.length) vm.opportunity.numberOfInterviews = vm.proposals.length;
-		// 	vm.canCloseInterviews = false;
-		// 	var ninterviewcomplete = 0;
-		// 	vm.proposals.forEach (function (p) {
-		// 		if (p.interviewComplete) ninterviewcomplete++;
-		// 	});
-		// 	if (ninterviewcomplete >= vm.opportunity.numberOfInterviews) {
-		// 		vm.canCloseInterviews = true;
-		// 	}
-		// };
-		// -------------------------------------------------------------------------
-		//
 		// Evaluate question rankings or calculate skill points
 		//
 		// -------------------------------------------------------------------------
@@ -256,7 +216,9 @@
 				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
 					vm.proposals.forEach (function (p) {
-						vm.responses[questionIndex].push (p.questions[questionIndex])
+						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !p.questions[questionIndex].rejected) {
+							vm.responses[questionIndex].push (p.questions[questionIndex])
+						}
 					});
 				}
 				//
@@ -329,11 +291,14 @@
 						proposal.scores.total = 0;
 						proposal.scores.price = 0;
 						proposal.isAssigned = false;
+						proposal.screenedIn = false;
+						proposal.questions.forEach(function(question) {
+							question['rejected'] = false;
+						})
 					})
 					vm.totalAndSort();
 					vm.saveProposals();
 					vm.saveOpportunity();
-					buildQuestionPivot ();
 				}
 			});
 		};
@@ -368,6 +333,11 @@
 					$scope.data.totalQuestions = vm.opportunity.questions.length;
 					$scope.data.currentPage    = 1;
 
+					// filter out rejected responses
+					// $scope.data.responses = $scope.data.responses.filter(function(response) {
+					// 	return !response['rejected'];
+					// });
+
 					$scope.close = function () {
 						$uibModalInstance.close('cancel');
 					};
@@ -384,7 +354,6 @@
 							if (r.rank === orank) r.rank = nrank;
 							else if (r.rank === nrank) r.rank = orank;
 						});
-						console.groupEnd ();
 					};
 					$scope.moveDown = function (resp, qindex) {
 						var orank = resp.rank;
@@ -544,6 +513,58 @@
 		}
 		// -------------------------------------------------------------------------
 		//
+		// Question vetting modal
+		//
+		// -------------------------------------------------------------------------
+		vm.openQuestionVetting = function() {
+			modalService.showModal({
+				size: 'md',
+				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-question-vetting.html',
+				controller: function($scope, $uibModalInstance) {
+					$scope.data				   = {};
+					$scope.data.questions      = [];
+					$scope.data.proposals      = vm.proposals;
+					$scope.data.nproposals     = vm.proposals.length;
+					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.responses      = vm.responses;
+					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.currentPage    = 1;
+
+					$scope.close = function () {
+						$uibModalInstance.close({});
+					};
+					$scope.ok = function () {
+						$uibModalInstance.close({
+							action: 'save'
+						});
+					};
+					$scope.commit = function () {
+						var q = 'Are you sure you wish to commmit your validation? Ensure you have reviewed all questions.  This action cannot be undone.';
+						ask.yesNo (q).then (function (r) {
+							if (r) {
+								$uibModalInstance.close({
+									action: 'commit'
+								});
+							}
+						});
+					};
+				}
+			})
+			.then(function (resp) {
+				if (resp.action === 'save') {
+					// save validations on responses, but do not end vetting stage
+					vm.saveProposals();
+				}
+				else if (resp.action === 'commit') {
+					// save validations on responses, and end vetting stage
+					vm.opportunity.evaluationStage = vm.stages.questions;
+					vm.saveProposals();
+					buildQuestionPivot();
+				}
+			});
+		}
+		// -------------------------------------------------------------------------
+		//
 		// Interview Modal
 		//
 		// -------------------------------------------------------------------------
@@ -641,13 +662,20 @@
 		//
 		// score = sum ( (n+1)-Q(r) ) / (n * m) * 400
 		//
+		// Rejected questions are not considered in the scoring
 		vm.questionScore = function (proposal) {
 			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
-			proposal.scores.question = Math.round(proposal.questions.map (function (q) {
-				return vm.proposals.length + 1 - q.rank;
-			}).reduce (function (a, b) {
-				return a + b;
-			}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+			proposal.scores.question = Math.round(
+				proposal.questions
+				// filter out rejected questions
+				.filter(function (q) {
+					return !q.rejected;
+				})
+				.map (function (q) {
+					return vm.proposals.length + 1 - q.rank;
+				}).reduce (function (a, b) {
+					return a + b;
+				}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
 			return proposal.scores.question;
 		};
 

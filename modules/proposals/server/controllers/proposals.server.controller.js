@@ -255,8 +255,14 @@ var saveProposal = function (proposal) {
 exports.saveProposal = saveProposal;
 var saveProposalRequest = function (req, res, proposal) {
 	return saveProposal (proposal)
-	.then (function () { res.json (proposal); })
-	.catch (function (e) { res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+	.then (function () {
+		res.json (proposal);
+	})
+	.catch (function (e) {
+		res.status(422).send ({
+			message: errorHandler.getErrorMessage(e)
+		});
+	});
 };
 // -------------------------------------------------------------------------
 //
@@ -373,8 +379,12 @@ exports.assign = function (req, res) {
 	.then (function () {
 		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user, req.user);
 	})
-	.then (function () {res.json (proposal); })
-	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+	.then (function () {
+		res.json (proposal);
+	})
+	.catch (function (e) {
+		res.status(422).send ({ message: errorHandler.getErrorMessage(e)});
+	});
 };
 exports.assignswu = function (req, res) {
 	var proposal = req.proposal;
@@ -386,7 +396,9 @@ exports.assignswu = function (req, res) {
 		return Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
 	})
 	.then (function () {res.json (proposal); })
-	.catch (function (e) {res.status(422).send ({ message: errorHandler.getErrorMessage(e) }); });
+	.catch (function (e) {
+		res.status(422).send ({ message: errorHandler.getErrorMessage(e) });
+	});
 };
 // -------------------------------------------------------------------------
 //
