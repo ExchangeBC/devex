@@ -571,6 +571,10 @@
 							}
 						});
 					};
+
+					$scope.getWordCount = function (response) {
+						return response.split(' ').length;
+					}
 				}
 			})
 			.then(function (resp) {
