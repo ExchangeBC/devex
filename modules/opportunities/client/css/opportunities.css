@@ -44,3 +44,8 @@ span.screened-in {
 span.screened-out {
 	color: red;
 }
+
+div.rejected {
+	text-decoration: line-through;
+	color: darkred;
+}
