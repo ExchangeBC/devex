@@ -23,10 +23,11 @@
 						<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
 						<!-- <li class="list-group-item" ng-repeat="response in data.responses[qindex]"> -->
 							<div class="row">
-								<span>
-									Reject <input type="checkbox" ng-model="response.rejected">
-								</span>
-								<div class="col-sm-9" ng-class="{rejected: response.rejected}">
+								<div align="right">
+									Reject <input type="checkbox" ng-model="response.rejected"><br/>
+									Word count: {{getWordCount(response.response)}}
+								</div>
+								<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}">
 									{{response.response}}
 								</div>
 							</div>
