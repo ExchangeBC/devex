@@ -1,5 +1,5 @@
 <div class="modal-header">
-	<h3>Interview Scores</h3>
+	<div class="modal-title">Interview Scores</div>
 </div>
 <div class="modal-body">
 	<div class="container">
@@ -22,6 +22,6 @@
 </div>
 <div class="modal-footer">
 	<span ng-show="scoreForm.$error.number || !scoreForm.$valid">Scores must be a number between 0 and 25</span>
+	<button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()"><i class="fa fa-lock"></i> Lock in Scores</button>
 	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
-	<button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()">Save</button>
 </div>

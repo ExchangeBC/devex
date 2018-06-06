@@ -462,7 +462,7 @@
 		// -------------------------------------------------------------------------
 		vm.codeChallenge = function () {
 			modalService.showModal ({
-				size: 'md',
+				size: 'sm',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-code-challenge.html',
 				controller: function ($scope, $uibModalInstance) {
 					$scope.data = {};
@@ -549,7 +549,7 @@
 		// -------------------------------------------------------------------------
 		vm.interview = function () {
 			modalService.showModal ({
-				size: 'md',
+				size: 'sm',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
 				controller: function ($scope, $uibModalInstance) {
 					$scope.data = {};
