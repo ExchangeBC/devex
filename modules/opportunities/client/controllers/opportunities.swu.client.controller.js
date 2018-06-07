@@ -588,6 +588,7 @@
 					vm.recalculateRankings();
 					vm.opportunity.evaluationStage = vm.stages.questions;
 					vm.saveProposals();
+					vm.saveOpportunity();
 					buildQuestionPivot();
 				}
 			});
