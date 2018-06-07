@@ -1,0 +1,66 @@
+<style type="text/css">
+	.company-invitation-avatars {
+		padding: 20px;
+		text-align: center;
+	}
+	.company-invitation-avatars i {
+		font-size: 2em;
+		vertical-align: middle;
+		padding: 20px;
+	}
+	.company-invitation-avatars img {
+		height: 70px;
+	}
+	.company-invitation-message {
+		text-align: center;
+		padding: 20px;
+	}
+	.company-invitation-message p {
+		font-size: 1.1em;
+		font-weight: 400;
+	}
+	.company-invitation-actions {
+		text-align: center;
+		padding: 30px 10px;
+	}
+	.expiry-message {
+		padding: 20px 10px;
+		text-align: center;
+		font-size: 0.9em;
+		color: #777;
+	}
+</style>
+
+<section>
+		<div class="modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<!-- Clicking the close button should close the modal and take the user back to their Message Center -->
+					<button class="close"><i class="fa fa-lg fa-times"></i></button>
+					<div class="modal-title">Invitation to join {{Company Name}}</div>
+				</div>
+				<div class="modal-body">
+					<div class="company-invitation-avatars">
+						<!-- Replace src to display Inviter's avatar -->
+						<img class="img img-circle" title="Inviter avatar" src="/img/bob_avatar.png">
+						<i class="fa fa-plus"></i>
+						<!-- Replace src to display Company's logo -->
+						<img class="img img-circle" title="Company avatar" src="/img/bob_avatar.png">
+					</div>
+					<div class="company-invitation-message">
+						<p><strong>{{Inviter Name}}</strong> has invited you to join <strong>{{Company Name}}</strong>.</p>
+						<p>If you accept, {{Company Name}} will be able to put you forward as a team member on proposals for Sprint With Us opportunities.</p>
+					</div>
+					<div class="company-invitation-actions">
+						<button class="btn btn-lg btn-primary">Accept</button>
+						<button class="btn btn-lg btn-secondary">Decline</button>
+						<!-- Clicking ignore should close the modal and take the user back to their Message Center -->
+						<button class="btn btn-lg btn-default">Ignore</button>	
+					</div>
+					<div class="expiry-message">
+						This invitation will expire on <strong>{{expiry date, if we're doing that}}</strong> if you do nothing.
+					</div>
+				</div>
+			</div>
+		</div>
+</section>
