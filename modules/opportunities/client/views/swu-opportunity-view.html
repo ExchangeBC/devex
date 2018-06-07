@@ -121,7 +121,7 @@
 					<div class="table-title">Evaluation Scoring Summary</div>
 					<div class="alert alert-warning hidden-md hidden-lg">
 						<i class="fa fa-lg fa-laptop"></i> &nbsp; To view the evaluation summary table, you need to be on a device with a wider screen. (Sorry, we're working on it!)
-					</div>
+				</div>
 					<table class="table table-condensed table-striped hidden-xs hidden-sm">
 						<thead>
 							<tr>
@@ -196,8 +196,8 @@
 							</tr>
 							<tr>
 								<td align="right" class="text-right" colspan="9">
-									<b><span ng-show="vm.stageIs('price')" ng-bind="vm.getTopProposal().businessName"></span></b><span ng-show="vm.stageIs('price')"> has the highest score for this evaluation: </span>
-									<button ng-show="vm.stageIs('price')" class="btn btn-sm btn-primary" type="button" ng-click="vm.assign(vm.getTopProposal())">Assign</button>
+									<b><span ng-if="vm.stageIs('price')" ng-bind="vm.getTopProposal().businessName"></span></b><span ng-if="vm.stageIs('price')"> has the highest score for this evaluation: </span>
+									<button ng-if="vm.stageIs('price')" class="btn btn-sm btn-primary" type="button" ng-click="vm.assign(vm.getTopProposal())">Assign</button>
 								</td>
 							</tr>
 						</tbody>
