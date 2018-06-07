@@ -86,9 +86,12 @@ var countStatus = function (id) {
 					count: {$sum: 1}
 				}
 			}
-		]).cursor({}).exec();
-
-		resolve( cursor );
+		])
+		.cursor({ batchSize: 1000, async: true })
+		.exec()
+		.then(function(cursor) {
+			resolve(cursor);
+		});
 	});
 };
 // -------------------------------------------------------------------------
@@ -109,12 +112,12 @@ exports.stats = function (req, res) {
 		return countStatus (op._id);
 	})
 	.then (function (result) {
-		result.each(function(error, doc) {
-			if (doc) {
+		result.toArray().then(function(docs) {
+			docs.forEach(function(doc) {
 				ret[doc._id.toLowerCase()] = doc.count;
-			}
+			});
+			res.json(ret);
 		});
-		res.json(ret);
 	})
 	.catch (function (err) {
 		res.status(422).send ({
