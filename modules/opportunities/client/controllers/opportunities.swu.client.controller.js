@@ -371,8 +371,8 @@
 						});
 					};
 					$scope.truncate = function(string) {
-						if (string.length > 40)
-						   return string.substring(0,40)+'...';
+						if (string.length > 80)
+						   return string.substring(0,80)+'...';
 						else
 						   return string;
 					 };
