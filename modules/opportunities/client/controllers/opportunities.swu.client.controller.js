@@ -215,9 +215,9 @@
 				var questionIndex;
 				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
-					vm.proposals.forEach (function (p) {
-						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !p.questions[questionIndex].rejected) {
-							vm.responses[questionIndex].push (p.questions[questionIndex])
+					vm.proposals.forEach (function (proposal) {
+						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !proposal.questions[questionIndex].rejected) {
+							vm.responses[questionIndex].push (proposal.questions[questionIndex])
 						}
 					});
 				}
@@ -333,53 +333,78 @@
 					$scope.data.totalQuestions = vm.opportunity.questions.length;
 					$scope.data.currentPage    = 1;
 
-					// filter out rejected responses
-					// $scope.data.responses = $scope.data.responses.filter(function(response) {
-					// 	return !response['rejected'];
-					// });
+					$scope.data.model = {
+						selected: null,
+						questions: {}
+					};
+
+					vm.responses.forEach(function(respArray) {
+
+						// set initial order by current ranking
+						respArray.sort(function(a, b) {
+							return a.rank - b.rank;
+						});
+						$scope.data.model.questions[respArray[0].question] = respArray;
+					})
+					$scope.pageChanged = function() {
+						$scope.data.model.selected = null;
+					}
 
 					$scope.close = function () {
-						$uibModalInstance.close('cancel');
+						$uibModalInstance.close({});
 					};
 					$scope.ok = function () {
-						$uibModalInstance.close('save');
-					};
-					$scope.pageChanged = function () {
-					};
-					$scope.moveUp = function (resp, qindex) {
-						console.group ('moving up in question '+qindex);
-						var orank = resp.rank;
-						var nrank = orank-1;
-						vm.responses[qindex].forEach (function (r) {
-							if (r.rank === orank) r.rank = nrank;
-							else if (r.rank === nrank) r.rank = orank;
-						});
-					};
-					$scope.moveDown = function (resp, qindex) {
-						var orank = resp.rank;
-						var nrank = orank+1;
-						vm.responses[qindex].forEach (function (r) {
-							if (r.rank === orank) r.rank = nrank;
-							else if (r.rank === nrank) r.rank = orank;
+						$uibModalInstance.close({
+							action: 'save',
+							questions: $scope.data.model.questions
 						});
 					};
 					$scope.commit = function () {
 						var q = 'Are you sure you wish to commmit this ranking session? Ensure you have completed ranking all questions.  This action cannot be undone.';
 						ask.yesNo (q).then (function (r) {
 							if (r) {
-								$uibModalInstance.close('commit');
+								$uibModalInstance.close({
+									action: 'commit',
+									questions: $scope.data.model.questions
+								});
 							}
 						});
-					}
+					};
+					$scope.truncate = function(string) {
+						if (string.length > 40)
+						   return string.substring(0,40)+'...';
+						else
+						   return string;
+					 };
+					$scope.inserted = function(item, index) {
+						// ensure item just dropped remains selected
+						$scope.data.model.selected = item;
+					};
 				}
 			}, {
 			})
 			.then (function (resp) {
-				if (resp === 'save') {
+
+				// commit selected ordering to proposals
+				// this nastiness is necessary as the drag and drop widget deep clones objects, so we have to match up original
+				// question/response objects by id and update the originals
+				vm.proposals.forEach(function(proposal) {
+					proposal.questions.forEach(function(question) {
+						var match = resp.questions[question.question].find(function(response) {
+							return question._id === response._id;
+						});
+
+						if (match) {
+							question.rank = resp.questions[question.question].indexOf(match) + 1;
+						}
+					})
+				})
+
+				if (resp.action === 'save') {
 					vm.saveProposals ();
 					vm.opportunity.evaluationStage = vm.stages.questions_saved;
 				}
-				if (resp === 'commit') {
+				if (resp.action === 'commit') {
 					vm.proposals.forEach(function(proposal) {
 						vm.questionScore(proposal);
 					});

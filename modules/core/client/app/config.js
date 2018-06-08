@@ -16,7 +16,8 @@
     'ngFileUpload',
     'ngImgCrop',
     'ui-notification',
-    'ncy-angular-breadcrumb'
+    'ncy-angular-breadcrumb',
+    'dndLists'
     ],
     registerModule: registerModule
   };
