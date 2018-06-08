@@ -31,7 +31,8 @@ module.exports = {
         'public/lib/tinymce/tinymce.js',
         'public/lib/angular-ui-tinymce/src/tinymce.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
-        'public/jquery/jquery.min.js'
+        'public/jquery/jquery.min.js',
+        'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js'
         // endbower
       ],
       tests: ['public/lib/angular-mocks/angular-mocks.js']

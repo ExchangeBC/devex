@@ -12,28 +12,48 @@
 	</div>
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="panel panel-primary" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
-				<div class="panel-heading text-center">
-					{{qindex=$index;""}}
-					<strong>
-						Question: {{question}}
-					</strong>
-				</div>
-				<ul class="list-group">
-					<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
-					<!-- <li class="list-group-item" ng-repeat="response in data.responses[qindex]"> -->
-						<div class="row">
-							<div class="col-sm-9">
-								{{response.response}}
+			<table width="100%">
+				<tr>
+					<td width="65%">
+						<div class="panel panel-primary" ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
+							<div class="panel-heading text-center">
+								<strong>
+								Question: {{question[0].question}}
+								</strong>
 							</div>
-							<div class="col-sm-3">
-								<button ng-click="moveDown(response, qindex)" ng-if="$index<data.nproposals-1" class="btn btn-sm pull-right" title="move down"><i class="fa fa-angle-down"></i></button>
-								<button ng-click="moveUp(response, qindex)" ng-if="$index>0" class="btn btn-sm pull-right" title="move up"><i class="fa fa-angle-up"></i></button>
-							</div>
+							<table width="100%">
+								<tr>
+									<td width="15%">
+										<ul dnd-list="question">
+											<li ng-repeat="response in question" style="text-align:center;">
+												Rank {{$index + 1}}
+											</li>
+										</ul>
+									</td>
+									<td width="100%">
+										<ul dnd-list="question"
+											dnd-inserted="inserted(item, index)">
+											<li ng-repeat="response in question"
+												dnd-draggable="response"
+												dnd-moved="question.splice($index, 1)"
+												dnd-effect-allowed="move"
+												dnd-selected="data.model.selected = response"
+												ng-class="{'selected': data.model.selected === response}">
+												{{truncate(response.response)}}
+											</li>
+										</ul>
+									</td>
+								</tr>
+							</table>
 						</div>
-					</li>
-				</ul>
-			</div>
+					</td>
+					<td width="35%">
+						<div>
+							<textarea ng-model="data.model.selected.response" type="text" name="txtarea" class="long-question" disabled></textarea>
+						</div>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 </div>
