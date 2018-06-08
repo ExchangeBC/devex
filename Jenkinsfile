@@ -197,7 +197,7 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
 //         }
 //      }}
   //  }
-}
+//}
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
