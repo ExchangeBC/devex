@@ -112,7 +112,7 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
      }
   }
 
-stage('Functional Test Staging') {
+/** stage('Functional Test Staging') {
   // def userInput = 'y'
   def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
   // try {
@@ -176,7 +176,7 @@ stage('Functional Test Staging') {
         }
      }}
   // }
-}
+} **/
 
 stage('deploy-prod') {
     timeout(time: 3, unit: 'DAYS') {
