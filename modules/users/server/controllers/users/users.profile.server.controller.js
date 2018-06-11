@@ -3,69 +3,66 @@
 /**
  * Module dependencies
  */
-var _ = require('lodash'),
-	fs = require('fs'),
-	path = require('path'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	mongoose = require('mongoose'),
-	multer = require('multer'),
-	config = require(path.resolve('./config/config')),
-	User = mongoose.model('User'),
-	validator = require('validator'),
-	orgController = require(path.resolve('./modules/orgs/server/controllers/orgs.server.controller')),
-	// notifier = require(path.resolve('./modules/core/server/controllers/core.server.notifier.js')).notifier
-	claimMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).claimMessages,
-	//
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
-	;
+var _             = require ('lodash');
+var fs            = require ('fs');
+var path          = require ('path');
+var errorHandler  = require (path.resolve ('./modules/core/server/controllers/errors.server.controller'));
+var mongoose      = require ('mongoose');
+var multer        = require ('multer');
+var config        = require (path.resolve ('./config/config'));
+var User          = mongoose.model ('User');
+var validator     = require ('validator');
+var orgController = require (path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
+var claimMessages = require (path.resolve ('./modules/messages/server/controllers/messages.controller')).claimMessages;
+var Notifications = require (path.resolve ('./modules/notifications/server/controllers/notifications.server.controller'));
+
 
  // CC:  USERFIELDS
 var whitelistedFields = [
-	'orgsAdmin',
-	'orgsMember',
-	'orgsPending',
-	'_id',
-	'firstName',
-	'lastName',
-	'email',
-	'username',
-	'government',
-	'notifyOpportunities',
-	'subscribeOpportunitiesId',
-	'notifyEvents',
-	'notifyBlogs',
-	'userTitle',
-	'isDisplayEmail',
-	'isDeveloper'      ,
-	'paymentMethod'    ,
-	'phone'              ,
-	'address'            ,
-	'businessContactName'     ,
-	'businessContactEmail'    ,
-	'businessContactPhone'    ,
-	'businessName'     ,
-	'businessAddress'  ,
-	'businessAddress2' ,
-	'businessCity'     ,
-	'businessProvince' ,
-	'businessCode',
-	'location',
-	'description',
-	'website',
-	'skills',
-	'skillsData',
-	'badges',
-	'capabilities',
-	'endorsements',
-	'github',
-	'stackOverflow',
-	'stackExchange',
-	'linkedIn',
-	'isPublicProfile',
-	'isAutoAdd',
-	'capabilityDetails',
+	'orgsAdmin'                ,
+	'orgsMember'               ,
+	'orgsPending'              ,
+	'_id'                      ,
+	'firstName'                ,
+	'lastName'                 ,
+	'email'                    ,
+	'username'                 ,
+	'government'               ,
+	'notifyOpportunities'      ,
+	'subscribeOpportunitiesId' ,
+	'notifyEvents'             ,
+	'notifyBlogs'              ,
+	'userTitle'                ,
+	'isDisplayEmail'           ,
+	'isDeveloper'              ,
+	'paymentMethod'            ,
+	'phone'                    ,
+	'address'                  ,
+	'businessContactName'      ,
+	'businessContactEmail'     ,
+	'businessContactPhone'     ,
+	'businessName'             ,
+	'businessAddress'          ,
+	'businessAddress2'         ,
+	'businessCity'             ,
+	'businessProvince'         ,
+	'businessCode'             ,
+	'location'                 ,
+	'description'              ,
+	'website'                  ,
+	'skills'                   ,
+	'skillsData'               ,
+	'badges'                   ,
+	'capabilities'             ,
+	'endorsements'             ,
+	'github'                   ,
+	'stackOverflow'            ,
+	'stackExchange'            ,
+	'linkedIn'                 ,
+	'isPublicProfile'          ,
+	'isAutoAdd'                ,
+	'capabilityDetails'        ,
 	'capabilitySkills'
-
 ];
 
 var updateOrgs = function (orglist) {
@@ -103,8 +100,8 @@ exports.update = function (req, res) {
 		user.updated = Date.now();
 		user.displayName = user.firstName + ' ' + user.lastName;
 
-		subscriptionHandler(user)
-		.then(function() {
+		// subscriptionHandler(user)
+		// .then(function() {
 			return user.save(function (err) {
 				if (err) {
 					return res.status(422).send({
@@ -122,7 +119,7 @@ exports.update = function (req, res) {
 					});
 				}
 			});
-		});
+		// });
 
 	}
 	else {
@@ -133,40 +130,40 @@ exports.update = function (req, res) {
 };
 
 
-function subscriptionHandler(user) {
-	var promise = Promise.resolve();
-	if (user.email == null || user.email === '') {
-		return promise;
-	}
-	if (user.notifyOpportunities) {
-		promise = Notifications.subscribe ('not-add-opportunity', user)
-			.then(function(json) {
-				// we save the id for the subscription so that was can unsubscribe at
-				// a later point.
-				user.subscribeOpportunitiesId = json.id;
-			})
-			.catch(function(err) {
-				// if there was an error, reset the notifyOpportunites flag
-				console.error('Could not subscribe user due to error from notification ' +
-					'service:' + err);
-				user.notifyOpportunites = false;
-			});
-	}
-	else if (!user.notifyOpportunities ) {
-		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
-		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
-			.then(function() {
-				user.subscribeOpportunitiesId = null;
-			})
-			.catch(function() {
-				// if there was an error, reset the notifyOpportunites flag
-			})
-	}
+// function subscriptionHandler(user) {
+// 	var promise = Promise.resolve();
+// 	if (user.email == null || user.email === '') {
+// 		return promise;
+// 	}
+// 	if (user.notifyOpportunities) {
+// 		promise = Notifications.subscribe ('not-add-opportunity', user)
+// 			.then(function(json) {
+// 				// we save the id for the subscription so that was can unsubscribe at
+// 				// a later point.
+// 				user.subscribeOpportunitiesId = json.id;
+// 			})
+// 			.catch(function(err) {
+// 				// if there was an error, reset the notifyOpportunites flag
+// 				console.error('Could not subscribe user due to error from notification ' +
+// 					'service:' + err);
+// 				user.notifyOpportunites = false;
+// 			});
+// 	}
+// 	else if (!user.notifyOpportunities ) {
+// 		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
+// 		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
+// 			.then(function() {
+// 				user.subscribeOpportunitiesId = null;
+// 			})
+// 			.catch(function() {
+// 				// if there was an error, reset the notifyOpportunites flag
+// 			})
+// 	}
 
-	return promise;
-}
+// 	return promise;
+// }
 
-exports.subscriptionHandler = subscriptionHandler;
+// exports.subscriptionHandler = subscriptionHandler;
 /**
  * Update profile picture
  */

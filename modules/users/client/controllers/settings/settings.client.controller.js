@@ -21,7 +21,7 @@
 	.controller('ProfilePrivacyController', function ($scope, subscriptions, Authentication, UsersService, Notification) {
 		var vm = this;
 		vm.user = angular.copy(Authentication.user);
-		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
+		// vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
 		vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
 			if (!isValid) {

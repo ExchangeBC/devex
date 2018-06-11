@@ -41,10 +41,17 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/opportunities/:opportunityId',
       permissions: '*'
+    }, {
+      resources: '/api/opportunities/watch/add/:opportunityId',
+      permissions: ['get']
+    }, {
+      resources: '/api/opportunities/watch/remove/:opportunityId',
+      permissions: ['get']
     }]
   }, {
     roles: ['user'],
-    allows: [{
+    allows: [
+    {
       resources: '/api/opportunities',
       permissions: ['get']
     }, {
@@ -65,10 +72,17 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/opportunities/publish/:opportunityId',
       permissions: ['*']
-   }, {
+    }, {
       resources: '/api/opportunities/:opportunityId',
       permissions: ['get']
-    }]
+    }, {
+      resources: '/api/opportunities/watch/add/:opportunityId',
+      permissions: ['get']
+    }, {
+      resources: '/api/opportunities/watch/remove/:opportunityId',
+      permissions: ['get']
+    }
+    ]
   }, {
     roles: ['guest'],
     allows: [{

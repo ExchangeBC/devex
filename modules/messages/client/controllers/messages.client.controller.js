@@ -37,6 +37,8 @@
 	})
 	.controller ('MessageViewController', function ($sce, $location, $state, $rootScope, message, Authentication, Notification, MessagesService) {
 		var vm        = this;
+		vm.haveresult = false;
+		vm.resultmsg  = '';
 		vm.trust      = $sce.trustAsHtml;
 		vm.message    = message ;
 		vm.auth       = Authentication;
@@ -54,30 +56,61 @@
 		// take some sort of action
 		//
 		vm.takeAction = function (action) {
+			console.log ('taking action:', action);
 			MessagesService.actioned ({
-				messageId: message._id,
-				action : action.actionCd
-			}).$promise.then (function () {
-				if (!action.isDefault) {
-					window.location = action.link;
-					// $location.path (action.link);
-				}
-				else {
-					$rootScope.$broadcast('updateMessages', 'done');
-					$state.go ('settings.messages');
-				}
+				messageId : message._id,
+				action    : action.actionCd
+			}).$promise
+			.then (function (response) {
+				vm.haveresult = true;
+				vm.resultmsg = vm.trust (response.message);
+				console.log ('returned ALL GOOD');
+				$rootScope.$broadcast('updateMessages', 'done');
 			})
-		}
+			.catch (function (response) {
+				vm.haveresult = true;
+				vm.resultmsg = vm.trust (response.message);
+				console.log ('returned BAD');
+				$rootScope.$broadcast('updateMessages', 'done');
+			})
+		};
+	})
+	.controller ('MessageResultController', function ($sce, $rootScope, $state, isGoodResult, message) {
+		var vm        = this;
+		vm.bodyMessage = isGoodResult ? $sce.trustAsHtml (message.successMessage) : $sce.trustAsHtml (message.failureMessage);
 	})
 	// =========================================================================
 	//
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateEditController', function ($scope, $state, template, Authentication, Notification) {
+	.controller ('MessageTemplateEditController', function ($scope, TINYMCE_OPTIONS, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
 		var qqq        = this;
 		qqq.template = template;
 		qqq.auth       = Authentication;
+		qqq.tinymceOptions = TINYMCE_OPTIONS;
+		qqq.template.defaultActionCd          = '';
+		qqq.template.defaultLinkTitleTemplate = '';
+		qqq.template.action1ActionCd          = '';
+		qqq.template.action1LinkTitleTemplate = '';
+		qqq.template.action1LinkTemplate      = '';
+		qqq.template.action2ActionCd          = '';
+		qqq.template.action2LinkTitleTemplate = '';
+		qqq.template.action2LinkTemplate      = '';
+		if (editing) {
+			qqq.template.defaultActionCd          = qqq.template.actions[0].actionCd          ;
+			qqq.template.defaultLinkTitleTemplate = qqq.template.actions[0].linkTitleTemplate ;
+			if (qqq.template.actions.length > 1) {
+				qqq.template.action1ActionCd          = qqq.template.actions[1].actionCd          ;
+				qqq.template.action1LinkTitleTemplate = qqq.template.actions[1].linkTitleTemplate ;
+				qqq.template.action1LinkTemplate      = qqq.template.actions[1].linkTemplate      ;
+			}
+			if (qqq.template.actions.length > 2) {
+				qqq.template.action2ActionCd          = qqq.template.actions[2].actionCd          ;
+				qqq.template.action2LinkTitleTemplate = qqq.template.actions[2].linkTitleTemplate ;
+				qqq.template.action2LinkTemplate      = qqq.template.actions[2].linkTemplate      ;
+			}
+		}
 		// -------------------------------------------------------------------------
 		//
 		// save the template, could be added or edited (post or put)
@@ -85,8 +118,34 @@
 		// -------------------------------------------------------------------------
 		qqq.savenow = function (isValid, leavenow) {
 			if (!isValid) {
-				$scope.$broadcast ('show-errors-check-validity', 'qqq.superbasicForm');
+				$scope.$broadcast ('show-errors-check-validity', 'qqq.templateForm');
 				return false;
+			}
+			//
+			// put the right bits in place
+			//
+			qqq.template.actions = [];
+			qqq.template.actions.push ({
+				isDefault         : true,
+				linkTitleTemplate : qqq.template.defaultLinkTitleTemplate,
+				linkTemplate      : '',
+				actionCd          : qqq.template.defaultActionCd
+			});
+			if (qqq.template.action1ActionCd && qqq.template.action1LinkTitleTemplate && qqq.template.action1LinkTemplate) {
+				qqq.template.actions.push ({
+					isDefault         : false,
+					linkTitleTemplate : qqq.template.action1LinkTitleTemplate,
+					linkTemplate      : qqq.template.action1LinkTemplate,
+					actionCd          : qqq.template.action1ActionCd
+				});
+			}
+			if (qqq.template.action2ActionCd && qqq.template.action2LinkTitleTemplate && qqq.template.action2LinkTemplate) {
+				qqq.template.actions.push ({
+					isDefault         : false,
+					linkTitleTemplate : qqq.template.action2LinkTitleTemplate,
+					linkTemplate      : qqq.template.action2LinkTemplate,
+					actionCd          : qqq.template.action2ActionCd
+				});
 			}
 			//
 			// Create a new template, or update the current instance
@@ -96,11 +155,11 @@
 			// success, notify and return to list
 			//
 			.then (function (result) {
-				qqq.superbasicForm.$setPristine ();
+				qqq.templateForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> template saved successfully!'
 				});
-				if (leavenow) $state.go ('messagetemplates.view', {superbasicId:qqq.template.code});
+				if (leavenow) $state.go ('messagetemplates.list');
 			})
 			//
 			// fail, notify and stay put

@@ -128,7 +128,13 @@ var OpportunitySchema = new Schema({
 		question            : {type: Number, default: 0.2},
 		interview           : {type: Number, default: 0.5},
 		price               : {type: Number, default: 0.1}
-	}
+	},
+	//
+	// this is a replacement for the old subscrptions which were clunky. in the past
+	// each time a new opp was created we had to create a su7bscrption type. this
+	// is much simpler and easier to maintain
+	//
+	watchers : {type: [{type:Schema.ObjectId, ref: 'User'}], default: []}
 }, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {

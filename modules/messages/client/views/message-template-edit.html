@@ -13,10 +13,22 @@
 								"title":"Template Code - no spaces please",
 								"id":"messageCd",
 								"name":"messageCd",
-								"placeholder":"a-nice-readable-code",
-								"required":"Must supply a template code"
+								"placeholder":"a-nice-readable-code"
 							}'>
 						</form-input>
+
+						<form-input
+							class="col-sm-12"
+							ng-model="qqq.template.description"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Template Description",
+								"id":"description",
+								"name":"description",
+								"placeholder":"Template Description"
+							}'>
+						</form-input>
+<!--
 						<form-display
 							class="col-sm-12"
 							x-options='{
@@ -30,23 +42,19 @@
 								</label>
 							</div>
 						</form-display>
-
-						<form-display
+ -->
+ 						<h4>Message Data</h4>
+						<form-input
 							class="col-sm-12"
+							ng-model="qqq.template.messageTitleTemplate"
+							x-form="qqq.templateForm"
 							x-options='{
-								"title":"Message Body Template",
-								"id":"messageBodyTemplate",
-								"name":"messageBodyTemplate"
+								"title":"Message Title Template",
+								"id":"messageTitleTemplate",
+								"name":"messageTitleTemplate",
+								"placeholder":"Message Title Template"
 							}'>
-							<textarea
-								name="messageBodyTemplate"
-								id="messageBodyTemplate"
-								class="form-control input-sm"
-								ui-tinymce="qqq.tinymceOptions"
-								placeholder="messageBodyTemplate"
-								ng-model="qqq.template.messageBodyTemplate">
-							</textarea>
-						</form-display>
+						</form-input>
 
 						<form-display
 							class="col-sm-12"
@@ -68,19 +76,32 @@
 						<form-display
 							class="col-sm-12"
 							x-options='{
-								"title":"Message Title Template",
-								"id":"messageTitleTemplate",
-								"name":"messageTitleTemplate"
+								"title":"Message Body Template",
+								"id":"messageBodyTemplate",
+								"name":"messageBodyTemplate"
 							}'>
 							<textarea
-								name="messageTitleTemplate"
-								id="messageTitleTemplate"
+								name="messageBodyTemplate"
+								id="messageBodyTemplate"
 								class="form-control input-sm"
 								ui-tinymce="qqq.tinymceOptions"
-								placeholder="messageTitleTemplate"
-								ng-model="qqq.template.messageTitleTemplate">
+								placeholder="messageBodyTemplate"
+								ng-model="qqq.template.messageBodyTemplate">
 							</textarea>
 						</form-display>
+
+						<h4>Email Data</h4>
+						<form-input
+							class="col-sm-12"
+							ng-model="qqq.template.emailSubjectTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Email Subject Template",
+								"id":"emailSubjectTemplate",
+								"name":"emailSubjectTemplate",
+								"placeholder":"Email Subject Template"
+							}'>
+						</form-input>
 
 						<form-display
 							class="col-sm-12"
@@ -99,23 +120,97 @@
 							</textarea>
 						</form-display>
 
-						<form-display
-							class="col-sm-12"
-							x-options='{
-								"title":"Email Subject Template",
-								"id":"emailSubjectTemplate",
-								"name":"emailSubjectTemplate"
-							}'>
-							<textarea
-								name="emailSubjectTemplate"
-								id="emailSubjectTemplate"
-								class="form-control input-sm"
-								ui-tinymce="qqq.tinymceOptions"
-								placeholder="emailSubjectTemplate"
-								ng-model="qqq.template.emailSubjectTemplate">
-							</textarea>
-						</form-display>
+						<h4>Action Link</h4>
 
+						<form-input
+							class="col-sm-12"
+							ng-model="qqq.template.linkTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action link: will be appended to: /api/message/handler/action/:actionCode/user/:userId - yours must start with a /",
+								"id":"linkTitleTemplate",
+								"name":"linkTitleTemplate",
+								"placeholder":"My Default Action"
+							}'>
+						</form-input>
+
+						<h4>Default Action (same as archive : no-op)</h4>
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.defaultActionCd"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Default Action Code",
+								"id":"actionCd",
+								"name":"actionCd",
+								"placeholder":"a-nice-readable-code"
+							}'>
+						</form-input>
+
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.defaultLinkTitleTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Default Action Button Title",
+								"id":"defaultLinkTitleTemplate",
+								"name":"defaultLinkTitleTemplate",
+								"placeholder":"Default Action Button Title"
+							}'>
+						</form-input>
+
+						<h4>Main Action 1 (if required then supply all fields)</h4>
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.action1ActionCd"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action Code",
+								"id":"action1ActionCd",
+								"name":"action1ActionCd",
+								"placeholder":"a-nice-readable-code"
+							}'>
+						</form-input>
+
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.action1LinkTitleTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action Button Title",
+								"id":"action1LinkTitleTemplate",
+								"name":"action1LinkTitleTemplate",
+								"placeholder":"Action Button Title"
+							}'>
+						</form-input>
+
+
+						<h4>Main Action 2 (if required then supply all fields)</h4>
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.action2ActionCd"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action Code",
+								"id":"action2ActionCd",
+								"name":"action2ActionCd",
+								"placeholder":"a-nice-readable-code"
+							}'>
+						</form-input>
+
+						<form-input
+							class="col-sm-6"
+							ng-model="qqq.template.action2LinkTitleTemplate"
+							x-form="qqq.templateForm"
+							x-options='{
+								"title":"Action Button Title",
+								"id":"action2LinkTitleTemplate",
+								"name":"action2LinkTitleTemplate",
+								"placeholder":"Action Button Title"
+							}'>
+						</form-input>
+
+<!--
 						<form-input
 							class="col-sm-4"
 							ng-model="qqq.template.daysToArchive"
@@ -124,7 +219,7 @@
 								"title":Number of days until auto archive and default action chosen",
 								"id":"daysToArchive",
 								"name":"daysToArchive",
-								"placeholder":"14"
+								"placeholder":"7"
 							}'>
 						</form-input>
 
@@ -137,46 +232,15 @@
 							<label class="label label-lg label-cap-default {{qqq.template.labelClass}}" ng-class={><i class="fa fa-circle"></i> {{qqq.template.name}}</label>
 							<label class="label">{{qqq.template.name}}</label>
 						</form-display>
-
-						<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
-						<!--
-						<form-display
-							class="col-sm-12"
-							x-options='{
-								"id":"flags",
-								"name":"flags"
-							}'>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" ng-model="qqq.template.isRequired" />
-										This template is required for companies to participate in the RFQ process
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.template.isInception" />
-										This template is part of the inception phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.template.isPrototype" />
-										This template is part of the prototype phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.template.isImplementation" />
-										This template is part of the implementation phase
-								</label>
-							</div>
-						</form-display>
-						-->
+ -->
 					</div>
 				</div>
 			</div>
 
 			<div class="edit-form-footer">
 				<div class="row form-foot text-right">
-					<button class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
-					<button class="btn btn-text-only" ui-sref="capabilities.view({templateId:qqq.template.code})"> Cancel</button>
+					<!-- <button class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button> -->
+					<button class="btn btn-text-only" ui-sref="messagetemplates.list"> Cancel</button>
 				<!--
 					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.templateForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
 				-->

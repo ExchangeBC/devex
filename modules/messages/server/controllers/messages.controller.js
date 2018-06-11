@@ -7,6 +7,7 @@
 //
 // =========================================================================
 var mongoose        = require ('mongoose');
+var User            = mongoose.model ('User');
 var Message         = mongoose.model ('Message');
 var MessageTemplate = mongoose.model ('MessageTemplate');
 var MessageArchive  = mongoose.model ('MessageArchive');
@@ -19,6 +20,7 @@ var nodemailer      = require('nodemailer');
 var smtpTransport   = nodemailer.createTransport (config.mailer.options);
 var chalk           = require('chalk');
 var helpers         = require(path.resolve('./modules/core/server/controllers/core.server.helpers'));
+var _               = require ('lodash');
 
 // =========================================================================
 //
@@ -28,11 +30,14 @@ var helpers         = require(path.resolve('./modules/core/server/controllers/co
 // -------------------------------------------------------------------------
 //
 // perform a query on the messages table
+// HIDE THE LINKS - they hsould never get to the front end as they pose a
+// security risk
 //
 // -------------------------------------------------------------------------
 var query = function (table, q) {
 	return new Promise (function (resolve, reject) {
 		table.find (q)
+		.select ('-link')
 		.sort ({dateSent:-1, dateExpired: 1})
 		.populate ('user', 'displayName email')
 		.exec (function (err, messages) {
@@ -127,22 +132,56 @@ var sendmail = function (message) {
 };
 // -------------------------------------------------------------------------
 //
+// get a user from an id
+//
+// -------------------------------------------------------------------------
+var getUser = function (userid) {
+	return new Promise (function (resolve, reject) {
+		User.findById (userid, '_id firstName lastName displayName email username').exec (function (err, user) {
+			if (err) reject (err);
+			else resolve (user);
+		});
+	});
+};
+// -------------------------------------------------------------------------
+//
 // if domain has http.... in front, then leave it, otherwise append
 // http.  We beleive that if https is used then the env variable will
 // prefix correctly with https
 //
 // -------------------------------------------------------------------------
 var getDomain = function () {
-	var domain = 'http://localhost:3030';
+	var domain = 'http://localhost:3000';
 	if (process.env.DOMAIN) {
 		var d = process.env.DOMAIN;
+		//
+		// if http or http, either way just set it
+		//
 		if (d.substr (0,4) === 'http') {
 			domain = d;
-		} else {
+		}
+		//
+		// otherwise no protocol specified so assume http
+		//
+		else {
 			domain = 'http://' + d;
 		}
 	}
 	return domain;
+}
+var getHostInfoFromDomain = function (o) {
+	var domain = getDomain ();
+	var part1 = domain.split ('://');
+	var part2 = part1[1].split (':');
+	var protocol = part1[0];
+	var host     = part2[0];
+	var port = (protocol === 'https') ? 443 : 80;
+	port = part2[1] ? part2[1] : port;
+	o._protocol = protocol;
+	o.host      = host;
+	o.port      = port;
+	o.url       = domain+o.path;
+	return o;
 }
 // -------------------------------------------------------------------------
 //
@@ -183,13 +222,14 @@ var prepareMessage = function (template, data) {
 	message.messageTitle = template.messageTitle (data);
 	message.emailBody    = template.emailBody (data);
 	message.emailSubject = template.emailSubject (data);
+	message.link         = template.link (data);
 	//
 	// now run the action tempaltes
 	//
 	template.actions.forEach (function (action) {
 		message.actions.push ({
 			actionCd  : action.actionCd,
-			link      : action.link (data),
+			// link      : action.link (data),
 			linkTitle : action.linkTitle (data),
 			isDefault : action.isDefault
 		})
@@ -235,6 +275,7 @@ var sendMessage = function (template, user, email, data) {
 //
 // -------------------------------------------------------------------------
 exports.sendMessages = function (messageCd, users, data) {
+	if (users.length === 0) return;
 	//
 	// ensure the domain is set properly
 	//
@@ -253,17 +294,35 @@ exports.sendMessages = function (messageCd, users, data) {
 			template.messageTitle = handlebars.compile(template.messageTitleTemplate);
 			template.emailBody    = handlebars.compile(appendNotificationLink (template.emailBodyTemplate));
 			template.emailSubject = handlebars.compile(template.emailSubjectTemplate);
+			template.link         = handlebars.compile(template.linkTemplate);
 			template.actions.forEach (function (action) {
-				action.link      = handlebars.compile(action.linkTemplate);
+				// action.link      = handlebars.compile(action.linkTemplate);
 				action.linkTitle = handlebars.compile(action.linkTitleTemplate);
 			});
+			var promise;
 			//
-			// send messages to each user
+			// if this is a list of userids
 			//
-			Promise.all (users.map (function (user) {
-				return sendMessage (template, user, user.email, data);
-			}))
-			.then (resolve, reject);
+			if (mongoose.Types.ObjectId.isValid (users[0])) {
+				promise = Promise.all (users.map (function (userid) {
+					return getUser (userid)
+					.then (function (user) {
+						return sendMessage (template, user, user.email, data);
+					});
+				}));
+			}
+			//
+			// or it is a list of user objects already
+			//
+			else {
+				promise = Promise.all (users.map (function (user) {
+					return sendMessage (template, user, user.email, data);
+				}));
+			}
+			//
+			// do it
+			//
+			promise.then (resolve, reject);
 		});
 	});
 };
@@ -360,11 +419,26 @@ exports.viewed = function (req, res) {
 exports.actioned = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
 	if (req.user._id.toString () !== req.message.user.toString ()) return sendError (res, 'Not owner of message');
-	req.message.actionTaken  = req.params.action
-	req.message.dateActioned = Date.now ();
-	archiveMessage (req.message)
-	.then (resResults (res))
-	.catch (resError (res));
+	//
+	// get the local domain, port, host, protocol info
+	// this gets over a potential risk by disallowing any calls to outside APIs through this
+	// mechanism
+	//
+	var domain = getDomain ();
+	var options = getHostInfoFromDomain ({
+		path : '/api/message/handler/action/'+req.params.action+'/user/'+req.user._id+req.message.link,
+		method : 'GET'
+	});
+	helpers.getJSON (options)
+	.then (function (data) {
+		req.message.actionTaken  = req.params.action
+		req.message.dateActioned = Date.now ();
+		archiveMessage (req.message);
+		return res.status (200).json (data);
+	})
+	.catch (function (data) {
+		return res.status (299).send (data);
+	})
 };
 // -------------------------------------------------------------------------
 //
