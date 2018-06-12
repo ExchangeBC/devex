@@ -24,7 +24,7 @@
       state: 'settings.profile'
     });
 
-    if (window.features.swu) menuService.addSubMenuItem('account', 'settings', {
+    menuService.addSubMenuItem('account', 'settings', {
       title: 'Messages',
       state: 'settings.messages'
     });

@@ -8,7 +8,7 @@
 	// =========================================================================
 	.controller ('ProposalViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
-		ppp.features = window.features;
+		// ppp.features 	  = window.features;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
@@ -127,8 +127,8 @@
 	// =========================================================================
 	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
-		var ppp                                   = this;
-		ppp.features                              = window.features;
+		var ppp              = this;
+		// ppp.features         = window.features;
 		ppp.trust            = $sce.trustAsHtml;
 		//
 		// check we have an opp

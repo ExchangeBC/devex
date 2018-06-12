@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	if (window.features.swu) angular.module('orgs.routes').config(['$stateProvider', function ($stateProvider) {
+	angular.module('orgs.routes').config(['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//

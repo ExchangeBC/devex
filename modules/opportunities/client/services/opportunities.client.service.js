@@ -238,7 +238,7 @@
 			//
 			// -------------------------------------------------------------------------
 			setScopeView : function (vm, opportunity, subscriptions, myproposal) {
-				vm.features = window.features;
+				// vm.features = window.features;
 				//
 				// set the notification code for updates to this opp, and set the vm flag to current state
 				//

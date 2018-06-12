@@ -13,9 +13,9 @@ exports.renderIndex = function (req, res) {
   if (req.user) {
     safeUserObject = {
       _id                     : req.user._id,
-      orgsAdmin                     : req.user.orgsAdmin,
-      orgsMember                     : req.user.orgsMember,
-      orgsPending                     : req.user.orgsPending,
+      orgsAdmin               : req.user.orgsAdmin,
+      orgsMember              : req.user.orgsMember,
+      orgsPending             : req.user.orgsPending,
       displayName             : validator.escape(req.user.displayName),
       provider                : validator.escape(req.user.provider),
       username                : validator.escape(req.user.username),
@@ -63,15 +63,15 @@ exports.renderIndex = function (req, res) {
       capabilitySkills : req.user.capabilitySkills
     };
   }
-  var features = config.features.split ('-');
-  var featureObject = {};
-  features.forEach (function (el) {
-    featureObject[el] = true;
-  });
+  // var features = config.features.split ('-');
+  // var featureObject = {};
+  // features.forEach (function (el) {
+  //   featureObject[el] = true;
+  // });
 
   res.render('modules/core/server/views/index', {
     user: JSON.stringify(safeUserObject),
-    sharedConfig: JSON.stringify(config.shared),
+    sharedConfig: JSON.stringify(config.shared)
     //
     // CC:FEATURES
     //
@@ -79,7 +79,7 @@ exports.renderIndex = function (req, res) {
     // use this fact to hide and show features in the front end
     //
     // feature_hide: config.feature_hide
-    features: JSON.stringify (featureObject)
+    // features: JSON.stringify (featureObject)
   });
 };
 
@@ -115,8 +115,8 @@ exports.renderNotFound = function (req, res) {
   });
 };
 
-exports.getFlags = function () {
-  return {
-    featureHide: config.feature_hide
-  };
-};
+// exports.getFlags = function () {
+//   return {
+//     featureHide: config.feature_hide
+//   };
+// };

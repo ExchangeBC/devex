@@ -8,7 +8,7 @@ var _ = require('lodash'),
 // global seed options object
 var seedOptions = {};
 
-var isProduction  = (config.feature_hide === 'true');
+var devexProd = (config.devexProd === 'true');
 
 function saveUser (user) {
 	return function() {
@@ -291,7 +291,6 @@ function reportError (reject) {
 			console.log('Database Seeding:\t' + err);
 			console.log();
 		}
-		reject(err);
 	};
 }
 
@@ -350,17 +349,21 @@ module.exports.start = function start(options) {
 		.then (seedNotifications)
 		.then (function () {
 			// If production, only seed admin using the ADMINPW environment parameter
-			if (isProduction) {
+			if (devexProd) {
 				Promise.resolve()
-					.then( function() {
-						var password = process.env.ADMINPW;
-						return password || 'adminadmin';
-					})
-					.then(seedTheUser(adminAccount))
-					.then(function () {
-						resolve();
-					})
-					.catch(reportError(reject));
+				.then( function() {
+					// do not allow an admin account to be created with the default password if we are in production
+					var password = process.env.ADMINPW;
+					if (!password) {
+						throw new Error('Attempt to create Administrator account in production with default password: aborting.');
+					}
+					return password;
+				})
+				.then(seedTheUser(adminAccount))
+				.then(function () {
+					resolve();
+				})
+				.catch(reportError(reject));
 			} else {
 				// Add both Admin and User account
 				Promise.resolve ()
