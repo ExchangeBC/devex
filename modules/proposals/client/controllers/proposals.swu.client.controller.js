@@ -29,7 +29,7 @@
 	// =========================================================================
 	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
 		var ppp           = this;
-		ppp.features = window.features;
+		// ppp.features 	  = window.features;
 		ppp.proposal      = proposal;
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
@@ -109,7 +109,7 @@
 	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
-			ppp.features = window.features;
+			// ppp.features = window.features;
 			ppp.trust    = $sce.trustAsHtml;
 			//
 			// check we have an opp

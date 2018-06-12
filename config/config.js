@@ -225,7 +225,7 @@ var initGlobalConfig = function () {
   //
   // CC: make global feature object
   //
-  config.feature = config.features.split('-').reduce (function (a, c) {a[c]=true;return a;}, {});
+  // config.feature = config.features.split('-').reduce (function (a, c) {a[c]=true;return a;}, {});
   return config;
 };
 

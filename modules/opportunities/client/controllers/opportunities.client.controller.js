@@ -41,7 +41,7 @@
 			$state.go('opportunities.list');
 		}
 		var vm                    = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -475,7 +475,7 @@
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
-		vm.features = window.features;
+		// vm.features = window.features;
 		var originalPublishedState             = opportunity.isPublished;
 		//
 		// what can the user do here?

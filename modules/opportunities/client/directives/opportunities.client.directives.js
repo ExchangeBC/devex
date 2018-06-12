@@ -20,7 +20,7 @@
 			controller   : function ($scope, OpportunitiesService, Authentication, Notification, modalService, $q, ask) {
 				var rightNow = new Date ();
 				var vm     = this;
-				vm.features = window.features;
+				// vm.features = window.features;
 				vm.rightNow = rightNow;
 				vm.rightNowString = vm.rightNow.toString();
 				var isUser = Authentication.user;

@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	if (window.features.superbasics) angular.module ('superbasics.routes').config (['$stateProvider', function ($stateProvider) {
+	angular.module ('superbasics.routes').config (['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//

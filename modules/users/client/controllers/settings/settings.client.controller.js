@@ -10,7 +10,7 @@
 	// -------------------------------------------------------------------------
 	.controller('SettingsController', function ($scope, Authentication) {
 		var vm = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.user = Authentication.user;
 	})
 	// -------------------------------------------------------------------------
@@ -22,7 +22,7 @@
 		var vm = this;
 		vm.user = angular.copy(Authentication.user);
 		vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
@@ -57,7 +57,7 @@
 	// -------------------------------------------------------------------------
 	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService, capabilities, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		var vm                     = this;
-		vm.features                = window.features;
+		// vm.features                = window.features;
 		vm.trust                   = $sce.trustAsHtml;
 		vm.user                    = angular.copy (Authentication.user);
 		vm.tinymceOptions          = TINYMCE_OPTIONS;

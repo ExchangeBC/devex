@@ -30,7 +30,7 @@
 			$state.go('opportunities.list');
 		}
 		var vm                    = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -901,7 +901,7 @@
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                      = this;
 		vm.trust                    = $sce.trustAsHtml;
-		vm.features                 = window.features;
+		// vm.features                 = window.features;
 		var originalPublishedState  = opportunity.isPublished;
 		//
 		// what can the user do here?

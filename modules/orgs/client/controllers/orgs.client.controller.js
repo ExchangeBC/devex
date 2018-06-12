@@ -64,7 +64,7 @@
 	// =========================================================================
 	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
 		vm.user = Authentication.user;
@@ -227,7 +227,7 @@
 	// -------------------------------------------------------------------------
 	.controller('OrgSkillsController', function ($scope, capabilities, $sce, Notification, org, dataService, Authentication, UsersService) {
 		var vm = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.org = org;
 		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
@@ -271,7 +271,7 @@
 	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm = this;
 		vm.org = org;
-		vm.features = window.features;
+		// vm.features = window.features;
 	})
 	// =========================================================================
 	//
@@ -368,7 +368,6 @@
 					templateUrl: '/modules/orgs/client/views/org-members-results.html',
 					controller: function ($scope, $uibModalInstance) {
 						$scope.data = {
-							messagesFeature : window.features.messages,
 							found    : result.emaillist.found,
 							notfound : result.emaillist.notfound
 						};
