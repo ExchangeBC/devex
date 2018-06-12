@@ -196,7 +196,7 @@ stage('Functional Test Dev') {
 	    }
         }
      }}
-   }
+   // }
 }
 	
 stage('deploy-test') {	
