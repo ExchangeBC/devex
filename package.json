@@ -17,8 +17,7 @@
   "scripts": {
     "postinstall": "bower install --config.interactive=false --allow-root && bower prune --allow-root && gulp build",
     "dev": "gulp default",
-    "quiet": "gulp quiet",
-    "start": "gulp prod"
+    "quiet": "gulp quiet"
   },
   "dependencies": {
     "acl": "~0.4.9",
