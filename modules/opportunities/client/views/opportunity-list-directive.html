@@ -5,8 +5,7 @@
 				<h3 class="list-page-title list-page-hide" ng-bind="vm.title"></h3>
 			</div>
 			<div class="col-xs-4">
-				<button ng-if="vm.userCanAdd && vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
-				<button ng-if="vm.userCanAdd && !vm.features.swu" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createcwu({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
+				<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
 			</div>
 		</div>
 	</div>
