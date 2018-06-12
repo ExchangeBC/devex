@@ -19,12 +19,9 @@
 				<a class="btn btn-text-only pull-right" ng-if="org.canEdit" href="javascript:void(0);"  id="orgadmin.profile" ui-sref="orgadmin.profile({ orgId: org._id })" ng-click="$event.stopPropagation()" title="Edit"><i class="fa fa-lg fa-gear"></i></a>
 				<label ng-if="org.isOrgMember && !org.isOrgAdmin" class="label label-default pull-right">Member</label>
 			</div>
-			
+			<img class="card-img-left" src="{{org.orgImageURL}}" alt="Company Logo">
 			<div class="card-body" id="orgs.view" ui-sref="orgs.view({ orgId: org._id })">
-				<avatar-display url="org.orgImageURL" text="org.name"></avatar-display>
-			<!--
-				<p ng-bind-html="vm.trust(org.description)"></p>
-			-->
+				<div class="card-title">{{org.name}}</div>
 			</div>
 		</div>
 	</div>

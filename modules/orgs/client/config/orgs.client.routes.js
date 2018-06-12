@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	if (window.features.swu) angular.module('orgs.routes').config(['$stateProvider', function ($stateProvider) {
+	angular.module('orgs.routes').config(['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//
@@ -60,7 +60,7 @@
 		})
 		// -------------------------------------------------------------------------
 		//
-		// view a org, resolve the org data
+		// view an org, resolve the org data
 		//
 		// -------------------------------------------------------------------------
 		.state('orgs.view', {
@@ -79,6 +79,24 @@
 				}
 			}
 		})
+		// .state('orgs.addself', {
+		// 	url: '/:orgId/m/:messageId',
+		// 	templateUrl: '/modules/orgs/client/views/org-addedto.html',
+		// 	controller: 'OrgAddSelfController',
+		// 	controllerAs: 'vm',
+		// 	resolve: {
+		// 		// r: function ($stateParams, MessagesService, OrgsService) {
+		// 		// 	return MessagesService.getarchived ({
+		// 		// 		messageId: $stateParams.messageId
+		// 		// 	})	;
+		// 		// },
+		// 		org: function ($stateParams, OrgsService) {
+		// 			return OrgsService.get({
+		// 				orgId: $stateParams.orgId
+		// 			}).$promise;
+		// 		}
+		// 	}
+		// })
 		// -------------------------------------------------------------------------
 		//
 		// the base for editing

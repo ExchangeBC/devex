@@ -1,0 +1,78 @@
+// Alerts
+
+// Common styles
+.alert {
+  display: inline-block;
+  color: @gray-dark;
+  background: @gray-lighter;
+  width: fit-content;
+  max-width: 1040px;
+  padding: 10px 20px;
+  margin: 10px 0;
+  font-weight: 400;
+  font-size: 1em;
+  border: none;
+  > p, h1, h2, h3, h4, h5 {
+    margin-top: 0;
+  }
+}
+
+.alert-success {
+  background: @alert-success-bg;
+}
+
+.alert-info {
+  background: @theme-info;
+  display: block !important;
+}
+
+.alert-warning {
+  background: @alert-warning-bg;
+}
+
+.alert-danger {
+  background: #fddece;
+}
+
+.alert-definitions {
+  font-size: .85em;
+  font-weight: 300;
+  color: #777;
+  background: @gray-lighter;
+  border: none;
+}
+
+.alert-outline-primary {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-primary;
+  border-radius: 3px;
+}
+
+.alert-outline-info {
+  background: transparent;
+  border: 3px solid; 
+  border-color: @theme-info;
+  border-radius: 3px;
+}
+
+.alert-outline-warning {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-yellow;
+  border-radius: 3px;
+}
+
+.alert-outline-success {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-success;
+  border-radius: 3px;
+}
+
+.alert-outline-orange {
+  background: transparent;
+  border: 3px solid;
+  border-color: @theme-orange;
+  border-radius: 3px;
+}

@@ -30,6 +30,7 @@ var path = require('path'),
 	Capability = mongoose.model('Capability'),
 	Proposal = mongoose.model('Proposal'),
 	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
@@ -283,6 +284,46 @@ var saveOrg = function (req, res) {
 		});
 	};
 };
+var saveOrgReturnMessage = function (req, res) {
+	return function (org) {
+		helpers.applyAudit (org, req.user);
+		checkCapabilities (org)
+		.then (function (org) {
+			org.save (function (err, neworg) {
+				if (err) {
+					return res.status(422).send({
+						message: errorHandler.getErrorMessage(err)
+					});
+				} else {
+					//
+					// TBD: the code following shoudl be nested in here and checked for
+					// failure properly etc.
+					//
+					req.user.save (function (err, user) {
+						req.login (user, function (err) {
+							if (err) {
+								res.status(422).send ({
+									message: errorHandler.getErrorMessage (err)
+								});
+							}
+						});
+					});
+					getOrgById (neworg._id)
+					.then (function (o) {
+						res.status(200).json ({
+							message: '<h4>Success!</h4> You have been added to '+org.name
+						})
+					})
+					.catch (function (err) {
+						res.status (422).send ({
+							message: 'Error populating organization'
+						});
+					});
+				}
+			});
+		});
+	};
+};
 // -------------------------------------------------------------------------
 //
 // remove a user from all open proposals
@@ -379,7 +420,49 @@ var removeAdmin = function (user, org) {
 // list of orgs the user is a member of
 //
 // -------------------------------------------------------------------------
-var inviteMembers = function (emaillist, org) {
+var inviteMembersWithMessages = function (emaillist, org) {
+	var list = {
+		found    : [],
+		notfound : []
+	};
+	if (!emaillist) return Promise.resolve (list);
+	//
+	// flatten out the members and admins arrays so that later on the
+	// addToSet function truly works on duplicates
+	//
+	org.admins = org.admins.map (function (obj) {return obj.id;});
+	org.members = org.members.map (function (obj) {return obj.id;});
+	return getUsers ({email : {$in : emaillist}})
+	.then (function (users) {
+		if (users) {
+			list.found = users;
+			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
+			emaillist.forEach (function (email) {
+				if (!usersIndex[email]) list.notfound.push ({email:email});
+			});
+		}
+	})
+	.then (function () {
+		sendMessages ('add-user-to-company-request', list.found, {org:org});
+		sendMessages ('invitation-from-company', list.notfound, {org:org});
+
+		// record users so that they have 'permission' to self add
+		if (!org.invited) {
+			org.invited = [];
+		}
+		list.notfound.forEach(function(entry) {
+			org.invited.push(entry.email);
+		});
+
+		list.found.forEach(function(entry) {
+			org.invited.push(entry.email);
+		});
+	})
+	.then (function () {
+		return Promise.resolve (list);
+	});
+};
+var inviteMembersWithNotification = function (emaillist, org) {
 	var list = {
 		found    : [],
 		notfound : []
@@ -407,6 +490,10 @@ var inviteMembers = function (emaillist, org) {
 		return Promise.resolve (list);
 	});
 };
+var inviteMembers = function (emaillist, org) {
+	if (config.feature.messages) return inviteMembersWithMessages (emaillist, org);
+	else return inviteMembersWithNotification (emaillist, org);
+}
 
 exports.removeUserFromMemberList = function (req, res) {
 	removeMember (req.profile, req.org)
@@ -607,7 +694,48 @@ exports.myadmin = function (req, res) {
 		}
 	});
 };
-
+// -------------------------------------------------------------------------
+//
+// add the current user to the passed in org
+//
+// -------------------------------------------------------------------------
+exports.addMeToOrg = function (req, res) {
+	var org = req.org;
+	var user = req.user;
+	var orgO = org.toObject();
+	var userO = user.toObject();
+	if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
+		Promise.resolve (user)
+		.then (addUserTo (org, 'members'))
+		.then (saveUser)
+		.then (function () { return org; })
+		.then (saveOrg (req, res));
+	}
+};
+exports.addUserToOrg = function (req, res) {
+	req.user = req.model;
+	var org = req.org;
+	var user = req.user;
+	var orgO = org.toObject();
+	var userO = user.toObject();
+	if (req.params.actionCode === 'decline') {
+		return res.status (200).json ({
+			message: '<h4>Declined</h4>Thank you, you have not been added to company '+org.name
+		});
+	}
+	else {
+		// return res.status (200).json ({
+		// 	message: '<h4>Accepted</h4>Thank you, you have been added to company '+org.name
+		// });
+		if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
+			Promise.resolve (user)
+			.then (addUserTo (org, 'members'))
+			.then (saveUser)
+			.then (function () { return org; })
+			.then (saveOrgReturnMessage (req, res));
+		}
+	}
+};
 // -------------------------------------------------------------------------
 //
 // magic that populates the org on the request

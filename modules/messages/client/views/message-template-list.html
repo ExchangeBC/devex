@@ -1,0 +1,27 @@
+<section class="list-page"><div class="container" role="main">
+<div class="row list-head">
+	<div class="col-sm-12">
+		<button class="btn btn-primary pull-right" ui-sref="messagetemplatesadmin.create()" title="New">
+			<i class="glyphicon glyphicon-plus"></i> Add a Message Template
+		</button>
+	</div>
+</div>
+
+<div class="row" ng-if="!vm.templates.length" style="padding-top: 20px; padding-bottom: 20px;">
+	<div class="col-sm-12">
+		<div class="well">
+			No Message Templates right now. Check back soon!
+		</div>
+	</div>
+</div>
+
+<div class="row" ng-if="vm.templates.length">
+	<div class="col-xs-12 col-sm-4" ng-repeat="template in vm.templates">
+		<div class="card">
+			<div class="card-header" id="messagetemplatesadmin.edit" ui-sref="messagetemplatesadmin.edit({templateId:template._id})">
+				<div class="card-title" ng-bind="template.messageCd"></div>
+			</div>
+		</div>
+	</div>
+</div>
+</div></section>

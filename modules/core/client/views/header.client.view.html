@@ -1,62 +1,100 @@
-<nav id="mainNav" class="navbar-inverse">
-<div class="container" ng-controller="HeaderController as vm">
-	<div class="navbar-header navbar-inverse">
-		<button class="navbar-toggle" type="button" ng-click="vm.isCollapsed = !vm.isCollapsed">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<a id="home" ui-sref="home" href="/">
-			<img class="navbar-brand" src="/modules/core/client/img/logo/new-logo-white.svg" alt="BCDevExchange">
-		</a>
+<style type="text/css">
+	.message-list-dropdown {
+		padding: 0;
+		min-width: 400px;
+	}
+	.message {
+		padding: 10px;
+		border-bottom: 1px solid #e3e3e3;
+	}
+	.message:last-child {
+		border-bottom: none;
+	}
+	.message:hover {
+		cursor: pointer;
+		background: blue;
+		color: white;
+	}
+
+</style>
+
+<nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
+	<div class="container" ng-controller="HeaderController as vm">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" ng-click="vm.isCollapsed = !vm.isCollapsed">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a href="/" id="home"><img class="navbar-brand" src="/modules/core/client/img/logo/new-logo-white.svg" alt="BCDevExchange" ui-sref="home"></a>
+		</div>
+		
+		<div class="collapse navbar-collapse" uib-collapse="!vm.isCollapsed" role="navigation">
+			<!-- Main menu items with submenus, we inserted item.icon with a default of a puzzle piece -->
+			<ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
+				<li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
+					<a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
+					<ul ng-switch-when="dropdown" class="dropdown-menu">
+						<li ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
+							<a id="{{subitem.state}}" ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
+						</li>
+					</ul>
+					<a ng-switch-default ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
+				</li>
+			</ul>
+
+			<!-- Sign in, pushed right -->
+			<ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
+				<li ui-sref-active="active">
+					<a id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-lg fa-github" aria-hidden="true"></i>&nbsp; Sign In</a>
+				</li>
+			</ul>
+
+			<!-- Notifications/messages menu, pushed right -->
+			<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
+				<li class="dropdown" uib-dropdown>
+					<a class="dropdown-toggle user-header-dropdown-toggle" id="notifications" uib-dropdown-toggle role="button">
+						<i class="fa fa-lg fa-bell" aria-hidden="true"></i>
+						<!-- This badge should appear if there are unread messages -->
+						<div class="badge badge-unread">&nbsp;</div>
+					</a>
+
+					<ul class="dropdown-menu message-list-dropdown" role="menu">	
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
+						<div class="message">
+							You've been invited to join <strong>Company Super-Awesome</strong>
+						</div>
+					</ul>
+				</li>
+			
+			<!-- User menu, also pushed right -->
+			<!--<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">-->
+				<li class="dropdown" uib-dropdown>
+					<a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
+						<img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="header-profile-image" />
+						<!-- Hide the name for now -->
+						<!--<span class="hidden-sm hidden-md hidden-lg hidden-xl" ng-bind="vm.authentication.user.displayName"></span>-->
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<!--<li class="menu-heading"><span ng-bind="vm.authentication.user.displayName"></span></li>
+						<li class="divider"></li>-->
+						<li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">
+							<a ui-sref="{{item.state}}" ng-bind="item.title"></a>
+						</li>
+						<li class="divider"></li>
+						<li>
+							<a href="/api/auth/signout" target="_self">Sign Out</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
 	</div>
-	<nav class="navbar-collapse navbar-inverse" uib-collapse="!vm.isCollapsed" role="navigation">
-		<!--
-			Main menu items with submenus, we inserted item.icon with a default of a puzzle piece
-		-->
-		<ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
-			<li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
-				<a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
-				<ul ng-switch-when="dropdown" class="dropdown-menu">
-					<li ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
-						<a id="{{subitem.state}}" ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
-					</li>
-				</ul>
-				<a ng-switch-default ui-sref="{{item.state}}"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}</a>
-			</li>
-		</ul>
-		<!--
-			sign in, pushed right
-		-->
-		<ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
-			<li ui-sref-active="active">
-				<a id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Sign In</a>
-			</li>
-		</ul>
-		<!--
-			User menu, also pushed right
-		-->
-		<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
-			<li class="dropdown" uib-dropdown>
-				<a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
-					<img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="header-profile-image" />
-					<!-- Hide the name for now -->
-					<!-- <span ng-bind="vm.authentication.user.displayName"></span> <b class="caret"></b> -->
-				</a>
-				<ul class="dropdown-menu" role="menu">
-					<li class="menu-heading"><span ng-bind="vm.authentication.user.displayName"></span></li>
-					<li class="divider"></li>
-					<li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">
-						<a ui-sref="{{item.state}}" ng-bind="item.title"></a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a href="/api/auth/signout" target="_self">Signout</a>
-					</li>
-				</ul>
-			</li>
-		</ul>
-	</nav>
-</div>
 </nav>

@@ -1,8 +1,10 @@
 'use strict';
-var _ = require('lodash');
-var path = require('path');
-var config = require(path.resolve('./config/config'));
+var _            = require('lodash');
+var path         = require('path');
+var config       = require(path.resolve('./config/config'));
 var errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+var http         = require ('http');
+var https        = require ('https');
 
 exports.generateCode = function (s) {
 	return s.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-');
@@ -114,25 +116,26 @@ exports.fileUploadFunctions = function (doc, Model, field, req, res, upload, exi
 }
 exports.formatMoney = function(n, ic, id, iit){
 var c = isNaN(ic = Math.abs(ic)) ? 2 : ic,
-    d = id === undefined ? '.' : id,
-    t = iit === undefined ? ',' : iit,
-    s = n < 0 ? '-' : '',
-    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
-    var j = i.length;
-    j = (j) > 3 ? j % 3 : 0;
+	d = id === undefined ? '.' : id,
+	t = iit === undefined ? ',' : iit,
+	s = n < 0 ? '-' : '',
+	i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c)));
+	var j = i.length;
+	j = (j) > 3 ? j % 3 : 0;
    return '$' +s + (j ? i.substr(0, j) + t : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : '');
  };
 
 exports.formatDate = function (d) {
+	if (!d) return 'no date';
 var monthNames = [
 'January', 'February', 'March',
 'April', 'May', 'June', 'July',
 'August', 'September', 'October',
 'November', 'December'
 ];
-var day = d.getDate();
 var monthIndex = d.getMonth();
 var year = d.getFullYear();
+var day = d.getDate();
 return monthNames[monthIndex] + ' ' + day + ', '+ year;
 }
 
@@ -196,6 +199,114 @@ exports.soundex = function(s) {
 	return (r + '000').slice(0, 4).toUpperCase();
 };
 
-
+// -------------------------------------------------------------------------
+//
+// get some json from a rest interface
+//
+// -------------------------------------------------------------------------
+exports.getJSON = function (options) {
+	return new Promise (function (resolve, reject) {
+		//
+		// which proto are we using?
+		//
+		var protocol = options._protocol === 'https' ? https : http;
+		//
+		// make a new request object and gather the result
+		//
+		var req = protocol.get (options.url, function (res) {
+			var output = '';
+			res.setEncoding ('utf8');
+			//
+			// collect data as it arrives
+			//
+			res.on ('data', function (chunk) {
+				output += chunk;
+			});
+			//
+			// all done, either resolve or reject the data
+			//
+			res.on ('end', function () {
+				var obj = JSON.parse (output);
+				//
+				// if inside the 200 range then treat this as AOK
+				// all returned data should be of the form :
+				// {
+				// 		message: < your html response goes here >
+				// }
+				// this keeps things in line with error messages as well
+				//
+				if (200 <= res.statusCode && res.statusCode <= 299) resolve (obj);
+				else reject (obj);
+			});
+		});
+		//
+		// attach an error handler, err.message will be present and therefore
+		// used as the return html
+		//
+		req.on ('error', function (err) {
+			reject (err);
+		});
+		//
+		// complete the request - causes it to be sent and closed on the client side
+		//
+		req.end ();
+	});
+};
+// -------------------------------------------------------------------------
+//
+// get some json from a rest interface
+//
+// -------------------------------------------------------------------------
+exports.getJSONr = function (options) {
+	return new Promise (function (resolve, reject) {
+		//
+		// which proto are we using?
+		//
+		var protocol = options._protocol === 'https' ? https : http;
+		//
+		// make a new request object and gather the result
+		//
+		var req = protocol.request (options, function (res) {
+			console.log ('request started', res);
+			var output = '';
+			res.setEncoding ('utf8');
+			//
+			// collect data as it arrives
+			//
+			res.on ('data', function (chunk) {
+				output += chunk;
+			});
+			//
+			// all done, either resolve or reject the data
+			//
+			res.on ('end', function () {
+				var obj = JSON.parse (output);
+				//
+				// if inside the 200 range then treat this as AOK
+				// all returned data should be of the form :
+				// {
+				// 		message: < your html response goes here >
+				// }
+				// this keeps things in line with error messages as well
+				//
+				if (200 <= res.statusCode && res.statusCode <= 299) resolve (obj);
+				else reject (obj);
+			});
+		});
+		//
+		// attach an error handler, err.message will be present and therefore
+		// used as the return html
+		//
+		req.on ('error', function (err) {
+			console.log ('request error:', err);
+			console.log ('request :', req);
+			reject (err);
+		});
+		//
+		// complete the request - causes it to be sent and closed on the client side
+		//
+		req.end ();
+	});
+};
 
 

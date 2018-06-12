@@ -36,6 +36,27 @@
 		// what can the user do here?
 		//
 	})
+	// -------------------------------------------------------------------------
+	//
+	// user adds themselves to an org
+	//
+	// -------------------------------------------------------------------------
+	// .controller('OrgAddSelfController', function ($scope, $state, $sce, org, OrgsService) {
+	// 	var vm = this;
+	// 	vm.adding = true;
+	// 	vm.isgood = true;
+	// 	if (org) {
+	// 		OrgsService.addMeToOrg ({orgId:org._id}).$promise
+	// 		.then (function () {
+	// 			vm.adding = false;
+	// 			vm.isgood = true;
+	// 		})
+	// 		.catch (function () {
+	// 			vm.adding = false;
+	// 			vm.isgood = false;
+	// 		});
+	// 	}
+	// })
 	// =========================================================================
 	//
 	// create a new org
@@ -43,7 +64,7 @@
 	// =========================================================================
 	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
 		var vm = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.org = org;
 		// vm.orgaddForm = {};
 		vm.user = Authentication.user;
@@ -206,7 +227,7 @@
 	// -------------------------------------------------------------------------
 	.controller('OrgSkillsController', function ($scope, capabilities, $sce, Notification, org, dataService, Authentication, UsersService) {
 		var vm = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		vm.org = org;
 		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
@@ -250,7 +271,7 @@
 	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
 		var vm = this;
 		vm.org = org;
-		vm.features = window.features;
+		// vm.features = window.features;
 	})
 	// =========================================================================
 	//

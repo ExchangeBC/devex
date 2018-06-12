@@ -222,6 +222,10 @@ var initGlobalConfig = function () {
     getGlobbedPaths: getGlobbedPaths,
     validateSessionSecret: validateSessionSecret
   };
+  //
+  // CC: make global feature object
+  //
+  // config.feature = config.features.split('-').reduce (function (a, c) {a[c]=true;return a;}, {});
   return config;
 };
 

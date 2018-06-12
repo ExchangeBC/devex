@@ -72,7 +72,7 @@
 	<div class="container">
 		<!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
 		<div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
-			<div class="alert alert-important">
+			<div class="alert alert-warning">
 				<span class="strong"><i class="fa fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span> Before you can publish, you'll need to define these things:
 				<ul style="text-align: left;"><li ng-repeat="fname in vm.errorFields">{{fname}}</li></ul>
 			</div>
@@ -106,9 +106,14 @@
 		<!-- // Follow and Unfollow buttons for users who aren't Opportunity Admin // -->
 
 			<!-- // User is NOT following the opportunity // -->
-			<button ng-if="!vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
+			<button ng-if="false && !vm.canEdit && !vm.notifyMe && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.subscribe(true)"><i class="fa fa-bullhorn"></i> Follow</button>
 			<!-- // User IS following the opportunity // -->
-			<button ng-if="vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+			<button ng-if="false && vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.subscribe(false)""><i class="fa fa-bullhorn"></i> Following</button>
+
+			<!-- // User is NOT following the opportunity // -->
+			<button ng-if="!vm.canEdit && !vm.isWatching && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.addWatch()"><i class="fa fa-eye"></i> Watch</button>
+			<!-- // User IS following the opportunity // -->
+			<button ng-if="vm.isWatching" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.removeWatch()"><i class="fa fa-eye"></i> Un-Watch</button>
 
 		</div>
 

@@ -17,14 +17,15 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/opportunities/client/views/opportunity-list-directive.html',
-			controller   : function ($scope, OpportunitiesService, Authentication, Notification, modalService, $q, ask) {
+			controller   : function ($scope, OpportunitiesService, OpportunitiesCommon, Authentication, Notification, modalService, $q, ask, UsersService) {
 				var rightNow = new Date ();
 				var vm     = this;
-				vm.features = window.features;
+				// vm.features = window.features;
 				vm.rightNow = rightNow;
 				vm.rightNowString = vm.rightNow.toString();
 				var isUser = Authentication.user;
 				vm.isUser = isUser;
+				vm.user = isUser;
 				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				vm.canApplyGeneral = isUser && !vm.isAdmin && !vm.isGov;
@@ -149,6 +150,28 @@
 						else ret = dm+' minutes';
 					}
 					return ret;
+				};
+				vm.isWatching = function (opportunity) {
+					return OpportunitiesCommon.isWatchng (opportunity);
+				};
+				vm.addWatch    = function (opp) {opp.isWatching = OpportunitiesCommon.addWatch (opp);};
+				vm.removeWatch = function (opp) {opp.isWatching = OpportunitiesCommon.removeWatch (opp);};
+
+				vm.subscribe   = function () {
+					if (!Authentication.user) return;
+					Authentication.user.notifyOpportunities = true;
+					var user = new UsersService(Authentication.user);
+					user.$update ();
+					Notification.success ({ message: '<i class="fa fa-bell fa-3x"></i><br/><br/>You will be notified of new Opportunities' });
+					return true;
+				};
+				vm.unsubscribe = function () {
+					if (!Authentication.user) return;
+					Authentication.user.notifyOpportunities = false;
+					var user = new UsersService(Authentication.user);
+					user.$update ();
+					Notification.success ({ message: '<i class="fa fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities' });
+					return false;
 				};
 			}
 		}

@@ -1,12 +1,12 @@
 <div class="modal-header">
-	<h3>Questions</h3>
-	<p>
-		Organize the responses to the question from best to worst using the arrow buttons provided.
-	</p>
+	<button class="close" data-ng-click="close()"><i class="fa fa-times"></i></button>
+	<div class="modal-title">Rank Questionnaire Responses</div>
 </div>
 <div class="modal-body">
 	<div class="row">
 		<div class="col-sm-12 text-center">
+			<p>For each question we have randomized the responses that teams submitted.</p>
+			<h4>Using the arrow buttons, rank the responses from best (top) to worst (bottom) for all five questions.</h4>
 			<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
 		</div>
 	</div>
@@ -58,7 +58,7 @@
 	</div>
 </div>
 <div class="modal-footer text-right">
-	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
-	<button class="btn btn-primary" data-ng-click="ok()">Save</button>
-	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
+	<button class="btn btn-lg btn-primary" data-ng-click="ok()">Save my work & Close</button>
+	<button class="btn btn-lg btn-success" data-ng-click="commit()"><i class="fa fa-lock"></i> Lock in all rankings</button>
+	<button class="btn btn-lg btn-default" data-ng-click="close()">Cancel</button>
 </div>

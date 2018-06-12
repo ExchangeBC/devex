@@ -7,6 +7,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
   passport = require('passport'),
+  claimMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).claimMessages,
   User = mongoose.model('User');
 
 // URLs for which user can't be redirected on signin
@@ -38,7 +39,11 @@ exports.signup = function (req, res) {
       // Remove sensitive data before login
       user.password = undefined;
       user.salt = undefined;
-
+      //
+      // CC: this bit claims any messages attributed to this new
+      // user's email address
+      //
+      claimMessages (user);
       req.login(user, function (err) {
         if (err) {
           res.status(400).send(err);
@@ -200,6 +205,7 @@ exports.saveOAuthUserProfile = function (req, providerUserProfile, done) {
 
             // And save the user
             user.save(function (err) {
+              claimMessages (user);
               return done(err, user, info);
             });
           });

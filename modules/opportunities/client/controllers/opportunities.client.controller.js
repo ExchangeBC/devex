@@ -41,7 +41,7 @@
 			$state.go('opportunities.list');
 		}
 		var vm                    = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -64,6 +64,12 @@
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
 		vm.trust = $sce.trustAsHtml;
+		//
+		// am I watchng?
+		//
+		vm.isWatching  = OpportunitiesCommon.isWatchng (vm.opportunity);
+		vm.addWatch    = function () {vm.isWatching = OpportunitiesCommon.addWatch (vm.opportunity);};
+		vm.removeWatch = function () {vm.isWatching = OpportunitiesCommon.removeWatch (vm.opportunity);};
 		//
 		// what can the user do here?
 		//
@@ -475,7 +481,7 @@
 	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
 		vm.trust               = $sce.trustAsHtml;
-		vm.features = window.features;
+		// vm.features = window.features;
 		var originalPublishedState             = opportunity.isPublished;
 		//
 		// what can the user do here?

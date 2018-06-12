@@ -74,8 +74,8 @@ exports.update = function (req, res) {
 
 
 
-  userController.subscriptionHandler(user,prevState)
-  .then(function() {
+  // userController.subscriptionHandler(user,prevState)
+  // .then(function() {
     user.save(function (err) {
       if (err) {
         return res.status(422).send({
@@ -85,7 +85,7 @@ exports.update = function (req, res) {
 
       res.json(user);
     });
-  });
+  // });
 };
 
 /**

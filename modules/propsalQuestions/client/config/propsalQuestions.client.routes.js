@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 
-	if (window.features.propsalQuestions) angular.module ('propsalQuestions.routes').config (['$stateProvider', function ($stateProvider) {
+	angular.module ('propsalQuestions.routes').config (['$stateProvider', function ($stateProvider) {
 		$stateProvider
 		// -------------------------------------------------------------------------
 		//

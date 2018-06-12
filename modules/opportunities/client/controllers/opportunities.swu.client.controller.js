@@ -30,7 +30,7 @@
 			$state.go('opportunities.list');
 		}
 		var vm                    = this;
-		vm.features = window.features;
+		// vm.features = window.features;
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
@@ -96,6 +96,12 @@
 				vm.clist.push (id);
 			}
 		});
+		//
+		// am I watchng?
+		//
+		vm.isWatching  = OpportunitiesCommon.isWatchng (vm.opportunity);
+		vm.addWatch    = function () {vm.isWatching = OpportunitiesCommon.addWatch (vm.opportunity);};
+		vm.removeWatch = function () {vm.isWatching = OpportunitiesCommon.removeWatch (vm.opportunity);};
 		//
 		// what can the user do here?
 		//
@@ -456,7 +462,7 @@
 		// -------------------------------------------------------------------------
 		vm.codeChallenge = function () {
 			modalService.showModal ({
-				size: 'md',
+				size: 'sm',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-code-challenge.html',
 				controller: function ($scope, $uibModalInstance) {
 					$scope.data = {};
@@ -625,7 +631,7 @@
 		// -------------------------------------------------------------------------
 		vm.interview = function () {
 			modalService.showModal ({
-				size: 'md',
+				size: 'sm',
 				templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
 				controller: function ($scope, $uibModalInstance) {
 					$scope.data = {};
@@ -901,7 +907,7 @@
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                      = this;
 		vm.trust                    = $sce.trustAsHtml;
-		vm.features                 = window.features;
+		// vm.features                 = window.features;
 		var originalPublishedState  = opportunity.isPublished;
 		//
 		// what can the user do here?

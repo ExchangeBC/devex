@@ -3,68 +3,62 @@
 var _ = require('lodash'),
 	config = require('../config'),
 	mongoose = require('mongoose'),
-	path = require('path'),
-	chalk = require('chalk'),
-	crypto = require('crypto');
+	chalk = require('chalk')
 
 // global seed options object
 var seedOptions = {};
 
-var isProduction  = config.feature_hide;
-var isDevelopment = !isProduction;
-
-function removeUser (user) {
-	return new Promise(function (resolve, reject) {
-		var User = mongoose.model('User');
-		User.find({ username: user.username }).remove(function (err) {
-			if (err) {
-				reject(new Error('Failed to remove local ' + user.username));
-			}
-			resolve();
-		});
-	});
-}
+var devexProd = (config.devexProd === 'true');
 
 function saveUser (user) {
 	return function() {
 		return new Promise(function (resolve, reject) {
-			// Then save the user
-			user.save(function (err, theuser) {
+
+			var User = mongoose.model('User');
+
+			// attempt to find existing user
+			User.find({ username: user.username, email: user.email }, function(err, users) {
 				if (err) {
-					console.log (err);
-					reject(new Error('Failed to add local ' + user.username));
-				} else {
-					resolve(theuser);
+					console.error(err);
+					reject(new Error('Error querying database for ' + user.username));
 				}
-			});
+				else {
+					// if we found an existing user, update with password defined in environment parameters
+					if (users.length > 0) {
+						users[0].password = user.password;
+						users[0].save(users[0], function(err, user) {
+							if (err) {
+								console.error(err);
+								reject(new Error('Failed to update existing user ' + user.username));
+							}
+							else {
+								resolve(user);
+							}
+						});
+					}
+					// if we didn't find an existing user, create the new user
+					else {
+						user.save(function (err, newUser) {
+							if (err) {
+								console.log (err);
+								reject(new Error('Failed to add local ' + user.username));
+							}
+							else {
+								resolve(newUser);
+							}
+						});
+					}
+				}
+			})
 		});
 	};
-}
-
-function checkUserNotExists (user) {
-	return new Promise(function (resolve, reject) {
-		var User = mongoose.model('User');
-		User.find({ username: user.username }, function (err, users) {
-			if (err) {
-				reject(new Error('Failed to find local account ' + user.username));
-			}
-
-			if (users.length === 0) {
-				resolve();
-			} else {
-				// console.log('Database Seeding:\t\t\t' + 'local account already exists: ' + user.username);
-				// resolve ();
-				reject(new Error('Failed due to local account already exists: ' + user.username));
-			}
-		});
-	});
 }
 
 function reportSuccess (password) {
 	return function (user) {
 		return new Promise(function (resolve, reject) {
 			if (seedOptions.logResults) {
-				console.log(chalk.bold.red('Database Seeding:\t\t\tLocal ' + user.username + ' added with password set to ' + password));
+				console.log(chalk.bold.red('Database Seeding:\tLocal user \'' + user.username + '\' has password set to \'' + password + '\''));
 			}
 			resolve();
 		});
@@ -76,37 +70,165 @@ function seedTheUser (user) {
 	return function (password) {
 		return new Promise(function (resolve, reject) {
 
-			var User = mongoose.model('User');
 			// set the new password
 			user.password = password;
 
-			if (user.username === seedOptions.seedAdmin.username && process.env.NODE_ENV === 'production') {
-				checkUserNotExists(user)
-					.then(saveUser(user))
-					.then(reportSuccess(password))
-					.then(function () {
-						resolve();
-					})
-					.catch(function (err) {
-						reject(err);
-					});
-			} else {
-				// removeUser(user)
-				checkUserNotExists(user)
-					.then(saveUser(user))
-					.then(reportSuccess(password))
-					.then(function () {
-						resolve();
-					})
-					// .catch(function (err) {
-					//   // resolve();
-					//   reject(err);
-					// });
-					;
-			}
+			Promise.resolve()
+			.then(saveUser(user))
+			.then(reportSuccess(password))
+			.then(function () {
+				resolve();
+			})
+			.catch(function (err) {
+				reject(err);
+			});
 		});
 	};
 }
+
+function clearTemplates () {
+	var T = mongoose.model ('MessageTemplate');
+	return new Promise (function (resolve, reject) {
+		T.remove ({}, function () {
+			resolve ();
+		});
+	});
+}
+
+function seedTestMessageTemplate () {
+	var T = mongoose.model ('MessageTemplate');
+	var saveT = function (t) {
+		return new Promise (function (resolve, reject) {
+			t.save (function (err) {
+				resolve ();
+			});
+		});
+	};
+	return clearTemplates ().then (function () {
+		return Promise.all ([
+			new T ({
+				messageCd            : 'add-user-to-company-request',
+				messageLevel         : 'request',
+				description          : 'Ask the user whether they agree to be added to this company' ,
+				isSubscriptionType   : false,
+				messageBodyTemplate  : '<p>Hi {{user.name}}</p><br/>Whazzup about company {{org.name}}?',
+				messageShortTemplate : 'company {{org.name}} wants you dude!',
+				messageTitleTemplate : 'company {{org.name}}?',
+				emailBodyTemplate    : '<p>Hi {{user.name}}</p><br/>Whazzup about company {{org.name}}?',
+				emailSubjectTemplate : 'company {{org.name}}',
+				modelsRequired       : ['org'],
+				daysToArchive        : 7,
+				linkTemplate         : '/join/org/{{org._id}}',
+				actions              : [{
+					actionCd      : 'decline',
+					linkTitleTemplate : 'Decline',
+					isDefault     : true
+				},{
+					actionCd      : 'accept',
+					linkTitleTemplate : 'Accept'
+				}]
+			}),
+			new T ({
+				messageCd            : 'invitation-from-company',
+				messageLevel         : 'request',
+				description          : 'Does the user want to sign up to devex, invited by company' ,
+				isSubscriptionType   : false,
+				messageBodyTemplate  : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a></p>',
+				messageShortTemplate : 'company {{org.name}} wants you join devex and hopefully join their company',
+				messageTitleTemplate : 'company {{org.name}} wants you join devex',
+				emailBodyTemplate    : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up to the <a href="{{domain}}">developer\'s exchange</a> and join them in doing great work!</p>',
+				emailSubjectTemplate : 'company {{org.name}} wants you join devex',
+				modelsRequired       : ['org'],
+				daysToArchive        : 7,
+				linkTemplate         : '/join/org/{{org._id}}',
+				actions              : [{
+					actionCd      : 'decline',
+					linkTitleTemplate : 'Decline',
+					isDefault     : true
+				},{
+					actionCd      : 'accept',
+					linkTitleTemplate : 'Accept'
+				}]
+			}),
+			new T ({
+				messageCd            : 'opportunity-update',
+				messageLevel         : 'info',
+				description          : 'notify the user that there were updates to an opportunity they are watching' ,
+				isSubscriptionType   : true,
+				messageBodyTemplate  : '<p>Hi there</p><br/>Opportunity {{opportunity.name}} has been updated. <a href="{{ domain }}/{{opportunity.path}}">Click here to view the opportunity</a></p>',
+				messageShortTemplate : '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate : 'Opportunity updated',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> Hi {{user.displayName}}, <br/><br/> An opportunity you followed has been updated: <h4>{{ opportunity.name }}</h4> <h4><a href="{{ domain }}/{{ opportunity.path }}">See the details</a></h4> --- <i>To stop receiving notifications about this opportunity, <a href="{{ domain }}/{{ opportunity.path }}">browse to the opportunity</a> and un-watch it</i>',
+				emailSubjectTemplate : 'Opportunity {{ opportunity.name }} has been updated',
+				modelsRequired       : ['opportunity'],
+				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
+				actions              : [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
+			}),
+			new T ({
+				messageCd            : 'opportunity-add',
+				messageLevel         : 'info',
+				description          : 'notify the user that there is a new opportunity' ,
+				isSubscriptionType   : true,
+				messageBodyTemplate  : '<p>Hi there</p><br/>Opportunity {{opportunity.name}} has been added. <a href="{{ domain }}/{{opportunity.path}}">Click here to view the opportunity</a></p>',
+				messageShortTemplate : '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate : 'Opportunity Added',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> Hi {{user.displayName}}, <br/><br/> We\'ve just posted a new opportunity: <h4>{{ opportunity.name }}</h4> <ul><li>Value: <b>{{ opportunity.earn }}</b></li><li>Value: <b>{{ opportunity.deadline_format_date }}</b></li></ul><h4><a href="{{ domain }}/{{ opportunity.path }}">See the details</a></h4> Have a great day!<br/><b>The BCDevExchange Team</b><br/><br/>--- <i>To stop receiving notifications about new opportunities, <a href="{{ domain }}/opportunities">browse to the opportunity listing</a> and stop listening, or visit <a href="{{ domain }}/settings/privacy">your profile</a> and uncheck "Tell me about new opportunities" </i>',
+				emailSubjectTemplate : 'A new opportunity has just been posted!',
+				modelsRequired       : ['opportunity'],
+				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
+				actions              : [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
+			}),
+			new T ({
+				messageCd            : 'opportunity-assign-cwu',
+				messageLevel         : 'info',
+				description          : 'notify the user that they have been assigned the opportunity' ,
+				isSubscriptionType   : true,
+				messageBodyTemplate  : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/> <h2>Congratulations {{user.displayName}}!</h2> The Proposal you submitted to work on, {{ opportunity.name }}, has been selected! {{opportunity.assignor}} is offering the assignment to you.',
+				messageShortTemplate : '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate : 'Your Proposal has been selected!',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/> <h2>Congratulations {{user.displayName}}!</h2> The Proposal you submitted to work on, {{ opportunity.name }}, has been selected! {{opportunity.assignor}} is offering the assignment to you.',
+				emailSubjectTemplate : 'Your Proposal has been selected!',
+				modelsRequired       : ['opportunity'],
+				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
+				actions              : [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
+			}),
+			new T ({
+				messageCd            : 'opportunity-assign-swu',
+				messageLevel         : 'info',
+				description          : 'notify the user that they have been assigned the opportunity' ,
+				isSubscriptionType   : true,
+				messageBodyTemplate  : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/> <h2>Congratulations {{user.displayName}}!</h2> The Proposal you submitted to work on, {{ opportunity.name }}, has been selected! {{opportunity.assignor}} is offering the assignment to you.',
+				messageShortTemplate : '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate : 'Your Proposal has been selected!',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/> <h2>Congratulations {{user.displayName}}!</h2> The Proposal you submitted to work on, {{ opportunity.name }}, has been selected! {{opportunity.assignor}} is offering the assignment to you.',
+				emailSubjectTemplate : 'Your Proposal has been selected!',
+				modelsRequired       : ['opportunity'],
+				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
+				actions              : [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
+			})
+		].map (saveT));
+	});
+};
 
 //
 // Seed the default notifications for each object type in the system
@@ -166,10 +288,9 @@ function reportError (reject) {
 	return function (err) {
 		if (seedOptions.logResults) {
 			console.log();
-			console.log('Database Seeding:\t\t\t' + err);
+			console.log('Database Seeding:\t' + err);
 			console.log();
 		}
-		reject(err);
 	};
 }
 
@@ -177,6 +298,7 @@ module.exports.start = function start(options) {
 	// Initialize the default seed options
 	seedOptions = _.clone(config.seedDB.options, true);
 
+	seedTestMessageTemplate ();
 	// Check for provided options
 
 	if (_.has(options, 'logResults')) {
@@ -226,18 +348,22 @@ module.exports.start = function start(options) {
 		Promise.resolve ()
 		.then (seedNotifications)
 		.then (function () {
-			// If production only seed admin if it does not exist
-			if (isProduction) {
-				User.generateRandomPassphrase()
-					.then(function (random) {
-						var passed = process.env.ADMINPW;
-						return passed || 'adminadmin';
-					})
-					.then(seedTheUser(adminAccount))
-					.then(function () {
-						resolve();
-					})
-					.catch(reportError(reject));
+			// If production, only seed admin using the ADMINPW environment parameter
+			if (devexProd) {
+				Promise.resolve()
+				.then( function() {
+					// do not allow an admin account to be created with the default password if we are in production
+					var password = process.env.ADMINPW;
+					if (!password) {
+						throw new Error('Attempt to create Administrator account in production with default password: aborting.');
+					}
+					return password;
+				})
+				.then(seedTheUser(adminAccount))
+				.then(function () {
+					resolve();
+				})
+				.catch(reportError(reject));
 			} else {
 				// Add both Admin and User account
 				Promise.resolve ()
@@ -256,11 +382,10 @@ module.exports.start = function start(options) {
 				//
 				// admin account
 				//
-				.then (User.generateRandomPassphrase())
-				.then(function (random) {
-					var passed = process.env.ADMINPW;
-					console.log (passed);
-					return passed || 'adminadmin';
+				Promise.resolve()
+				.then(function() {
+					var password = process.env.ADMINPW;
+					return password || 'adminadmin';
 				})
 				.then(seedTheUser(adminAccount))
 				//
