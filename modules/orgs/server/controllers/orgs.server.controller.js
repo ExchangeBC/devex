@@ -491,8 +491,7 @@ var inviteMembersWithNotification = function (emaillist, org) {
 	});
 };
 var inviteMembers = function (emaillist, org) {
-	if (config.feature.messages) return inviteMembersWithMessages (emaillist, org);
-	else return inviteMembersWithNotification (emaillist, org);
+	return inviteMembersWithMessages (emaillist, org);
 }
 
 exports.removeUserFromMemberList = function (req, res) {
