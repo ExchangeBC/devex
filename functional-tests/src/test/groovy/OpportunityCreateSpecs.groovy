@@ -159,7 +159,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           oppEmail << Keys.chord(Keys.TAB)
           // Dates are automatically generated based on current date
 
-          "Set All Dates"()
+          // "Set All Dates"()
 
           selectEarn.earn = Earn //Fixed Price-Reward
 
