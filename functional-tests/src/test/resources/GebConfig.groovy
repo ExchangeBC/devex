@@ -89,7 +89,7 @@ baseNavigatorWaiting = true
 def env = System.getenv()
 baseUrl = env['BASEURL']
 if (!baseUrl) {
-	baseUrl = "http://platform-dev.pathfinder.gov.bc.ca/"
+	baseUrl = "http://localhost:3030/"
 }
 
 println "BaseURL: ${baseUrl}"
