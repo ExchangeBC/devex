@@ -157,7 +157,7 @@ var getDomain = function () {
 		domain += 'http://';
 	}
 
-	domain += config.host + ':' + config.port;
+	domain += 'localhost:3000';
 	return domain;
 }
 var getHostInfoFromDomain = function (o) {
