@@ -364,7 +364,7 @@
 			if (!result.emaillist) return Promise.resolve ();
 			return new Promise (function (resolve, reject) {
 				modalService.showModal ({
-					size: 'md',
+					size: 'sm',
 					templateUrl: '/modules/orgs/client/views/org-members-results.html',
 					controller: function ($scope, $uibModalInstance) {
 						$scope.data = {
