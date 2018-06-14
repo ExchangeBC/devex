@@ -37,6 +37,7 @@ environments {
 			o.addArguments('headless')
 			o.addArguments('disable-gpu') 
 			o.addArguments('no-sandbox')
+			o.addArguments('window-size=1980,1080')
 			new ChromeDriver(o)
 		}
 	}
