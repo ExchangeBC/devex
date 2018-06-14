@@ -145,28 +145,19 @@ var getUser = function (userid) {
 };
 // -------------------------------------------------------------------------
 //
-// if domain has http.... in front, then leave it, otherwise append
-// http.  We beleive that if https is used then the env variable will
-// prefix correctly with https
+// Gets the domain and uses the correct protocol based on configuration
 //
 // -------------------------------------------------------------------------
 var getDomain = function () {
-	var domain = 'http://localhost:3000';
-	if (process.env.DOMAIN) {
-		var d = process.env.DOMAIN;
-		//
-		// if http or http, either way just set it
-		//
-		if (d.substr (0,4) === 'http') {
-			domain = d;
-		}
-		//
-		// otherwise no protocol specified so assume http
-		//
-		else {
-			domain = 'http://' + d;
-		}
+	var domain = '';
+	if (config.secure && config.secure.ssl) {
+		domain += 'https://';
 	}
+	else {
+		domain += 'http://';
+	}
+
+	domain += config.host + ':' + config.port;
 	return domain;
 }
 var getHostInfoFromDomain = function (o) {
