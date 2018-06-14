@@ -226,7 +226,13 @@ exports.getJSON = function (options) {
 			// all done, either resolve or reject the data
 			//
 			res.on ('end', function () {
-				var obj = JSON.parse (output);
+				try {
+					var obj = JSON.parse (output);
+				}
+				catch (err) {
+					console.error(err);
+					console.error('Received invalid response from internal REST call: ' + output);
+				}
 				//
 				// if inside the 200 range then treat this as AOK
 				// all returned data should be of the form :
