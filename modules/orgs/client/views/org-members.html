@@ -3,12 +3,12 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-7">
 				<p>This is where you make your Statement of Qualifications which will comprise your Response to the RFQ.</p>
-				<p>Make sure your team members have <strong>signed in</strong> on the BCDevExchange and <strong>claimed their capabilities</strong> in their BCDevExchange profile. Once they've done this, you can add them to your company using the email address in their profile</p>
-				<h4>Add team members</h4>
+				<p>Make sure your team members have <strong>claimed their capabilities</strong> in their BCDevExchange profile.</p>
+				<h4>Invite team members</h4>
 				<div class="input-group">
-				  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="robwilkins@gmail.com, janeeyre@gmail.com" ng-model="vm.emaillist">
+				  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="name@example.com, name@example.com" ng-model="vm.emaillist">
 				  <span class="input-group-btn">
-					<button class="btn btn-primary" type="button" ng-click="vm.addMembers()"><i class="fa fa-plus"></i> Add</button>
+					<button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
 				  </span>
 				</div>
 				<span class="small gray-light">Add multiple emails separated with a comma.</span>

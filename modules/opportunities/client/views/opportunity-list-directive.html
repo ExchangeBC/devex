@@ -1,4 +1,4 @@
-<section class="list-page" style="background: #fff;">
+<section class="list-page" style="background-color: #fff;">
 	<div class="container">
 		<div class="row list-head">
 			<div class="col-xs-8">
@@ -8,10 +8,24 @@
 				<button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
 			</div>
 		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<label class="label label-watching pull-right" ng-if="vm.isUser">
+					<button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to get notified when new opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not listening for new opportunities</button>
+					<button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to stop getting notifications about new opportunities"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new opportunities</button>
+				</label>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<label class="label label-watching pull-right" ng-if="vm.isUser">
+					<button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to get notified when new opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not listening for new opportunities</button>
+					<button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to stop getting notifications about new opportunities"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new opportunities</button>
+				</label>
+			</div>
+		</div>
 	</div>
 </section>
-
-<section class="list-page">
 
 	<!-- This div can go; don't need the filters anymore -->
 	<div class="list-filter">
@@ -28,17 +42,11 @@
 
 			<button class="btn btn-sm btn-filter-unselected" ng-if="!vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
 			<button class="btn btn-sm btn-filter-selected" ng-if="vm.filter.closed" ng-model="vm.filter.closed" uib-btn-checkbox>Closed</button>
-
-			<label class="label label-watching pull-right" ng-if="vm.isUser">
-				<button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to notify me when new Opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not Listening for new Opportunities</button>
-				<button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to no longer notify me when new Opportunities are posted"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new Opportunities</button>
-			</label>
-
-
 		</div>
 	</div>
 	
 	<!-- This all stays; just need to match up the new logic to make cards apppear in either the Open or Closed list as appropriate -->
+<section class="list-page" style="min-height: 300px;">
 	<div class="container">
 		<div class="card" ng-class="{'card-greyed': !opportunity.isPublished}" ng-repeat="opportunity in vm.opportunities | orderBy:'deadline':false | filter:vm.filterRecords as results">
 
@@ -112,7 +120,7 @@
 			</div>
 
 			<!-- I made an alert in the template html file to replace this. -->
-			<div class="row" ng-if="! vm.opportunities.length">
+			<div class="alert" ng-if="! vm.opportunities.length">
 				<div class="col-xs-12">
 					<div class="well well-transparent">No open opportunities right now. Check back soon!</div>
 				</div>
@@ -121,11 +129,8 @@
 		</div>
 
 		<!-- This can be repositioned under the Open Opportunities list; we'll never need it for the Closed list -->
-		<div class="row gray" ng-if="results.length==0">
-			<div class="col-xs-12">
-				<br><br>
-				<i class="fa fa-lg fa-frown-o"></i> &nbsp;No opportunities right now that match your search criteria...Check back soon!
-			</div>
+		<div class="alert" ng-if="results.length==0">
+			<i class="fa fa-lg fa-frown-o"></i> &nbsp;No opportunities right now that match your filters...
 		</div>
 
 	</div>

@@ -1,27 +1,36 @@
-<section class="edit-form-background" role="main">
-	<div class="edit-form">
-		<div class="row">
-			<div class="proposal-form-container" ng-if="!vm.haveresult">
-						<div class="card-title" ng-bind-html="vm.trust(vm.message.messageTitle)"></div>
-						<div class="card-teaser" ng-bind-html="vm.trust(vm.message.messageShort)"></div>
-						<div ng-bind-html="vm.trust(vm.message.messageBody)"></div>
-						<div>
-							This message was posted on {{vm.message.datePosted}}
-						</div>
-						<div>
-							This message expires on {{vm.message.date2Archive}}
-						</div>
-						<div>
-							This message was last viewed on {{vm.message.dateViewed}}
-						</div>
-						<br/>
-						<div class="btn-group text-right">
-							<button class="btn" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
-						</div>
-						<br/>
-			</div>
-			<div class="proposal-form-container" ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
+<div class="modal-md">
+	<div class="modal-content">
+		<div class="modal-header">
+			<button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times"></i></button>
+			<div class="modal-title" ng-bind-html="vm.trust(vm.message.messageTitle)"></div>
 		</div>
-		<div class="row"><br/><a ui-sref="settings.messages" class="btn btn-default pull-right"> &lt;&lt; Back to message list</a></div>
+		<div class="modal-body">
+			
+			<div class="row">
+				<div ng-if="!vm.haveresult">
+					<!-- Don't think a Message Short template is needed -->
+					<!--
+					<div class="company-invitation-message" ng-bind-html="vm.trust(vm.message.messageShort)"></div>
+					-->
+					<div class="message-date-posted">{{vm.message.datePosted}}</div>
+					<div class="company-invitation-message" ng-bind-html="vm.trust(vm.message.messageBody)"></div>
+					<!-- Don't think we need this? ... Use case? -->
+					<!--					
+					<div>
+						This message was last viewed on {{vm.message.dateViewed}}
+					</div>
+					<br/>
+				-->
+					<div class="company-invitation-actions">
+						<button class="btn btn-lg" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
+					</div>
+				<!-- Commenting out the expiry message/date until we figure out what we want to do with it -->
+				<!--
+					<div class="expiry-message">This invitation will expire on <strong>{{vm.message.date2Archive}}</strong> if you do nothing. If you join a company, you can always leave it later.</div>
+				-->
+				</div>
+				<div ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
+			</div>
+		</div>
 	</div>
-</section>
+</div>
