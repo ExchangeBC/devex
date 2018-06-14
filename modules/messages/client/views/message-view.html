@@ -24,8 +24,10 @@
 					<div class="company-invitation-actions">
 						<button class="btn btn-lg" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
 					</div>
-					<br/>
+				<!-- Commenting out the expiry message/date until we figure out what we want to do with it -->
+				<!--
 					<div class="expiry-message">This invitation will expire on <strong>{{vm.message.date2Archive}}</strong> if you do nothing. If you join a company, you can always leave it later.</div>
+				-->
 				</div>
 				<div ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
 			</div>
