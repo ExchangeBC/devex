@@ -311,7 +311,7 @@ var saveOrgReturnMessage = function (req, res) {
 					getOrgById (neworg._id)
 					.then (function (o) {
 						res.status(200).json ({
-							message: '<h4>Success!</h4> You have been added to '+org.name
+							message: '<h4>Success!</h4> You are now a member of '+org.name
 						})
 					})
 					.catch (function (err) {
