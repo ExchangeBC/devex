@@ -89,17 +89,27 @@ function seedTheUser (user) {
 function clearTemplates () {
 	var T = mongoose.model ('MessageTemplate');
 	return new Promise (function (resolve, reject) {
-		T.remove ({}, function () {
+		T.remove ({}, function (err) {
+			if (err) {
+				console.error(err);
+				console.error('Error removing templates');
+				reject();
+			}
 			resolve ();
 		});
 	});
 }
 
 function seedTestMessageTemplate () {
+	console.log(chalk.bold.red('Database seeding:\t Seeding message templates.'));
 	var T = mongoose.model ('MessageTemplate');
 	var saveT = function (t) {
 		return new Promise (function (resolve, reject) {
 			t.save (function (err) {
+				if (err) {
+					console.error(err);
+					console.error('Error saving template');
+				}
 				resolve ();
 			});
 		});
@@ -111,10 +121,10 @@ function seedTestMessageTemplate () {
 				messageLevel         : 'request',
 				description          : 'Notify a user they have been invited to join a company' ,
 				isSubscriptionType   : false,
-				messageBodyTemplate  : '<p><strong>{{Inviter.name}}</strong> has invited you to join <strong>{{org.name}}</strong>.</p><p>If you accept, {{org.name}} will be able to put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
+				messageBodyTemplate  : '<p>You have been invited to join <strong>{{org.name}}</strong>.</p><p>If you accept, {{org.name}} will be able to put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
 				messageShortTemplate : '',
 				messageTitleTemplate : 'You\'ve been invited to join {{org.name}}',
-				emailBodyTemplate    : '<p>Hi {{user.name}}</p><br/><p><strong>{{Inviter.name}}</strong> has invited you to join <strong>{{org.name}}</strong> so they can put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
+				emailBodyTemplate    : '<p>Hi {{user.name}}</p><br/><p><strong>, You have been invited you to join <strong>{{org.name}}</strong> so they can put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
 				emailSubjectTemplate : 'You\'ve been invited to join {{org.name}}',
 				modelsRequired       : ['org'],
 				daysToArchive        : 7,
@@ -133,10 +143,10 @@ function seedTestMessageTemplate () {
 				messageLevel         : 'request',
 				description          : 'Invite a user to sign up, because they have been invited by company' ,
 				isSubscriptionType   : false,
-				messageBodyTemplate  : '<p><strong>{{Inviter name}}</strong> has invited you to join <strong>{{org.name}}</strong>.</p><p>If you accept, {{org.name}} will be able to put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
+				messageBodyTemplate  : '<p>You have been invited to join <strong>{{org.name}}</strong>.</p><p>If you accept, {{org.name}} will be able to put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>',
 				messageShortTemplate : '',
 				messageTitleTemplate : 'You\'ve been invited to join {{org.name}}',
-				emailBodyTemplate    : '<p>Hi there</p><br/>Company {{org.name}} is inviting you to sign up on the BCDevExchange and join <strong>{{org.name}}</strong> so they can put you forward as a team member on a proposal.</p>',
+				emailBodyTemplate    : '<p>Hi {{user.name}}</p><br/>Company {{org.name}} is inviting you to sign up on the BCDevExchange and join <strong>{{org.name}}</strong> so they can put you forward as a team member on a proposal.</p>',
 				emailSubjectTemplate : 'Sign up and join {{org.name}}',
 				modelsRequired       : ['org'],
 				daysToArchive        : 7,
