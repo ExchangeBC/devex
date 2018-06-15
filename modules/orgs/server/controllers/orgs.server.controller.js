@@ -210,6 +210,10 @@ var collapseCapabilities = function (org) {
 //
 // -------------------------------------------------------------------------
 var checkCapabilities = function (org) {
+	// make sure an org was found
+	if (!org) {
+		return;
+	}
 	return collapseCapabilities (org)
 	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
@@ -220,6 +224,10 @@ var checkCapabilities = function (org) {
 	})
 };
 var minisave = function (org) {
+	// make sure an org was found
+	if (!org) {
+		return;
+	}
 	return new Promise (function (resolve, reject) {
 		org.save (function (err, model) {
 			if (err) reject (err);

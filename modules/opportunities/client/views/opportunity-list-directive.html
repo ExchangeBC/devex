@@ -16,14 +16,6 @@
 				</label>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-xs-12">
-				<label class="label label-watching pull-right" ng-if="vm.isUser">
-					<button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to get notified when new opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not listening for new opportunities</button>
-					<button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to stop getting notifications about new opportunities"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new opportunities</button>
-				</label>
-			</div>
-		</div>
 	</div>
 </section>
 
