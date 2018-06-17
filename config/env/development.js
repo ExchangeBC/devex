@@ -73,12 +73,7 @@ module.exports = {
       service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
       host: 'apps.smtp.gov.bc.ca',
       ignoreTLS: true,
-      secure: true,
-      port: 25,
-      auth: {
-        user: process.env.MAILER_EMAIL_ID,
-        pass: process.env.MAILER_PASSWORD
-      }
+      secure: false
     }
   },
   shared: {
