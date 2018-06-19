@@ -55,19 +55,19 @@
 		//
 		// take some sort of action
 		//
-		vm.takeAction = function (action) {			
+		vm.takeAction = function (action) {
 			MessagesService.actioned ({
 				messageId : message._id,
 				action    : action.actionCd
 			}).$promise
 			.then (function (response) {
 				vm.haveresult = true;
-				vm.resultmsg = vm.trust (response.message);				
+				vm.resultmsg = vm.trust (response.message);
 				$rootScope.$broadcast('updateMessages', 'done');
 			})
 			.catch (function (response) {
 				vm.haveresult = true;
-				vm.resultmsg = vm.trust (response.message);				
+				vm.resultmsg = vm.trust (response.message);
 				$rootScope.$broadcast('updateMessages', 'done');
 			})
 		};
