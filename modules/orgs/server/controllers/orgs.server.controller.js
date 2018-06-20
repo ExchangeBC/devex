@@ -551,7 +551,8 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var org        = _.assign (req.org, req.body);
+	// Andrew: Replaced _.assign with _.merge, as assign has the chance of overwriting existing properties in the target object
+	var org        = _.merge (req.org, req.body);
 	org.adminName  = req.user.displayName;
 	org.adminEmail = req.user.email;
 
