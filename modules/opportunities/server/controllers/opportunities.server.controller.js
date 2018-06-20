@@ -25,7 +25,6 @@ var path = require('path'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
@@ -419,7 +418,7 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var opportunity = _.assign (req.opportunity, req.body);
+	var opportunity = _.merge (req.opportunity, req.body);
 	//
 	// set the audit fields so we know who did what when
 	//
@@ -433,7 +432,8 @@ exports.update = function (req, res) {
 	//
 	updateSave (opportunity)
 	.then (function () {
-		if (opportunity.isPublished) {
+		// BA-694: only send out notifications on published opportunities that are still open
+		if (opportunity.isPublished && opportunity.deadline - new Date() > 0) {
 			sendMessages ('opportunity-update', opportunity.watchers, {opportunity: setMessageData (opportunity)});
 			github.createOrUpdateIssue ({
 				title  : opportunity.name,
