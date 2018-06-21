@@ -22,7 +22,7 @@
 					<br/>
 				-->
 					<div class="company-invitation-actions">
-						<button class="btn btn-lg" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
+						<button class="btn btn-lg" ng-disabled="vm.message.isArchived" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
 					</div>
 				<!-- Commenting out the expiry message/date until we figure out what we want to do with it -->
 				<!--
