@@ -106,3 +106,26 @@ div.rejected {
 	text-decoration: line-through;
 	color: darkred;
 }
+
+.opportunity-list {
+	padding: 20px 0;
+	margin-bottom: 100px;
+}
+.opportunity-list-header {
+	border-bottom: 2px dotted #e3e3e3;
+	font-size: 1.42em;
+	font-weight: 600;
+	padding: 10px 5px;
+}
+.opportunity-count {
+	margin-bottom: 5px;
+	margin-left: 5px;
+	font-size: .7em;
+	background-color: #555;
+	font-weight: normal;
+	padding: 4px 9px;
+}
+.value-tally {
+	font-size: .8em;
+	margin-top: 1px;
+}
