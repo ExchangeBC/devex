@@ -233,14 +233,9 @@ var prepareMessage = function (template, data) {
 // returns a promise
 //
 // -------------------------------------------------------------------------
-var sendMessage = function (template, user, email, data) {
+var sendMessage = function (template, user, data) {
 	data.user = user;
 	var message = prepareMessage (template, data);
-	var emailOptions = {
-		to      : email,
-		subject : message.emailSubject,
-		html    : message.emailBody
-	}
 	return sendmail (message)
 	.then (saveMessage)
 	.catch (function (err) {
@@ -270,7 +265,7 @@ exports.sendMessages = function (messageCd, users, data) {
 	//
 	// ensure the domain is set properly
 	//
-	data.domain = getDomain ();
+	data.domain = config.app.domain ? config.app.domain : 'http://localhost:3000';
 	//
 	// get the template and then send
 	//
@@ -298,7 +293,7 @@ exports.sendMessages = function (messageCd, users, data) {
 				promise = Promise.all (users.map (function (userid) {
 					return getUser (userid)
 					.then (function (user) {
-						return sendMessage (template, user, user.email, data);
+						return sendMessage (template, user, data);
 					});
 				}));
 			}
@@ -307,7 +302,7 @@ exports.sendMessages = function (messageCd, users, data) {
 			//
 			else {
 				promise = Promise.all (users.map (function (user) {
-					return sendMessage (template, user, user.email, data);
+					return sendMessage (template, user, data);
 				}));
 			}
 			//

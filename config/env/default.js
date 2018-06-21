@@ -8,7 +8,7 @@ module.exports = {
 		description: 'Better ways for government and developers to work together',
 		keywords: 'developer, government, codewithus, agile, digitial service',
 		googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID',
-		domain: process.env.DOMAIN || 'http://localhost:3030'
+		domain: process.env.DOMAIN || 'http://localhost:3000'
 	},
 	devexProd: process.env.DEVEX_PROD || false,
 	port: process.env.PORT || 3000,
