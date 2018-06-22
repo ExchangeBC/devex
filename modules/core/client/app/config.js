@@ -46,6 +46,16 @@
       positionY: 'bottom'
     });
   });
+
+  angular.module('ngIdle').config(function(IdleProvider, KeepaliveProvider) {
+    IdleProvider.idle(5);
+    IdleProvider.timeout(5);
+    KeepaliveProvider.interval(2);
+  })
+  .run(function(Idle) {
+    Idle.watch();
+  });
+
 }(window));
 
 

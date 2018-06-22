@@ -5,9 +5,9 @@
     .module('core')
     .controller('HeaderController', HeaderController);
 
-  HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService'];
+  HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService', '$uibModal', 'Idle'];
 
-  function HeaderController($scope, $state, $location, Authentication, menuService, flags) {
+  function HeaderController($scope, $state, $location, Authentication, menuService, $uibModal) {
     var vm = this;
     vm.accountMenu = menuService.getMenu('account').items[0];
     vm.authentication = Authentication;
@@ -31,6 +31,30 @@
         if (route === 'admin' && active.substring(0, 5) === 'admin')
             return true;
     };
+
+    /**
+     * Functions for handling session timeout warnings
+     */
+    $scope.$on('IdleStart', function() {
+      $scope.warning = $uibModal.open({
+        templateUrl: '/modules/core/client/views/modal.timeout.warning.html',
+        windowClass: 'modal-danger',
+        backdrop: 'static'
+      });
+    });
+
+    $scope.$on('IdleTimeout', function() {
+      $scope.warning.close();
+      $scope.timedout = $uibModal.open({
+        templateUrl: '/modules/core/client/views/modal.timeout.html',
+        windowClass: 'modal-danger',
+        backdrop: 'static'
+      });
+    });
+
+    $scope.$on('IdleEnd', function() {
+      $scope.warning.close();
+    });
 
     function stateChangeSuccess() {
       // Collapsing the menu after navigation
