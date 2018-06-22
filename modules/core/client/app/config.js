@@ -17,7 +17,8 @@
     'ngImgCrop',
     'ui-notification',
     'ncy-angular-breadcrumb',
-    'dndLists'
+    'dndLists',
+    'ngIdle'
     ],
     registerModule: registerModule
   };
@@ -32,12 +33,6 @@
     // Add the module to the AngularJS configuration file
     angular.module(applicationModuleName).requires.push(moduleName);
   }
-
-
-
-
-
-
 
   // Angular-ui-notification configuration
   angular.module('ui-notification').config(function(NotificationProvider) {
