@@ -47,15 +47,12 @@
     });
   });
 
+  // Angular idle configuration
   angular.module('ngIdle').config(function(IdleProvider, KeepaliveProvider) {
-    IdleProvider.idle(5);
-    IdleProvider.timeout(5);
+    IdleProvider.idle(300);
+    IdleProvider.timeout(300);
     KeepaliveProvider.interval(2);
   })
-  .run(function(Idle) {
-    Idle.watch();
-  });
-
 }(window));
 
 

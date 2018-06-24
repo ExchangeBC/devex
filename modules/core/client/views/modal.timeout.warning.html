@@ -1,6 +1,9 @@
 <div class="modal-header">
     <h3 style="text-align:center;">Are you still there?</h3>
-    </div>
-    <div idle-countdown="countdown" ng-init="countdown=5" class="modal-body">
-    <uib-progressbar max="5" value="5" animate="false" class="progress-striped active">To protect your privacy, we'll log you out in {{countdown}} second(s).</uib-progressbar>
+</div>
+<div class="modal-body">
+    To protect your privacy, we'll log you out in
+    <span ng-if="qqq.countdown > 60">{{qqq.getCountdownInMinutes()}} minute(s)</span>
+    <span ng-if="qqq.countdown <= 60"> {{qqq.countdown}} second(s).</span>
+    <uib-progressbar max="qqq.max" value="qqq.countdown" animate="false" class="progress-striped active"></uib-progressbar>
 </div>
