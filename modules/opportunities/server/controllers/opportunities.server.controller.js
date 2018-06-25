@@ -510,7 +510,8 @@ var pub = function (req, res, isToBePublished) {
 		var data = setNotificationData (opportunity);
 		if (firstTime) {
 			getSubscribedUsers ().then (function (users) {
-				sendMessages ('opportunity-add', users, {opportunity: setMessageData (opportunity)});
+				var messageCode = (opportunity.opportunityTypeCd === 'code-with-us') ? 'opportunity-add-cwu' : 'opportunity-add-swu';
+				sendMessages (messageCode, users, {opportunity: setMessageData (opportunity)});
 			});
 		}
 		else if (isToBePublished) {

@@ -235,6 +235,20 @@ var prepareMessage = function (template, data) {
 // -------------------------------------------------------------------------
 var sendMessage = function (template, user, data) {
 	data.user = user;
+
+	if (data.opportunity) {
+		// eslint-disable-next-line new-cap
+		data.formattedEarnings = Intl.NumberFormat('en', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(data.opportunity.earn);
+		// eslint-disable-next-line new-cap
+		data.formattedBudget = Intl.NumberFormat('en', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(data.opportunity.budget);
+	}
+
 	var message = prepareMessage (template, data);
 	return sendmail (message)
 	.then (saveMessage)
