@@ -85,6 +85,41 @@
 					);
 					return result;
 				};
+				vm.filterOpen = function(r) {
+					var d = new Date (r.deadline);
+					return vm.rightNow <= d;
+				}
+				vm.filterClosed = function(r) {
+					var d = new Date (r.deadline);
+					return vm.rightNow > d;
+				};
+				vm.countOpenOpportunities = function() {
+					return vm.opportunities.filter(function(opportunity) {
+						return vm.rightNow <= new Date(opportunity.deadline);
+					}).length;
+				}
+				/**
+				 * Returns the total value of all closed opportunities.
+				 * Sums up earnings for CWU and budget for SWU
+				 */
+				vm.getTotalClosedAmount = function() {
+
+					var total = 0;
+					vm.opportunities
+					.filter(function(opportunity) {
+						return vm.rightNow > new Date(opportunity.deadline);
+					})
+					.forEach(function(closedOpportunity) {
+						if (closedOpportunity.opportunityTypeCd === 'code-with-us') {
+							total += closedOpportunity.earn;
+						}
+						else {
+							total += closedOpportunity.budget;
+						}
+					});
+
+					return total;
+				};
 				vm.publish = function (opportunity, state) {
 					var publishedState = opportunity.isPublished;
 					var t              = state ? 'Published' : 'Unpublished';

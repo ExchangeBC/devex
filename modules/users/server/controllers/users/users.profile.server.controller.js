@@ -79,7 +79,7 @@ var updateOrgs = function (orglist) {
 exports.update = function (req, res) {
 	// Init Variables
 	var user = req.user;
-	console.log (user.orgsMember);
+	// console.log (user.orgsMember);
 	if (user) {
 		// Update whitelisted fields only
 		var isClaimMessages = (!user.email && req.body.email);

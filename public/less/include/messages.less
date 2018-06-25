@@ -1,0 +1,123 @@
+// ---------------------------------------------
+// Styles used in the MESSAGES module
+// ---------------------------------------------
+
+// This narrow container is for lists, like the Messages list, that I think will be nicer to read narrower on large displays
+.narrow-container {
+	width: 55vw;
+	margin: auto;
+}
+@media (max-width: 767px) {
+	.narrow-container {
+	width: 95vw;
+	}
+}
+
+// These styles created for the modals for the message detail
+.company-invitation-avatars {
+	padding: 20px;
+	text-align: center;
+}
+.company-invitation-avatars i {
+	font-size: 2em;
+	vertical-align: middle;
+	padding: 20px;
+}
+.company-invitation-avatars img {
+	height: 70px;
+}
+.company-invitation-message {
+	text-align: center;
+	padding: 20px;
+}
+.company-invitation-message p {
+	font-size: 1.1em;
+	font-weight: 400;
+}
+.company-invitation-actions {
+	text-align: center;
+	padding: 30px 10px;
+}
+.expiry-message {
+	padding: 20px 10px;
+	text-align: center;
+	font-size: 0.9em;
+	color: #777;
+}
+.message-date-posted {
+	text-align: center;
+	color: #b3b3b3;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+.message-result {
+	text-align: center;
+}
+
+// These styles created for the new Messages list page
+.message-list {
+	padding: 20px 0;
+	margin-bottom: 100px;
+}
+.message-archives {
+	max-height: 900px;
+	overflow-y: scroll;
+}
+.message-list-header {
+	border-bottom: 2px dotted #e3e3e3;
+	font-size: 1.42em;
+	font-weight: 600;
+	padding: 10px 5px;
+}
+.message-card {
+	display: flex;
+	padding: 20px;
+	border-bottom: 1px solid #f8f8f8;
+}
+.message-card:last-child {
+	border-bottom: none;
+}
+.message-card:hover {
+	cursor: pointer;
+	background-color: #f6f8fa;
+	border-radius: 5px;
+}
+img.message-image {
+	height: 50px;
+	float: left;
+	margin-right: 30px;
+}
+.message-card-body {
+	display: inline-block;
+}
+.message-date {
+	color: #777;
+	font-size: .95em;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+.message-title {
+	display: block;
+	font-size: 1.3em;
+	font-weight: bold;
+	margin-bottom: 10px
+}
+.message-subtitle {
+	display: block;
+	font-size: .95em;
+	color: #b3b3b3;
+}
+table.archived-messages tr {
+	border-bottom: 1px solid #f8f8f8;
+}
+table.archived-messages tr:last-child {
+	border-bottom: none;
+}
+table.archived-messages tr > td {
+	border-top: none;
+	padding: 25px 5px;
+}
+table.archived-messages tr > td.date {
+	color: #b3b3b3;
+	margin-right: 20px;
+}

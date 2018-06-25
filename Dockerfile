@@ -7,7 +7,7 @@
 # Compose:
 # docker-compose up -d
 
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 LABEL maintainer=MEAN.JS
 
 # 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 35729 = livereload
@@ -49,15 +49,15 @@ RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.
 RUN dpkg -i dumb-init_*.deb
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
-RUN sudo apt-get install -yq nodejs npm \
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN sudo apt-get install -yq nodejs \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #COPY phantom /opt/mean.js/node_modules
 
 # Install MEAN.JS Prerequisites
-RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 gulp-if && npm cache clean
+RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 gulp-if && npm cache verify
 
 
 RUN mkdir -p /opt/mean.js/public/lib
@@ -70,7 +70,7 @@ WORKDIR /opt/mean.js
 # Install npm packages
 COPY package.json /opt/mean.js/package.json
 #RUN npm install --quiet && npm cache clean
-RUN npm install && npm cache clean
+RUN npm install && npm cache verify
 
 # Install bower packages
 COPY bower.json /opt/mean.js/bower.json

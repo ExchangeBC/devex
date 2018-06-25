@@ -106,7 +106,7 @@ var notifyUser = function (org) {
 // -------------------------------------------------------------------------
 var getUsers = function (terms) {
 	return new Promise (function (resolve, reject) {
-		User.find (terms, '_id email displayName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
+		User.find (terms, '_id email displayName firstName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
 			if (err) reject (err);
 			else resolve (user);
 		});
@@ -210,6 +210,10 @@ var collapseCapabilities = function (org) {
 //
 // -------------------------------------------------------------------------
 var checkCapabilities = function (org) {
+	// make sure an org was found
+	if (!org) {
+		return;
+	}
 	return collapseCapabilities (org)
 	.then (getRequiredCapabilities)
 	.then (function (capabilities) {
@@ -220,6 +224,10 @@ var checkCapabilities = function (org) {
 	})
 };
 var minisave = function (org) {
+	// make sure an org was found
+	if (!org) {
+		return;
+	}
 	return new Promise (function (resolve, reject) {
 		org.save (function (err, model) {
 			if (err) reject (err);
@@ -311,7 +319,7 @@ var saveOrgReturnMessage = function (req, res) {
 					getOrgById (neworg._id)
 					.then (function (o) {
 						res.status(200).json ({
-							message: '<h4>Success!</h4> You have been added to '+org.name
+							message: '<h4>Success!</h4> You are now a member of '+org.name
 						})
 					})
 					.catch (function (err) {
@@ -491,8 +499,7 @@ var inviteMembersWithNotification = function (emaillist, org) {
 	});
 };
 var inviteMembers = function (emaillist, org) {
-	if (config.feature.messages) return inviteMembersWithMessages (emaillist, org);
-	else return inviteMembersWithNotification (emaillist, org);
+	return inviteMembersWithMessages (emaillist, org);
 }
 
 exports.removeUserFromMemberList = function (req, res) {
@@ -544,7 +551,8 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var org        = _.assign (req.org, req.body);
+	// Andrew: Replaced _.assign with _.merge, as assign has the chance of overwriting existing properties in the target object
+	var org        = _.merge (req.org, req.body);
 	org.adminName  = req.user.displayName;
 	org.adminEmail = req.user.email;
 

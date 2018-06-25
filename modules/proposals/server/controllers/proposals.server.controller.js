@@ -87,11 +87,10 @@ var countStatus = function (id) {
 				}
 			}
 		])
-		.cursor({ batchSize: 1000, async: true })
-		.exec()
-		.then(function(cursor) {
-			resolve(cursor);
-		});
+		.cursor()
+		.exec();
+
+		resolve(cursor);
 	});
 };
 // -------------------------------------------------------------------------
@@ -112,10 +111,10 @@ exports.stats = function (req, res) {
 		return countStatus (op._id);
 	})
 	.then (function (result) {
-		result.toArray().then(function(docs) {
-			docs.forEach(function(doc) {
-				ret[doc._id.toLowerCase()] = doc.count;
-			});
+		result.eachAsync(function(doc) {
+			ret[doc._id.toLowerCase()] = doc.count;
+		})
+		.then(function() {
 			res.json(ret);
 		});
 	})

@@ -17,7 +17,7 @@ var _ = require('lodash'),
       'gulp-angular-templatecache': 'templateCache'
     }
   }),
-  pngquant = require('imagemin-pngquant'),
+  // pngquant = require('imagemin-pngquant'),
   wiredep = require('wiredep').stream,
   path = require('path'),
   endOfLine = require('os').EOL,
@@ -49,33 +49,33 @@ gulp.task('env:prod', function () {
 gulp.task('nodemon', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--debug'],
+    nodeArgs: ['--inspect', '-r', 'dotenv/config'],
     ext: 'js,html',
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
   });
 });
 
-gulp.task('node-inspector', function() {
-  gulp.src([])
-    .pipe(plugins.nodeInspector({
-      debugPort: 5858,
-      webHost: '0.0.0.0',
-      webPort: 1337,
-      saveLiveEdit: false,
-      preload: true,
-      inject: true,
-      hidden: [],
-      stackTraceLimit: 50,
-      sslKey: '',
-      sslCert: ''
-    }));
-});
+// gulp.task('node-inspector', function() {
+//   gulp.src([])
+//     .pipe(plugins.nodeInspector({
+//       debugPort: 5858,
+//       webHost: '0.0.0.0',
+//       webPort: 1337,
+//       saveLiveEdit: false,
+//       preload: true,
+//       inject: true,
+//       hidden: [],
+//       stackTraceLimit: 50,
+//       sslKey: '',
+//       sslCert: ''
+//     }));
+// });
 
 // Nodemon debug task
 gulp.task('nodemon-debug', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--debug'],
+    nodeArgs: ['--inspect-brk', '-r', 'dotenv/config'],
     ext: 'js,html',
     verbose: true,
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
@@ -218,15 +218,15 @@ gulp.task('less', function () {
 });
 
 // Imagemin task
-gulp.task('imagemin', function () {
-  return gulp.src(defaultAssets.client.img)
-    .pipe(plugins.imagemin({
-      progressive: true,
-      svgoPlugins: [{ removeViewBox: false }],
-      use: [pngquant()]
-    }))
-    .pipe(gulp.dest('public/dist/img'));
-});
+// gulp.task('imagemin', function () {
+//   return gulp.src(defaultAssets.client.img)
+//     .pipe(plugins.imagemin({
+//       progressive: true,
+//       svgoPlugins: [{ removeViewBox: false }],
+//       use: [pngquant()]
+//     }))
+//     .pipe(gulp.dest('public/dist/img'));
+// });
 
 // wiredep task to default
 gulp.task('wiredep', function () {
@@ -567,7 +567,7 @@ gulp.task('default', function (done) {
 
 // Run the project in debug mode
 gulp.task('debug', function (done) {
-  runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
+  runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon-debug', 'watch'], done);
   // runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
 });
 

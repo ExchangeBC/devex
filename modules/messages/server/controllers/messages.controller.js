@@ -55,7 +55,7 @@ var count = function (table, q) {
 	});
 };
 var appendNotificationLink = function (messagebody) {
-	var link = '<a href="{{domain}}/messages/{{messageid}}">BC Developer\'s Exchange</a>';
+	var link = '<a href="{{domain}}/messages/{{messageid}}">BCDevExchange</a>';
 	var m = 'Sign in to the '+link+' to respond to this message. This message will expire on {{date2Archive}}';
 	return messagebody+'<p><br/>'+m+'<br/></p>';
 }
@@ -145,28 +145,19 @@ var getUser = function (userid) {
 };
 // -------------------------------------------------------------------------
 //
-// if domain has http.... in front, then leave it, otherwise append
-// http.  We beleive that if https is used then the env variable will
-// prefix correctly with https
+// Gets the domain and uses the correct protocol based on configuration
 //
 // -------------------------------------------------------------------------
 var getDomain = function () {
-	var domain = 'http://localhost:3000';
-	if (process.env.DOMAIN) {
-		var d = process.env.DOMAIN;
-		//
-		// if http or http, either way just set it
-		//
-		if (d.substr (0,4) === 'http') {
-			domain = d;
-		}
-		//
-		// otherwise no protocol specified so assume http
-		//
-		else {
-			domain = 'http://' + d;
-		}
+	var domain = '';
+	if (config.secure && config.secure.ssl) {
+		domain += 'https://';
 	}
+	else {
+		domain += 'http://';
+	}
+
+	domain += 'localhost:3000';
 	return domain;
 }
 var getHostInfoFromDomain = function (o) {
@@ -242,14 +233,9 @@ var prepareMessage = function (template, data) {
 // returns a promise
 //
 // -------------------------------------------------------------------------
-var sendMessage = function (template, user, email, data) {
+var sendMessage = function (template, user, data) {
 	data.user = user;
 	var message = prepareMessage (template, data);
-	var emailOptions = {
-		to      : email,
-		subject : message.emailSubject,
-		html    : message.emailBody
-	}
 	return sendmail (message)
 	.then (saveMessage)
 	.catch (function (err) {
@@ -279,7 +265,7 @@ exports.sendMessages = function (messageCd, users, data) {
 	//
 	// ensure the domain is set properly
 	//
-	data.domain = getDomain ();
+	data.domain = config.app.domain ? config.app.domain : 'http://localhost:3000';
 	//
 	// get the template and then send
 	//
@@ -307,7 +293,7 @@ exports.sendMessages = function (messageCd, users, data) {
 				promise = Promise.all (users.map (function (userid) {
 					return getUser (userid)
 					.then (function (user) {
-						return sendMessage (template, user, user.email, data);
+						return sendMessage (template, user, data);
 					});
 				}));
 			}
@@ -316,7 +302,7 @@ exports.sendMessages = function (messageCd, users, data) {
 			//
 			else {
 				promise = Promise.all (users.map (function (user) {
-					return sendMessage (template, user, user.email, data);
+					return sendMessage (template, user, data);
 				}));
 			}
 			//

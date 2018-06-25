@@ -37,6 +37,7 @@ environments {
 			o.addArguments('headless')
 			o.addArguments('disable-gpu') 
 			o.addArguments('no-sandbox')
+			o.addArguments('window-size=1980,1080')
 			new ChromeDriver(o)
 		}
 	}
@@ -89,7 +90,7 @@ baseNavigatorWaiting = true
 def env = System.getenv()
 baseUrl = env['BASEURL']
 if (!baseUrl) {
-	baseUrl = "http://platform-dev.pathfinder.gov.bc.ca/"
+	baseUrl = "http://localhost:3030/"
 }
 
 println "BaseURL: ${baseUrl}"

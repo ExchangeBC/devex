@@ -5,7 +5,18 @@
     .module('users')
     .controller('AuthenticationController', AuthenticationController);
 
-  AuthenticationController.$inject = ['$scope', '$rootScope', '$state', 'usercount', 'UsersService', '$location', '$window', 'Authentication', 'PasswordValidator', 'Notification'];
+  AuthenticationController.$inject =
+    ['$scope',
+    '$rootScope',
+    '$state',
+    'usercount',
+    'UsersService',
+    '$location',
+    '$window',
+    'Authentication',
+    'PasswordValidator',
+    'Notification',
+    'Idle'];
 
   function AuthenticationController($scope, $rootScope, $state, usercount, UsersService, $location, $window, Authentication, PasswordValidator, Notification) {
     var vm = this;
@@ -27,16 +38,19 @@
     if (vm.authentication.user) {
       $location.path('/');
     }
+
     function governmentSelected() {
       return ($location.search().role === 'non_gov');
     }
-	function non_gov() {
+
+	  function non_gov() {
       $window.location.href = '/authentication/government?role=non_gov';
     }
-    	function gov() {
 
-$window.location.href = '/authentication/government?role=gov';
+    function gov() {
+      $window.location.href = '/authentication/government?role=gov';
     }
+
     function signup(isValid) {
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
@@ -74,7 +88,6 @@ $window.location.href = '/authentication/government?role=gov';
     }
 
     // Authentication Callbacks
-
     function onUserSignupSuccess(response) {
       // If successful we assign the response to the global user model
       vm.authentication.user = response;

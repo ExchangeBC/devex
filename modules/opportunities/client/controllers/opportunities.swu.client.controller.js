@@ -496,7 +496,7 @@
 						if (match) {
 							if (score.score / 25 >= 0.8) {
 								match.passedCodeChallenge = true;
-								match.scores.codechallenge = Math.round((score.score / 25) * (vm.weights.codechallenge * vm.maxPoints));
+								match.scores.codechallenge = Math.round((score.score / 25) * (vm.weights.codechallenge * vm.maxPoints) * 100) / 100;
 								passCount++;
 							}
 							else {
@@ -662,7 +662,7 @@
 							return proposal.businessName === score.businessName;
 						});
 						if (match) {
-							match.scores.interview = Math.round((score.score / 25)  * (vm.weights.interview * vm.maxPoints));
+							match.scores.interview = Math.round((score.score / 25)  * (vm.weights.interview * vm.maxPoints) * 100) / 100;
 							scoreCount++;
 						}
 					});

@@ -520,7 +520,6 @@
 				.then (
 					function (response) {
 						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'});
-						ppp.subscribe (true);
 						resolve ();
 					},
 					function (error) {
@@ -562,7 +561,6 @@
 					ppp.proposal.$remove (
 						function () {
 							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Proposal deleted'});
-							ppp.subscribe (false);
 							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 						},
 						function (error) {
@@ -670,23 +668,6 @@
 		ppp.downloadTermsClicked = function() {
 			ppp.termsDownloaded = true;
 		}
-		ppp.subscribe = function (state) {
-			var notificationCode = 'not-update-'+ppp.opportunity.code;
-			if (!editing && !ppp.proposal._id && state) {
-				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = true;
-				}).catch (function () {
-				});
-			}
-			else {
-				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = false;
-				}).catch (function () {
-				});
-			}
-		};
 		ppp.type = function (type) {
 			if (type.indexOf ('pdf') > -1) return 'pdf';
 			else if (type.indexOf ('image') > -1) return 'image';

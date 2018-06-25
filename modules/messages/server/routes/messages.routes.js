@@ -39,9 +39,24 @@ module.exports = function (app) {
 	app.param('messageId', function (req, res, next, id) {
 		if (!mongoose.Types.ObjectId.isValid (id)) return res.status (400).send ({message: 'Invalid Message Id'});
 		else {
-			require ('mongoose').model ('Message').findById (id).exec (function (err, message) {
-				if (err) return next (err);
-				else if (!message) return res.status (400).send ({message: 'Message not found'});
+			mongoose.model ('Message').findById (id).exec (function (err, message) {
+				if (err) {
+					return next (err);
+				}
+				else if (!message) {
+					mongoose.model ('MessageArchive').findById (id).exec(function (err, message) {
+						if (err) {
+							return next (err);
+						}
+						else if (!message) {
+							return res.status (400).send ({message: 'Message not found'});
+						}
+						else {
+							req.message = message;
+							next ();
+						}
+					});
+				}
 				else {
 					req.message = message;
 					next ();

@@ -17,7 +17,8 @@
     'ngImgCrop',
     'ui-notification',
     'ncy-angular-breadcrumb',
-    'dndLists'
+    'dndLists',
+    'ngIdle'
     ],
     registerModule: registerModule
   };
@@ -33,12 +34,6 @@
     angular.module(applicationModuleName).requires.push(moduleName);
   }
 
-
-
-
-
-
-
   // Angular-ui-notification configuration
   angular.module('ui-notification').config(function(NotificationProvider) {
     NotificationProvider.setOptions({
@@ -51,6 +46,13 @@
       positionY: 'bottom'
     });
   });
+
+  // Angular idle configuration
+  angular.module('ngIdle').config(function(IdleProvider, KeepaliveProvider) {
+    IdleProvider.idle(Number(window.sessionTimeoutWarning));
+    IdleProvider.timeout(Number(window.sessionTimeout));
+    KeepaliveProvider.interval(2);
+  })
 }(window));
 
 

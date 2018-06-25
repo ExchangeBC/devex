@@ -60,3 +60,7 @@
 .ctc-green {
 	color: green;
 }
+.modal-backdrop {
+	color: #FFFFFF;
+	opacity: 0.5 !important;
+}

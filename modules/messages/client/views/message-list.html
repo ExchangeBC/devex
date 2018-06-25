@@ -17,11 +17,11 @@
 				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)"></div>
 				<div class="card-teaser" ng-bind-html="vm.trust(message.messageShort)"></div>
 			</div>
-			<div class="card-body" ng-if="message.isArchived" id="messages.view" ui-sref="messages.view({ messageId: message._id })">
+			<div class="card-body" ng-if="message.isArchived" id="amessages.view" ui-sref="messages.view({ messageId: message._id })">
 				<div class="card-title" ng-bind-html="vm.trust(message.messageTitle)"></div>
 				<div class="card-teaser" ng-bind-html="vm.trust(message.messageShort)"></div>
 				<div ng-if="message.isArchived">
-					Action Taken: <button class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-if="action.actionCd === message.actionTaken">{{vm.trust(action.linkTitle)}}</button>
+					Action Taken: <button disabled class="btn" ng-repeat="action in message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-if="action.actionCd === message.actionTaken">{{vm.trust(action.linkTitle)}}</button>
 				</div>
 			</div>
 			<div class="row" ng-if="!vm.messages.length">

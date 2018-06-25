@@ -50,6 +50,8 @@ module.exports.initLocalVariables = function (app) {
   app.locals.favicon = config.favicon;
   app.locals.env = process.env.NODE_ENV;
   app.locals.domain = config.domain;
+  app.locals.sessionTimeout = config.sessionTimeout || 300;
+  app.locals.sessionTimeoutWarning = config.sessionTimeoutWarning || 300;
 
   // Passing the request url to environment locals
   app.use(function (req, res, next) {
@@ -144,11 +146,13 @@ module.exports.initSession = function (app, db) {
     }
   }
   if (config.app.domain === 'http://localhost:3030' || process.env.NODE_ENV === 'development') {
-    sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
-    sessionParameters.store = new MongoStore ({
-      mongooseConnection : db.connection,
-      collection         : config.sessionCollection
-    });
+    db.then(function(dbInfo) {
+      sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
+      sessionParameters.store = new MongoStore ({
+        mongooseConnection : dbInfo.connection,
+        collection         : config.sessionCollection
+      });
+    })
   }
   app.use(session(sessionParameters));
 

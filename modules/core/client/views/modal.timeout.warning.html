@@ -1,0 +1,9 @@
+<div class="modal-header">
+    <h3 style="text-align:center;">Are you still there?</h3>
+</div>
+<div class="modal-body">
+    To protect your privacy, we'll log you out in
+    <span ng-if="qqq.countdown > 60">{{qqq.getCountdownInMinutes()}} minute(s)</span>
+    <span ng-if="qqq.countdown <= 60"> {{qqq.countdown}} second(s).</span>
+    <uib-progressbar max="qqq.max" value="qqq.countdown" animate="false" class="progress-striped active"></uib-progressbar>
+</div>

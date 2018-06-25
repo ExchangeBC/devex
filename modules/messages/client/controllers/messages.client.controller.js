@@ -56,7 +56,6 @@
 		// take some sort of action
 		//
 		vm.takeAction = function (action) {
-			console.log ('taking action:', action);
 			MessagesService.actioned ({
 				messageId : message._id,
 				action    : action.actionCd
@@ -64,13 +63,11 @@
 			.then (function (response) {
 				vm.haveresult = true;
 				vm.resultmsg = vm.trust (response.message);
-				console.log ('returned ALL GOOD');
 				$rootScope.$broadcast('updateMessages', 'done');
 			})
 			.catch (function (response) {
 				vm.haveresult = true;
 				vm.resultmsg = vm.trust (response.message);
-				console.log ('returned BAD');
 				$rootScope.$broadcast('updateMessages', 'done');
 			})
 		};
