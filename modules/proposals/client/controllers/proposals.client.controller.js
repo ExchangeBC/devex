@@ -464,7 +464,6 @@
 					if (r) {
 						ppp.proposal.$remove(function() {
 							Notification.success({message: '<i class="fa fa-3x fa-trash"></i><br> <h4>Your proposal has been deleted</h4>'});
-							ppp.subscribe(false);
 							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu', {opportunityId:ppp.opportunity.code});
