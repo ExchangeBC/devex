@@ -106,7 +106,7 @@ var notifyUser = function (org) {
 // -------------------------------------------------------------------------
 var getUsers = function (terms) {
 	return new Promise (function (resolve, reject) {
-		User.find (terms, '_id email displayName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
+		User.find (terms, '_id email displayName firstName username profileImageURL orgsAdmin orgsMember orgsPending').exec (function (err, user) {
 			if (err) reject (err);
 			else resolve (user);
 		});
