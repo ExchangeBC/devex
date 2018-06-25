@@ -24,6 +24,10 @@
 	<div class="container">
 		<div class="opportunity-list-header">
 			Open Opportunities
+			<div class="alert" ng-if="vm.countOpenOpportunities() === 0">
+				<i class="fa fa-lg fa-frown-o"></i>&nbsp; No open opportunities right now - check back soon, or make sure you're signed up for notifications <a href="/settings/privacy">in your profile</a>
+			</div>
+
 			<div class="card" class="opportunity-list" ng-class="{'card-greyed': !opportunity.isPublished}" 
 				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterOpen">
 
@@ -44,7 +48,7 @@
 						
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
-						<label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label>
+						<!-- <label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label> -->
 
 						<label class="label label-watching pull-right" ng-if="vm.isUser">
 							<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>

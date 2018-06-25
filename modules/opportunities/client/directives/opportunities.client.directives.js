@@ -93,6 +93,11 @@
 					var d = new Date (r.deadline);
 					return vm.rightNow > d;
 				};
+				vm.countOpenOpportunities = function() {
+					return vm.opportunities.filter(function(opportunity) {
+						return vm.rightNow <= new Date(opportunity.deadline);
+					}).length;
+				}
 				/**
 				 * Returns the total value of all closed opportunities.
 				 * Sums up earnings for CWU and budget for SWU
