@@ -28,6 +28,8 @@ module.exports = {
 		// in HTTPS mode.
 		secure: false
 	},
+	sessionTimeout: process.env.SESSION_TIMEOUT || 300,
+	sessionTimeoutWarning: process.env.SESSION_WARNING || 300,
 	home: process.env.PWD || '/opt/mean.js',
 	terms: {
 		'cwu1': {

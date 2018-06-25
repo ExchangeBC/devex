@@ -49,8 +49,8 @@
 
   // Angular idle configuration
   angular.module('ngIdle').config(function(IdleProvider, KeepaliveProvider) {
-    IdleProvider.idle(300);
-    IdleProvider.timeout(300);
+    IdleProvider.idle(Number(window.sessionTimeoutWarning));
+    IdleProvider.timeout(Number(window.sessionTimeout));
     KeepaliveProvider.interval(2);
   })
 }(window));
