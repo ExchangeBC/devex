@@ -180,14 +180,33 @@ function seedTestMessageTemplate () {
 				}]
 			}),
 			new T ({
-				messageCd            : 'opportunity-add',
+				messageCd            : 'opportunity-add-cwu',
 				messageLevel         : 'info',
 				description          : 'notify the user that there is a new opportunity' ,
 				isSubscriptionType   : true,
 				messageBodyTemplate  : '<p>Did you see the opportunity that was posted today?</p><h4>{{opportunity.name}}</h4> <p><a href="{{ domain }}/{{opportunity.path}}">Click here to view the details</a></p>',
 				messageShortTemplate : '',
 				messageTitleTemplate : 'A new opportunity has just been posted!',
-				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi {{user.displayName}},</p> <p>A new opportunity has just been posted:</p> <h4>{{ opportunity.name }}</h4> <ul><li>Value: <b>$ {{ opportunity.earn }}</b> CAD</li><li>Deadline to apply: <b>16:00 Pacific Time</b> on <b>{{ opportunity.deadline_format_date }}</b></li></ul><h4><a href="{{ domain }}/{{ opportunity.path }}">Click here to see the details</a></h4> <p>Have a great day!<br/><b>The BCDevExchange Team</b></p> <br><br> <p><i>To stop receiving notifications about new opportunities, <a href="{{ domain }}/opportunities">browse to the opportunity list</a> and stop listening, or visit <a href="{{ domain }}/settings/privacy">your profile</a> and uncheck "Tell me about new opportunities" </i></p>',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi {{user.displayName}},</p> <p>A new opportunity has just been posted:</p> <h4>{{ opportunity.name }}</h4> <ul><li>Value: <b>{{ formattedEarnings }}</b> CAD</li><li>Deadline to apply: <b>16:00 Pacific Time</b> on <b>{{ opportunity.deadline_format_date }}</b></li></ul><h4><a href="{{ domain }}/{{ opportunity.path }}">Click here to see the details</a></h4> <p>Have a great day!<br/><b>The BCDevExchange Team</b></p> <br><br> <p><i>To stop receiving notifications about new opportunities, <a href="{{ domain }}/opportunities">browse to the opportunity list</a> and stop listening, or visit <a href="{{ domain }}/settings/privacy">your profile</a> and uncheck "Tell me about new opportunities" </i></p>',
+				emailSubjectTemplate : 'A new opportunity has just been posted!',
+				modelsRequired       : ['opportunity'],
+				daysToArchive        : 1,
+				linkTemplate         : '/defaultonly',
+				actions              : [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'Dismiss',
+					isDefault     : true
+				}]
+			}),
+			new T ({
+				messageCd            : 'opportunity-add-swu',
+				messageLevel         : 'info',
+				description          : 'notify the user that there is a new opportunity' ,
+				isSubscriptionType   : true,
+				messageBodyTemplate  : '<p>Did you see the opportunity that was posted today?</p><h4>{{opportunity.name}}</h4> <p><a href="{{ domain }}/{{opportunity.path}}">Click here to view the details</a></p>',
+				messageShortTemplate : '',
+				messageTitleTemplate : 'A new opportunity has just been posted!',
+				emailBodyTemplate    : '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi {{user.displayName}},</p> <p>A new opportunity has just been posted:</p> <h4>{{ opportunity.name }}</h4> <ul><li>Value: <b>{{ formattedBudget }}</b> CAD</li><li>Deadline to apply: <b>16:00 Pacific Time</b> on <b>{{ opportunity.deadline_format_date }}</b></li></ul><h4><a href="{{ domain }}/{{ opportunity.path }}">Click here to see the details</a></h4> <p>Have a great day!<br/><b>The BCDevExchange Team</b></p> <br><br> <p><i>To stop receiving notifications about new opportunities, <a href="{{ domain }}/opportunities">browse to the opportunity list</a> and stop listening, or visit <a href="{{ domain }}/settings/privacy">your profile</a> and uncheck "Tell me about new opportunities" </i></p>',
 				emailSubjectTemplate : 'A new opportunity has just been posted!',
 				modelsRequired       : ['opportunity'],
 				daysToArchive        : 1,
