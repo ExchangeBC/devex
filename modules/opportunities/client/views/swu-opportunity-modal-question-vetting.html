@@ -1,45 +1,48 @@
 <div class="modal-header">
-		<h3>Questionnaire Review</h3>
-		<p>
-			Review each response for self-identifying information, and mark those that are invalid.  Commit your review once complete.
-		</p>
-	</div>
-	<div class="modal-body">
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
-			</div>
+	<button class="close" data-ng-click="close()"><i class="fa fa-times"></i></button>
+	<div class="modal-title">Questionnaire Review</div>
+</div>
+<div class="modal-body">
+	<div class="row">
+		<div class="col-xs-12">
+			<p>Review each response for self-identifying information, and mark those that are invalid.  Commit your review once complete.</p>
 		</div>
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="panel panel-primary" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
-					<div class="panel-heading text-center">
-						{{qindex=$index;""}}
-						<strong>
-							Question: {{question}}
-						</strong>
-					</div>
-					<ul class="list-group">
-						<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
-						<!-- <li class="list-group-item" ng-repeat="response in data.responses[qindex]"> -->
-							<div class="row">
-								<div align="right">
-									Reject <input type="checkbox" ng-model="response.rejected"><br/>
-									Word count: {{getWordCount(response.response)}}
-								</div>
-								<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}">
-									{{response.response}}
-								</div>
-							</div>
-						</li>
-					</ul>
+	</div>
+	<div class="row">
+		<div class="col-sm-12 text-center">
+			<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="panel panel-primary" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
+				<div class="panel-heading text-center">
+					{{qindex=$index;""}}
+					<strong>
+						Question: {{question}}
+					</strong>
 				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
+					<!-- <li class="list-group-item" ng-repeat="response in data.responses[qindex]"> -->
+						<div class="row">
+							<div align="right">
+								Reject <input type="checkbox" ng-model="response.rejected"><br/>
+								Word count: {{getWordCount(response.response)}}
+							</div>
+							<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}">
+								{{response.response}}
+							</div>
+						</div>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer text-right">
-		<button class="btn btn-default" data-ng-click="close()">Cancel</button>
-		<button class="btn btn-primary" data-ng-click="ok()">Save</button>
-		<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
-	</div>
+</div>
+<div class="modal-footer text-right">
+	<button class="btn btn-primary" data-ng-click="ok()">Save</button>
+	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
+	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
+</div>
 	

@@ -129,3 +129,7 @@ div.rejected {
 	font-size: .8em;
 	margin-top: 1px;
 }
+.score-form {
+	width: 60%;
+	margin: 0 auto;
+}
