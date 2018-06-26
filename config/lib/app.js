@@ -11,27 +11,24 @@ var config = require('../config'),
 
 function seedDB() {
   if (config.seedDB && config.seedDB.seed) {
-    console.log(chalk.bold.red('Warning:  Database seeding is turned on'));
+    console.log(chalk.yellow('Warning:  Database seeding is turned on'));
     seed.start();
   }
 }
 
-// Initialize Models
-mongoose.loadModels(seedDB);
-
 module.exports.init = function init(callback) {
   mongoose.connect(function (db) {
+    // Initialize Models
+    mongoose.loadModels(seedDB);
+
     // Initialize express
     var app = express.init(db);
     if (callback) callback(app, db, config);
-
   });
 };
 
 module.exports.start = function start(callback) {
-  var _this = this;
-
-  _this.init(function (app, db, config) {
+  this.init(function (app, db, config) {
 
     // Start the app by listening on <port> at <host>
     app.listen(config.port, config.host, function () {

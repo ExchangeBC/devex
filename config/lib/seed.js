@@ -58,7 +58,7 @@ function reportSuccess (password) {
 	return function (user) {
 		return new Promise(function (resolve, reject) {
 			if (seedOptions.logResults) {
-				console.log(chalk.bold.red('Database Seeding:\tLocal user \'' + user.username + '\' has password set to \'' + password + '\''));
+				console.log(chalk.bold.yellow('Database Seeding:\tLocal user \'' + user.username + '\' has password set to \'' + password + '\''));
 			}
 			resolve();
 		});
@@ -101,7 +101,7 @@ function clearTemplates () {
 }
 
 function seedTestMessageTemplate () {
-	console.log(chalk.bold.red('Database seeding:\t Seeding message templates.'));
+	console.log(chalk.bold.yellow('Database seeding:\t Seeding message templates.'));
 	var T = mongoose.model ('MessageTemplate');
 	var saveT = function (t) {
 		return new Promise (function (resolve, reject) {
