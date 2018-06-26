@@ -54,7 +54,8 @@ module.exports = {
     browser: true,
     jasmine: true,
     mocha: true,
-    jquery: true
+    jquery: true,
+    es6: true
   },
   globals: {
     angular: true,

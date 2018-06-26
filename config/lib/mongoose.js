@@ -9,59 +9,60 @@ var config = require('../config'),
   mongoose = require('mongoose');
 
 // Load the mongoose models
-module.exports.loadModels = function (callback) {
-  // Globbing model files
-  config.files.server.models.forEach(function (modelPath) {
-	require(path.resolve(modelPath));
-  });
-
-  if (callback) callback();
+module.exports.loadModels = () => {
+	// Globbing model files
+	config.files.server.models.forEach((modelPath) => {
+		require(path.resolve(modelPath));
+	});
 };
 
 // Initialize Mongoose
-module.exports.connect = function (callback) {
+module.exports.connect = () => {
 
-  	mongoose.Promise = Promise;
+	return new Promise(function(resolve) {
+		mongoose.Promise = Promise;
 
-	// set up mongodb event handlers
-	mongoose.connection.on('disconnected', function() {
-		console.log(chalk.yellow('Disconnected from ' + config.db.uri));
-	});
+		// set up mongodb event handlers
+		mongoose.connection.on('disconnected', function() {
+			console.log(chalk.yellow('Disconnected from ' + config.db.uri));
+		});
 
-	mongoose.connection.on('connecting', function() {
-		console.log(chalk.yellow('Attempting to connect to ' + config.db.uri + '...'));
-	});
+		mongoose.connection.on('connecting', function() {
+			console.log(chalk.yellow('Attempting to connect to ' + config.db.uri + '...'));
+		});
 
-	mongoose.connection.on('reconnected', function() {
-		console.log(chalk.green('Reconnected to ' + config.db.uri));
-	})
-
-	mongoose.connection.once('connected', function() {
-		mongoose.set('debug', config.db.debug);
-
-		console.log(chalk.green('Connected successfully to ' + config.db.uri));
-		if (callback) {
-			callback(mongoose.connection);
-		}
-	});
-
-	process.on('SIGINT', function() {
-		mongoose.connection.close(function() {
-			console.log(chalk.red('Closing connection to ' + config.db.uri));
-			process.exit(0);
+		mongoose.connection.on('reconnected', function() {
+			console.log(chalk.green('Reconnected to ' + config.db.uri));
 		})
-	})
 
-	var handleFailedConnect = function(err) {
-		console.error(chalk.red('Could not connect to ' + config.db.uri + ' - is the database running?'));
-		console.error(chalk.red(err));
+		process.on('SIGINT', function() {
+			mongoose.connection.close(function() {
+				console.log(chalk.red('Closing connection to ' + config.db.uri));
+				process.exit(0);
+			})
+		})
 
-		setTimeout(function() {
-			mongoose.connect(config.db.uri, config.db.options).catch(handleFailedConnect);
-		}, 3000);
-	}
+		var handleSuccessConnect = function() {
+			mongoose.set('debug', config.db.debug);
+			console.log(chalk.green('Connected successfully to ' + config.db.uri));
+			resolve(mongoose.connection);
+		}
 
-	mongoose.connect(config.db.uri, config.db.options).catch(handleFailedConnect);
+		var handleFailedConnect = function(err) {
+			console.error(chalk.red('Could not connect to ' + config.db.uri + ' - is the database running?'));
+			console.error(chalk.red(err));
+
+			setTimeout(function() {
+				mongoose.connect(config.db.uri, config.db.options)
+				.then(handleSuccessConnect)
+				.catch(handleFailedConnect);
+			}, 3000);
+		}
+
+		mongoose.connect(config.db.uri, config.db.options)
+		.then(handleSuccessConnect)
+		.catch(handleFailedConnect);
+	});
 };
 
 module.exports.disconnect = function (cb) {

@@ -374,6 +374,7 @@ module.exports.start = function start(options) {
 			displayName: 'Test Government',
 			roles: ['user', 'gov']
 		});
+
 		Promise.resolve ()
 		.then (seedNotifications)
 		.then (function () {
@@ -411,7 +412,6 @@ module.exports.start = function start(options) {
 				//
 				// admin account
 				//
-				Promise.resolve()
 				.then(function() {
 					var password = process.env.ADMINPW;
 					return password || 'adminadmin';
