@@ -1,9 +1,9 @@
 'use strict';
 
-var _ = require('lodash'),
-	config = require('../config'),
-	mongoose = require('mongoose'),
-	chalk = require('chalk')
+var _ 			= require('lodash'),
+	config 		= require('../config'),
+	mongoose 	= require('mongoose'),
+	chalk 		= require('chalk')
 
 // global seed options object
 var seedOptions = {};
@@ -58,7 +58,7 @@ function reportSuccess (password) {
 	return function (user) {
 		return new Promise(function (resolve, reject) {
 			if (seedOptions.logResults) {
-				console.log(chalk.bold.yellow('Database Seeding:\tLocal user \'' + user.username + '\' has password set to \'' + password + '\''));
+				console.log(chalk.yellow('Database Seeding:\tLocal user \'' + user.username + '\' has password set to \'' + password + '\''));
 			}
 			resolve();
 		});
@@ -101,7 +101,7 @@ function clearTemplates () {
 }
 
 function seedTestMessageTemplate () {
-	console.log(chalk.bold.yellow('Database seeding:\t Seeding message templates.'));
+	console.log(chalk.yellow('Database seeding:\tSeeding message templates.'));
 	var T = mongoose.model ('MessageTemplate');
 	var saveT = function (t) {
 		return new Promise (function (resolve, reject) {
