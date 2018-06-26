@@ -64,3 +64,7 @@
 	color: #FFFFFF;
 	opacity: 0.5 !important;
 }
+.message-view-container {
+	width: 50%;
+	margin: 2em auto;
+}

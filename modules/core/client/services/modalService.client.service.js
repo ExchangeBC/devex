@@ -5,6 +5,7 @@
 	.service('modalService', ['$uibModal', function ($uibModal) {
 		// inspired by this post :https://weblogs.asp.net/dwahlin/building-an-angularjs-modal-service
 		var modalDefaults = {
+			size: 'sm',
 			backdrop: true,
 			keyboard: true,
 			modalFade: true,

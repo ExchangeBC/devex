@@ -2,22 +2,22 @@
 	<div class="modal-title">Interview Scores</div>
 </div>
 <div class="modal-body">
-	<div class="container">
-	<div class="row">
-		<div class="cols-md-12">
-			<p>Enter interview scores for each company listed below.</p>
+	<div class="score-form">
+		<div class="row">
+			<div class="cols-md-12">
+				<p>Enter interview scores for each company listed below.</p>
+			</div>
 		</div>
-	</div>
-	<div class="row">
-		<form name="scoreForm">
-			<table>
-				<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
-					<td><input class="scoreBox" name="input" type="number" min="0" max="25" ng-model="proposal.score"/></td>
-					<td>&nbsp;&nbsp;{{proposal.businessName}}</td>
-				</tr>
-			</table>
-		</form>
-	</div>
+		<div class="row">
+			<form name="scoreForm">
+				<table>
+					<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
+						<td><input class="scoreBox" name="input" type="number" min="0" max="25" ng-model="proposal.score"/></td>
+						<td>&nbsp;&nbsp;{{proposal.businessName}}</td>
+					</tr>
+				</table>
+			</form>
+		</div>
 	</div>
 </div>
 <div class="modal-footer">
