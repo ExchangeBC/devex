@@ -58,7 +58,7 @@
 				modalService.showModal ({}, {
 			        closeButtonText: opts.cancel || 'Cancel',
 			        actionButtonText: opts.ok || 'OK',
-			        headerText: opts.header || 'Continue ?',
+			        headerText: opts.header || 'Are you sure?',
 			        bodyText: opts.question || 'Perform this action?'
 				})
 				.then (
