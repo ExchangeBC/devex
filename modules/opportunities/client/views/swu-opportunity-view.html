@@ -307,7 +307,7 @@
 				<div class="text-center" ng-if="vm.stageIs('assigned')">
 					<span class="light">This opportunity has been awarded to:</span>
 					&nbsp;
-					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.org.orgImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.org.orgImageURL.substr(0,1) == '/') ? '' : '/') + vm.opportunity.proposal.org.orgImageURL}}">
 					&nbsp;
 					<strong>{{vm.opportunity.proposal.businessName}}</strong>
 				</div>
