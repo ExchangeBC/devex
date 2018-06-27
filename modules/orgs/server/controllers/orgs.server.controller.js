@@ -29,7 +29,7 @@ var path = require('path'),
 	User = mongoose.model('User'),
 	Capability = mongoose.model('Capability'),
 	Proposal = mongoose.model('Proposal'),
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
+	// Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
@@ -87,18 +87,18 @@ var saveUser = function (user) {
 		});
 	});
 };
-var notifyUser = function (org) {
-	return function (user) {
-		Notifications.notifyUserAdHoc ('user-added-to-company', {
-			username    : user.displayName,
-			useremail   : user.email,
-			adminname   : org.adminName,
-			adminemail  : org.adminEmail,
-			companyname : org.name
-		});
-		return Promise.resolve ();
-	};
-};
+// var notifyUser = function (org) {
+// 	return function (user) {
+// 		Notifications.notifyUserAdHoc ('user-added-to-company', {
+// 			username    : user.displayName,
+// 			useremail   : user.email,
+// 			adminname   : org.adminName,
+// 			adminemail  : org.adminEmail,
+// 			companyname : org.name
+// 		});
+// 		return Promise.resolve ();
+// 	};
+// };
 // -------------------------------------------------------------------------
 //
 // find a user give the passed in search
@@ -373,7 +373,7 @@ var addMember = function (user, org) {
 	return Promise.resolve (user)
 	.then (addUserTo (org, 'members'))
 	.then (saveUser)
-	.then (notifyUser (org))
+	// .then (notifyUser (org))
 	.then (resolveOrg (org));
 };
 var addAdmin = function (user, org) {

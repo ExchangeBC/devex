@@ -14,8 +14,6 @@ var User          = mongoose.model ('User');
 var validator     = require ('validator');
 var orgController = require (path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
 var claimMessages = require (path.resolve ('./modules/messages/server/controllers/messages.controller')).claimMessages;
-var Notifications = require (path.resolve ('./modules/notifications/server/controllers/notifications.server.controller'));
-
 
  // CC:  USERFIELDS
 var whitelistedFields = [

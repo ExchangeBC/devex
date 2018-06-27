@@ -19,15 +19,13 @@ request : <code>-request
 /**
  * Module dependencies.
  */
-var path = require('path'),
-	mongoose = require('mongoose'),
-	Project = mongoose.model('Project'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
-	_ = require('lodash'),
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller'))
-	;
+var path 			= require('path'),
+	mongoose 		= require('mongoose'),
+	Project 		= mongoose.model('Project'),
+	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	Opportunities 	= require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
+	_ 				= require('lodash');
 
 // -------------------------------------------------------------------------
 //
@@ -196,12 +194,6 @@ exports.create = function(req, res) {
 			} else {
 				setProjectAdmin (project, req.user);
 				req.user.save ();
-				Notifications.addNotification ({
-					code: 'not-update-'+project.code,
-					name: 'Update of Project '+project.name,
-					target: 'Project',
-					event: 'Update'
-				});
 				res.json(project);
 			}
 		});
@@ -275,14 +267,7 @@ exports.update = function (req, res) {
 				});
 			} else {
 				project.link = 'https://'+(process.env.DOMAIN || 'localhost')+'/projects/'+project.code;
-				Promise.all (notificationCodes.map (function (code) {
-					return Notifications.notifyObject (code, project);
-				}))
-				.catch (function () {
-				})
-				.then (function () {
-					res.json (decorate (project, req.user ? req.user.roles : []));
-				});
+				res.json (decorate (project, req.user ? req.user.roles : []));
 			}
 		});
 	}

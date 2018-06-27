@@ -24,7 +24,7 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewSWUController', function ($scope, capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, CapabilitiesMethods, OpportunitiesCommon) {
+	.controller('OpportunityViewSWUController', function (capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, CapabilitiesMethods, OpportunitiesCommon) {
 		if (!opportunity) {
 			console.error ('no opportunity provided');
 			$state.go('opportunities.list');
@@ -34,8 +34,8 @@
 		//
 		// set the notification code for updates to this opp, and set the vm flag to current state
 		//
-		var notificationCode = 'not-update-'+opportunity.code;
-		vm.notifyMe = subscriptions.map (function (s) {return (s.notificationCode === notificationCode);}).reduce (function (a, c) {return (a || c);}, false);
+		// var notificationCode = 'not-update-'+opportunity.code;
+		// vm.notifyMe = subscriptions.map (function (s) {return (s.notificationCode === notificationCode);}).reduce (function (a, c) {return (a || c);}, false);
 
 		vm.myproposal             = myproposal;
 		vm.projectId              = $stateParams.projectId;
@@ -866,36 +866,36 @@
 		// subscribe to changes
 		//
 		// -------------------------------------------------------------------------
-		vm.subscribe = function (state) {
-			if (state) {
-				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					vm.notifyMe = true;
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully subscribed!'
-					});
-				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
-					});
-				});
-			}
-			else {
-				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					vm.notifyMe = false;
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully un-subscribed!'
-					});
-				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
-					});
-				});
-			}
-		};
+		// vm.subscribe = function (state) {
+		// 	if (state) {
+		// 		NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
+		// 		.then (function () {
+		// 			vm.notifyMe = true;
+		// 			Notification.success ({
+		// 				message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully subscribed!'
+		// 			});
+		// 		}).catch (function (res) {
+		// 			Notification.error ({
+		// 				message : res.data.message,
+		// 				title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
+		// 			});
+		// 		});
+		// 	}
+		// 	else {
+		// 		NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
+		// 		.then (function () {
+		// 			vm.notifyMe = false;
+		// 			Notification.success ({
+		// 				message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully un-subscribed!'
+		// 			});
+		// 		}).catch (function (res) {
+		// 			Notification.error ({
+		// 				message : res.data.message,
+		// 				title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
+		// 			});
+		// 		});
+		// 	}
+		// };
 
 	})
 	// =========================================================================

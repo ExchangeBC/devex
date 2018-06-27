@@ -262,55 +262,55 @@ function seedTestMessageTemplate () {
 //
 // Seed the default notifications for each object type in the system
 //
-function seedNotifications () {
-	var Notification = mongoose.model ('Notification');
-	//
-	// we make notifications for add / delete for Users, Opportunities, Programs, and Projects
-	//
-	var objects = ['User', 'Program', 'Project', 'Opportunity'];
-	var events = ['Add', 'Delete', 'UpdateAny'];
-	var prefix = 'not';
-	var codes = [];
-	objects.forEach (function (obj) {
-		var lobj = obj.toLowerCase();
-		events.forEach (function (evt) {
-			var levt = evt.toLowerCase();
-			codes.push ({
-				code     : [prefix, levt, lobj].join('-'),
-				name     : evt+' '+obj,
-				// question : 'Notify me of object: ['+obj+'] event: ['+evt+']',
-				target   : obj,
-				// subject  : 'subject default',
-				// body     : 'body default',
-				event    : evt
-			});
-		});
-	});
-	// console.log (codes);
-	return Promise.all (codes.map (function (code) {
-		var notification = new Notification ({
-			code        : code.code,
-			name        : code.name,
-			// description : code.name,
-			// question    : code.question,
-			target      : code.target,
-			event       : code.event
-			// subject     : code.subject,
-			// body        : code.body
-		});
-		return new Promise (function (resolve, reject) {
-			Notification.find ({code:code.code}, function (err, result) {
-				if (err || result.length > 0) resolve ();
-				else {
-					notification.save (function (err, m) {
-						// if (err) console.error (err);
-						resolve (m);
-					});
-				}
-			});
-		});
-	}));
-}
+// function seedNotifications () {
+// 	var Notification = mongoose.model ('Notification');
+// 	//
+// 	// we make notifications for add / delete for Users, Opportunities, Programs, and Projects
+// 	//
+// 	var objects = ['User', 'Program', 'Project', 'Opportunity'];
+// 	var events = ['Add', 'Delete', 'UpdateAny'];
+// 	var prefix = 'not';
+// 	var codes = [];
+// 	objects.forEach (function (obj) {
+// 		var lobj = obj.toLowerCase();
+// 		events.forEach (function (evt) {
+// 			var levt = evt.toLowerCase();
+// 			codes.push ({
+// 				code     : [prefix, levt, lobj].join('-'),
+// 				name     : evt+' '+obj,
+// 				// question : 'Notify me of object: ['+obj+'] event: ['+evt+']',
+// 				target   : obj,
+// 				// subject  : 'subject default',
+// 				// body     : 'body default',
+// 				event    : evt
+// 			});
+// 		});
+// 	});
+// 	// console.log (codes);
+// 	return Promise.all (codes.map (function (code) {
+// 		var notification = new Notification ({
+// 			code        : code.code,
+// 			name        : code.name,
+// 			// description : code.name,
+// 			// question    : code.question,
+// 			target      : code.target,
+// 			event       : code.event
+// 			// subject     : code.subject,
+// 			// body        : code.body
+// 		});
+// 		return new Promise (function (resolve, reject) {
+// 			Notification.find ({code:code.code}, function (err, result) {
+// 				if (err || result.length > 0) resolve ();
+// 				else {
+// 					notification.save (function (err, m) {
+// 						// if (err) console.error (err);
+// 						resolve (m);
+// 					});
+// 				}
+// 			});
+// 		});
+// 	}));
+// }
 
 // report the error
 function reportError (reject) {
@@ -376,7 +376,7 @@ module.exports.start = function start(options) {
 		});
 
 		Promise.resolve ()
-		.then (seedNotifications)
+		// .then (seedNotifications)
 		.then (function () {
 			// If production, only seed admin using the ADMINPW environment parameter
 			if (devexProd) {

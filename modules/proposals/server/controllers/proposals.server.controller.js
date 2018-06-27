@@ -19,25 +19,22 @@ request : <code>-request
 /**
  * Module dependencies.
  */
-var path = require('path'),
-	mongoose = require('mongoose'),
-	Proposal = mongoose.model('Proposal'),
-	User = mongoose.model('User'),
-	Opportunity = mongoose.model('Opportunity'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	Opportunities = require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
-	_ = require('lodash'),
-	multer = require('multer'),
-	config = require(path.resolve('./config/config')),
-	Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
-	github = require(path.resolve('./modules/core/server/controllers/core.server.github'))
-	;
+var path 			= require('path'),
+	mongoose 		= require('mongoose'),
+	Proposal 		= mongoose.model('Proposal'),
+	User 			= mongoose.model('User'),
+	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	Opportunities 	= require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
+	_ 				= require('lodash'),
+	multer 			= require('multer'),
+	config 			= require(path.resolve('./config/config'));
 
 var userfields = '_id displayName firstName lastName email phone address username profileImageURL \
 					businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 					roles provider';
-var streamFile = function (res, file, name, mime) {
+
+var streamFile = (res, file, name, mime) => {
 	var fs = require ('fs');
 	fs.exists (file, function (yes) {
 		if (!yes) {
@@ -62,12 +59,6 @@ var streamFile = function (res, file, name, mime) {
 // -------------------------------------------------------------------------
 var adminRole = function (opportunity) {
 	return opportunity.code+'-admin';
-};
-var memberRole = function (opportunity) {
-	return opportunity.code;
-};
-var requestRole = function (opportunity) {
-	return opportunity.code+'-request';
 };
 var ensureAdmin = function (opportunity, user) {
 	return !(!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin'));
@@ -98,19 +89,22 @@ var countStatus = function (id) {
 // stats
 //
 // -------------------------------------------------------------------------
-exports.stats = function (req, res) {
+exports.stats = (req, res) => {
 	var op = req.opportunity;
 	var ret = {
 		following: 0
 	};
-	Notifications.countFollowingOpportunity (op.code)
-	.then (function (result) {
-		ret.following = result;
+
+	Promise.resolve()
+	.then (() => {
+		if (op.watchers) {
+			ret.following = op.watchers.length;
+		}
 		ret.submitted = 0;
 		ret.draft = 0;
 		return countStatus (op._id);
 	})
-	.then (function (result) {
+	.then (result => {
 		result.eachAsync(function(doc) {
 			ret[doc._id.toLowerCase()] = doc.count;
 		})
@@ -118,7 +112,7 @@ exports.stats = function (req, res) {
 			res.json(ret);
 		});
 	})
-	.catch (function (err) {
+	.catch (err => {
 		res.status(422).send ({
 			message: errorHandler.getErrorMessage(err)
 		});
