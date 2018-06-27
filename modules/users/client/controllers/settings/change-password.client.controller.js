@@ -7,7 +7,7 @@
 
   ChangePasswordController.$inject = ['$scope', '$http', 'Authentication', 'UsersService', 'PasswordValidator', 'Notification'];
 
-  function ChangePasswordController($scope, $http, Authentication, UsersService, PasswordValidator, Notification) {
+  function ChangePasswordController($scope, Authentication, UsersService, PasswordValidator, Notification) {
     var vm = this;
 
     vm.user = Authentication.user;

@@ -8,9 +8,8 @@
 	// overarching settings controller, does not do anything really
 	//
 	// -------------------------------------------------------------------------
-	.controller('SettingsController', function ($scope, Authentication) {
+	.controller('SettingsController', function (Authentication) {
 		var vm = this;
-		// vm.features = window.features;
 		vm.user = Authentication.user;
 	})
 	// -------------------------------------------------------------------------
@@ -18,27 +17,15 @@
 	// controller for privacy
 	//
 	// -------------------------------------------------------------------------
-	.controller('ProfilePrivacyController', function ($scope, subscriptions, Authentication, UsersService, Notification) {
+	.controller('ProfilePrivacyController', function ($scope, Authentication, UsersService, Notification) {
 		var vm = this;
 		vm.user = angular.copy(Authentication.user);
-		// vm.user.notifyOpportunities = subscriptions.map (function (s) {return (s.notificationCode === 'not-add-opportunity');}).reduce (function (a, c) {return (a || c);}, false);
-		// vm.features = window.features;
 		vm.savePrivacy = function(isValid) {
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 				return false;
 			}
 			var successMessage = '<h4>Changes Saved</h4>';
-			// Don't need these extras to pop up
-		//	if (vm.user.notifyOpportunities) {
-		//		successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
-		//	}
-		//	if (vm.user.isPublicProfile) {
-		//		successMessage += '<p>Your profile will be made public.</p>';
-		//	}
-		//	if (vm.user.isAutoAdd) {
-		//		successMessage += '<p>You may be automatically added to teams under your organizations.</p>';
-		//	}
 			var user = new UsersService(vm.user);
 			user.$update(function (response) {
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');
@@ -55,9 +42,8 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('ProfileSkillsController', function ($scope, $sce, Notification, dataService, Authentication, UsersService, capabilities, CapabilitiesMethods, TINYMCE_OPTIONS) {
+	.controller('ProfileSkillsController', function ($scope, $sce, Notification, Authentication, UsersService, capabilities, CapabilitiesMethods, TINYMCE_OPTIONS) {
 		var vm                     = this;
-		// vm.features                = window.features;
 		vm.trust                   = $sce.trustAsHtml;
 		vm.user                    = angular.copy (Authentication.user);
 		vm.tinymceOptions          = TINYMCE_OPTIONS;
@@ -99,7 +85,7 @@
 	// controller for messages
 	//
 	// -------------------------------------------------------------------------
-	.controller('ProfileMessagesController', function ($scope, Authentication) {
+	.controller('ProfileMessagesController', function (Authentication) {
 		var vm = this;
 		vm.user = Authentication.user;
 	})

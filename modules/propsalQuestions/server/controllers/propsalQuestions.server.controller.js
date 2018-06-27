@@ -1,10 +1,4 @@
 'use strict';
-/*
-
-Notes about propsalQuestions
-
-
-*/
 
 /**
  * Module dependencies.
