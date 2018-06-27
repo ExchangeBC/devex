@@ -6,14 +6,13 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewController', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
 		var ppp           = this;
-		// ppp.features 	  = window.features;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		ppp.capabilities                          = capabilities;
+		ppp.capabilities  = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
@@ -125,7 +124,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp              = this;
 		// ppp.features         = window.features;
@@ -274,15 +273,6 @@
 						member.skillsByCode[ppp.i2cs[cid]] = true;
 					});
 				}
-				// //
-				// // make an array of all capabilities of the member
-				// //
-				// var memberCapabilityIds = member.capabilities.map(function(a){return a._id.toString();});
-				// //
-				// // if the member has any of the required capabilities then add them to
-				// // winners array
-				// //
-				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
 			});
 		}
 		// -------------------------------------------------------------------------
