@@ -5,11 +5,10 @@
 		.module('users')
 		.controller('EditProfileController', EditProfileController);
 
-	EditProfileController.$inject = ['$scope', '$http', '$location', '$state', 'modalService', 'dataService', 'UsersService', 'Authentication', 'Notification'];
+	EditProfileController.$inject = ['$scope', '$state', 'modalService', 'dataService', 'UsersService', 'Authentication', 'Notification'];
 
 	function EditProfileController($scope, $state, modalService, dataService, UsersService, Authentication, Notification) {
 		var vm               = this;
-		// vm.features = window.features;
 		var isUser           = Authentication.user;
 		var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var wasGovRequest    = isUser && !!~Authentication.user.roles.indexOf ('gov-request');

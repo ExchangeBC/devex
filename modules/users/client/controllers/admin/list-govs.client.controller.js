@@ -5,9 +5,9 @@
     .module('users.admin')
     .controller('GovListController', GovListController);
 
-  GovListController.$inject = ['$scope', '$filter', 'AdminService', '$state', '$window'];
+  GovListController.$inject = ['$filter', 'AdminService', '$window'];
 
-  function GovListController($scope, $filter, AdminService, $state, $window) {
+  function GovListController($filter, AdminService, $window) {
     var vm = this;
      vm.approve = approve;
     vm.buildPager = buildPager;

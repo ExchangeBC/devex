@@ -124,7 +124,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp              = this;
 		// ppp.features         = window.features;
@@ -543,23 +543,6 @@
 				ppp.proposal = doc;
 				$scope.$apply();
 			});
-		};
-		ppp.subscribe = function (state) {
-			var notificationCode = 'not-update-'+ppp.opportunity.code;
-			if (!editing && !ppp.proposal._id && state) {
-				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = true;
-				}).catch (function () {
-				});
-			}
-			else if (!state) {
-				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = false;
-				}).catch (function () {
-				});
-			}
 		};
 		ppp.type = function (type) {
 			if (type.indexOf ('pdf') > -1) return 'pdf';

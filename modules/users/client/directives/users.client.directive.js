@@ -9,7 +9,7 @@
 	.directive ('lowercase', function () {
 		return {
 			require: 'ngModel',
-			link: function (scope, element, attrs, modelCtrl) {
+			link: function (element, modelCtrl) {
 				modelCtrl.$parsers.push (function (input) {
 					return input ? input.toLowerCase() : '';
 				});
@@ -35,7 +35,7 @@
 			restrict: 'EAC',
 			// replace: true,
 			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Upload new picture</button>',
-			controller: function ($scope, $uibModal, $timeout, Authentication, Upload, Notification) {
+			controller: function ($scope, $uibModal) {
 				var wsx = this;
 				var uploadurl = '/api/users/picture';
 				if ($scope.org) {
@@ -91,9 +91,6 @@
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }
 						}
 					})
-					// .result.finally (function () {
-					// 	$state.go ($state.previous.state, $state.previous.params);
-					// });
 					;
 				}
 			}

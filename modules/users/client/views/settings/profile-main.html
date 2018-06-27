@@ -27,35 +27,6 @@
 							"required":"Last Name is required"
 						}'>
 					</form-input>
-					<!-- // Seeing if I can move the email field to the Notifications tab where I think it has more context // -->
-					<!--
-					<form-input
-						ng-model="vm.user.email"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Email Address",
-							"id":"email",
-							"name":"email",
-							"placeholder":"Email Address",
-							"required":"Email Address is required"
-						}'>
-					</form-input>
-					-->
-					<!-- Hiding this field as user testing showed it was confusing. Don't think we've determined its use yet, either. -->
-					<!--
-					<form-input
-						ng-model="vm.user.userTitle"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Title",
-							"id":"userTitle",
-							"name":"userTitle",
-							"placeholder":"Title"
-						}'>
-					</form-input>
-					-->
 					<form-input
 						ng-model="vm.user.email"
 						class="col-sm-12"
@@ -79,81 +50,6 @@
 							"name":"city"
 						}'>
 					</form-input>
-
-				<!-- // Hide inputs we thought about putting in but that do not have any value right now //-->
-				<!--
-					<form-display
-						class="col-sm-12"
-						x-options='{
-							"title":"Location",
-							"id":"location",
-							"name":"location"
-						}'>
-						<select name="location" ng-model="vm.user.location" id="location" class="form-control"  ng-options="v as v for v in vm.cities">
-							<option value="">Select Location</option>
-						</select>
-					</form-display>
-				
-					<form-input
-					class="col-sm-6"
-					ng-model="vm.user.website"
-					x-form="vm.userForm"
-					x-options='{
-						"title":"Website",
-						"id":"website",
-						"name":"website",
-						"placeholder":"https://yourgreatsite.com"
-					}'>
-					</form-input>
-
-					<form-input
-						class="col-sm-6"
-						ng-model="vm.user.github"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"GitHub",
-							"id":"github",
-							"name":"github",
-							"placeholder":"https://github.com/your-github-handle"
-						}'>
-					</form-input>
-
-					<form-input
-						class="col-sm-6"
-						ng-model="vm.user.stackExchange"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Stack Exchange",
-							"id":"stackExchange",
-							"name":"stackExchange",
-							"placeholder":"https://superuser.com/users/1557/magicandrew181"
-						}'>
-					</form-input>
-				
-					<form-input
-						class="col-sm-6"
-						ng-model="vm.user.stackOverflow"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Stack Overflow",
-							"id":"stackOverflow",
-							"name":"stackOverflow",
-							"placeholder":"https://stackoverflow.com/users/219302/jezabel"
-						}'>
-					</form-input>
-				
-					<form-input
-						class="col-sm-12"
-						ng-model="vm.user.linkedIn"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"LinkedIn",
-							"id":"linkedIn",
-							"name":"linkedIn",
-							"placeholder":"https://www.linkedin.com/in/your-name-69b46146/"
-						}'>
-					</form-input>
-				-->
 				</fieldset>
 				<div class="alert alert-info">
 					<h5><i class="fa fa-university"></i> <span class="strong">Work for government?</span></h5>
@@ -177,28 +73,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- // Hiding "About You" // -->
-	<!--
-		<div class="row">
-			<div class="col-sm-6" ng-if="vm.features.swu">
-				<form-display
-					class="col-sm-12"
-					x-options='{
-						"title":"A little bit about you",
-						"id":"description",
-						"name":"description"
-					}'>
-					<textarea
-						name="description"
-						id="description"
-						class="form-control"
-						placeholder="A full description of the profile"
-						ng-model="vm.user.description">
-					</textarea>
-				</form-display>
-			</div>
-		</div>
-	-->
 
 	<div class="edit-form-footer">
 		<div class="row">

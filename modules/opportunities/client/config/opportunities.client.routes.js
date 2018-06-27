@@ -42,9 +42,6 @@
 			resolve: {
 				opportunities: function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.query ();
-				},
-				subscriptions: function (NotificationsService) {
-					return NotificationsService.subscriptions().$promise;
 				}
 			},
 			controller: 'OpportunitiesListController',
