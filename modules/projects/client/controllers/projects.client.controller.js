@@ -15,7 +15,7 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectViewController', function ($scope, $state, $sce, $stateParams, project, Authentication, ProjectsService, Notification) {
+	.controller('ProjectViewController', function ($sce, $stateParams, project, Authentication, ProjectsService, Notification) {
 		var vm                 = this;
 		vm.programId           = project.program ? project.program._id : $stateParams.programId;
 		vm.project             = project;
@@ -82,7 +82,7 @@
 	// Controller the view of the project page
 	//
 	// =========================================================================
-	.controller('ProjectEditController', function ($scope, $state, $sce, $stateParams, $window, project, editing, programs, Authentication, Notification, previousState) {
+	.controller('ProjectEditController', function ($scope, $state, $stateParams, $window, project, editing, programs, Authentication, Notification, previousState) {
 		var vm             = this;
 		vm.previousState   = previousState;
 		vm.isAdmin         = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');

@@ -15,7 +15,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($window, $scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', function ($window, $sce, program, Authentication, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
@@ -81,7 +81,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $sce, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
+	.controller('ProgramEditController', function ($scope, $state, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
 		var vm            = this;
 		vm.user = Authentication.user;
 		vm.fileSelected = false;

@@ -1,10 +1,4 @@
 'use strict';
-/*
-
-Notes about capabilities
-
-
-*/
 
 /**
  * Module dependencies.
