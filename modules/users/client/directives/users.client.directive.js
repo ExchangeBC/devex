@@ -43,7 +43,7 @@
 				}
 				wsx.edit = function () {
 					$uibModal.open ({
-						size: 'lg',
+						size: 'md',
 						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',
 						controllerAs: 'qqq',
 						bindToController: true,
