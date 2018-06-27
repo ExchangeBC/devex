@@ -64,17 +64,8 @@
 			// dump out the current state
 			//
 			// -------------------------------------------------------------------------
-			dump: function (scope, title) {
+			dump: function (title) {
 				title = (title || 'capabilities') + ':';
-				// console.groupCollapsed (title);
-				// console.log ('scope.capabilities', scope.capabilities);
-				// console.log ('scope.capabilitySkills', scope.capabilitySkills);
-				// console.log ('scope.iCapabilities', scope.iCapabilities);
-				// console.log ('scope.iCapabilitySkills', scope.iCapabilitySkills);
-				// console.log ('scope.iOppCapabilities', scope.iOppCapabilities);
-				// console.log ('scope.iOppCapabilitiesCore', scope.iOppCapabilitiesCore);
-				// console.log ('scope.iOppCapabilitySkills', scope.iOppCapabilitySkills);
-				// console.groupEnd ();
 			},
 			// -------------------------------------------------------------------------
 			//
@@ -175,9 +166,6 @@
 						if (scope.iOppCapabilitySkills[capabilitySkill.code]) scope.oppCapabilitySkillCodes.push (capabilitySkill.code);
 					});
 				});
-				// model.capabilitySkills.forEach (function (capabilitySkill) {
-				// 	scope.iOppCapabilitySkills[capabilitySkill.code] = true;
-				// });
 				model.capabilitiesCore.forEach (function (capability) {
 					scope.iOppCapabilitiesCore[capability.code] = true;
 				});

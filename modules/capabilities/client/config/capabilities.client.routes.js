@@ -30,7 +30,7 @@
 			controller   : 'CapabilitiesListController',
 			controllerAs : 'vm',
 			resolve: {
-				capabilities: function ($stateParams, CapabilitiesService) {
+				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();
 				}
 			},
