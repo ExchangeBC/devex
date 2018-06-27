@@ -941,10 +941,16 @@ exports.opportunityByID = function (req, res, next, id) {
 		.populate({
 			path: 'proposal',
 			model: 'Proposal',
-			populate : {
-				path: 'user',
-				model: 'User'
-			}
+			populate : [
+				{
+					path: 'user',
+					model: 'User'
+				},
+				{
+					path: 'org',
+					model: 'Org'
+				}
+				]
 		})
 		// .populate({path:'proposal.user', model:'User'}) //'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail')
 		.exec(function (err, opportunity) {
