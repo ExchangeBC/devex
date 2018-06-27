@@ -16,13 +16,10 @@
 	// Controller the view of the org page
 	//
 	// =========================================================================
-	.controller('OrgViewController', function ($scope, $state, $sce, org, Authentication, OrgsService, Notification, capabilities) {
+	.controller('OrgViewController', function ($sce, org, Authentication) {
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
-		// console.log ('user org admins' , vm.user.orgAdmin);
-		// console.log (' org admins' , vm.org.admins);
-		// console.log (' org owner' , vm.org.owner);
 		vm.isLoggedIn      = !!vm.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
 		vm.isGov           = vm.user && !!~Authentication.user.roles.indexOf ('gov');
@@ -36,33 +33,12 @@
 		// what can the user do here?
 		//
 	})
-	// -------------------------------------------------------------------------
-	//
-	// user adds themselves to an org
-	//
-	// -------------------------------------------------------------------------
-	// .controller('OrgAddSelfController', function ($scope, $state, $sce, org, OrgsService) {
-	// 	var vm = this;
-	// 	vm.adding = true;
-	// 	vm.isgood = true;
-	// 	if (org) {
-	// 		OrgsService.addMeToOrg ({orgId:org._id}).$promise
-	// 		.then (function () {
-	// 			vm.adding = false;
-	// 			vm.isgood = true;
-	// 		})
-	// 		.catch (function () {
-	// 			vm.adding = false;
-	// 			vm.isgood = false;
-	// 		});
-	// 	}
-	// })
 	// =========================================================================
 	//
 	// create a new org
 	//
 	// =========================================================================
-	.controller('OrgCreateController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
+	.controller('OrgCreateController', function ($scope, $state, org, Authentication, Notification, UsersService) {
 		var vm = this;
 		// vm.features = window.features;
 		vm.org = org;
@@ -130,7 +106,7 @@
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, UsersService) {
+	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $window, org, Authentication, Notification, dataService, UsersService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -205,9 +181,6 @@
 				Notification.success ({
 					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
 				});
-				// .then (function () {
-				// 	$state.go('orgs.view', {orgId:vm.org._id});
-				// });
 			})
 			//
 			// fail, notify and stay put
@@ -225,17 +198,12 @@
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('OrgSkillsController', function ($scope, capabilities, $sce, Notification, org, dataService, Authentication, UsersService) {
+	.controller('OrgSkillsController', function (capabilities, Notification, org) {
 		var vm = this;
 		// vm.features = window.features;
 		vm.org = org;
 		vm.capabilities = capabilities;
 		vm.updateUserProfile = function (isValid) {
-			// vm.orgForm.$setPristine ();
-			// if (!isValid) {
-			// 	$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
-			// 	return false;
-			// }
 			//
 			// Create a new org, or update the current instance
 			//
@@ -244,13 +212,9 @@
 			// success, notify and return to list
 			//
 			.then (function () {
-				// vm.orgForm.$setPristine ();
 				Notification.success ({
 					message : '<i class="glyphicon glyphicon-ok"></i> capabilities saved successfully!'
 				});
-				// .then (function () {
-				// 	$state.go('orgs.view', {orgId:vm.org._id});
-				// });
 			})
 			//
 			// fail, notify and stay put
@@ -268,17 +232,16 @@
 	// edit org teams list
 	//
 	// =========================================================================
-	.controller('OrgTeamsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgTeamsController', function (org) {
 		var vm = this;
 		vm.org = org;
-		// vm.features = window.features;
 	})
 	// =========================================================================
 	//
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($scope, $rootScope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
+	.controller('OrgMembersController', function ($rootScope, org, Notification, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
@@ -310,12 +273,6 @@
 				vm.org.additions = vm.emaillist;
 				vm.org.createOrUpdate ()
 				.then (vm.displayResults)
-				// .then (function () {
-				// 	Notification.success ({
-				// 		message : '<i class="glyphicon glyphicon-ok"></i> Member added and notified'
-				// 	});
-				// 	vm.refresh ();
-				// })
 				//
 				// fail, notify and stay put
 				//
@@ -387,7 +344,7 @@
 	// accept terms
 	//
 	// =========================================================================
-	.controller('OrgTermsController', function ($rootScope, $state, org, Notification) {
+	.controller('OrgTermsController', function ($rootScope, org, Notification) {
 		var vm = this;
 		vm.org = org;
 		vm.save = function () {
@@ -407,7 +364,7 @@
 	// edit org skill list
 	//
 	// =========================================================================
-	.controller('OrgProposalsController', function ($scope, $state, $sce, $window, $timeout, Upload, org, Authentication, Notification, dataService) {
+	.controller('OrgProposalsController', function (org) {
 		var vm = this;
 		vm.org = org;
 	})

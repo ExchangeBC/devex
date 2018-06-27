@@ -14,7 +14,7 @@
 				orgs: '='
 			},
 			templateUrl  : '/modules/orgs/client/views/list.orgs.directive.html',
-			controller   : function ($scope, $sce, OrgsService, Authentication, Notification) {
+			controller   : function ($scope, $sce, OrgsService, Authentication) {
 				var vm = this;
 				var isUser = Authentication.user;
 				var isAdmin  = isUser && !!~Authentication.user.roles.indexOf ('admin');
@@ -68,7 +68,7 @@
 			restrict: 'EAC',
 			// replace: true,
 			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
-			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
+			controller: function ($uibModal) {
 				var wsx = this;
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
@@ -113,7 +113,6 @@
 								// Show success message
 								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
 								// Populate user object
-								// qqq.user = Authentication.user = response;
 								qqq.user = response;
 								// Reset form
 								qqq.fileSelected = false;
@@ -130,9 +129,6 @@
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }
 						}
 					})
-					// .result.finally (function () {
-					// 	$state.go ($state.previous.state, $state.previous.params);
-					// });
 					;
 				}
 			}
