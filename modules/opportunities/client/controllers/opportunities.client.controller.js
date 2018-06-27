@@ -35,19 +35,12 @@
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($scope, $state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, $q, ask, subscriptions, myproposal, dataService, NotificationsService, OpportunitiesCommon) {
+	.controller('OpportunityViewController', function ($state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 		if (!opportunity) {
 			console.error ('no opportunity provided');
 			$state.go('opportunities.list');
 		}
 		var vm                    = this;
-		// vm.features = window.features;
-		//
-		// set the notification code for updates to this opp, and set the vm flag to current state
-		//
-		var notificationCode = 'not-update-'+opportunity.code;
-		vm.notifyMe = subscriptions.map (function (s) {return (s.notificationCode === notificationCode);}).reduce (function (a, c) {return (a || c);}, false);
-
 		vm.myproposal             = myproposal;
 		vm.projectId              = $stateParams.projectId;
 		vm.opportunity            = opportunity;
@@ -63,7 +56,7 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
-		vm.trust = $sce.trustAsHtml;
+		vm.trust 				  = $sce.trustAsHtml;
 		//
 		// am I watchng?
 		//
@@ -437,52 +430,16 @@
 				}
 			});
 		};
-		// -------------------------------------------------------------------------
-		//
-		// subscribe to changes
-		//
-		// -------------------------------------------------------------------------
-		vm.subscribe = function (state) {
-			if (state) {
-				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					vm.notifyMe = true;
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully subscribed!'
-					});
-				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Subscription Error!'
-					});
-				});
-			}
-			else {
-				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					vm.notifyMe = false;
-					Notification.success ({
-						message : '<i class="glyphicon glyphicon-ok"></i> You have been successfully un-subscribed!'
-					});
-				}).catch (function (res) {
-					Notification.error ({
-						message : res.data.message,
-						title   : '<i class=\'glyphicon glyphicon-remove\'></i> Un-Subsciption Error!'
-					});
-				});
-			}
-		};
 	})
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, modalService, $q, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
-		vm.trust               = $sce.trustAsHtml;
-		// vm.features = window.features;
-		var originalPublishedState             = opportunity.isPublished;
+		vm.trust               				  = $sce.trustAsHtml;
+		var originalPublishedState            = opportunity.isPublished;
 		//
 		// what can the user do here?
 		//
@@ -495,8 +452,8 @@
 		vm.opportunity.opportunityTypeCd      = 'code-with-us';
 		vm.opportunity.deadline               = new Date (vm.opportunity.deadline);
 		vm.opportunity.assignment             = new Date (vm.opportunity.assignment);
-		vm.opportunity.start                  = new Date (vm.opportunity.start)		;
-		vm.opportunity.endDate                = new Date (vm.opportunity.endDate)	;
+		vm.opportunity.start                  = new Date (vm.opportunity.start);
+		vm.opportunity.endDate                = new Date (vm.opportunity.endDate);
 		vm.authentication                     = Authentication;
 		vm.opportunity.skilllist              = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		// -------------------------------------------------------------------------
