@@ -1,167 +1,83 @@
-.modal-dialog {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  margin: none;
+.modal-header, .modal-footer {
+	border: none;
 }
 
-@media (min-width: 768px) {
-  .modal-dialog {
-    width: 100%;
-    margin: 0;
-  }
+/* This is to make the X icon on close button for modals thinner than the default fa-times */
+.fa-times-thin:before {
+	content: '\00d7';
 }
 
-.modal-content {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.modal-header {
-  > button.close {
-      padding: 0;
-      margin-top: 3px;
-      font-size: 1.8em;
-      float: right;
-  }
-  > .modal-title {
-  text-align: center;
-  font-size: 1.43em;
-  font-weight: bold;
-  padding: .25em 0; 
-  }
-}   
-
-//.modal-backdrop {
-//  background-color: @gray-lighter;
-//}
-
-.modal-backdrop.in {
-  opacity: .7;
-  filter: alpha(opacity=70);
-}
+// Three different sizes to work with:
 
 .modal-lg {
-  height: 100%;
-  width: 100%;
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  > .modal-content {
-      position: absolute;
-      top: 0;
-      border: none;
-      border-radius: 0;
-      box-shadow: none;
-      > .modal-header {
-        height: 75px;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        > button.close {
-          font-size: 2.1em;
-        }
-        > .modal-title {
-          font-size: 1.8em;
-        }
-      }
-      > .modal-body {
-          position: absolute;
-          width: 95%;
-          overflow-y: auto;
-          top: 75px;
-          bottom: 75px;
-      }
-      > .modal-footer {
-        height: 75px;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-      }
-  }
+	margin: 0;
+	width: 100%;
+	> .modal-content {
+		border: none;
+		border-radius: 0;
+		> .modal-header {
+			font-size: 24px;
+		}
+		> .modal-body {
+			max-height: 80vh; /* This seems to be about right to keep the buttons in the footer positioned flush with the bottom of the display if the content is long */
+			overflow: scroll;
+		}
+		> .modal-footer {
+			> button {
+				font-size: 15px;
+			}
+		}
+	}
 }
 
 .modal-md {
-  width: 80%;
-  height: 70%;
-  margin: 30px auto auto;
-  > .modal-content {
-    > .modal-header {
-      height: 65px;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      > button.close {
-        font-size: 1.8em;
-      }
-      > .modal-title {
-        font-size: 1.5em;
-      }
-    }
-    > .modal-body {
-        position: relative;
-        width: 95%;
-        margin-left: auto;
-        margin-right: auto;
-        overflow-y: auto;
-        top: 65px;
-        bottom: 65px;
-    }
-    > .modal-footer {
-      height: 65px;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-    }
-  }
+	> .modal-content {
+		> .modal-header {
+			font-size: 21px;
+		}
+		> .modal-body {
+			max-height: 70vh; /* make sure modal bodies don't get too long */
+			overflow: scroll;
+		}
+	}
 }
 
 .modal-sm {
-  width: 40%;
-  height: 35%;
-  margin: auto;
-  > .modal-content {
-    > .modal-header {
-      width: 100%;
-      top: 0;
-      > button.close {
-        font-size: 1.8em;
-      }
-      > .modal-title {
-        font-size: 1.5em;
-      }
+	> .modal-content {
+		> .modal-header {
+			font-size: 17px;
+		}
+	}
+}
+
+.modal-header {
+	> button.close {
+		font-size: 1.7em; /* make the size of the close button proportional to size of the font of the modal title (different for sm, md, or lg) */
+		margin: -8px 5px 0 0;
+	}
+}
+
+.modal-title {
+	text-align: center;
+	font-weight: 600;
+	margin-top: 1.4em; /* Make the title appear lower than, not inline with, the close button */
+}
+
+// Small display considerations
+
+@media (min-width: 768px) {
+	.modal-sm {
+    	width: 430px;
+    	margin: 100px auto; /* make small modals a bit nearer the center of the display instead of at the */
     }
-    > .modal-body {
-        position: relative;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    > .modal-footer {
-      height: 65px;
-      width: 100%;
-      position: absolute;
-      bottom: 0;
-    }
-  }
+    .modal-md {
+    	width: 80%;
+    	max-width: 1040px; /* make maximum width same size as .container */
+    }	
 }
 
 @media (max-width: 767px) {
-  .modal-sm, .modal-md {
-    width: 95%;
-    max-height: 90%;  
-  }
+	.modal-md {
+		width: 95%; /* decrease left and right margins on small displays */
+	}
 }
-
-
-
-
