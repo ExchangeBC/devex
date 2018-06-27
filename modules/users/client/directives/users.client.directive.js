@@ -34,7 +34,7 @@
 			bindToController: true,
 			restrict: 'EAC',
 			// replace: true,
-			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Upload new picture</button>',
+			template : '<button type="button" class="btn btn-sm btn-default" ng-click="wsx.edit()">Upload new picture</button>',
 			controller: function ($scope, $uibModal) {
 				var wsx = this;
 				var uploadurl = '/api/users/picture';
@@ -47,7 +47,7 @@
 						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',
 						controllerAs: 'qqq',
 						bindToController: true,
-						controller: function ($timeout, Authentication, $uibModalInstance, Upload, Notification) {
+						controller: function ($state, $timeout, Authentication, $uibModalInstance, Upload, Notification) {
 							var qqq = this;
 							qqq.user = Authentication.user;
 							qqq.fileSelected = false;
@@ -79,6 +79,8 @@
 								// Reset form
 								qqq.fileSelected = false;
 								qqq.progress = 0;
+
+								$state.reload();
 							}
 
 							// Called after the user has failed to uploaded a new picture
