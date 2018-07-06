@@ -15,6 +15,20 @@ module.exports = {
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
   },
+  sessionCookie: {
+    // session expiration is set by default to 1 year (TODO: this is a temporary fix, and needs to be set to a reasonable value, and we need to implement proper timeout handling)
+    maxAge: 365 * 24 * (60 * 60 * 1000),
+    // maxAge: 2000,
+    // httpOnly flag makes sure the cookie is only accessed
+    // through the HTTP protocol and not JS/browser
+    httpOnly: true,
+    // secure cookie should be turned to true to provide additional
+    // layer of security so that the cookie is set only when working
+    // in HTTPS mode.
+    secure: false
+  },
+  sessionTimeout: process.env.SESSION_TIMEOUT || 300 * 24,
+  sessionTimeoutWarning: process.env.SESSION_WARNING || 300 * 24,
   log: {
     // logging with Morgan - https://github.com/expressjs/morgan
     // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
