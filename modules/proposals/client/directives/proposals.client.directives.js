@@ -128,9 +128,12 @@
 					vm.proposals   = ProposalsService.query ();
 					vm.columnCount = 1;
 				}
-				vm.stats = ProposalsService.getStats ({
-					opportunityId: $scope.opportunity._id
-				});
+				if ($scope.opportunity)
+				{
+					vm.stats = ProposalsService.getStats ({
+						opportunityId: $scope.opportunity._id
+					});
+				}
 				if ($scope.title) vm.title = $scope.title;
 				vm.publish = function (proposal, state) {
 					var publishedState = proposal.isPublished;
