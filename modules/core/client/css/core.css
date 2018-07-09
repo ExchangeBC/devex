@@ -68,3 +68,8 @@
 	width: 50%;
 	margin: 2em auto;
 }
+.collapsing {
+	-webkit-transition: none;
+	transition: none;
+	display: none;
+}
