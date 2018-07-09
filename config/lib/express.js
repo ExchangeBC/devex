@@ -38,7 +38,7 @@ module.exports.initLocalVariables = function (app) {
   app.locals.title = config.app.title;
   app.locals.description = config.app.description;
   if (config.secure && config.secure.ssl === true) {
-	app.locals.secure = config.secure.ssl;
+  	app.locals.secure = config.secure.ssl;
   }
   app.locals.keywords = config.app.keywords;
   app.locals.googleAnalyticsTrackingID = config.app.googleAnalyticsTrackingID;
@@ -128,33 +128,46 @@ module.exports.initViewEngine = function (app) {
  */
 module.exports.initSession = function (app, db) {
   // Express MongoDB session storage
+  var sessionParameters = {
+    saveUninitialized : true,
+    resave            : false,
+    unset             : 'destroy',
+    secret            : config.sessionSecret,
+    name              : config.sessionKey,
+    cookie            : {
+      httpOnly : config.sessionCookie.httpOnly,
+      secure   : config.sessionCookie.secure && config.secure.ssl
+    }
+  };
+  //
+  // CC : BA-698 hopefully fix the memory leak issue. If this
+  // does not work in production, then make the shareConnection switch false
+  // to try giving mongoDb connector its own connection and not
+  // share the mongoose one
+  //
+  var shareConnection = true;
+  if (shareConnection) {
+  	sessionParameters.store = new MongoStore ({
+  	  mongooseConnection : db,
+  	  collection         : config.sessionCollection
+  	});
+  }
+  else {
+    sessionParameters.store = new MongoStore ({
+      url        : config.db.uri,
+      collection : config.sessionCollection
+    });
+  }
   //
   // CC : modified so that session persists in development
   // an on localhost - makes testing easier - still remove
   // stored session for production, which would mean all
   // uses of openshift
   //
-  var sessionParameters = {
-	saveUninitialized : true,
-	resave            : false,
-	unset             : 'destroy',
-	secret            : config.sessionSecret,
-	name              : config.sessionKey,
-	cookie            : {
-	  httpOnly : config.sessionCookie.httpOnly,
-	  secure   : config.sessionCookie.secure && config.secure.ssl
-	}
-  }
   if (config.app.domain === 'http://localhost:3030' || process.env.NODE_ENV === 'development') {
-
-	sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
-	sessionParameters.store = new MongoStore ({
-	  mongooseConnection : db,
-	  collection         : config.sessionCollection
-	});
+    sessionParameters.cookie.maxAge = config.sessionCookie.maxAge;
   }
   app.use(session(sessionParameters));
-
   // Add Lusca CSRF Middleware
   app.use(lusca(config.csrf));
 };

@@ -80,7 +80,6 @@ function seedTheUser (user) {
 				resolve();
 			})
 			.catch(function (err) {
-				// reject(err);
 				resolve(err);
 			});
 		});
