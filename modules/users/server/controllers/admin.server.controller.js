@@ -144,29 +144,28 @@ exports.approve = function (req, res, next) {
   .exec(function (err, user) {
     if (err) {
       return next(err);
-    } else if (!user) {
-      return next(new Error('Failed to load User ' + req.body.user._id));
     }
-    if (req.body.flag === 1)
-        user.roles=['gov','user'];
-    else
-      {
-        user.roles=['user'];
-      }
+    else if (!user) {
+      return next (new Error('Failed to load User ' + req.body.user._id));
+    }
+    user.roles = (req.body.flag === 1) ? ['gov','user'] : ['user'];
 
-      user.save(function (err) {
-                  if (err) {
-            return res.status(422).send({
-              message: errorHandler.getErrorMessage(err)
-            });
-          } else {
-            res.send({
-              message: 'done'
-            });
-          }
+    user.save (function (err) {
+      if (err) {
+        return res.status(422).send({
+          message: errorHandler.getErrorMessage(err)
         });
-
-    next();
+      } else {
+        res.status(200).send({
+           message: 'done'
+        });
+      }
+    });
+    //
+    // CC: this is the offending line, since we are handling everything
+    // we do not need to call next;
+    //
+    // next();
   });
 };
 // -------------------------------------------------------------------------
