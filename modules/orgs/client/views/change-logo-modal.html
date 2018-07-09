@@ -15,8 +15,8 @@
 				<img ng-src="{{qqq.fileSelected ? croppedDataUrl :  qqq.org.orgImageURL}}" alt="{{qqq.org.name}}" class="img-thumbnail user-profile-picture" ngf-drop>
 			</div>
 			<div ng-show="!qqq.fileSelected" class="text-center form-group">
-				<button class="btn btn-default btn-file" ngf-select="qqq.fileSelected = true" ng-model="picFile" accept="image/*">
-					Select Picture
+				<button class="btn btn-default btn-file" ngf-select="qqq.onSelectPicture($file)" ng-model="picFile" accept="image/*">
+					Select Picture (Max Size 1M)
 				</button>
 			</div>
 			<div ng-show="qqq.fileSelected" class="text-center form-group">

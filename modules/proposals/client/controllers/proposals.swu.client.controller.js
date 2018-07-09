@@ -605,27 +605,37 @@
 		// -------------------------------------------------------------------------
 		//
 		// upload documents
+		// CC: BA-614-615 Add check for max file size before uploading
 		//
 		// -------------------------------------------------------------------------
 		ppp.upload = function (file) {
-			Upload.upload({
-				url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
-				data: {
-					file: file
-				}
-			})
-			.then(
-				function (response) {
-					ppp.proposal = new ProposalsService (response.data);
-					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
-				},
-				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
-				},
-				function (evt) {
-					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
-			});
-
+			if (!file) return;
+			if (file.size > (3 * 1024 * 1024)) {
+				Notification.error ({
+					delay   : 6000,
+					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+				});
+			}
+			else {
+				Upload.upload ({
+					url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
+					data: {
+						file: file
+					}
+				})
+				.then(
+					function (response) {
+						ppp.proposal = new ProposalsService (response.data);
+						Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
+					},
+					function (response) {
+						Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
+					},
+					function (evt) {
+						ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+				});
+			}
 		};
 		ppp.deletefile = function (fileid) {
 			ProposalsService.removeDoc ({

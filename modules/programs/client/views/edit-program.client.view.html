@@ -85,7 +85,9 @@
 										<img ng-src="{{vm.fileSelected ? vm.croppedDataUrl : '/' + vm.program.logo}}" alt="Program Logo" class="img-thumbnail user-profile-picture" ngf-drop>
 									</div>
 									<div ng-show="!vm.fileSelected" class="text-center form-group">
-										<button type="button" class="btn btn-default btn-file" ngf-select="vm.fileSelected = true" ng-model="vm.picFile" accept="image/*">Select Picture</button>
+										<button type="button" class="btn btn-default btn-file" ngf-select="vm.onSelectPicture($file)" ng-model="vm.picFile" accept="image/*">
+										Select Picture (Max Size 1M)
+									</button>
 									</div>
 									<div ng-show="0 && vm.fileSelected" class="text-center form-group">
 										<button  type="button" class="btn btn-primary" ng-click="vm.upload(vm.croppedDataUrl, vm.picFile.name)">Upload</button>

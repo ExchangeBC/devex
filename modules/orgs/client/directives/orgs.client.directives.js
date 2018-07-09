@@ -88,6 +88,23 @@
 							qqq.fileSelected = false;
 							qqq.org = org;
 							qqq.org.orgImageURL = ((qqq.org.orgImageURL.substr(0,1) === '/' || qqq.org.orgImageURL.substr(0,4) === 'http') ? '' : '/') + qqq.org.orgImageURL;
+							// -------------------------------------------------------------------------
+							//
+							// CC: BA-614-615 determine that the picture does not exceed the max allowed size
+							//
+							// -------------------------------------------------------------------------
+							qqq.fileSelected = false;
+							qqq.onSelectPicture = function (file) {
+								if (!file) return;
+								if (file.size > (1 * 1024 * 1024)) {
+									Notification.error ({
+										delay   : 6000,
+										title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+										message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+									});
+								}
+								else qqq.fileSelected = true;
+							};
 							qqq.upload = function (dataUrl, name) {
 								Upload.upload({
 									url: uploadurl,

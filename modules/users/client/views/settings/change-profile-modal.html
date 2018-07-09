@@ -22,8 +22,8 @@
 			</tr>
 			<tr ng-show="!qqq.fileSelected">
 				<td colspan="2" align="center">
-					<button class="btn btn-default btn-file image-upload-button" ngf-select="qqq.fileSelected = true" ng-model="picFile" accept="image/*">
-						Select Picture
+					<button class="btn btn-default btn-file image-upload-button" ngf-select="qqq.onSelectPicture($file)" ng-model="picFile" accept="image/*">
+						Select Picture (Max Size 1M)
 					</button>
 				</td>
 			</tr>
