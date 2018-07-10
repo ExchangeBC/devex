@@ -22,14 +22,15 @@
 <section class="list-page">
 	<!-- Open Opportunities Container -->
 	<div class="container">
-		<div class="opportunity-list-header">
+		<div class="opportunity-list-header" ng-show="vm.renderOpen">
 			Open Opportunities
 			<div class="alert" ng-if="vm.countOpenOpportunities() === 0">
 				<i class="fa fa-lg fa-frown-o"></i>&nbsp; No open opportunities right now - check back soon, or make sure you're signed up for notifications <a href="/settings/privacy">in your profile</a>
 			</div>
 
 			<div class="card" class="opportunity-list" ng-class="{'card-greyed': !opportunity.isPublished}" 
-				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterOpen">
+				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterOpen"
+				ng-init="$last && vm.finishedRenderingOpen()">
 
 				{{opportunity.isWatching=vm.isWatching(opportunity);""}}
 
@@ -105,11 +106,12 @@
 
 	<!-- Closed Opportunities Container -->
 	<div class="container">
-		<div class="opportunity-list-header">
+		<div class="opportunity-list-header" ng-show="vm.renderClosed">
 			Closed Opportunities
 			<span class="value-tally pull-right hidden-xs">Total value: {{vm.getTotalClosedAmount() | currency}}</span>
 			<div class="card" class="opportunity-list"
-				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterClosed">
+				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterClosed"
+				ng-init="$last && vm.finishedRenderingClosed()">
 
 				<div class="card-header text-right" ng-if="vm.isAdmin || opportunity.userIs.admin">
 						<label class="label label-default" ng-if="!opportunity.isPublished"><i class="fa fa-exclamation-triangle" ></i> Unpublished</label>
