@@ -18,17 +18,21 @@
 		</div>
 	</div>
 </section>
-	
+
 <section class="list-page">
 	<!-- Open Opportunities Container -->
 	<div class="container">
 		<div class="opportunity-list-header">
+			<div class="alert" ng-if="vm.isLoading">
+				<i class="fa fa-lg fa-spinner fa-spin"></i>&nbsp; Loading Opportunities</a>
+			</div>
+			<div ng-if="!vm.isLoading">
 			Open Opportunities
 			<div class="alert" ng-if="vm.countOpenOpportunities() === 0">
 				<i class="fa fa-lg fa-frown-o"></i>&nbsp; No open opportunities right now - check back soon, or make sure you're signed up for notifications <a href="/settings/privacy">in your profile</a>
 			</div>
 
-			<div class="card" class="opportunity-list" ng-class="{'card-greyed': !opportunity.isPublished}" 
+			<div class="card" class="opportunity-list" ng-class="{'card-greyed': !opportunity.isPublished}"
 				ng-repeat="opportunity in vm.opportunities | orderBy:'created':true | filter:vm.filterOpen">
 
 				{{opportunity.isWatching=vm.isWatching(opportunity);""}}
@@ -45,7 +49,7 @@
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
 						<label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
-						
+
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
 						<!-- <label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label> -->
@@ -70,7 +74,7 @@
 					<div class="label-list">
 						<!-- <label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label> -->
 						<label class="label label-swu"><i class="fa fa-users"></i> Code With Us</label>
-						
+
 
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
@@ -101,10 +105,11 @@
 				</div>
 			</div>
 		</div>
+		</div>
 	</div>
 
 	<!-- Closed Opportunities Container -->
-	<div class="container">
+	<div class="container"ng-if="!vm.isLoading">
 		<div class="opportunity-list-header">
 			Closed Opportunities
 			<span class="value-tally pull-right hidden-xs">Total value: {{vm.getTotalClosedAmount() | currency}}</span>
@@ -123,7 +128,7 @@
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
 						<label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
-						
+
 						<label class="label label-danger">CLOSED</label>
 
 						<label class="label label-watching pull-right" ng-if="vm.isUser">
