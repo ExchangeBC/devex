@@ -32,6 +32,7 @@
 				vm.project = $scope.project;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
+				vm.isLoading = true;
 				if (vm.context === 'project') {
 					vm.programId    = vm.program._id;
 					vm.programTitle = vm.program.title;
@@ -39,9 +40,9 @@
 					vm.projectTitle = vm.project.name;
 					vm.title         = 'Opportunities for '+vm.projectTitle;
 					vm.userCanAdd    = vm.project.userIs.admin || vm.isAdmin;
-					vm.opportunities = OpportunitiesService.forProject ({
+					OpportunitiesService.forProject ({
 						projectId: vm.projectId
-					});
+					}).$promise.then (function (opps) {vm.opportunities = opps; vm.isLoading = false;});
 					vm.columnCount   = 1;
 				} else if (vm.context === 'program') {
 					vm.programId    = vm.program._id;
@@ -50,9 +51,9 @@
 					vm.projectTitle = null;
 					vm.title         = 'Opportunities for '+vm.programTitle;
 					vm.userCanAdd    = (vm.isAdmin || vm.isGov);
-					vm.opportunities = OpportunitiesService.forProgram ({
+					OpportunitiesService.forProgram ({
 						programId: vm.programId
-					});
+					}).$promise.then (function (opps) {vm.opportunities = opps; vm.isLoading = false;});
 					vm.columnCount   = 1;
 				} else {
 					vm.programId    = null;
@@ -61,7 +62,7 @@
 					vm.projectTitle = null;
 					vm.title         = 'All Opportunities';
 					vm.userCanAdd    = (vm.isAdmin || vm.isGov);
-					vm.opportunities = OpportunitiesService.query ();
+					OpportunitiesService.query ().$promise.then (function (opps) {vm.opportunities = opps; vm.isLoading = false;});
 					vm.columnCount   = 1;
 				}
 				if ($scope.title) vm.title = $scope.title;
@@ -97,14 +98,6 @@
 					return vm.opportunities.filter(function(opportunity) {
 						return vm.rightNow <= new Date(opportunity.deadline);
 					}).length;
-				}
-				vm.renderOpen = false;
-				vm.renderClosed = false;
-				vm.finishedRenderingOpen = function() {
-					vm.renderOpen = true;
-				}
-				vm.finishedRenderingClosed = function() {
-					vm.renderClosed = true;
 				}
 				/**
 				 * Returns the total value of all closed opportunities.
