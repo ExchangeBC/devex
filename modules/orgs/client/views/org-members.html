@@ -1,5 +1,5 @@
 <div class="edit-form-tab-content">
-	<form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
+	<form ng-cloak name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
 		<div class="row">
 			<div class="col-xs-12 col-sm-7">
 				<p>This is where you make your Statement of Qualifications which will comprise your Response to the RFQ.</p>
@@ -14,10 +14,10 @@
 				<span class="small gray-light">Add multiple emails separated with a comma.</span>
 				<h5>My Members:</h5>
 				<!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
-				<div class="alert alert-warning" ng-if="vm.org.members.length<2">
+				<div ng-cloak class="alert alert-warning" ng-if="vm.org.members.length<2">
 					<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
 				</div>
-				<div class="card card-user" ng-repeat="member in vm.org.members">
+				<div ng-cloak class="card card-user" ng-repeat="member in vm.org.members">
 					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
 					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
 					<div class="card-body">
@@ -37,7 +37,7 @@
 				</div>
 				<table class="table capabilities-list">
 					<tbody>
-						<tr ng-repeat="capability in vm.capabilities">
+						<tr ng-cloak ng-repeat="capability in vm.capabilities">
 							<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
 							<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
 							<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
