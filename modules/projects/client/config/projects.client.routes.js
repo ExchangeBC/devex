@@ -17,7 +17,7 @@
 		.state('projects', {
 			abstract: true,
 			url: '/projects',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -78,7 +78,7 @@
 		.state('projectadmin', {
 			abstract: true,
 			url: '/projectadmin',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//

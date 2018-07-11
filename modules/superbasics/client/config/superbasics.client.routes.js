@@ -17,7 +17,7 @@
 // 		.state ('superbasics', {
 // 			abstract : true,
 // 			url      : '/superbasics',
-// 			template : '<ui-view/>'
+// 			template : '<ui-view autoscroll="true"></ui-view>'
 // 		})
 // 		// -------------------------------------------------------------------------
 // 		//
@@ -68,7 +68,7 @@
 // 		.state ('superbasicadmin', {
 // 			abstract : true,
 // 			url      : '/superbasicadmin',
-// 			template : '<ui-view/>'
+// 			template : '<ui-view autoscroll="true"></ui-view>'
 // 		})
 // 		// -------------------------------------------------------------------------
 // 		//

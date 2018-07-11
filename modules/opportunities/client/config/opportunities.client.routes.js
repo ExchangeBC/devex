@@ -17,7 +17,7 @@
 		.state('opportunities', {
 			abstract: true,
 			url: '/opportunities',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();
@@ -138,7 +138,7 @@
 		.state('opportunityadmin', {
 			abstract: true,
 			url: '/opportunityadmin',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();
