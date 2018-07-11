@@ -17,7 +17,7 @@
 		.state('programs', {
 			abstract: true,
 			url: '/programs',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -75,7 +75,7 @@
 		.state('programadmin', {
 			abstract: true,
 			url: '/programadmin',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//

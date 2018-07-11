@@ -11,7 +11,7 @@
 		.state ('messagetemplates', {
 			abstract : true,
 			url      : '/messagetemplates',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		.state ('messagetemplates.list', {
 			url          : '',
@@ -47,7 +47,7 @@
 		.state ('messagetemplatesadmin', {
 			abstract : true,
 			url      : '/messagetemplatesadmin',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -101,7 +101,7 @@
 		.state ('messages', {
 			abstract : true,
 			url      : '/messages',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		.state ('messages.view', {
 			url          : '/:messageId',
