@@ -252,7 +252,6 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.refresh = function () {
-			// $rootScope.$broadcast('updateOrg', 'done');
 			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
 			var id = vm.org._id;
@@ -261,7 +260,6 @@
 			.then (function (org) {
 				vm.org = org;
 				CapabilitiesMethods.init (vm, vm.org, capabilities);
-				// $rootScope.$broadcast('updateOrg', 'done');
 				vm.loading = false;
 			});
 		};
@@ -281,12 +279,8 @@
 				saveorg.additions = vm.emaillist;
 				saveorg.$update ()
 				.then (function (savedOrg) {
-					// vm.org = savedOrg;
 					vm.emaillist = '';
-					// CapabilitiesMethods.init (vm, vm.org, capabilities);
-					// vm.refresh ();
 					vm.orgForm.$setPristine ();
-					// $rootScope.$broadcast('updateOrg', 'done');
 					return savedOrg;
 				})
 				.then (vm.displayResults)
