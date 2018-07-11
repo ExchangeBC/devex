@@ -252,43 +252,48 @@
 		//
 		// -------------------------------------------------------------------------
 		vm.refresh = function () {
-			$rootScope.$broadcast('updateOrg', 'done');
 			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
-			OrgsService.get ({orgId: vm.org._id}).$promise
+			var id = vm.org._id;
+			vm.loading = true;
+			OrgsService.get ({orgId: id}).$promise
 			.then (function (org) {
 				vm.org = org;
 				CapabilitiesMethods.init (vm, vm.org, capabilities);
-				$rootScope.$broadcast('updateOrg', 'done');
+				vm.loading = false;
 			});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// add or remove members
+		// CC: swap out the reference here.  this does create a new reference and
+		// orphans the original, but since all we do on this screen is this action
+		// it really makes little difference.  If change was afffected immediately
+		// then this would be an issue
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
 			vm.orgForm.$setPristine ();
 			if (vm.emaillist !== '') {
-				vm.org.additions = vm.emaillist;
-				vm.org.createOrUpdate ()
+				var saveorg = new OrgsService (vm.org);
+				saveorg.additions = vm.emaillist;
+				saveorg.$update ()
+				.then (function (savedOrg) {
+					vm.emaillist = '';
+					vm.orgForm.$setPristine ();
+					return savedOrg;
+				})
 				.then (vm.displayResults)
 				//
 				// fail, notify and stay put
 				//
-				.then (function () {
-					vm.emaillist = '';
-					CapabilitiesMethods.init (vm, vm.org, capabilities);
-					vm.refresh ();
-					vm.orgForm.$setPristine ();
-					$rootScope.$broadcast('updateOrg', 'done');
-				})
 				.catch (function (res) {
 					Notification.error ({
 						message : res.message,
 						title   : '<i class=\'glyphicon glyphicon-remove\'></i> invitations send error!'
 					});
-				});
+				})
+				;
 			}
 		};
 		vm.removeMember = function (member) {
