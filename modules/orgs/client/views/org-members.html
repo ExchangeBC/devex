@@ -13,18 +13,20 @@
 				</div>
 				<span class="small gray-light">Add multiple emails separated with a comma.</span>
 				<h5>My Members:</h5>
-				<!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
-				<div ng-cloak class="alert alert-warning" ng-if="vm.org.members.length<2">
-					<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
-				</div>
-				<div ng-cloak class="card card-user" ng-repeat="member in vm.org.members">
-					<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-					<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
-					<div class="card-body">
-						<label-list>
-							<label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
-							<label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-						</label-list>
+				<div ng-cloak ng-if="!vm.loading">
+					<!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
+					<div ng-cloak class="alert alert-warning" ng-if="vm.org.members.length<2">
+						<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
+					</div>
+					<div ng-cloak class="card card-user" ng-repeat="member in vm.org.members">
+						<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
+						<div class="card-body">
+							<label-list>
+								<label ng-cloak ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
+								<label ng-cloak ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+							</label-list>
+						</div>
 					</div>
 				</div>
 			</div>

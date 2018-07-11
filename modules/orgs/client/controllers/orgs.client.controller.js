@@ -255,16 +255,23 @@
 			// $rootScope.$broadcast('updateOrg', 'done');
 			vm.orgForm.$setPristine ();
 			vm.emaillist = '';
-			OrgsService.get ({orgId: vm.org._id}).$promise
+			var id = vm.org._id;
+			vm.loading = true;
+			OrgsService.get ({orgId: id}).$promise
 			.then (function (org) {
 				vm.org = org;
 				CapabilitiesMethods.init (vm, vm.org, capabilities);
 				// $rootScope.$broadcast('updateOrg', 'done');
+				vm.loading = false;
 			});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// add or remove members
+		// CC: swap out the reference here.  this does create a new reference and
+		// orphans the original, but since all we do on this screen is this action
+		// it really makes little difference.  If change was afffected immediately
+		// then this would be an issue
 		//
 		// -------------------------------------------------------------------------
 		vm.addMembers = function () {
