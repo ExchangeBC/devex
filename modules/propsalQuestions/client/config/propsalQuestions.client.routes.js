@@ -17,7 +17,7 @@
 		.state ('propsalQuestions', {
 			abstract : true,
 			url      : '/propsalQuestions',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -68,7 +68,7 @@
 		.state ('propsalQuestionadmin', {
 			abstract : true,
 			url      : '/propsalQuestionadmin',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//

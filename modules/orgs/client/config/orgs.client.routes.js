@@ -17,7 +17,7 @@
 		.state('orgs', {
 			abstract: true,
 			url: '/orgs',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//

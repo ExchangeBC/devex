@@ -17,7 +17,7 @@
 		.state ('proposals', {
 			abstract: true,
 			url: '/proposals',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
@@ -100,7 +100,7 @@
 		.state ('proposaladmin', {
 			abstract: true,
 			url: '/proposaladmin',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			data: {
 				notroles: ['gov', 'guest']
 			},
