@@ -79,7 +79,8 @@
     // OAuth provider request
     function callOauthProvider(url) {
       if ($state.previous && $state.previous.href) {
-        sessionStorage.setItem('prevState', $state.previous.state.name);
+		sessionStorage.setItem('prevState', $state.previous.state.name);
+		sessionStorage.setItem('prevParams', JSON.stringify($state.previous.params));
       }
       $rootScope.authRole = $location.search().role;
       // Effectively call OAuth authentication route:
