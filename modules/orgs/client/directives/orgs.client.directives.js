@@ -14,7 +14,7 @@
 				orgs: '='
 			},
 			templateUrl  : '/modules/orgs/client/views/list.orgs.directive.html',
-			controller   : function ($scope, $sce, OrgsService, Authentication, Notification) {
+			controller   : function ($scope, $sce, OrgsService, Authentication) {
 				var vm = this;
 				var isUser = Authentication.user;
 				var isAdmin  = isUser && !!~Authentication.user.roles.indexOf ('admin');
@@ -68,7 +68,7 @@
 			restrict: 'EAC',
 			// replace: true,
 			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
-			controller: function ($rootScope, $scope, $uibModal, $timeout, Authentication, Upload, Notification) {
+			controller: function ($uibModal) {
 				var wsx = this;
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
@@ -88,6 +88,23 @@
 							qqq.fileSelected = false;
 							qqq.org = org;
 							qqq.org.orgImageURL = ((qqq.org.orgImageURL.substr(0,1) === '/' || qqq.org.orgImageURL.substr(0,4) === 'http') ? '' : '/') + qqq.org.orgImageURL;
+							// -------------------------------------------------------------------------
+							//
+							// CC: BA-614-615 determine that the picture does not exceed the max allowed size
+							//
+							// -------------------------------------------------------------------------
+							qqq.fileSelected = false;
+							qqq.onSelectPicture = function (file) {
+								if (!file) return;
+								if (file.size > (1 * 1024 * 1024)) {
+									Notification.error ({
+										delay   : 6000,
+										title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+										message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+									});
+								}
+								else qqq.fileSelected = true;
+							};
 							qqq.upload = function (dataUrl, name) {
 								Upload.upload({
 									url: uploadurl,
@@ -113,7 +130,6 @@
 								// Show success message
 								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
 								// Populate user object
-								// qqq.user = Authentication.user = response;
 								qqq.user = response;
 								// Reset form
 								qqq.fileSelected = false;
@@ -130,9 +146,6 @@
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }
 						}
 					})
-					// .result.finally (function () {
-					// 	$state.go ($state.previous.state, $state.previous.params);
-					// });
 					;
 				}
 			}

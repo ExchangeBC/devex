@@ -31,3 +31,12 @@
 .social-button:hover {
   opacity: 0.65;
 }
+.image-upload-table {
+  margin: 0 auto;
+}
+.image-upload-child {
+  margin: 0 2em;
+}
+.image-upload-button {
+  margin: 2em 0.5em;
+}

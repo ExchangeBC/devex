@@ -21,7 +21,7 @@
 					roles: ['user', 'admin', 'gov-request', 'gov']
 				},
 				resolve: {
-					capabilities: function ($stateParams, CapabilitiesService) {
+					capabilities: function (CapabilitiesService) {
 						return CapabilitiesService.query ();
 					}
 				}
@@ -40,11 +40,6 @@
 				templateUrl: '/modules/users/client/views/settings/profile-privacy.html',
 				controller: 'ProfilePrivacyController',
 				controllerAs: 'vm',
-				resolve: {
-					subscriptions: function (NotificationsService) {
-						return NotificationsService.subscriptions().$promise;
-					}
-				},
 				data: {
 					pageTitle: 'Privacy'
 				}
@@ -85,15 +80,6 @@
 					pageTitle: 'Settings password'
 				}
 			})
-			// .state('settings.picture', {
-			// 	url: '/picture',
-			// 	templateUrl: '/modules/users/client/views/settings/change-profile-picture.client.view.html',
-			// 	controller: 'ChangeProfilePictureController',
-			// 	controllerAs: 'vm',
-			// 	data: {
-			// 		pageTitle: 'Settings picture'
-			// 	}
-			// })
 			.state('authentication', {
 				abstract: true,
 				url: '/authentication',

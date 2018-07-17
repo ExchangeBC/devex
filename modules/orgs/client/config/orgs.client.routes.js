@@ -17,7 +17,7 @@
 		.state('orgs', {
 			abstract: true,
 			url: '/orgs',
-			template: '<ui-view/>'
+			template: '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -51,7 +51,7 @@
 				label: 'All orgs'
 			},
 			resolve: {
-				orgs: function ($stateParams, OrgsService) {
+				orgs: function (OrgsService) {
 					return OrgsService.query ().$promise;
 				}
 			},
@@ -79,24 +79,6 @@
 				}
 			}
 		})
-		// .state('orgs.addself', {
-		// 	url: '/:orgId/m/:messageId',
-		// 	templateUrl: '/modules/orgs/client/views/org-addedto.html',
-		// 	controller: 'OrgAddSelfController',
-		// 	controllerAs: 'vm',
-		// 	resolve: {
-		// 		// r: function ($stateParams, MessagesService, OrgsService) {
-		// 		// 	return MessagesService.getarchived ({
-		// 		// 		messageId: $stateParams.messageId
-		// 		// 	})	;
-		// 		// },
-		// 		org: function ($stateParams, OrgsService) {
-		// 			return OrgsService.get({
-		// 				orgId: $stateParams.orgId
-		// 			}).$promise;
-		// 		}
-		// 	}
-		// })
 		// -------------------------------------------------------------------------
 		//
 		// the base for editing
@@ -141,20 +123,6 @@
 				}
 			}
 		})
-		// .state ('orgadmin.skills', {
-		// 	url: '/skills',
-		// 	templateUrl: '/modules/orgs/client/views/org-skills.html',
-		// 	controller: 'OrgSkillsController',
-		// 	controllerAs: 'vm',
-		// 	data: {
-		// 		pageTitle: 'Company Skills'
-		// 	},
-		// 	resolve: {
-		// 		capabilities: function (CapabilitiesService) {
-		// 			return CapabilitiesService.query ().$promise;
-		// 		}
-		// 	}
-		// })
 		.state ('orgadmin.members', {
 			url: '/members',
 			templateUrl: '/modules/orgs/client/views/org-members.html',
@@ -190,50 +158,6 @@
 				}
 			}
 		})
-		// .state ('orgadmin.teams', {
-		// 	url: '/teams',
-		// 	templateUrl: '/modules/orgs/client/views/org-teams.html',
-		// 	controller: 'OrgTeamsController',
-		// 	controllerAs: 'vm',
-		// 	data: {
-		// 		pageTitle: 'Company Teams'
-		// 	}
-		// })
-		// .state ('orgadmin.proposals', {
-		// 	url: '/proposals',
-		// 	templateUrl: '/modules/orgs/client/views/org-proposals.html',
-		// 	controller: 'OrgProposalsController',
-		// 	controllerAs: 'vm',
-		// 	data: {
-		// 		pageTitle: 'Company Proposals'
-		// 	}
-		// })
-		// // -------------------------------------------------------------------------
-		// //
-		// // edit a org
-		// //
-		// // -------------------------------------------------------------------------
-		// .state('orgadmin.profile', {
-		// 	url: '/:orgId/edit',
-		// 	templateUrl: '/modules/orgs/client/views/edit-org.client.view.html',
-		// 	controller: 'OrgEditController',
-		// 	controllerAs: 'vm',
-		// 	resolve: {
-		// 		org: function ($stateParams, OrgsService) {
-		// 			return OrgsService.get({
-		// 				orgId: $stateParams.orgId
-		// 			}).$promise;
-		// 		},
-		// 		editing: function () { return true; },
-		// 		previousState: function ($state) {
-		// 			return {
-		// 				name: $state.current.name,
-		// 				params: $state.params,
-		// 				url: $state.href($state.current.name, $state.params)
-		// 			};
-		// 		}
-		// 	}
-		// })
 		;
 	}]);
 }());

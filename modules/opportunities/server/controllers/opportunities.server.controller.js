@@ -271,9 +271,8 @@ var oppBody = function (opp) {
 	// ret += '<h2>Proposal Evaluation Criteria</h2>';
 	// ret += opp.evaluation;
 
-	ret += '<p>This is a paid opportunity through the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
-	ret += '<br/>';
-	ret += '<p>To apply, visit the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">opportunity page</a> and submit a proposal before '+deadline+'</p>';
+	ret += '<p>This issue has been auto-generated to facilitate questions about <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">a paid opportunity</a> that has just been posted on the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
+	ret += '<p>To learn more or apply, <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">visit the opportunity page</a>. The opportunity closes on <b>'+deadline+'</b>.</p>';
 	return ret;
 
 };

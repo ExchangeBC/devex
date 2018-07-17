@@ -15,7 +15,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($window, $scope, $state, $sce, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', function ($window, $sce, program, Authentication, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
@@ -81,7 +81,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $sce, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
+	.controller('ProgramEditController', function ($scope, $state, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
 		var vm            = this;
 		vm.user = Authentication.user;
 		vm.fileSelected = false;
@@ -202,6 +202,23 @@
 					}
 				);
 			});
+		};
+		// -------------------------------------------------------------------------
+		//
+		// CC: BA-614-615 determine that the picture does not exceed the max allowed size
+		//
+		// -------------------------------------------------------------------------
+		vm.fileSelected = false;
+		vm.onSelectPicture = function (file) {
+			if (!file) return;
+			if (file.size > (1 * 1024 * 1024)) {
+				Notification.error ({
+					delay   : 6000,
+					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+				});
+			}
+			else vm.fileSelected = true;
 		};
 	})
 	;

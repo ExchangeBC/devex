@@ -17,7 +17,7 @@
 		.state('opportunities', {
 			abstract: true,
 			url: '/opportunities',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();
@@ -42,9 +42,6 @@
 			resolve: {
 				opportunities: function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.query ();
-				},
-				subscriptions: function (NotificationsService) {
-					return NotificationsService.subscriptions().$promise;
 				}
 			},
 			controller: 'OpportunitiesListController',
@@ -69,9 +66,6 @@
 					return OpportunitiesService.get ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				subscriptions: function (NotificationsService) {
-					return NotificationsService.subscriptions().$promise;
 				},
 				myproposal: function ($stateParams, ProposalsService, Authentication) {
 					if (!Authentication.user) return {};
@@ -108,9 +102,6 @@
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
 				},
-				subscriptions: function (NotificationsService) {
-					return NotificationsService.subscriptions().$promise;
-				},
 				org: function (Authentication, OrgsService) {
 					if (!Authentication.user) return {};
 					return OrgsService.myadmin ().$promise.then (function (orgs) {
@@ -139,44 +130,6 @@
 				parent: 'opportunities.list'
 			}
 		})
-		// // -------------------------------------------------------------------------
-		// //
-		// // view a opportunity, resolve the opportunity data
-		// //
-		// // -------------------------------------------------------------------------
-		// .state('opportunities.view', {
-		// 	url: '/any/:opportunityId',
-		// 	params: {
-		// 		programId: null,
-		// 		projectId: null
-		// 	},
-		// 	templateUrl: '/modules/opportunities/client/views/view-opportunity.client.view.html',
-		// 	controller: 'OpportunityViewController',
-		// 	controllerAs: 'vm',
-		// 	resolve: {
-		// 		opportunity: function ($stateParams, OpportunitiesService) {
-		// 			return OpportunitiesService.get ({
-		// 				opportunityId: $stateParams.opportunityId
-		// 			}).$promise;
-		// 		},
-		// 		subscriptions: function (NotificationsService) {
-		// 			return NotificationsService.subscriptions().$promise;
-		// 		},
-		// 		myproposal: function ($stateParams, ProposalsService, Authentication) {
-		// 			if (!Authentication.user) return {};
-		// 			return ProposalsService.myopp ({
-		// 				opportunityId: $stateParams.opportunityId
-		// 			}).$promise;
-		// 		}
-		// 	},
-		// 	data: {
-		// 		pageTitle: 'Opportunity: {{opportunity.name}}'
-		// 	},
-		// 	ncyBreadcrumb: {
-		// 		label: '{{vm.opportunity.name}}',
-		// 		parent: 'opportunities.list'
-		// 	}
-		// })
 		// -------------------------------------------------------------------------
 		//
 		// the base for editing
@@ -185,7 +138,7 @@
 		.state('opportunityadmin', {
 			abstract: true,
 			url: '/opportunityadmin',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();

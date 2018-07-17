@@ -16,7 +16,7 @@
 	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('CapabilityViewController', function ($sce, $state, capability, Authentication, Notification) {
+	.controller ('CapabilityViewController', function ($sce, capability, Authentication) {
 		var vm        = this;
 		vm.trust      = $sce.trustAsHtml;
 		vm.capability = capability;

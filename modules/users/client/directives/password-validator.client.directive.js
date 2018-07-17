@@ -15,7 +15,7 @@
 
     return directive;
 
-    function link(scope, element, attrs, ngModel) {
+    function link(scope, ngModel) {
       ngModel.$validators.requirements = function (password) {
         var status = true;
         if (password) {

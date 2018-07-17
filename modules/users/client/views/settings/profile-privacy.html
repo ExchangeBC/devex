@@ -2,21 +2,25 @@
 	<div class="edit-form-tab-content">
 		<div class="row">
 			<div class="col-xs-12">
-				<fieldset>
+
 					<div class="col-sm-5">
 						<h4><i class="fa fa-envelope-o"></i> Notifications</h4>
-						<form-input
-							ng-model="vm.user.email"
-							class="col-sm-12"
-							x-form="vm.userForm"
-							x-options='{
-								"title":"Email Address",
-								"id":"email",
-								"name":"email",
-								"placeholder":"Email Address",
-								"required":"Email Address is required"
-									}'>
-						</form-input>
+						<fieldset>
+					<form-input
+						ng-model="vm.user.email"
+						class="col-sm-12"
+						x-form="vm.userForm"
+						x-options='{
+							"title":"Email Address",
+							"id":"email",
+							"name":"email",
+							"placeholder":"Email Address",
+							"required":"Email Address is required"
+								}'>
+					</form-input>
+
+						<!-- CC: for whatever reason, if this is here then the input above works fine -->
+ 						<label class=""></label>
 						<br>
 						<div class="checkbox">
 							<label>
@@ -33,6 +37,7 @@
 							<br/>
 							<span class="checkbox-subtext">Check this box to allow your email address to be public.</span>
 						</div>
+						</fieldset>
 					</div>
 					<div class="hidden-xs col-sm-2"></div>
 					<div class="col-sm-5">
@@ -46,30 +51,7 @@
 						<h5>
 							&#42; Any addenda to RFQ ON‌-003166 will be listed on the corresponding BC Bid page listed as the &quot;BC Developers' Exchange for Agile Software Development&quot;.
 						</h5>
-
-					<!--
-						<div class="checkbox" ng-if="vm.features.swu">
-							<label>
-							<input type="checkbox" ng-model="vm.user.isPublicProfile" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-							Make my basic profile public
-							</label>
-							<span class="checkbox-subtext">Allow anyone to see your basic profile information. (Your <span class="strong">capabilities</span> will be kept private.)</span>
-						</div>
-						<br>
-					-->
-
-					<!--
-						<br>
-						<div class="checkbox" ng-if="vm.features.swu">
-							<label>
-							<input type="checkbox" ng-model="vm.user.isAutoAdd" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-							Allow companies I've trusted to put me forward on opportunities
-							</label>
-							<span class="checkbox-subtext">If you check this box, companies you have trusted can put you forward on a team opportunity without first getting your approval. Your consent will always be required for companies you haven't trusted yet.</span>
-						</div>
-					-->
 					</div>
-				</fieldset>
 			</div>
 		</div>
 	</div>

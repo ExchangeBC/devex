@@ -5,11 +5,10 @@
 		.module('users')
 		.controller('EditProfileController', EditProfileController);
 
-	EditProfileController.$inject = ['$scope', '$http', '$location', '$state', 'modalService', 'dataService', 'UsersService', 'Authentication', 'Notification'];
+	EditProfileController.$inject = ['$scope', '$state', 'modalService', 'dataService', 'UsersService', 'Authentication', 'Notification'];
 
-	function EditProfileController($scope, $http, $location, $state, modalService, dataService, UsersService, Authentication, Notification) {
+	function EditProfileController($scope, $state, modalService, dataService, UsersService, Authentication, Notification) {
 		var vm               = this;
-		// vm.features = window.features;
 		var isUser           = Authentication.user;
 		var wasGov           = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		var wasGovRequest    = isUser && !!~Authentication.user.roles.indexOf ('gov-request');
@@ -32,18 +31,6 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
-
-		//
-		// TEMPRARY HACK HACK HACK
-		//
-		// until such time as make a dynamic list of notifications the user has subscriibed to
-		// we will sontinue to use the flag on the user schema 'notifiyOpportunities'.  however,
-		// instead of using it as the gospel truth, we set it to true on entry here only if the
-		// user has a proper subscription (one of the subs is 'not-add-opportunity').
-		// we will then set the flag using the user interface as usual, and that value is returned as usual
-		// to the back end, which then triggers the setting or removal of that subscription
-		// in future we will set the flag and use a side process to set of unset the subscription
-		//
 
 		var saveChangesModalOpt = {
 				closeButtonText: 'Return User Profile Page',
@@ -109,21 +96,7 @@
 			if (vm.isgov) {
 				vm.user.isDeveloper = false;
 			}
-			var govRequest = vm.user.addRequest;
 			var successMessage = '<h4>Changes Saved</h4>';
-			// Seeing if I can comment these details out without breaking anything. These details are just extra noise that's not needed.
-		//	if (govRequest) {
-		//		successMessage += '<p>You have requested government user access, the request is now posted for review. You will receive the goverment access and be able to access gov user functionality as soon as the admin verifies you as government user.</p>';
-		//	}
-		//	if (vm.user.notifyOpportunities) {
-		//		successMessage += '<p>We will send you notifications of new Code With Us Opportunities.</p>';
-		//	}
-		//	if (vm.user.notifyEvents) {
-		//		successMessage += '<p>We will notify you of upcoming events.</p>';
-		//	}
-		//	if (vm.user.notifyBlogs) {
-		//		successMessage += '<p>We will notify you of new blog posts.</p>';
-		//	}
 			var user = new UsersService(vm.user);
 			user.$update(function (response) {
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');

@@ -6,7 +6,7 @@
 	// Controller for the master list of propsalQuestions
 	//
 	// =========================================================================
-	.controller ('PropsalQuestionsListController', function (propsalQuestions, Authentication) {
+	.controller ('PropsalQuestionsListController', function (propsalQuestions) {
 		var vm         = this;
 		vm.propsalQuestions = propsalQuestions;
 	})
@@ -15,12 +15,12 @@
 	// Controller the view of the propsalQuestion page
 	//
 	// =========================================================================
-	.controller ('PropsalQuestionViewController', function ($sce, $state, propsalQuestion, Authentication, Notification) {
+	.controller ('PropsalQuestionViewController', function ($sce, propsalQuestion, Authentication) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
-		vm.propsalQuestion          = propsalQuestion;
+		vm.propsalQuestion     = propsalQuestion;
 		vm.auth                = Authentication;
-		vm.canEdit              = Authentication.isAdmin;
+		vm.canEdit             = Authentication.isAdmin;
 	})
 	// =========================================================================
 	//
@@ -28,9 +28,9 @@
 	//
 	// =========================================================================
 	.controller ('PropsalQuestionEditController', function ($scope, $state, propsalQuestion, Authentication, Notification) {
-		var qqq        = this;
+		var qqq        		= this;
 		qqq.propsalQuestion = propsalQuestion;
-		qqq.auth       = Authentication;
+		qqq.auth       		= Authentication;
 		// -------------------------------------------------------------------------
 		//
 		// save the propsalQuestion, could be added or edited (post or put)

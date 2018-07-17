@@ -5,6 +5,7 @@
 	.service('modalService', ['$uibModal', function ($uibModal) {
 		// inspired by this post :https://weblogs.asp.net/dwahlin/building-an-angularjs-modal-service
 		var modalDefaults = {
+			size: 'sm',
 			backdrop: true,
 			keyboard: true,
 			modalFade: true,
@@ -57,7 +58,7 @@
 				modalService.showModal ({}, {
 			        closeButtonText: opts.cancel || 'Cancel',
 			        actionButtonText: opts.ok || 'OK',
-			        headerText: opts.header || 'Continue ?',
+			        headerText: opts.header || 'Are you sure?',
 			        bodyText: opts.question || 'Perform this action?'
 				})
 				.then (

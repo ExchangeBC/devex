@@ -16,7 +16,7 @@
 		.state ('capabilities', {
 			abstract : true,
 			url      : '/capabilities',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//
@@ -30,7 +30,7 @@
 			controller   : 'CapabilitiesListController',
 			controllerAs : 'vm',
 			resolve: {
-				capabilities: function ($stateParams, CapabilitiesService) {
+				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ();
 				}
 			},
@@ -67,7 +67,7 @@
 		.state ('capabilityadmin', {
 			abstract : true,
 			url      : '/capabilityadmin',
-			template : '<ui-view/>'
+			template : '<ui-view autoscroll="true"></ui-view>'
 		})
 		// -------------------------------------------------------------------------
 		//

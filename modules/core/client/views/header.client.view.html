@@ -1,7 +1,7 @@
-<nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container" ng-controller="HeaderController as vm">
+<nav  ng-cloak id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
+	<div  ng-cloak class="container" ng-controller="HeaderController as vm">
 		<!-- Brand and toggle get grouped for better mobile display -->
-		<div class="navbar-header">
+		<div  ng-cloak class="navbar-header">
 			<button type="button" class="navbar-toggle" ng-click="vm.isCollapsed = !vm.isCollapsed">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
@@ -10,14 +10,14 @@
 			</button>
 			<a href="/" id="home"><img class="navbar-brand" src="/modules/core/client/img/logo/new-logo-white.svg" alt="BCDevExchange" ui-sref="home"></a>
 		</div>
-		
-		<div class="collapse navbar-collapse" uib-collapse="!vm.isCollapsed" role="navigation">
+
+		<div  ng-cloak class="collapse navbar-collapse" uib-collapse="!vm.isCollapsed" role="navigation">
 			<!-- Main menu items with submenus, we inserted item.icon with a default of a puzzle piece -->
-			<ul class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
-				<li ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
+			<ul  ng-cloak class="nav navbar-nav" ng-if="vm.menu.shouldRender(vm.authentication.user);">
+				<li  ng-cloak ng-repeat="item in vm.menu.items | orderBy: 'position'" ng-if="item.shouldRender(vm.authentication.user);" ng-switch="item.type" ng-class="{ dropdown: item.type === 'dropdown' }" ui-sref-active="active" class="{{item.class}}" uib-dropdown="item.type === 'dropdown'">
 					<a ng-switch-when="dropdown" class="dropdown-toggle" uib-dropdown-toggle role="button"><i class="nav-icon" ng-class="item.icon||'fa fa-puzzle-piece'" aria-hidden="true"></i> {{::item.title}}&nbsp;<span class="caret"></span></a>
-					<ul ng-switch-when="dropdown" class="dropdown-menu">
-						<li ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
+					<ul ng-cloak  ng-switch-when="dropdown" class="dropdown-menu">
+						<li ng-cloak  ng-repeat="subitem in item.items | orderBy: 'position'" ng-if="subitem.shouldRender(vm.authentication.user);">
 							<a id="{{subitem.state}}" ui-sref="{{subitem.state}}({{subitem.params}})" ng-bind="subitem.title"></a>
 						</li>
 					</ul>
@@ -26,21 +26,21 @@
 			</ul>
 
 			<!-- Sign in, pushed right -->
-			<ul class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
-				<li ui-sref-active="active">
+			<ul  ng-cloak class="nav navbar-nav navbar-right" ng-hide="vm.authentication.user">
+				<li  ng-cloak ui-sref-active="active">
 					<a id="authentication.signin" ui-sref="authentication.signin"><i class="fa fa-lg fa-github" aria-hidden="true"></i>&nbsp; Sign In</a>
 				</li>
 			</ul>
 
 			<!-- Notifications/messages menu, pushed right -->
-			<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
-				<li class="dropdown" uib-dropdown>
+			<ul  ng-cloak class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">
+				<li  ng-cloak class="dropdown" uib-dropdown>
 					<!-- <a class="dropdown-toggle user-header-dropdown-toggle" id="notifications" uib-dropdown-toggle role="button">
 						<i class="fa fa-lg fa-bell" aria-hidden="true"></i>
 						<div class="badge badge-unread">&nbsp;</div>
 					</a> -->
 
-					<ul class="dropdown-menu messages-menu" role="menu">		
+					<ul  ng-cloak class="dropdown-menu messages-menu" role="menu">
 						<!-- This list should contain the titles of any messages that are unresolved (i.e. still in the user's 'New'/'Open' list) -->
 						<!-- Each item should link to the detail view for that message (i.e. not the Messages list page) -->
 						<li ui-sref-active="active">
@@ -58,16 +58,16 @@
 						</li>
 					</ul>
 				</li>
-			
+
 			<!-- User menu, also pushed right -->
 			<!--<ul class="nav navbar-nav navbar-right" ng-show="vm.authentication.user">-->
-				<li class="dropdown" uib-dropdown>
+				<li  ng-cloak class="dropdown" uib-dropdown>
 					<a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">
 						<img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="header-profile-image" />
 						<!-- Hide the name for now -->
 						<!--<span class="hidden-sm hidden-md hidden-lg hidden-xl" ng-bind="vm.authentication.user.displayName"></span>-->
 					</a>
-					<ul class="dropdown-menu" role="menu">
+					<ul  ng-cloak class="dropdown-menu" role="menu">
 						<!--<li class="menu-heading"><span ng-bind="vm.authentication.user.displayName"></span></li>
 						<li class="divider"></li>-->
 						<li ui-sref-active="active" ng-repeat="item in vm.accountMenu.items">

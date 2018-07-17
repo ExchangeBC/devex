@@ -27,9 +27,8 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewSWUController', function ($scope, capabilities, $sce, $state, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewSWUController', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
 		var ppp           = this;
-		// ppp.features 	  = window.features;
 		ppp.proposal      = proposal;
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
@@ -106,7 +105,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
 			// ppp.features = window.features;
@@ -395,48 +394,35 @@
 			// also tally up the booleans in isMetAllCapabilities. if they are all true
 			// then the user can submit their proposal
 			//
-			// console.log (ppp.prp);
 			ppp.isMetAllCapabilities = true;
 			var haveanyatall = false;
-			// console.log ('ppp.oinp.isInception', ppp.oinp.isInception);
 			if (ppp.oinp.isInception) ppp.inp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
 				var code = c;
-				// console.log ('code', code);
 				ppp.p_inp.iPropCapabilities[code] = ppp.members.inception.map (function (member) {
 					if (!ppp.inTeam[member.email]) return false;
 					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_inp.iPropCapabilities[code];
-				// console.log ('ppp.p_inp.iPropCapabilities[code]', ppp.p_inp.iPropCapabilities[code]);
 			});
-			// console.log ('ppp.oprp.isPrototype', ppp.oprp.isPrototype);
 			if (ppp.oprp.isPrototype) ppp.prp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
 				var code = c;
-				// console.log ('code', code);
 				ppp.p_prp.iPropCapabilities[code] = ppp.members.proto.map (function (member) {
-					// console.log ('member', member);
 					if (!ppp.prTeam[member.email]) return false;
 					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_prp.iPropCapabilities[code];
-				// console.log ('ppp.p_prp.iPropCapabilities[code]', ppp.p_prp.iPropCapabilities[code]);
 			});
-			// console.log ('ppp.oimp.isImplementation', ppp.oimp.isImplementation);
 			if (ppp.oimp.isImplementation) ppp.imp.oppCapabilityCodes.forEach (function (c) {
 				haveanyatall = true;
 				var code = c;
-				// console.log ('code', code);
 				ppp.p_imp.iPropCapabilities[code] = ppp.members.implementation.map (function (member) {
 					if (!ppp.imTeam[member.email]) return false;
 					else return member.iCapabilities[code] || false;
 				}).reduce (function (accum, el) {return accum || el}, false);
 				ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && ppp.p_imp.iPropCapabilities[code];
-				// console.log ('ppp.p_imp.iPropCapabilities[code]', ppp.p_imp.iPropCapabilities[code]);
 			});
-			// console.log ('haveanyatall', haveanyatall);
-			// console.log ('isMetAllCapabilities', ppp.isMetAllCapabilities);
 			ppp.isMetAllCapabilities = ppp.isMetAllCapabilities && haveanyatall;
 			//
 			// now skills
@@ -615,44 +601,41 @@
 			setTeams ();
 			ppp.proposal.status = 'Submitted';
 			saveproposal ('<h4>Your proposal has been submitted</h4>');
-			// ProposalsService.submit (ppp.proposal).$promise
-			// .then (
-			// 	function (response) {
-			// 		console.log ('response', response);
-			// 		ppp.proposal = response;
-			// 		Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
-			// 		_init ();
-			// 		setSkills ();
-			// 	},
-			// 	function (error) {
-			// 		 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Error Submitting Proposal' });
-			// 	}
-			// );
 		}
 		// -------------------------------------------------------------------------
 		//
 		// upload documents
+		// CC: BA-614-615 Add check for max file size before uploading
 		//
 		// -------------------------------------------------------------------------
 		ppp.upload = function (file) {
-			Upload.upload({
-				url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
-				data: {
-					file: file
-				}
-			})
-			.then(
-				function (response) {
-					ppp.proposal = new ProposalsService (response.data);
-					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
-				},
-				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
-				},
-				function (evt) {
-					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
-			});
-
+			if (!file) return;
+			if (file.size > (3 * 1024 * 1024)) {
+				Notification.error ({
+					delay   : 6000,
+					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+				});
+			}
+			else {
+				Upload.upload ({
+					url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
+					data: {
+						file: file
+					}
+				})
+				.then(
+					function (response) {
+						ppp.proposal = new ProposalsService (response.data);
+						Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
+					},
+					function (response) {
+						Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
+					},
+					function (evt) {
+						ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+				});
+			}
 		};
 		ppp.deletefile = function (fileid) {
 			ProposalsService.removeDoc ({
@@ -661,7 +644,6 @@
 			}).$promise
 			.then (function (doc) {
 				ppp.proposal = doc;
-				// $scope.$apply();
 			});
 		};
 		ppp.termsDownloaded = false;

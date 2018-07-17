@@ -5,9 +5,9 @@
     .module('users.admin')
     .controller('UserListController', UserListController);
 
-  UserListController.$inject = ['$scope', '$state', '$filter', 'AdminService'];
+  UserListController.$inject = ['$state', '$filter', 'AdminService'];
 
-  function UserListController($scope, $state, $filter, AdminService) {
+  function UserListController($state, $filter, AdminService) {
     var vm = this;
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;

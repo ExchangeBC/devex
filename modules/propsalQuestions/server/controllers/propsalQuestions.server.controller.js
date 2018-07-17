@@ -1,22 +1,13 @@
 'use strict';
-/*
-
-Notes about propsalQuestions
-
-
-*/
 
 /**
  * Module dependencies.
  */
-var path          = require ('path'),
-	mongoose      = require ('mongoose'),
-	PropsalQuestion    = mongoose.model ('PropsalQuestion'),
-	errorHandler  = require (path.resolve ('./modules/core/server/controllers/errors.server.controller')),
-	helpers       = require (path.resolve ('./modules/core/server/controllers/core.server.helpers')),
-	_             = require ('lodash'),
-	Notifications = require (path.resolve ('./modules/notifications/server/controllers/notifications.server.controller'))
-	;
+var path          		= require ('path'),
+	mongoose      		= require ('mongoose'),
+	PropsalQuestion    	= mongoose.model ('PropsalQuestion'),
+	errorHandler  		= require (path.resolve ('./modules/core/server/controllers/errors.server.controller')),
+	_             		= require ('lodash');
 
 // -------------------------------------------------------------------------
 //

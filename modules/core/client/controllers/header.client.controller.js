@@ -45,6 +45,7 @@
 
     $scope.$on('IdleStart', function() {
       vm.warning = $uibModal.open({
+        size: 'sm',
         animation: true,
         templateUrl: '/modules/core/client/views/modal.timeout.warning.html',
         windowClass: 'modal-danger',
@@ -65,6 +66,7 @@
       client.send();
 
       $scope.timedout = $uibModal.open({
+        size: 'sm',
         templateUrl: '/modules/core/client/views/modal.timeout.html',
         windowClass: 'modal-danger',
         backdrop: 'static',

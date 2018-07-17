@@ -6,14 +6,13 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function ($scope, capabilities, $sce, $state, $stateParams, proposal, Authentication, ProposalsService, Notification, ask, dataService) {
+	.controller ('ProposalViewController', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
 		var ppp           = this;
-		// ppp.features 	  = window.features;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
 		ppp.opportunity   = ppp.proposal.opportunity;
 		ppp.detail        = $sce.trustAsHtml(ppp.proposal.detail);
-		ppp.capabilities                          = capabilities;
+		ppp.capabilities  = capabilities;
 		//
 		// what type of opportunity is this? this will determine what tabs get shown
 		//
@@ -125,7 +124,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, $stateParams, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, NotificationsService, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp              = this;
 		// ppp.features         = window.features;
@@ -274,15 +273,6 @@
 						member.skillsByCode[ppp.i2cs[cid]] = true;
 					});
 				}
-				// //
-				// // make an array of all capabilities of the member
-				// //
-				// var memberCapabilityIds = member.capabilities.map(function(a){return a._id.toString();});
-				// //
-				// // if the member has any of the required capabilities then add them to
-				// // winners array
-				// //
-				// if (anyUnion (memberCapabilityIds, opportunityCapabilityIds)) ppp.winners.push (member);
 			});
 		}
 		// -------------------------------------------------------------------------
@@ -522,27 +512,37 @@
 		// -------------------------------------------------------------------------
 		//
 		// upload documents
+		// CC: BA-614-615 Add check for max file size before uploading
 		//
 		// -------------------------------------------------------------------------
 		ppp.upload = function (file) {
-			Upload.upload({
-				url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
-				data: {
-					file: file
-				}
-			})
-			.then(
-				function (response) {
-					ppp.proposal = new ProposalsService (response.data);
-					Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
-				},
-				function (response) {
-					Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
-				},
-				function (evt) {
-					ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
-			});
-
+			if (!file) return;
+			if (file.size > (3 * 1024 * 1024)) {
+				Notification.error ({
+					delay   : 6000,
+					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
+				});
+			}
+			else {
+				Upload.upload({
+					url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
+					data: {
+						file: file
+					}
+				})
+				.then(
+					function (response) {
+						ppp.proposal = new ProposalsService (response.data);
+						Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
+					},
+					function (response) {
+						Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
+					},
+					function (evt) {
+						ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+				});
+			}
 		};
 		ppp.deletefile = function (fileid) {
 			ProposalsService.removeDoc ({
@@ -553,23 +553,6 @@
 				ppp.proposal = doc;
 				$scope.$apply();
 			});
-		};
-		ppp.subscribe = function (state) {
-			var notificationCode = 'not-update-'+ppp.opportunity.code;
-			if (!editing && !ppp.proposal._id && state) {
-				NotificationsService.subscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = true;
-				}).catch (function () {
-				});
-			}
-			else if (!state) {
-				NotificationsService.unsubscribeNotification ({notificationId: notificationCode}).$promise
-				.then (function () {
-					ppp.notifyMe = false;
-				}).catch (function () {
-				});
-			}
 		};
 		ppp.type = function (type) {
 			if (type.indexOf ('pdf') > -1) return 'pdf';

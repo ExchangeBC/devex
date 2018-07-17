@@ -17,7 +17,7 @@
 		.state ('proposals', {
 			abstract: true,
 			url: '/proposals',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
@@ -100,7 +100,7 @@
 		.state ('proposaladmin', {
 			abstract: true,
 			url: '/proposaladmin',
-			template: '<ui-view/>',
+			template: '<ui-view autoscroll="true"></ui-view>',
 			data: {
 				notroles: ['gov', 'guest']
 			},
@@ -143,10 +143,6 @@
 						if (orgs && orgs.length > 0) return orgs[0];
 						else return null;
 					});
-					// var orgs = Authentication.user.orgsAdmin || [null];
-					// var org = orgs[0];
-					// if (org) return OrgsService.get ({orgId:org}).$promise;
-					// else return null;
 				}
 			}
 		})
@@ -238,14 +234,6 @@
 						}
 						else return null;
 					});
-					// // console.log ('Authentication.user.orgsAdmin', Authentication.user.orgsAdmin);
-					// var orgs = Authentication.user.orgsAdmin && Authentication.user.orgsAdmin.length > 0 ? Authentication.user.orgsAdmin : [null];
-					// var org = orgs[0];
-					// if (org) return ProposalsService.getPotentialResources ({
-					// 	opportunityId : $stateParams.opportunityId,
-					// 	orgId         : org
-					// }).$promise;
-					// else return null;
 				}
 			}
 		})
@@ -279,10 +267,6 @@
 						if (orgs && orgs.length > 0) return orgs[0];
 						else return null;
 					});
-					// var orgs = Authentication.user.orgsAdmin || [null];
-					// var org = orgs[0];
-					// if (org) return OrgsService.get ({orgId:org}).$promise;
-					// else return null;
 				},
 				resources: function (Authentication, ProposalsService, $stateParams, OrgsService) {
 					if (!Authentication.user) return null;
@@ -296,13 +280,6 @@
 						}
 						else return null;
 					});
-					// var orgs = Authentication.user.orgsAdmin || [null];
-					// var org = orgs[0];
-					// if (org) return ProposalsService.getPotentialResources ({
-					// 	opportunityId : $stateParams.opportunityId,
-					// 	orgId         : org
-					// }).$promise;
-					// else return null;
 				},
 				editing: function () { return false; }
 			}
