@@ -217,18 +217,21 @@
 		<hr>
 
 		<div class="row">
-			<div class="col-xs-12 col-sm-8">
+			<div class="col-xs-12">
 				<h3 class="opp-detail">How to Apply</h3>
 				<p>Submit your Proposal before <span class="strong">{{vm.deadline}}</span>.</p>
 				<p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
 			</div>
-			<div class="col-xs-12 col-sm-4">
+			<!-- Hiding this until we fix the linking issue... -->
+            <!--
+            <div class="col-xs-12 col-sm-4">
 				<div class="well well-warning">
 					<h4>Got Questions?</h4>
 					<a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment.<br><br>
 					<i class="fa fa-comments fa-2x"></i>
 				</div>
 			</div>
+            -->
 		</div>
 
 		<div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-warning">
