@@ -392,9 +392,15 @@ exports.read = function (req, res) {
 
 var updateSave = function (opportunity) {
 	return new Promise (function (resolve, reject) {
-		opportunity.save (function (err) {
-			if (err) reject (err);
-			else resolve (opportunity);
+		// Fix due to mongoose flakiness with array types in schemas
+		opportunity.markModified('skills');
+		opportunity.save (function (err, updatedOpportunity) {
+			if (err) {
+				reject (err);
+			}
+			else {
+				resolve (updatedOpportunity);
+			}
 		});
 	});
 };
@@ -418,6 +424,9 @@ exports.update = function (req, res) {
 	// audit fields, but they get updated in the following step
 	//
 	var opportunity = _.merge (req.opportunity, req.body);
+
+	// manually transfer over skills, as the merge won't handle removals properly from the skills array
+	opportunity.skills = req.body.skills;
 	//
 	// set the audit fields so we know who did what when
 	//
