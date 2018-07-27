@@ -1,0 +1,23 @@
+<div class="edit-form-tab-content">
+	<fieldset>
+
+		<form-display
+			class="col-sm-12"
+			x-options='{
+				"title":"Addenda",
+				"name":"addenda",
+				"help":"List andy addenda to the opportunity in the textbox below"
+			}'>
+			<textarea
+				name="addenda"
+				id="addenda"
+				class="form-control input-sm"
+				ui-tinymce="vm.tinymceOptions"
+				placeholder="Addendum to the opportunity"
+				ng-model="vm.opportunity.addenda">
+			</textarea>
+		</form-display>
+
+	</fieldset>
+</div>
+
