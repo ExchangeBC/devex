@@ -181,7 +181,7 @@ var setNotificationData = function (opportunity) {
 var setMessageData = function (opportunity) {
 	opportunity.path                 = '/opportunities/'+(opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu')+'/'+opportunity.code;
 	opportunity.earn_format_mnoney   = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
-	opportunity.earn                 = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
+	opportunity.earn                 = opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
 	opportunity.dateDeadline         = helpers.formatDate (new Date(opportunity.deadline));
 	opportunity.timeDeadline         = helpers.formatTime (new Date(opportunity.deadline));
 	opportunity.dateAssignment       = helpers.formatDate (new Date(opportunity.assignment));
@@ -452,8 +452,11 @@ exports.update = function (req, res) {
 			.then (function (result) {
 				opportunity.issueUrl    = result.html_url;
 				opportunity.issueNumber = result.number;
-				opportunity.save ();
-				res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				updateSave (opportunity)
+				.then(function(updatedOpportunity) {
+					opportunity = updatedOpportunity;
+					res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				})
 			})
 			.catch (function () {
 				res.status(422).send({
