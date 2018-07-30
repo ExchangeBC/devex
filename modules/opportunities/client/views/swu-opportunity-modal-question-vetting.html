@@ -30,8 +30,7 @@
 								Reject <input type="checkbox" ng-model="response.rejected"><br/>
 								Word count: {{getWordCount(response.response)}}
 							</div>
-							<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}">
-								{{response.response}}
+							<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}" ng-bind-html="response.sanitizedResponse">
 							</div>
 						</div>
 					</li>
@@ -45,4 +44,3 @@
 	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-thumbs-o-up"></i> Commit</button>
 	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
 </div>
-	

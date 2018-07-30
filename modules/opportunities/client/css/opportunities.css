@@ -46,7 +46,7 @@ ul[dnd-list] li.selected {
     color: #3c763d;
 }
 
-textarea.long-question {
+div.long-question {
 	font-family: Arial, sans-serif;
 	font-size: 12pt;
 	width: 100%;
@@ -76,7 +76,7 @@ span.edit-link {
 	margin-right: 10px;
 }
 
-.list-group div.list-group-item, 
+.list-group div.list-group-item,
 .list-group a.list-group-item {
 	overflow: hidden;
 }
