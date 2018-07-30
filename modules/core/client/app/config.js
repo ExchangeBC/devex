@@ -18,7 +18,8 @@
     'ui-notification',
     'ncy-angular-breadcrumb',
     'dndLists',
-    'ngIdle'
+	'ngIdle',
+	'ngSanitize'
     ],
     registerModule: registerModule
   };

@@ -332,12 +332,18 @@
 					$scope.data.totalQuestions = vm.opportunity.questions.length;
 					$scope.data.currentPage    = 1;
 
+					vm.responses.forEach(function(question, questionIndex) {
+						question.forEach(function(response, responseIndex) {
+							$scope.data.responses[questionIndex][responseIndex].sanitizedResponse = $sce.trustAsHtml(response.response);
+						})
+					})
+
 					$scope.data.model = {
 						selected: null,
 						questions: {}
 					};
 
-					vm.responses.forEach(function(respArray) {
+					$scope.data.responses.forEach(function(respArray) {
 
 						// set initial order by current ranking
 						respArray.sort(function(a, b) {
@@ -369,14 +375,9 @@
 							}
 						});
 					};
-					$scope.truncate = function(string) {
-						if (string.length > 80)
-						   return string.substring(0,80)+'...';
-						else
-						   return string;
-					 };
 					$scope.inserted = function(item, index) {
 						// ensure item just dropped remains selected
+						item.sanitizedResponse = $sce.trustAsHtml(item.response);
 						$scope.data.model.selected = item;
 					};
 				}
@@ -387,17 +388,19 @@
 				// commit selected ordering to proposals
 				// this nastiness is necessary as the drag and drop widget deep clones objects, so we have to match up original
 				// question/response objects by id and update the originals
-				vm.proposals.forEach(function(proposal) {
-					proposal.questions.forEach(function(question) {
-						var match = resp.questions[question.question].find(function(response) {
-							return question._id === response._id;
-						});
+				if (resp.questions) {
+					vm.proposals.forEach(function(proposal) {
+						proposal.questions.forEach(function(question) {
+							var match = resp.questions[question.question].find(function(response) {
+								return question._id === response._id;
+							});
 
-						if (match) {
-							question.rank = resp.questions[question.question].indexOf(match) + 1;
-						}
+							if (match) {
+								question.rank = resp.questions[question.question].indexOf(match) + 1;
+							}
+						})
 					})
-				})
+				}
 
 				if (resp.action === 'save') {
 					vm.saveProposals ();
@@ -576,6 +579,16 @@
 					$scope.data.responses      = vm.responses;
 					$scope.data.totalQuestions = vm.opportunity.questions.length;
 					$scope.data.currentPage    = 1;
+
+					vm.responses.forEach(function(question, questionIndex) {
+						question.forEach(function(response, responseIndex) {
+							$scope.data.responses[questionIndex][responseIndex].sanitizedResponse = $sce.trustAsHtml(response.response);
+						})
+					})
+
+					// vm.responses.forEach(function(response, index) {
+					// 	$scope.data.responses[index][0].sanitizedResponse = $sce.trustAsHtml(response[0].response);
+					// });
 
 					$scope.close = function () {
 						$uibModalInstance.close({});

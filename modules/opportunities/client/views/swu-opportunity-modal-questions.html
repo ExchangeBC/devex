@@ -24,32 +24,38 @@
 							<table width="100%">
 								<tr>
 									<td width="15%">
-										<ul dnd-list="question">
-											<li ng-repeat="response in question" style="text-align:center;">
-												Rank {{$index + 1}}
-											</li>
-										</ul>
+                    <div>
+                        <ul dnd-list="question">
+                            <li ng-repeat="response in question" style="text-align:center; max-height:42px;">
+                              Rank {{$index + 1}}
+                            </li>
+                          </ul>
+                    </div>
 									</td>
 									<td width="100%">
-										<ul dnd-list="question"
-											dnd-inserted="inserted(item, index)">
-											<li ng-repeat="response in question"
-												dnd-draggable="response"
-												dnd-moved="question.splice($index, 1)"
-												dnd-effect-allowed="move"
-												dnd-selected="data.model.selected = response"
-												ng-class="{'selected': data.model.selected === response}">
-												{{truncate(response.response)}}
-											</li>
-										</ul>
+                    <div>
+                      <ul dnd-list="question"
+                        dnd-inserted="inserted(item, index)">
+                        <li ng-repeat="response in question"
+                          dnd-draggable="response"
+                          dnd-moved="question.splice($index, 1)"
+                          dnd-effect-allowed="move"
+                          dnd-selected="data.model.selected = response"
+                          ng-class="{'selected': data.model.selected === response}"
+                          ng-bind-html="response.sanitizedResponse"
+                          style="max-height:42px; min-height: 42px; overflow-y: hidden">
+                        </li>
+                      </ul>
+                    </div>
 									</td>
 								</tr>
 							</table>
 						</div>
 					</td>
-					<td width="35%">
-						<div>
-							<textarea ng-model="data.model.selected.response" type="text" name="txtarea" class="long-question" disabled></textarea>
+					<td width="35%" style="margin-left: 5px;">
+						<div class="long-question">
+              <!-- <textarea ng-model="data.model.selected.sanitizedResponse" type="text" name="txtarea" class="long-question" disabled></textarea> -->
+              <div ng-bind-html="data.model.selected.sanitizedResponse"></div>
 						</div>
 					</td>
 				</tr>
