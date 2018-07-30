@@ -33,7 +33,7 @@
 				<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-lg fa-times"></i></a>
 			</div>
 
-			<uib-tabset active class="edit-form-tabs">
+			<uib-tabset active="ppp.activeTab" class="edit-form-tabs">
 
 				<uib-tab index="1">
 					<uib-tab-heading>
@@ -631,7 +631,8 @@
 						<textarea
 							name="q1"
 							id="q1"
-							class="form-control"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
 							ng-model="ppp.proposal.questions[0].response">
 						</textarea>
 					</div>
@@ -648,8 +649,9 @@
 						</div>
 						<textarea
 							name="q2"
-							id="q1"
-							class="form-control"
+							id="q2"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
 							ng-model="ppp.proposal.questions[1].response">
 						</textarea>
 					</div>
@@ -666,8 +668,9 @@
 						</div>
 						<textarea
 							name="q3"
-							id="q1"
-							class="form-control"
+							id="q3"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
 							ng-model="ppp.proposal.questions[2].response">
 						</textarea>
 					</div>
@@ -683,8 +686,9 @@
 						</div>
 						<textarea
 							name="q4"
-							id="q1"
-							class="form-control"
+							id="q4"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
 							ng-model="ppp.proposal.questions[3].response">
 						</textarea>
 					</div>
@@ -702,8 +706,9 @@
 						</div>
 						<textarea
 							name="q5"
-							id="q1"
-							class="form-control"
+							id="q5"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
 							ng-model="ppp.proposal.questions[4].response">
 						</textarea>
 					</div>
