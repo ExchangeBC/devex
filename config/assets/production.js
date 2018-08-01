@@ -32,7 +32,7 @@ module.exports = {
         'public/lib/ng-img-crop/compile/minified/ng-img-crop.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
-		'public/lib/ng-idle/angular-idle.min.js'
+        'public/lib/ng-idle/angular-idle.min.js',
         // endbower
       ]
     },
