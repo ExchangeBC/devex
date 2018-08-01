@@ -60,8 +60,8 @@ module.exports.connect = () => {
 			}, 3000);
 		}
 
-		var mongoOptions = _.assign(config.db.options, { useNewUrlParser: true });
-		mongoose.connect(config.db.uri, mongoOptions)
+		_.assign(config.db.options, { useNewUrlParser: true });
+		mongoose.connect(config.db.uri, config.db.options)
 		.then(handleSuccessConnect)
 		.catch(handleFailedConnect);
 	});

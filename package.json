@@ -60,7 +60,7 @@
     "lusca": "~1.6.0",
     "method-override": "~2.3.5",
     "mocha": "~5.2.0",
-    "mongoose": "^5.1.8",
+    "mongoose": "^5.2.6",
     "morgan": "~1.9.0",
     "multer": "~1.3.0",
     "ng-file-upload": "^12.2.13",
