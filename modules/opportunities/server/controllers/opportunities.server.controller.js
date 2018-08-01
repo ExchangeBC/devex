@@ -392,8 +392,6 @@ exports.read = function (req, res) {
 
 var updateSave = function (opportunity) {
 	return new Promise (function (resolve, reject) {
-		// Fix due to mongoose flakiness with array types in schemas
-		opportunity.markModified('skills');
 		opportunity.save (function (err, updatedOpportunity) {
 			if (err) {
 				reject (err);
@@ -423,10 +421,17 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var opportunity = _.merge (req.opportunity, req.body);
+	// We use lodash mergeWith and a customizer to handle arrays.  By default lodash merge will concatenate arrays, which means that
+	// items can never be removed.  The customizer defaults to also use the incoming array.
+	// see https://lodash.com/docs/4.17.10#mergeWith
+	var opportunity = _.mergeWith(req.opportunity, req.body, (objValue, srcValue) => {
+		if (_.isArray(objValue)) {
+			return srcValue;
+		}
+	});
 
 	// manually transfer over skills, as the merge won't handle removals properly from the skills array
-	opportunity.skills = req.body.skills;
+	// opportunity.skills = req.body.skills;
 	//
 	// set the audit fields so we know who did what when
 	//
