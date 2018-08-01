@@ -5,7 +5,8 @@
  */
 var config 		= require('../config'),
   	chalk 		= require('chalk'),
-  	path 		= require('path'),
+	path 		= require('path'),
+	_			= require('lodash'),
   	mongoose 	= require('mongoose');
 
 // Load the mongoose models
@@ -59,7 +60,8 @@ module.exports.connect = () => {
 			}, 3000);
 		}
 
-		mongoose.connect(config.db.uri, config.db.options)
+		var mongoOptions = _.assign(config.db.options, { useNewUrlParser: true });
+		mongoose.connect(config.db.uri, mongoOptions)
 		.then(handleSuccessConnect)
 		.catch(handleFailedConnect);
 	});
