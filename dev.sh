@@ -7,7 +7,11 @@ fi
 echo "Current working directory is " $pwdPath
 docker stop db_devex
 docker start db_devex
-docker stop mean_devex
+# check for a running container before stopping it
+MEAN_PID=$(docker ps -a -q -f "name=mean_devex")
+if [[ -n $MEAN_PID ]]; then
+    docker stop mean_devex
+fi
 docker run \
 -p 3030:3000 \
 -p 5858:5858 \
