@@ -309,7 +309,7 @@ exports.me = function (req, res) {
 };
 
 exports.count = function (req, res) {
-	User.count ({}, function (err, cnt) {
+	User.countDocuments ({}, function (err, cnt) {
 		if (err) res.status(400).send(err);
 		else res.json ({count:cnt});
 	});
