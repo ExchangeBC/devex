@@ -253,7 +253,7 @@ var resolveOrg = function (org) {
 var saveOrg = function (req, res) {
 	return function (org) {
 		var additionsList = org.additionsList;
-		if (additionsList && additionsList.found.length === 0 && additionsList.notfound.length === 0) additionsList = null;
+		if (additionsList && additionsList.found.length === 0 && additionsList.notFound.length === 0) additionsList = null;
 		helpers.applyAudit (org, req.user);
 		checkCapabilities (org)
 		.then (function (org) {
@@ -531,12 +531,12 @@ exports.update = function (req, res) {
 
 	var additionsList = {
 		found : [],
-		notfound : []
+		notFound : []
 	};
 	inviteMembers (list, org)
 	.then (function (newlist) {
 		additionsList.found = newlist.found;
-		additionsList.notfound = newlist.notfound;
+		additionsList.notFound = newlist.notFound;
 		org.additionsList = additionsList;
 		return org;
 	})
