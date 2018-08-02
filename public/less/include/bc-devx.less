@@ -1117,7 +1117,11 @@ form-title {
 // Opportunity labels
 
 .label-price {
-  background: @gray-darker;
+  color: red;
+  font-size: 1em;
+  letter-spacing: revert;
+  font-weight: bold;
+  padding-left: 0;
 }
 
 .label-skill {
@@ -1178,8 +1182,11 @@ form-title {
   border: 1px solid @theme-orange;
 }
 
-.label-swu {
-  background: @gray-darker;
+.label-opp-type {
+  color: @gray-darker;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: revert;
 }
 
 // Capability Labels
@@ -1674,7 +1681,6 @@ form-title {
   }
 }
 
-
 // User Avatar
 
 .avatar-user {
@@ -1904,6 +1910,11 @@ form-title {
   font-size: 1.15em;
   font-weight: 700;
   margin: .75em 0 .5em;
+}
+
+.opportunity-card-title {
+  font-size: 1.4em;
+  margin: 1.5em 0;
 }
 
 .card-teaser {
