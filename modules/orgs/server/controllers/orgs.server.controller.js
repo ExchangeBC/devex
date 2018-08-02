@@ -431,34 +431,28 @@ var removeAdmin = function (user, org) {
 var inviteMembersWithMessages = function (emaillist, org) {
 	var list = {
 		found    : [],
-		notfound : []
+		notFound : []
 	};
 	if (!emaillist) return Promise.resolve (list);
-	//
-	// flatten out the members and admins arrays so that later on the
-	// addToSet function truly works on duplicates
-	//
-	org.admins = org.admins.map (function (obj) {return obj.id;});
-	org.members = org.members.map (function (obj) {return obj.id;});
 	return getUsers ({email : {$in : emaillist}})
 	.then (function (users) {
 		if (users) {
 			list.found = users;
 			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
 			emaillist.forEach (function (email) {
-				if (!usersIndex[email]) list.notfound.push ({email:email});
+				if (!usersIndex[email]) list.notFound.push ({email:email});
 			});
 		}
 	})
 	.then (function () {
 		sendMessages ('add-user-to-company-request', list.found, {org:org});
-		sendMessages ('invitation-from-company', list.notfound, {org:org});
+		sendMessages ('invitation-from-company', list.notFound, {org:org});
 
 		// record users so that they have 'permission' to self add
 		if (!org.invited) {
 			org.invited = [];
 		}
-		list.notfound.forEach(function(entry) {
+		list.notFound.forEach(function(entry) {
 			org.invited.push(entry.email);
 		});
 
@@ -470,34 +464,7 @@ var inviteMembersWithMessages = function (emaillist, org) {
 		return Promise.resolve (list);
 	});
 };
-var inviteMembersWithNotification = function (emaillist, org) {
-	var list = {
-		found    : [],
-		notfound : []
-	};
-	if (!emaillist) return Promise.resolve (list);
-	//
-	// flatten out the members and admins arrays so that later on the
-	// addToSet function truly works on duplicates
-	//
-	org.admins = org.admins.map (function (obj) {return obj.id;});
-	org.members = org.members.map (function (obj) {return obj.id;});
-	return getUsers ({email : {$in : emaillist}})
-	.then (function (users) {
-		if (users) {
-			list.found = users;
-			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
-			emaillist.forEach (function (email) {
-				if (!usersIndex[email]) list.notfound.push ({email:email});
-			});
-		}
-		return users;
-	})
-	.then (addMembers (org))
-	.then (function () {
-		return Promise.resolve (list);
-	});
-};
+
 var inviteMembers = function (emaillist, org) {
 	return inviteMembersWithMessages (emaillist, org);
 }
