@@ -125,8 +125,7 @@ div.rejected {
 }
 
 .opportunity-list {
-	padding: 20px 0;
-	margin-bottom: 100px;
+	padding: 2em 0 3em;
 }
 .opportunity-list-header {
 	border-bottom: 2px dotted #e3e3e3;
