@@ -23,6 +23,7 @@ module.exports = {
         'public/lib/angular-resource/angular-resource.min.js',
         'public/lib/angular-ui-notification/dist/angular-ui-notification.min.js',
         'public/lib/angular-ui-router/release/angular-ui-router.min.js',
+        'public/lib/angular-sanitize/angular-sanitize.min.js',
         'public/lib/tinymce/tinymce.min.js',
         'public/lib/angular-ui-tinymce/src/tinymce.js',
         'public/lib/angular-breadcrumb/release/angular-breadcrumb.min.js',
@@ -31,7 +32,7 @@ module.exports = {
         'public/lib/ng-img-crop/compile/minified/ng-img-crop.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
-        'public/lib/ng-idle/angular-idle.min.js'
+        'public/lib/ng-idle/angular-idle.min.js',
         // endbower
       ]
     },

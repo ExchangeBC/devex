@@ -171,6 +171,11 @@
 			ppp.oinp.f_startDate = formatDate (new Date (ppp.oinp.startDate));
 			ppp.oprp.f_endDate   = formatDate (new Date (ppp.oprp.endDate  ));
 			ppp.oprp.f_startDate = formatDate (new Date (ppp.oprp.startDate));
+
+			ppp.activeTab = 1;
+			ppp.activateTab = function(tabIndex) {
+				ppp.activeTab = tabIndex;
+			}
 			//
 			// set up validators for currency amount validators for each phase
 			//
@@ -279,6 +284,9 @@
 
 			ppp.totals = {};
 			ppp.tinymceOptions = TINYMCE_OPTIONS;
+			ppp.tinymceOptions.toolbar = 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+			ppp.tinymceOptions.plugins = 'wordcount';
+
 			//
 			// set up the html display stuff
 			//
@@ -486,14 +494,18 @@
 		// -------------------------------------------------------------------------
 		var saveproposal = function (goodmessage, badmessage) {
 			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
-			console.log(validPriceAmounts);
+
+			// validate price amounts - shouldn't be able to save invalid amounts
 			if (!validPriceAmounts) {
 				Notification.error({
 					message: 'Invalid price amounts entered',
 					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
 				});
+				ppp.activateTab(4);
+				window.scrollTo(0, 0);
 				return;
 			}
+
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;
@@ -583,15 +595,36 @@
 		//
 		// -------------------------------------------------------------------------
 		ppp.submit = function () {
+
+			// validate price amounts - shouldn't be able to sumbit prices that exceed max
 			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
-			// console.log(validPriceAmounts);
 			if (!validPriceAmounts) {
 				Notification.error({
 					message: 'Invalid price amounts entered',
 					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
 				});
+				ppp.activateTab(4);
+				window.scrollTo(0, 0);
 				return;
 			}
+
+			// validate word counts - shouldn't be able to submit responses to questions that exceed max word count
+			var invalidResponseIndex = 0;
+			window.tinymce.editors.forEach(function(editor, index) {
+				if (editor.plugins.wordcount.getCount() > 300) {
+					Notification.error({
+						message: 'Word count exceeded for Question ' + (index + 1) + '.  Please edit your response before submitting',
+						title: '<i class="glyphicon glyphicon-remove"</i> Error'
+					});
+					invalidResponseIndex = index + 1;
+				}
+			})
+			if (invalidResponseIndex > 0) {
+				ppp.activateTab(5);
+				window.scrollTo(0, 0);
+				return;
+			}
+
 			ppp.proposal.opportunity          = ppp.opportunity;
 			ppp.proposal.businessName         = ppp.org.name;
 			ppp.proposal.businessAddress      = ppp.org.fullAddress;

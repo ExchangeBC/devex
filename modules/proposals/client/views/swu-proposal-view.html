@@ -131,15 +131,15 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<h5>{{data.proposal.questions[0].question}}</h5>
-			{{data.proposal.questions[0].response}}<br>
+			<span ng-bind-html="data.proposal.questions[0].response"></span><br>
 			<h5>{{data.proposal.questions[1].question}}</h5>
-			{{data.proposal.questions[1].response}}<br>
+			<span ng-bind-html="data.proposal.questions[1].response"></span><br>
 			<h5>{{data.proposal.questions[2].question}}</h5>
-			{{data.proposal.questions[2].response}}<br>
+			<span ng-bind-html="data.proposal.questions[2].response"></span><br>
 			<h5>{{data.proposal.questions[3].question}}</h5>
-			{{data.proposal.questions[3].response}}<br>
+			<span ng-bind-html="data.proposal.questions[3].response"></span><br>
 			<h5>{{data.proposal.questions[4].question}}</h5>
-			{{data.proposal.questions[4].response}}
+			<span ng-bind-html="data.proposal.questions[4].response"></span>
 		</div>
 	</div>
 </div> <!-- End of modal-body -->

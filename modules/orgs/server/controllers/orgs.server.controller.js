@@ -551,8 +551,14 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	// Andrew: Replaced _.assign with _.merge, as assign has the chance of overwriting existing properties in the target object
-	var org        = _.merge (req.org, req.body);
+	// We use lodash mergeWith and a customizer to handle arrays.  By default lodash merge will concatenate arrays, which means that
+	// items can never be removed.  The customizer defaults to also use the incoming array.
+	// see https://lodash.com/docs/4.17.10#mergeWith
+	var org = _.mergeWith(req.org, req.body, (objValue, srcValue) => {
+		if (_.isArray(objValue)) {
+			return srcValue;
+		}
+	});
 	org.adminName  = req.user.displayName;
 	org.adminEmail = req.user.email;
 

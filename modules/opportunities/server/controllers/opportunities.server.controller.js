@@ -181,7 +181,7 @@ var setNotificationData = function (opportunity) {
 var setMessageData = function (opportunity) {
 	opportunity.path                 = '/opportunities/'+(opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu')+'/'+opportunity.code;
 	opportunity.earn_format_mnoney   = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
-	opportunity.earn                 = helpers.formatMoney ((opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn), 2);
+	opportunity.earn                 = opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
 	opportunity.dateDeadline         = helpers.formatDate (new Date(opportunity.deadline));
 	opportunity.timeDeadline         = helpers.formatTime (new Date(opportunity.deadline));
 	opportunity.dateAssignment       = helpers.formatDate (new Date(opportunity.assignment));
@@ -392,8 +392,6 @@ exports.read = function (req, res) {
 
 var updateSave = function (opportunity) {
 	return new Promise (function (resolve, reject) {
-		// Fix due to mongoose flakiness with array types in schemas
-		opportunity.markModified('skills');
 		opportunity.save (function (err, updatedOpportunity) {
 			if (err) {
 				reject (err);
@@ -423,10 +421,17 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var opportunity = _.merge (req.opportunity, req.body);
+	// We use lodash mergeWith and a customizer to handle arrays.  By default lodash merge will concatenate arrays, which means that
+	// items can never be removed.  The customizer defaults to also use the incoming array.
+	// see https://lodash.com/docs/4.17.10#mergeWith
+	var opportunity = _.mergeWith(req.opportunity, req.body, (objValue, srcValue) => {
+		if (_.isArray(objValue)) {
+			return srcValue;
+		}
+	});
 
 	// manually transfer over skills, as the merge won't handle removals properly from the skills array
-	opportunity.skills = req.body.skills;
+	// opportunity.skills = req.body.skills;
 	//
 	// set the audit fields so we know who did what when
 	//
@@ -452,8 +457,11 @@ exports.update = function (req, res) {
 			.then (function (result) {
 				opportunity.issueUrl    = result.html_url;
 				opportunity.issueNumber = result.number;
-				opportunity.save ();
-				res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				updateSave (opportunity)
+				.then(function(updatedOpportunity) {
+					opportunity = updatedOpportunity;
+					res.json (decorate (opportunity, req.user ? req.user.roles : []));
+				})
 			})
 			.catch (function () {
 				res.status(422).send({

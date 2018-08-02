@@ -16,7 +16,10 @@ function seedDB() {
 			seed.start().then(() => {
 				resolve()
 			});
-		  }
+		}
+		else {
+			resolve();
+		}
 	});
 }
 

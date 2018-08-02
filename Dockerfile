@@ -18,7 +18,9 @@ ENV NODE_ENV development
 
 # Install Utilities
 RUN apt-get update -q  \
- && apt-get install -yqq curl \
+ && apt-get install -yqq \
+ apt-utils \
+ curl \
  wget \
  aptitude \
  htop \
@@ -26,7 +28,6 @@ RUN apt-get update -q  \
  git \
  traceroute \
  dnsutils \
- curl \
  ssh \
  tree \
  tcpdump \
@@ -40,7 +41,6 @@ RUN apt-get update -q  \
  libkrb5-dev \
  ruby \
  sudo \
- apt-utils \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -50,15 +50,23 @@ RUN dpkg -i dumb-init_*.deb
 
 # Install nodejs
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-RUN sudo apt-get install -yq nodejs \
+RUN sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Install yarn (replaces npm)
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update -q \
+ && sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq yarn \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #COPY phantom /opt/mean.js/node_modules
 
 # Install MEAN.JS Prerequisites
-RUN npm install --quiet -g gulp bower yo mocha karma-cli pm2 gulp-if && npm cache verify
-
+RUN yarn global add gulp bower yo mocha karma-cli pm2 gulp-if --silent \
+ && yarn cache clean
 
 RUN mkdir -p /opt/mean.js/public/lib
 WORKDIR /opt/mean.js
@@ -68,15 +76,19 @@ WORKDIR /opt/mean.js
 # and install node_modules/ everytime we build the docker, but only
 # when the local package.json file changes.
 # Install npm packages
-COPY package.json /opt/mean.js/package.json
-#RUN npm install --quiet && npm cache clean
-RUN npm install && npm cache verify
+COPY package.json yarn.lock /opt/mean.js/
 
 # Install bower packages
 COPY bower.json /opt/mean.js/bower.json
 COPY .bowerrc /opt/mean.js/.bowerrc
 
-RUN bower install --quiet --allow-root --config.interactive=false
+# Install node_modules with yarn
+RUN yarn install --non-interactive --pure-lockfile \
+ && yarn cache clean
+
+#RUN npm install --quiet && npm cache clean
+#RUN npm install && npm cache verify
+#RUN bower install --quiet --allow-root --config.interactive=false
 
 COPY . /opt/mean.js
 
