@@ -46,8 +46,8 @@ var OrgSchema = new Schema ({
 	createdBy            : {type: 'ObjectId', ref: 'User', default: null },
 	updated              : {type: Date, default: null },
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
-	members              : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]},
-	admins               : {type: [{type:Schema.ObjectId, ref: 'User'}], default:[]},
+	members              : {type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+	admins               : {type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
 	invited				 : [String]
 }, { usePushEach: true });
 
