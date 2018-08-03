@@ -61,7 +61,6 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
-		vm.display.addenda		  = $sce.trustAsHtml(vm.opportunity.addenda);
 		vm.trust = $sce.trustAsHtml;
 		vm.canApply = org && org.metRFQ;
 		vm.opportunity.hasOrg = vm.canApply;
@@ -915,7 +914,60 @@
 		vm.form                   = {};
 		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.closing				  = 'CLOSED';
-		vm.closing = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
+		vm.closing 				  = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
+
+		// viewmodel items related to addendum
+		vm.addenda 			  	  = vm.opportunity.addenda
+		vm.addenda.forEach(function(addendum) {
+			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
+		})
+		vm.editingAddenda		  = false;
+		vm.addendaEditIndex		  = -1;
+		vm.currentAddendaText	  = '';
+
+		// Adding a new addendum
+		// We add a new one to the list and enter edit mode
+		vm.addNewAddendum = function() {
+			vm.addenda.push({
+				description: '',
+				createdBy: Authentication.user,
+				createdOn: Date.now()
+			});
+
+			vm.currentAddendaText = '';
+			vm.addendaEditIndex = vm.addenda.length - 1;
+			vm.editingAddenda = true;
+		}
+		// Cancel edit addendum
+		vm.cancelEditAddendum = function() {
+			if (vm.editingAddenda) {
+				vm.addenda.splice(vm.addendaEditIndex, 1);
+				vm.editingAddenda = false;
+			}
+		}
+		// Save the addendum being edited
+		vm.saveEditAddendum = function() {
+			var curAddenda = vm.addenda[vm.addendaEditIndex];
+			if (curAddenda) {
+				curAddenda.description = vm.currentAddendaText;
+				curAddenda.createdBy = Authentication.user;
+				curAddenda.createdOn = Date.now();
+				curAddenda.cleanDesc = $sce.trustAsHtml(vm.currentAddendaText);
+			}
+
+			vm.editingAddenda = false;
+		}
+		// Delete an addendum with confirm modal
+		vm.deleteAddenda = function(index) {
+			if (index >= 0 && index < vm.addenda.length) {
+				var q = 'Are you sure you wish to delete this addendum?';
+				ask.yesNo (q).then (function (r) {
+					if (r) {
+						vm.addenda.splice(index, 1);
+					}
+				});
+			}
+		}
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//

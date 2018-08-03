@@ -22,6 +22,16 @@ var OpportunityCapabilities = new Schema ({
 	desiredYears : {type: Number, default:0 },
 	skills       : {type: [String], default:[]}
 });
+// -------------------------------------------------------------------------
+//
+// Opportunity addendums
+//
+// -------------------------------------------------------------------------
+var AddendumSchema = new Schema ({
+	description : {type: String},
+	createdBy 	: {type: Schema.Types.ObjectId, ref: 'User', default: null},
+	createdOn	: {type: Date, default: null}
+});
 /**
  * Opportunity Schema
  */
@@ -134,8 +144,8 @@ var OpportunitySchema = new Schema({
 	// each time a new opp was created we had to create a su7bscrption type. this
 	// is much simpler and easier to maintain
 	//
-	watchers : {type: [{type:Schema.ObjectId, ref: 'User'}], default: []},
-	addenda					: {type: String, default: ''}
+	watchers 				: {type: [{type:Schema.ObjectId, ref: 'User'}], default: []},
+	addenda					: {type: [AddendumSchema], default: []}
 }, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {

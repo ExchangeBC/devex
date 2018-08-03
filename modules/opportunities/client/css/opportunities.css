@@ -133,3 +133,26 @@ div.rejected {
 	width: 60%;
 	margin: 25px auto;
 }
+/* Opportunity addenda styling */
+li.addendum-list-item {
+	padding-top: 2em;
+}
+div.addendum-item {
+	margin-left: 25px;
+	padding-bottom: 1em;
+	border-bottom: 1px solid gray;
+}
+div.addendum-item-editing {
+	margin-left: 25px;
+	padding-bottom: 1em;
+}
+div.addendum-created {
+	margin-bottom: 1em;
+	font-style: italic;
+	font-size: smaller;
+}
+div.add-button-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
