@@ -61,6 +61,10 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
+		vm.display.addenda		  = vm.opportunity.addenda;
+		vm.display.addenda.forEach(function(addendum) {
+			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
+		});
 		vm.trust = $sce.trustAsHtml;
 		vm.canApply = org && org.metRFQ;
 		vm.opportunity.hasOrg = vm.canApply;
