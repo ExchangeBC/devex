@@ -920,8 +920,85 @@
 		vm.closing				  = 'CLOSED';
 		vm.closing 				  = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
 
+		// viewmodel items related to team questions
+		vm.teamQuestions		  	= vm.opportunity.teamQuestions;
+		vm.teamQuestions.forEach(function(teamQuestion) {
+			teamQuestion.cleanText 	= $sce.trustAsHtml(teamQuestion.question);
+			teamQuestion.newQuestion = false;
+		});
+		vm.editingTeamQuestion	  	= false;
+		vm.teamQuestionEditIndex  	= -1;
+		vm.currentTeamQuestionText	= '';
+		vm.currentQuestionWordLimit = 300;
+		vm.currentQuestionScore		= 5;
+
+		// Adding a new team question
+		// We a new one to the list and enter edit mode
+		vm.addNewTeamQuestion = function() {
+			vm.teamQuestions.push({
+				question: '',
+				wordLimit: 300,
+				questionScore: 5,
+				newQuestion: true
+			});
+
+			vm.currentTeamQuestionText = '';
+			vm.currentQuestionWordLimit = 300;
+			vm.currentQuestionScore = 5;
+			vm.teamQuestionEditIndex = vm.teamQuestions.length - 1;
+			vm.editingTeamQuestion = true;
+		}
+		// Cancel edit team question
+		vm.cancelEditTeamQuestion = function() {
+			if (vm.editingTeamQuestion) {
+
+				// if this was a brand new question, remove it
+				if (vm.teamQuestions[vm.teamQuestionEditIndex].newQuestion === true) {
+					vm.teamQuestions.splice(vm.teamQuestionEditIndex, 1);
+				}
+
+				// discard changes
+				vm.currentTeamQuestionText = '';
+				vm.editingTeamQuestion = false;
+			}
+		}
+		// Enter edit mode for an existing team question
+		vm.editTeamQuestion = function(index) {
+			vm.teamQuestionEditIndex = index;
+			var currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+			vm.currentTeamQuestionText = currentTeamQuestion.question;
+			vm.currentQuestionWordLimit = currentTeamQuestion.wordLimit;
+			vm.currentQuestionScore = currentTeamQuestion.questionScore;
+			vm.editingTeamQuestion = true;
+		}
+		// Save edit team question
+		vm.saveEditTeamQuestion = function() {
+			var curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+			if (curTeamQuestion) {
+				curTeamQuestion.question = vm.currentTeamQuestionText;
+				curTeamQuestion.wordLimit = vm.currentQuestionWordLimit;
+				curTeamQuestion.questionScore = vm.currentQuestionScore;
+				curTeamQuestion.cleanText = $sce.trustAsHtml(vm.currentTeamQuestionText);
+				curTeamQuestion.newQuestion = false;
+			}
+
+			vm.editingTeamQuestion = false;
+		}
+
+		// Delete team question with confirm modal
+		vm.deleteTeamQuestion = function(index) {
+			if (index >= 0 && index < vm.teamQuestions.length) {
+				var q = 'Are you sure you wish to delete this team question from the opportunity?';
+				ask.yesNo (q).then (function (r) {
+					if (r) {
+						vm.teamQuestions.splice(index, 1);
+					}
+				});
+			}
+		}
+
 		// viewmodel items related to addendum
-		vm.addenda 			  	  = vm.opportunity.addenda
+		vm.addenda 			  	  = vm.opportunity.addenda;
 		vm.addenda.forEach(function(addendum) {
 			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
 		})

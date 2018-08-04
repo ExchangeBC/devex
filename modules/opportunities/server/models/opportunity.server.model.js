@@ -24,7 +24,7 @@ var OpportunityCapabilities = new Schema ({
 });
 // -------------------------------------------------------------------------
 //
-// Opportunity addendums
+// Opportunity addendum schema
 //
 // -------------------------------------------------------------------------
 var AddendumSchema = new Schema ({
@@ -32,9 +32,21 @@ var AddendumSchema = new Schema ({
 	createdBy 	: {type: Schema.Types.ObjectId, ref: 'User', default: null},
 	createdOn	: {type: Date, default: null}
 });
-/**
- * Opportunity Schema
- */
+// -------------------------------------------------------------------------
+//
+// Opportunity team question schema
+//
+// -------------------------------------------------------------------------
+var TeamQuestionSchema = new Schema ({
+	question		: {type: String},
+	wordLimit		: {type: Number, default: 300},
+	questionScore	: {type: Number, default: 1}
+})
+// -------------------------------------------------------------------------
+//
+// Opportunity schema
+//
+// -------------------------------------------------------------------------
 var OpportunitySchema = new Schema({
 	//
 	// common fields
@@ -145,7 +157,8 @@ var OpportunitySchema = new Schema({
 	// is much simpler and easier to maintain
 	//
 	watchers 				: {type: [{type:Schema.ObjectId, ref: 'User'}], default: []},
-	addenda					: {type: [AddendumSchema], default: []}
+	addenda					: {type: [AddendumSchema], default: []},
+	teamQuestions			: {type: [TeamQuestionSchema], default: []}
 }, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {
@@ -226,3 +239,4 @@ OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
 };
 
 mongoose.model('Opportunity', OpportunitySchema);
+mongoose.model('TeamQuestion', TeamQuestionSchema);
