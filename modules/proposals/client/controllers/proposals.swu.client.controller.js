@@ -105,7 +105,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
 			ppp.trust    = $sce.trustAsHtml;
