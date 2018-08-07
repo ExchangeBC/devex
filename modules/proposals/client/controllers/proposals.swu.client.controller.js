@@ -271,14 +271,37 @@
 			ppp.p_imp.iPropCapabilities = {};
 			ppp.p_imp.iPropCapabilitySkills = {};
 			//
-			// questions: HACK, needs to be better and indexed etc etc
+			// team questions
 			//
-			ppp.questions = dataService.questions;
-			var i;
-			if (!ppp.proposal.questions) ppp.proposal.questions = [];
-			for (i=0; i<ppp.questions.length; i++) {
-				if (!ppp.proposal.questions[i]) {
-					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
+			if (!ppp.proposal.teamQuestionResponses || ppp.proposal.teamQuestionResponses.length === 0) {
+				ppp.proposal.teamQuestionResponses = [];
+				ppp.opportunity.teamQuestions.forEach(function(teamQuestion) {
+					ppp.proposal.teamQuestionResponses.push({
+						question: teamQuestion.question,
+						cleanQuestion: $sce.trustAsHtml(teamQuestion.question),
+						cleanGuideline: $sce.trustAsHtml(teamQuestion.guideline),
+						response: '',
+						wordLimit: teamQuestion.wordLimit,
+						questionScore: teamQuestion.questionScore,
+						rank: 0,
+						rejected: false,
+						showGuidance: true
+					});
+				});
+			}
+			else {
+				ppp.proposal.teamQuestionResponses.forEach(function(teamQuestionResponse, index) {
+					teamQuestionResponse.cleanQuestion = $sce.trustAsHtml(ppp.opportunity.teamQuestions[index].question);
+					teamQuestionResponse.cleanGuideline = $sce.trustAsHtml(ppp.opportunity.teamQuestions[index].guideline);
+					teamQuestionResponse.wordLimit = ppp.opportunity.teamQuestions[index].wordLimit;
+					teamQuestionResponse.questionScore = ppp.opportunity.teamQuestions[index].questionScore;
+					teamQuestionResponse.showGuidance = true;
+				})
+			}
+
+			ppp.toggleGuidance = function(index) {
+				if (index >= 0 && index < ppp.proposal.teamQuestionResponses.length) {
+					ppp.proposal.teamQuestionResponses[index].showGuidance = !ppp.proposal.teamQuestionResponses[index].showGuidance;
 				}
 			}
 
@@ -611,7 +634,7 @@
 			// validate word counts - shouldn't be able to submit responses to questions that exceed max word count
 			var invalidResponseIndex = 0;
 			window.tinymce.editors.forEach(function(editor, index) {
-				if (editor.plugins.wordcount.getCount() > 300) {
+				if (editor.plugins.wordcount.getCount() > ppp.opportunity.teamQuestions[index].wordLimit) {
 					Notification.error({
 						message: 'Word count exceeded for Question ' + (index + 1) + '.  Please edit your response before submitting',
 						title: '<i class="glyphicon glyphicon-remove"</i> Error'

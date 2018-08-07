@@ -39,6 +39,7 @@ var AddendumSchema = new Schema ({
 // -------------------------------------------------------------------------
 var TeamQuestionSchema = new Schema ({
 	question		: {type: String},
+	guideline		: {type: String},
 	wordLimit		: {type: Number, default: 300},
 	questionScore	: {type: Number, default: 1}
 })

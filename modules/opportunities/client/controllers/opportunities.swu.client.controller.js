@@ -923,12 +923,14 @@
 		// viewmodel items related to team questions
 		vm.teamQuestions		  	= vm.opportunity.teamQuestions;
 		vm.teamQuestions.forEach(function(teamQuestion) {
-			teamQuestion.cleanText 	= $sce.trustAsHtml(teamQuestion.question);
+			teamQuestion.cleanQuestion 	= $sce.trustAsHtml(teamQuestion.question);
+			teamQuestion.cleanGuideline = $sce.trustAsHtml(teamQuestion.guideline);
 			teamQuestion.newQuestion = false;
 		});
 		vm.editingTeamQuestion	  	= false;
 		vm.teamQuestionEditIndex  	= -1;
 		vm.currentTeamQuestionText	= '';
+		vm.currentGuidelineText		= '';
 		vm.currentQuestionWordLimit = 300;
 		vm.currentQuestionScore		= 5;
 
@@ -937,12 +939,14 @@
 		vm.addNewTeamQuestion = function() {
 			vm.teamQuestions.push({
 				question: '',
+				guideline: '',
 				wordLimit: 300,
 				questionScore: 5,
 				newQuestion: true
 			});
 
 			vm.currentTeamQuestionText = '';
+			vm.currentGuidelinText = '';
 			vm.currentQuestionWordLimit = 300;
 			vm.currentQuestionScore = 5;
 			vm.teamQuestionEditIndex = vm.teamQuestions.length - 1;
@@ -959,6 +963,7 @@
 
 				// discard changes
 				vm.currentTeamQuestionText = '';
+				vm.currentGuidelineText = '';
 				vm.editingTeamQuestion = false;
 			}
 		}
@@ -967,6 +972,7 @@
 			vm.teamQuestionEditIndex = index;
 			var currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
 			vm.currentTeamQuestionText = currentTeamQuestion.question;
+			vm.currentGuidelineText = currentTeamQuestion.guideline;
 			vm.currentQuestionWordLimit = currentTeamQuestion.wordLimit;
 			vm.currentQuestionScore = currentTeamQuestion.questionScore;
 			vm.editingTeamQuestion = true;
@@ -976,9 +982,11 @@
 			var curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
 			if (curTeamQuestion) {
 				curTeamQuestion.question = vm.currentTeamQuestionText;
+				curTeamQuestion.guideline = vm.currentGuidelineText;
 				curTeamQuestion.wordLimit = vm.currentQuestionWordLimit;
 				curTeamQuestion.questionScore = vm.currentQuestionScore;
-				curTeamQuestion.cleanText = $sce.trustAsHtml(vm.currentTeamQuestionText);
+				curTeamQuestion.cleanQuestion = $sce.trustAsHtml(vm.currentTeamQuestionText);
+				curTeamQuestion.cleanGuideline = $sce.trustAsHtml(vm.currentGuidelineText);
 				curTeamQuestion.newQuestion = false;
 			}
 

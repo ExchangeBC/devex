@@ -6,7 +6,8 @@
 
       <!-- non-editing view -->
       <div ng-if="!vm.editingTeamQuestion || !(vm.teamQuestionEditIndex === $index)" class="addendum-item">
-        <div ng-bind-html="question.cleanText"></div>
+        <span class="addendum-created">Question: </span><div class="input-help alert alert-info" ng-bind-html="question.cleanQuestion"></div>
+        <span class="addendum-created">Response Guideline: </span><div class="input-help alert alert-info" ng-bind-html="question.cleanGuideline"></div>
         <div class="addendum-created">Word Limit: {{question.wordLimit}}</div>
         <div class="addendum-created">Question Points: {{question.questionScore}}</div>
         <div>
@@ -24,13 +25,24 @@
                 x-options='{
                   "name":"teamQuestion"
                 }'>
+                Question:
                 <textarea
                   name="teamQuestion"
                   id="teamQuestion"
                   class="form-control input-sm"
                   ui-tinymce="vm.tinymceOptions"
-                  placeholder="Team question"
+                  placeholder="Team Question"
                   ng-model="vm.currentTeamQuestionText">
+                </textarea>
+                <br>
+                Response Guideline:
+                <textarea
+                  name="responseGuideline"
+                  id="responseGuideline"
+                  class="form-control input-sm"
+                  ui-tinymce="vm.tinymceOptions"
+                  placeholder="Response Guideline"
+                  ng-model="vm.currentGuidelineText">
                 </textarea>
                 <table>
                   <tr>

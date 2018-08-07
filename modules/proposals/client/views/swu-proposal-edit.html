@@ -598,7 +598,8 @@
 				<uib-tab index="5">
 					<uib-tab-heading>
 						5. Team Questions <i class="fa fa-pencil"></i>
-					</uib-tab-heading>
+          </uib-tab-heading>
+
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
@@ -615,9 +616,26 @@
 						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the Organization name, Resource name, or specific company software!
 					</div>
 					<h5>
-						The response for each question is limited to 300 words. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
+						Please note the word limit for each response, as responses exceeding that limit will receive a score of 0. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
 					</h5>
-					<br>
+          <br>
+          <div ng-repeat="question in ppp.proposal.teamQuestionResponses" class="form-group">
+            <b style="vertical-align: top;">Question {{$index + 1}} &nbsp;&nbsp;</b><em style="vertical-align: top;">({{question.wordLimit}} word limit, worth {{question.questionScore}} points):</em><br>
+            <label ng-bind-html="question.cleanQuestion"></label>
+            &nbsp;&nbsp;
+            <div class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="question.showGuidance">click to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
+            <div class="input-help alert alert-info" ng-show="question.showGuidance" ng-bind-html="question.cleanGuideline"></div>
+            <textarea
+							name="teamQuestion"
+							id="teamQuestion"
+              class="form-control"
+              ui-tinymce="ppp.tinymceOptions"
+							ng-model="question.response">
+						</textarea>
+          </div>
+          </uib-tab>
+
+          <!--
 					<div class="form-group">
 						<label>{{ppp.proposal.questions[0].question}}</label>
 						&nbsp;&nbsp;
@@ -712,7 +730,7 @@
 							ng-model="ppp.proposal.questions[4].response">
 						</textarea>
 					</div>
-				</uib-tab>
+				</uib-tab> -->
 
 				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
 				<uib-tab index="6">
