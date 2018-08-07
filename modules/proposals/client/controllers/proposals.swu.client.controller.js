@@ -108,7 +108,6 @@
 	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
-			// ppp.features = window.features;
 			ppp.trust    = $sce.trustAsHtml;
 			//
 			// check we have an opp
@@ -271,37 +270,30 @@
 			ppp.p_imp.iPropCapabilities = {};
 			ppp.p_imp.iPropCapabilitySkills = {};
 			//
-			// team questions
+			// team question responses
 			//
-			if (!ppp.proposal.teamQuestionResponses || ppp.proposal.teamQuestionResponses.length === 0) {
-				ppp.proposal.teamQuestionResponses = [];
-				ppp.opportunity.teamQuestions.forEach(function(teamQuestion) {
-					ppp.proposal.teamQuestionResponses.push({
-						question: teamQuestion.question,
-						cleanQuestion: $sce.trustAsHtml(teamQuestion.question),
-						cleanGuideline: $sce.trustAsHtml(teamQuestion.guideline),
-						response: '',
-						wordLimit: teamQuestion.wordLimit,
-						questionScore: teamQuestion.questionScore,
-						rank: 0,
-						rejected: false,
-						showGuidance: true
-					});
-				});
-			}
-			else {
-				ppp.proposal.teamQuestionResponses.forEach(function(teamQuestionResponse, index) {
-					teamQuestionResponse.cleanQuestion = $sce.trustAsHtml(ppp.opportunity.teamQuestions[index].question);
-					teamQuestionResponse.cleanGuideline = $sce.trustAsHtml(ppp.opportunity.teamQuestions[index].guideline);
-					teamQuestionResponse.wordLimit = ppp.opportunity.teamQuestions[index].wordLimit;
-					teamQuestionResponse.questionScore = ppp.opportunity.teamQuestions[index].questionScore;
-					teamQuestionResponse.showGuidance = true;
-				})
-			}
+			ppp.responses = [];
+			ppp.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
+				var response = {
+					question: teamQuestion.question,
+					cleanQuestion: $sce.trustAsHtml(teamQuestion.question),
+					cleanGuideline: $sce.trustAsHtml(teamQuestion.guideline),
+					wordLimit: teamQuestion.wordLimit,
+					questionScore: teamQuestion.questionScore,
+					showGuidance: true
+				};
+
+				// if there was a previously saved response, display that
+				if (ppp.proposal.teamQuestionResponses && ppp.proposal.teamQuestionResponses[index]) {
+					response.response = ppp.proposal.teamQuestionResponses[index].response;
+				}
+
+				ppp.responses.push(response);
+			});
 
 			ppp.toggleGuidance = function(index) {
-				if (index >= 0 && index < ppp.proposal.teamQuestionResponses.length) {
-					ppp.proposal.teamQuestionResponses[index].showGuidance = !ppp.proposal.teamQuestionResponses[index].showGuidance;
+				if (index >= 0 && index < ppp.responses.length) {
+					ppp.responses[index].showGuidance = !ppp.responses[index].showGuidance;
 				}
 			}
 
@@ -529,12 +521,13 @@
 				return;
 			}
 
-			ppp.proposal.opportunity          = ppp.opportunity;
-			ppp.proposal.businessName         = ppp.org.name;
-			ppp.proposal.businessAddress      = ppp.org.fullAddress;
-			ppp.proposal.businessContactName  = ppp.org.contactName;
-			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			ppp.proposal.opportunity          	= ppp.opportunity;
+			ppp.proposal.businessName         	= ppp.org.name;
+			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
+			ppp.proposal.businessContactName  	= ppp.org.contactName;
+			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
+			ppp.proposal.teamQuestionResponses 	= ppp.responses;
 			setTeams ();
 			return new Promise (function (resolve, reject) {
 				ppp.proposal.createOrUpdate ()
@@ -648,15 +641,19 @@
 				return;
 			}
 
-			ppp.proposal.opportunity          = ppp.opportunity;
-			ppp.proposal.businessName         = ppp.org.name;
-			ppp.proposal.businessAddress      = ppp.org.fullAddress;
-			ppp.proposal.businessContactName  = ppp.org.contactName;
-			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			ppp.proposal.opportunity          	= ppp.opportunity;
+			ppp.proposal.businessName         	= ppp.org.name;
+			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
+			ppp.proposal.businessContactName  	= ppp.org.contactName;
+			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
+			ppp.proposal.teamQuestionResponses 	= ppp.responses;
 			setTeams ();
 			ppp.proposal.status = 'Submitted';
-			saveproposal ('<h4>Your proposal has been submitted</h4>');
+			saveproposal ('<h4>Your proposal has been submitted</h4>')
+			.then(function() {
+				ppp.close();
+			});
 		}
 		// -------------------------------------------------------------------------
 		//
