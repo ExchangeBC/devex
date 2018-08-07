@@ -181,9 +181,9 @@ div.add-button-wrapper {
 }
 @media (min-width: 768px) {
     .sticky-sidebar {
-        padding: 20px 0 20px 50px; 
-        position: -webkit-sticky; 
-        top: 40px; 
+        padding: 20px 0 20px 50px;
+        position: -webkit-sticky;
+        top: 40px;
         bottom: 40px;
     }
 }
@@ -194,7 +194,7 @@ div.add-button-wrapper {
     }
 }
 div.overline {
-    text-transform: uppercase
+    text-transform: uppercase;
     font-size: .8em;
     letter-spacing: .015em;
     margin-bottom: 3px;
