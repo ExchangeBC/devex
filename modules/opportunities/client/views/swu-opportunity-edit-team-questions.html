@@ -6,13 +6,13 @@
 
       <!-- non-editing view -->
       <div ng-if="!vm.editingTeamQuestion || !(vm.teamQuestionEditIndex === $index)" class="addendum-item">
-        <span class="addendum-created">Question: </span><div class="input-help alert alert-info" ng-bind-html="question.cleanQuestion"></div>
+        <span class="addendum-created">Question: </span><br><div class="input-help alert alert-success" ng-bind-html="question.cleanQuestion"></div><br>
         <span class="addendum-created">Response Guideline: </span><div class="input-help alert alert-info" ng-bind-html="question.cleanGuideline"></div>
         <div class="addendum-created">Word Limit: {{question.wordLimit}}</div>
-        <div class="addendum-created">Question Points: {{question.questionScore}}</div>
+        <div class="addendum-created">Question Score: {{question.questionScore}}</div>
         <div>
-          <button type="button" ng-click="vm.deleteTeamQuestion($index)">Delete</button>
-          <button type="button" ng-click="vm.editTeamQuestion($index)">Edit</button>
+          <button type="button" ng-show="!vm.opportunity.isPublished && !vm.opportunity.wasPublished" ng-click="vm.deleteTeamQuestion($index)">Delete</button>
+          <button type="button" ng-show="!vm.opportunity.isPublished && !vm.opportunity.wasPublished" ng-click="vm.editTeamQuestion($index)">Edit</button>
         </div>
       </div>
 
@@ -69,7 +69,10 @@
 
   <!-- Add new team question button -->
   <div class="add-button-wrapper">
-      <button ng-show="!vm.editingTeamQuestion" type="button" ng-click="vm.addNewTeamQuestion()">Add New</button>
+      <button ng-show="!vm.editingTeamQuestion && !vm.opportunity.isPublished && !vm.opportunity.wasPublished" type="button" ng-click="vm.addNewTeamQuestion()">Add New</button>
+  </div>
+  <div ng-show="vm.opportunity.isPublished || vm.opportunity.wasPublished" class="alert alert-warning">
+      Team Questions may not be updated if an opportunity has been previously published
   </div>
 </div>
 
