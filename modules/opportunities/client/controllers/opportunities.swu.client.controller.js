@@ -918,6 +918,9 @@
 		vm.closing 				  = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
 
 		// viewmodel items related to team questions
+		if (!vm.opportunity.teamQuestions) {
+			vm.opportunity.teamQuestions = [];
+		}
 		vm.teamQuestions		  	= vm.opportunity.teamQuestions;
 		vm.teamQuestions.forEach(function(teamQuestion) {
 			teamQuestion.cleanQuestion 	= $sce.trustAsHtml(teamQuestion.question);
@@ -943,7 +946,7 @@
 			});
 
 			vm.currentTeamQuestionText = '';
-			vm.currentGuidelinText = '';
+			vm.currentGuidelineText = '';
 			vm.currentQuestionWordLimit = 300;
 			vm.currentQuestionScore = 5;
 			vm.teamQuestionEditIndex = vm.teamQuestions.length - 1;
@@ -1003,6 +1006,9 @@
 		}
 
 		// viewmodel items related to addendum
+		if (!vm.opportunity.addenda) {
+			vm.opportunity.addenda = [];
+		}
 		vm.addenda 			  	  = vm.opportunity.addenda;
 		vm.addenda.forEach(function(addendum) {
 			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);

@@ -160,7 +160,7 @@ li.addendum-list-item {
 	padding: 1em 0;
     border-bottom: 1px dotted #f6f8fa;
 }
-div.addendum-item {
+span.addendum-item, div.addendum-item {
 	margin-left: 25px;
 	padding-bottom: 1em;
 	border-bottom: 1px solid gray;
@@ -169,7 +169,7 @@ div.addendum-item-editing {
 	margin-left: 25px;
 	padding-bottom: 1em;
 }
-span,div.addendum-created {
+div.addendum-created {
 	margin-bottom: .5em;
 	font-size: smaller;
     font-weight: 600;
