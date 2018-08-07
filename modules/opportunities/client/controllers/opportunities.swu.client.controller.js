@@ -216,11 +216,11 @@
 				//
 				vm.responses = [];
 				var questionIndex;
-				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
+				for (questionIndex=0; questionIndex<vm.opportunity.teamQuestions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
 					vm.proposals.forEach (function (proposal) {
-						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !proposal.questions[questionIndex].rejected) {
-							vm.responses[questionIndex].push (proposal.questions[questionIndex])
+						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !proposal.teamQuestionResponses[questionIndex].rejected) {
+							vm.responses[questionIndex].push (proposal.teamQuestionResponses[questionIndex])
 						}
 					});
 				}
@@ -295,7 +295,7 @@
 						proposal.scores.price = 0;
 						proposal.isAssigned = false;
 						proposal.screenedIn = false;
-						proposal.questions.forEach(function(question) {
+						proposal.teamQuestionResponses.forEach(function(question) {
 							question['rejected'] = false;
 						})
 					})
@@ -331,9 +331,9 @@
 					$scope.data.questions      = [];
 					$scope.data.proposals      = vm.proposals;
 					$scope.data.nproposals     = vm.proposals.length;
-					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.questions      = vm.opportunity.teamQuestions;
 					$scope.data.responses      = vm.responses;
-					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
 					$scope.data.currentPage    = 1;
 
 					vm.responses.forEach(function(question, questionIndex) {
@@ -394,13 +394,13 @@
 				// question/response objects by id and update the originals
 				if (resp.questions) {
 					vm.proposals.forEach(function(proposal) {
-						proposal.questions.forEach(function(question) {
-							var match = resp.questions[question.question].find(function(response) {
-								return question._id === response._id;
+						proposal.teamQuestionResponses.forEach(function(response) {
+							var match = resp.questions[response.question].find(function(question) {
+								return response._id === question._id;
 							});
 
 							if (match) {
-								question.rank = resp.questions[question.question].indexOf(match) + 1;
+								response.rank = resp.questions[response.question].indexOf(match) + 1;
 							}
 						})
 					})
@@ -579,9 +579,9 @@
 					$scope.data.questions      = [];
 					$scope.data.proposals      = vm.proposals;
 					$scope.data.nproposals     = vm.proposals.length;
-					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.questions      = vm.opportunity.teamQuestions;
 					$scope.data.responses      = vm.responses;
-					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
 					$scope.data.currentPage    = 1;
 
 					vm.responses.forEach(function(question, questionIndex) {
@@ -589,10 +589,6 @@
 							$scope.data.responses[questionIndex][responseIndex].sanitizedResponse = $sce.trustAsHtml(response.response);
 						})
 					})
-
-					// vm.responses.forEach(function(response, index) {
-					// 	$scope.data.responses[index][0].sanitizedResponse = $sce.trustAsHtml(response[0].response);
-					// });
 
 					$scope.close = function () {
 						$uibModalInstance.close({});
@@ -735,16 +731,17 @@
 		//
 		// Rejected questions are not considered in the scoring
 		vm.questionScore = function (proposal) {
-			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
+			var bestScore = vm.opportunity.teamQuestions.length * vm.proposals.length;
 			proposal.scores.question = Math.round(
-				proposal.questions
+				proposal.teamQuestionResponses
 				// filter out rejected questions
 				.filter(function (q) {
 					return !q.rejected;
 				})
 				.map (function (q) {
 					return vm.proposals.length + 1 - q.rank;
-				}).reduce (function (a, b) {
+				})
+				.reduce (function (a, b) {
 					return a + b;
 				}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
 			return proposal.scores.question;
