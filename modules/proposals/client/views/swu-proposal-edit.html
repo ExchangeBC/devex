@@ -674,12 +674,39 @@
 							</table>
 						</div>
 					</div>
+        </uib-tab>
+
+        <!-- Addenda tab -->
+        <uib-tab index="7">
+					<uib-tab-heading>
+						7. Addenda
+					</uib-tab-heading>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
+              <br>
+							<div class="alert" ng-if ="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
+								There are currently no addenda for this RFP.
+              </div>
+
+              <ol>
+                <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
+                  <div>
+                    <span ng-bind-html="addendum.description"></span>
+                    <div class="addendum-created">
+                      Added on {{addendum.createdOn | date}}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+						</div>
+					</div>
 				</uib-tab>
 
 				<!-- // New Review & Submit tab // -->
-				<uib-tab index="7">
+				<uib-tab index="8">
 					<uib-tab-heading>
-						7. Review &amp; Submit <i class="fa fa-paper-plane"></i>
+						8. Review &amp; Submit <i class="fa fa-paper-plane"></i>
 					</uib-tab-heading>
 					<h4>
 						Review and Submit Your Proposal
@@ -821,64 +848,8 @@
 					</div>
 				</uib-tab>
 
-				<uib-tab index="8">
-					<uib-tab-heading>
-						8. Addenda
-					</uib-tab-heading>
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
-              <br>
-							<div class="alert" ng-if ="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
-								There are currently no addenda for this RFP.
-              </div>
 
-              <ol>
-                <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
-
-                  <!-- non-editing view -->
-                  <div>
-                    <span ng-bind-html="addendum.description"></span>
-                    <div class="addendum-created">
-                      Added on {{addendum.createdOn | date}}
-                    </div>
-                  </div>
-                </li>
-              </ol>
-
-							<!-- <br>
-							<p class="small" style="border-bottom: 1px dotted #e3e3e3">Posted <strong>Wed May 23, 2018</strong></p>
-							<p><strong>Question:</strong> The opportunity mentions an existing application, <a href="https://mines.empr.gov.bc.ca" target="_blank">https://mines.empr.gov.bc.ca</a>. What (if any) of this existing application can or should be re-used? Would we be expected to determine how much can be re-used through the inception and proof of concept phases?
-							<p><strong>Answer:</strong> The intent is to complete some enhancements to the https://mines.empr.gov.bc.ca application. We do not intent to reuse it in the MDS application.</p>
-							</p>
-							<hr>
-							<p><strong>Question:</strong> The project seems to hint that Angular is preferred (and the existing app is built in angular). Does this preclude other technology solutions from being used (e.g. React or Vue)?</p>
-							<p><strong>Answer:</strong> No, this does not preclude other solutions and we will accept the potential inclusion of other technologies.</p>
-							<ul ng-repeat="addendum in ppp.proposal.addendums">
-								<li>{{addendum.descrption}} (added {{addendum.created}})</li>
-							</ul> -->
-						</div>
-					</div>
-				</uib-tab>
 			</uib-tabset>
-
-			<!-- // This is where the Terms originally sat at the bottom of the page // -->
-			<!--
-				<div class="row">
-					<div class="well well-lg well-info well-left-align pre-scrollable">
-						<h4>Sprint With Us Terms and Conditions</h4>
-						<p>To submit a proposal to work on this opportunity you must agree to the Terms.</p>
-						<iframe class="col-sm-12" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
-						<div class="col-sm-12">
-							<br/>
-							<label class="checkbox-inline">
-								<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read and fully understand and agree to the terms and conditions.
-							</label>
-							<a class="btn btn-default pull-right" href="/api/proposals/download/terms/swu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
-						</div>
-					</div>
-				</div>
-			-->
 
 				<div class="edit-form-footer">
 					<div class="row">
