@@ -185,8 +185,8 @@ class OpportunityCreateSpecs extends GebReportingSpec {
 
           and: "when published, a confirmation window is displayed"
           oppPublishClick
-          waitFor { page.angularReady && oppubYesClick }
-          assert { published }
+        //   waitFor { page.angularReady && oppubYesClick }
+        //   assert { published }
      where:
       Project | TitleData | Teaser | Description | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
       "Automation Test Project" | "Opportunity Creation/Publish/Deletion Test" | "Short Description" | "Some Description" | "https://github.com/rstens/devex.git" | "Victoria" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria" | "\$20,000.00" | "Proposal Evaluation Criteria" | "roland.stens@gmail.com"
