@@ -647,6 +647,15 @@
 				return;
 			}
 
+			// ensure that proposal has met all the criteria for submission
+			if (!(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)) {
+				Notification.error({
+					message: 'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
+					title: '<i class="glyphicon glyphicon-remove"</i> Error'
+				});
+				return;
+			}
+
 			ppp.proposal.opportunity          	= ppp.opportunity;
 			ppp.proposal.businessName         	= ppp.org.name;
 			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
