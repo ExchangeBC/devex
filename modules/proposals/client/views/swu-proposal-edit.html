@@ -799,52 +799,6 @@
                         </div>
                       </uib-accordion>
                     </div>
-										<!-- <uib-accordion>
-											<div uib-accordion-group is-open="qq1" ng-click="qq1=!qq1" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													1. {{ppp.proposal.questions[0].question}} <i>(<span ng-if="!qq1">click to show details</span><span ng-if="qq1">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">
-													<p>{{ppp.proposal.questions[0].response}}</p>
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq2" ng-click="qq2=!qq2" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													2. {{ppp.proposal.questions[1].question}} <i>(<span ng-if="!qq2">click to show details</span><span ng-if="qq2">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[1].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq3" ng-click="qq3=!qq3" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													3. {{ppp.proposal.questions[2].question}} <i>(<span ng-if="!qq3">click to show details</span><span ng-if="qq3">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[2].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq4" ng-click="qq4=!qq4" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													4. {{ppp.proposal.questions[3].question}} <i>(<span ng-if="!qq4">click to show details</span><span ng-if="qq4">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[3].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq5" ng-click="qq5=!qq5" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													5. {{ppp.proposal.questions[4].question}} <i>(<span ng-if="!qq5">click to show details</span><span ng-if="qq5">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[4].response}}
-												</div>
-											</div>
-										</uib-accordion> -->
 									</div>
 								</div>
 								<br>
@@ -874,12 +828,25 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
-						<!--
-							<div class="alert" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
+              <br>
+							<div class="alert" ng-if ="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
 								There are currently no addenda for this RFP.
-							</div>
-						-->
-							<br>
+              </div>
+
+              <ol>
+                <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
+
+                  <!-- non-editing view -->
+                  <div>
+                    <span ng-bind-html="addendum.description"></span>
+                    <div class="addendum-created">
+                      Added on {{addendum.createdOn | date}}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+
+							<!-- <br>
 							<p class="small" style="border-bottom: 1px dotted #e3e3e3">Posted <strong>Wed May 23, 2018</strong></p>
 							<p><strong>Question:</strong> The opportunity mentions an existing application, <a href="https://mines.empr.gov.bc.ca" target="_blank">https://mines.empr.gov.bc.ca</a>. What (if any) of this existing application can or should be re-used? Would we be expected to determine how much can be re-used through the inception and proof of concept phases?
 							<p><strong>Answer:</strong> The intent is to complete some enhancements to the https://mines.empr.gov.bc.ca application. We do not intent to reuse it in the MDS application.</p>
@@ -889,7 +856,7 @@
 							<p><strong>Answer:</strong> No, this does not preclude other solutions and we will accept the potential inclusion of other technologies.</p>
 							<ul ng-repeat="addendum in ppp.proposal.addendums">
 								<li>{{addendum.descrption}} (added {{addendum.created}})</li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 				</uib-tab>
