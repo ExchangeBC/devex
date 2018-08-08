@@ -1,0 +1,78 @@
+<div class="edit-form-tab-content">
+
+  <!-- List of team questions -->
+  <ol>
+    <li ng-repeat="question in vm.teamQuestions" class="addendum-list-item">
+
+      <!-- non-editing view -->
+      <div ng-if="!vm.editingTeamQuestion || !(vm.teamQuestionEditIndex === $index)" class="addendum-item">
+        <span class="addendum-created">Question: </span><br><div class="input-help alert alert-success" ng-bind-html="question.cleanQuestion"></div><br>
+        <span class="addendum-created">Response Guideline: </span><div class="input-help alert alert-info" ng-bind-html="question.cleanGuideline"></div>
+        <div class="addendum-created">Word Limit: {{question.wordLimit}}</div>
+        <div class="addendum-created">Question Score: {{question.questionScore}}</div>
+        <div>
+          <button type="button" class="btn btn-sm btn-default" ng-show="!vm.opportunity.isPublished && !vm.opportunity.wasPublished" ng-click="vm.deleteTeamQuestion($index)">Delete</button>
+          <button type="button" class="btn btn-sm btn-default" ng-show="!vm.opportunity.isPublished && !vm.opportunity.wasPublished" ng-click="vm.editTeamQuestion($index)">Edit</button>
+        </div>
+      </div>
+
+      <!-- editing view -->
+      <div ng-if="vm.editingTeamQuestion && vm.teamQuestionEditIndex === $index" class="addendum-item-editing">
+          <div>&nbsp;</div>
+          <fieldset>
+              <form-display
+                class="col-sm-12"
+                x-options='{
+                  "name":"teamQuestion"
+                }'>
+                Question:
+                <textarea
+                  name="teamQuestion"
+                  id="teamQuestion"
+                  class="form-control input-sm"
+                  ui-tinymce="vm.tinymceOptions"
+                  placeholder="Team Question"
+                  ng-model="vm.currentTeamQuestionText">
+                </textarea>
+                <br>
+                Response Guideline:
+                <textarea
+                  name="responseGuideline"
+                  id="responseGuideline"
+                  class="form-control input-sm"
+                  ui-tinymce="vm.tinymceOptions"
+                  placeholder="Response Guideline"
+                  ng-model="vm.currentGuidelineText">
+                </textarea>
+                <table>
+                  <tr>
+                    <td align="right">Response Word Limit:&nbsp;&nbsp;</td>
+                    <td><input type="number" ng-model="vm.currentQuestionWordLimit"></td>
+                  </tr>
+                  <tr>
+                    <td align="right">Question Score:&nbsp;&nbsp;</td>
+                    <td><input type="number" ng-model="vm.currentQuestionScore"></td>
+                  </tr>
+                </table>
+
+              </form-display>
+
+            </fieldset>
+            <div>
+              <button type="button" class="btn btn-sm btn-default" ng-click="vm.cancelEditTeamQuestion()">Cancel</button>
+              <button type="button" class="btn btn-sm btn-primary" ng-click="vm.saveEditTeamQuestion()">Save</button>
+            </div>
+      </div>
+
+    </li>
+  </ol>
+
+  <!-- Add new team question button -->
+  <div class="add-button-wrapper">
+      <button class="btn btn-sm btn-default" ng-show="!vm.editingTeamQuestion && !vm.opportunity.isPublished && !vm.opportunity.wasPublished" type="button" ng-click="vm.addNewTeamQuestion()"><i class="fa fa-plus"></i> Add New</button>
+  </div>
+  <div ng-show="vm.opportunity.isPublished || vm.opportunity.wasPublished" class="alert alert-warning">
+      Team Questions may not be updated if an opportunity has already been published or previously published
+  </div>
+</div>
+

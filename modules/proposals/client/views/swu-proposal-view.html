@@ -130,16 +130,11 @@
 	<hr>
 	<div class="row">
 		<div class="col-xs-12">
-			<h5>{{data.proposal.questions[0].question}}</h5>
-			<span ng-bind-html="data.proposal.questions[0].response"></span><br>
-			<h5>{{data.proposal.questions[1].question}}</h5>
-			<span ng-bind-html="data.proposal.questions[1].response"></span><br>
-			<h5>{{data.proposal.questions[2].question}}</h5>
-			<span ng-bind-html="data.proposal.questions[2].response"></span><br>
-			<h5>{{data.proposal.questions[3].question}}</h5>
-			<span ng-bind-html="data.proposal.questions[3].response"></span><br>
-			<h5>{{data.proposal.questions[4].question}}</h5>
-			<span ng-bind-html="data.proposal.questions[4].response"></span>
+      <h4>Team Questions</h4>
+      <div ng-repeat="response in data.proposal.teamQuestionResponses">
+        <b>Question {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.question"></span>
+        <b>Response {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.response"></span>
+      </div>
 		</div>
 	</div>
 </div> <!-- End of modal-body -->

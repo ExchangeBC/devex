@@ -24,7 +24,7 @@
 
 <section class="edit-form-background" style="min-height: 750px" role="main">
 
-	<form id="proposalform" name="ppp.form.proposalform" class="form swu-proposal" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
+	<form id="proposalform" name="ppp.form.proposalform" class="form swu-proposal" novalidate>
 
 		<div class="edit-form swu-proposal">
 
@@ -598,7 +598,8 @@
 				<uib-tab index="5">
 					<uib-tab-heading>
 						5. Team Questions <i class="fa fa-pencil"></i>
-					</uib-tab-heading>
+          </uib-tab-heading>
+
 					<uib-accordion>
 						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
 							<uib-accordion-heading>
@@ -615,104 +616,24 @@
 						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the Organization name, Resource name, or specific company software!
 					</div>
 					<h5>
-						The response for each question is limited to 300 words. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
+						Please note the word limit for each response, as responses exceeding that limit will receive a score of 0. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
 					</h5>
-					<br>
-					<div class="form-group">
-						<label>{{ppp.proposal.questions[0].question}}</label>
-						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq0 = !sq0"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq0">click to hide details</span><span ng-if="sq0">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="!sq0">Tell us about your experience to demonstrate your knowledge and skill with:
-							<ul>
-								<li>Performance metrics</li>
-								<li>The role of measurement in software development</li>
-							</ul>
-						</div>
-						<textarea
-							name="q1"
-							id="q1"
+          <br>
+          <div ng-repeat="question in ppp.responses" class="form-group">
+            <b style="vertical-align: top;">Question {{$index + 1}} &nbsp;&nbsp;</b><em style="vertical-align: top;">({{question.wordLimit}} word limit, worth {{question.questionScore}} points):</em><br>
+            <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
+            &nbsp;&nbsp;
+            <div class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="question.showGuidance">click to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
+            <div class="input-help alert alert-info" ng-show="question.showGuidance" ng-bind-html="question.cleanGuideline"></div>
+            <textarea
+							name="teamQuestion"
+							id="teamQuestion"
               class="form-control"
               ui-tinymce="ppp.tinymceOptions"
-							ng-model="ppp.proposal.questions[0].response">
+							ng-model="question.response">
 						</textarea>
-					</div>
-					<div class="form-group">
-						<label>{{ppp.proposal.questions[1].question}}</label>
-						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq1 = !sq1"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq1">click to hide details</span><span ng-if="sq1">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="!sq1">
-							Tell us about your experience to demonstrate your knowledge and skill with:
-							<ul>
-								<li>The role of UX in software development</li>
-								<li>Teamwork</li>
-							</ul>
-						</div>
-						<textarea
-							name="q2"
-							id="q2"
-              class="form-control"
-              ui-tinymce="ppp.tinymceOptions"
-							ng-model="ppp.proposal.questions[1].response">
-						</textarea>
-					</div>
-					<div class="form-group">
-						<label>{{ppp.proposal.questions[2].question}}</label>
-						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq2 = !sq2"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq2">click to hide details</span><span ng-if="sq2">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="!sq2">
-							Tell us about your experience to demonstrate your knowledge and skill with:
-							<ul>
-								<li>Tools and processes</li>
-								<li>Level of information detail</li>
-							</ul>
-						</div>
-						<textarea
-							name="q3"
-							id="q3"
-              class="form-control"
-              ui-tinymce="ppp.tinymceOptions"
-							ng-model="ppp.proposal.questions[2].response">
-						</textarea>
-					</div>
-					<div class="form-group">
-						<label>{{ppp.proposal.questions[3].question}}</label>
-						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq3 = !sq3"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq3">click to hide details</span><span ng-if="sq3">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="!sq3">Tell us about your experience to demonstrate your knowledge and skill with:
-							<ul>
-								<li>User stories</li>
-								<li>Teamwork</li>
-							</ul>
-						</div>
-						<textarea
-							name="q4"
-							id="q4"
-              class="form-control"
-              ui-tinymce="ppp.tinymceOptions"
-							ng-model="ppp.proposal.questions[3].response">
-						</textarea>
-					</div>
-					<div class="form-group">
-						<label>{{ppp.proposal.questions[4].question}}</label>
-						&nbsp;&nbsp;
-						<span class="input-help-source" ng-click="sq4 = !sq4"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="!sq4">click to hide details</span><span ng-if="sq4">click to show details</span>)</i></span>
-						<div class="input-help alert alert-info" ng-show="!sq4">
-							Tell us about your experience to demonstrate your knowledge of and skill with:
-							<ul>
-								<li>The development life cycle</li>
-								<li>Testing</li>
-								<li>When to test</li>
-							</ul>
-						</div>
-						<textarea
-							name="q5"
-							id="q5"
-              class="form-control"
-              ui-tinymce="ppp.tinymceOptions"
-							ng-model="ppp.proposal.questions[4].response">
-						</textarea>
-					</div>
-				</uib-tab>
+          </div>
+        </uib-tab>
 
 				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
 				<uib-tab index="6">
@@ -861,53 +782,23 @@
 
 								<div class="row">
 									<div class="col-xs-12">
-										<h3 class="opp-detail">Responses to Team Questions</h3>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq1" ng-click="qq1=!qq1" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													1. {{ppp.proposal.questions[0].question}} <i>(<span ng-if="!qq1">click to show details</span><span ng-if="qq1">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">
-													<p>{{ppp.proposal.questions[0].response}}</p>
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq2" ng-click="qq2=!qq2" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													2. {{ppp.proposal.questions[1].question}} <i>(<span ng-if="!qq2">click to show details</span><span ng-if="qq2">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[1].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq3" ng-click="qq3=!qq3" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													3. {{ppp.proposal.questions[2].question}} <i>(<span ng-if="!qq3">click to show details</span><span ng-if="qq3">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[2].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq4" ng-click="qq4=!qq4" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													4. {{ppp.proposal.questions[3].question}} <i>(<span ng-if="!qq4">click to show details</span><span ng-if="qq4">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[3].response}}
-												</div>
-											</div>
-										</uib-accordion>
-										<uib-accordion>
-											<div uib-accordion-group is-open="qq5" ng-click="qq5=!qq5" class="panel-default" style="border: none; box-shadow: none;">
-												<uib-accordion-heading>
-													5. {{ppp.proposal.questions[4].question}} <i>(<span ng-if="!qq5">click to show details</span><span ng-if="qq5">click to hide details</span>)</i>
-												</uib-accordion-heading>
-												<div class="row">{{ppp.proposal.questions[4].response}}
-												</div>
-											</div>
-										</uib-accordion>
+                    <h3 class="opp-detail">Responses to Team Questions</h3>
+                    <div ng-repeat="response in ppp.responses">
+                      <uib-accordion>
+                        <div uib-accordion-group is-open="response.displayInSummary" ng-click="vm.toggleResponseAccordian($index)" class="panel-default" style="border: none; box-shadow: none;">
+                          <uib-accordion-heading style="float: none">
+                            <div style="float: left">
+                                {{$index + 1}}.&nbsp;
+                            </div>
+                            <span style="float: left" ng-bind-html="response.question"></span>
+                            <i>&nbsp;&nbsp;(<span ng-if="!response.displayInSummary">click to show response</span><span ng-if="response.displayInSummary">click to hide response</span>)</i>
+                          </uib-accordion-heading>
+                          <div style="float: left" class="row">
+                            <div ng-bind-html="response.response"></div>
+                          </div>
+                        </div>
+                      </uib-accordion>
+                    </div>
 									</div>
 								</div>
 								<br>
@@ -937,12 +828,25 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
-						<!--
-							<div class="alert" ng-if ="!ppp.proposal.addendums || ppp.proposal.addendums.length == 0">
+              <br>
+							<div class="alert" ng-if ="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
 								There are currently no addenda for this RFP.
-							</div>
-						-->
-							<br>
+              </div>
+
+              <ol>
+                <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
+
+                  <!-- non-editing view -->
+                  <div>
+                    <span ng-bind-html="addendum.description"></span>
+                    <div class="addendum-created">
+                      Added on {{addendum.createdOn | date}}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+
+							<!-- <br>
 							<p class="small" style="border-bottom: 1px dotted #e3e3e3">Posted <strong>Wed May 23, 2018</strong></p>
 							<p><strong>Question:</strong> The opportunity mentions an existing application, <a href="https://mines.empr.gov.bc.ca" target="_blank">https://mines.empr.gov.bc.ca</a>. What (if any) of this existing application can or should be re-used? Would we be expected to determine how much can be re-used through the inception and proof of concept phases?
 							<p><strong>Answer:</strong> The intent is to complete some enhancements to the https://mines.empr.gov.bc.ca application. We do not intent to reuse it in the MDS application.</p>
@@ -952,7 +856,7 @@
 							<p><strong>Answer:</strong> No, this does not preclude other solutions and we will accept the potential inclusion of other technologies.</p>
 							<ul ng-repeat="addendum in ppp.proposal.addendums">
 								<li>{{addendum.descrption}} (added {{addendum.created}})</li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 				</uib-tab>
@@ -980,8 +884,8 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
-							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
-							<button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
+							<button type="button" class="btn btn-primary pull-right" ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
+							<button type="button" class="btn btn-primary pull-right" ng-click="ppp.save(ppp.form.proposalform.$valid)" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
 							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" uib-tooltip="This will blow up all the work you've saved in this proposal!"><i class="fa fa-trash"></i> Delete This Proposal</button>
 							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i class="fa fa-ban"></i> Withdraw Proposal</button>
 							<a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/proposals/export/opportunity/{{ppp.opportunity._id}}" target="_blank"><i class="fa fa-file"></i> Export Proposal</a>

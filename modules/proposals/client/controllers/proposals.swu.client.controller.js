@@ -105,10 +105,9 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
-			// ppp.features = window.features;
 			ppp.trust    = $sce.trustAsHtml;
 			//
 			// check we have an opp
@@ -271,14 +270,36 @@
 			ppp.p_imp.iPropCapabilities = {};
 			ppp.p_imp.iPropCapabilitySkills = {};
 			//
-			// questions: HACK, needs to be better and indexed etc etc
+			// team question responses
 			//
-			ppp.questions = dataService.questions;
-			var i;
-			if (!ppp.proposal.questions) ppp.proposal.questions = [];
-			for (i=0; i<ppp.questions.length; i++) {
-				if (!ppp.proposal.questions[i]) {
-					ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
+			ppp.responses = [];
+			ppp.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
+				var response = {
+					question: teamQuestion.question,
+					cleanQuestion: $sce.trustAsHtml(teamQuestion.question),
+					cleanGuideline: $sce.trustAsHtml(teamQuestion.guideline),
+					wordLimit: teamQuestion.wordLimit,
+					questionScore: teamQuestion.questionScore,
+					showGuidance: true,
+					displayInSummary: false
+				};
+
+				// if there was a previously saved response, display that
+				if (ppp.proposal.teamQuestionResponses && ppp.proposal.teamQuestionResponses[index]) {
+					response.response = ppp.proposal.teamQuestionResponses[index].response;
+				}
+
+				ppp.responses.push(response);
+			});
+
+			ppp.toggleGuidance = function(index) {
+				if (index >= 0 && index < ppp.responses.length) {
+					ppp.responses[index].showGuidance = !ppp.responses[index].showGuidance;
+				}
+			}
+			ppp.toggleResponseAccordian = function(index) {
+				if (index >= 0 && index < ppp.responses.length) {
+					ppp.responses[index].displayInSummary = !ppp.responses[index].displayInSummary;
 				}
 			}
 
@@ -506,12 +527,13 @@
 				return;
 			}
 
-			ppp.proposal.opportunity          = ppp.opportunity;
-			ppp.proposal.businessName         = ppp.org.name;
-			ppp.proposal.businessAddress      = ppp.org.fullAddress;
-			ppp.proposal.businessContactName  = ppp.org.contactName;
-			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			ppp.proposal.opportunity          	= ppp.opportunity;
+			ppp.proposal.businessName         	= ppp.org.name;
+			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
+			ppp.proposal.businessContactName  	= ppp.org.contactName;
+			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
+			ppp.proposal.teamQuestionResponses 	= ppp.responses;
 			setTeams ();
 			return new Promise (function (resolve, reject) {
 				ppp.proposal.createOrUpdate ()
@@ -611,7 +633,7 @@
 			// validate word counts - shouldn't be able to submit responses to questions that exceed max word count
 			var invalidResponseIndex = 0;
 			window.tinymce.editors.forEach(function(editor, index) {
-				if (editor.plugins.wordcount.getCount() > 300) {
+				if (editor.plugins.wordcount.getCount() > ppp.opportunity.teamQuestions[index].wordLimit) {
 					Notification.error({
 						message: 'Word count exceeded for Question ' + (index + 1) + '.  Please edit your response before submitting',
 						title: '<i class="glyphicon glyphicon-remove"</i> Error'
@@ -625,15 +647,19 @@
 				return;
 			}
 
-			ppp.proposal.opportunity          = ppp.opportunity;
-			ppp.proposal.businessName         = ppp.org.name;
-			ppp.proposal.businessAddress      = ppp.org.fullAddress;
-			ppp.proposal.businessContactName  = ppp.org.contactName;
-			ppp.proposal.businessContactEmail = ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone = ppp.org.contactPhone;
+			ppp.proposal.opportunity          	= ppp.opportunity;
+			ppp.proposal.businessName         	= ppp.org.name;
+			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
+			ppp.proposal.businessContactName  	= ppp.org.contactName;
+			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
+			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
+			ppp.proposal.teamQuestionResponses 	= ppp.responses;
 			setTeams ();
 			ppp.proposal.status = 'Submitted';
-			saveproposal ('<h4>Your proposal has been submitted</h4>');
+			saveproposal ('<h4>Your proposal has been submitted</h4>')
+			.then(function() {
+				ppp.close();
+			});
 		}
 		// -------------------------------------------------------------------------
 		//

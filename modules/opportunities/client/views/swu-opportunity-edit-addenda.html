@@ -1,0 +1,55 @@
+<div class="edit-form-tab-content">
+
+  <!-- List of addendum -->
+  <ol>
+    <li ng-repeat="addendum in vm.addenda" class="addendum-list-item">
+
+      <!-- non-editing view -->
+      <div ng-if="!vm.editingAddenda || !(vm.addendaEditIndex === $index)" class="addendum-item">
+        <span ng-bind-html="addendum.cleanDesc"></span>
+        <div class="addendum-created">
+          Created by {{addendum.createdBy.displayName}} on {{addendum.createdOn | date : "medium"}}
+        </div>
+        <div>
+          <button type="button" class="btn btn-sm btn-default" ng-click="vm.deleteAddenda($index)">Delete</button>
+        </div>
+      </div>
+
+      <!-- editing view -->
+      <div ng-if="vm.editingAddenda && vm.addendaEditIndex === $index" class="addendum-item-editing">
+          <div>&nbsp;</div>
+          <fieldset>
+
+              <form-display
+                class="col-sm-12"
+                x-options='{
+                  "title":"New Addenda",
+                  "name":"addenda",
+                  "help":"List any addenda to the opportunity in the textbox below"
+                }'>
+                <textarea
+                  name="addenda"
+                  id="addenda"
+                  class="form-control input-sm"
+                  ui-tinymce="vm.tinymceOptions"
+                  placeholder="Addendum to the opportunity"
+                  ng-model="vm.currentAddendaText">
+                </textarea>
+              </form-display>
+
+            </fieldset>
+            <div>
+              <button type="button" class="btn btn-sm btn-default" ng-click="vm.cancelEditAddendum()">Cancel</button>
+              <button type="button" class="btn btn-sm btn-primary" ng-click="vm.saveEditAddendum()">Save</button>
+            </div>
+      </div>
+
+    </li>
+  </ol>
+
+  <!-- Add new addendum button -->
+  <div class="add-button-wrapper">
+      <button ng-show="!vm.editingAddenda" type="button" class="btn btn-sm btn-default" ng-click="vm.addNewAddendum()"><i class="fa fa-plus"></i> Add New</button>
+  </div>
+</div>
+

@@ -30,7 +30,7 @@
 				<a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i class="fa fa-lg fa-times"></i></a>
 			</div>
 
-			
+
 			<uib-tabset active class="edit-form-tabs">
 				<uib-tab index="0">
 					<uib-tab-heading>
@@ -61,7 +61,7 @@
 						Preferred Technical Skills
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-skills.html'"></div>
-				</uib-tab>
+        </uib-tab>
 				<uib-tab index="13">
 					<uib-tab-heading>
 						Budget
@@ -87,7 +87,19 @@
 						Terms and Conditions
 					</uib-tab-heading>
 					<div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-terms.html'"></div>
-				</uib-tab>
+        </uib-tab>
+        <uib-tab index="15">
+            <uib-tab-heading>
+              Team Questions
+            </uib-tab-heading>
+          <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-team-questions.html'"></div>
+        </uib-tab>
+        <uib-tab index="16">
+          <uib-tab-heading>
+            Addenda
+          </uib-tab-heading>
+          <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-addenda.html'"></div>
+        </uib-tab>
 			</uib-tabset>
 
 			<div class="edit-form-footer">

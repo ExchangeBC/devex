@@ -9,14 +9,7 @@
 
 	.factory ('dataService', function () {
 		return {
-			cities: citylist,
-			questions : [
-				'What performance metrics does your team measure?',
-				'How do the developers and User Experience people on your team interact?',
-				'Describe the level of detail your team generally needs in order to start work on a task or feature.',
-				'As a team, how do you discuss user stories?',
-				'At what point in the development cycle does your team start to talk about testing?'
-			]
+			cities: citylist
 		};
 	});
 }());

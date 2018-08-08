@@ -61,7 +61,7 @@
 				<div class="swu-evaluation-cta">
 					<p>Your first step is to comparatively rank the responses that teams submitted to the Team Questions.</p>
 					<button class="btn btn-lg btn-primary" ng-if="vm.proposals.length >= 1" ng-click="vm.questions()">Rank responses &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
-				</div>				
+				</div>
 			</div>
 
 			<!-- Stage 1c: Questions: Questionnaire response ranking (modal) has been saved, but not committed -->
@@ -78,7 +78,7 @@
 				<div class="swu-evaluation-message">Great! Next step: the Code Challenge.</div>
 				<div class="swu-evaluation-cta">
 					<p>In the table below, you should see which companies screen in for the Code Challenge.</p>
-					<p>Right now, you need to: <strong>(1) Notify all the companies who did not screen in</strong> and <strong>(2) Send the Code Challenge to all companies who did screen in.</strong></p>	
+					<p>Right now, you need to: <strong>(1) Notify all the companies who did not screen in</strong> and <strong>(2) Send the Code Challenge to all companies who did screen in.</strong></p>
 					<p>Once the Code Challenge submissions have been evaluated, come back here to enter the scores for each company. </p>
 					<button class="btn btn-lg btn-primary" ng-click="vm.codeChallenge()">Enter Code Challenge scores &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
 				</div>
@@ -100,7 +100,7 @@
 			<div class="text-center" ng-if="vm.stageIs('price')">
 				<div class="swu-evaluation-message">Congrats, you did it!</div>
 				<div class="swu-evaluation-cta">
-					<p>The evaluation is complete. The score for pricing has been automatically calculated by the system and the top scoring team is listed in the table below.</p> 
+					<p>The evaluation is complete. The score for pricing has been automatically calculated by the system and the top scoring team is listed in the table below.</p>
 					<p>After you have contacted the winning company and confirmed that they will be taking on the contract, you can click the Assign button below to show all viewers of the opportunity page which company won the competition.</p>
 				</div>
 			</div>
@@ -130,7 +130,7 @@
 								<button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Company" data-content="You don't get to see the name of the companies until you rank anonymized and randomized repsonses to the questionnaire, then select how many you're going to interview! Cool, eh?!">
 									Company
 								</button>
-							</td>								
+							</td>
 							<td class="text-center">
 								<button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Skills (/20)" data-content="All the companies claim to have all the capabilites you need. The score in this column is for the amount of the preferred technical skills you selected that the team members possess.">
 									Skills
@@ -210,7 +210,7 @@
 				<button ng-if="vm.isAdmin" ng-disabled="vm.pastStage('pending_review')" class="btn btn-sm btn-primary" ng-click="vm.openQuestionVetting()">Review Questions</button>
 			</div>
 
-		</div>	
+		</div>
 	</div>
 
 	<br>
@@ -302,7 +302,7 @@
 				<div ng-if="vm.closing === 'CLOSED'">
 					<p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{vm.deadline}}</strong>.</p>
 				</div>
-				
+
 				<!-- Opportunity has been assigned. -->
 				<div class="text-center" ng-if="vm.stageIs('assigned')">
 					<span class="light">This opportunity has been awarded to:</span>
@@ -397,8 +397,27 @@
 				<h3 class="opp-detail">Background</h3>
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
-		</div>
+    </div>
+    <hr>
 
+    <div class="row" ng-hide="vm.display.addenda === null">
+      <div class="col-xs-12">
+        <h3 class="opp-detail">Addenda</h3>
+
+        <ol>
+            <li ng-repeat="addendum in vm.display.addenda" class="addendum-list-item">
+
+              <!-- non-editing view -->
+              <div ng-if="!vm.editingAddenda || !(vm.addendaEditIndex === $index)">
+                <span ng-bind-html="addendum.cleanDesc"></span>
+                <div class="addendum-created">
+                  Added on {{addendum.createdOn | date}}
+                </div>
+              </div>
+            </li>
+          </ol>
+      </div>
+    </div>
 		<hr>
 
 		<div class="row">
@@ -615,10 +634,10 @@
 				<p>We will let you know after the Closing Time whether or not your Team has been shortlisted.</p>
 				<p>Thanks for your interest!</p>
 				<proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-			</div>	
-			<hr>	
-		</div>		
-		
+			</div>
+			<hr>
+		</div>
+
 
 
 		<!-- // Proposal Evaluation Criteria // -->

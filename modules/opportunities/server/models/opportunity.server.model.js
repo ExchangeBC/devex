@@ -22,9 +22,32 @@ var OpportunityCapabilities = new Schema ({
 	desiredYears : {type: Number, default:0 },
 	skills       : {type: [String], default:[]}
 });
-/**
- * Opportunity Schema
- */
+// -------------------------------------------------------------------------
+//
+// Opportunity addendum schema
+//
+// -------------------------------------------------------------------------
+var AddendumSchema = new Schema ({
+	description : {type: String},
+	createdBy 	: {type: Schema.Types.ObjectId, ref: 'User', default: null},
+	createdOn	: {type: Date, default: null}
+});
+// -------------------------------------------------------------------------
+//
+// Opportunity team question schema
+//
+// -------------------------------------------------------------------------
+var TeamQuestionSchema = new Schema ({
+	question		: {type: String},
+	guideline		: {type: String},
+	wordLimit		: {type: Number, default: 300},
+	questionScore	: {type: Number, default: 1}
+})
+// -------------------------------------------------------------------------
+//
+// Opportunity schema
+//
+// -------------------------------------------------------------------------
 var OpportunitySchema = new Schema({
 	//
 	// common fields
@@ -134,7 +157,9 @@ var OpportunitySchema = new Schema({
 	// each time a new opp was created we had to create a su7bscrption type. this
 	// is much simpler and easier to maintain
 	//
-	watchers : {type: [{type:Schema.ObjectId, ref: 'User'}], default: []}
+	watchers 				: {type: [{type:Schema.ObjectId, ref: 'User'}], default: []},
+	addenda					: {type: [AddendumSchema], default: []},
+	teamQuestions			: {type: [TeamQuestionSchema], default: []}
 }, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {
@@ -215,3 +240,4 @@ OpportunitySchema.statics.findUniqueCode = function (title, suffix, callback) {
 };
 
 mongoose.model('Opportunity', OpportunitySchema);
+mongoose.model('TeamQuestion', TeamQuestionSchema);
