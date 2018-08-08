@@ -15,7 +15,7 @@
     "npm": ">=2.0.0"
   },
   "scripts": {
-    "postinstall": "bower install --quiet --config.interactive=false --allow-root && bower prune --allow-root && npm run build",
+    "postinstall": "bower install --quiet --config.interactive=false --allow-root && bower prune --allow-root",
     "build": "gulp build",
     "dev": "gulp default",
     "quiet": "gulp quiet",

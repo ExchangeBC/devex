@@ -92,6 +92,9 @@ RUN yarn install --non-interactive --pure-lockfile \
 
 COPY . /opt/mean.js
 
+# Do not fail when there is no build script
+RUN npm run build --if-present
+
 # Run MEAN.JS server
 ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD ["npm", "start"]
