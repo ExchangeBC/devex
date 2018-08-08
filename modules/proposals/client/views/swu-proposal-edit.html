@@ -782,8 +782,24 @@
 
 								<div class="row">
 									<div class="col-xs-12">
-										<h3 class="opp-detail">Responses to Team Questions</h3>
-										<uib-accordion>
+                    <h3 class="opp-detail">Responses to Team Questions</h3>
+                    <div ng-repeat="response in ppp.responses">
+                      <uib-accordion>
+                        <div uib-accordion-group is-open="response.displayInSummary" ng-click="vm.toggleResponseAccordian($index)" class="panel-default" style="border: none; box-shadow: none;">
+                          <uib-accordion-heading style="float: none">
+                            <div style="float: left">
+                                {{$index + 1}}.&nbsp;
+                            </div>
+                            <span style="float: left" ng-bind-html="response.question"></span>
+                            <i>&nbsp;&nbsp;(<span ng-if="!response.displayInSummary">click to show response</span><span ng-if="response.displayInSummary">click to hide response</span>)</i>
+                          </uib-accordion-heading>
+                          <div style="float: left" class="row">
+                            <div ng-bind-html="response.response"></div>
+                          </div>
+                        </div>
+                      </uib-accordion>
+                    </div>
+										<!-- <uib-accordion>
 											<div uib-accordion-group is-open="qq1" ng-click="qq1=!qq1" class="panel-default" style="border: none; box-shadow: none;">
 												<uib-accordion-heading>
 													1. {{ppp.proposal.questions[0].question}} <i>(<span ng-if="!qq1">click to show details</span><span ng-if="qq1">click to hide details</span>)</i>
@@ -828,7 +844,7 @@
 												<div class="row">{{ppp.proposal.questions[4].response}}
 												</div>
 											</div>
-										</uib-accordion>
+										</uib-accordion> -->
 									</div>
 								</div>
 								<br>

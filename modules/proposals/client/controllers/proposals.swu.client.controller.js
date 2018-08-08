@@ -280,7 +280,8 @@
 					cleanGuideline: $sce.trustAsHtml(teamQuestion.guideline),
 					wordLimit: teamQuestion.wordLimit,
 					questionScore: teamQuestion.questionScore,
-					showGuidance: true
+					showGuidance: true,
+					displayInSummary: false
 				};
 
 				// if there was a previously saved response, display that
@@ -294,6 +295,11 @@
 			ppp.toggleGuidance = function(index) {
 				if (index >= 0 && index < ppp.responses.length) {
 					ppp.responses[index].showGuidance = !ppp.responses[index].showGuidance;
+				}
+			}
+			ppp.toggleResponseAccordian = function(index) {
+				if (index >= 0 && index < ppp.responses.length) {
+					ppp.responses[index].displayInSummary = !ppp.responses[index].displayInSummary;
 				}
 			}
 
