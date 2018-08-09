@@ -739,16 +739,18 @@ form-title {
   font-size: 1em;
 }
 
+/* Size form controls in px instead of em */
 .form-control {
-  font-size: 1em;
-  padding: .75em;
+  font-size: 14px !important;
+  padding: 10px;
   height: auto;
 }
 
+/* Size input-groups and their buttons in px instead of em so they align with the form-control */
 .input-group-btn {
-  font-size: 1em;
   > .btn {
-    padding: .95em;  
+    font-size: 13px !important;
+    padding: 11px;  
   }
 }
 
