@@ -35,41 +35,10 @@
 								"id":"flags",
 								"name":"flags"
 							}'>
-							<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}" ng-class={><i class="fa fa-circle"></i> {{qqq.capability.name}}</label>
+							<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}"><i class="fa fa-circle"></i> {{qqq.capability.name}}</label>
 							<label class="label">{{qqq.capability.name}}</label>
 						</form-display>
 
-						<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
-						<!--
-						<form-display
-							class="col-sm-12"
-							x-options='{
-								"id":"flags",
-								"name":"flags"
-							}'>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isRequired" />
-										This capability is required for companies to participate in the RFQ process
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isInception" />
-										This capability is part of the inception phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isPrototype" />
-										This capability is part of the prototype phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isImplementation" />
-										This capability is part of the implementation phase
-								</label>
-							</div>
-						</form-display>
-						-->
 						<form-display
 							class="col-sm-12"
 							x-options='{
@@ -95,13 +64,11 @@
 							<ul class="list-group">
 								<li class="list-group-item">
 									<div class="input-group" ng-cloak ng-if="!qqq.editingskill">
-										<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill"\>
-										<span class="input-group-btn">
-											<button class="btn btn-default" type="button" ng-click="qqq.addSkill()"  ng-cloak ng-if="!qqq.editingskill">Add</button>
-										</span>
+										<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill"><br><br>
+                    <button class="btn btn-default" type="button" ng-click="qqq.addSkill()" ng-if="!qqq.editingskill">Add</button>
 									</div>
 									<div class="input-group" ng-cloak ng-if="qqq.editingskill">
-										<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill"\>
+										<input type="text" class="form-control" placeholder="Add new specific skill..." ng-model="qqq.newskill">
 										<span class="input-group-btn">
 											<button class="btn btn-default" type="button" ng-click="qqq.updateSkill()">Save</button>
 										</span>
@@ -109,8 +76,8 @@
 								</li>
 								<li class="list-group-item" ng-repeat="skill in qqq.capability.skills">
 									{{skill.name}}
-									<button title="Delete Skill" class="btn-link pull-right" ng-click="qqq.deleteSkill(skill)"><i class="fa fa-minus-square"></i></button>
-									<button title="Edit Skill" class="btn-link pull-right" ng-click="qqq.editSkill(skill)"><i class="fa fa-edit"></i></button>
+									<button type="button" title="Delete Skill" class="btn-link pull-right" ng-click="qqq.deleteSkill(skill)"><i class="fa fa-minus-square"></i></button>
+                  <button type="button" title="Edit Skill" class="btn-link pull-right" ng-click="qqq.editSkill(skill)"><i class="fa fa-edit"></i></button>
 								</li>
 							</ul>
 						</div>
@@ -120,12 +87,12 @@
 
 			<div class="edit-form-footer">
 				<div class="row form-foot text-right">
-					<button class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
-					<button class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})"> Cancel</button>
+					<button type="button" class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
+					<button type="button" class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})"> Cancel</button>
 				<!--
 					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
 				-->
-					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid, true)"><i class="fa fa-save"></i> Save &amp; Close</button>
+					<button type="button" class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid, true)"><i class="fa fa-save"></i> Save &amp; Close</button>
 				</div>
 			</div>
 		</div>
