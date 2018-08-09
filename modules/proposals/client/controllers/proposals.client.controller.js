@@ -150,17 +150,6 @@
 		//
 		CapabilitiesMethods.init (ppp, ppp.opportunity, capabilities);
 		CapabilitiesMethods.dump (ppp, ppp.opportunity, capabilities);
-		//
-		// questions: HACK, needs to be better and indexed etc etc
-		//
-		ppp.questions = dataService.questions;
-		var i;
-		if (!ppp.proposal.questions) ppp.proposal.questions = [];
-		for (i=0; i<ppp.questions.length; i++) {
-			if (!ppp.proposal.questions[i]) {
-				ppp.proposal.questions[i] = {question:ppp.questions[i],response:''};
-			}
-		}
 
 		ppp.totals = {};
 		ppp.tinymceOptions = TINYMCE_OPTIONS;
