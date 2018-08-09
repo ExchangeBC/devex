@@ -1,23 +1,11 @@
-<section class="list-page" style="background-color: #fff;">
-  <div class="container">
-    <div class="row list-head">
-      <div class="col-xs-8">
-        <h3 class="list-page-title list-page-hide" ng-bind="vm.title"></h3>
-      </div>
-      <div class="col-xs-4">
-        <button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-xs-12">
-        <label class="label label-watching pull-right" ng-if="vm.isUser">
-          <button class="button-watching" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to get notified when new opportunities are posted"><i class="fa fa-bell fa-lg gray-light"></i> &nbsp; Not listening for new opportunities</button>
-          <button class="button-watching" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Click to stop getting notifications about new opportunities"><i class="fa fa-bell fa-lg text-primary"></i> &nbsp; Listening for new opportunities</button>
-        </label>
-      </div>
-    </div>
+<!-- Buttons that should sit just above the Open Opportunities -->
+<div class="container" ng-if="vm.isUser">
+  <div style="padding: .75em 0;">  
+    <button ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}" ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})" title="New"><i class="fa fa-plus"></i> Post an Opportunity</button>
+    <button class="btn btn-primary pull-right" ng-if="!vm.user.notifyOpportunities" ng-click="vm.subscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="Get emails about new opportunities">Subscribe &nbsp;<i class="fa fa-bell"></i></button>
+    <button class="btn btn-secondary pull-right" ng-if="vm.user.notifyOpportunities" ng-click="vm.unsubscribe(opportunity);$event.preventDefault(); $event.stopPropagation()" uib-tooltip="You'll get emails about new opportunities">Subscribed &nbsp;<i class="fa fa-bell"></i></button>
   </div>
-</section>
+</div>
 
 <!-- Open Opportunities Container -->
 <section>

@@ -2,20 +2,22 @@
 	<i class="fa fa-lg fa-envelope-o"></i>&nbsp;&nbsp;Get notified as soon as new opportunities are posted! <a href ui-sref="authentication.signin">Sign In</a> and select notifications in your Profile.
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="col-xs-12 col-sm-6">
-			<div class="alert alert-outline-info">
-				<i class="fa fa-code"></i> <strong>Code With Us</strong> opportunities pay a <strong>fixed-price</strong> for meeting acceptance criteria. &nbsp;<a href="/codewithus">Learn more ></a>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6">
-			<div class="alert alert-outline-info">
-				<i class="fa fa-group"></i> <strong>Sprint With Us</strong> opportunities are for registered companies who can supply <strong>teams</strong>. &nbsp;<a href="/sprintwithus">Learn more ></a>
-			</div>
-		</div>
-	</div>
-</div>
+<section style="background: #fcf8e3;" ng-if="vm.isUser">
+  <div class="container">
+      <div class="row">
+          <div class="col-xs-12 col-sm-6">
+              <div class="alert">
+                  <i class="fa fa-code"></i> <strong>Code With Us</strong> opportunities pay a <strong>fixed-price</strong> for meeting acceptance criteria. &nbsp;<a href="/codewithus">Learn more ></a>
+              </div>
+          </div>
+          <div class="col-xs-12 col-sm-6">
+              <div class="alert">
+                  <i class="fa fa-group"></i> <strong>Sprint With Us</strong> opportunities are for registered companies who can supply <strong>teams</strong>. &nbsp;<a href="/sprintwithus">Learn more ></a>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
 	
 <opportunity-list context="allopportunities"></opportunity-list>
 	
