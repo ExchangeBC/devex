@@ -18,7 +18,7 @@
 						<div class="panel panel-primary" ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
 							<div class="panel-heading text-center">
 								<strong>
-								Question: {{question[0].question}}
+								Question: <span ng-bind-html="question[0].question"></span>
 								</strong>
 							</div>
 							<table width="100%">

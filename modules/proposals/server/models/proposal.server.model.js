@@ -22,6 +22,12 @@ var AddendumSchema = new Schema ({
 	createdBy 	: {type: 'ObjectId', ref: 'User', default: null},
 	created		: {type: Date, default: null}
 });
+var TeamQuestionResponseSchema = new Schema ({
+	question : {type: String},
+	response : {type: String},
+	rank     : {type: Number, default: 0},
+	rejected : {type: Boolean, default: false}
+});
 /**
  * Proposal Schema
  */
@@ -85,10 +91,11 @@ var ProposalSchema = new Schema ({
 		total           : {type: Number, default: 0}
 
 	},
-	ranking				: {type: Number, default: 0},
-	screenedIn			: {type: Boolean, default: false},
-	passedCodeChallenge	: {type: Boolean, default: false},
-	addendums			: {type: [AddendumSchema], default: []}
+	ranking						: {type: Number, default: 0},
+	screenedIn					: {type: Boolean, default: false},
+	passedCodeChallenge			: {type: Boolean, default: false},
+	addendums					: {type: [AddendumSchema], default: []},
+	teamQuestionResponses		: {type: [TeamQuestionResponseSchema], default: []}
 }, { usePushEach: true });
 
 

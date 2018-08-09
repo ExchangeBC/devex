@@ -54,7 +54,14 @@ div.long-question {
 	margin-left: 10px;
 	resize: none;
 }
-
+div.opportunity-header {
+    margin: 2em 0 4em;
+}
+.opportunity-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
 .opportunity-description {
 	display: block;
 	clear: both;
@@ -64,6 +71,16 @@ div.long-question {
 	display: block;
 	clear: both;
 	margin: 4px 0 4px 0;
+}
+
+td.opportunity-details {
+    vertical-align: top;
+    padding: 0 25px 15px 0;
+    white-space: nowrap;
+}
+td.opportunity-details:last-child {
+ white-space: revert;
+ width: 99%;
 }
 
 h4.list-group-item-heading.opportunities {
@@ -131,4 +148,57 @@ div.rejected {
 .score-form {
 	width: 60%;
 	margin: 25px auto;
+}
+/* Opportunity addenda styling */
+ol.addendum-list {
+    -webkit-padding-start: 20px;
+    max-height: 340px;
+    overflow-y: auto;
+}
+li.addendum-list-item {
+	padding: 1em 0;
+    border-bottom: 1px dotted #f6f8fa;
+}
+span.addendum-item, div.addendum-item {
+	margin-left: 25px;
+	padding-bottom: 1em;
+	border-bottom: 1px solid gray;
+}
+div.addendum-item-editing {
+	margin-left: 25px;
+	padding-bottom: 1em;
+}
+div.addendum-created {
+	margin-bottom: .5em;
+	font-size: smaller;
+    font-weight: 600;
+    color: #b3b3b3;
+}
+div.add-button-wrapper {
+	display: flex;
+	align-items: center;
+}
+@media (min-width: 768px) {
+    .sticky-sidebar {
+        padding: 20px 0 20px 50px;
+        position: -webkit-sticky;
+        top: 40px;
+        bottom: 40px;
+    }
+}
+@media (max-width: 767px) {
+    .sticky-sidebar {
+        padding: 0;
+        position: relative;
+    }
+}
+div.overline {
+    text-transform: uppercase;
+    font-size: .8em;
+    letter-spacing: .015em;
+    margin-bottom: 3px;
+}
+div.gov-contact {
+    font-size: 1.1em;
+    font-weight: 600;
 }

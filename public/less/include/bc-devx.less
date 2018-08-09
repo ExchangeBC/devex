@@ -66,6 +66,12 @@ h5 {
   margin: 21px 0 15px;
 }
 
+hr {
+    border-bottom: 1px solid #eff2f6;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
 //---------------------------------------------
 // Grid
 //---------------------------------------------
@@ -142,7 +148,7 @@ a.breadcrumb-nav {
 }
 
 .light {
-  font-weight: 300;
+  color: #b3b3b3;
 }
 
 .strong {
@@ -370,7 +376,7 @@ tr.screened-out {
 // Edit form
 
 .edit-form {
-  max-width: 1040px;
+  max-width: 1250px;
   margin-left: auto;
   margin-right: auto;
   background: #fff;
@@ -634,7 +640,7 @@ section.signup {
 // ----------------------------------------------
 
 .form {
-  max-width: 1040px;
+  max-width: 1250px;
   margin-right: auto;
   margin-left: auto;
   padding: none;
@@ -714,51 +720,29 @@ form-title {
   letter-spacing: 0.025em;
   white-space: nowrap;
   border-radius: 3px;
-  font-size: 14px;
+  font-size: .9em;
+  text-transform: uppercase;
   box-shadow: none;
   .transition-all(0.15s);
   text-decoration: none;
   margin-left: 2px;
-}
+  padding: .75em 1.25em;
 
-.btn-solo {
-  height: 40px;
-  line-height: 38px;
-  padding: 0 14px;
-  box-shadow: 0 4px 6px rgba(50,50,93,.11),0 1px 3px rgba(0,0,0,.08);
-  &:hover {
-    -webkit-transform: translateY(-1px);
-    transform: translateY(-1px);
-    box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08);
-  }
-}
-
-.btn-lg {
-  font-size: 16px;
-}
-
-.btn-md {
-  font-size: 12px;
 }
 
 .btn-sm {
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 0.025em;
-  line-height: 1;
+  font-size: .8em;
+  padding: .5em .75em;
 }
 
-.btn-xs {
-  font-size: 10px;
-  height: 20px;
-  line-height: 16px;
+.btn-lg {
+  font-size: 1em;
 }
-
 
 .btn-default {
   color: @gray-dark;
-  background-color: @gray-lighter;
-  border-color: @gray-lighter;
+  background-color: #e6e6e6;
+  border-color: #e6e6e6;
   .input-group-btn & {
     border-color: @input-border;
   }
@@ -777,13 +761,13 @@ form-title {
   }
   &:hover {
   	color: @gray-dark;
-    background-color: darken(@gray-lighter, 7%);
-    border-color: darken(@gray-lighter, 7%);
+    background-color: darken(#e6e6e6, 7%);
+    border-color: darken(#e6e6e6, 7%);
   }
   &:hover,&:focus {
     color: @gray-dark;
-    background-color: darken(@gray-lighter, 7%);
-    border-color: darken(@gray-lighter, 7%);
+    background-color: darken(#e6e6e6, 7%);
+    border-color: darken(#e6e6e6, 7%);
   }
   &:active,
   &.active {

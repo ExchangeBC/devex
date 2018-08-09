@@ -968,6 +968,7 @@ exports.opportunityByID = function (req, res, next, id) {
 				}
 				]
 		})
+		.populate('addenda.createdBy', 'displayName')
 		// .populate({path:'proposal.user', model:'User'}) //'displayName firstName lastName email phone address username profileImageURL businessName businessAddress businessContactName businessContactPhone businessContactEmail')
 		.exec(function (err, opportunity) {
 			if (err) {

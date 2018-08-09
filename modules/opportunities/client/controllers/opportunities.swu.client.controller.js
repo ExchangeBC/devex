@@ -61,6 +61,10 @@
 		vm.display.description    = $sce.trustAsHtml(vm.opportunity.description);
 		vm.display.evaluation     = $sce.trustAsHtml(vm.opportunity.evaluation);
 		vm.display.criteria       = $sce.trustAsHtml(vm.opportunity.criteria);
+		vm.display.addenda		  = vm.opportunity.addenda;
+		vm.display.addenda.forEach(function(addendum) {
+			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
+		});
 		vm.trust = $sce.trustAsHtml;
 		vm.canApply = org && org.metRFQ;
 		vm.opportunity.hasOrg = vm.canApply;
@@ -212,11 +216,11 @@
 				//
 				vm.responses = [];
 				var questionIndex;
-				for (questionIndex=0; questionIndex<vm.opportunity.questions.length; questionIndex++) {
+				for (questionIndex=0; questionIndex<vm.opportunity.teamQuestions.length; questionIndex++) {
 					vm.responses[questionIndex] = [];
 					vm.proposals.forEach (function (proposal) {
-						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !proposal.questions[questionIndex].rejected) {
-							vm.responses[questionIndex].push (proposal.questions[questionIndex])
+						if (vm.opportunity.evaluationStage === vm.stages.pending_review || !proposal.teamQuestionResponses[questionIndex].rejected) {
+							vm.responses[questionIndex].push (proposal.teamQuestionResponses[questionIndex])
 						}
 					});
 				}
@@ -291,7 +295,7 @@
 						proposal.scores.price = 0;
 						proposal.isAssigned = false;
 						proposal.screenedIn = false;
-						proposal.questions.forEach(function(question) {
+						proposal.teamQuestionResponses.forEach(function(question) {
 							question['rejected'] = false;
 						})
 					})
@@ -327,9 +331,9 @@
 					$scope.data.questions      = [];
 					$scope.data.proposals      = vm.proposals;
 					$scope.data.nproposals     = vm.proposals.length;
-					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.questions      = vm.opportunity.teamQuestions;
 					$scope.data.responses      = vm.responses;
-					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
 					$scope.data.currentPage    = 1;
 
 					vm.responses.forEach(function(question, questionIndex) {
@@ -390,13 +394,13 @@
 				// question/response objects by id and update the originals
 				if (resp.questions) {
 					vm.proposals.forEach(function(proposal) {
-						proposal.questions.forEach(function(question) {
-							var match = resp.questions[question.question].find(function(response) {
-								return question._id === response._id;
+						proposal.teamQuestionResponses.forEach(function(response) {
+							var match = resp.questions[response.question].find(function(question) {
+								return response._id === question._id;
 							});
 
 							if (match) {
-								question.rank = resp.questions[question.question].indexOf(match) + 1;
+								response.rank = resp.questions[response.question].indexOf(match) + 1;
 							}
 						})
 					})
@@ -575,9 +579,9 @@
 					$scope.data.questions      = [];
 					$scope.data.proposals      = vm.proposals;
 					$scope.data.nproposals     = vm.proposals.length;
-					$scope.data.questions      = vm.opportunity.questions;
+					$scope.data.questions      = vm.opportunity.teamQuestions;
 					$scope.data.responses      = vm.responses;
-					$scope.data.totalQuestions = vm.opportunity.questions.length;
+					$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
 					$scope.data.currentPage    = 1;
 
 					vm.responses.forEach(function(question, questionIndex) {
@@ -585,10 +589,6 @@
 							$scope.data.responses[questionIndex][responseIndex].sanitizedResponse = $sce.trustAsHtml(response.response);
 						})
 					})
-
-					// vm.responses.forEach(function(response, index) {
-					// 	$scope.data.responses[index][0].sanitizedResponse = $sce.trustAsHtml(response[0].response);
-					// });
 
 					$scope.close = function () {
 						$uibModalInstance.close({});
@@ -731,16 +731,17 @@
 		//
 		// Rejected questions are not considered in the scoring
 		vm.questionScore = function (proposal) {
-			var bestScore = vm.opportunity.questions.length * vm.proposals.length;
+			var bestScore = vm.opportunity.teamQuestions.length * vm.proposals.length;
 			proposal.scores.question = Math.round(
-				proposal.questions
+				proposal.teamQuestionResponses
 				// filter out rejected questions
 				.filter(function (q) {
 					return !q.rejected;
 				})
 				.map (function (q) {
 					return vm.proposals.length + 1 - q.rank;
-				}).reduce (function (a, b) {
+				})
+				.reduce (function (a, b) {
 					return a + b;
 				}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
 			return proposal.scores.question;
@@ -914,7 +915,151 @@
 		vm.form                   = {};
 		vm.opportunity.skilllist  = vm.opportunity.skills ? vm.opportunity.skills.join (', ') : '';
 		vm.closing				  = 'CLOSED';
-		vm.closing = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
+		vm.closing 				  = ((vm.opportunity.deadline - new Date()) > 0) ? 'OPEN' : 'CLOSED';
+
+		// viewmodel items related to team questions
+		if (!vm.opportunity.teamQuestions) {
+			vm.opportunity.teamQuestions = [];
+		}
+		vm.teamQuestions		  	= vm.opportunity.teamQuestions;
+		vm.teamQuestions.forEach(function(teamQuestion) {
+			teamQuestion.cleanQuestion 	= $sce.trustAsHtml(teamQuestion.question);
+			teamQuestion.cleanGuideline = $sce.trustAsHtml(teamQuestion.guideline);
+			teamQuestion.newQuestion = false;
+		});
+		vm.editingTeamQuestion	  	= false;
+		vm.teamQuestionEditIndex  	= -1;
+		vm.currentTeamQuestionText	= '';
+		vm.currentGuidelineText		= '';
+		vm.currentQuestionWordLimit = 300;
+		vm.currentQuestionScore		= 5;
+
+		// Adding a new team question
+		// We a new one to the list and enter edit mode
+		vm.addNewTeamQuestion = function() {
+			vm.teamQuestions.push({
+				question: '',
+				guideline: '',
+				wordLimit: 300,
+				questionScore: 5,
+				newQuestion: true
+			});
+
+			vm.currentTeamQuestionText = '';
+			vm.currentGuidelineText = '';
+			vm.currentQuestionWordLimit = 300;
+			vm.currentQuestionScore = 5;
+			vm.teamQuestionEditIndex = vm.teamQuestions.length - 1;
+			vm.editingTeamQuestion = true;
+		}
+		// Cancel edit team question
+		vm.cancelEditTeamQuestion = function() {
+			if (vm.editingTeamQuestion) {
+
+				// if this was a brand new question, remove it
+				if (vm.teamQuestions[vm.teamQuestionEditIndex].newQuestion === true) {
+					vm.teamQuestions.splice(vm.teamQuestionEditIndex, 1);
+				}
+
+				// discard changes
+				vm.currentTeamQuestionText = '';
+				vm.currentGuidelineText = '';
+				vm.editingTeamQuestion = false;
+			}
+		}
+		// Enter edit mode for an existing team question
+		vm.editTeamQuestion = function(index) {
+			vm.teamQuestionEditIndex = index;
+			var currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+			vm.currentTeamQuestionText = currentTeamQuestion.question;
+			vm.currentGuidelineText = currentTeamQuestion.guideline;
+			vm.currentQuestionWordLimit = currentTeamQuestion.wordLimit;
+			vm.currentQuestionScore = currentTeamQuestion.questionScore;
+			vm.editingTeamQuestion = true;
+		}
+		// Save edit team question
+		vm.saveEditTeamQuestion = function() {
+			var curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+			if (curTeamQuestion) {
+				curTeamQuestion.question = vm.currentTeamQuestionText;
+				curTeamQuestion.guideline = vm.currentGuidelineText;
+				curTeamQuestion.wordLimit = vm.currentQuestionWordLimit;
+				curTeamQuestion.questionScore = vm.currentQuestionScore;
+				curTeamQuestion.cleanQuestion = $sce.trustAsHtml(vm.currentTeamQuestionText);
+				curTeamQuestion.cleanGuideline = $sce.trustAsHtml(vm.currentGuidelineText);
+				curTeamQuestion.newQuestion = false;
+			}
+
+			vm.editingTeamQuestion = false;
+		}
+
+		// Delete team question with confirm modal
+		vm.deleteTeamQuestion = function(index) {
+			if (index >= 0 && index < vm.teamQuestions.length) {
+				var q = 'Are you sure you wish to delete this team question from the opportunity?';
+				ask.yesNo (q).then (function (r) {
+					if (r) {
+						vm.teamQuestions.splice(index, 1);
+					}
+				});
+			}
+		}
+
+		// viewmodel items related to addendum
+		if (!vm.opportunity.addenda) {
+			vm.opportunity.addenda = [];
+		}
+		vm.addenda 			  	  = vm.opportunity.addenda;
+		vm.addenda.forEach(function(addendum) {
+			addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
+		})
+		vm.editingAddenda		  = false;
+		vm.addendaEditIndex		  = -1;
+		vm.currentAddendaText	  = '';
+
+		// Adding a new addendum
+		// We add a new one to the list and enter edit mode
+		vm.addNewAddendum = function() {
+			vm.addenda.push({
+				description: '',
+				createdBy: Authentication.user,
+				createdOn: Date.now()
+			});
+
+			vm.currentAddendaText = '';
+			vm.addendaEditIndex = vm.addenda.length - 1;
+			vm.editingAddenda = true;
+		}
+		// Cancel edit addendum
+		vm.cancelEditAddendum = function() {
+			if (vm.editingAddenda) {
+				vm.addenda.splice(vm.addendaEditIndex, 1);
+				vm.editingAddenda = false;
+			}
+		}
+		// Save the addendum being edited
+		vm.saveEditAddendum = function() {
+			var curAddenda = vm.addenda[vm.addendaEditIndex];
+			if (curAddenda) {
+				curAddenda.description = vm.currentAddendaText;
+				curAddenda.createdBy = Authentication.user;
+				curAddenda.createdOn = Date.now();
+				curAddenda.cleanDesc = $sce.trustAsHtml(vm.currentAddendaText);
+			}
+
+			vm.editingAddenda = false;
+		}
+		// Delete an addendum with confirm modal
+		vm.deleteAddenda = function(index) {
+			if (index >= 0 && index < vm.addenda.length) {
+				var q = 'Are you sure you wish to delete this addendum?';
+				ask.yesNo (q).then (function (r) {
+					if (r) {
+						vm.addenda.splice(index, 1);
+					}
+				});
+			}
+		}
 		//
 		// Every time we enter here until the opportunity has been published we will update the questions to the most current
 		//

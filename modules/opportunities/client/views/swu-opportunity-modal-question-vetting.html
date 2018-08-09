@@ -19,7 +19,7 @@
 				<div class="panel-heading text-center">
 					{{qindex=$index;""}}
 					<strong>
-						Question: {{question}}
+						Question: <span ng-bind-html="question.question"></span>
 					</strong>
 				</div>
 				<ul class="list-group">
@@ -28,7 +28,7 @@
 						<div class="row">
 							<div align="right">
 								Reject <input type="checkbox" ng-model="response.rejected"><br/>
-								Word count: {{getWordCount(response.response)}}
+								<!-- Word count: {{getWordCount(response.response)}} -->
 							</div>
 							<div align="left" class="col-sm-9" ng-class="{rejected: response.rejected}" ng-bind-html="response.sanitizedResponse">
 							</div>
