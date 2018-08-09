@@ -35,41 +35,10 @@
 								"id":"flags",
 								"name":"flags"
 							}'>
-							<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}" ng-class={><i class="fa fa-circle"></i> {{qqq.capability.name}}</label>
+							<label class="label label-lg label-cap-default {{qqq.capability.labelClass}}"><i class="fa fa-circle"></i> {{qqq.capability.name}}</label>
 							<label class="label">{{qqq.capability.name}}</label>
 						</form-display>
 
-						<!-- Commenting this checkbox out now that we've decided to allow the issuer of the opportunity to select which capabilities they want in each phase. -->
-						<!--
-						<form-display
-							class="col-sm-12"
-							x-options='{
-								"id":"flags",
-								"name":"flags"
-							}'>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isRequired" />
-										This capability is required for companies to participate in the RFQ process
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isInception" />
-										This capability is part of the inception phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isPrototype" />
-										This capability is part of the prototype phase
-								</label>
-								<br/>
-								<label>
-									<input type="checkbox" ng-model="qqq.capability.isImplementation" />
-										This capability is part of the implementation phase
-								</label>
-							</div>
-						</form-display>
-						-->
 						<form-display
 							class="col-sm-12"
 							x-options='{
