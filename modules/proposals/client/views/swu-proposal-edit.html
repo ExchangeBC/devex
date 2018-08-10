@@ -623,8 +623,8 @@
             <b style="vertical-align: top;">Question {{$index + 1}} &nbsp;&nbsp;</b><em style="vertical-align: top;">({{question.wordLimit}} word limit, worth {{question.questionScore}} points):</em><br>
             <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
             &nbsp;&nbsp;
-            <div class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="question.showGuidance">click to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
-            <div class="input-help alert alert-info" ng-show="question.showGuidance" ng-bind-html="question.cleanGuideline"></div>
+            <div ng-show="question.guideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="question.showGuidance">click to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
+            <div class="input-help alert alert-info" ng-show="question.showGuidance && question.guideline" ng-bind-html="question.cleanGuideline"></div>
             <textarea
 							name="teamQuestion"
 							id="teamQuestion"
