@@ -314,7 +314,12 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var proposal = _.assign (req.proposal, req.body);
+	// var proposal = _.assign (req.proposal, req.body);
+	var proposal = _.mergeWith(req.proposal, req.body, (objValue, srcValue) => {
+		if (_.isArray(objValue)) {
+			return srcValue;
+		}
+	});
 	//
 	// set the audit fields so we know who did what when
 	//

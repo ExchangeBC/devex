@@ -12,8 +12,8 @@
 			},
 			controllerAs: 'vm',
 			templateUrl: '/modules/opportunities/client/views/swu-opportunity-eval-directive.html',
-			controller: ['$scope', 'Authentication', 'ProposalsService',
-			function($scope, Authentication, ProposalsService) {
+			controller: ['$scope', 'Authentication', 'ProposalsService', 'ask',
+			function($scope, Authentication, ProposalsService, ask) {
 
 				var vm = this;
 				vm.opportunity 		= $scope.opportunity;
@@ -50,19 +50,6 @@
 					skill			: 0.05,
 					codechallenge	: 0.35
 				};
-
-				/**
-				 * Utility functions for determining stage of evaluation
-				 */
-				vm.beforeStage = function(stage) {
-					return vm.opportunity.evaluationStage < vm.stages[stage];
-				}
-				vm.pastStage = function(stage) {
-					return vm.opportunity.evaluationStage > vm.stages[stage];
-				}
-				vm.stageIs = function(stage) {
-					return vm.opportunity.evaluationStage === vm.stages[stage];
-				}
 
 				/**
 				 * Utility function for determining open/closed status
@@ -167,49 +154,68 @@
 					});
 				}
 
-				// Build question pivot
-				buildQuestionPivot()
-				.then(function(values) {
-					Promise.all([randomizeResponseOrder(values.responses), calculateSkillScores(values.proposals)])
-					.then(function(results) {
-						vm.responses = results[0];
-						vm.proposals = results[1];
-					});
-				});
-
-				// Switch on evaulation stage
-				// switch (vm.opportunity.evaluationStage) {
-				// 	case vm.stages.new:
-				// 		break;
-				// 	case vm.stages.pending_review:
-				// 		break;
-				// 	case vm.stages.questions:
-				// 		break;
-				// 	case vm.stages.questions_saved:
-				// 		break;
-				// 	case vm.stages.code_scores:
-				// 		break;
-				// 	case vm.stages.interview:
-				// 		break;
-				// 	case vm.stages.price:
-				// 		break;
-				// 	case vm.stages.assigned:
-				// 		break;
-				// 	case vm.stages.all_fail:
-				// 		break;
-				// }
-
 				/**
 				 * Total up the proposal scores
 				 * and sort highest to lowest
 				 */
-				vm.totalAndSort = function() {
-					vm.proposals.forEach(function(proposal) {
-						proposal.scores.total = Math.round((proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price) * 100) / 100;
-					});
+				var totalAndSort = function() {
+					return new function() {
+						return new Promise(function(resolve, reject) {
+							vm.proposals.forEach(function(proposal) {
+								proposal.scores.total = Math.round((proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price) * 100) / 100;
+							});
 
-					vm.proposals.sort(function(a, b) {
-						return b.scores.total - a.scores.total;
+							vm.proposals.sort(function(a, b) {
+								return b.scores.total - a.scores.total;
+							});
+							resolve();
+						})
+					}
+				}
+
+				var saveProposal = function(proposal) {
+					if (!vm.canEdit) {
+						return;
+					}
+
+					return proposal.$update();
+				};
+
+				var saveProposals = function() {
+					return function() {
+						if (!vm.canEdit) {
+							return;
+						}
+
+						return Promise.all (vm.proposals.map (function(proposal) {
+							return saveProposal(proposal);
+						}));
+					}
+				};
+
+				var saveOpportunity = function() {
+					return function() {
+						if (!vm.canEdit) {
+							return;
+						}
+
+						return vm.opportunity.$update();
+					}
+				};
+
+				var initializeEvaluation = function() {
+					buildQuestionPivot()
+					.then(function(values) {
+						switch (vm.opportunity.evaluationStage) {
+							case vm.stages.new:
+							case vm.stages.pending_review:
+								Promise.all([randomizeResponseOrder(values.responses), calculateSkillScores(values.proposals)])
+								.then(function(results) {
+									vm.responses = results[0];
+									vm.proposals = results[1];
+									vm.opportunity.evaluationStage = vm.stages.pending_review;
+								});
+						};
 					});
 				}
 
@@ -224,6 +230,51 @@
 					}
 					return null;
 				}
+
+				vm.resetEvaluation = function () {
+
+					var message = 'WARNING: This will reset the current evaluation and any calculations or entered data will be lost.  Proceed?';
+					ask.yesNo(message).then(function(response) {
+						if (response) {
+							vm.opportunity.evaluationStage = vm.stages.new;
+							vm.proposal = null;
+							vm.proposals.forEach(function(proposal) {
+								proposal.scores.skill = 0;
+								proposal.scores.question = 0;
+								proposal.scores.codechallenge = 0;
+								proposal.scores.interview = 0;
+								proposal.scores.total = 0;
+								proposal.scores.price = 0;
+								proposal.isAssigned = false;
+								proposal.screenedIn = false;
+								proposal.teamQuestionResponses.forEach(function(question) {
+									question['rejected'] = false;
+								});
+							})
+
+							Promise.resolve()
+							.then(totalAndSort)
+							.then(saveProposals)
+							.then(saveOpportunity)
+							.then(initializeEvaluation);
+						}
+					});
+				}
+
+				/**
+				 * Utility functions for determining stage of evaluation
+				 */
+				vm.beforeStage = function(stage) {
+					return vm.opportunity.evaluationStage < vm.stages[stage];
+				}
+				vm.pastStage = function(stage) {
+					return vm.opportunity.evaluationStage > vm.stages[stage];
+				}
+				vm.stageIs = function(stage) {
+					return vm.opportunity.evaluationStage === vm.stages[stage];
+				}
+
+				initializeEvaluation();
 			}]
 		}
 	});

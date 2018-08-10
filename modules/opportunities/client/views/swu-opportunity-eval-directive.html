@@ -191,8 +191,8 @@
 
     <!-- Temporary - for development purposes only-->
     <div align="center" ng-if="vm.closing === 'CLOSED'">
-      <button ng-if="vm.isAdmin" class="btn btn-sm btn-primary" ng-click="vm.resetEvaluation()">Reset Evaluation</button>
-      <button ng-if="vm.isAdmin" ng-disabled="vm.pastStage('pending_review')" class="btn btn-sm btn-primary" ng-click="vm.openQuestionVetting()">Review Questions</button>
+      <button type="button" ng-if="vm.isAdmin" class="btn btn-sm btn-primary" ng-click="vm.resetEvaluation()">Reset Evaluation</button>
+      <button type="button" ng-if="vm.isAdmin" ng-disabled="vm.pastStage('pending_review')" class="btn btn-sm btn-primary" ng-click="vm.openQuestionVetting()">Review Questions</button>
     </div>
 
   </div>
