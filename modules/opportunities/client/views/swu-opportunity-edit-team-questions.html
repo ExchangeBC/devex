@@ -7,7 +7,7 @@
       <!-- non-editing view -->
       <div ng-if="!vm.editingTeamQuestion || !(vm.teamQuestionEditIndex === $index)" class="addendum-item">
         <span class="addendum-created">Question: </span><br><div class="input-help alert alert-success" ng-bind-html="question.cleanQuestion"></div><br>
-        <span class="addendum-created" ng-show="question.guideline">Response Guideline: </span><div ng-show="question.guideline" class="input-help alert alert-info" ng-bind-html="question.cleanGuideline"></div>
+        <span class="addendum-created" ng-show="question.cleanGuideline">Response Guideline: </span><div ng-show="question.cleanGuideline" class="input-help alert alert-info" ng-bind-html="question.cleanGuideline"></div>
         <div class="addendum-created">Word Limit: {{question.wordLimit}}</div>
         <div class="addendum-created">Question Score: {{question.questionScore}}</div>
         <div>
