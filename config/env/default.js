@@ -58,12 +58,12 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		'codechallenge': {
-			path: 'public/code-challenge-rules-2018-05-14.pdf',
+			path: 'public/code-challenge-rules-2018-08-10.pdf',
 			name: 'code-challenge.pdf',
 			type: 'application/pdf'
 		},
 		'teamscenario': {
-			path: 'public/team-scenario-rules-2018-05-25.pdf',
+			path: 'public/team-scenario-rules-2018-08-10.pdf',
 			name: 'team-scenario.pdf',
 			type: 'application/pdf'
 		}
