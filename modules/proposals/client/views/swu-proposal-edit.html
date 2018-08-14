@@ -490,13 +490,11 @@
 													ng-blur="ppp.validateInceptionAmount()"
 													select-on-click>
 										</div>
-									</div>
-								</div>
-							</div>
-							<div class="proposal-amount-wrapper">
-								<span 	class="proposal-amount-error alert alert-danger"
+                                        <span 	class="proposal-amount-error alert alert-danger"
 										ng-if="ppp.proposal.phases.inception.invalidAmount">
 										<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.inceptionMax | currency}}</strong></span>
+									</div>
+								</div>
 							</div>
 						</div>
 
@@ -531,12 +529,10 @@
 													  placeholder=0.00
 													  select-on-click>
 										</div>
+                                        <span 	class="proposal-amount-error alert alert-danger"
+										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency}}</strong></span>
 									</div>
 								</div>
-							</div>
-							<div class="proposal-amount-wrapper">
-								<span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency}}</strong></span>
 							</div>
 						</div>
 
@@ -570,14 +566,13 @@
 										  select-on-click
 										  ng-blur="ppp.validateImplementationAmount()">
 										</div>
+                                        <span 	class="proposal-amount-error alert alert-danger"
+                                                ng-if="ppp.proposal.phases.implementation.invalidAmount">
+                                                <i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency}}</strong>
+                                        </span>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div class="proposal-amount-wrapper">
-							<span 	class="proposal-amount-error alert alert-danger"
-									ng-if="ppp.proposal.phases.implementation.invalidAmount">
-									<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency}}</strong></span>
 						</div>
 					</div>
 
