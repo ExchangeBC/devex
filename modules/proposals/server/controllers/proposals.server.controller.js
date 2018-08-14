@@ -393,10 +393,13 @@ exports.assignswu = function (req, res) {
 	proposal.isAssigned = true;
 	helpers.applyAudit (proposal, req.user);
 	saveProposal (proposal)
-	.then (function () {
-		return Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+	.then (function (updatedProposal) {
+		Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+		return updatedProposal;
 	})
-	.then (function () {res.json (proposal); })
+	.then (function (updatedProposal) {
+		res.json (updatedProposal);
+	})
 	.catch (function (e) {
 		res.status(422).send ({ message: errorHandler.getErrorMessage(e) });
 	});
@@ -483,7 +486,7 @@ exports.forOpportunity = function (req, res) {
 	if (!ensureAdmin (req.opportunity, req.user)) {
 		return res.json ([]);
 	}
-	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
+	Proposal.find({opportunity:req.opportunity._id, $or: [{status:'Submitted'}, {status: 'Assigned'}]}).sort('created')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')

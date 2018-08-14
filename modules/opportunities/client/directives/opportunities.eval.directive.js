@@ -12,8 +12,8 @@
 			},
 			controllerAs: 'vm',
 			templateUrl: '/modules/opportunities/client/views/swu-opportunity-eval-directive.html',
-			controller: ['$scope', 'Authentication', 'ProposalsService', 'ask',
-			function($scope, Authentication, ProposalsService, ask) {
+			controller: ['$scope', '$state', 'Authentication', 'Notification', 'ProposalsService', 'ask', 'modalService',
+			function($scope, $state, Authentication, Notification, ProposalsService, ask, modalService) {
 
 				var vm = this;
 				vm.opportunity 		= $scope.opportunity;
@@ -50,6 +50,9 @@
 					skill			: 0.05,
 					codechallenge	: 0.35
 				};
+
+				vm.maxCodeChallengePoints = vm.weights.codechallenge * vm.maxPoints;
+				vm.maxInterviewPoints = vm.weights.interview * vm.maxPoints;
 
 				/**
 				 * Utility function for determining open/closed status
@@ -92,9 +95,7 @@
 							vm.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
 								responses[index] = [];
 								proposals.forEach(function(proposal) {
-									if (!proposal.teamQuestionResponses[index].rejected) {
-										responses[index].push(proposal.teamQuestionResponses[index]);
-									}
+									responses[index].push(proposal.teamQuestionResponses[index]);
 								});
 							});
 							resolve({ responses: responses, proposals: proposals });
@@ -158,21 +159,23 @@
 				 * Total up the proposal scores
 				 * and sort highest to lowest
 				 */
-				var totalAndSort = function() {
-					return new function() {
-						return new Promise(function(resolve, reject) {
-							vm.proposals.forEach(function(proposal) {
-								proposal.scores.total = Math.round((proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price) * 100) / 100;
-							});
+				var totalAndSort = function(proposals) {
+					return new Promise(function(resolve, reject) {
+						proposals.forEach(function(proposal) {
+							proposal.scores.total = Math.round((proposal.scores.skill + proposal.scores.question + proposal.scores.codechallenge + proposal.scores.interview + proposal.scores.price) * 100) / 100;
+						});
 
-							vm.proposals.sort(function(a, b) {
-								return b.scores.total - a.scores.total;
-							});
-							resolve();
-						})
-					}
+						vm.proposals.sort(function(a, b) {
+							return b.scores.total - a.scores.total;
+						});
+						resolve(proposals);
+					});
 				}
 
+				/**
+				 * Save an individual proposal
+				 * @param {*} proposal Proposal to save
+				 */
 				var saveProposal = function(proposal) {
 					if (!vm.canEdit) {
 						return;
@@ -181,28 +184,34 @@
 					return proposal.$update();
 				};
 
+				/**
+				 * Save the entire set of proposals
+				 */
 				var saveProposals = function() {
-					return function() {
-						if (!vm.canEdit) {
-							return;
-						}
-
-						return Promise.all (vm.proposals.map (function(proposal) {
-							return saveProposal(proposal);
-						}));
+					if (!vm.canEdit) {
+						return;
 					}
+
+					return Promise.all (vm.proposals.map (function(proposal) {
+						return saveProposal(proposal);
+					}));
 				};
 
+				/**
+				 * Save the current opportunity
+				 */
 				var saveOpportunity = function() {
-					return function() {
-						if (!vm.canEdit) {
-							return;
-						}
-
-						return vm.opportunity.$update();
+					if (!vm.canEdit) {
+						return;
 					}
+
+					return vm.opportunity.$update();
 				};
 
+				/**
+				 * Initialize the evaluation by building the question pivot and then taking further action
+				 * depending on the evaluation stage
+				 */
 				var initializeEvaluation = function() {
 					buildQuestionPivot()
 					.then(function(values) {
@@ -215,9 +224,457 @@
 									vm.proposals = results[1];
 									vm.opportunity.evaluationStage = vm.stages.pending_review;
 								});
+							break;
+
+							case vm.stages.questions:
+							case vm.stages.questions_saved:
+							case vm.stages.code_scores:
+							case vm.stages.interview:
+							case vm.stages.price:
+							case vm.stages.assigned:
+							case vm.stages.all_fail:
+								vm.responses = values.responses;
+								vm.proposals = values.proposals;
+							break;
 						};
 					});
 				}
+
+				/**
+				 * Helper function for adjusting question rankings after questions have been rejected
+				 */
+				var recalculateRankings = function() {
+					return new Promise(function(resolve, reject) {
+						vm.responses.forEach(function(responseArray) {
+							responseArray.filter(function(response) {
+								return response.rejected;
+							})
+							.forEach(function(rejResponse) {
+								responseArray.forEach(function(response) {
+									if (rejResponse === response) {
+										response.rank = 0;
+									}
+									else if (rejResponse.rank < response.rank) {
+										response.rank -= 1;
+									}
+								})
+							});
+						});
+						resolve();
+					});
+				}
+
+				/**
+				 * Function for calculating scoring based on team question ranking
+				 * since the ranking is from 1 - n we want to invert it and then add up and
+				 * give a percent over best possible score
+				 * n = number of proposals
+				 * m = number of questions
+				 * Q(r) = question ranking (will be from 1 to n with 1 being the best)
+				 * score = sum ( (n+1)-Q(r) ) / (n * m) * 400
+				 * Rejected questions are not considered in the scoring
+				 */
+				var scoreTeamQuestions = function (proposals) {
+					var bestScore = vm.opportunity.teamQuestions.length * vm.proposals.length;
+					proposals.forEach(function(proposal) {
+						proposal.scores.question = Math.round(
+							proposal.teamQuestionResponses
+							// filter out rejected questions
+							.filter(function (q) {
+								return !q.rejected;
+							})
+							.map (function (q) {
+								return vm.proposals.length + 1 - q.rank;
+							})
+							.reduce (function (a, b) {
+								return a + b;
+							}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+					});
+
+					return proposals;
+				};
+
+				/**
+				 * Calculates rankings so that top 4 companies can be screened in - assumes the proposal are already sorted by current score
+				 * Teams that tie in points are considered to be in the same position
+				 * The highest scoring team following a tie will be considered to be in the position relative to the other teams
+				 * (If two teams tie for 1st, the next team will be in 3rd)
+				 */
+				var screenProposals = function(proposals) {
+					var currentRanking = 0;
+					var prevScore;
+					proposals.forEach(function(proposal) {
+						currentRanking++;
+						proposal.ranking = (proposal.scores.total === prevScore) ? currentRanking - 1 : currentRanking;
+						prevScore = proposal.scores.total;
+						proposal.ranking > 4 ? proposal.screenedIn = false : proposal.screenedIn = true;
+					});
+
+					return proposals;
+				}
+
+				/**
+				 * Calculates scores for pricing bids.
+				 * Scores are relative to the lowest bidding proposal (who receives full points)
+				 * Weightings for price scores are factored in at this stage as well.
+				 */
+				var calculatePriceScores = function (proposals) {
+					var lowestBidder;
+					var passedProposals = proposals.filter(function(proposal) {
+						return proposal.screenedIn && proposal.passedCodeChallenge;
+					})
+
+					passedProposals.forEach(function(proposal) {
+						proposal.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
+						if (lowestBidder !== 0 && (lowestBidder === undefined || proposal.cost < lowestBidder.cost)) {
+							lowestBidder = proposal;
+						}
+					})
+
+					passedProposals.forEach(function(proposal) {
+						if (proposal.cost === 0) {
+							proposal.scores.price = 0;
+						}
+						else {
+							proposal.scores.price = Math.round((lowestBidder.cost/proposal.cost) * (vm.weights.price * vm.maxPoints) * 100) / 100;
+						}
+					})
+
+					return proposals;
+				};
+
+				/**
+				 * Open up a modal for question review.
+				 * An admin will use this modal to reject self-identifying responses.
+				 */
+				vm.openQuestionReviewModal = function() {
+					modalService.showModal({
+						size: 'md',
+						templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-question-vetting.html',
+						controller: function($scope, $uibModalInstance) {
+							$scope.data				   = {};
+							$scope.data.questions      = [];
+							$scope.data.proposals      = vm.proposals;
+							$scope.data.nproposals     = vm.proposals.length;
+							$scope.data.questions      = vm.opportunity.teamQuestions;
+							$scope.data.responses      = vm.responses;
+							$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
+							$scope.data.currentPage    = 1;
+
+							$scope.cancel = function() {
+								$uibModalInstance.close({});
+							};
+							$scope.save = function() {
+								$uibModalInstance.close({
+									action: 'save',
+									responses: $scope.data.responses
+								});
+							};
+							$scope.commit = function() {
+								// Prompt user for confirmation before committing review
+								var message = 'Are you sure you wish to commmit your validation? Ensure you have reviewed all questions.  This action cannot be undone.';
+								ask.yesNo(message).then (function(response) {
+									if (response) {
+										$uibModalInstance.close({
+											action: 'commit'
+										});
+									}
+								});
+							};
+						}
+					})
+					.then(function(resp) {
+
+						if (resp.action === 'save') {
+							// recalculate rankings and save proposals, but do not end vetting stage
+							Promise.resolve()
+							.then(recalculateRankings)
+							.then(saveProposals);
+						}
+						else if (resp.action === 'commit') {
+							// recalculate rankings, move to next evaluation stage, save proposals and opp
+							Promise.resolve()
+							.then(recalculateRankings)
+							.then(function() {
+								vm.opportunity.evaluationStage = vm.stages.questions;
+							})
+							.then(saveProposals)
+							.then(saveOpportunity);
+						}
+					});
+				}
+
+				/**
+				 * Open up a modal for question ranking
+				 * The modal allows questions to be comparatively ranked
+				 */
+				vm.openQuestionRankingModal = function () {
+					modalService.showModal ({
+						size: 'lg',
+						templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-questions.html',
+						controller: function ($scope, $uibModalInstance) {
+
+							$scope.data                = {};
+							$scope.data.proposals      = vm.proposals;
+							$scope.data.nproposals     = vm.proposals.length;
+							$scope.data.questions      = vm.opportunity.teamQuestions;
+							$scope.data.totalQuestions = vm.opportunity.teamQuestions.length;
+							$scope.data.currentPage    = 1;
+
+							$scope.data.model = {
+								selected: null,
+								questions: vm.responses.map(function(respArray) {
+									return respArray.filter(function(resp) {
+										return !resp.rejected;
+									});
+								})
+							};
+
+							vm.responses.forEach(function(respArray) {
+
+								// set initial order by current ranking
+								respArray.sort(function(a, b) {
+									return a.rank - b.rank;
+								});
+							})
+							$scope.pageChanged = function() {
+								$scope.data.model.selected = null;
+							}
+
+							$scope.close = function () {
+								$uibModalInstance.close({});
+							};
+							$scope.ok = function () {
+								$uibModalInstance.close({
+									action: 'save',
+									questions: $scope.data.model.questions
+								});
+							};
+							$scope.commit = function () {
+								var q = 'Are you sure you wish to commmit this ranking session? Ensure you have completed ranking all questions.  This action cannot be undone.';
+								ask.yesNo (q).then (function (r) {
+									if (r) {
+										$uibModalInstance.close({
+											action: 'commit',
+											questions: $scope.data.model.questions
+										});
+									}
+								});
+							};
+							$scope.inserted = function(item) {
+								// ensure item just dropped remains selected
+								$scope.data.model.selected = item;
+							};
+						}
+					}, {
+					})
+					.then (function (resp) {
+
+						// commit selected ordering to proposals
+						// this nastiness is necessary as the drag and drop widget deep clones objects, so we have to match up original
+						// question/response objects by id and update the originals
+						if (resp.questions) {
+							vm.proposals.forEach(function(proposal) {
+								proposal.teamQuestionResponses.forEach(function(response, index) {
+									var match = resp.questions[index].find(function(question) {
+										return response._id === question._id;
+									});
+
+									if (match) {
+										response.rank = resp.questions[index].indexOf(match) + 1;
+									}
+								});
+							});
+						}
+
+						if (resp.action === 'save') {
+							Promise.resolve()
+							.then(saveProposals)
+							.then(function() {
+								vm.opportunity.evaluationStage = vm.stages.questions_saved;
+							});
+						}
+						if (resp.action === 'commit') {
+							Promise.resolve(vm.proposals)
+							.then(scoreTeamQuestions)
+							.then(totalAndSort)
+							.then(screenProposals)
+							.then(saveProposals)
+							.then(function() {
+								vm.opportunity.evaluationStage = vm.stages.code_scores;
+							})
+							.then(saveOpportunity);
+						}
+					});
+				};
+
+				/**
+				 * Opens a modal for inputting code challenge scores for each team
+				 * Validates scores based on weight for CC
+				 */
+				vm.openCodeChallengeModal = function () {
+					modalService.showModal ({
+						size: 'sm',
+						templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-code-challenge.html',
+						controller: function ($scope, $uibModalInstance) {
+							$scope.data = {};
+							$scope.data.proposalScores = [];
+							$scope.data.maxCodeChallengePoints = vm.maxCodeChallengePoints;
+							vm.proposals.forEach(function(proposal) {
+								if (proposal.screenedIn) {
+									$scope.data.proposalScores.push({ businessName: proposal.businessName, score: undefined })
+								}
+							})
+							$scope.cancel = function () {
+								$uibModalInstance.close ({});
+							};
+							$scope.save = function () {
+								$uibModalInstance.close ({
+									action : 'save',
+									proposalScores  : $scope.data.proposalScores
+								});
+							};
+						}
+					}, {
+					})
+					.then (function (resp) {
+						if (resp.action === 'save') {
+							var scoreCount = 0;
+							var passCount = 0;
+							resp.proposalScores.forEach(function(score) {
+								var match = vm.proposals.find(function(proposal) {
+									return proposal.businessName === score.businessName;
+								});
+
+								if (match) {
+									if (score.score / vm.maxCodeChallengePoints >= 0.8) {
+										match.passedCodeChallenge = true;
+										match.scores.codechallenge = Math.round((score.score / vm.maxCodeChallengePoints) * (vm.weights.codechallenge * vm.maxPoints) * 100) / 100;
+										passCount++;
+									}
+									else {
+										match.passedCodeChallenge = false;
+									}
+
+									scoreCount++;
+								}
+							});
+
+							// if we have scored all proposal for the code challenge stage, and at least 1 company passed, move on
+							if (scoreCount === vm.proposals.filter(function(proposal) { return proposal.screenedIn}).length) {
+								if (passCount > 0) {
+									vm.opportunity.evaluationStage = vm.stages.interview
+								}
+								else {
+									vm.opportunity.evaluationStage = vm.stages.all_fail;
+								}
+							}
+
+							// calculate rankings
+							Promise.resolve(vm.proposals)
+							.then(totalAndSort)
+							.then(saveProposals)
+							.then(saveOpportunity);
+						}
+					});
+				};
+
+				/**
+				 * Opens a modal allowing the admin to enter scores for the team scenario/interview stage
+				 * Validates based on interview weighting and max points
+				 */
+				vm.openInterviewModal = function () {
+					modalService.showModal ({
+						size: 'sm',
+						templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
+						controller: function ($scope, $uibModalInstance) {
+							$scope.data = {};
+							$scope.data.maxInterviewPoints = vm.maxInterviewPoints;
+							$scope.data.proposalScores = [];
+							vm.proposals.forEach(function(proposal) {
+								if (proposal.screenedIn && proposal.passedCodeChallenge) {
+									$scope.data.proposalScores.push({ businessName: proposal.businessName, score: null })
+								}
+							})
+							$scope.cancel = function () {
+								$uibModalInstance.close ({});
+							};
+							$scope.save = function () {
+								$uibModalInstance.close ({
+									action : 'save',
+									proposalScores  : $scope.data.proposalScores
+								});
+							};
+						}
+					}, {
+					})
+					.then (function (resp) {
+						if (resp.action === 'save') {
+
+							var scoreCount = 0;
+							resp.proposalScores.forEach(function(score) {
+								var match = vm.proposals.find(function(proposal) {
+									return proposal.businessName === score.businessName;
+								});
+								if (match) {
+									match.scores.interview = Math.round((score.score / vm.maxInterviewPoints)  * (vm.weights.interview * vm.maxPoints) * 100) / 100;
+									scoreCount++;
+								}
+							});
+
+							// if we have scored all proposal for the interview stage, calculate price scores
+							var promise;
+							if (scoreCount === vm.proposals.filter(function(proposal) {
+									return proposal.screenedIn && proposal.passedCodeChallenge;
+								}).length) {
+									promise = Promise.resolve(vm.proposals)
+									.then(calculatePriceScores)
+									.then(function(proposals) {
+										vm.opportunity.evaluationStage = vm.stages.price;
+										return proposals;
+									})
+							}
+							else {
+								promise = Promise.resolve(vm.proposals);
+							}
+
+							promise
+							.then(totalAndSort)
+							.then(saveProposals)
+							.then(saveOpportunity);
+						}
+					});
+				};
+
+				/**
+				 * Assign the opportunity to the given proposal
+				 * Updates the proposal that won, and the opportunity
+				 * @param {Proposal} proposal
+				 */
+				vm.assignOpportunity = function (proposal) {
+					var message = 'Are you sure you want to assign this opportunity to this proponent?';
+					ask.yesNo(message).then(function (resp) {
+						if (resp) {
+							ProposalsService.assignswu(proposal).$promise
+							.then (
+								function (response) {
+									vm.proposal = response;
+									Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
+									$state.go ('opportunities.viewswu',{opportunityId:vm.opportunity.code});
+									vm.opportunity.evaluationStage = vm.stages.assigned;
+									vm.opportunity.proposal = vm.proposal;
+									vm.proposal.isAssigned = true;
+									Promise.resolve(vm.proposal)
+									.then(saveProposal)
+									.then(saveOpportunity);
+								},
+								function (error) {
+									 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+								}
+							);
+						}
+					});
+				};
 
 				/**
 				 * Retrieve the top proposal
@@ -231,12 +688,16 @@
 					return null;
 				}
 
+				/**
+				 * Reset the evaluation back to the first stage.  Prompt the user for confirmation first.
+				 */
 				vm.resetEvaluation = function () {
 
 					var message = 'WARNING: This will reset the current evaluation and any calculations or entered data will be lost.  Proceed?';
 					ask.yesNo(message).then(function(response) {
 						if (response) {
 							vm.opportunity.evaluationStage = vm.stages.new;
+
 							vm.proposal = null;
 							vm.proposals.forEach(function(proposal) {
 								proposal.scores.skill = 0;
@@ -250,9 +711,10 @@
 								proposal.teamQuestionResponses.forEach(function(question) {
 									question['rejected'] = false;
 								});
-							})
+								proposal.status = 'Submitted';
+							});
 
-							Promise.resolve()
+							Promise.resolve(vm.proposals)
 							.then(totalAndSort)
 							.then(saveProposals)
 							.then(saveOpportunity)
@@ -274,7 +736,9 @@
 					return vm.opportunity.evaluationStage === vm.stages[stage];
 				}
 
-				initializeEvaluation();
+				// Initialze the evaluation
+				Promise.resolve()
+				.then(initializeEvaluation);
 			}]
 		}
 	});

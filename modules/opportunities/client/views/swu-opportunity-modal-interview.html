@@ -8,7 +8,7 @@
 			<form name="scoreForm">
 				<table>
 					<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
-						<td><input class="scoreBox" name="input" type="number" min="0" max="25" ng-model="proposal.score"/></td>
+						<td><input class="scoreBox" name="input" type="number" min="0" max="{{data.maxInterviewPoints}}" ng-model="proposal.score"/></td>
 						<td>&nbsp;&nbsp;{{proposal.businessName}}</td>
 					</tr>
 				</table>
@@ -17,7 +17,7 @@
 	</div>
 </div>
 <div class="modal-footer">
-	<span ng-show="scoreForm.$error.number || !scoreForm.$valid">Scores must be a number between 0 and 25</span>
+	<span>Scores must be a number between 0 and {{data.maxInterviewPoints}}</span>
 	<button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()"><i class="fa fa-lock"></i> Lock in Scores</button>
 	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
 </div>

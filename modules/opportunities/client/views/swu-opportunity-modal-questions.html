@@ -42,7 +42,7 @@
                           dnd-effect-allowed="move"
                           dnd-selected="data.model.selected = response"
                           ng-class="{'selected': data.model.selected === response}"
-                          ng-bind-html="response.sanitizedResponse"
+                          ng-bind-html="response.response"
                           style="max-height:42px; min-height: 42px; overflow-y: hidden">
                         </li>
                       </ul>
@@ -55,7 +55,7 @@
 					<td width="35%" style="margin-left: 5px;">
 						<div class="long-question">
               <!-- <textarea ng-model="data.model.selected.sanitizedResponse" type="text" name="txtarea" class="long-question" disabled></textarea> -->
-              <div ng-bind-html="data.model.selected.sanitizedResponse"></div>
+              <div ng-bind-html="data.model.selected.response"></div>
 						</div>
 					</td>
 				</tr>
