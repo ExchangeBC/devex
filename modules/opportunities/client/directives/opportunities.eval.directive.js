@@ -149,7 +149,7 @@
 										proposal.scores.skill++;
 									}
 								});
-								proposal.scores.skill = Math.round((proposal.scores.skill / maxScore) + (vm.weights.skill * vm.maxPoints) * 100) / 100;
+								proposal.scores.skill = Math.round((proposal.scores.skill / maxScore) * (vm.weights.skill * vm.maxPoints) * 100) / 100;
 							}
 						});
 						resolve(proposals);
