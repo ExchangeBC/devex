@@ -301,12 +301,18 @@
 				 * (If two teams tie for 1st, the next team will be in 3rd)
 				 */
 				var screenProposals = function(proposals) {
-					var currentRanking = 0;
-					var prevScore;
-					proposals.forEach(function(proposal) {
-						currentRanking++;
-						proposal.ranking = (proposal.scores.total === prevScore) ? currentRanking - 1 : currentRanking;
-						prevScore = proposal.scores.total;
+					// assign rank based on ordering
+					proposals.forEach(function(proposal, index) {
+						proposal.ranking = index + 1;
+
+						// if a score is the same as the previous score, assign it the same ranking, otherwise leave it as is
+						if (index > 0) {
+							var prevScore = proposals[index - 1].scores.total;
+							if (proposal.scores.total === prevScore) {
+								proposal.ranking = proposals[index - 1].ranking;
+							}
+						}
+
 						proposal.ranking > 4 ? proposal.screenedIn = false : proposal.screenedIn = true;
 					});
 
@@ -675,6 +681,24 @@
 						}
 					});
 				};
+
+				/**
+				 * Open a modal to display specific info about the selected proposal/business
+				 * @param {Proposal} proposal
+				 */
+				vm.showCompanyInfo = function(proposal) {
+					modalService.showModal({
+						size: 'md',
+						templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
+						controller: function($scope, $uibModalInstance) {
+							$scope.data = {};
+							$scope.data.proposal = proposal;
+							$scope.close = function() {
+								$uibModalInstance.close({});
+							}
+						}
+					})
+				}
 
 				/**
 				 * Retrieve the top proposal
