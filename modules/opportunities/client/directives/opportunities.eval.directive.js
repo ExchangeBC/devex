@@ -666,13 +666,14 @@
 							ProposalsService.assignswu(proposal).$promise
 							.then (
 								function (response) {
-									vm.proposal = response;
+									vm.proposals[vm.proposals.indexOf(proposal)] = response;
+									proposal = response;
 									Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
 									$state.go ('opportunities.viewswu',{opportunityId:vm.opportunity.code});
 									vm.opportunity.evaluationStage = vm.stages.assigned;
-									vm.opportunity.proposal = vm.proposal;
-									vm.proposal.isAssigned = true;
-									Promise.resolve(vm.proposal)
+									vm.opportunity.proposal = proposal;
+									proposal.isAssigned = true;
+									Promise.resolve(proposal)
 									.then(saveProposal)
 									.then(saveOpportunity);
 								},
