@@ -22,6 +22,7 @@
 				vm.isAdmin			= vm.isUser && ~Authentication.user.roles.indexOf('admin');
 				vm.canEdit			= vm.isAdmin || $scope.opportunity.userIs.admin;
 				vm.maxPoints		= 100;
+				vm.isLoading		= true;
 
 
 				/**
@@ -237,6 +238,7 @@
 								vm.proposals = values.proposals;
 							break;
 						};
+						vm.isLoading = false;
 					});
 				}
 
