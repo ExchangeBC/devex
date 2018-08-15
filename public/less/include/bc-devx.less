@@ -1041,7 +1041,10 @@ form-title {
 // Labels
 // --------------------------------------------------
 .label-list {
-  margin: 3px 3px 3px 0px;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .label {
@@ -1116,7 +1119,11 @@ form-title {
 // Opportunity labels
 
 .label-price {
-  background: @gray-darker;
+  color: red;
+  font-size: .9em;
+  letter-spacing: .015em;
+  font-weight: bold;
+  padding-left: 0;
 }
 
 .label-skill {
@@ -1134,6 +1141,7 @@ form-title {
   color: @gray-dark;
   font-weight: bold;
   font-size: .9em;
+  letter-spacing: .015em;
 }
 
 .label-watching {
@@ -1177,8 +1185,11 @@ form-title {
   border: 1px solid @theme-orange;
 }
 
-.label-swu {
-  background: @gray-darker;
+.label-opp-type {
+  color: @gray-darker;
+  font-size: .9em;
+  font-weight: bold;
+  letter-spacing: .015em;
 }
 
 // Capability Labels
@@ -1673,7 +1684,6 @@ form-title {
   }
 }
 
-
 // User Avatar
 
 .avatar-user {
@@ -1746,7 +1756,6 @@ form-title {
 
 .card-body {
   padding: 1em;
-  font-size: 10pt;
 }
 
 .card-footer {
@@ -1903,6 +1912,11 @@ form-title {
   font-size: 1.15em;
   font-weight: 700;
   margin: .75em 0 .5em;
+}
+
+.opportunity-card-title {
+  font-size: 1.2em;
+  margin: .5em 0;
 }
 
 .card-teaser {
@@ -2245,6 +2259,10 @@ form-title {
 
 .banner-gray {
   background-color: @gray-lightest;
+}
+
+.banner-warning {
+  background-color: @theme-warning;
 }
 
 // Offset the bottom margin of navbar-default
