@@ -48,7 +48,8 @@
 
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
-						<label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
+						<label class="label label-price">{{opportunity.budget|currency}}</label>
+                        <label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
 
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
@@ -72,7 +73,7 @@
 
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='code-with-us'" id="opportunities.view" ui-sref="opportunities.viewcwu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
-						<!-- <label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label> -->
+						<label class="label label-price">{{opportunity.earn|currency}}</label>
 						<label class="label label-swu"><i class="fa fa-users"></i> Code With Us</label>
 
 
@@ -128,7 +129,8 @@
 
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'" id="opportunities.view" ui-sref="opportunities.viewswu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
-						<label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
+						<label class="label label-price">{{opportunity.budget|currency}}</label>
+                        <label class="label label-swu"><i class="fa fa-users"></i> Sprint With Us</label>
 
 						<label class="label label-danger">CLOSED</label>
 
@@ -150,7 +152,7 @@
 
 				<div class="card-body" ng-if="opportunity.opportunityTypeCd==='code-with-us'" id="opportunities.view" ui-sref="opportunities.viewcwu({ opportunityId: opportunity.code, projectId: vm.projectId })">
 					<div class="label-list">
-						<!-- <label class="label label-price"><i class="fa fa-tag"></i>&nbsp;{{opportunity.earn|currency}}</label> -->
+						<label class="label label-price">{{opportunity.earn|currency}}</label>
 						<label class="label label-swu"><i class="fa fa-users"></i> Code With Us</label>
 
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
