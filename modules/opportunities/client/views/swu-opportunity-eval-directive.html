@@ -100,7 +100,7 @@
 
       <!-- Opportunity has been assigned. -->
       <div class="swu-evaluation-cta text-center" ng-if="vm.stageIs('assigned')">
-        <h4>This opportunity has been assigned to {{vm.opportunity.proposal.businessName}}</h4>
+        <h4>This opportunity has been assigned to {{vm.opportunity.proposal.businessName | limitTo: 20 }}{{ vm.opportunity.proposal.businessName.length > 20 ? '...' : '' }}</h4>
       </div>
 
       <div class="swu-evaluation-summary" ng-if="vm.closing === 'CLOSED'">
@@ -182,7 +182,7 @@
             </tr>
             <tr>
               <td align="right" class="text-right" colspan="9">
-                <b><span ng-if="vm.stageIs('price')" ng-bind="vm.getTopProposal().businessName"></span></b><span ng-if="vm.stageIs('price')"> has the highest score for this evaluation: </span>
+                <b><span ng-if="vm.stageIs('price')">{{ vm.getTopProposal().businessName | limitTo: 20 }}{{ vm.getTopProposal().businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.stageIs('price')"> has the highest score for this evaluation: </span>
                 <button ng-if="vm.stageIs('price')" class="btn btn-sm btn-primary" type="button" ng-click="vm.assignOpportunity(vm.getTopProposal())">Assign</button>
               </td>
             </tr>

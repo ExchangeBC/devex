@@ -9,7 +9,7 @@
 				<table>
 					<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
 						<td><input class="scoreBox" name="input" type="number" min="0" max="{{data.maxCodeChallengePoints}}" ng-model="proposal.score"/></td>
-						<td>&nbsp;&nbsp;{{proposal.businessName}}</td>
+						<td>&nbsp;&nbsp;{{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}</td>
 					</tr>
 				</table>
 			</form>
