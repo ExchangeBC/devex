@@ -5,12 +5,7 @@
   </div>
   <div ng-show="!vm.isLoading">
     <div class="swu-evaluation-header">
-        <!-- If opportunity is still open, show proposal stats -->
-        <div class="row" ng-if="vm.closing !== 'CLOSED'">
-          <div class="col-xs-12">
-            <proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity"></proposal-list>
-          </div>
-        </div>
+
         <!-- Once opportunity is closed, show evaluation progress bar -->
         <div class="swu-evaluation-progress text-center" ng-if="vm.closing === 'CLOSED' && vm.beforeStage('assigned')">
           <step ng-class="{active: vm.opportunity.evaluationStage === 2 || vm.opportunity.evaluationStage === 3, complete: vm.opportunity.evaluationStage > 3}">
