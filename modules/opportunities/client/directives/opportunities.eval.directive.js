@@ -290,7 +290,7 @@
 							})
 							.reduce (function (a, b) {
 								return a + b;
-							}) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+							}, 0) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
 					});
 
 					return proposals;
