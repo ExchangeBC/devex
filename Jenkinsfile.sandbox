@@ -80,13 +80,12 @@ node('maven') {
             echo ">> IMAGE_HASH: ${IMAGE_HASH}"
 	    echo ">>>> Build Complete"
     }
-    stage('Dev deploy') {
+    stage('Sandbox deploy') {
 	    echo ">>> Tag ${IMAGE_HASH} with ${DEV_TAG_NAME}"
  	    openshiftTag destStream: IMAGE_NAME, verbose: 'false', destTag: DEV_TAG_NAME, srcStream: IMAGE_NAME, srcTag: "${IMAGE_HASH}"
             sleep 5
 	    openshiftVerifyDeployment depCfg: DEV_DEPLOYMENT_NAME, namespace: DEV_NS, replicaCount: 1, verbose: 'false', verifyReplicaCount: 'false'
 	    echo ">>>> Deployment Complete"
-	    notifySlack("Dev Deploy, changes:\n" + getChangeString(), "#builds", "https://hooks.slack.com/services/${SLACK_TOKEN}", [])
     }
 }
 
