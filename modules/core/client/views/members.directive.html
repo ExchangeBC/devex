@@ -12,10 +12,8 @@
 			<span class="text-muted">No members found.</span>
 		</div>
 	</div>
-	<div class="col-sm-4" ng-repeat="column in vm.columns">
-		
-		<!-- NEW card format -->
-		<div class="card-user-transparent" ng-repeat="member in vm.members | slice:column.start:column.end">
+	<div class="col-sm-4" ng-repeat="member in vm.members">
+		<div class="card-user-transparent">
 			<img class="card-img-left" src="{{((member.profileImageURL.substr(0,1) == '/' || member.profileImageURL.substr(0,4) == 'http') ? '' : '/') + member.profileImageURL}}"/>
 			<div class="card-body">
 				<!-- // Admin can remove any member // -->
