@@ -1,4 +1,4 @@
-// define constants
+// define constants 
 def BUILDCFG_NAME ='devxp-dev'
 def IMAGE_NAME = 'devxp-dev'
 def DEV_DEPLOYMENT_NAME = 'platform-sandbox'
