@@ -163,7 +163,7 @@
             <tr ng-repeat="proposal in vm.proposals | orderBy:'-scores.total'">
               <td class="text-left">
                 <span ng-show="vm.beforeStage('code_scores')">Company {{$index + 1}}</span>
-                <a href="" ng-show="vm.stageIs('code_scores') || vm.pastStage('questions_saved')" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName}}</a>
+                <a href="" ng-show="vm.stageIs('code_scores') || vm.pastStage('questions_saved')" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}</a>
               </td>
               <td class="text-center">{{proposal.scores.skill}}</td>
               <td class="text-center"><span ng-show="vm.pastStage('questions_saved')">{{proposal.scores.question}}</span></td>
