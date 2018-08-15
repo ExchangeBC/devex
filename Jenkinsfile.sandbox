@@ -1,6 +1,6 @@
 // define constants
-def BUILDCFG_NAME ='devxp-dev'
-def IMAGE_NAME = 'devxp-dev'
+def BUILDCFG_NAME ='devxp-sandbox'
+def IMAGE_NAME = 'devxp-sandbox'
 def DEV_DEPLOYMENT_NAME = 'platform-sandbox'
 def DEV_TAG_NAME = 'sandbox'
 def DEV_NS = 'devex-platform-dev'
