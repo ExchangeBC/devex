@@ -61,6 +61,9 @@ var adminRole = function (opportunity) {
 	return opportunity.code+'-admin';
 };
 var ensureAdmin = function (opportunity, user) {
+	if (!user) {
+		return false;
+	}
 	return !(!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin'));
 };
 var countStatus = function (id) {
