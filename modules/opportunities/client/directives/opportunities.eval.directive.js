@@ -29,15 +29,16 @@
 				 * Constants for evaluation stages for SWU proposals
 				 */
 				vm.stages = {
-					new				: 0,
-					pending_review	: 1,
-					questions		: 2,
-					questions_saved	: 3,
-					code_scores		: 4,
-					interview		: 5,
-					price			: 6,
-					assigned		: 7,
-					all_fail		: 8
+					new					: 0,
+					pending_review		: 1,
+					choose_grade_type	: 2,
+					questions			: 3,
+					questions_saved		: 4,
+					code_scores			: 5,
+					interview			: 6,
+					price				: 7,
+					assigned			: 8,
+					all_fail			: 9
 				};
 
 				/**
@@ -234,6 +235,7 @@
 								.then(totalAndSort);
 							break;
 
+							case vm.stages.choose_grade_type:
 							case vm.stages.questions:
 							case vm.stages.questions_saved:
 							case vm.stages.code_scores:
@@ -413,7 +415,7 @@
 							Promise.resolve()
 							.then(recalculateRankings)
 							.then(function() {
-								vm.opportunity.evaluationStage = vm.stages.questions;
+								vm.opportunity.evaluationStage = vm.stages.choose_grade_type;
 							})
 							.then(saveProposals)
 							.then(saveOpportunity);
@@ -747,17 +749,30 @@
 					});
 				}
 
-				/**
-				 * Utility functions for determining stage of evaluation
-				 */
-				vm.beforeStage = function(stage) {
-					return vm.opportunity.evaluationStage < vm.stages[stage];
+				vm.selectLinearGrading = function() {
+					var message = 'Confirm you wish to use linear grading';
+					ask.yesNo(message)
+					.then(function(response) {
+						if (response) {
+							vm.opportunity.teamQuestionGradingType = 'Linear';
+							vm.opportunity.evaluationStage = vm.stages.questions;
+							Promise.resolve()
+							.then(saveOpportunity);
+						}
+					});
 				}
-				vm.pastStage = function(stage) {
-					return vm.opportunity.evaluationStage > vm.stages[stage];
-				}
-				vm.stageIs = function(stage) {
-					return vm.opportunity.evaluationStage === vm.stages[stage];
+
+				vm.selectWeightedGrading = function() {
+					var message = 'Confirm you wish to use weighted grading';
+					ask.yesNo(message)
+					.then(function(response) {
+						if (response) {
+							vm.opportunity.teamQuestionGradingType = 'Weighted';
+							vm.opportunity.evaluationStage = vm.stages.questions;
+							Promise.resolve()
+							.then(saveOpportunity);
+						}
+					});
 				}
 
 				// Initialze the evaluation
