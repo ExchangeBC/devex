@@ -54,6 +54,7 @@
 
 				vm.maxCodeChallengePoints = vm.weights.codechallenge * vm.maxPoints;
 				vm.maxInterviewPoints = vm.weights.interview * vm.maxPoints;
+				vm.topProposal = null;
 
 				/**
 				 * Utility function for determining open/closed status
@@ -169,6 +170,10 @@
 						vm.proposals.sort(function(a, b) {
 							return b.scores.total - a.scores.total;
 						});
+						if (vm.proposals && vm.proposals.length > 0) {
+							vm.topProposal = vm.proposals[0];
+						}
+
 						resolve(proposals);
 					});
 				}
@@ -224,7 +229,9 @@
 									vm.responses = results[0];
 									vm.proposals = results[1];
 									vm.opportunity.evaluationStage = vm.stages.pending_review;
-								});
+									return vm.proposals;
+								})
+								.then(totalAndSort);
 							break;
 
 							case vm.stages.questions:
@@ -236,6 +243,8 @@
 							case vm.stages.all_fail:
 								vm.responses = values.responses;
 								vm.proposals = values.proposals;
+								Promise.resolve(vm.proposals)
+								.then(totalAndSort);
 							break;
 						};
 						vm.isLoading = false;
@@ -704,18 +713,6 @@
 				}
 
 				/**
-				 * Retrieve the top proposal
-				 * If the proposals have been totaled and sorted this returns
-				 * the proposal with the highest total score.
-				 */
-				vm.getTopProposal = function() {
-					if (vm.proposals && vm.proposals.length > 0) {
-						return vm.proposals[0];
-					}
-					return null;
-				}
-
-				/**
 				 * Reset the evaluation back to the first stage.  Prompt the user for confirmation first.
 				 */
 				vm.resetEvaluation = function () {
@@ -725,7 +722,7 @@
 						if (response) {
 							vm.opportunity.evaluationStage = vm.stages.new;
 
-							vm.proposal = null;
+							vm.opportunity.proposal = null;
 							vm.proposals.forEach(function(proposal) {
 								proposal.scores.skill = 0;
 								proposal.scores.question = 0;

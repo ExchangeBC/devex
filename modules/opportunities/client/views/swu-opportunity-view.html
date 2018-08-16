@@ -114,7 +114,7 @@
 				</div>
 
 				<!-- Opportunity has been assigned. -->
-				<div class="text-center" ng-if="vm.stageIs('assigned')">
+				<div class="text-center" ng-if="vm.opportunity.proposal">
 					<span class="light">This opportunity has been awarded to:</span>
 					&nbsp;
 					<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.org.orgImageURL.substr(0,1) == '/') ? '' : '/') + vm.opportunity.proposal.org.orgImageURL}}">

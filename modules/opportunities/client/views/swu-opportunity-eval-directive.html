@@ -182,8 +182,8 @@
             </tr>
             <tr>
               <td align="right" class="text-right" colspan="9">
-                <b><span ng-if="vm.stageIs('price')">{{ vm.getTopProposal().businessName | limitTo: 20 }}{{ vm.getTopProposal().businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.stageIs('price')"> has the highest score for this evaluation: </span>
-                <button ng-if="vm.stageIs('price')" class="btn btn-sm btn-primary" type="button" ng-click="vm.assignOpportunity(vm.getTopProposal())">Assign</button>
+                <b><span ng-if="vm.stageIs('price')">{{ vm.topProposal.businessName | limitTo: 20 }}{{ vm.topProposal.businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.stageIs('price')"> has the highest score for this evaluation: </span>
+                <button ng-if="vm.stageIs('price')" class="btn btn-sm btn-primary" type="button" ng-click="vm.assignOpportunity(vm.topProposal)">Assign</button>
               </td>
             </tr>
           </tbody>
