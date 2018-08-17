@@ -1,6 +1,16 @@
 (function () {
 	'use strict';
 	angular.module ('opportunities')
+	.directive('selectOnClick', ['$window', function ($window) {
+		return {
+			restrict: 'A',
+			link: function (scope, element, attrs) {
+				element.on('focus', function () {
+					this.select();
+				});
+			}
+		};
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// directive for listing opportunities

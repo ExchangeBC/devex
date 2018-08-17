@@ -38,10 +38,34 @@ ul[dnd-list] li {
     margin-bottom: -1px;
 }
 
+ul.question-input-list {
+	list-style-type: none;
+}
+
+li.question-input {
+	text-align: right;
+	max-height: 42px;
+}
+
+ul.question-list {
+	list-style-type: none;
+}
+li.question-item {
+	max-height: 42px;
+	min-height: 42px;
+	overflow-y: hidden;
+	line-height: 3.5em;
+}
+td.question-cell {
+	border: solid;
+	border-width: 1px;
+	border-color: lightgray;
+}
+
 /**
  * Show selected elements in green
  */
-ul[dnd-list] li.selected {
+ul li.selected, td.selected {
     background-color: #dff0d8;
     color: #3c763d;
 }
@@ -53,6 +77,9 @@ div.long-question {
 	height: 500px;
 	margin-left: 10px;
 	resize: none;
+	border: solid;
+	border-width: 1px;
+	border-color: lightgray;
 }
 div.opportunity-header {
     margin: 2em 0 4em;
@@ -103,7 +130,9 @@ tr.spaceUnder>td {
 }
 
 input.scoreBox {
-	width: 3.5em;
+	width: 35px;
+	margin-right: 1em;
+	text-align: right;
 }
 
 input::-webkit-outer-spin-button,

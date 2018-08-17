@@ -287,22 +287,62 @@
 				 * score = sum ( (n+1)-Q(r) ) / (n * m) * 400
 				 * Rejected questions are not considered in the scoring
 				 */
-				var scoreTeamQuestions = function (proposals) {
-					var bestScore = vm.opportunity.teamQuestions.length * vm.proposals.length;
-					proposals.forEach(function(proposal) {
-						proposal.scores.question = Math.round(
-							proposal.teamQuestionResponses
-							// filter out rejected questions
-							.filter(function (q) {
-								return !q.rejected;
-							})
-							.map (function (q) {
-								return vm.proposals.length + 1 - q.rank;
-							})
-							.reduce (function (a, b) {
-								return a + b;
-							}, 0) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+				var scoreTeamQuestions = function(proposals) {
+
+					var totalQuestionPoints = vm.opportunity.teamQuestions
+					.map(function(question) {
+						return question.questionScore;
+					})
+					.reduce(function(a, b) {
+						return a + b;
+					}, 0);
+
+					var teamQuestionWeights = vm.opportunity.teamQuestions.map(function(question) {
+						return question.questionScore / totalQuestionPoints;
 					});
+
+					if (vm.opportunity.teamQuestionGradingType === 'Linear') {
+
+						var bestScore = teamQuestionWeights.reduce(function(a, b) {
+							return a + b;
+						}) * proposals.length;
+
+						proposals.forEach(function(proposal) {
+
+							proposal.scores.question = Math.round(
+								proposal.teamQuestionResponses
+								.map(function(response, index) {
+									if (response.rejected) {
+										return 0;
+									}
+									return (vm.proposals.length + 1 - response.rank) * teamQuestionWeights[index];
+								})
+								.reduce(function(a, b) {
+									return a + b;
+								}, 0) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+						});
+					}
+					else {
+						proposals.forEach(function(proposal) {
+
+							var bestScore = teamQuestionWeights.reduce(function(a, b) {
+								return a + b;
+							}) * 5;
+
+							proposal.scores.question = Math.round(
+								proposal.teamQuestionResponses
+								.map(function(response, index) {
+									if (response.rejected) {
+										return 0;
+									}
+									return (response.score * teamQuestionWeights[index]);
+								})
+								.reduce(function(a, b) {
+									return a + b;
+								}, 0) / bestScore * (vm.weights.question * vm.maxPoints) * 100) / 100;
+
+						});
+					}
 
 					return proposals;
 				};
@@ -427,10 +467,19 @@
 				 * Open up a modal for question ranking
 				 * The modal allows questions to be comparatively ranked
 				 */
-				vm.openQuestionRankingModal = function () {
+				vm.openQuestionRankingModal = function() {
+
+					var modalMarkupUrl;
+					if (vm.opportunity.teamQuestionGradingType === 'Linear') {
+						modalMarkupUrl = '/modules/opportunities/client/views/swu-opportunity-modal-eval-questions-linear.html';
+					}
+					else {
+						modalMarkupUrl = '/modules/opportunities/client/views/swu-opportunity-modal-eval-questions-weighted.html';
+					}
+
 					modalService.showModal ({
 						size: 'lg',
-						templateUrl: '/modules/opportunities/client/views/swu-opportunity-modal-questions.html',
+						templateUrl: modalMarkupUrl,
 						controller: function ($scope, $uibModalInstance) {
 
 							$scope.data                = {};
@@ -449,30 +498,44 @@
 								})
 							};
 
-							vm.responses.forEach(function(respArray) {
+							$scope.data.model.questions.forEach(function(respArray) {
 
 								// set initial order by current ranking
 								respArray.sort(function(a, b) {
 									return a.rank - b.rank;
 								});
-							})
+							});
+
 							$scope.pageChanged = function() {
 								$scope.data.model.selected = null;
 							}
 
-							$scope.close = function () {
+							$scope.close = function() {
 								$uibModalInstance.close({});
 							};
-							$scope.ok = function () {
+
+							$scope.save = function() {
 								$uibModalInstance.close({
 									action: 'save',
 									questions: $scope.data.model.questions
 								});
 							};
-							$scope.commit = function () {
-								var q = 'Are you sure you wish to commmit this ranking session? Ensure you have completed ranking all questions.  This action cannot be undone.';
-								ask.yesNo (q).then (function (r) {
-									if (r) {
+
+							$scope.validateScores = function() {
+								$scope.data.scoresValid = true;
+								$scope.data.model.questions.forEach(function(question) {
+									question.forEach(function(response) {
+										if (response.score === undefined || response.score < 1 || response.score > 5) {
+											$scope.data.scoresValid = false;
+										}
+									});
+								});
+							}
+
+							$scope.commit = function() {
+								var message = 'Are you sure you wish to commmit this grading session? Ensure you have completed evaluating all questions.  This action cannot be undone.';
+								ask.yesNo(message).then (function(resp) {
+									if (resp) {
 										$uibModalInstance.close({
 											action: 'commit',
 											questions: $scope.data.model.questions
@@ -480,27 +543,29 @@
 									}
 								});
 							};
+
 							$scope.inserted = function(item) {
 								// ensure item just dropped remains selected
 								$scope.data.model.selected = item;
 							};
+
+							$scope.validateScores();
 						}
 					}, {
 					})
-					.then (function (resp) {
+					.then (function(resp) {
 
-						// commit selected ordering to proposals
-						// this nastiness is necessary as the drag and drop widget deep clones objects, so we have to match up original
-						// question/response objects by id and update the originals
 						if (resp.questions) {
 							vm.proposals.forEach(function(proposal) {
 								proposal.teamQuestionResponses.forEach(function(response, index) {
+
 									var match = resp.questions[index].find(function(question) {
 										return response._id === question._id;
 									});
 
 									if (match) {
 										response.rank = resp.questions[index].indexOf(match) + 1;
+										response.score = match.score;
 									}
 								});
 							});
@@ -511,7 +576,8 @@
 							.then(saveProposals)
 							.then(function() {
 								vm.opportunity.evaluationStage = vm.stages.questions_saved;
-							});
+							})
+							.then(saveOpportunity);
 						}
 						if (resp.action === 'commit') {
 							Promise.resolve(vm.proposals)
@@ -723,7 +789,7 @@
 					ask.yesNo(message).then(function(response) {
 						if (response) {
 							vm.opportunity.evaluationStage = vm.stages.new;
-
+							vm.opportunity.teamQuestionGradingType = 'Linear';
 							vm.opportunity.proposal = null;
 							vm.proposals.forEach(function(proposal) {
 								proposal.scores.skill = 0;
@@ -734,8 +800,9 @@
 								proposal.scores.price = 0;
 								proposal.isAssigned = false;
 								proposal.screenedIn = false;
-								proposal.teamQuestionResponses.forEach(function(question) {
-									question['rejected'] = false;
+								proposal.teamQuestionResponses.forEach(function(response) {
+									response.rejected = false;
+									response.score = 0;
 								});
 								proposal.status = 'Submitted';
 							});

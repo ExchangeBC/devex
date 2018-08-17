@@ -86,7 +86,7 @@
         <div class="swu-evaluation-message" ng-if="vm.proposals.length >= 1">You still need to finish ranking the responses to the Team Questions.</div>
         <div class="swu-evaluation-cta">
           <p>When you have all the rankings the way you want them, click the Commit button to lock in your decisions.</p>
-          <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 0" ng-click="vm.questions()">Finish and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+          <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 0" ng-click="vm.openQuestionRankingModal()">Finish and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
         </div>
       </div>
 
