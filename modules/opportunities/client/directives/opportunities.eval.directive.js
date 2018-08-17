@@ -16,13 +16,14 @@
 			function($scope, $state, Authentication, Notification, ProposalsService, ask, modalService) {
 
 				var vm = this;
-				vm.opportunity 		= $scope.opportunity;
-				vm.authentication 	= Authentication;
-				vm.isUser			= Authentication.user;
-				vm.isAdmin			= vm.isUser && ~Authentication.user.roles.indexOf('admin');
-				vm.canEdit			= vm.isAdmin || $scope.opportunity.userIs.admin;
-				vm.maxPoints		= 100;
-				vm.isLoading		= true;
+				vm.opportunity 			= $scope.opportunity;
+				vm.authentication 		= Authentication;
+				vm.isUser				= Authentication.user;
+				vm.isAdmin				= vm.isUser && ~Authentication.user.roles.indexOf('admin');
+				vm.canEdit				= vm.isAdmin || $scope.opportunity.userIs.admin;
+				vm.maxPoints			= 100;
+				vm.isLoading			= true;
+				vm.bestScoreWeighted 	= 5;
 
 
 				/**
@@ -303,9 +304,7 @@
 
 					if (vm.opportunity.teamQuestionGradingType === 'Linear') {
 
-						var bestScore = teamQuestionWeights.reduce(function(a, b) {
-							return a + b;
-						}) * proposals.length;
+						var bestScore = proposals.length;
 
 						proposals.forEach(function(proposal) {
 
@@ -325,9 +324,7 @@
 					else {
 						proposals.forEach(function(proposal) {
 
-							var bestScore = teamQuestionWeights.reduce(function(a, b) {
-								return a + b;
-							}) * 5;
+							var bestScore = vm.bestScoreWeighted;
 
 							proposal.scores.question = Math.round(
 								proposal.teamQuestionResponses
