@@ -1,0 +1,63 @@
+<div class="modal-header">
+    <button class="close" data-ng-click="close()"><i class="fa fa-times-thin"></i></button>
+    <div class="modal-title">Grade Questionnaire Responses</div>
+  </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-12 text-center">
+          <p>For each question we have randomized the responses that teams submitted.</p>
+          <h4>Grade the individual responses with a score between 1 (worst) and 5 (best) for all {{data.model.questions.length}} questions.</h4>
+          <ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+
+            <table width="100%">
+              <tr>
+                <td width="65%">
+                  <div class="panel panel-primary" ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
+                    <div class="panel-heading text-center">
+                      <strong>
+                      Question: <span ng-bind-html="question[0].question"></span>
+                      </strong>
+                    </div>
+                      <table width="100%">
+                          <tr ng-repeat="response in question">
+                            <td width="15%" class="question-cell">
+                              <div>
+                                  <ul class="question-input-list">
+                                      <li class="question-input">
+                                          Score: <input select-on-click class="scoreBox" name="input" type="text" pattern="[0-5]" required min="0" max="5" ng-model="response.score" ng-change="validateScores()"/>
+                                      </li>
+                                    </ul>
+                              </div>
+                            </td>
+                            <td width="100%" class="question-cell" ng-click="data.model.selected = response" ng-class="{'selected': data.model.selected === response}">
+                              <div>
+                                <ul class="question-list">
+                                  <li class="question-item" ng-bind-html="response.response">
+                                  </li>
+                                </ul>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                  </div>
+                </td>
+                <td width="35%" style="margin-left: 5px;">
+                  <div class="long-question">
+                    <div ng-bind-html="data.model.selected.response"></div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+        </div>
+      </div>
+    </div>
+  <div class="modal-footer text-right">
+    <div>All scores must be a number between 1 and 5</div>
+    <button class="btn btn-primary" data-ng-click="save()">Save my work & Close</button>
+    <button ng-disabled="!data.scoresValid" class="btn btn-success" data-ng-click="commit()"><i class="fa fa-lock"></i> Lock in scores</button>
+    <button class="btn btn-default" data-ng-click="close()">Cancel</button>
+  </div>

@@ -159,7 +159,8 @@ var OpportunitySchema = new Schema({
 	//
 	watchers 				: {type: [{type:Schema.ObjectId, ref: 'User'}], default: []},
 	addenda					: {type: [AddendumSchema], default: []},
-	teamQuestions			: {type: [TeamQuestionSchema], default: []}
+	teamQuestions			: {type: [TeamQuestionSchema], default: []},
+	teamQuestionGradingType : {type: String, default:'Linear', enum:['Linear', 'Weighted']}
 }, { usePushEach: true });
 
 OpportunitySchema.virtual ('closingIn').get (function () {
