@@ -135,21 +135,24 @@
 							<br>
 							<p><b>Mandatory:</b> To apply on this opportunity, you must agree to the <a href="https://github.com/BCDevExchange/code-with-us/raw/master/Code%20With%20Us%20Paid%20Terms_Nov_28.pdf" title="Code With Us terms">Code With Us terms</a>. To indicate your acceptance of the terms, download the terms document, and upload it here as an attachment.</p>
 							-->
-							<a href class="btn btn-sm btn-primary" ngf-select="ppp.upload($file)"><i class="fa fa-plus"></i> Upload a file (max size 3MB per file)</a>
-
-							<table class="table table-striped">
-								<tr ng-repeat="file in ppp.proposal.attachments">
-									<td class=" text-right">
-										<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
-									</td>
-									<td class="text-left">
-										{{file.name}}
-									</td>
-									<td class=" text-left">
-										<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
-									</td>
-								</tr>
-							</table>
+							<div>
+								<a href class="btn btn-default" ngf-select="ppp.upload($file)"><i class="fa fa-upload"></i> Upload a file</a> &nbsp; <span class="light">Max 3 MB per file</span>
+							</div>
+							<div style="padding: 20px 0;">
+								<table class="table">
+									<tr ng-repeat="file in ppp.proposal.attachments">
+										<td class="text-left" width="32px">
+											<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+										</td>
+										<td class="text-left">
+											{{file.name}}
+										</td>
+										<td class="text-left">
+											<i class="fa fa-trash btn-remove-attachment" title="remove" ng-click="ppp.deletefile(file._id)"></i>
+										</td>
+									</tr>
+								</table>
+							</div>
 						<!-- <div class="button" ngf-select="uploadFiles($files)" multiple="multiple">Upload on file select</div>
 						Drop File:
 						<div ngf-drop="uploadFiles($files)" class="drop-box"

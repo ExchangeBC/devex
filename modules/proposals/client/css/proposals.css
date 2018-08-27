@@ -24,3 +24,6 @@
 	flex-flow: column wrap;
 	align-items: center;
 }
+.btn-remove-attachment:hover {
+	cursor: pointer;
+}
