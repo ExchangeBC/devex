@@ -256,7 +256,7 @@
 								<!-- Team member list Iinception) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.inception.pagedItems"
+										<div 	ng-repeat="member in ppp.inception.filteredItems"
 												class="team-member"
 												ng-class="{'selected':ppp.inTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.inTeam)">
@@ -264,15 +264,6 @@
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
-								</div>
-								<!-- Page controls (inception) -->
-								<div class="pagination-wrapper">
-									<uib-pagination boundary-links="false"
-													items-per-page="ppp.inception.itemsPerPage"
-													total-items="ppp.inception.filterLength"
-													ng-model="ppp.inception.currentPage"
-													ng-change="ppp.inception.pageChanged()"
-													maxSize="5"/>
 								</div>
 							</div>
 
@@ -325,7 +316,7 @@
 								<!-- Team member list (poc) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.poc.pagedItems"
+										<div 	ng-repeat="member in ppp.poc.filteredItems"
 												class="team-member"
 												ng-class="{'selected':ppp.prTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.prTeam)">
@@ -333,15 +324,6 @@
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
-								</div>
-								<!-- Page controls (poc) -->
-								<div class="pagination-wrapper">
-									<uib-pagination boundary-links="false"
-													items-per-page="ppp.poc.itemsPerPage"
-													total-items="ppp.poc.filterLength"
-													ng-model="ppp.poc.currentPage"
-													ng-change="ppp.poc.pageChanged()"
-													maxSize="5"/>
 								</div>
 							</div>
 
@@ -393,7 +375,7 @@
 								<!-- Team member list (implementation) -->
 								<div class="panel-body team-selection-wrapper">
 									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.implementation.pagedItems"
+										<div ng-repeat="member in ppp.implementation.filteredItems"
 												class="team-member"
 												ng-class="{'selected':ppp.imTeam[member.email]}"
 												ng-click="ppp.clickMember(member, ppp.imTeam)">
@@ -401,15 +383,6 @@
 											<name>{{member.displayName}}</name>
 										</div>
 									</div>
-								</div>
-								<!-- Page controls (implementation) -->
-								<div class="pagination-wrapper">
-									<uib-pagination boundary-links="false"
-													items-per-page="ppp.implementation.itemsPerPage"
-													total-items="ppp.implementation.filterLength"
-													ng-model="ppp.implementation.currentPage"
-													ng-change="ppp.implementation.pageChanged()"
-													maxSize="5"/>
 								</div>
 							</div>
 
