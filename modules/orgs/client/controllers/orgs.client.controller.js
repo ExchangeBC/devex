@@ -281,6 +281,7 @@
 				.then (function (savedOrg) {
 					vm.emaillist = '';
 					vm.orgForm.$setPristine ();
+					vm.org = savedOrg;
 					return savedOrg;
 				})
 				.then (vm.displayResults)
