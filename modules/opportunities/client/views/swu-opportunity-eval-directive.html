@@ -1,0 +1,234 @@
+<div ng-if="vm.canEdit && vm.opportunity.isPublished" class="container swu-evaluation">
+
+  <div class="alert" ng-if="vm.isLoading">
+    <i class="fa fa-lg fa-spinner fa-spin"></i>&nbsp; Loading Evaluation...</a>
+  </div>
+  <div ng-show="!vm.isLoading">
+    <div class="swu-evaluation-header">
+
+        <!-- Once opportunity is closed, show evaluation progress bar -->
+        <div class="swu-evaluation-progress text-center" ng-if="vm.closing === 'CLOSED' && vm.beforeStage('assigned')">
+
+          <step ng-class="{ active:   vm.opportunity.evaluationStage >= vm.stages.pending_review &&
+                                      vm.opportunity.evaluationStage <= vm.stages.questions_saved,
+                            complete: vm.opportunity.evaluationStage > vm.stages.questions_saved }">
+            <icon>1</icon>
+            <step-name>Team Questions</step-name>
+          </step>
+
+          <step ng-class="{ disabled: vm.opportunity.evaluationStage < vm.stages.code_scores,
+                            active:   vm.opportunity.evaluationStage === vm.stages.code_scores,
+                            complete: vm.opportunity.evaluationStage > vm.stages.code_scores }">
+            <icon>2</icon>
+            <step-name>Code Challenge</step-name>
+          </step>
+
+          <step ng-class="{ disabled: vm.opportunity.evaluationStage < vm.stages.interview,
+                            active:   vm.opportunity.evaluationStage === vm.stages.interview,
+                            complete: vm.opportunity.evaluationStage > vm.stages.interview }">
+            <icon>3</icon>
+            <step-name>Team Scenario</step-name>
+          </step>
+
+          <step ng-class="{ disabled: vm.opportunity.evaluationStage < vm.stages.price,
+                            active:   vm.opportunity.evaluationStage === vm.stages.price,
+                            complete: vm.opportunity.evaluationStage > vm.stages.price }">
+            <icon>4</icon>
+            <step-name>Assign</step-name>
+          </step>
+
+        </div>
+      </div>
+
+      <!-- Once opportunity is closed, show evaluation steps -->
+  <div class="swu-evaluation-body" ng-if="vm.closing === 'CLOSED'">
+
+    <!-- Stage 1a: Questions: Questions are pending review by someone with the 'vetter' role -->
+    <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.pending_review">
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Well, you got one response!</div>
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i> &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+      <div class="swu-evaluation-cta">
+        <p><i class="fa fa-lg fa-hourglass-1"></i> &nbsp; Review in progress .... Check back soon!</p>
+        <p>A procurement specialist is reviewing the responses to the Team Questions to make sure they don't contain any self-identifying information. Once this is done, you'll be able to start the evaluation.</p>
+      </div>
+    </div>
+
+    <!-- Stage 1b: Questions: Choose question grading type as linear or weighted -->
+    <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.choose_grade_type">
+        <div class="swu-evaluation-message" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+        <div class="swu-evaluation-message" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Well, you got one response!</div>
+        <div class="swu-evaluation-message" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i> &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+        <div class="swu-evaluation-cta">
+          <p>Your first step is to choose how you would like to grade the responses that were submitted to the Team Questions.  </p>
+          <p><em>Choose:</em></p>
+          <p><b>Linear Grading </b> to order the responses for each question from best to worst</p>
+          <p><em>or</em></p>
+          <p><b>Weighted Grading</b> to assign a score from 1 to 5 to each individual response.</p>
+          <button class="btn btn-lg btn-primary" ng-click="vm.selectLinearGrading()">&nbsp;&nbsp;&nbsp;Linear &nbsp;<i class="fa fa-lg fa-sort"></i></button>
+          <button class="btn btn-lg btn-primary" ng-click="vm.selectWeightedGrading()">Weighted &nbsp;<i class="fa fa-lg fa-balance-scale"></i></button>
+        </div>
+      </div>
+
+    <!-- Stage 1c: Questions: Questionnaire response ranking (modal) has not been saved yet -->
+    <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.questions">
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i> &nbsp;Well, you got one response!</div>
+      <div class="swu-evaluation-message" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i> &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+      <div class="swu-evaluation-cta">
+        <p>Your first step is to comparatively rank the responses that teams submitted to the Team Questions.</p>
+        <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length >= 1" ng-click="vm.openQuestionRankingModal()">Rank responses &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+      </div>
+    </div>
+
+      <!-- Stage 1c: Questions: Questionnaire response ranking (modal) has been saved, but not committed -->
+      <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.questions_saved">
+        <div class="swu-evaluation-message" ng-if="vm.proposals.length >= 1">You still need to finish ranking the responses to the Team Questions.</div>
+        <div class="swu-evaluation-cta">
+          <p>When you have all the rankings the way you want them, click the Commit button to lock in your decisions.</p>
+          <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 0" ng-click="vm.openQuestionRankingModal()">Finish and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Stage 2: Enter Code Challenge Scores -->
+      <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.code_scores">
+        <div class="swu-evaluation-message">Great! Next step: the Code Challenge.</div>
+        <div class="swu-evaluation-cta">
+          <p>In the table below, you should see which companies screen in for the Code Challenge.</p>
+          <p>Right now, you need to: <strong>(1) Notify all the companies who did not screen in</strong> and <strong>(2) Send the Code Challenge to all companies who did screen in.</strong></p>
+          <p>Once the Code Challenge submissions have been evaluated, come back here to enter the scores for each company. </p>
+          <button class="btn btn-lg btn-primary" ng-click="vm.openCodeChallengeModal()">Enter Code Challenge scores &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Stage 3: Enter Interview Scores -->
+      <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.interview">
+        <div class="swu-evaluation-message">Alright, we're getting there! Next up: the Team Scenario.</div>
+        <div class="swu-evaluation-cta">
+          <p>Now you should see how teams are stacking up in the evaluation so far.</p>
+          <p>If any teams did not pass the Code Challenge, inform them right away.</p>
+          <p>For teams that passed the Code Challenge, now you need to send them information about the Team Scenario and get those scheduled.</p>
+          <p>Once all of the Team Scenarios have taken place and your evaluation panel has come to consensus on the overall scores for each company, come back here to enter the total scores.</p>
+          <button class="btn btn-lg btn-primary" ng-click="vm.openInterviewModal()">Enter Team Scenario scores &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+        </div>
+      </div>
+
+      <!-- Stage 4: Assignment -->
+      <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.price">
+        <div class="swu-evaluation-message">Congrats, you did it!</div>
+        <div class="swu-evaluation-cta">
+          <p>The evaluation is complete. The score for pricing has been automatically calculated by the system and the top scoring team is listed in the table below.</p>
+          <p>After you have contacted the winning company and confirmed that they will be taking on the contract, you can click the Assign button below to show all viewers of the opportunity page which company won the competition.</p>
+        </div>
+      </div>
+
+      <!-- Edge case: All proponents failed the code challenge -->
+      <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.all_failed">
+        <div class="alert alert-danger">
+          <i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Uh oh!</strong> This evaluation can't continue because no proponents passed the Code Challenge!
+        </div>
+      </div>
+
+      <!-- Opportunity has been assigned. -->
+      <div class="swu-evaluation-cta text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.assigned">
+        <h4>This opportunity has been assigned to {{vm.opportunity.proposal.businessName | limitTo: 20 }}{{ vm.opportunity.proposal.businessName.length > 20 ? '...' : '' }}</h4>
+      </div>
+
+      <div class="swu-evaluation-summary" ng-if="vm.closing === 'CLOSED'">
+        <div class="table-title">Evaluation Scoring Summary</div>
+        <div class="alert alert-warning hidden-md hidden-lg">
+          <i class="fa fa-lg fa-laptop"></i> &nbsp; To view the evaluation summary table, you need to be on a device with a wider screen. (Sorry, we're working on it!)
+        </div>
+        <table class="table table-condensed table-striped hidden-xs hidden-sm">
+          <thead>
+            <tr>
+              <!-- I'd like to link the column headings, so that each one opens a popover that explains what each score is and how it's calculated -->
+              <td class="text-left">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Company" data-content="You don't get to see the name of the companies until you rank anonymized and randomized repsonses to the questionnaire, then select how many you're going to interview! Cool, eh?!">
+                  Company
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Skills (/{{vm.weights.skill * vm.maxPoints}})" data-content="All the companies claim to have all the capabilites you need. The score in this column is for the amount of the preferred technical skills you selected that the team members possess.">
+                  Skills
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Team Questions (/{{vm.weights.question * vm.maxPoints}})" data-content="This score is out of 20. You blindly rank the responses to questions from best to worse. We do the rest.">
+                  Team Questions
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Mid Score" data-context="This is the score used to determine the top 4 companies will continue on to the next evaluation phase.">
+                  Mid Score
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Screen Rank" data-context="This is the ranking of the screened teams.">
+                Screen Rank
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Code Challenge (/{{vm.weights.codechallenge * vm.maxPoints}})" data-content="This score is out of 25. You enter each team's Code Challenge score and we record it.">
+                  Code Challenge
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Interview (/{{vm.weights.interview * vm.maxPoints}})" data-content="Once you've conducted interviews, you'll enter one aggregated score for each company.">
+                  Team Scenario
+                </button>
+              </td>
+              <td class="text-center">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Price (/{{vm.weights.price * vm.maxPoints}})" data-content="You'll get to see a score for the pricing the company submitted after you enter an interview score. Score for pricing is based on an algorithm that looks at the minimum and maximum prices submitted. It's not heavily weighted because we don't want this to be the determining factor for you.">
+                  Price
+                </button>
+              </td>
+              <td class="text-right">
+                <button type="button" class="btn btn-table-heading" data-container="body" data-toggle="popover" data-placement="top" title="Total (/{{vm.maxPoints}})" data-content="This is the total score out of 100%.">
+                  Total Score
+                </button>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="proposal in vm.proposals | orderBy:'-scores.total'">
+              <td class="text-left">
+                <span ng-show="vm.opportunity.evaluationStage <= vm.stages.questions_saved">Company {{$index + 1}}</span>
+                <a href="" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}</a>
+              </td>
+              <td class="text-center">{{proposal.scores.skill}}</td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{proposal.scores.question}}</span></td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{proposal.scores.skill + proposal.scores.question}}</span></td>
+              <td class="text-center">
+                <span class="screened-in" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores && proposal.screenedIn">{{proposal.ranking}}</span>
+                <span class="screened-out" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores && !proposal.screenedIn">Screened Out</span>
+              </td>
+              <td class="text-center">
+                <span ng-show="vm.opportunity.evaluationStage >= vm.stages.interview && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.codechallenge}}</span>
+                <span class="screened-out" ng-show="vm.opportunity.evaluationStage >= vm.stages.interview && proposal.screenedIn && !proposal.passedCodeChallenge">Failed</span>
+              </td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.interview}}</span></td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.price}}</span></td>
+              <td class="text-right"><span>{{proposal.scores.total}}</span></td>
+            </tr>
+            <tr>
+              <td align="right" class="text-right" colspan="9">
+                <b><span ng-if="vm.opportunity.evaluationStage === vm.stages.price">{{ vm.topProposal.businessName | limitTo: 20 }}{{ vm.topProposal.businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.opportunity.evaluationStage === vm.stages.price"> has the highest score for this evaluation: </span>
+                <button ng-if="vm.opportunity.evaluationStage === vm.stages.price" class="btn btn-sm btn-primary" type="button" ng-click="vm.assignOpportunity(vm.topProposal)">Assign</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Temporary - for development purposes only-->
+      <div align="center" ng-if="vm.closing === 'CLOSED'">
+        <button type="button" ng-if="vm.isAdmin" class="btn btn-sm btn-primary" ng-click="vm.resetEvaluation()">Reset Evaluation</button>
+        <button type="button" ng-if="vm.isAdmin" ng-disabled="vm.opportunity.evaluationStage !== vm.stages.pending_review" class="btn btn-sm btn-primary" ng-click="vm.openQuestionReviewModal()">Review Questions</button>
+      </div>
+
+    </div>
+  </div>
+
+
+</div>

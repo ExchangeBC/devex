@@ -61,6 +61,9 @@ var adminRole = function (opportunity) {
 	return opportunity.code+'-admin';
 };
 var ensureAdmin = function (opportunity, user) {
+	if (!user) {
+		return false;
+	}
 	return !(!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin'));
 };
 var countStatus = function (id) {
@@ -314,7 +317,12 @@ exports.update = function (req, res) {
 	// copy over everything passed in. This will overwrite the
 	// audit fields, but they get updated in the following step
 	//
-	var proposal = _.assign (req.proposal, req.body);
+	// var proposal = _.assign (req.proposal, req.body);
+	var proposal = _.mergeWith(req.proposal, req.body, (objValue, srcValue) => {
+		if (_.isArray(objValue)) {
+			return srcValue;
+		}
+	});
 	//
 	// set the audit fields so we know who did what when
 	//
@@ -388,10 +396,13 @@ exports.assignswu = function (req, res) {
 	proposal.isAssigned = true;
 	helpers.applyAudit (proposal, req.user);
 	saveProposal (proposal)
-	.then (function () {
-		return Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+	.then (function (updatedProposal) {
+		Opportunities.assignswu (proposal.opportunity._id, proposal._id, proposal.user, req.user);
+		return updatedProposal;
 	})
-	.then (function () {res.json (proposal); })
+	.then (function (updatedProposal) {
+		res.json (updatedProposal);
+	})
 	.catch (function (e) {
 		res.status(422).send ({ message: errorHandler.getErrorMessage(e) });
 	});
@@ -478,7 +489,7 @@ exports.forOpportunity = function (req, res) {
 	if (!ensureAdmin (req.opportunity, req.user)) {
 		return res.json ([]);
 	}
-	Proposal.find({opportunity:req.opportunity._id, status:'Submitted'}).sort('created')
+	Proposal.find({opportunity:req.opportunity._id, $or: [{status:'Submitted'}, {status: 'Assigned'}]}).sort('created')
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')

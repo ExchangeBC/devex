@@ -26,7 +26,8 @@ var TeamQuestionResponseSchema = new Schema ({
 	question : {type: String},
 	response : {type: String},
 	rank     : {type: Number, default: 0},
-	rejected : {type: Boolean, default: false}
+	rejected : {type: Boolean, default: false},
+	score	 : {type: Number, default: 0}
 });
 /**
  * Proposal Schema
