@@ -338,17 +338,8 @@
 		ppp.poc = {};
 		ppp.implementation = {};
 		ppp.buildPager = function () {
-			ppp.inception.pagedItems = [];
-			ppp.inception.itemsPerPage = 5;
-			ppp.inception.currentPage = 1;
 			ppp.inception.figureOutItemsToDisplay();
-			ppp.poc.pagedItems = [];
-			ppp.poc.itemsPerPage = 5;
-			ppp.poc.currentPage = 1;
 			ppp.poc.figureOutItemsToDisplay();
-			ppp.implementation.pagedItems = [];
-			ppp.implementation.itemsPerPage = 5;
-			ppp.implementation.currentPage = 1;
 			ppp.implementation.figureOutItemsToDisplay();
 		}
 		ppp.inception.figureOutItemsToDisplay = function () {
@@ -359,11 +350,6 @@
 					return 	(member.displayName.toUpperCase().includes(ppp.inception.search.toUpperCase()) ||
 							(ppp.inTeam[member.email] === true));
 				});
-			var begin = ((ppp.inception.currentPage - 1) * ppp.inception.itemsPerPage);
-			var end = begin + ppp.inception.itemsPerPage;
-			var items = ppp.inception.filteredItems.slice(begin, end);
-			ppp.inception.filterLength = ppp.inception.filteredItems.length;
-			ppp.inception.pagedItems = items;
 		}
 		ppp.inception.pageChanged = function () {
 			ppp.inception.figureOutItemsToDisplay();
@@ -376,11 +362,6 @@
 					return 	(member.displayName.toUpperCase().includes(ppp.poc.search.toUpperCase()) ||
 							(ppp.prTeam[member.email] === true));
 				});
-			var begin = ((ppp.poc.currentPage - 1) * ppp.poc.itemsPerPage);
-			var end = begin + ppp.poc.itemsPerPage;
-			var items = ppp.poc.filteredItems.slice(begin, end);
-			ppp.poc.filterLength = ppp.poc.filteredItems.length;
-			ppp.poc.pagedItems = items;
 		}
 		ppp.poc.pageChanged = function () {
 			ppp.poc.figureOutItemsToDisplay();
@@ -393,11 +374,6 @@
 					return 	(member.displayName.toUpperCase().includes(ppp.implementation.search.toUpperCase()) ||
 							(ppp.imTeam[member.email] === true));
 				});
-			var begin = ((ppp.implementation.currentPage - 1) * ppp.implementation.itemsPerPage);
-			var end = begin + ppp.implementation.itemsPerPage;
-			var items = ppp.implementation.filteredItems.slice(begin, end);
-			ppp.implementation.filterLength = ppp.implementation.filteredItems.length;
-			ppp.implementation.pagedItems = items;
 		}
 		ppp.implementation.pageChanged = function () {
 			ppp.implementation.figureOutItemsToDisplay();

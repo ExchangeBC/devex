@@ -133,7 +133,7 @@
 		var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		var dt = vm.opportunity.deadline;
-		vm.deadline = dt.getHours()+':00 PST, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
+		vm.deadline = dt.getHours()+':00 Pacific Time, '+dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.assignment;
 		vm.assignment = dayNames[dt.getDay()]+', '+monthNames[dt.getMonth()]+' '+dt.getDate()+', '+dt.getFullYear();
 		dt = vm.opportunity.start;
@@ -694,15 +694,31 @@
 			// set the time on the 2 dates that care about it
 			//
 			vm.opportunity.deadline.setHours(16);
+			vm.opportunity.deadline.setMinutes(0);
+			vm.opportunity.deadline.setSeconds(0);
 			vm.opportunity.assignment.setHours(16);
 			if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date ();
 			vm.opportunity.endDate.setHours(16);
-			vm.oimp.endDate.setHours (16);
-			vm.oimp.startDate.setHours (16);
-			vm.oinp.endDate.setHours (16);
-			vm.oinp.startDate.setHours (16);
-			vm.oprp.endDate.setHours (16);
-			vm.oprp.startDate.setHours (16);
+			vm.opportunity.endDate.setMinutes(0);
+			vm.opportunity.endDate.setSeconds(0);
+			vm.oimp.endDate.setHours(16);
+			vm.oimp.endDate.setMinutes(0);
+			vm.oimp.endDate.setSeconds(0);
+			vm.oimp.startDate.setHours(16);
+			vm.oimp.startDate.setMinutes(0);
+			vm.oimp.startDate.setSeconds(0);
+			vm.oinp.endDate.setHours(16);
+			vm.oinp.endDate.setMinutes(0);
+			vm.oinp.endDate.setSeconds(0);
+			vm.oinp.startDate.setHours(16);
+			vm.oinp.startDate.setMinutes(0);
+			vm.oinp.startDate.setSeconds(0);
+			vm.oprp.endDate.setHours(16);
+			vm.oprp.endDate.setMinutes(0);
+			vm.oprp.endDate.setSeconds(0);
+			vm.oprp.startDate.setHours(16);
+			vm.oprp.startDate.setMinutes(0);
+			vm.oprp.startDate.setSeconds(0);
 
 
 			//
