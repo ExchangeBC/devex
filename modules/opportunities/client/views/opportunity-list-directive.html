@@ -53,8 +53,6 @@
 
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
-						<!-- <label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label> -->
-
 						<label class="label label-watching pull-right" ng-if="vm.isUser">
 							<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>
 							<button class="button-watching" ng-if="opportunity.isWatching" ng-click="vm.removeWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg text-primary"></i></button>
@@ -134,11 +132,6 @@
 
 						<label class="label label-danger">CLOSED</label>
 
-						<label class="label label-watching pull-right" ng-if="vm.isUser">
-							<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>
-							<button class="button-watching" ng-if="opportunity.isWatching" ng-click="vm.removeWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg text-primary"></i></button>
-						</label>
-
 						<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}}
 							<span class="gray-light" ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
 							<span class="gray-light" ng-if="opportunity.onsite == 'onsite'">In-person work required</span>
@@ -158,11 +151,6 @@
 						<label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
 
 						<label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label>
-
-						<label class="label label-watching pull-right" ng-if="vm.isUser">
-							<button class="button-watching" ng-if="!opportunity.isWatching" ng-click="vm.addWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg gray-light"></i></button>
-							<button class="button-watching" ng-if="opportunity.isWatching" ng-click="vm.removeWatch(opportunity);$event.preventDefault(); $event.stopPropagation()"><i class="fa fa-eye fa-lg text-primary"></i></button>
-						</label>
 
 						<label class="label label-danger" ng-if="opportunity.opportunityTypeCd==='sprint-with-us'"><i class="fa fa-users"></i> Team Required </label>
 						<label class="label label-location"><i class="fa fa-map-marker fa-lg"></i>&nbsp;{{opportunity.location}}
