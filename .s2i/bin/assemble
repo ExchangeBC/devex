@@ -59,7 +59,7 @@ fi
 
 echo "---> Installing all dependencies"
 npm install yarn -g -q
-yarn install  --non-interactive --pure-lockfile
+yarn install --non-interactive --pure-lockfile --ignore-engines
 
 # Do not fail when there is no build script
 echo "---> Building your Node application from source"
