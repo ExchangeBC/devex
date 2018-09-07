@@ -841,7 +841,7 @@ exports.downloadSWUProposal = function(req, res) {
 				links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
 			});
 			var questions = '<ol>';
-			proposal.questions.forEach( function (question) {
+			proposal.teamQuestionResponses.forEach( function (question) {
 				questions += ('<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>');
 			});
 			questions += '</ol>';

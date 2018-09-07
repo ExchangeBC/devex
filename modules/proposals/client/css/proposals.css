@@ -17,7 +17,8 @@
 	min-width: 160px;
 }
 .team-selection-wrapper {
-	height: 235px;
+	max-height: 330px;
+	overflow-y: scroll;
 }
 .pagination-wrapper {
 	display: flex;

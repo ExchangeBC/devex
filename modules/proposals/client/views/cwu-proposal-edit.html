@@ -169,12 +169,10 @@
 					</uib-tab-heading>
 					<div class="edit-form-tab-content">
 						<div class="alert alert-info">
-							To submit a Proposal, you must agree to the following terms:
+							To submit a Proposal, you must agree to the Terms.
 						</div>
-						<iframe class="row" style="height: 400px;" src="/code-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
-						<br>
-						<a class="btn btn-sm btn-primary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a>
-						<div class="alert alert-warning">
+						<div><a class="btn btn-primary" href="/api/proposals/download/terms/cwu1" target="_blank"><i class="fa fa-download"></i> Download Terms</a></div>
+						<div>
 							<label class="checkbox-inline checkbox-alone">
 								<input type="checkbox" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> I acknowledge that I have read, fully understand, and agree to these terms.
 							</label>
