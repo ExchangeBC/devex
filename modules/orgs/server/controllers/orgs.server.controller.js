@@ -713,24 +713,21 @@ exports.addUserToOrg = function (req, res) {
 	req.user = req.model;
 	var org = req.org;
 	var user = req.user;
-	// var orgO = org.toObject();
-	// var userO = user.toObject();
+
 	if (req.params.actionCode === 'decline') {
-		return res.status (200).json ({
+		return res.status(200).json ({
 			message: '<h4>Declined</h4>Thank you, you have not been added to company '+org.name
 		});
 	}
 	else {
 		// The user accepting the invitation must be recorded by id if they were an existing user at time of invite or by email if they had not yet registered
-		if (org.invitedUsers &&
-			org.invitedNonUsers &&
-			(org.invitedUsers.map(function(invitedUser) { return invitedUser.id; }).indexOf(user.id) !== -1) ||
-			(org.invitedNonUsers.map(function(invitedNonUser) { return invitedNonUser.email; }).indexOf(user.email) !== -1)) {
-			Promise.resolve (user)
-			.then (addUserTo (org, 'members'))
-			.then (saveUser)
-			.then (function () { return org; })
-			.then (saveOrgReturnMessage (req, res));
+		if ((org.invitedUsers && org.invitedUsers.map(function(invitedUser) { return invitedUser.id; }).indexOf(user.id) !== -1) ||
+			(org.invitedNonUsers && org.invitedNonUsers.map(function(invitedNonUser) { return invitedNonUser.email; }).indexOf(user.email) !== -1)) {
+			Promise.resolve(user)
+			.then(addUserTo (org, 'members'))
+			.then(saveUser)
+			.then(function() { return org; })
+			.then(saveOrgReturnMessage(req, res));
 		}
 		else {
 			return res.status(200).json({
