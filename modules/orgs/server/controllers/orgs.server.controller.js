@@ -62,6 +62,8 @@ var getOrgById = function (id) {
 				select: 'name code'
 			}]
 		})
+		.populate('invitedUsers')
+		.populate('invitedNonUsers')
 		.exec (function (err, org) {
 			if (err) {
 				reject (err);
@@ -433,35 +435,49 @@ var inviteMembersWithMessages = function (emaillist, org) {
 		found    : [],
 		notFound : []
 	};
-	if (!emaillist) return Promise.resolve (list);
-	return getUsers ({email : {$in : emaillist}})
-	.then (function (users) {
+
+	if (!emaillist) {
+		return Promise.resolve (list);
+	}
+
+	return getUsers ({email : { $in : emaillist } })
+	.then(function(users) {
 		if (users) {
 			list.found = users;
-			var usersIndex = users.reduce (function (accum, curr) {accum[curr.email] = true; return accum;}, {});
-			emaillist.forEach (function (email) {
-				if (!usersIndex[email]) list.notFound.push ({email:email});
+
+			list.notFound = emaillist
+			.filter(function(email) {
+				return users.map(function(user) { return user.email; }).indexOf(email) === -1;
+			})
+			.map(function(email) {
+				return { email: email };
 			});
 		}
+		return users;
 	})
-	.then (function () {
-		sendMessages ('add-user-to-company-request', list.found, {org:org});
-		sendMessages ('invitation-from-company', list.notFound, {org:org});
+	.then(function(users) {
+		sendMessages('add-user-to-company-request', list.found, { org: org });
+		sendMessages('invitation-from-company', list.notFound, { org: org });
 
 		// record users so that they have 'permission' to self add
-		if (!org.invited) {
-			org.invited = [];
+		if (!org.invitedNonUsers) {
+			org.invitedNonUsers = [];
 		}
-		list.notFound.forEach(function(entry) {
-			org.invited.push(entry.email);
+
+		if (!org.invitedUsers) {
+			org.invitedUsers = [];
+		}
+
+		users.forEach(function(user) {
+			org.invitedUsers.push(user);
 		});
 
-		list.found.forEach(function(entry) {
-			org.invited.push(entry.email);
+		list.notFound.forEach(function(email) {
+			org.invitedNonUsers.push(email);
 		});
 	})
-	.then (function () {
-		return Promise.resolve (list);
+	.then (function() {
+		return Promise.resolve(list);
 	});
 };
 
@@ -697,8 +713,8 @@ exports.addUserToOrg = function (req, res) {
 	req.user = req.model;
 	var org = req.org;
 	var user = req.user;
-	var orgO = org.toObject();
-	var userO = user.toObject();
+	// var orgO = org.toObject();
+	// var userO = user.toObject();
 	if (req.params.actionCode === 'decline') {
 		return res.status (200).json ({
 			message: '<h4>Declined</h4>Thank you, you have not been added to company '+org.name
@@ -708,7 +724,7 @@ exports.addUserToOrg = function (req, res) {
 		// return res.status (200).json ({
 		// 	message: '<h4>Accepted</h4>Thank you, you have been added to company '+org.name
 		// });
-		if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
+		if (org.invitedUsers && org.invitedUsers.map(function(invitedUser) { return invitedUser.id; }).indexOf(user.id) !== -1) {
 			Promise.resolve (user)
 			.then (addUserTo (org, 'members'))
 			.then (saveUser)

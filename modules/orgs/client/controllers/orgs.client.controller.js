@@ -332,7 +332,7 @@
 					controller: function ($scope, $uibModalInstance) {
 						$scope.data = {
 							found    : result.emaillist.found,
-							notfound : result.emaillist.notfound
+							notfound : result.emaillist.notFound
 						};
 						$scope.close = function () {
 							$uibModalInstance.close ();
