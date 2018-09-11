@@ -1,69 +1,57 @@
-<section class="static-page"><div class="container" role="main">
-  <div class="page-header">
+<div class="sub-nav">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="/admin/users" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Users</a>
+    </div>
+  </div>
+</div>
+
+<section class="fill-view">
+  <div class="container" role="main">
     <div class="row">
-      <div class="col-md-6">
-        <h1 ng-bind="vm.user.username"></h1>
-      </div>
-      <div class="col-md-4">
-        <a class="btn btn-primary"  id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})">
-          <i class="glyphicon glyphicon-edit"></i>
-        </a>
-        <a class="btn btn-primary" ng-click="vm.remove()" ng-if="!vm.isContextUserSelf()">
-          <i class="glyphicon glyphicon-trash"></i>
-        </a>
+      <div class="col-xs-12">
+        <div class="profile-header">
+          <avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="50"></avatar-display>
+        </div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td class="user-attribute">Signed up on:</td>
+              <td ng-bind="vm.user.created"></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="user-attribute"><i class="fa fa-lg fa-github"></i> GitHub Handle:</td>
+              <td><a href="https://github.com/{{vm.user.username}}" target="_blank"> @<span ng-bind="vm.user.username"></span></a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="user-attribute">Email:</td>
+              <td><a href="mailto:{{vm.user.email}}"><span ng-bind="vm.user.email"></span></a></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td class="user-attribute">Notifications:</td>
+              <td>
+                <div ng-if="vm.user.notifyOpportunities"><i class="fa fa-lg fa-check-circle success"></i> Listening for new opportunities</div>
+                <div ng-if="!vm.user.notifyOpportunities" class="light">Not listening for new opportunities</div>
+              </td>
+              <td><a class="btn btn-sm btn-default pull-right"  id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i class="fa fa-pencil"></i> Edit</a></td>
+            </tr>
+            <tr>
+              <td class="user-attribute">Roles:</td>
+              <td>
+                <div ng-bind="vm.user.roles"></div>
+              </td>
+              <td><a class="btn btn-sm btn-default pull-right"  id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i class="fa fa-pencil"></i> Edit</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <br><br><br><br>
+        <div class="button-spacer">
+          <a class="btn btn-danger" ng-click="vm.remove()" ng-if="!vm.isContextUserSelf()">Delete This User</a>
+        </div>
       </div>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-8">
-      <div class="row">
-        <div class="col-md-3"><strong>First Name</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.firstName"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Last Name</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.lastName"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Email</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.email"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Title</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.userTitle"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Organization Name</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.government"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Notify Opportunities</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.notifyOpportunities"></div>
-      </div>
-      <hr/>
-	    <div class="row">
-        <div class="col-md-3"><strong>Notify Events</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.notifyEvents"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Provider</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.provider"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Created</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.created"></div>
-      </div>
-      <hr/>
-      <div class="row">
-        <div class="col-md-3"><strong>Roles</strong></div>
-        <div class="col-md-6" ng-bind="vm.user.roles"></div>
-  </div>
-</div></section>
+</section>

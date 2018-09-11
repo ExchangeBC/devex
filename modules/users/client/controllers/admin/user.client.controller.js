@@ -13,6 +13,7 @@
     vm.user = user;
     vm.remove = remove;
     vm.update = update;
+    vm.cancel = cancel;
     vm.isContextUserSelf = isContextUserSelf;
 
     function remove(user) {
@@ -44,9 +45,15 @@
         $state.go('admin.user', {
           userId: user._id
         });
-        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> User saved successfully!' });
+        Notification.success({ message: '<i class="fa fa-2x fa-check-circle"></i><br><h4>Changes saved!</h4>' });
       }, function (errorResponse) {
-        Notification.error({ message: errorResponse.data.message, title: '<i class="glyphicon glyphicon-remove"></i> User update error!' });
+        Notification.error({ message: errorResponse.data.message, title: '<i class="fa fa-2x fa-exclamation-triangle"></i><br><h4>User update error!</h4>' });
+      });
+    }
+
+    function cancel() {
+      $state.go('admin.user', {
+        userId: user._id
       });
     }
 

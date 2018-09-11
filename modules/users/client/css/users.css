@@ -40,3 +40,14 @@
 .image-upload-button {
   margin: 2em 0.5em;
 }
+/* Set max-width of textarea to be same as .container to prevent it from being able to be expanded horizontally outside its container */
+textarea {
+  max-width: 1040px;
+}
+.button-spacer {
+  padding: 30px 0;
+}
+td.user-attribute {
+  color: #ccc;
+  width: 145px;
+}
