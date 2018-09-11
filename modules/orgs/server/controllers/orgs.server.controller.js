@@ -721,15 +721,21 @@ exports.addUserToOrg = function (req, res) {
 		});
 	}
 	else {
-		// return res.status (200).json ({
-		// 	message: '<h4>Accepted</h4>Thank you, you have been added to company '+org.name
-		// });
-		if (org.invitedUsers && org.invitedUsers.map(function(invitedUser) { return invitedUser.id; }).indexOf(user.id) !== -1) {
+		// The user accepting the invitation must be recorded by id if they were an existing user at time of invite or by email if they had not yet registered
+		if (org.invitedUsers &&
+			org.invitedNonUsers &&
+			(org.invitedUsers.map(function(invitedUser) { return invitedUser.id; }).indexOf(user.id) !== -1) ||
+			(org.invitedNonUsers.map(function(invitedNonUser) { return invitedNonUser.email; }).indexOf(user.email) !== -1)) {
 			Promise.resolve (user)
 			.then (addUserTo (org, 'members'))
 			.then (saveUser)
 			.then (function () { return org; })
 			.then (saveOrgReturnMessage (req, res));
+		}
+		else {
+			return res.status(200).json({
+				message: '<h4>Invalid Invitation</h4>Your invitation has either expired or is invalid.  Please ask your company admin to reissue you another invite.'
+			});
 		}
 	}
 };
