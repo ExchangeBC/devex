@@ -75,9 +75,9 @@
 			<button ng-if="false && vm.notifyMe" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="Stop receiving emails about this opportunity" ng-click="vm.subscribe(false)"><i class="fa fa-bullhorn"></i> Following</button>
 
 			<!-- // User is NOT following the opportunity // -->
-			<button ng-if="!vm.canEdit && !vm.isWatching && vm.hasEmail" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.addWatch()"><i class="fa fa-eye"></i> Watch</button>
+			<button ng-if="!vm.canEdit && !vm.isWatching && vm.hasEmail && vm.closing !== 'CLOSED'" type="button" class="btn btn-sm btn-primary pull-right" uib-tooltip="Get email notifications if this opportunity changes." ng-click="vm.addWatch()"><i class="fa fa-eye"></i> Watch</button>
 			<!-- // User IS following the opportunity // -->
-			<button ng-if="vm.isWatching" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.removeWatch()"><i class="fa fa-eye"></i> Un-Watch</button>
+			<button ng-if="vm.isWatching && vm.closing !== 'CLOSED'" type="button" class="btn btn-sm btn-secondary pull-right" uib-tooltip="You’ll get an email if this opportunity changes" ng-click="vm.removeWatch()"><i class="fa fa-eye"></i> Un-Watch</button>
 		</div>
 
 		<!-- // Sprint With Us Terms // -->
