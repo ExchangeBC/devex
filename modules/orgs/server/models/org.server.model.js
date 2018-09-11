@@ -17,6 +17,10 @@ var validateLocalStrategyEmail = function (email) {
 // Org
 //
 // -------------------------------------------------------------------------
+var InvitedNonUserSchema = new Schema({
+	email: {type: String, default: ''}
+});
+
 var OrgSchema = new Schema ({
 	name                 : {type: String, default: '', required: 'Name cannot be blank'},
 	dba                  : {type: String, default: ''},
@@ -48,7 +52,9 @@ var OrgSchema = new Schema ({
 	updatedBy            : {type: 'ObjectId', ref: 'User', default: null },
 	members              : {type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
 	admins               : {type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
-	invited				 : [String]
+	invited				 : [String],
+	invitedUsers		 : {type: [{ type: Schema.Types.ObjectId, ref: 'User' }], default: [] },
+	invitedNonUsers		 : {type: [InvitedNonUserSchema], default: []}
 }, { usePushEach: true });
 
 OrgSchema.pre ('save', function (next) {
