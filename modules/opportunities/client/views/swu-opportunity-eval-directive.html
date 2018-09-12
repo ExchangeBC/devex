@@ -196,20 +196,20 @@
                 <span ng-show="vm.opportunity.evaluationStage <= vm.stages.questions_saved">Company {{$index + 1}}</span>
                 <a href="" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores" ng-click="vm.showCompanyInfo(proposal)">{{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}</a>
               </td>
-              <td class="text-center">{{proposal.scores.skill}}</td>
-              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{proposal.scores.question}}</span></td>
-              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{proposal.scores.skill + proposal.scores.question}}</span></td>
+              <td class="text-center">{{(proposal.scores.skill).toFixed(2)}}</td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{(proposal.scores.question).toFixed(2)}}</span></td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores">{{(proposal.scores.skill + proposal.scores.question).toFixed(2)}}</span></td>
               <td class="text-center">
                 <span class="screened-in" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores && proposal.screenedIn">{{proposal.ranking}}</span>
                 <span class="screened-out" ng-show="vm.opportunity.evaluationStage >= vm.stages.code_scores && !proposal.screenedIn">Screened Out</span>
               </td>
               <td class="text-center">
-                <span ng-show="vm.opportunity.evaluationStage >= vm.stages.interview && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.codechallenge}}</span>
+                <span ng-show="vm.opportunity.evaluationStage >= vm.stages.interview && proposal.screenedIn && proposal.passedCodeChallenge">{{(proposal.scores.codechallenge).toFixed(2)}}</span>
                 <span class="screened-out" ng-show="vm.opportunity.evaluationStage >= vm.stages.interview && proposal.screenedIn && !proposal.passedCodeChallenge">Failed</span>
               </td>
-              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.interview}}</span></td>
-              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{proposal.scores.price}}</span></td>
-              <td class="text-right"><span>{{proposal.scores.total}}</span></td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{(proposal.scores.interview).toFixed(2)}}</span></td>
+              <td class="text-center"><span ng-show="vm.opportunity.evaluationStage >= vm.stages.price && proposal.screenedIn && proposal.passedCodeChallenge">{{(proposal.scores.price).toFixed(2)}}</span></td>
+              <td class="text-right"><span>{{(proposal.scores.total).toFixed(2)}}</span></td>
             </tr>
             <tr>
               <td align="right" class="text-right" colspan="9">
