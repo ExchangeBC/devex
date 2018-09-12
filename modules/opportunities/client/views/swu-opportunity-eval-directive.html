@@ -1,6 +1,6 @@
 <div ng-if="vm.canEdit && vm.opportunity.isPublished" class="container swu-evaluation">
 
-  <div class="alert" ng-if="vm.isLoading">
+  <div class="alert" ng-show="vm.isLoading">
     <i class="fa fa-lg fa-spinner fa-spin"></i>&nbsp; Loading Evaluation...</a>
   </div>
   <div ng-show="!vm.isLoading">

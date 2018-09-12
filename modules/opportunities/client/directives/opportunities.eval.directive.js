@@ -250,7 +250,9 @@
 								.then(totalAndSort);
 							break;
 						};
+
 						vm.isLoading = false;
+						$scope.$apply();
 					});
 				}
 
