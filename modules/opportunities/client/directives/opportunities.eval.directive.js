@@ -815,6 +815,28 @@
 					});
 				}
 
+				vm.undoLastStage = function() {
+
+					var message = 'WARNING: This will cause any calculations or entered data from the last stage to be erased.  Proceed?';
+					ask.yesNo(message).then(function(response) {
+						if (response) {
+
+							if (vm.opportunity.evaluationStage === vm.stages.price || vm.opportunity.evaluationStage === vm.stages.assigned ) {
+								vm.opportunity.evaluationStage = vm.stages.interview;
+							}
+							else if (vm.opportunity.evaluationStage === vm.stages.all_fail) {
+								vm.opportunity.evaluationStage = vm.stages.code_scores;
+							}
+							else {
+								vm.opportunity.evaluationStage = vm.opportunity.evaluationStage - 1;
+							}
+
+							Promise.resolve()
+							.then(saveOpportunity);
+						}
+					});
+				}
+
 				vm.selectLinearGrading = function() {
 					var message = 'Confirm you wish to use linear grading';
 					ask.yesNo(message)
