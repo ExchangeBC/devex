@@ -1,35 +1,23 @@
-<div>
-	<div class="message-view-container">
-		<div>
-			<button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times-thin"></i></button>
-		</div>
-		<div>
-			
-			<div class="row">
-				<div ng-if="!vm.haveresult">
-					<!-- Don't think a Message Short template is needed -->
-					<!--
-					<div class="company-invitation-message" ng-bind-html="vm.trust(vm.message.messageShort)"></div>
-					-->
-					<div class="message-date-posted">{{vm.message.datePosted}}</div>
-					<div class="company-invitation-message" ng-bind-html="vm.trust(vm.message.messageBody)"></div>
-					<!-- Don't think we need this? ... Use case? -->
-					<!--					
-					<div>
-						This message was last viewed on {{vm.message.dateViewed}}
-					</div>
-					<br/>
-				-->
-					<div class="company-invitation-actions">
-						<button class="btn btn-lg" ng-disabled="vm.message.isArchived" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
-					</div>
-				<!-- Commenting out the expiry message/date until we figure out what we want to do with it -->
-				<!--
-					<div class="expiry-message">This invitation will expire on <strong>{{vm.message.date2Archive}}</strong> if you do nothing. If you join a company, you can always leave it later.</div>
-				-->
-				</div>
-				<div class="message-result" ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
-			</div>
-		</div>
-	</div>
-</div>
+<section class="message-detail-background">
+  <div class="container">
+    <div class="row">
+      <div class="col-centered col-sm-10 col-md-8">
+        
+        <div class="message" ng-if="!vm.haveresult">
+		  <button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times-thin"></i></button>
+		  <div class="message-date-sent">{{vm.message.datePosted}}</div>
+          <div ng-bind-html="vm.trust(vm.message.messageBody)"></div>
+          <div class="message-actions">
+              <button class="btn" ng-disabled="vm.message.isArchived" ng-repeat="action in vm.message.actions" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(action)">{{vm.trust(action.linkTitle)}}</button>
+          </div>
+        </div>
+        
+        <div class="message" ng-if="vm.haveresult">
+          <button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times-thin"></i></button>
+          <div class="message-result" ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
+        </div>
+        
+      </div>
+    </div>  
+  </div>  
+</section>

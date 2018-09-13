@@ -13,7 +13,7 @@
 	}
 }
 
-// These styles created for the modals for the message detail
+/* These styles created for the modals for the message detail. May not be used */
 .company-invitation-avatars {
 	padding: 20px;
 	text-align: center;
@@ -26,17 +26,39 @@
 .company-invitation-avatars img {
 	height: 70px;
 }
-.company-invitation-message {
-	text-align: center;
-	padding: 20px;
+
+/* Styles for message-list.html (Message list) */
+.message-list {
+  margin: 20px 0;
 }
-.company-invitation-message p {
-	font-size: 1.1em;
-	font-weight: 400;
+.message-list-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
 }
-.company-invitation-actions {
-	text-align: center;
-	padding: 30px 10px;
+.message-list-item:last-child {
+  border-bottom: none;
+}
+
+
+/* Styles for message-view.html (Message detail) */
+section.message-detail-background {
+  background: #e2e2e2;
+  padding: 40px 0;
+  height: 90vh;
+}
+
+/* Commenting this out because it was overriding the style of the black, flashing, "confirmations" .... */
+// .message {
+//   padding: 20px;
+//   background: #fff;
+//   border-radius: 4px;
+//   > button.close {
+//       float: left;
+//   }
+// }
+
+.message-actions {
+	margin: 40px 0 0;
 }
 .expiry-message {
 	padding: 20px 10px;
@@ -44,30 +66,14 @@
 	font-size: 0.9em;
 	color: #777;
 }
-.message-date-posted {
-	text-align: center;
-	color: #b3b3b3;
-	font-weight: bold;
-	margin-bottom: 20px;
-}
+
 .message-result {
 	text-align: center;
 }
 
-// These styles created for the new Messages list page
-.message-list {
-	padding: 20px 0;
-	margin-bottom: 100px;
-}
 .message-archives {
 	max-height: 900px;
 	overflow-y: scroll;
-}
-.message-list-header {
-	border-bottom: 2px dotted #e3e3e3;
-	font-size: 1.42em;
-	font-weight: 600;
-	padding: 10px 5px;
 }
 .message-card {
 	display: flex;
@@ -89,12 +95,6 @@ img.message-image {
 }
 .message-card-body {
 	display: inline-block;
-}
-.message-date {
-	color: #777;
-	font-size: .95em;
-	font-weight: bold;
-	margin-bottom: 5px;
 }
 .message-title {
 	display: block;

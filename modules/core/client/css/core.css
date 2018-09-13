@@ -73,3 +73,24 @@
 	transition: none;
 	display: none;
 }
+/* New classes for Messages icon on main navbar */
+.messages-icon {
+  font-size: 1.5em;
+  margin-right: .75em;
+}
+.unread-badge {
+  background: #f26925;
+  color: #fff;
+  font-weight: bold;
+  position: absolute;
+  top: -7px;
+  right: -13px;
+  font-size: 10px;
+  display: inline;
+  padding: .3em .6em;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 1em;
+}

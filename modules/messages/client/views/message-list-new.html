@@ -1,0 +1,27 @@
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-centered col-sm-10 col-md-8">
+        
+        <div class="message-list" id="newMessages">
+          <div class="message-list-header">New Messages</div>
+          <div class="message-list-item" ng-model="vm.filter.open" ng-if="!message.isArchived" id="messages.view" ui-sref="messages.view({ messageId: message._id })" ng-repeat="message in vm.messages | orderBy:'dateSent':true">
+            <div ng-bind-html="vm.trust(message.messageTitle)"></div>
+            <div ng-bind-html="vm.trust(message.messageShort)"></div>
+          </div>
+          <!-- If no new messages -->
+          <div class="well well-transparent" ng-if="!vm.messages.length">Your Inbox in Empty!</div>
+        </div>
+        
+        <div class="message-list" id="oldMessages">
+          <div class="message-list-header">Old Messages</div>
+          <div class="message-list-item" ng-model="vm.filter.archived" ng-if="message.isArchived" id="amessages.view" ui-sref="messages.view({ messageId: message._id })" ng-repeat="message in vm.messages | orderBy:'dateSent':true">
+            <div ng-bind-html="vm.trust(message.messageTitle)"></div>
+            <div ng-bind-html="vm.trust(message.messageShort)"></div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,86 +1,88 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
-	<div class="edit-form-tab-content">
-		<div class="row">
-			<div class="col-sm-6">
-				<fieldset>
-					<form-input
-						ng-model="vm.user.firstName"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"First Name",
-							"id":"firstName",
-							"name":"firstName",
-							"placeholder":"First Name",
-							"required":"First Name is required"
+	
+	<h3 style="margin-top: 0">
+		<avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="65"></avatar-display>
+	</h3>
+	<div style="margin: 0 0 20px;"><edit-profile-image></edit-profile-image></div>
+
+	<div style="margin: 10px 0;">
+		<fieldset>
+			<form-input
+				ng-model="vm.user.firstName"
+				class="col-sm-12"
+				x-form="vm.userForm"
+				x-options='{
+					"title":"First Name",
+					"id":"firstName",
+					"name":"firstName",
+					"placeholder":"First Name",
+					"required":"First Name is required"
+				}'>
+			</form-input>
+			<form-input
+				ng-model="vm.user.lastName"
+				class="col-sm-12"
+				x-form="vm.userForm"
+				x-options='{
+					"title":"Last Name",
+					"id":"lastName",
+					"name":"lastName",
+					"placeholder":"Last Name",
+					"required":"Last Name is required"
+				}'>
+			</form-input>
+			<form-input
+				ng-model="vm.user.email"
+				class="col-sm-12"
+				x-form="vm.userForm"
+				x-options='{
+					"title":"Email Address",
+					"id":"email",
+					"name":"email",
+					"placeholder":"Email Address",
+					"required":"Email Address is required"
 						}'>
-					</form-input>
-					<form-input
-						ng-model="vm.user.lastName"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Last Name",
-							"id":"lastName",
-							"name":"lastName",
-							"placeholder":"Last Name",
-							"required":"Last Name is required"
-						}'>
-					</form-input>
-					<form-input
-						ng-model="vm.user.email"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Email Address",
-							"id":"email",
-							"name":"email",
-							"placeholder":"Email Address",
-							"required":"Email Address is required"
-								}'>
-					</form-input>
-					
-					<form-input
-						class="col-sm-12"
-						ng-model="vm.user.location"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"City/Town",
-							"id":"city",
-							"name":"city"
-						}'>
-					</form-input>
-				</fieldset>
-				<div class="alert alert-info">
-					<h5><i class="fa fa-university"></i> <span class="strong">Work for government?</span></h5>
-					<p>If you're a public sector employee in British Columbia, you can use this site to pay for code and hire Agile product teams through our lightweight procurement processes, <i class="fa fa-tag"></i> <strong>Code With Us</strong> and <i class="fa fa-group"></i> <strong>Sprint With Us</strong>.</p>
-				</div>
-				<div class="checkbox">
-					<label ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
-						<input 	type="checkbox"  
-								ng-model="vm.isgov" 
-								ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
-						<span ng-if="vm.goveditable">Verify me as a B.C. public sector employee so I can post opportunities!</span>
-						<span ng-if="!vm.goveditable" style="color: gray">Verify me as a B.C. public sector employee so I can post opportunities!</span>
-					</label>
-					<p class="small" style="margin-top: 10px; margin-left: 15px;">&nbsp;&nbsp;<i class="fa fa-envelope gray-light"></i> We'll notify you by email when we've approved your request.</p>
-				</div>
-			</div>
-			<div class="hidden-xs col-sm-1"></div>
-			<div class="col-sm-5">
-				<h3><avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="90"></avatar-display></h3>
-				<div><edit-profile-image></edit-profile-image></div>
-			</div>
+			</form-input>
+			
+			<form-input
+				class="col-sm-12"
+				ng-model="vm.user.location"
+				x-form="vm.userForm"
+				x-options='{
+					"title":"Location",
+					"id":"city",
+					"name":"city"
+				}'>
+			</form-input>
+		</fieldset>
+	</div>
+	<!--		
+		<div class="alert alert-info">
+			<h5><i class="fa fa-university"></i> <span class="strong">Work for government?</span></h5>
+			<p>If you're a public sector employee in British Columbia, you can use this site to pay for code and hire Agile product teams through our lightweight procurement processes, <i class="fa fa-tag"></i> <strong>Code With Us</strong> and <i class="fa fa-group"></i> <strong>Sprint With Us</strong>.</p>
 		</div>
+	-->
+
+	<div class="checkbox">
+		<label ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
+			<input 	type="checkbox"  
+					ng-model="vm.isgov" 
+					ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
+			<span ng-if="vm.goveditable">Verify me as a B.C. public sector employee so I can post opportunities!</span>
+			<span ng-if="!vm.goveditable" style="color: gray">Verify me as a B.C. public sector employee so I can post opportunities!</span>&nbsp;<i class="fa fa-question-circle" uib-tooltip="If you're a public sector employee in British Columbia, you can use the BCDevExchange to pay for code and hire Agile product teams."></i>
+		</label>
+		<p class="small" style="margin-top: 10px; margin-left: 15px;">We'll notify you by email when we've approved your request.</p>
+	</div>
+			
+	
+	<div style="margin: 20px 0">
+		<button type="submit" class="btn btn-primary">Save Changes</button>
 	</div>
 
-	<div class="edit-form-footer">
-		<div class="row">
-			<div class="col-xs-12">
-				<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-				<button class="btn btn-text-only" ng-click="vm.delete()" uib-tooltip="Deleting your profile will erase your record as a contributor on projects and opportunities. There is no undo - make sure you're sure!"><i class="fa fa-trash"></i> Delete my profile</button>
-			</div>
-		</div>
-	</div>
+	<hr>
+
+	<h3>Delete My Profile</h3>
+	<p>Deleting your profile will erase your record as a contributor on projects and opportunities. There is no undo - make sure you're sure!</p>
+	<button class="btn btn-danger" ng-click="vm.delete()">Delete my profile</button>
 
 </form>

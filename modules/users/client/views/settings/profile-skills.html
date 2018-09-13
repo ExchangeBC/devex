@@ -1,62 +1,56 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" novalidate autocomplete="off">
-	<div class="edit-form-tab-content">
-		<div class="alert alert-warning">
-			<p><strong>Let us know what you can do!</strong> &nbsp;<i class="fa fa-group"></i> <strong>Sprint With Us</strong> opportunities call for teams with these capabilities and skills. <strong>Claim the ones you have</strong>, and let the companies you trust know.</p>
-		</div>
+	
+	<h4 style="margin-top: 11px;">Capabilities &amp; Skills</h4>	
+	<p>Let us know what you can do! <i>Sprint With Us</i> opportunities call for teams with these capabilities and skills.</p>
 		
-		<fieldset>
-			<div class="form-group">
-				<uib-accordion close-others="true">
-					<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities">
-						<uib-accordion-heading>
-							<i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>
-							&nbsp; 
-							{{capability.name}}
-						</uib-accordion-heading>
-						<div class="row">
-							
-							<div class="col-xs-12 col-sm-7">
-								<h5>Definition:</h5>
-								<p ng-bind-html="vm.trust(capability.description)"></p>
-							</div>
-
-							<div class="hidden-xs col-sm-1"></div>
-
-							<div class="col-xs-12 col-sm-4">
-								<div class="alert alert-warning">
-									<div class="checkbox">
-									
-									<label>
-										<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
-											<strong>Claim this capability</strong>
-									</label>
-									</div>
-								</div>
-
-								<div class="well well-warning" ng-if="capability.skills.length > 0">
-									<p>Select all the <strong>preferred technical skills</strong> you possess:</p>
-									<div class="label-list">
-										<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
-											<span ng-bind="skill.name"></span>
-										</label>
-									</div>
-								</div>
-							</div>
-
+	<fieldset>
+		<div class="form-group">
+			<uib-accordion close-others="true">
+				<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities">
+					<uib-accordion-heading>
+						<i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>
+						&nbsp; 
+						{{capability.name}}
+					</uib-accordion-heading>
+					<div class="row">
+						
+						<div class="col-xs-12 col-sm-7">
+							<div>Definition:</div>
+							<p ng-bind-html="vm.trust(capability.description)"></p>
 						</div>
+
+						<div class="hidden-xs col-sm-1"></div>
+
+						<div class="col-xs-12 col-sm-4">
+							
+							<div class="checkbox">
+							
+							<label>
+								<input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
+									<strong>Claim this capability</strong>
+							</label>
+							</div>
+
+							<div ng-if="capability.skills.length > 0">
+								<p>Select all the <strong>preferred technical skills</strong> you possess:</p>
+								<div class="label-list">
+									<label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}" ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
+										<span ng-bind="skill.name"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+
 					</div>
-				</uib-accordion>
-			</div>
-		</fieldset>
-	</div>
-			
-	<div class="edit-form-footer">
-		<div class="row">
-			<div class="col-xs-12">
-				<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-			</div>
+				</div>
+			</uib-accordion>
 		</div>
+	</fieldset>
+	
+	<div style="margin: 20px 0">
+		<button type="submit" class="btn btn-primary">Save Changes</button>
 	</div>
+	
 </form>
 <!--
 

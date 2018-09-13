@@ -1,66 +1,63 @@
 <form name="vm.userForm" id="vm.userForm" novalidate autocomplete="off">
-	<div class="edit-form-tab-content">
-		<div class="row">
-			<div class="col-xs-12">
-
-					<div class="col-sm-5">
-						<h4><i class="fa fa-envelope-o"></i> Notifications</h4>
-						<fieldset>
-					<form-input
-						ng-model="vm.user.email"
-						class="col-sm-12"
-						x-form="vm.userForm"
-						x-options='{
-							"title":"Email Address",
-							"id":"email",
-							"name":"email",
-							"placeholder":"Email Address",
-							"required":"Email Address is required"
-								}'>
-					</form-input>
-
-						<!-- CC: for whatever reason, if this is here then the input above works fine -->
- 						<label class=""></label>
-						<br>
-						<div class="checkbox">
-							<label>
-							<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-							Tell me about new opportunities
-							</label>
-							<span class="checkbox-subtext">Get an instant email notification whenever a new opportunity is published.</span>
-						</div>
-						<div class="checkbox">
-							<label>
-								<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
-								Allow people to see my email address
-							</label>
-							<br/>
-							<span class="checkbox-subtext">Check this box to allow your email address to be public.</span>
-						</div>
-						</fieldset>
-					</div>
-					<div class="hidden-xs col-sm-2"></div>
-					<div class="col-sm-5">
-						<h4>Terms of Use &amp; Privacy Notice</h4>
-						<div class="alert alert-info gray-light small">
-							Your personal information is being collected by the Ministry of Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA). The collection, use and disclosure of your personal information is for the purpose of notifying, applying and awarding opportunities on the BCDevExchange. If you have any questions, please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Citizens’ Services, 250-514-2739.
-						</div>
-						<h5>
-							<a href="/api/proposals/download/terms/user1" target="_blank"><i class="fa fa-download"></i> Read the Terms of Use</a>
-						</h5>
-						<h5>
-							&#42; Any addenda to RFQ ON‌-003166 will be listed on the corresponding BC Bid page listed as the &quot;BC Developers' Exchange for Agile Software Development&quot;.
-						</h5>
-					</div>
-			</div>
+	
+	<fieldset>
+		<!--	
+			<form-input
+				ng-model="vm.user.email"
+				class="col-sm-12"
+				x-form="vm.userForm"
+				x-options='{
+					"title":"Email Address",
+					"id":"email",
+					"name":"email",
+					"placeholder":"Email Address",
+					"required":"Email Address is required"
+						}'>
+			</form-input>
+		-->
+		<h4 style="margin-top: 11px;">Notifications</h4>
+		<div class="checkbox">
+			<label>
+			<input type="checkbox" ng-model="vm.user.notifyOpportunities" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+			Tell me about new opportunities
+			</label>
+			<span class="checkbox-subtext">We'll send an email to <span class="strong">{{vm.user.email}}</span> whenever a new opportunity is published. You can change your email address on the <a ui-sref="settings.profile">About Me</a> tab.</span>
 		</div>
+	
+	<!-- I believe we should reduce the clutter and disable/hide this until (1) users are actually using the project member lists (currently, they are not), or (2) we make users have some kind of public-facing aspect. -->	
+	<!--
+		<h4>Privacy</h4>
+		<div class="checkbox">
+			<label>
+				<input type="checkbox" ng-model="vm.user.isDisplayEmail" ng-disabled='vm.user.email === "" || vm.user.email == null'>
+				Allow people to see my email address
+				&nbsp;
+				<i class="fa fa-question-circle" uib-tooltip="Right now, we don't have public user profiles, but if you contribute to a project, you can choose to be listed as a  member on the project page. If you do, your name and avatar will appear, and a link to your email if you click this box."></i>
+			</label>
+			<br/>
+			<span class="checkbox-subtext">Check this box to allow your email address to be public.</span>
+		</div>
+	-->
+
+	</fieldset>
+	
+	<div style="margin: 20px 0">
+		<button ng-click="vm.savePrivacy(vm.userForm.$valid)" class="btn btn-primary">Save Changes</button>
 	</div>
 
-	<div class="edit-form-footer">
-		<div class="row">
-			<div class="col-xs-12">
-				<button ng-click="vm.savePrivacy(vm.userForm.$valid)" class="btn btn-primary pull-right"><i class="fa fa-save"></i> Save Changes</button>
-			</div>
-		</div>
-	</div>
 </form>
+
+<hr>					
+					
+<h5>Privacy</h5>
+<p class="small">
+	Your personal information is being collected by the Ministry of Citizens’ Services under s.26(c) of the Freedom of Information and Protection of Privacy Act (FOIPPA). The collection, use and disclosure of your personal information is for the purpose of notifying, applying and awarding opportunities on the BCDevExchange. If you have any questions, please contact: Peter Watkins, Executive Director, BC Developers’ Exchange and DevOps, Ministry of Citizens’ Services, 250-514-2739.
+</p>
+<p><a href="/api/proposals/download/terms/user1" target="_blank"><i class="fa fa-download"></i> Terms of Use</a></p>
+
+<!-- MW: This doesn't belong here! -->
+<!--
+	<h5>
+		&#42; Any addenda to RFQ ON‌-003166 will be listed on the corresponding BC Bid page listed as the &quot;BC Developers' Exchange for Agile Software Development&quot;.
+	</h5>
+-->

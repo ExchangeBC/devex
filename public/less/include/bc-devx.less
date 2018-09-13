@@ -606,23 +606,16 @@ section.gray-darker {
   background: @gray-darker;
 }
 
-section.page-controls {
-  padding: 0;
-  background: @theme-yellow;
-}
-
 section.proposals-admin-view {
   background: @theme-important;
 }
 
 section.edit-form-background {
   background: @gray-light;
-  padding: 10px;
 }
 
 section.detail-page-background {
   background: @gray-lighter;
-  padding-bottom: 30px;
 }
 
 section.list-page {
@@ -635,7 +628,7 @@ section.form-page {
 
 section.signup {
   background: #fff;
-  padding: 2em 0 7em;
+  height: 95vh; /* This is to hide the footer from view when the user is signing in; less distraction */
 }
 
 // Forms / Might use these later to simplify html
@@ -722,13 +715,10 @@ form-title {
   letter-spacing: 0.025em;
   white-space: nowrap;
   border-radius: 3px;
-  font-size: .9em;
-  text-transform: uppercase;
   box-shadow: none;
   .transition-all(0.15s);
   text-decoration: none;
   margin-left: 2px;
-  padding: .75em 1.25em;
 
 }
 
@@ -1592,8 +1582,8 @@ form-title {
 .nav-pills {
   margin: 0 0 2em;
   > li {
-    > a {
-      padding: .3em .7em;
+    > a:hover {
+      background-color: transparent;
     }
   }
   > li.active, li.active:hover {

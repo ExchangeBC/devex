@@ -20,14 +20,9 @@
     });
 
     menuService.addSubMenuItem('account', 'settings', {
-      title: 'Profile',
+      title: 'Settings',
       state: 'settings.profile'
     });
-
-    menuService.addSubMenuItem('account', 'settings', {
-      title: 'Messages',
-      state: 'settings.messages'
-    });
-
+    
   }
 }());
