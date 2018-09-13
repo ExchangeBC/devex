@@ -53,6 +53,15 @@
 					pageTitle: 'Messages'
 				}
 			})
+			.state ('settings.affiliations', {
+				url: '/affiliations',
+				templateUrl: '/modules/users/client/views/settings/profile-affiliations.html',
+				controller: 'ProfileAffiliationsController',
+				controllerAs: 'vm',
+				data: {
+					pageTitle: 'Affiliations'
+				}
+			})
 			.state('settings.profile', {
 				url: '/profile',
 				templateUrl: '/modules/users/client/views/settings/profile-main.html',

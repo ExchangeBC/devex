@@ -89,5 +89,14 @@
 		var vm = this;
 		vm.user = Authentication.user;
 	})
+	// -------------------------------------------------------------------------
+	//
+	// controller for affiliations
+	//
+	// -------------------------------------------------------------------------
+	.controller('ProfileAffiliationsController', function (Authentication) {
+		var vm = this;
+		vm.user = Authentication.user;
+	})
 	;
 }());
