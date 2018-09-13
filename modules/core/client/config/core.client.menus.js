@@ -23,6 +23,5 @@
       title: 'Settings',
       state: 'settings.profile'
     });
-    
   }
 }());
