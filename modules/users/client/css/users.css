@@ -51,3 +51,18 @@ td.user-attribute {
   color: #ccc;
   width: 145px;
 }
+.settings-panel-title {
+  margin-top: 10px;
+}
+table.company-affiliations-list > tbody > tr {
+  
+}
+table.company-affiliations-list > tbody > tr > td {
+  vertical-align: middle;
+}
+table.company-affiliations-list > tbody > tr > td.company-name {
+  font-weight: 600;
+}
+table.company-affiliations-list > tbody > tr > td.joined-date {
+  color: gray;
+}

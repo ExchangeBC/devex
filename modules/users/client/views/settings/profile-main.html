@@ -1,6 +1,6 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
 	
-	<h3 style="margin-top: 0">
+	<h3 class="settings-panel-title">
 		<avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="65"></avatar-display>
 	</h3>
 	<div style="margin: 0 0 20px;"><edit-profile-image></edit-profile-image></div>
@@ -75,13 +75,13 @@
 	</div>
 			
 	
-	<div style="margin: 20px 0">
+	<div class="button-spacer">
 		<button type="submit" class="btn btn-primary">Save Changes</button>
 	</div>
 
 	<hr>
 
-	<h3>Delete My Profile</h3>
+	<h5>Delete My Profile</h5>
 	<p>Deleting your profile will erase your record as a contributor on projects and opportunities. There is no undo - make sure you're sure!</p>
 	<button class="btn btn-danger" ng-click="vm.delete()">Delete my profile</button>
 
