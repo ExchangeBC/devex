@@ -109,18 +109,24 @@
 					}'>
 				</form-input>
 
-
-				<form-input
-					class="col-sm-12"
-					ng-model="vm.org.website"
-					x-form="vm.orgForm"
-					x-options='{
-						"title":"Website",
-						"id":"website",
-						"name":"website",
-						"placeholder":"https://mycompany.com"
-					}'>
-				</form-input>
+        <form-display
+							x-options='{
+								"title":"Website",
+								"id":"website",
+								"name":"website"
+              }'
+              x-form="vm.orgForm"
+              class="col-sm-12">
+              <select class="form-control protocol-input"
+                      ng-model="vm.org.websiteProtocol">
+                <option>http://</option>
+                <option>https://</option>
+              </select>
+              <input  class="form-control website-input"
+                      type="text"
+                      placeholder="www.mycompany.org"
+                      ng-model="vm.org.websiteAddress" />
+        </form-display>
 
 				</fieldset>
 			</div>
@@ -168,29 +174,6 @@
 				</fieldset>
 			</div>
 		</div>
-	<!-- // I'm thinking we hide this for now // -->
-	<!--
-		<div class="row">
-			<div class="col-sm-12">
-				<form-display
-					class="col-sm-12"
-					x-options='{
-						"title":"A little Bit About Your Company",
-						"id":"description",
-						"name":"description"
-					}'>
-					<textarea
-						name="description"
-						id="description"
-						class="form-control input-sm"
-						ui-tinymce="vm.tinymceOptions"
-						placeholder="A full description of the profile"
-						ng-model="vm.org.description">
-					</textarea>
-				</form-display>
-			</div>
-		</div>
-	-->
 	</div>
 
 	<div class="edit-form-footer">

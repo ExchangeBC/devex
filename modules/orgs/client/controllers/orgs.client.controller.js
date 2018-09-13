@@ -115,14 +115,8 @@
 		vm.org        = org;
 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
-		// vm.previousState  = previousState;
-		// vm.editing        = editing;
 		vm.cities         = dataService.cities;
 		vm.capabilities   = capabilities;
-
-		// if (editing && (!vm.org || !vm.org._id)) {
-		// 	return $state.go('orgadmin.create');
-		// }
 
 		vm.form           = {};
 		vm.tinymceOptions = {
@@ -138,6 +132,25 @@
 			vm.org.orgImageURL = data;
 
 		});
+
+		parseWebsite();
+
+		function parseWebsite() {
+			var parts = vm.org.website.split('://');
+			if (parts[0] === 'https') {
+				vm.org.websiteProtocol = 'https://';
+			}
+			else {
+				vm.org.websiteProtocol = 'http://';
+			}
+
+			if (parts.length > 1) {
+				vm.org.websiteAddress = parts[1];
+			}
+			else {
+				vm.org.websiteAddress = vm.org.website;
+			}
+		}
 		// -------------------------------------------------------------------------
 		//
 		// remove the org with some confirmation
@@ -169,6 +182,8 @@
 				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
 				return false;
 			}
+
+			vm.org.website = vm.org.websiteProtocol + vm.org.websiteAddress;
 			//
 			// Create a new org, or update the current instance
 			//
@@ -178,6 +193,7 @@
 			//
 			.then (function () {
 				vm.orgForm.$setPristine ();
+				parseWebsite();
 				Notification.success ({
 					message : '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
 				});
