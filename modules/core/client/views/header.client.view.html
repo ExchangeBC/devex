@@ -38,12 +38,11 @@
                 <li>
                     <a href="/settings/messages">
                         <i class="fa fa-envelope-o messages-icon" style="position: relative;">
-                          <!-- Andrew: Please make this span appear only if user has un-actioned messages.  -->
-                          <span class="unread-badge">1<!-- This should display the number of un-actioned messages --></span>
+                          <span class="unread-badge" ng-if="vm.messageCount > 0" ng-bind="vm.messageCount"></span>
                         </i>
                     </a>
                 </li>
-              
+
                 <!-- User menu dropdown -->
 				<li  ng-cloak class="dropdown" uib-dropdown>
 					<a class="dropdown-toggle user-header-dropdown-toggle" uib-dropdown-toggle role="button">

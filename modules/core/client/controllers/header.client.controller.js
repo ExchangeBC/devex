@@ -7,14 +7,18 @@
     .controller('WarningModalController', WarningModalController)
     .controller('TimeoutModalController', TimeoutModalController);
 
-  HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService', '$uibModal', 'Idle'];
+  HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService', '$uibModal', 'Idle', 'MessagesService'];
 
-  function HeaderController($scope, $state, $location, Authentication, menuService, $uibModal, Idle) {
+  function HeaderController($scope, $state, $location, Authentication, menuService, $uibModal, Idle, MessagesService) {
     var vm = this;
     vm.accountMenu = menuService.getMenu('account').items[0];
     vm.authentication = Authentication;
     vm.isCollapsed = false;
-    vm.menu = menuService.getMenu('topbar');
+	vm.menu = menuService.getMenu('topbar');
+
+	MessagesService.mycount(function(response) {
+		vm.messageCount = response.count;
+	});
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
     $scope.isHomePage = function() {

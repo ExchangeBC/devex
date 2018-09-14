@@ -356,9 +356,9 @@ var resError = function (res) {
 		return sendError (res, message);
 	};
 };
-var resResults = function (res) {
-	return function (messages) {
-		return res.status (200).json (messages);
+var resResults = function(res) {
+	return function(messages) {
+		return res.status(200).json(messages);
 	};
 };
 // -------------------------------------------------------------------------
@@ -389,7 +389,9 @@ exports.listarchived = function (req, res) {
 exports.mycount = function (req, res) {
 	if (!req.user) return sendError (res, 'No user context supplied');
 	count (Message, {user: req.user._id})
-	.then (resResults (res))
+	.then (function(count) {
+		res.status(200).json({ count: count });
+	})
 	.catch (resError (res));
 };
 exports.myarchivedcount = function (req, res) {
