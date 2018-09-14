@@ -25,7 +25,6 @@
 				vm.isLoading			= true;
 				vm.bestScoreWeighted 	= 5;
 
-
 				/**
 				 * Constants for evaluation stages for SWU proposals
 				 */
@@ -233,7 +232,11 @@
 									vm.opportunity.evaluationStage = vm.stages.pending_review;
 									return vm.proposals;
 								})
-								.then(totalAndSort);
+								.then(totalAndSort)
+								.then(function() {
+									vm.isLoading = false;
+									$scope.$apply();
+								});
 							break;
 
 							case vm.stages.choose_grade_type:
@@ -247,12 +250,13 @@
 								vm.responses = values.responses;
 								vm.proposals = values.proposals;
 								Promise.resolve(vm.proposals)
-								.then(totalAndSort);
+								.then(totalAndSort)
+								.then(function() {
+									vm.isLoading = false;
+									$scope.$apply();
+								});
 							break;
 						};
-
-						vm.isLoading = false;
-						$scope.$apply();
 					});
 				}
 
