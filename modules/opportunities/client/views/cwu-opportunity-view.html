@@ -157,9 +157,15 @@
 						<span ng-if="vm.opportunity.onsite == 'offsite'">In-person work NOT required</span>
 						<span ng-if="vm.opportunity.onsite == 'onsite'">In-person work required</span>
 						<span ng-if="vm.opportunity.onsite == 'mixed'">Some in-person work required</span>
-						<span class="label label-warning" ng-repeat="code in vm.opportunity.skills">{{code}}</span>
+					</dd>
+					<dt>Required skills:</dt>
+					<dd>
+						<div class="label-list">
+							<label class="label label-skill" ng-repeat="code in vm.opportunity.skills">{{code}}</label>
+						</div>
 					</dd>
 				</dl>
+				
 
 				<!--
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
