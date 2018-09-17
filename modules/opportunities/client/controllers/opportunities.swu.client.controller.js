@@ -243,7 +243,6 @@
 		uibButtonConfig.activeClass = 'custombuttonbackground';
 		var vm                      = this;
 		vm.trust                    = $sce.trustAsHtml;
-		// vm.features                 = window.features;
 		var originalPublishedState  = opportunity.isPublished;
 		//
 		// what can the user do here?
@@ -622,6 +621,43 @@
 				});
 			}
 		};
+
+		function validateBudget() {
+			if (vm.opportunity.budget > 2000000) {
+				Notification.error ({
+					message : 'You cannot enter an overall budget greater than $2,000,000',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
+
+			if (vm.opportunity.phases.inception.maxCost > vm.opportunity.budget) {
+				Notification.error ({
+					message : 'You cannot enter an Inception budget greater than the total budget.',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
+
+			if (vm.opportunity.phases.proto.maxCost > vm.opportunity.budget) {
+				Notification.error ({
+					message : 'You cannot enter a Proof of Concept budget greater than the total budget.',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
+
+			if (vm.opportunity.phases.implementation.maxCost > vm.opportunity.budget) {
+				Notification.error ({
+					message : 'You cannot enter an Implementation budget greater than the total budget.',
+					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
+				});
+				return false;
+			}
+
+			return true;
+		}
+
 		// -------------------------------------------------------------------------
 		//
 		// save the opportunity, could be added or edited (post or put)
@@ -645,15 +681,13 @@
 				return false;
 			}
 			//
-			// budget canot exceed 2 million
+			// validate the budget and phase cost maximums
 			//
-			if (vm.opportunity.budget > 2000000) {
-				Notification.error ({
-					message : 'You cannot enter an overall budget greater than $2,000,000',
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
-				});
+			if (!validateBudget()) {
 				return false;
 			}
+
+			// validate the entire form
 			if (!isValid) {
 				$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 				Notification.error ({

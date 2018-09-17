@@ -183,7 +183,7 @@
 			ppp.proposal.phases.proto.invalidAmount = false;
 			ppp.proposal.phases.implementation.invalidAmount = false;
 			ppp.validateInceptionAmount = function() {
-				ppp.inceptionMax = 100000;
+				ppp.inceptionMax = ppp.opportunity.phases.inception.maxCost;
 				if (ppp.proposal.phases.inception.cost < 0 || ppp.proposal.phases.inception.cost > ppp.inceptionMax) {
 					ppp.proposal.phases.inception.invalidAmount = true;
 				}
@@ -198,7 +198,7 @@
 				}
 			}
 			ppp.validatePrototypeAmount = function() {
-				ppp.protoMax = 500000;
+				ppp.protoMax  = ppp.opportunity.phases.proto.maxCost;
 				if (ppp.proposal.phases.proto.cost < 0 || ppp.proposal.phases.proto.cost > ppp.protoMax) {
 					ppp.proposal.phases.proto.invalidAmount = true;
 				}
@@ -213,7 +213,7 @@
 				}
 			}
 			ppp.validateImplementationAmount = function() {
-				ppp.implMax = 2000000;
+				ppp.implMax = ppp.opportunity.phases.implementation.maxCost;
 				if (ppp.proposal.phases.implementation.cost < 0 || ppp.proposal.phases.implementation.cost > ppp.implMax) {
 					ppp.proposal.phases.implementation.invalidAmount = true;
 				}

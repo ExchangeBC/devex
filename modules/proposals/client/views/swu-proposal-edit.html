@@ -439,7 +439,7 @@
 							</div>
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oinp.isInception">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}</div>
-
+              <br>
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oinp.isInception">
 								<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
@@ -450,7 +450,7 @@
 										Enter Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
-										<p class="small">Phase Cost for Inception must not exceed $100,000</p>
+										<p class="small">Phase Cost for Inception must not exceed {{ppp.opportunity.phases.inception.maxCost | currency : "$" : 0}}</p>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
 										  <input 	type="text"
@@ -465,7 +465,7 @@
 										</div>
                                         <span 	class="proposal-amount-error alert alert-danger"
 										ng-if="ppp.proposal.phases.inception.invalidAmount">
-										<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.inceptionMax | currency}}</strong></span>
+										<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.inceptionMax | currency : "$" : 0}}</strong></span>
 									</div>
 								</div>
 							</div>
@@ -478,7 +478,7 @@
 							</div>
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oprp.isPrototype">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
-
+              <br>
 							<!-- If Phase is included -->
 							<div ng-if="ppp.oprp.isPrototype">
 								<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
@@ -489,7 +489,7 @@
 										Enter Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
-										<p class="small">Phase Cost for Proof of Concept must not exceed $500,000</p>
+										<p class="small">Phase Cost for Proof of Concept must not exceed {{ppp.opportunity.phases.proto.maxCost | currency : "$" : 0}}</p>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
 										  <input 	type="text"
@@ -502,8 +502,8 @@
 													  placeholder=0.00
 													  select-on-click>
 										</div>
-                                        <span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency}}</strong></span>
+                    <span 	class="proposal-amount-error alert alert-danger"
+										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency : "$" : 0}}</strong></span>
 									</div>
 								</div>
 							</div>
@@ -526,7 +526,7 @@
 										Enter Your Total Phase Cost for this Phase:
 									</div>
 									<div class="panel-body">
-										<p class="small">Phase Cost for Implementation must not exceed $2,000,000</p>
+										<p class="small">Phase Cost for Implementation must not exceed {{ppp.opportunity.phases.implementation.maxCost | currency : "$" : 0}}</p>
 										<div class="input-group">
 										  <span class="input-group-addon">$</span>
 										  <input type="text"
@@ -539,10 +539,10 @@
 										  select-on-click
 										  ng-blur="ppp.validateImplementationAmount()">
 										</div>
-                                        <span 	class="proposal-amount-error alert alert-danger"
-                                                ng-if="ppp.proposal.phases.implementation.invalidAmount">
-                                                <i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency}}</strong>
-                                        </span>
+                    <span 	class="proposal-amount-error alert alert-danger"
+                            ng-if="ppp.proposal.phases.implementation.invalidAmount">
+                            <i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency : "$" : 0}}</strong>
+                    </span>
 									</div>
 								</div>
 							</div>
@@ -554,7 +554,7 @@
 							<h4><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
 							<div height="35px" class="proposal-total-amount-wrapper">
 								<span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency}}</strong></span>
+										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency : "$" : 0}}</strong></span>
 							</div>
 						</div>
 					</div>

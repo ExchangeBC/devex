@@ -100,7 +100,8 @@ var OpportunitySchema = new Schema({
 			contract         : {type: String, default: ''},
 			endDate          : {type: Date, default: Date.now },
 			startDate        : {type: Date, default: Date.now },
-			target           : {type: Number, default: 0}
+			target           : {type: Number, default: 0},
+			maxCost			 : {type: Number, default: 2000000}
 		},
 		inception : {
 			isInception      : {type: Boolean, default: false},
@@ -110,7 +111,8 @@ var OpportunitySchema = new Schema({
 			contract         : {type: String, default: ''},
 			endDate          : {type: Date, default: Date.now },
 			startDate        : {type: Date, default: Date.now },
-			target           : {type: Number, default: 0}
+			target           : {type: Number, default: 0},
+			maxCost			 : {type: Number, default: 100000}
 		},
 		proto : {
 			isPrototype      : {type: Boolean, default: false},
@@ -120,7 +122,8 @@ var OpportunitySchema = new Schema({
 			contract         : {type: String, default: ''},
 			endDate          : {type: Date, default: Date.now },
 			startDate        : {type: Date, default: Date.now },
-			target           : {type: Number, default: 0}
+			target           : {type: Number, default: 0},
+			maxCost			 : {type: Number, default: 500000}
 		},
 		aggregate : {
 			capabilities     : {type: [{type:Schema.ObjectId, ref: 'Capability'}], default:[]},

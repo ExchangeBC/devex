@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col-xs-12 col-sm-6">
+    <div class="well">
+      <label for="budget">What's your total max budget for this team?</label>
+      <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <input type="text" ng-model="vm.opportunity.budget" id="budget" model-format="currency" class="form-control text-right" aria-label="Total Amount (to the nearest dollar)">
+      </div>
+      <br>
+      <label ng-if="vm.opportunity.phases.inception.isInception" for="budget">What's your max budget for the Inception Phase?</label>
+      <div ng-if="vm.opportunity.phases.inception.isInception" class="input-group">
+        <span class="input-group-addon">$</span>
+        <input type="text" ng-model="vm.opportunity.phases.inception.maxCost" id="incBudget" model-format="currency" class="form-control text-right" aria-label="Inception Amount (to the nearest dollar)">
+      </div>
+      <br>
+      <label ng-if="vm.opportunity.phases.proto.isPrototype" for="budget">What's your max budget for the Proof of Concept Phase?</label>
+      <div ng-if="vm.opportunity.phases.proto.isPrototype" class="input-group">
+        <span class="input-group-addon">$</span>
+        <input type="text" ng-model="vm.opportunity.phases.proto.maxCost" id="incBudget" model-format="currency" class="form-control text-right" aria-label="POC Amount (to the nearest dollar)">
+      </div>
+      <br>
+      <label for="budget">What's your max budget for the Implementation Phase?</label>
+      <div class="input-group">
+        <span class="input-group-addon">$</span>
+        <input type="text" ng-model="vm.opportunity.phases.implementation.maxCost" id="incBudget" model-format="currency" class="form-control text-right" aria-label="Implementation Amount (to the nearest dollar)">
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-6">
+    <div class="well">This is your signal to companies about the total amount of money they could potentially earn by working with you. This is the budget you are planning to use up if everything goes right, getting as far as you can with the team into the Implementation phase.
+    </div>
+  </div>
+</div>
