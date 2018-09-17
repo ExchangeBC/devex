@@ -4,17 +4,11 @@
 
 		<div class="edit-form">
 
-			<div class="edit-form-header">
-				<div class="row">
-					<div class="col-xs-12">
-						
-							<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fa fa-lg fa-times"></i></a>
-							&nbsp; <span class="light small">PROPOSAL FROM:</span>
-							<img class="img-avatar-flat img-avatar-sm" src="{{ppp.proposal.user.profileImageURL}}">
-							&nbsp;
-							{{ppp.proposal.user.displayName}}
-					</div>
-				</div>
+			<div class="edit-form-header">		
+				<button class="close" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fa fa-times-thin"></i></button>
+				<span class="light">Proposal from:</span>
+				&nbsp;
+				<strong>{{ppp.proposal.user.displayName}}</strong>
 			</div>
 
 			<div class="edit-form-body">
@@ -172,7 +166,8 @@
 			<div class="edit-form-footer">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-lg btn-success pull-right" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> Assign this Applicant</button>
+						<button type="button" class="btn btn-success" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> Assign this Applicant</button>
+						<button class="btn btn-default pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close">Close</button>
 					</div>
 				</div>
 			</div>

@@ -18,13 +18,22 @@
 
 <div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="alert alert-warning" style="display: inline-block;"><i class="fa fa-frown-o fa-lg"></i>&nbsp; No Proposals were submitted!</div>
+		<div class="alert">🙁 No proposals were submitted...</div>
 	</div>
 </div>
 
 <div class="row" ng-if="vm.isclosed && vm.proposals.length">
 	<div class="col-xs-12 text-center">
-		<div class="alert alert-success" style="display: inline-block;"><i class="fa fa-lg fa-thumbs-o-up"></i> <strong>Sweet!</strong> You've got Proposals!</div><br>
-		<img class="img-avatar" ng-repeat="proposal in vm.proposals" src="{{((proposal.user.profileImageURL.substr(0,1) == '/' || proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + proposal.user.profileImageURL}}" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="{{proposal.user.firstName}} {{proposal.user.lastName}}"/>
+		<div class="alert">🎉 You've got proposals! 🎉</div>
+		<div class="row">
+			<div class="col-xs-1 col-sm-4"></div>
+			<div class="col-xs-10 col-sm-4">
+				<h4>Proposals received:</h4>
+				<div class="list-group">
+					<strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}} {{proposal.user.lastName}}<i class="fa fa-file pull-right"></i></a></strong>
+				</div>
+			</div>
+			<div class="col-xs-1 col-sm-4"></div>
+		</div>
 	</div>
 </div>

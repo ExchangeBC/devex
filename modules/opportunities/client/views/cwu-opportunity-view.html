@@ -62,7 +62,7 @@
 		<br>
 		<div class="row">
 			<div class="col-xs-12 text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
-				<a class="btn btn-sm btn-secondary" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
+				<a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-file-zip-o"></i> Download Proposals Archive</a>
 			</div>
 		</div>
 	</div>
@@ -315,7 +315,7 @@
 					<proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity" opportunity="vm.opportunity" title="Proposals received"></proposal-list>
 				</div>
 				<div class="col-xs-12" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
-					<a class="btn btn-default" href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-download"></i> Download Proposals Archive</a>
+					<a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fa fa-file-zip-o"></i> Download Proposals Archive</a>
 				</div>
 				<br/>
 				<div ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
