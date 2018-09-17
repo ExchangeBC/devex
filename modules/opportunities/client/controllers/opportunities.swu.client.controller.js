@@ -631,7 +631,7 @@
 				return false;
 			}
 
-			if (vm.opportunity.phases.inception.maxCost > vm.opportunity.budget) {
+			if (vm.opportunity.phases.inception.isInception && vm.opportunity.phases.inception.maxCost > vm.opportunity.budget) {
 				Notification.error ({
 					message : 'You cannot enter an Inception budget greater than the total budget.',
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
@@ -639,7 +639,7 @@
 				return false;
 			}
 
-			if (vm.opportunity.phases.proto.maxCost > vm.opportunity.budget) {
+			if (vm.opportunity.phases.proto.isPrototype && vm.opportunity.phases.proto.maxCost > vm.opportunity.budget) {
 				Notification.error ({
 					message : 'You cannot enter a Proof of Concept budget greater than the total budget.',
 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Errors on Page'
