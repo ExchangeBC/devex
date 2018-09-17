@@ -150,10 +150,11 @@ var OpportunitySchema = new Schema({
 	evaluationStage           : {type: Number, default: 0},
 	numberOfInterviews        : {type: Number, default: 4},
 	weights : {
-		skill               : {type: Number, default: 0.2},
-		question            : {type: Number, default: 0.2},
-		interview           : {type: Number, default: 0.5},
-		price               : {type: Number, default: 0.1}
+		codechallenge		: {type: Number, default: 0.35},
+		skill               : {type: Number, default: 0.05},
+		question            : {type: Number, default: 0.25},
+		interview           : {type: Number, default: 0.25},
+		price               : {type: Number, default: 0.10}
 	},
 	//
 	// this is a replacement for the old subscrptions which were clunky. in the past
