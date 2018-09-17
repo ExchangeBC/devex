@@ -28,3 +28,6 @@
 .btn-remove-attachment:hover {
 	cursor: pointer;
 }
+.update-proposal-link {
+	display: inline-block;
+}
