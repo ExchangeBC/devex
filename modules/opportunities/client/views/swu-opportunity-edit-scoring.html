@@ -1,0 +1,50 @@
+<div class="edit-form-tab-content">
+
+  <div class="alert alert-info">
+    Each proposal submitted for your opportunity will receive a score for each stage of the evaluation process.
+    <br>The evaluation stages are listed below, and you can choose the weight that each stage contributes to the final score.
+    <br><span class="strong">Note:</span> Weights are specified as percentages and the sum of all weights must total up to 100%.
+  </div>
+
+  <div class="weight-entry-form">
+		<div class="row">
+			<form name="scoreForm">
+				<table>
+					<tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell">Skills</td>
+						<td><input class="weight-entry-input" name="input" type="number" ng-model="vm.skillsPercentage" ng-change="vm.saveWeights()"/></td>
+          </tr>
+          <tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell">Team Questions</td>
+            <td><input class="weight-entry-input" name="input" type="number" ng-model="vm.questionPercentage" ng-change="vm.saveWeights()"/></td>
+          </tr>
+          <tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell">Code Challenge</td>
+            <td><input class="weight-entry-input" name="input" type="number" ng-model="vm.codeChallengePercentage" ng-change="vm.saveWeights()"/></td>
+          </tr>
+          <tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell">Team Scenario</td>
+            <td><input class="weight-entry-input" name="input" type="number" ng-model="vm.teamScenarioPercentage" ng-change="vm.saveWeights()"/></td>
+          </tr>
+          <tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell">Price</td>
+            <td><input class="weight-entry-input" name="input" type="number" ng-model="vm.pricePercentage" ng-change="vm.saveWeights()"/></td>
+          </tr>
+          <tr class="spaceUnder">
+            <td align="right" class="weight-entry-label-cell"><strong>Total</strong></td>
+            <td align="right">
+              <span ng-class="{ 'weight-total-text-invalid': vm.totalPercentage !== 100,
+                                'weight-total-text-valid': vm.totalPercentage === 100 }">
+                {{vm.totalPercentage}}%
+              </span>
+            </td>
+
+          </tr>
+        </table>
+        <span class="alert alert-warning" ng-show="vm.totalPercentage !== 100"><i class="fa fa-exclamation-circle"></i>  The weights must add up to 100% to be applied.</span>
+        <span class="alert alert-info" ng-show="vm.totalPercentage === 100"<i class="fa fa-check-circle"></i> Save the opportunity to apply these weights.</span>
+			</form>
+		</div>
+	</div>
+</div>
+

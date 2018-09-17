@@ -298,6 +298,30 @@
 		vm.currentQuestionWordLimit = 300;
 		vm.currentQuestionScore		= 5;
 
+		// Load question weights into readable form
+		loadWeights();
+		function loadWeights() {
+			vm.skillsPercentage 		= vm.opportunity.weights.skill * 100;
+			vm.questionPercentage 		= vm.opportunity.weights.question * 100;
+			vm.codeChallengePercentage	= vm.opportunity.weights.codechallenge * 100;
+			vm.teamScenarioPercentage	= vm.opportunity.weights.interview * 100;
+			vm.pricePercentage			= vm.opportunity.weights.price * 100;
+			vm.totalPercentage			= vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
+		}
+
+		// Save edited scoring weights for evaluation to the opportunity (does not save the opportunity itself)
+		vm.saveWeights = function() {
+
+			vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
+			if (vm.totalPercentage === 100) {
+				vm.opportunity.weights.skill 			= vm.skillsPercentage / 100;
+				vm.opportunity.weights.question 		= vm.questionPercentage / 100;
+				vm.opportunity.weights.codechallenge 	= vm.codeChallengePercentage / 100;
+				vm.opportunity.weights.interview		= vm.teamScenarioPercentage / 100;
+				vm.opportunity.weights.price			= vm.pricePercentage / 100;
+			}
+		}
+
 		// Adding a new team question
 		// We a new one to the list and enter edit mode
 		vm.addNewTeamQuestion = function() {

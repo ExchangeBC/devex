@@ -179,6 +179,29 @@ div.rejected {
 	width: 60%;
 	margin: 25px auto;
 }
+.weight-entry-form {
+	width: 100%;
+	margin: 25px auto;
+}
+.weight-entry-label-cell {
+	padding-right: 2em;
+}
+.weight-entry-input {
+	width: 3em;
+	margin-right: 1em;
+	text-align: right;
+}
+.weight-total-text-valid {
+	width: 2em;
+	margin-right: 1em;
+	font-weight: bold;
+}
+.weight-total-text-invalid {
+	width: 2em;
+	margin-right: 1em;
+	font-weight: bold;
+	color: red;
+}
 /* Opportunity addenda styling */
 ol.addendum-list {
     -webkit-padding-start: 20px;

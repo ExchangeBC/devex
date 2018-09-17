@@ -45,13 +45,14 @@
 				 * Weighting for opportunity evaluations
 				 * TODO: Have these pulled from the opportunity itself rather than hardcoded in
 				 */
-				vm.weights = {
-					price			: 0.1,
-					interview		: 0.25,
-					question		: 0.25,
-					skill			: 0.05,
-					codechallenge	: 0.35
-				};
+				// vm.weights = {
+				// 	price			: 0.1,
+				// 	interview		: 0.25,
+				// 	question		: 0.25,
+				// 	skill			: 0.05,
+				// 	codechallenge	: 0.35
+				// };
+				vm.weights = vm.opportunity.weights;
 
 				vm.maxCodeChallengePoints = vm.weights.codechallenge * vm.maxPoints;
 				vm.maxInterviewPoints = vm.weights.interview * vm.maxPoints;
