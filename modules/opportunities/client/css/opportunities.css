@@ -195,6 +195,7 @@ div.rejected {
 	width: 2em;
 	margin-right: 1em;
 	font-weight: bold;
+	color: green;
 }
 .weight-total-text-invalid {
 	width: 2em;

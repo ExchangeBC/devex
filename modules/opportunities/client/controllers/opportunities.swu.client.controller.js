@@ -313,6 +313,12 @@
 		vm.saveWeights = function() {
 
 			vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
+
+			if (isNaN(vm.totalPercentage)) {
+				vm.totalPercentage = 0;
+				return;
+			}
+
 			if (vm.totalPercentage === 100) {
 				vm.opportunity.weights.skill 			= vm.skillsPercentage / 100;
 				vm.opportunity.weights.question 		= vm.questionPercentage / 100;
