@@ -59,7 +59,7 @@
 				// take some sort of action
 				//
 				vm.takeAction = function (messageId, action) {
-					console.log ('takeaction', messageId, action);
+					// console.log ('takeaction', messageId, action);
 					// if (isDefault) {
 					// 	$event.stopPropagation();
 					// 	$event.preventDefault();
@@ -67,12 +67,22 @@
 					MessagesService.actioned ({
 						messageId: messageId,
 						action : action.actionCd
-					}).$promise.then (function () {
-						if (!action.isDefault) {
-							$location.path (action.link);
-						}
-						else $rootScope.$broadcast('updateMessages', 'done');
-					})
+					}).$promise.then (function (response) {
+						// if (!action.isDefault) {
+						// 	$location.path (action.link);
+						// }
+						// else $rootScope.$broadcast('updateMessages', 'done');
+						vm.resultmsg = response.message;
+						var message = vm.messages.find(function(message) { return message._id === messageId; });
+						message.actionTaken = action.actionCd;
+						$rootScope.$broadcast('updateMessageCount', 'done');
+						setTimeout(function() {
+							// $rootScope.$broadcast('updateMessages', 'done');
+							// var removeIndex = vm.messages.map(function(message) { return message._id; }).indexOf(messageId);
+							var removeIndex = vm.messages.indexOf(message);
+							vm.messages.splice(removeIndex, 1);
+						}, 4000);
+					});
 				}
 				//
 				// if changes occur

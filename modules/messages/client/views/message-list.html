@@ -1,71 +1,53 @@
 <h3 class="settings-panel-title">Messages</h3>
-  
-  <!-- Delete this alert when completing code -->
-  <div class="alert alert-info">For now, I believe the only thing we need messages to be generated for are for invitations to join a company. We should make the messages simple and actionable from the list view (so the user doesn't need to click into a detail view of the message).</div>
 
-  <div class="message-list">
-    
-    <!-- This illustrates a message that has not been actioned yet -->      
-    <div class="message-list-item">   
+  <div class="message-list" ng-repeat="message in vm.messages | orderBy : 'datePosted' : true">
+
+    <!-- This illustrates a message that has not been actioned yet -->
+    <div class="message-list-item" ng-if="!message.actionTaken">
       <div class="row">
         <div class="col-xs-2">
           <!-- If possible, it would be nice in this context if we could simplify the date to Month and Day (no year) -->
-          <div class="message-list-item-date">Aug 30</div>
+          <div class="message-list-item-date">{{message.datePosted | date : 'MMMM d'}}</div>
         </div>
         <div class="col-xs-10">
           <div class="message-list-item-body">
-            <p>This is the body of a message that has not been actioned yet -- for example:  "You've been invited to join <strong>Quartech Systems.</strong></p>
-            <p>The second paragraph might explain more detail about the implications of taking the action -- for example: "If you accept, Quartech Systems will be able to put you forward as a team member on <i>Sprint With Us</i> opportunities."</p>
-            <button class="btn btn-primary">Accept</button>
-            <button class="btn btn-default">Decline</button>
+            <p ng-bind-html="message.messageBody"></p>
+            <div class="message-actions">
+                <button class="btn" ng-repeat="action in message.actions | orderBy : 'isDefault' : false" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{vm.trust(action.linkTitle)}}</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- This illustrates a message that has not been actioned yet -->      
-    <div class="message-list-item">   
-      <div class="row">
-        <div class="col-xs-2">
-          <div class="message-list-item-date">Jul 17</div>
-        </div>
-        <div class="col-xs-10">
-          <div class="message-list-item-body">
-            <p>This is the body of a message that has not been actioned yet -- for example:  "You've been invited to join <strong>Quartech Systems.</strong></p>
-            <p>The second paragraph might explain more detail about the implications of taking the action -- for example: "If you accept, Quartech Systems will be able to put you forward as a team member on <i>Sprint With Us</i> opportunities."</p>
-            <button class="btn btn-primary">Accept</button>
-            <button class="btn btn-default">Decline</button>
-          </div>
-        </div>
+    <div class="message-confirmation" ng-if="message.actionTaken">
+        <div class="message-result" ng-bind-html="vm.resultmsg"></div>
       </div>
-    </div>
-
   </div>
 
   <!-- Delete this alert when completing code -->
-  <div class="alert alert-info">After the user clicks one of the action buttons in the message, the message disappears and is replaced with one of these confirmation messages. Ideally, the confirmation message would display for approx. 6 seconds, then disappear on its own.  If that's not easy to do in this space, then we could make the user manually dismiss the message, as illustrated below by the 'Dismiss' link.</div>
+  <!-- <div class="alert alert-info">After the user clicks one of the action buttons in the message, the message disappears and is replaced with one of these confirmation messages. Ideally, the confirmation message would display for approx. 6 seconds, then disappear on its own.  If that's not easy to do in this space, then we could make the user manually dismiss the message, as illustrated below by the 'Dismiss' link.</div> -->
 
   <!-- Body after message has been actioned -->
-  
-  <div class="message-confirmation">   
+
+  <!-- <div class="message-confirmation">
     <i class="fa fa-lg fa-check-circle success"></i>
     &nbsp;
     Success! You're now a member of <strong>Three Trees Technical Inc.</strong>
     &nbsp;
     <a href="">Dismiss</a>
-  </div>
+  </div> -->
 
-  <br>  
+  <!-- <br> -->
 
-  <div class="message-confirmation">   
+  <!-- <div class="message-confirmation">
     <i class="fa fa-lg fa-times-circle"></i>
     &nbsp;
     Invitation declined. You won't be added to <strong>Three Trees Technical Inc.</strong>
     &nbsp;
     <a href="">Dismiss</a>
-  </div>  
+  </div> -->
 
-          
+
   <!-- If no new messages -->
   <div class="well well-transparent" ng-if="!vm.messages.length">Your Inbox in Empty!</div>
 

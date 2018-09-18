@@ -7,9 +7,9 @@
     .controller('WarningModalController', WarningModalController)
     .controller('TimeoutModalController', TimeoutModalController);
 
-  HeaderController.$inject = ['$scope', '$state', '$location', 'Authentication', 'menuService', '$uibModal', 'Idle', 'MessagesService'];
+  HeaderController.$inject = ['$rootScope', '$scope', '$state', '$location', 'Authentication', 'menuService', '$uibModal', 'Idle', 'MessagesService'];
 
-  function HeaderController($scope, $state, $location, Authentication, menuService, $uibModal, Idle, MessagesService) {
+  function HeaderController($rootScope, $scope, $state, $location, Authentication, menuService, $uibModal, Idle, MessagesService) {
     var vm = this;
     vm.accountMenu = menuService.getMenu('account').items[0];
     vm.authentication = Authentication;
@@ -18,6 +18,12 @@
 
 	MessagesService.mycount(function(response) {
 		vm.messageCount = response.count;
+	});
+
+	$rootScope.$on('updateMessageCount', function() {
+		MessagesService.mycount(function(response) {
+			vm.messageCount = response.count;
+		});
 	});
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
