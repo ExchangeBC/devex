@@ -155,8 +155,8 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           selectLocation.location = Location //Location
           selectOnsite.onsite = Onsite //On site Requirements
 
-          oppEmail.value(Email)
-          oppEmail << Keys.chord(Keys.TAB)
+          // oppEmail.value(Email)
+          // oppEmail << Keys.chord(Keys.TAB)
           // Dates are automatically generated based on current date
 
           // "Set All Dates"()

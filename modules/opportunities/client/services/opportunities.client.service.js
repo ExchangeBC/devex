@@ -193,7 +193,6 @@
 					cwu: [
 						[(o.evaluation), 'Proposal Evaluation Criteria'],
 						[(o.criteria), 'Acceptance Criteria'],
-						[(o.proposalEmail), 'Email to Receive Acceptance of Terms and Contract'],
 						[(o.skills), 'Required Skills'],
 						[(o.earn), 'Fixed-Price Reward'],
 						[(o.start), 'Proposed Start Date']

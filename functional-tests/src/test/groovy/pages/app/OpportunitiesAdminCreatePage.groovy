@@ -30,7 +30,7 @@ class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {
             oppTitle { $("input",id:"title") }
             oppTeaser { $("#short") }
             selectProject { $("#opportunityForm") }
-            oppEmail { $("input", id:"proposalEmail") }
+            //oppEmail { $("input", id:"proposalEmail") }
             oppGithub { $("input",id:"github") }
             oppSkills { $("input", id:"skilllist") }
             selectEarn { $("#opportunityForm") }

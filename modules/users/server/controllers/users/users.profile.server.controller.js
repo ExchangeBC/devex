@@ -127,41 +127,6 @@ exports.update = function (req, res) {
 	}
 };
 
-
-// function subscriptionHandler(user) {
-// 	var promise = Promise.resolve();
-// 	if (user.email == null || user.email === '') {
-// 		return promise;
-// 	}
-// 	if (user.notifyOpportunities) {
-// 		promise = Notifications.subscribe ('not-add-opportunity', user)
-// 			.then(function(json) {
-// 				// we save the id for the subscription so that was can unsubscribe at
-// 				// a later point.
-// 				user.subscribeOpportunitiesId = json.id;
-// 			})
-// 			.catch(function(err) {
-// 				// if there was an error, reset the notifyOpportunites flag
-// 				console.error('Could not subscribe user due to error from notification ' +
-// 					'service:' + err);
-// 				user.notifyOpportunites = false;
-// 			});
-// 	}
-// 	else if (!user.notifyOpportunities ) {
-// 		// promise = oppEmailNotifier.unsubscribe(user.subscribeOpportunitiesId)
-// 		promise = Notifications.unsubscribeUserNotification ('not-add-opportunity', user)
-// 			.then(function() {
-// 				user.subscribeOpportunitiesId = null;
-// 			})
-// 			.catch(function() {
-// 				// if there was an error, reset the notifyOpportunites flag
-// 			})
-// 	}
-
-// 	return promise;
-// }
-
-// exports.subscriptionHandler = subscriptionHandler;
 /**
  * Update profile picture
  */
