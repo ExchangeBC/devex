@@ -255,6 +255,12 @@
 		vm.opportunity                   = opportunity;
 		vm.opportunity.opportunityTypeCd = 'sprint-with-us';
 
+		const codeChallengeDefaultWeight = 0.35;
+		const skillDefaultWeight		 = 0.05;
+		const questionDefaultWeight		 = 0.25;
+		const interviewDefaultWeight	 = 0.25;
+		const priceDefaultWeight		 = 0.10;
+
 		// Initialize phases for new opportunities
 		if (!vm.opportunity.phases) {
 			vm.opportunity.phases = {
@@ -267,11 +273,11 @@
 		// Set default weights for new opportunities
 		if (!vm.opportunity.weights) {
 			vm.opportunity.weights = {
-				codechallenge	: 0.35,
-				skill           : 0.05,
-				question        : 0.25,
-				interview       : 0.25,
-				price           : 0.10
+				codechallenge	: codeChallengeDefaultWeight,
+				skill           : skillDefaultWeight,
+				question        : questionDefaultWeight,
+				interview       : interviewDefaultWeight,
+				price           : priceDefaultWeight
 			}
 		};
 
