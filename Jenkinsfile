@@ -132,7 +132,7 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
      }
   }
 
-stage('Functional Test Dev') {
+stage('Functional Test Sandbox') {
   // def userInput = 'y'
   def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
   // try {
@@ -161,7 +161,7 @@ stage('Functional Test Dev') {
         command: '',
         args: '${computer.jnlpmac} ${computer.name}',
         envVars: [
-            envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
+            envVar(key:'BASEURL', value: 'https://platform-sandbox.pathfinder.gov.bc.ca/')
         ]
       )
     ]) {
