@@ -254,13 +254,27 @@
 		vm.editing                       = editing;
 		vm.opportunity                   = opportunity;
 		vm.opportunity.opportunityTypeCd = 'sprint-with-us';
+
+		// Initialize phases for new opportunities
 		if (!vm.opportunity.phases) {
 			vm.opportunity.phases = {
 				implementation : {},
 				inception : {},
 				proto : {}
 			}
-		}
+		};
+
+		// Set default weights for new opportunities
+		if (!vm.opportunity.weights) {
+			vm.opportunity.weights = {
+				codechallenge	: 0.35,
+				skill           : 0.05,
+				question        : 0.25,
+				interview       : 0.25,
+				price           : 0.10
+			}
+		};
+
 		vm.oimp                   = vm.opportunity.phases.implementation;
 		vm.oinp                   = vm.opportunity.phases.inception;
 		vm.oprp                   = vm.opportunity.phases.proto;
