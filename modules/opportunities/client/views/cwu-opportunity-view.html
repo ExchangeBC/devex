@@ -120,19 +120,25 @@
 		<!-- // Status // -->
 		<div class="row">
 			<!-- // Closing deadline while opportunity is still open // -->
-			<div class="col-xs-12 text-center" ng-if="vm.opportunity.isPublished && vm.opportunity.status === 'Pending'">
-				<label class="label label-lg label-deadline"><i class="fa fa-hourglass-half"></i>&nbsp;<span style="font-weight:300;">Closing in:</span><span class="strong"> {{vm.closing}}</span></label>
-			</div>
+      <div class="row" ng-if="vm.opportunity.isPublished">
+        <div class="col-xs-12 text-center">
+          <div ng-if="vm.closing !== 'CLOSED'">
+            <p><label class="label label-lg label-success">OPEN</label> &nbsp; <i class="fa fa-lg fa-clock-o"></i> &nbsp;Proposals must be received through this website before <strong>{{vm.deadline}}</strong>.</p>
+          </div>
+          <div ng-if="vm.closing === 'CLOSED'">
+            <p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{vm.deadline}}</strong>.</p>
+          </div>
 
-			<!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
-			<div class="col-xs-12 text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
-				<span class="light">Opportunity assigned to:</span>
-				&nbsp;
-				<img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
-				&nbsp;
-				{{vm.opportunity.proposal.user.displayName}}
-			</div>
-
+          <!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
+			    <div class="col-xs-12 text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
+				    <span class="light">Opportunity assigned to:</span>
+				    &nbsp;
+				    <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+            &nbsp;
+				    {{vm.opportunity.proposal.user.displayName}}
+          </div>
+        </div>
+      </div>
 		</div>
 
 		<!-- // Title and Teaser // -->
@@ -165,7 +171,7 @@
 						</div>
 					</dd>
 				</dl>
-				
+
 
 				<!--
 				<div class="label-list" style="padding-top: 4px; padding-bottom: 10px;">
@@ -236,7 +242,7 @@
 					<i class="fa fa-comments fa-2x"></i>
 				</div>
 			</div>
-            
+
 		</div>
 
 		<div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-warning">
