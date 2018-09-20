@@ -255,11 +255,11 @@
 		vm.opportunity                   = opportunity;
 		vm.opportunity.opportunityTypeCd = 'sprint-with-us';
 
-		const codeChallengeDefaultWeight = 0.35;
-		const skillDefaultWeight		 = 0.05;
-		const questionDefaultWeight		 = 0.25;
-		const interviewDefaultWeight	 = 0.25;
-		const priceDefaultWeight		 = 0.10;
+		var codeChallengeDefaultWeight = 0.35;
+		var skillDefaultWeight		   = 0.05;
+		var questionDefaultWeight	   = 0.25;
+		var interviewDefaultWeight	   = 0.25;
+		var priceDefaultWeight		   = 0.10;
 
 		// Initialize phases for new opportunities
 		if (!vm.opportunity.phases) {
