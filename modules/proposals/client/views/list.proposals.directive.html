@@ -1,14 +1,9 @@
 <div class="row">
 	<div class="col-xs-12 text-center">
 			<div class="proposal-stats">
-				<!-- // Hiding Views until we can hook this up to display unique visitors // -->
-				<!--
-				<span><i class="fa fa-eye"></i> {{vm.pageViews}}</span> Views 
-				&nbsp;&nbsp;&nbsp;
-				-->
 				<span uib-tooltip="People following this opportunity"><i class="fa fa-user"></i> {{vm.stats.following}} Followers</span>
 				&nbsp;&nbsp;&nbsp;
-				<span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals started</span> 
+				<span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals started</span>
 				&nbsp;&nbsp;&nbsp;
 				<span uib-tooltip="Proposal submitted"><i class="fa fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
 			</div>

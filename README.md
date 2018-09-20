@@ -25,7 +25,7 @@ We are open to pull requests. Please read our [contributing guidelines](https://
 
 ## Development
 
-Prerequisites: Docker
+Prerequisite: Docker
 
 To get started, run the following command to set things up the first time:
 ```bash
