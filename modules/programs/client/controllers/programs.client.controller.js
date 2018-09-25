@@ -6,16 +6,16 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('ProgramsListController', function (ProgramsService) {
+	.controller('ProgramsListController', ['ProgramsService', function (ProgramsService) {
 		var vm      = this;
 		vm.programs = ProgramsService.query();
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', function ($window, $sce, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', ['$window', '$sce', 'program', 'Authentication', 'ProgramsService', 'Notification', function ($window, $sce, program, Authentication, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
@@ -75,13 +75,13 @@
 				});
 			});
 		};
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', function ($scope, $state, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
+	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'Authentication', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
 		var vm            = this;
 		vm.user = Authentication.user;
 		vm.fileSelected = false;
@@ -220,6 +220,6 @@
 			}
 			else vm.fileSelected = true;
 		};
-	})
+	}])
 	;
 }());

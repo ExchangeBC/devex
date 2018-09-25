@@ -16,7 +16,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
-			controller   : function ($scope, ProjectsService, Authentication, Notification) {
+			controller   : ['$scope', 'ProjectsService', 'Authentication', 'Notification', function ($scope, ProjectsService, Authentication, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
@@ -89,7 +89,7 @@
 						});
 					});
 				};
-			}
+			}]
 		}
 	})
 	;

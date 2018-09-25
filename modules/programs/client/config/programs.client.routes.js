@@ -35,9 +35,9 @@
 				label: 'All programs'
 			},
 			resolve: {
-				programs: function ($stateParams, ProgramsService) {
+				programs: ['$stateParams', 'ProgramsService', function ($stateParams, ProgramsService) {
 					return ProgramsService.query ();
-				}
+				}]
 			},
 			controller: 'ProgramsListController',
 			controllerAs: 'vm'
@@ -53,11 +53,11 @@
 			controller: 'ProgramViewController',
 			controllerAs: 'vm',
 			resolve: {
-				program: function ($stateParams, ProgramsService) {
+				program: ['$stateParams', 'ProgramsService', function ($stateParams, ProgramsService) {
 					return ProgramsService.get({
 						programId: $stateParams.programId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'Program: {{program.title}}'
@@ -88,19 +88,19 @@
 			controller: 'ProgramEditController',
 			controllerAs: 'vm',
 			resolve: {
-				program: function ($stateParams, ProgramsService) {
+				program: ['$stateParams', 'ProgramsService', function ($stateParams, ProgramsService) {
 					return ProgramsService.get({
 						programId: $stateParams.programId
 					}).$promise;
-				},
+				}],
 				editing: function () { return true; },
-				previousState: function ($state) {
+				previousState: ['$state', function ($state) {
 					return {
 						name: $state.current.name,
 						params: $state.params,
 						url: $state.href($state.current.name, $state.params)
 					};
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -122,17 +122,17 @@
 			controller: 'ProgramEditController',
 			controllerAs: 'vm',
 			resolve: {
-				program: function (ProgramsService) {
+				program: ['ProgramsService', function (ProgramsService) {
 					return new ProgramsService();
-				},
+				}],
 				editing: function () { return false; },
-				previousState: function ($state) {
+				previousState: ['$state', function ($state) {
 				  return {
 					name: $state.current.name,
 					params: $state.params,
 					url: $state.href($state.current.name, $state.params)
 				  };
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],

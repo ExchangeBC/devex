@@ -19,9 +19,9 @@
 			url: '/opportunities',
 			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
-				capabilities: function (CapabilitiesService) {
+				capabilities: ['CapabilitiesService', function (CapabilitiesService) {
 					return CapabilitiesService.query().$promise
-				}
+				}]
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -40,9 +40,9 @@
 				label: 'All opportunities'
 			},
 			resolve: {
-				opportunities: function ($stateParams, OpportunitiesService) {
+				opportunities: ['$stateParams', 'OpportunitiesService', function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.query ();
-				}
+				}]
 			},
 			controller: 'OpportunitiesListController',
 			controllerAs: 'vm'
@@ -62,17 +62,17 @@
 			controller: 'OpportunityViewController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
+				opportunity: ['$stateParams', 'OpportunitiesService', function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.get ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				myproposal: function ($stateParams, ProposalsService, Authentication) {
+				}],
+				myproposal: ['$stateParams', 'ProposalsService', 'Authentication', function ($stateParams, ProposalsService, Authentication) {
 					if (!Authentication.user) return {};
 					return ProposalsService.myopp ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'
@@ -97,12 +97,12 @@
 			controller: 'OpportunityViewSWUController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
+				opportunity: ['$stateParams', 'OpportunitiesService', function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.get ({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				org: function (Authentication, OrgsService) {
+				}],
+				org: ['Authentication', 'OrgsService', function (Authentication, OrgsService) {
 					if (!Authentication.user) return {};
 					return OrgsService.myadmin ().$promise.then (function (orgs) {
 						if (orgs && orgs.length > 0) return orgs[0];
@@ -112,15 +112,15 @@
 					// var org = orgs[0];
 					// if (org) return OrgsService.get ({orgId:org}).$promise;
 					// else return {};
-				},
-				myproposal: function ($stateParams, ProposalsService, Authentication, org) {
+				}],
+				myproposal: ['$stateParams', 'ProposalsService', 'Authentication', 'org', function ($stateParams, ProposalsService, Authentication, org) {
 					if (!Authentication.user) return {};
 					if (!org || !org._id) return {};
 					return ProposalsService.myOrgOpp ({
 						orgId : org._id,
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'Opportunity: {{opportunity.name}}'
@@ -140,9 +140,9 @@
 			url: '/opportunityadmin',
 			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
-				capabilities: function (CapabilitiesService) {
+				capabilities: ['CapabilitiesService', function (CapabilitiesService) {
 					return CapabilitiesService.query().$promise;
-				}
+				}]
 			}
 		})
 		// -------------------------------------------------------------------------
@@ -160,17 +160,17 @@
 			controller: 'OpportunityEditController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
+				opportunity: ['$stateParams', 'OpportunitiesService', function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.get({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				programs: function (ProgramsService) {
+				}],
+				programs: ['ProgramsService', function (ProgramsService) {
 					return ProgramsService.myadmin ().$promise;
-				},
-				projects: function (ProjectsService) {
+				}],
+				projects: ['ProjectsService', function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
-				},
+				}],
 				editing: function () { return true; }
 			},
 			data: {
@@ -197,17 +197,17 @@
 			controller: 'OpportunityEditSWUController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function ($stateParams, OpportunitiesService) {
+				opportunity: ['$stateParams', 'OpportunitiesService', function ($stateParams, OpportunitiesService) {
 					return OpportunitiesService.get({
 						opportunityId: $stateParams.opportunityId
 					}).$promise;
-				},
-				programs: function (ProgramsService) {
+				}],
+				programs: ['ProgramsService', function (ProgramsService) {
 					return ProgramsService.myadmin ().$promise;
-				},
-				projects: function (ProjectsService) {
+				}],
+				projects: ['ProjectsService', function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
-				},
+				}],
 				editing: function () { return true; }
 			},
 			data: {
@@ -237,12 +237,12 @@
 			controller: 'OpportunityLandingController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function (OpportunitiesService) {
+				opportunity: ['OpportunitiesService', function (OpportunitiesService) {
 					return new OpportunitiesService();
-				},
-				projects: function (ProjectsService) {
+				}],
+				projects: ['ProjectsService', function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
-				},
+				}],
 				editing: function () { return false; }
 			},
 			data: {
@@ -272,12 +272,12 @@
 			controller: 'OpportunityEditController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function (OpportunitiesService) {
+				opportunity: ['OpportunitiesService', function (OpportunitiesService) {
 					return new OpportunitiesService();
-				},
-				projects: function (ProjectsService) {
+				}],
+				projects: ['ProjectsService', function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
-				},
+				}],
 				editing: function () { return false; }
 			},
 			data: {
@@ -307,12 +307,12 @@
 			controller: 'OpportunityEditSWUController',
 			controllerAs: 'vm',
 			resolve: {
-				opportunity: function (OpportunitiesService) {
+				opportunity: ['OpportunitiesService', function (OpportunitiesService) {
 					return new OpportunitiesService();
-				},
-				projects: function (ProjectsService) {
+				}],
+				projects: ['ProjectsService', function (ProjectsService) {
 					return ProjectsService.myadmin ().$promise;
-				},
+				}],
 				editing: function () { return false; }
 			},
 			data: {

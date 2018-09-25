@@ -30,9 +30,9 @@
 			controller   : 'CapabilitiesListController',
 			controllerAs : 'vm',
 			resolve: {
-				capabilities: function (CapabilitiesService) {
+				capabilities: ['CapabilitiesService', function (CapabilitiesService) {
 					return CapabilitiesService.query ().$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'Capabilities List'
@@ -49,11 +49,11 @@
 			controller   : 'CapabilityViewController',
 			controllerAs : 'vm',
 			resolve: {
-				capability: function ($stateParams, CapabilitiesService) {
+				capability: ['$stateParams', 'CapabilitiesService', function ($stateParams, CapabilitiesService) {
 					return CapabilitiesService.get ({
 						capabilityId: $stateParams.capabilityId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'Capability: {{ capability.name }}'
@@ -81,11 +81,11 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
-				capability: function ($stateParams, CapabilitiesService) {
+				capability: ['$stateParams', 'CapabilitiesService', function ($stateParams, CapabilitiesService) {
 					return CapabilitiesService.get ({
 						capabilityId: $stateParams.capabilityId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -104,9 +104,9 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
-				capability: function (CapabilitiesService) {
+				capability: ['CapabilitiesService', function (CapabilitiesService) {
 					return new CapabilitiesService ();
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],

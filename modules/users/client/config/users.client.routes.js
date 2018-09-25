@@ -21,9 +21,9 @@
 					roles: ['user', 'admin', 'gov-request', 'gov']
 				},
 				resolve: {
-					capabilities: function (CapabilitiesService) {
+					capabilities: ['CapabilitiesService', function (CapabilitiesService) {
 						return CapabilitiesService.query ();
-					}
+					}]
 				}
 			})
 			.state ('settings.skills', {
@@ -96,9 +96,9 @@
 				controller: 'AuthenticationController',
 				controllerAs: 'vm',
 				resolve: {
-					usercount: function (UsersService) {
+					usercount: ['UsersService', function (UsersService) {
 						return UsersService.countUsers ().then (function (o) {return o.count});
-					}
+					}]
 				}
 			})
 			.state('authentication.gov', {

@@ -19,23 +19,23 @@
 	// Controller for the master list of messagetemplates
 	//
 	// =========================================================================
-	.controller ('MessageTemplatesListController', function (templates, Authentication) {
+	.controller ('MessageTemplatesListController', ['templates', 'Authentication', function (templates, Authentication) {
 		var vm         = this;
 		vm.templates = templates;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateViewController', function ($sce, $state, template, Authentication, Notification) {
+	.controller ('MessageTemplateViewController', ['$sce', '$state', 'template', 'Authentication', 'Notification', function ($sce, $state, template, Authentication, Notification) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.template          = template;
 		vm.auth                = Authentication;
 		vm.canEdit              = Authentication.isAdmin;
-	})
-	.controller ('MessageViewController', function ($sce, $location, $state, $rootScope, message, Authentication, Notification, MessagesService) {
+	}])
+	.controller ('MessageViewController', ['$sce', '$location', '$state', '$rootScope', 'message', 'Authentication', 'Notification', 'MessagesService', function ($sce, $location, $state, $rootScope, message, Authentication, Notification, MessagesService) {
 		var vm        = this;
 		vm.haveresult = false;
 		vm.resultmsg  = '';
@@ -71,17 +71,17 @@
 				$rootScope.$broadcast('updateMessages', 'done');
 			})
 		};
-	})
-	.controller ('MessageResultController', function ($sce, $rootScope, $state, isGoodResult, message) {
+	}])
+	.controller ('MessageResultController', ['$sce', '$rootScope', '$state', 'isGoodResult', 'message', function ($sce, $rootScope, $state, isGoodResult, message) {
 		var vm        = this;
 		vm.bodyMessage = isGoodResult ? $sce.trustAsHtml (message.successMessage) : $sce.trustAsHtml (message.failureMessage);
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateEditController', function ($scope, TINYMCE_OPTIONS, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
+	.controller ('MessageTemplateEditController', ['$scope', 'TINYMCE_OPTIONS', '$state', 'editing', 'template', 'Authentication', 'Notification', 'MessageTemplatesService', function ($scope, TINYMCE_OPTIONS, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
 		var qqq        = this;
 		qqq.template = template;
 		qqq.auth       = Authentication;
@@ -168,6 +168,6 @@
 				});
 			});
 		};
-	})
+	}])
 	;
 }());

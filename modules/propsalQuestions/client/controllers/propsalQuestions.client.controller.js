@@ -6,28 +6,28 @@
 	// Controller for the master list of propsalQuestions
 	//
 	// =========================================================================
-	.controller ('PropsalQuestionsListController', function (propsalQuestions) {
+	.controller ('PropsalQuestionsListController', ['propsalQuestions', function (propsalQuestions) {
 		var vm         = this;
 		vm.propsalQuestions = propsalQuestions;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the propsalQuestion page
 	//
 	// =========================================================================
-	.controller ('PropsalQuestionViewController', function ($sce, propsalQuestion, Authentication) {
+	.controller ('PropsalQuestionViewController', ['$sce', 'propsalQuestion', 'Authentication', function ($sce, propsalQuestion, Authentication) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.propsalQuestion     = propsalQuestion;
 		vm.auth                = Authentication;
 		vm.canEdit             = Authentication.isAdmin;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the propsalQuestion page
 	//
 	// =========================================================================
-	.controller ('PropsalQuestionEditController', function ($scope, $state, propsalQuestion, Authentication, Notification) {
+	.controller ('PropsalQuestionEditController', ['$scope', '$state', 'propsalQuestion', 'Authentication', 'Notification', function ($scope, $state, propsalQuestion, Authentication, Notification) {
 		var qqq        		= this;
 		qqq.propsalQuestion = propsalQuestion;
 		qqq.auth       		= Authentication;
@@ -65,6 +65,6 @@
 				});
 			});
 		};
-	})
+	}])
 	;
 }());

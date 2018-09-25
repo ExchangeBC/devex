@@ -18,9 +18,9 @@
 			templateUrl  : '/modules/messages/client/views/message-template-list.html',
 			data         : { pageTitle: 'Message Templates List' },
 			resolve      : {
-				templates: function (MessageTemplatesService) {
+				templates: ['MessageTemplatesService', function (MessageTemplatesService) {
 					return MessageTemplatesService.query ().$promise;
-				}
+				}]
 			},
 			controllerAs : 'vm',
 			controller   : 'MessageTemplatesListController'
@@ -30,11 +30,11 @@
 			templateUrl  : '/modules/messages/client/views/message-template-view.html',
 			data         : { pageTitle: 'Message Templates List' },
 			resolve      : {
-				template: function (MessageTemplatesService, $stateParams) {
+				template: ['MessageTemplatesService', '$stateParams', function (MessageTemplatesService, $stateParams) {
 					return MessageTemplatesService.get ({
 						templateId: $stateParams.templateId
 					}).$promise;
-				}
+				}]
 			},
 			controllerAs : 'qqq',
 			controller   : 'MessageTemplateViewController'
@@ -61,11 +61,11 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
-				template: function ($stateParams, MessageTemplatesService) {
+				template: ['$stateParams', 'MessageTemplatesService', function ($stateParams, MessageTemplatesService) {
 					return MessageTemplatesService.get ({
 						templateId: $stateParams.templateId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -84,9 +84,9 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
-				template: function (MessageTemplatesService) {
+				template: ['MessageTemplatesService', function (MessageTemplatesService) {
 					return new MessageTemplatesService ();
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -108,11 +108,11 @@
 			templateUrl  : '/modules/messages/client/views/message-view.html',
 			data         : { pageTitle: 'Message View' },
 			resolve      : {
-				message: function (MessagesService, $stateParams) {
+				message: ['MessagesService', '$stateParams', function (MessagesService, $stateParams) {
 					return MessagesService.get ({
 						messageId: $stateParams.messageId
 					}).$promise;
-				}
+				}]
 			},
 			controllerAs : 'vm',
 			controller   : 'MessageViewController'

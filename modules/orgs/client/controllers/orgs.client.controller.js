@@ -6,17 +6,17 @@
 	// Controller for the master list of orgs
 	//
 	// =========================================================================
-	.controller('OrgsListController', function (orgs, Authentication) {
+	.controller('OrgsListController', ['orgs', 'Authentication', function (orgs, Authentication) {
 		var vm      = this;
 		vm.isLoggedIn      = !!Authentication.user;
 		vm.orgs = orgs;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the org page
 	//
 	// =========================================================================
-	.controller('OrgViewController', function ($sce, org, Authentication) {
+	.controller('OrgViewController', ['$sce', 'org', 'Authentication', function ($sce, org, Authentication) {
 		var vm             = this;
 		vm.org             = org;
 		vm.user            = Authentication.user;
@@ -32,13 +32,13 @@
 		//
 		// what can the user do here?
 		//
-	})
+	}])
 	// =========================================================================
 	//
 	// create a new org
 	//
 	// =========================================================================
-	.controller('OrgCreateController', function ($scope, $state, org, Authentication, Notification, UsersService) {
+	.controller('OrgCreateController', ['$scope', '$state', 'org', 'Authentication', 'Notification', 'UsersService', function ($scope, $state, org, Authentication, Notification, UsersService) {
 		var vm = this;
 		// vm.features = window.features;
 		vm.org = org;
@@ -86,13 +86,13 @@
 		vm.delete = function () {
 			$state.go('orgs.list');
 		}
-	})
+	}])
 	// =========================================================================
 	//
 	// top level of the edit
 	//
 	// =========================================================================
-	.controller('OrgAdminController', function ($rootScope, org, OrgsService) {
+	.controller('OrgAdminController', ['$rootScope', 'org', 'OrgsService', function ($rootScope, org, OrgsService) {
 		var vm = this;
 		vm.org = org;
 		$rootScope.$on('updateOrg', function () {
@@ -100,13 +100,13 @@
 				vm.org = result;
 			});
 		});
-	})
+	}])
 	// =========================================================================
 	//
 	// edit the tonbstone info for an org
 	//
 	// =========================================================================
-	.controller('OrgProfileController', function ($rootScope, capabilities, $scope, $state, $window, org, Authentication, Notification, dataService, UsersService) {
+	.controller('OrgProfileController', ['$rootScope', 'capabilities', '$scope', '$state', '$window', 'org', 'Authentication', 'Notification', 'dataService', 'UsersService', function ($rootScope, capabilities, $scope, $state, $window, org, Authentication, Notification, dataService, UsersService) {
 		var vm            = this;
 		vm.user            = Authentication.user;
 		vm.isAdmin         = vm.user && !!~Authentication.user.roles.indexOf ('admin');
@@ -208,13 +208,13 @@
 				});
 			});
 		};
-	})
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// controller for skills
 	//
 	// -------------------------------------------------------------------------
-	.controller('OrgSkillsController', function (capabilities, Notification, org) {
+	.controller('OrgSkillsController', ['capabilities', 'Notification', 'org', function (capabilities, Notification, org) {
 		var vm = this;
 		// vm.features = window.features;
 		vm.org = org;
@@ -242,22 +242,22 @@
 				});
 			});
 		}
-	})
+	}])
 	// =========================================================================
 	//
 	// edit org teams list
 	//
 	// =========================================================================
-	.controller('OrgTeamsController', function (org) {
+	.controller('OrgTeamsController', ['org', function (org) {
 		var vm = this;
 		vm.org = org;
-	})
+	}])
 	// =========================================================================
 	//
 	// edit org member list
 	//
 	// =========================================================================
-	.controller('OrgMembersController', function ($rootScope, org, Notification, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
+	.controller('OrgMembersController', ['$rootScope', 'org', 'Notification', 'OrgsService', 'capabilities', 'CapabilitiesMethods', 'ask', 'modalService', function ($rootScope, org, Notification, OrgsService, capabilities, CapabilitiesMethods, ask, modalService) {
 		var vm = this;
 		vm.org = org;
 		vm.emaillist = '';
@@ -360,13 +360,13 @@
 			});
 		};
 
-	})
+	}])
 	// =========================================================================
 	//
 	// accept terms
 	//
 	// =========================================================================
-	.controller('OrgTermsController', function ($rootScope, org, Notification) {
+	.controller('OrgTermsController', ['$rootScope', 'org', 'Notification', function ($rootScope, org, Notification) {
 		var vm = this;
 		vm.org = org;
 		vm.save = function () {
@@ -380,15 +380,15 @@
 				$rootScope.$broadcast('updateOrg', 'done');
 			})
 		};
-	})
+	}])
 	// =========================================================================
 	//
 	// edit org skill list
 	//
 	// =========================================================================
-	.controller('OrgProposalsController', function (org) {
+	.controller('OrgProposalsController', ['org', function (org) {
 		var vm = this;
 		vm.org = org;
-	})
+	}])
 	;
 }());

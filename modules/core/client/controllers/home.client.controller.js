@@ -1,6 +1,7 @@
 (function () {
   'use strict';
 
+  HomeController.$inject = ['Authentication', '$state'];
   angular
     .module('core')
     .controller('HomeController', HomeController);

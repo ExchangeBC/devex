@@ -16,7 +16,7 @@
 				propsalQuestions : '='
 			},
 			templateUrl  : '/modules/propsalQuestions/client/views/list.propsalQuestions.directive.html',
-			controller   : function ($sce, $rootScope, $scope, PropsalQuestionsService, Authentication) {
+			controller   : ['$sce', '$rootScope', '$scope', 'PropsalQuestionsService', 'Authentication', function ($sce, $rootScope, $scope, PropsalQuestionsService, Authentication) {
 				var vm         = this;
 				vm.trust       = $sce.trustAsHtml;
 				vm.auth        = Authentication;
@@ -27,7 +27,7 @@
 				$rootScope.$on ('updatePropsalQuestions', function () {
 					vm.propsalQuestions = PropsalQuestionsService.query ();
 				});
-			}
+			}]
 		}
 	})
 	// -------------------------------------------------------------------------
@@ -44,13 +44,13 @@
 				propsalQuestion : '='
 			},
 			templateUrl  : '/modules/propsalQuestions/client/views/view.propsalQuestion.directive.html',
-			controller   : function ($scope, Authentication) {
+			controller   : ['$scope', 'Authentication', function ($scope, Authentication) {
 				var vm        = this;
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;
 				vm.propsalQuestion = $scope.propsalQuestion;
-			}
+			}]
 		}
 
 	})

@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 	// Authentication service for user variables
-	angular.module ('users.services').factory ('Authentication', function ($window) {
+	angular.module ('users.services').factory ('Authentication', ['$window', function ($window) {
 		var auth = {
 			user: $window.user,
 			permissions : function () {
@@ -18,5 +18,5 @@
 			}
 		};
 		return auth;
-	});
+	}]);
 }());

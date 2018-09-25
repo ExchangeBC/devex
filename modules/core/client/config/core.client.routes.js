@@ -42,9 +42,9 @@
 				controller: 'ErrorController',
 				controllerAs: 'vm',
 				params: {
-					message: function($stateParams) {
+					message: ['$stateParams', function($stateParams) {
 						return $stateParams.message;
-					}
+					}]
 				},
 				data: {
 					ignoreState: true,
@@ -60,9 +60,9 @@
 				controller: 'ErrorController',
 				controllerAs: 'vm',
 				params: {
-					message: function($stateParams) {
+					message: ['$stateParams', function($stateParams) {
 						return $stateParams.message;
-					}
+					}]
 				},
 				data: {
 					ignoreState: true,

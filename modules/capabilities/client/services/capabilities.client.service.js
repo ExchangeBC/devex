@@ -7,7 +7,7 @@
 	// service for capabilities
 	//
 	// -------------------------------------------------------------------------
-	.factory ('CapabilitiesService', function ($resource, $log) {
+	.factory ('CapabilitiesService', ['$resource', '$log', function ($resource, $log) {
 		var Capability = $resource ('/api/capabilities/:capabilityId', {
 			capabilityId: '@_id'
 		}, {
@@ -26,13 +26,13 @@
 			}
 		});
 		return Capability;
-	})
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// service for capability skills
 	//
 	// -------------------------------------------------------------------------
-	.factory ('CapabilitySkillsService', function ($resource, $log) {
+	.factory ('CapabilitySkillsService', ['$resource', '$log', function ($resource, $log) {
 		var CapabilitySkill = $resource ('/api/capabilityskill/:capabilityskillId', {
 			capabilityskillId: '@_id'
 		}, {
@@ -51,7 +51,7 @@
 			}
 		});
 		return CapabilitySkill;
-	})
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// given a set of capabilities and a scope, set up the need scope items

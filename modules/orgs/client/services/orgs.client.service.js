@@ -1,6 +1,6 @@
 (function () {
 	'use strict';
-	angular.module ('orgs.services').factory ('OrgsService', function ($resource, $log) {
+	angular.module ('orgs.services').factory ('OrgsService', ['$resource', '$log', function ($resource, $log) {
 		var Org = $resource ('/api/orgs/:orgId', {
 			orgId: '@_id'
 		}, {
@@ -44,5 +44,5 @@
 			}
 		});
 		return Org;
-	});
+	}]);
 }());

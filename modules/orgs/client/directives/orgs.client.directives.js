@@ -14,7 +14,7 @@
 				orgs: '='
 			},
 			templateUrl  : '/modules/orgs/client/views/list.orgs.directive.html',
-			controller   : function ($scope, $sce, OrgsService, Authentication) {
+			controller   : ['$scope', '$sce', 'OrgsService', 'Authentication', function ($scope, $sce, OrgsService, Authentication) {
 				var vm = this;
 				var isUser = Authentication.user;
 				var isAdmin  = isUser && !!~Authentication.user.roles.indexOf ('admin');
@@ -50,7 +50,7 @@
 						vm.orgs = $scope.orgs;
 					})
 				}
-			}
+			}]
 		}
 	})
 	// -------------------------------------------------------------------------
@@ -68,7 +68,7 @@
 			restrict: 'EAC',
 			// replace: true,
 			template : '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
-			controller: function ($uibModal) {
+			controller: ['$uibModal', function ($uibModal) {
 				var wsx = this;
 				var uploadurl = '/api/upload/logo/org/'+wsx.org._id
 				wsx.edit = function () {
@@ -82,7 +82,7 @@
 								return wsx.org;
 							}
 						},
-						controller: function ($rootScope, $timeout, Authentication, org, $uibModalInstance, Upload, Notification) {
+						controller: ['$rootScope', '$timeout', 'Authentication', 'org', '$uibModalInstance', 'Upload', 'Notification', function ($rootScope, $timeout, Authentication, org, $uibModalInstance, Upload, Notification) {
 							var qqq = this;
 							qqq.user = Authentication.user;
 							qqq.fileSelected = false;
@@ -144,11 +144,11 @@
 							}
 
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }
-						}
+						}]
 					})
 					;
 				}
-			}
+			}]
 		};
 	})
 	;
