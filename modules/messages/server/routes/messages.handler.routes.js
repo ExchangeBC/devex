@@ -45,7 +45,7 @@ module.exports = function (app) {
 	//
 	// -------------------------------------------------------------------------
 	app.route('/api/message/handler/action/:actionCode/user/:userId/defaultonly').get (isUser, function (req, res) {
-		return res.status (200).json ({message:'<p>Thank You '+req.model.displayName+'</p>'});
+		return res.status (200).json ({message:'Thank You '+req.model.displayName});
 	});
 	// -------------------------------------------------------------------------
 	//

@@ -32,23 +32,35 @@
   margin: 20px 0;
 }
 .message-list-item {
-  padding: 20px 0;
-  border-bottom: 1px solid #ccc;
-}
-.message-list-item {
-  border-bottom: solid;
-  border-width: 1px;
-  border-color: gray;
+  padding: 15px 20px;
+  border: 1px solid #e6e6e6;
 }
 .message-list-item-date {
-	width: 8em;
+	display: inline-block;
+	color: #aaa;
+	text-align: right;
+	margin: 0 0 14px;
 }
-.message-confirmation {
-	border-bottom: solid;
-	border-width: 1px;
-	border-color: gray;
+.message-list-item-body {
+	display: block;
+	width: 75%;
 }
-
+.message-result {
+	margin: 20px 0;
+	padding: 20px;
+	background-color: #fcf8e3;
+	border-radius: 3px;
+}
+.list-empty-message {
+	padding: 20px 0;
+	font-size: 1.5rem;
+	color: #aaa;
+	> emoji {
+		font-size: 3em;
+		margin: 0 15px;
+		vertical-align: middle;
+	}
+}
 
 /* Styles for message-view.html (Message detail) */
 section.message-detail-background {
@@ -68,7 +80,7 @@ section.message-detail-background {
 // }
 
 .message-actions {
-	margin: 40px 0 0;
+	margin: 20px 0 0;
 }
 .expiry-message {
 	padding: 20px 10px;
@@ -76,11 +88,6 @@ section.message-detail-background {
 	font-size: 0.9em;
 	color: #777;
 }
-
-.message-result {
-	text-align: center;
-}
-
 .message-archives {
 	max-height: 900px;
 	overflow-y: scroll;

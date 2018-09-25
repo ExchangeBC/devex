@@ -16,15 +16,17 @@
     vm.isCollapsed = false;
 	vm.menu = menuService.getMenu('topbar');
 
-	MessagesService.mycount(function(response) {
-		vm.messageCount = response.count;
-	});
-
-	$rootScope.$on('updateMessageCount', function() {
+	if (Authentication.user) {
 		MessagesService.mycount(function(response) {
 			vm.messageCount = response.count;
 		});
-	});
+
+		$rootScope.$on('updateMessageCount', function() {
+			MessagesService.mycount(function(response) {
+				vm.messageCount = response.count;
+			});
+		});
+	}
 
     $scope.$on('$stateChangeSuccess', stateChangeSuccess);
     $scope.isHomePage = function() {

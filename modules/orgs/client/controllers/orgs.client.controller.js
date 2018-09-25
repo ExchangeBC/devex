@@ -314,7 +314,7 @@
 			}
 		};
 		vm.removeMember = function (member) {
-			ask.yesNo ('Are you sure you want to remove this user from your company? If you have added them to a proposal, you may not longer qualify to apply on the opportunity.')
+			ask.yesNo ('Are you sure you want to remove this member from your company? If you have added them to a proposal, you may no longer qualify to apply on the opportunity.')
 			.then (function (yes) {
 				if (yes) {
 					OrgsService.removeUser ({

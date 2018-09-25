@@ -55,8 +55,8 @@ var count = function (table, q) {
 	});
 };
 var appendNotificationLink = function (messagebody) {
-	var link = '<a href="{{domain}}/messages/{{messageid}}">BCDevExchange</a>';
-	var m = 'Sign in to the '+link+' to respond to this message. This message will expire on {{date2Archive}}';
+	var link = '<a href="{{domain}}/messages/{{messageid}}">Sign in to the BCDevExchange</a>';
+	var m = 'To respond to this message, '+link+' and navigate to your messages.';
 	return messagebody+'<p><br/>'+m+'<br/></p>';
 }
 // -------------------------------------------------------------------------

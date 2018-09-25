@@ -28,8 +28,8 @@
 			</div>
 			<div ng-if="!vm.isLoading">
 			Open Opportunities
-			<div class="alert" ng-if="vm.countOpenOpportunities() === 0">
-				<i class="fa fa-lg fa-frown-o"></i>&nbsp; No open opportunities right now - check back soon, or make sure you're signed up for notifications <a href="/settings/privacy">in your profile</a>
+			<div class="list-empty-message" ng-if="vm.countOpenOpportunities() === 0">
+				<emoji>🌵</emoji> No open opportunities right now
 			</div>
 
 			<div class="card" class="opportunity-list" ng-class="{'card-greyed': !opportunity.isPublished}"
@@ -102,12 +102,7 @@
 					<div class="card-teaser" ng-bind="opportunity.short"></div>
 				</div>
 
-				<!-- I made an alert in the template html file to replace this. -->
-				<div class="alert" ng-if="! vm.opportunities.length">
-					<div class="col-xs-12">
-						<div class="well well-transparent">No open opportunities right now. Check back soon!</div>
-					</div>
-				</div>
+				
 			</div>
 		</div>
 		</div>

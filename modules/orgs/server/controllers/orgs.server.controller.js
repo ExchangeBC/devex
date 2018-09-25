@@ -321,7 +321,7 @@ var saveOrgReturnMessage = function (req, res) {
 					getOrgById (neworg._id)
 					.then (function (o) {
 						res.status(200).json ({
-							message: '<h4>Success!</h4> You are now a member of '+org.name
+							message: '<i class="fa fa-lg fa-check-circle-o success"></i> You are now a member of '+org.name
 						})
 					})
 					.catch (function (err) {
@@ -716,7 +716,7 @@ exports.addUserToOrg = function (req, res) {
 
 	if (req.params.actionCode === 'decline') {
 		return res.status(200).json ({
-			message: '<h4>Declined</h4>Thank you, you have not been added to company '+org.name
+			message: '<i class="fa fa-lg fa-check-circle-o"></i> Company invitation declined.'
 		});
 	}
 	else {

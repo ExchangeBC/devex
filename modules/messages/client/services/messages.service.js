@@ -71,7 +71,6 @@
 		}, {update: {method: 'PUT'}});
 		angular.extend (Payload.prototype, {
 			createOrUpdate: function () {
-				console.log ('message temaplte = ', this);
 				var messagetemplate = this;
 				if (messagetemplate._id) {
 					return messagetemplate.$update (function () {}, function (e) {$log.error (e.data);});

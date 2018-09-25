@@ -19,6 +19,50 @@
 	})
 	// -------------------------------------------------------------------------
 	//
+	// directive for listing affiliations users have with their orgs
+	//
+	// -------------------------------------------------------------------------
+	.directive('affiliationsList', function() {
+		return {
+			restrict		: 'E',
+			controllerAs	: 'vm',
+			scope			: {
+				context		: '@'
+			},
+			templateUrl		: '/modules/users/client/views/settings/affiliations-directive.html',
+			controller		: ['$scope', 'Notification', 'OrgsService', 'Authentication', 'ask', function($scope, Notification, OrgsService, Authentication, ask) {
+				var vm 			= this;
+				vm.auth			= Authentication.permissions();
+				vm.context		= $scope.context;
+				vm.user			= Authentication.user;
+
+				function loadAffiliations() {
+					vm.affiliations = OrgsService.my();
+				}
+
+				vm.removeAffiliation = function(affiliation) {
+					var question = 'Removing your affiliation with ' + affiliation.name + ' means they won\'t be able to include you on proposals to Sprint With Us opportunities. \
+					Are you sure you want to do this?';
+					ask.yesNo(question).then(function (result) {
+						if (result) {
+							OrgsService.removeUser ({
+								orgId: affiliation._id,
+								userId: vm.user._id
+							}).$promise
+							.then (function (org) {
+								loadAffiliations();
+								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> You have been removed from ' + affiliation.name });
+							});
+						}
+					});
+				}
+
+				loadAffiliations();
+			}]
+		};
+	})
+	// -------------------------------------------------------------------------
+	//
 	// directive, modal edit profile pic
 	//
 	// -------------------------------------------------------------------------

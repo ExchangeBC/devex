@@ -1,0 +1,8 @@
+<table class="table company-affiliations-list">
+	<tbody>
+		<tr ng-repeat="affiliation in vm.affiliations">
+			<td class="company-name"><a href="/orgs/{{affiliation._id}}">{{affiliation.name}}</a></td>
+			<td><button type="button" class="btn btn-sm btn-default" ng-click="vm.removeAffiliation(affiliation)">Leave</button></td>
+    </tr>
+	</tbody>
+</table>
