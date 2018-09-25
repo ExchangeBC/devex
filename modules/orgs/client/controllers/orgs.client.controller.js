@@ -292,7 +292,7 @@
 			vm.orgForm.$setPristine ();
 			if (vm.emaillist !== '') {
 				var saveorg = new OrgsService (vm.org);
-				saveorg.additions = vm.emaillist;
+				saveorg.additions = vm.emaillist.toLowerCase();
 				saveorg.$update ()
 				.then (function (savedOrg) {
 					vm.emaillist = '';
