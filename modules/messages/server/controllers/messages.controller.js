@@ -48,7 +48,7 @@ var query = function (table, q) {
 };
 var count = function (table, q) {
 	return new Promise (function (resolve, reject) {
-		table.count (q, function (err, c) {
+		table.countDocuments (q, function (err, c) {
 			if (err) reject (errorHandler.getErrorMessage(err));
 			else resolve (c);
 		});

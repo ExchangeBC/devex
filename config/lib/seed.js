@@ -84,10 +84,10 @@ function seedTheUser(user) {
 	};
 }
 
-function clearTemplates() {
-	var T = mongoose.model('MessageTemplate');
-	return new Promise(function(resolve, reject) {
-		T.remove({}, function(err) {
+function clearTemplates () {
+	var T = mongoose.model ('MessageTemplate');
+	return new Promise (function (resolve, reject) {
+		T.deleteMany ({}, function (err) {
 			if (err) {
 				console.error(err);
 				console.error('Error removing templates');

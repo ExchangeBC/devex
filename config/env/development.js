@@ -10,7 +10,9 @@ var devConfig = {
       pass: process.env.MONGODB_PASSWORD || '',
       autoReconnect: true,
       reconnectTries: Number.MAX_VALUE,
-      reconnectInterval: 1000
+	  reconnectInterval: 1000,
+	  useNewUrlParser: true,
+	  autoIndex: false
     },
     // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
