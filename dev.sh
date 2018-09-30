@@ -16,6 +16,7 @@ docker run \
 -p 3030:3000 \
 -p 5858:5858 \
 -p 35729:35729 \
+-p 9229:9229 \
 -v $pwdPath/config:/opt/mean.js/config \
 -v $pwdPath/modules:/opt/mean.js/modules \
 -v $pwdPath/public:/opt/mean.js/public \

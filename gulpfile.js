@@ -49,7 +49,7 @@ gulp.task('env:prod', function () {
 gulp.task('nodemon', function () {
   return plugins.nodemon({
     script: 'server.js',
-    nodeArgs: ['--inspect', '-r', 'dotenv/config'],
+    nodeArgs: ['--inspect=0.0.0.0', '-r', 'dotenv/config'],
     ext: 'js,html',
     watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
   });
