@@ -14,6 +14,7 @@ if [[ -n $MEAN_PID ]]; then
 fi
 docker run \
 -p 3030:3000 \
+-p 9229:9229 \
 -p 5858:5858 \
 -p 35729:35729 \
 -v $pwdPath/config:/opt/mean.js/config \

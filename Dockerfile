@@ -10,8 +10,8 @@
 FROM ubuntu:18.04
 LABEL maintainer=MEAN.JS
 
-# 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 35729 = livereload
-EXPOSE 80 443 3000 35729
+# 80 = HTTP, 443 = HTTPS, 3000 = MEAN.JS server, 9229 = node debugger, 35729 = livereload
+EXPOSE 80 443 3000 9229 35729
 
 # Set development environment as default
 ENV NODE_ENV development
