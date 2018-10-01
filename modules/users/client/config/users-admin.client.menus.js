@@ -14,10 +14,6 @@
       state: 'admin.users'
     });
     menuService.addSubMenuItem('topbar', 'admin', {
-      title: 'Manage Gov. Request',
-      state: 'admin.govs'
-    });
-    menuService.addSubMenuItem('topbar', 'admin', {
       title: 'Notify of Opportunities',
       state: 'admin.notifyopps'
     });
