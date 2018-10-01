@@ -1,7 +1,8 @@
 'use strict';
-var isUser = function (req, res, next) {return req.headers.host==='localhost:3000' ? next () : res.status (403).json ({message: 'User is not authorized'});};
-var path   = require ('path');
-var orgs   = require (path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
+var isUser = function(req, res, next) { return req.headers.host==='localhost:3000' ? next() : res.status(403).json({ message: 'User is not authorized' });};
+var path   = require('path');
+var orgs   = require(path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
+var users  = require(path.resolve('./modules/users/server/controllers/users/users.authentication.server.controller'));
 // =========================================================================
 //
 // MESSAGE HANDLER ROUTES
@@ -53,9 +54,6 @@ module.exports = function (app) {
 	//
 	// -------------------------------------------------------------------------
 	app.route('/api/message/handler/action/:actionCode/user/:userId/test/test/test').get (isUser, function (req, res) {
-		// console.log ('test test test')
-		// console.log ('action code:', req.params.actionCode);
-		// console.log ('user:', req.model);
 		if (req.params.actionCode === 'ok') return res.status (200).json ({message:'<p>this is some Good html '+req.model.displayName+'</p>'});
 		else return res.status (400).send ({message:'<p>this is some BAD html '+req.model.displayName+'</p>'});
 	});
@@ -67,5 +65,12 @@ module.exports = function (app) {
 	app.route('/api/message/handler/action/:actionCode/user/:userId/join/org/:orgId')
 		.all (isUser)
 		.get (orgs.addUserToOrg);
-
+	// -------------------------------------------------------------------------
+	//
+	// requesting user is granted government role
+	//
+	// -------------------------------------------------------------------------
+	app.route('/api/message/handler/action/:actionCode/user/:userId/gov/add/:requestingUserId')
+		.all(isUser)
+		.get(users.grantGovernmentRole)
 };

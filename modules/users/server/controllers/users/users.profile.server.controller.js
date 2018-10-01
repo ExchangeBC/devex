@@ -14,6 +14,7 @@ var User          = mongoose.model ('User');
 var validator     = require ('validator');
 var orgController = require (path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
 var claimMessages = require (path.resolve ('./modules/messages/server/controllers/messages.controller')).claimMessages;
+var sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages;
 
  // CC:  USERFIELDS
 var whitelistedFields = [
@@ -69,15 +70,12 @@ var updateOrgs = function (orglist) {
 	}));
 };
 
-
-
 /**
  * Update user details
  */
 exports.update = function (req, res) {
 	// Init Variables
 	var user = req.user;
-	// console.log (user.orgsMember);
 	if (user) {
 		// Update whitelisted fields only
 		var isClaimMessages = (!user.email && req.body.email);
@@ -90,6 +88,11 @@ exports.update = function (req, res) {
 		//
 		if (req.body.addRequest) {
 			user.addRoles (['gov-request']);
+			// Send request message and email to each admin in the system
+			User.find({ roles: { '$in' : ['admin'] } })
+			.then(function(admins) {
+				sendMessages('gov-member-request', admins, { requestingUser: user });
+			});
 		}
 		if (req.body.removeRequest) {
 			user.removeRoles (['gov-request']);
@@ -98,27 +101,23 @@ exports.update = function (req, res) {
 		user.updated = Date.now();
 		user.displayName = user.firstName + ' ' + user.lastName;
 
-		// subscriptionHandler(user)
-		// .then(function() {
-			return user.save(function (err) {
-				if (err) {
-					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
-					});
-				} else {
-					if (isClaimMessages) claimMessages (user);
-					updateOrgs (user.orgsMember);
-					req.login(user, function (err) {
-						if (err) {
-							res.status(400).send(err);
-						} else {
-							res.json(user);
-						}
-					});
-				}
-			});
-		// });
-
+		return user.save(function (err) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				if (isClaimMessages) claimMessages (user);
+				updateOrgs (user.orgsMember);
+				req.login(user, function (err) {
+					if (err) {
+						res.status(400).send(err);
+					} else {
+						res.json(user);
+					}
+				});
+			}
+		});
 	}
 	else {
 		res.status(401).send({

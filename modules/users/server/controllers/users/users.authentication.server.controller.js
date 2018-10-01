@@ -279,3 +279,42 @@ exports.removeOAuthProvider = function (req, res) {
     }
   });
 };
+
+exports.grantGovernmentRole = function(req, res) {
+
+	if (req.params.actionCode === 'decline') {
+
+		// nothing to do if declining other than return notification
+		return res.status(200).send({
+			message: '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request declined.'
+		})
+	}
+	else {
+		var requestingUserId = req.params.requestingUserId;
+		User.findById(requestingUserId, 'roles').exec(function(err, requestingUser) {
+
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			}
+			else {
+				requestingUser.roles = ['user', 'gov'];
+
+				// save user and return notification
+				requestingUser.save(function(err) {
+					if (err) {
+						return res.status(422).send({
+							message: errorHandler.getErrorMessage(err)
+						});
+					}
+					else {
+						return res.status(200).send({
+							message: '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request approved.'
+						});
+					}
+				});
+			}
+		});
+	}
+};

@@ -254,6 +254,29 @@ function seedTestMessageTemplate () {
 					linkTitleTemplate : 'OK',
 					isDefault     : true
 				}]
+			}),
+			new T({
+				messageCd			  	: 'gov-member-request',
+				messageLevel		  	: 'request',
+				description			  	: 'Notify the devex administrator account of a new government membership request',
+				isSubscriptionType	  	: false,
+				messageBodyTemplate		: '<p><strong>{{ requestingUser.firstName }} {{ requestingUser.lastName }}</strong> has requested goverment access</p><p>Approving the request will give {{ requestingUser.firstName }} permission to create and evaluate new opportunities.</p>',
+				messageShortTemplate	: '',
+				messageTitleTemplate	: '',
+				emailBodyTemplate		: '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi Admin,</p> <p><strong>{{requestingUser.firstName}} {{requestingUser.lastName}}</strong> has requested government access to the BC Developer\'s Exchange.  Click <a href="{{ domain }}/settings/messages">here</a> to authorize or decline their request.</p>',
+				emailSubjectTemplate	: 'BC Developer\'s Exchange - Government Access Request',
+				modelsRequired			: ['user'],
+				daysToArchive			: 0,
+				linkTemplate			: '/gov/add/{{ requestingUser._id }}',
+				actions					: [{
+					actionCd			: 'approve',
+					linkTitleTemplate	: 'Approve'
+				},
+				{
+					actionCd			: 'decline',
+					linkTitleTemplate	: 'Decline',
+					isDefault			: true
+				}]
 			})
 		].map (saveT));
 	});
