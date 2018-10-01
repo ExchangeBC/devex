@@ -8,6 +8,13 @@
     <edit-profile-image></edit-profile-image>
   </div>
 
+  <h3 class="settings-panel-title">
+    <avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="65"></avatar-display>
+  </h3>
+  <div style="margin: 0 0 20px;">
+    <edit-profile-image></edit-profile-image>
+  </div>
+
   <div style="margin: 10px 0;">
     <fieldset>
       <form-input ng-model="vm.user.firstName" class="col-sm-12" x-form="vm.userForm" x-options='{
@@ -43,27 +50,27 @@
       </form-input>
     </fieldset>
   </div>
-  <!--
-		<div class="alert alert-info">
-			<h5><i class="fa fa-university"></i> <span class="strong">Work for government?</span></h5>
-			<p>If you're a public sector employee in British Columbia, you can use this site to pay for code and hire Agile product teams through our lightweight procurement processes, <i class="fa fa-tag"></i> <strong>Code With Us</strong> and <i class="fa fa-group"></i> <strong>Sprint With Us</strong>.</p>
-		</div>
-	-->
 
-  <div class="checkbox">
-    <label ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
-      <input type="checkbox" ng-model="vm.isgov" ng-disabled='vm.user.email === "" || vm.user.email == null || !vm.goveditable'>
-      <span ng-if="vm.goveditable">Verify me as a B.C. public sector employee so I can post opportunities!</span>
-      <span ng-if="!vm.goveditable" style="color: gray">Verify me as a B.C. public sector employee so I can post
-        opportunities!</span>&nbsp;<i class="fa fa-question-circle" uib-tooltip="If you're a public sector employee in British Columbia, you can use the BCDevExchange to pay for code and hire Agile product teams."></i>
-    </label>
-    <p class="small" style="margin-top: 10px; margin-left: 15px;">We'll notify you by email when we've approved your
-      request.</p>
+  <div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
   </div>
 
+  <hr>
 
-  <div class="button-spacer">
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+  <div>
+    <label ng-if="!vm.isGov">
+      <i class="fa fa-question-circle" uib-tooltip="If you're a public sector employee in British Columbia, you can use the BCDevExchange to pay for code and hire Agile product teams."></i>
+      <span class="lighter">Verify me as a BC public sector employee so I can post opportunities!</span>
+
+      <button type="button" class="btn btn-sm btn-default" ng-if="!vm.pendingGovRequest" ng-click="vm.addGovtRequest()">Send
+        Request</button>
+      <button type="button" class="btn btn-sm btn-warning" ng-if="vm.pendingGovRequest" disabled>Request Pending</button>
+    </label>
+
+    <label ng-if="vm.isGov">
+      <i class="fa fa-check-circle"></i>
+      <span class="lighter">You are verified as a public sector employee and can post opportunities!</span>
+    </label>
   </div>
 
   <hr>

@@ -277,6 +277,44 @@ function seedTestMessageTemplate () {
 					linkTitleTemplate	: 'Decline',
 					isDefault			: true
 				}]
+			}),
+			new T({
+				messageCd			  	: 'gov-request-declined',
+				messageLevel		  	: 'info',
+				description			  	: 'Notify a user requesting government access that their request has been declined',
+				isSubscriptionType	  	: false,
+				messageBodyTemplate		: '<p>Your request for public sector verification has been denied.  If you feel this is in error, please send email to <a href="mailto:bcdevexchange@gov.bc.ca">bcdevexchange@gov.bc.ca</a>',
+				messageShortTemplate	: '',
+				messageTitleTemplate	: '',
+				emailBodyTemplate		: '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi {{ requestingUser.firstName }},</p><p>Your request for public sector verification has been denied.  If you feel this is in error, please send email to <a href="mailto:bcdevexchange@gov.bc.ca">bcdevexchange@gov.bc.ca</a></p>',
+				emailSubjectTemplate	: 'BC Developer\'s Exchange - Government Access Request',
+				modelsRequired			: ['user'],
+				daysToArchive			: 0,
+				linkTemplate			: '/defaultonly',
+				actions					: [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
+			}),
+			new T({
+				messageCd			  	: 'gov-request-approved',
+				messageLevel		  	: 'info',
+				description			  	: 'Notify a user requesting government access that their request has been approved',
+				isSubscriptionType	  	: false,
+				messageBodyTemplate		: '<p>Your request for public sector verification has been approved!  You are now able to <a href="{{ domain }}/opportunityadmin/createlanding">post</a> Code With Us and Sprint With Us opportunities!',
+				messageShortTemplate	: '',
+				messageTitleTemplate	: '',
+				emailBodyTemplate		: '<img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png"> <br/><br/> <p>Hi {{ requestingUser.firstName }},</p><p>Your request for public sector verification has been approved!  You are now able to <a href="{{ domain }}/opportunityadmin/createlanding">post<a/> Code With Us and Sprint With Us opportunities!</p>',
+				emailSubjectTemplate	: 'BC Developer\'s Exchange - Government Access Request',
+				modelsRequired			: ['user'],
+				daysToArchive			: 0,
+				linkTemplate			: '/defaultonly',
+				actions					: [{
+					actionCd      : 'ok',
+					linkTitleTemplate : 'OK',
+					isDefault     : true
+				}]
 			})
 		].map (saveT));
 	});

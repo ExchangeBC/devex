@@ -8,6 +8,7 @@ var path = require('path'),
   mongoose = require('mongoose'),
   passport = require('passport'),
   claimMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).claimMessages,
+  sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
   User = mongoose.model('User');
 
 // URLs for which user can't be redirected on signin
@@ -282,24 +283,37 @@ exports.removeOAuthProvider = function (req, res) {
 
 exports.grantGovernmentRole = function(req, res) {
 
-	if (req.params.actionCode === 'decline') {
-
-		// nothing to do if declining other than return notification
-		return res.status(200).send({
-			message: '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request declined.'
-		})
-	}
-	else {
-		var requestingUserId = req.params.requestingUserId;
-		User.findById(requestingUserId, 'roles').exec(function(err, requestingUser) {
-
+	var requestingUserId = req.params.requestingUserId;
+	if (requestingUserId) {
+		User.findById(requestingUserId, 'id roles').exec(function(err, requestingUser) {
 			if (err) {
 				return res.status(422).send({
 					message: errorHandler.getErrorMessage(err)
 				});
 			}
 			else {
-				requestingUser.roles = ['user', 'gov'];
+
+				// remove gov-request role
+				var index = requestingUser.roles.indexOf('gov-request');
+				if (index > 0) {
+					requestingUser.roles.splice(index, 1);
+				}
+
+				var responseType;
+				var notificationMessage;
+				if (req.params.actionCode === 'decline') {
+					// set response types and messages
+					responseType = 'gov-request-declined';
+					notificationMessage = '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request declined.';
+				}
+				else {
+					// set roles to include gov
+					requestingUser.roles.push('gov');
+
+					// set response types and messages
+					responseType = 'gov-request-approved';
+					notificationMessage = '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request approved.';
+				}
 
 				// save user and return notification
 				requestingUser.save(function(err) {
@@ -309,12 +323,14 @@ exports.grantGovernmentRole = function(req, res) {
 						});
 					}
 					else {
+						// send message to requesting user letting them know request has been approved
+						sendMessages(responseType, [requestingUser.id], { requestingUser: requestingUser });
 						return res.status(200).send({
-							message: '<i class="fa fa-lg fa-check-circle-o"></i> Goverment membership request approved.'
+							message: notificationMessage
 						});
 					}
 				});
 			}
-		});
+		})
 	}
 };

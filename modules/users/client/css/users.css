@@ -67,3 +67,6 @@ table.company-affiliations-list > tbody > tr > td.company-name {
 table.company-affiliations-list > tbody > tr > td.joined-date {
 	color: gray;
 }
+span.lighter {
+	font-size: 80%;
+}

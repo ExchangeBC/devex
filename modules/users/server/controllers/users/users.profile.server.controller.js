@@ -75,13 +75,18 @@ var updateOrgs = function (orglist) {
  */
 exports.update = function (req, res) {
 	// Init Variables
-	var user = req.user;
-	if (user) {
-		// Update whitelisted fields only
+	if (req.user) {
+
+		// user = _.extend(user, _.pick(req.body, whitelistedFields));
+		var user = _.mergeWith(req.user, _.pick(req.body, whitelistedFields), function(objValue, srcValue) {
+			if (_.isArray(objValue)) {
+				return srcValue;
+			}
+		});
+
+		user.email = user.email.toLowerCase ();
 		var isClaimMessages = (!user.email && req.body.email);
 
-		user = _.extend(user, _.pick(req.body, whitelistedFields));
-		user.email = user.email.toLowerCase ();
 		// Previous state of user
 		//
 		// this deals with marking the user as government or not
@@ -93,9 +98,6 @@ exports.update = function (req, res) {
 			.then(function(admins) {
 				sendMessages('gov-member-request', admins, { requestingUser: user });
 			});
-		}
-		if (req.body.removeRequest) {
-			user.removeRoles (['gov-request']);
 		}
 
 		user.updated = Date.now();
