@@ -105,7 +105,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, Notification, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
+	.controller ('ProposalEditSWUController', function (capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, OpportunitiesService, Notification, CapabilitiesMethods, org, TINYMCE_OPTIONS, resources) {
 		var ppp                                   = this;
 		var _init = function () {
 			ppp.trust    = $sce.trustAsHtml;
@@ -489,53 +489,88 @@
 		// save the proposal - promise
 		//
 		// -------------------------------------------------------------------------
-		var saveproposal = function (goodmessage, badmessage) {
-			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
+		var saveProposal = function(proposalToSave) {
+			var validPriceAmounts = !ppp.exceededOpportunityAmount &&
+									!proposalToSave.phases.inception.invalidAmount &&
+									!proposalToSave.phases.proto.invalidAmount &&
+									!proposalToSave.phases.implementation.invalidAmount;
 
 			// validate price amounts - shouldn't be able to save invalid amounts
 			if (!validPriceAmounts) {
-				Notification.error({
-					message: 'Invalid price amounts entered',
-					title: '<i class="glyphicon glyphicon-remove"</i> Error submitting proposal'
-				});
 				ppp.activateTab(4);
 				window.scrollTo(0, 0);
-				return;
+				return Promise.reject({
+					title: 'Error',
+					message: 'Invalid price amounts entered'
+				});
 			}
 
-			ppp.proposal.opportunity          	= ppp.opportunity;
-			ppp.proposal.businessName         	= ppp.org.name;
-			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
-			ppp.proposal.businessContactName  	= ppp.org.contactName;
-			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
-			ppp.proposal.teamQuestionResponses 	= ppp.responses;
-			setTeams ();
-			return new Promise (function (resolve, reject) {
-				ppp.proposal.createOrUpdate ()
-				.then (
-					function (response) {
-						Notification.success({ message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'});
-						resolve ();
-					},
-					function (error) {
-						 Notification.error ({ message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved' });
-						 reject ();
-					}
-				);
-			});
+			// check opportunity deadline on server (do not check on client as the deadline may have passed since last request)
+			return OpportunitiesService.getDeadlineStatus({opportunityId: ppp.opportunity._id}).$promise
+			.then(function(response) {
+				if (response.deadlineStatus === 'CLOSED') {
+					return Promise.reject({
+						title: 'Error',
+						message: 'The opportunity deadline has passed.'
+					});
+				}
+				else {
+					proposalToSave.opportunity          	= ppp.opportunity;
+					proposalToSave.businessName         	= ppp.org.name;
+					proposalToSave.businessAddress      	= ppp.org.fullAddress;
+					proposalToSave.businessContactName  	= ppp.org.contactName;
+					proposalToSave.businessContactEmail 	= ppp.org.contactEmail;
+					proposalToSave.businessContactPhone 	= ppp.org.contactPhone;
+					proposalToSave.teamQuestionResponses 	= ppp.responses;
+
+					setTeams ();
+
+					return new Promise(function(resolve, reject) {
+						proposalToSave.createOrUpdate()
+						.then (
+							function(response) {
+								resolve({
+									savedProposal: response,
+									message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>',
+									title: 'Success'
+								});
+							},
+							function(error) {
+								reject({
+									 message: error.data.message,
+									 title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved'
+								 });
+							}
+						);
+					});
+				}
+			})
 		};
 		// -------------------------------------------------------------------------
 		//
 		// perform the save, both user info and proposal info
 		//
 		// -------------------------------------------------------------------------
-		ppp.save = function (isvalid) {
+		ppp.save = function(isvalid) {
 			if (!isvalid) {
 				$scope.$broadcast('show-errors-check-validity', 'ppp.form.proposalform');
 				return false;
 			}
-			saveproposal ();
+			var proposalToSave = angular.copy(ppp.proposal);
+			saveProposal(proposalToSave)
+			.then(function(response) {
+				ppp.proposal = response.savedProposal;
+				Notification.success({
+					title: response.title,
+					message: response.message
+				})
+			})
+			.catch(function(error) {
+				Notification.error({
+					title: error.title,
+					message: error.message
+				});
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
@@ -551,48 +586,86 @@
 		// function is a boolean as to whether or not to perform the action
 		//
 		// -------------------------------------------------------------------------
-		var performdelete = function (q) {
-			ask.yesNo (q).then (function (r) {
-				if (r) {
-					ppp.proposal.$remove (
-						function () {
-							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Proposal deleted'});
-							$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
-						},
-						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - could not delete your proposal'});
-						}
-					);
+		var performDelete = function() {
+
+			OpportunitiesService.getDeadlineStatus({ opportunityId: ppp.opportunity._id }).$promise
+			.then(function(response) {
+				if (response.deadlineStatus === 'CLOSED') {
+					Notification.error({
+						title: 'Error',
+						message: '<i class="fa fa-exclamation-triangle"></i> Unable to withdraw proposal.  The opportunity deadline has passed.'
+					});
+					return;
 				}
-			});
+				else {
+					var message = 'Are you sure you want to delete your proposal? All your work will be lost.';
+					ask.yesNo(message).then(function(response) {
+						if (response) {
+
+							ppp.proposal.$remove (
+								function() {
+									Notification.success({
+										title: 'Success',
+										message: '<i class="fa fa-check-circle"></i> Proposal deleted'
+									});
+
+									$state.go ('opportunities.viewswu', { opportunityId: ppp.opportunity.code });
+								},
+								function(error) {
+									 Notification.error ({
+										 title: 'Error',
+										 message: '<i class="fa fa-exclamation-triangle"></i>' + error.message});
+								}
+							);
+						}
+					});
+				}
+			})
 		};
-		var performwithdrawal = function (txt) {
+
+		var performWithdrawal = function() {
 			ppp.agreeConfirm = false;
-			ppp.proposal.status = 'Draft';
-			saveproposal ('<h4>Your proposal has been withdrawn</h4>');
+
+			var proposalToSave = angular.copy(ppp.proposal);
+			proposalToSave.status = 'Draft';
+
+			saveProposal(proposalToSave)
+			.then(function(response) {
+				ppp.proposal = response.savedProposal;
+				Notification.success({
+					title: 'Success',
+					message: '<h4>Your proposal has been withdrawn</h4>'
+				});
+			})
+			.catch(function(error) {
+				Notification.error({
+					title: 'Error',
+					message: error.message
+				});
+			});
 		};
 		// -------------------------------------------------------------------------
 		//
 		// this deletes a draft
 		//
 		// -------------------------------------------------------------------------
-		ppp.delete = function () {
-			performdelete ('Are you sure you want to delete your proposal? All your work will be lost. There is no undo for this!');
+		ppp.delete = function() {
+			performDelete();
 		};
 		// -------------------------------------------------------------------------
 		//
 		// this deletes a submission
 		//
 		// -------------------------------------------------------------------------
-		ppp.withdraw = function () {
-			performwithdrawal ();
+		ppp.withdraw = function() {
+			performWithdrawal();
 		};
 		// -------------------------------------------------------------------------
 		//
 		// submit the proposal
 		//
 		// -------------------------------------------------------------------------
-		ppp.submit = function () {
+		ppp.submit = function() {
 
 			// validate price amounts - shouldn't be able to sumbit prices that exceed max
 			var validPriceAmounts = !ppp.exceededOpportunityAmount && !ppp.proposal.phases.inception.invalidAmount && !ppp.proposal.phases.proto.invalidAmount && !ppp.proposal.phases.implementation.invalidAmount;
@@ -632,17 +705,25 @@
 				return;
 			}
 
-			ppp.proposal.opportunity          	= ppp.opportunity;
-			ppp.proposal.businessName         	= ppp.org.name;
-			ppp.proposal.businessAddress      	= ppp.org.fullAddress;
-			ppp.proposal.businessContactName  	= ppp.org.contactName;
-			ppp.proposal.businessContactEmail 	= ppp.org.contactEmail;
-			ppp.proposal.businessContactPhone 	= ppp.org.contactPhone;
-			ppp.proposal.teamQuestionResponses 	= ppp.responses;
-			setTeams ();
-			ppp.proposal.status = 'Submitted';
-			saveproposal ('<h4>Your proposal has been submitted</h4>')
-			.then(function() {
+			setTeams();
+
+			var proposalToSave = angular.copy(ppp.proposal);
+			proposalToSave.status = 'Submitted';
+
+			saveProposal(proposalToSave)
+			.then(function(response) {
+				ppp.proposal = response.savedProposal;
+				Notification.success({
+					title: response.title,
+					message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Proposal submitted</h4>'
+				});
+				ppp.close();
+			})
+			.catch(function(error) {
+				Notification.error({
+					title: error.title,
+					message: error.message
+				})
 				ppp.close();
 			});
 		}

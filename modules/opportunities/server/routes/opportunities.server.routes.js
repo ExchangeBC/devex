@@ -72,6 +72,11 @@ module.exports = function(app) {
 	app.route('/api/opportunities/watch/remove/:opportunityId')
 		.get(opportunities.removeWatch);
 
+	//
+	// add route for querying the status of an opportunity
+	//
+	app.route('/api/opportunities/deadline/status/:opportunityId')
+		.get(opportunities.deadlineStatus);
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);

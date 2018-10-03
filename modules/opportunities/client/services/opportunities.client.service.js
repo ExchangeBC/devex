@@ -101,6 +101,10 @@
 			removeWatch: {
 				method: 'GET',
 				url : '/api/opportunities/watch/remove/:opportunityId'
+			},
+			getDeadlineStatus: {
+				method: 'GET',
+				url : '/api/opportunities/deadline/status/:opportunityId'
 			}
 		});
 		angular.extend (Opportunity.prototype, {

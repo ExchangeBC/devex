@@ -910,6 +910,10 @@ exports.removeWatch = function (req, res) {
 	res.json ({ok:true});
 };
 
+exports.deadlineStatus = function(req, res) {
+	var deadlineStatus = (new Date(req.opportunity.deadline) - new Date()) <= 0 ? 'CLOSED' : 'OPEN';
+	res.json({ deadlineStatus: deadlineStatus });
+}
 // -------------------------------------------------------------------------
 //
 // magic that populates the opportunity on the request
