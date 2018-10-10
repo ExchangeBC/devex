@@ -1,15 +1,6 @@
 (function() {
 	'use strict';
 
-	HeaderController.$inject = [
-		'$scope',
-		'$state',
-		'$location',
-		'Authentication',
-		'menuService',
-		'$uibModal',
-		'Idle'
-	];
 	WarningModalController.$inject = ['$scope', 'Idle'];
 	angular
 		.module('core')
