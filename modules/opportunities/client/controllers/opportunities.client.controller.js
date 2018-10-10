@@ -7,18 +7,18 @@
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunitiesListController', function (OpportunitiesService, Authentication) {
+	.controller('OpportunitiesListController', ['OpportunitiesService', 'Authentication', function (OpportunitiesService, Authentication) {
 		var vm      = this;
 		vm.opportunities = OpportunitiesService.query();
 		var isUser = Authentication.user;
 		vm.isUser = isUser;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller for the master list of programs
 	//
 	// =========================================================================
-	.controller('OpportunityLandingController', function (Authentication, $stateParams) {
+	.controller('OpportunityLandingController', ['Authentication', '$stateParams', function (Authentication, $stateParams) {
 		var vm          = this;
 		vm.programId    = $stateParams.programId;
 		vm.programTitle = $stateParams.programTitle;
@@ -29,13 +29,13 @@
 		var isAdmin     = isUser && !!~Authentication.user.roles.indexOf ('admin');
 		var isGov       = isUser && !!~Authentication.user.roles.indexOf ('gov');
 		vm.userCanAdd   = (isAdmin || isGov);
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityViewController', function ($state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
+	.controller('OpportunityViewController', ['$state', '$stateParams', '$sce', 'opportunity', 'Authentication', 'OpportunitiesService', 'ProposalsService', 'Notification', 'modalService', 'ask', 'myproposal', 'OpportunitiesCommon', function ($state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 		if (!opportunity) {
 			console.error ('no opportunity provided');
 			$state.go('opportunities.list');
@@ -430,13 +430,13 @@
 				}
 			});
 		};
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the opportunity page
 	//
 	// =========================================================================
-	.controller('OpportunityEditController', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+	.controller('OpportunityEditController', ['$scope', '$state', '$stateParams', '$window', '$sce', 'opportunity', 'editing', 'projects', 'Authentication', 'Notification', 'dataService', 'ask', 'TINYMCE_OPTIONS', 'OpportunitiesCommon', function ($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 		var vm                                = this;
 		vm.trust               				  = $sce.trustAsHtml;
 		var originalPublishedState            = opportunity.isPublished;
@@ -707,6 +707,6 @@
 		vm.toggleHelp = function(field) {
 			vm.displayHelp[field] = ! vm.displayHelp[field];
 		};
-	})
+	}])
 	;
 }());

@@ -6,7 +6,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
+	.controller ('ProposalViewController', ['capabilities', '$sce', '$state', 'proposal', 'ProposalsService', 'Notification', 'ask', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
 		var ppp           = this;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
@@ -118,13 +118,13 @@
 				}
 			});
 		};
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalEditController', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
+	.controller ('ProposalEditController', ['uibButtonConfig', 'capabilities', 'editing', '$scope', '$sce', 'ask', 'Upload', '$state', 'proposal', 'opportunity', 'Authentication', 'ProposalsService', 'UsersService', 'Notification', 'dataService', 'CapabilitiesMethods', 'org', 'TINYMCE_OPTIONS', function (uibButtonConfig, capabilities, editing, $scope, $sce, ask, Upload, $state, proposal, opportunity, Authentication, ProposalsService, UsersService, Notification, dataService, CapabilitiesMethods, org, TINYMCE_OPTIONS) {
 		var isInArray = function (a,el) {return a.map (function(al){return (el===al);}).reduce(function(a,c){return (a||c);},false); };
 		var ppp              = this;
 		// ppp.features         = window.features;
@@ -550,6 +550,6 @@
 			else if (type.indexOf ('excel') > -1) return 'excel';
 			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
 		};
-	})
+	}])
 	;
 }());

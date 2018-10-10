@@ -68,28 +68,28 @@
         url: '/notifyopps',
         templateUrl: '/modules/users/client/views/admin/listopps.client.view.html',
         controllerAs: 'vm',
-        controller: function (users) {
+        controller: ['users', function (users) {
           var vm = this;
           vm.users = users;
-        },
+        }],
         resolve: {
-          users: function (AdminService) {
+          users: ['AdminService', function (AdminService) {
             return AdminService.listopps().$promise;
-          }
+          }]
         }
       })
       .state('admin.notifymeets', {
         url: '/notifymeets',
         templateUrl: '/modules/users/client/views/admin/listmeets.client.view.html',
         controllerAs: 'vm',
-        controller: function (users) {
+        controller: ['users', function (users) {
           var vm = this;
           vm.users = users;
-        },
+        }],
         resolve: {
-          users: function (AdminService) {
+          users: ['AdminService', function (AdminService) {
             return AdminService.listmeets().$promise;
-          }
+          }]
         }
       })
       .state('admin.user-edit', {

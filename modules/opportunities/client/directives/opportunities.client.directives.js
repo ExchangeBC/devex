@@ -27,7 +27,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/opportunities/client/views/opportunity-list-directive.html',
-			controller   : function ($scope, OpportunitiesService, OpportunitiesCommon, Authentication, Notification, modalService, $q, ask, UsersService) {
+			controller   : ['$scope', 'OpportunitiesService', 'OpportunitiesCommon', 'Authentication', 'Notification', 'modalService', '$q', 'ask', 'UsersService', function ($scope, OpportunitiesService, OpportunitiesCommon, Authentication, Notification, modalService, $q, ask, UsersService) {
 				var rightNow = new Date ();
 				var vm     = this;
 				// vm.features = window.features;
@@ -219,7 +219,7 @@
 					Notification.success ({ message: '<i class="fa fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities' });
 					return false;
 				};
-			}
+			}]
 		}
 	})
 	;

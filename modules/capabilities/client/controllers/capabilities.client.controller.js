@@ -6,29 +6,29 @@
 	// Controller for the master list of capabilities
 	//
 	// =========================================================================
-	.controller ('CapabilitiesListController', function (capabilities, Authentication) {
+	.controller ('CapabilitiesListController', ['capabilities', 'Authentication', function (capabilities, Authentication) {
 		var vm          = this;
 		vm.capabilities = capabilities;
 		vm.auth         = Authentication.permissions ();
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('CapabilityViewController', function ($sce, capability, Authentication) {
+	.controller ('CapabilityViewController', ['$sce', 'capability', 'Authentication', function ($sce, capability, Authentication) {
 		var vm        = this;
 		vm.trust      = $sce.trustAsHtml;
 		vm.capability = capability;
 		vm.auth       = Authentication.permissions ();
 		vm.canEdit    = vm.auth.isAdmin;
-	})
+	}])
 	// =========================================================================
 	//
 	// Controller the view of the capability page
 	//
 	// =========================================================================
-	.controller ('CapabilityEditController', function ($window, $scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS, CapabilitySkillsService) {
+	.controller ('CapabilityEditController', ['$window', '$scope', '$state', 'capability', 'Authentication', 'Notification', 'TINYMCE_OPTIONS', 'CapabilitySkillsService', function ($window, $scope, $state, capability, Authentication, Notification, TINYMCE_OPTIONS, CapabilitySkillsService) {
 		var qqq            = this;
 		qqq.capability     = capability;
 		qqq.auth           = Authentication.permissions ();
@@ -215,6 +215,6 @@
 				});
 			}
 		};
-	})
+	}])
 	;
 }());

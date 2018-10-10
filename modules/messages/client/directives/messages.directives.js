@@ -14,7 +14,7 @@
 				context   : '@'
 			},
 			templateUrl  : '/modules/messages/client/views/message-list.html',
-			controller   : function ($sce, $rootScope, $scope, MessagesService, Authentication, $location) {
+			controller   : ['$sce', '$rootScope', '$scope', 'MessagesService', 'Authentication', '$location', function ($sce, $rootScope, $scope, MessagesService, Authentication, $location) {
 				var vm        = this;
 				vm.trust      = $sce.trustAsHtml;
 				vm.auth       = Authentication.permissions ();
@@ -91,7 +91,7 @@
 					vm.reset ();
 				});
 				vm.reset ();
-			}
+			}]
 		}
 	})
 	// -------------------------------------------------------------------------
@@ -107,13 +107,13 @@
 				message : '='
 			},
 			templateUrl  : '/modules/messages/client/views/view.message.directive.html',
-			controller   : function ($scope, Authentication) {
+			controller   : ['$scope', 'Authentication', function ($scope, Authentication) {
 				var vm        = this;
 				vm.auth       = Authentication;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;
 				vm.message = $scope.message;
-			}
+			}]
 		}
 
 	})

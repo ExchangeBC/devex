@@ -17,7 +17,7 @@
 				title: '@'
 			},
 			templateUrl  : '/modules/core/client/views/members.directive.html',
-			controller   : function ($scope, $rootScope, Authentication) {
+			controller   : ['$scope', '$rootScope', 'Authentication', function ($scope, $rootScope, Authentication) {
 				var vm = this;
 				var isUser = Authentication.user;
 				vm.isUser = isUser ;
@@ -57,7 +57,7 @@
 					reset ();
 				});
 				reset ();
-			}
+			}]
 		}
 	})
 	// -------------------------------------------------------------------------
@@ -76,7 +76,7 @@
 				title: '@'
 			},
 			templateUrl  : '/modules/core/client/views/member.requests.directive.html',
-			controller   : function ($scope, $rootScope, Authentication) {
+			controller   : ['$scope', '$rootScope', 'Authentication', function ($scope, $rootScope, Authentication) {
 				var vm = this;
 				var isUser                 = Authentication.user;
 				vm.isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');vm.model = $scope.model;
@@ -114,7 +114,7 @@
 					reset ();
 				});
 				reset ();
-			}
+			}]
 		}
 	})
 

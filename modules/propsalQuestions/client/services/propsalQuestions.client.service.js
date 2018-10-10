@@ -1,7 +1,7 @@
 // PropsalQuestions service used to communicate PropsalQuestions REST endpoints
 (function () {
 	'use strict';
-	angular.module ('propsalQuestions.services').factory ('PropsalQuestionsService', function ($resource, $log) {
+	angular.module ('propsalQuestions.services').factory ('PropsalQuestionsService', ['$resource', '$log', function ($resource, $log) {
 		var PropsalQuestion = $resource ('/api/propsalQuestions/:propsalQuestionId', {
 			propsalQuestionId: '@_id'
 		}, {
@@ -20,5 +20,5 @@
 			}
 		});
 		return PropsalQuestion;
-	});
+	}]);
 }());

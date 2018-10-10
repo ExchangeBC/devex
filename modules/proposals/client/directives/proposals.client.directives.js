@@ -29,7 +29,7 @@
 				proposal: '='
 			},
 			bindToController: true,
-			controller   : function ($scope, ProposalsService, Authentication) {
+			controller   : ['$scope', 'ProposalsService', 'Authentication', function ($scope, ProposalsService, Authentication) {
 				var qaz = this;
 				//
 				// we need to determine which of several possibilities we have
@@ -73,7 +73,7 @@
 					//
 					else qaz.case = 'needscompany';
 				}
-			}
+			}]
 		};
 	})
 	// -------------------------------------------------------------------------
@@ -92,7 +92,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/proposals/client/views/list.proposals.directive.html',
-			controller   : function ($scope, ProposalsService, Authentication, Notification) {
+			controller   : ['$scope', 'ProposalsService', 'Authentication', 'Notification', function ($scope, ProposalsService, Authentication, Notification) {
 				var vm     = this;
 				vm.opportunity = $scope.opportunity;
 				vm.context = $scope.context;
@@ -174,7 +174,7 @@
 						});
 					});
 				};
-			}
+			}]
 		}
 	})
 	// -------------------------------------------------------------------------
@@ -192,7 +192,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/proposals/client/views/company-proposals-directive.html',
-			controller   : function ($scope, TeamsService, Authentication, Notification) {
+			controller   : ['$scope', 'TeamsService', 'Authentication', 'Notification', function ($scope, TeamsService, Authentication, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
@@ -201,7 +201,7 @@
 				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
 				vm.userCanAdd = vm.isAdmin;
 				if ($scope.title) vm.title = $scope.title;
-			}
+			}]
 		}
 	})
 	;

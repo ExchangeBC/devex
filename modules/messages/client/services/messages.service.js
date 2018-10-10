@@ -7,7 +7,7 @@
 	// service for database interaction - the $resource for messages
 	//
 	// -------------------------------------------------------------------------
-	.factory('MessagesService', function ($resource, $log) {
+	.factory('MessagesService', ['$resource', '$log', function ($resource, $log) {
 		var Payload = $resource('/api/messages/:messageId', {
 			messageId: '@_id'
 		}, {
@@ -59,13 +59,13 @@
 			}
 		});
 		return Payload;
-	})
+	}])
 	// -------------------------------------------------------------------------
 	//
 	// service for database interaction - the $resource for messages
 	//
 	// -------------------------------------------------------------------------
-	.factory('MessageTemplatesService', function ($resource, $log) {
+	.factory('MessageTemplatesService', ['$resource', '$log', function ($resource, $log) {
 		var Payload = $resource('/api/messagetemplates/:templateId', {
 			templateId: '@_id'
 		}, {update: {method: 'PUT'}});
@@ -80,6 +80,6 @@
 			}
 		});
 		return Payload;
-	})
+	}])
 	;
 }());

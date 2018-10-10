@@ -31,9 +31,9 @@
 			controller   : 'PropsalQuestionsListController',
 			controllerAs : 'vm',
 			resolve: {
-				propsalQuestions: function ($stateParams, PropsalQuestionsService) {
+				propsalQuestions: ['$stateParams', 'PropsalQuestionsService', function ($stateParams, PropsalQuestionsService) {
 					return PropsalQuestionsService.query ();
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'PropsalQuestions List'
@@ -50,11 +50,11 @@
 			controller   : 'PropsalQuestionViewController',
 			controllerAs : 'vm',
 			resolve: {
-				propsalQuestion: function ($stateParams, PropsalQuestionsService) {
+				propsalQuestion: ['$stateParams', 'PropsalQuestionsService', function ($stateParams, PropsalQuestionsService) {
 					return PropsalQuestionsService.get ({
 						propsalQuestionId: $stateParams.propsalQuestionId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				pageTitle: 'PropsalQuestion: {{ propsalQuestion.name }}'
@@ -82,11 +82,11 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
-				propsalQuestion: function ($stateParams, PropsalQuestionsService) {
+				propsalQuestion: ['$stateParams', 'PropsalQuestionsService', function ($stateParams, PropsalQuestionsService) {
 					return PropsalQuestionsService.get ({
 						propsalQuestionId: $stateParams.propsalQuestionId
 					}).$promise;
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
@@ -105,9 +105,9 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
-				propsalQuestion: function (PropsalQuestionsService) {
+				propsalQuestion: ['PropsalQuestionsService', function (PropsalQuestionsService) {
 					return new PropsalQuestionsService ();
-				}
+				}]
 			},
 			data: {
 				roles: ['admin', 'gov'],
