@@ -20,16 +20,19 @@
     "build": "gulp build",
     "dev": "gulp default",
     "quiet": "gulp quiet",
-    "debug": "gulp debug"
+    "debug": "gulp debug",
+    "pack": "webpack"
   },
   "dependencies": {
     "acl": "0.4.11",
     "angular": "^1.7.5",
     "angular-animate": "^1.7.5",
     "angular-breadcrumb": "~0.4.1",
+    "angular-drag-and-drop-lists": "^2.1.0",
     "angular-messages": "^1.7.5",
     "angular-mocks": "^1.7.5",
     "angular-resource": "^1.7.5",
+    "angular-sanitize": "^1.7.5",
     "angular-ui-bootstrap": "~1.2.1",
     "angular-ui-notification": "~0.3.6",
     "angular-ui-router": "^1.0.20",
@@ -64,6 +67,7 @@
     "morgan": "1.9.0",
     "multer": "1.3.1",
     "ng-file-upload": "^12.2.13",
+    "ng-idle": "^1.3.2",
     "ng-img-crop": "^0.2.0",
     "node-fetch": "2.1.2",
     "nodemailer": "4.6.8",
@@ -96,6 +100,10 @@
     "eslint": "5.4.0",
     "eslint-config-airbnb": "16.1.0",
     "eslint-plugin-import": "2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.8.2",
+    "exports-loader": "^0.7.0",
+    "file-loader": "^2.0.0",
     "gulp": "3.9.1",
     "gulp-angular-templatecache": "2.2.1",
     "gulp-autoprefixer": "5.0.0",
@@ -117,6 +125,7 @@
     "gulp-sass": "4.0.1",
     "gulp-uglify": "3.0.1",
     "gulp-util": "3.0.8",
+    "imports-loader": "^0.8.0",
     "istanbul": "0.4.5",
     "karma": "3.0.0",
     "karma-chrome-launcher": "2.2.0",
@@ -130,6 +139,8 @@
     "run-sequence": "2.2.1",
     "semver": "5.5.0",
     "should": "13.2.3",
-    "supertest": "3.1.0"
+    "supertest": "3.1.0",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
   }
 }
