@@ -1,5 +1,8 @@
+// Import certain style elements here so that webpack picks them up
 import '../../../../public/less/theme.less';
 import 'font-awesome/scss/font-awesome.scss';
+import '../css/bl_checkbox.css';
+import '../css/core.css';
 
 (function() {
 	'use strict';

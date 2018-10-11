@@ -1,3 +1,6 @@
+// Import certain style elements here so that webpack picks them up
+import '../css/opportunities.css';
+
 // =========================================================================
 //
 // `this set of controllers is for SWU opportunities specifically
@@ -42,7 +45,9 @@
 			'opportunity',
 			'Authentication',
 			'OpportunitiesService',
+			'ProposalsService',
 			'Notification',
+			'modalService',
 			'ask',
 			'myproposal',
 			'CapabilitiesMethods',
@@ -56,7 +61,9 @@
 				opportunity,
 				Authentication,
 				OpportunitiesService,
+				ProposalsService,
 				Notification,
+				modalService,
 				ask,
 				myproposal,
 				CapabilitiesMethods,

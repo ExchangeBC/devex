@@ -1,64 +1,74 @@
-(function () {
-  'use strict';
+import '../css/users.css';
 
-  angular
-    .module('users.admin')
-    .controller('UserController', UserController);
+(function() {
+	'use strict';
 
-  UserController.$inject = ['$scope', '$state', '$window', 'Authentication', 'userResolve', 'Notification'];
+	angular.module('users.admin').controller('UserController', UserController);
 
-  function UserController($scope, $state, $window, Authentication, user, Notification) {
-    var vm = this;
-    vm.authentication = Authentication;
-    vm.user = user;
-    vm.remove = remove;
-    vm.update = update;
-    vm.cancel = cancel;
-    vm.isContextUserSelf = isContextUserSelf;
+	UserController.$inject = ['$scope', '$state', '$window', 'Authentication', 'userResolve', 'Notification'];
 
-    function remove(user) {
-      if ($window.confirm('Are you sure you want to delete this user?')) {
-        if (user) {
-          user.$remove();
+	function UserController($scope, $state, $window, Authentication, user, Notification) {
+		var vm = this;
+		vm.authentication = Authentication;
+		vm.user = user;
+		vm.remove = remove;
+		vm.update = update;
+		vm.cancel = cancel;
+		vm.isContextUserSelf = isContextUserSelf;
 
-          vm.users.splice(vm.users.indexOf(user), 1);
-          Notification.success('User deleted successfully!');
-        } else {
-          vm.user.$remove(function () {
-            $state.go('admin.users');
-            Notification.success({ message: '<i class="fas fa-check-circle"></i> User deleted successfully!' });
-          });
-        }
-      }
-    }
+		function remove(user) {
+			if ($window.confirm('Are you sure you want to delete this user?')) {
+				if (user) {
+					user.$remove();
 
-    function update(isValid) {
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.userForm');
+					vm.users.splice(vm.users.indexOf(user), 1);
+					Notification.success('User deleted successfully!');
+				} else {
+					vm.user.$remove(function() {
+						$state.go('admin.users');
+						Notification.success({
+							message: '<i class="fas fa-check-circle"></i> User deleted successfully!'
+						});
+					});
+				}
+			}
+		}
 
-        return false;
-      }
+		function update(isValid) {
+			if (!isValid) {
+				$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
 
-      var user = vm.user;
+				return false;
+			}
 
-      user.$update(function () {
-        $state.go('admin.user', {
-          userId: user._id
-        });
-        Notification.success({ message: '<i class="fas fa-2x fa-check-circle"></i><br><h4>Changes saved!</h4>' });
-      }, function (errorResponse) {
-        Notification.error({ message: errorResponse.data.message, title: '<i class="fas fa-2x fa-exclamation-triangle"></i><br><h4>User update error!</h4>' });
-      });
-    }
+			var user = vm.user;
 
-    function cancel() {
-      $state.go('admin.user', {
-        userId: user._id
-      });
-    }
+			user.$update(
+				function() {
+					$state.go('admin.user', {
+						userId: user._id
+					});
+					Notification.success({
+						message: '<i class="fas fa-2x fa-check-circle"></i><br><h4>Changes saved!</h4>'
+					});
+				},
+				function(errorResponse) {
+					Notification.error({
+						message: errorResponse.data.message,
+						title: '<i class="fas fa-2x fa-exclamation-triangle"></i><br><h4>User update error!</h4>'
+					});
+				}
+			);
+		}
 
-    function isContextUserSelf() {
-      return vm.user.username === vm.authentication.user.username;
-    }
-  }
+		function cancel() {
+			$state.go('admin.user', {
+				userId: user._id
+			});
+		}
+
+		function isContextUserSelf() {
+			return vm.user.username === vm.authentication.user.username;
+		}
+	}
 }());
