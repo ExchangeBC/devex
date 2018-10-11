@@ -91,6 +91,6 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
 		})
-	],
-	stats: 'errors-only'
+	]
+	// stats: 'errors-only'
 };
