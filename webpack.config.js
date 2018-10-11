@@ -44,7 +44,7 @@ module.exports = {
 		mainFiles: ['index', 'compile/minified/ng-img-crop']
 	},
 	optimization: {
-		minimize: false
+		minimize: true
 	},
 	module: {
 		rules: [
@@ -91,5 +91,6 @@ module.exports = {
 		new MiniCssExtractPlugin({
 			filename: '[name].css'
 		})
-	]
+	],
+	stats: 'errors-only'
 };

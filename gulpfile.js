@@ -25,7 +25,11 @@ var _ = require('lodash'),
 	webdriver_update = require('gulp-protractor').webdriver_update,
 	webdriver_standalone = require('gulp-protractor').webdriver_standalone,
 	del = require('del'),
-	KarmaServer = require('karma').Server;
+	KarmaServer = require('karma').Server,
+	gprint = require('gulp-print').default,
+	vinylPaths = require('vinyl-paths'),
+	webpack_stream = require('webpack-stream'),
+	webpack_config = require('./webpack.config.js');
 
 // Local settings
 var changedTestFiles = [];
@@ -43,6 +47,26 @@ gulp.task('env:dev', function() {
 // Set NODE_ENV to 'production'
 gulp.task('env:prod', function() {
 	process.env.NODE_ENV = 'production';
+});
+
+// Define paths for webpack
+const paths = {
+	build: 'public/dist/'
+};
+
+// Clean task
+gulp.task('clean', () => {
+	return (
+		gulp
+			.src(`${paths.build}*`)
+			// .pipe(gprint())
+			.pipe(vinylPaths(del))
+	);
+});
+
+// Webpack task
+gulp.task('webpack', ['clean'], () => {
+	return webpack_stream(webpack_config).pipe(gulp.dest(`${paths.build}`));
 });
 
 // Nodemon task
@@ -80,7 +104,6 @@ gulp.task('watch', function() {
 		gulp.watch(defaultAssets.client.sass, ['sass', 'csslint']).on('change', plugins.refresh.changed);
 		gulp.watch(defaultAssets.client.less, ['less', 'csslint']).on('change', plugins.refresh.changed);
 		gulp.watch(defaultAssets.client.theme.less.watch, ['themecss', 'csslint']);
-		gulp.watch(defaultAssets.client.theme.sass.watch, ['themecss', 'csslint']);
 
 		if (process.env.NODE_ENV === 'production') {
 			gulp.watch(defaultAssets.server.gulpConfig, ['templatecache', 'eslint']);
@@ -119,9 +142,10 @@ gulp.task('watch:server:run-tests', function() {
 
 // CSS linting task
 gulp.task('csslint', function() {
-	// return gulp.src(defaultAssets.client.css)
-	// 	.pipe(plugins.csslint('.csslintrc'))
-	// 	.pipe(plugins.csslint.formatter());
+	return gulp
+		.src(defaultAssets.client.css)
+		.pipe(plugins.csslint('.csslintrc'))
+		.pipe(plugins.csslint.formatter());
 	// Don't fail CSS issues yet
 	// .pipe(plugins.csslint.failFormatter());
 });
@@ -129,8 +153,8 @@ gulp.task('csslint', function() {
 // Compile theme CSS
 gulp.task('themecss', function() {
 	return gulp
-		.src(defaultAssets.client.theme.sass.entry)
-		.pipe(plugins.sass())
+		.src(defaultAssets.client.theme.less.entry)
+		.pipe(plugins.less())
 		.pipe(plugins.autoprefixer())
 		.pipe(plugins.concat('theme.css'))
 		.pipe(gulp.dest('public/dist'));
@@ -366,10 +390,7 @@ gulp.task('updateLastPublished', function(done) {
 	// Connect mg
 	mg.connect(function() {
 		var Opportunity = mongoose.model('Opportunity');
-		var promise = Opportunity.find({
-			isPublished: true,
-			lastPublished: null
-		}).exec();
+		var promise = Opportunity.find({ isPublished: true, lastPublished: null }).exec();
 
 		promise
 			.then(function(records) {
@@ -543,24 +564,24 @@ gulp.task('test:coverage', function(done) {
 // this means that changes need a stop and start, but oh well...
 //
 gulp.task('quiet', function(done) {
-	runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon'], done);
-	// runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['nodemon'], done);
+	// runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon'], done);
+	runSequence('env:dev', 'copyLocalEnvConfig', 'lint', 'nodemon', done);
 });
 
 // Run the project in development mode
 gulp.task('default', function(done) {
-	runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon', 'watch'], done);
-	// runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['nodemon', 'watch'], done);
+	// runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon', 'watch'], done);
+	runSequence('env:dev', 'copyLocalEnvConfig', 'lint', 'webpack', ['nodemon', 'watch'], done);
 });
 
 // Run the project in debug mode
 gulp.task('debug', function(done) {
-	runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon-debug', 'watch'], done);
-	// runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'lint', ['node-inspector', 'nodemon-debug', 'watch'], done);
+	// runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon-debug', 'watch'], done);
+	runSequence('env:dev', 'copyLocalEnvConfig', 'lint', ['nodemon-debug', 'watch'], done);
 });
 
 // Run the project in production mode
 gulp.task('prod', function(done) {
-	runSequence(['copyLocalEnvConfig', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
-	// runSequence(['copyLocalEnvConfig', 'makeUploadsDir', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
+	// runSequence(['copyLocalEnvConfig', 'templatecache'], 'build', 'env:prod', ['nodemon', 'watch'], done);
+	runSequence(['copyLocalEnvConfig', 'templateCache'], 'webpack', 'env:prod', ['nodemon', 'watch'], done);
 });
