@@ -1,20 +1,21 @@
-(function () {
-  'use strict';
+import '../../../../public/less/theme.less';
+import 'font-awesome/scss/font-awesome.scss';
 
-  HomeController.$inject = ['Authentication', '$state'];
-  angular
-    .module('core')
-    .controller('HomeController', HomeController);
+(function() {
+	'use strict';
 
-  function HomeController(Authentication, $state) {
-    var vm = this;
-    vm.isUser = Authentication.user;
-    if (sessionStorage.prevState) {
-	  var prevState = sessionStorage.prevState;
-	  var prevParams = JSON.parse(sessionStorage.prevParams);
-	  delete sessionStorage.prevState;
-	  delete sessionStorage.prevParams;
-      $state.go(prevState, prevParams);
-    }
-  }
+	HomeController.$inject = ['Authentication', '$state'];
+	angular.module('core').controller('HomeController', HomeController);
+
+	function HomeController(Authentication, $state) {
+		var vm = this;
+		vm.isUser = Authentication.user;
+		if (sessionStorage.prevState) {
+			var prevState = sessionStorage.prevState;
+			var prevParams = JSON.parse(sessionStorage.prevParams);
+			delete sessionStorage.prevState;
+			delete sessionStorage.prevParams;
+			$state.go(prevState, prevParams);
+		}
+	}
 }());

@@ -1,5 +1,7 @@
 const glob = require('glob');
 const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
 	entry: {
@@ -18,7 +20,9 @@ module.exports = {
 			'ng-file-upload',
 			'ng-idle',
 			'angular-drag-and-drop-lists',
-			'angular-sanitize'
+			'angular-sanitize',
+			'jquery',
+			'bootstrap'
 		],
 		appConfig: './modules/core/client/app/config.js',
 		appInit: './modules/core/client/app/init.js',
@@ -45,13 +49,47 @@ module.exports = {
 	module: {
 		rules: [
 			{
+				test: /\.css$/,
+				use: [{ loader: MiniCssExtractPlugin.loader }, 'css-loader']
+			},
+			{
+				test: /\.less$/,
+				use: [{ loader: MiniCssExtractPlugin.loader }, { loader: 'css-loader' }, { loader: 'less-loader' }]
+			},
+			{
 				test: require.resolve('tinymce/tinymce'),
 				use: ['imports-loader?this=>window', 'exports-loader?window.tinymce']
 			},
 			{
 				test: /tinymce\/(themes|plugins)\//,
 				use: ['imports-loader?this=>window']
+			},
+			{
+				test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+				loader: 'url-loader?limit=10000'
+			},
+			{
+				test: /\.(eot|ttf|wav|mp3)$/,
+				loader: 'file-loader'
+			},
+			{
+				test: /\.scss$/,
+				use: [{ loader: MiniCssExtractPlugin.loader }, { loader: 'css-loader' }, { loader: 'sass-loader' }]
 			}
 		]
-	}
+	},
+	node: {
+		console: true,
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty'
+	},
+	plugins: [
+		new webpack.ProvidePlugin({
+			jQuery: 'jquery'
+		}),
+		new MiniCssExtractPlugin({
+			filename: '[name].css'
+		})
+	]
 };
