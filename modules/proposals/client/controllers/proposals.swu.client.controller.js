@@ -1,3 +1,5 @@
+import '../css/proposals.css';
+
 (function() {
 	'use strict';
 	var formatDate = function(d) {

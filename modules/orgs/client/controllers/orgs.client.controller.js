@@ -1,3 +1,6 @@
+// Import certain style elements here so that webpack picks them up
+import '../css/orgs.css';
+
 (function() {
 	'use strict';
 	angular
