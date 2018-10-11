@@ -7,10 +7,11 @@
 		applicationEnvironment: window.env,
 		applicationModuleName: applicationModuleName,
 		applicationModuleVendorDependencies: [
-			'ngResource',
 			'ngAnimate',
+			'ngResource',
 			'ngMessages',
 			'ui.router',
+			'ui.bootstrap',
 			'ui.tinymce',
 			'ngFileUpload',
 			'ngImgCrop',
@@ -18,9 +19,7 @@
 			'ncy-angular-breadcrumb',
 			'dndLists',
 			'ngIdle',
-			'ngSanitize',
-			'ui.bootstrap',
-			'ngTouch'
+			'ngSanitize'
 		],
 		registerModule: registerModule
 	};
