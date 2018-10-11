@@ -562,7 +562,7 @@ gulp.task('test:coverage', function(done) {
 // run in development mode, but without the file system watch. the watch
 // causes some machines running docker to run very hot, causing the fan to run
 // non-stop, or if all solid state, causing the processor to downgrade speed
-// this means that changes need a stop and start, but oh well...
+// this means that changes need a stop and start, but oh well....
 //
 gulp.task('quiet', function(done) {
 	// runSequence('env:dev', ['copyLocalEnvConfig'], 'lint', ['nodemon'], done);
