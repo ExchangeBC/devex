@@ -20,6 +20,7 @@
     "dev": "gulp default",
     "quiet": "gulp quiet",
     "debug": "gulp debug",
+    "prod": "gulp prod",
     "pack": "webpack"
   },
   "dependencies": {
