@@ -113,14 +113,17 @@
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 
   <!--Application JavaScript Files-->
-  {{#each jsFiles}}
-  <script type="text/javascript" src="/{{this}}"></script>{{/each}}
+  <script src="/dist/vendor.bundle.js"></script>
+  <script src="/dist/appConfig.bundle.js"></script>
+  <script src="/dist/appInit.bundle.js"></script>
+  <script src="/dist/moduleConfig.bundle.js"></script>
+  <script src="/dist/modules.bundle.js"></script>
 
   <!--owasp config sync-->
-  <script type="text/javascript">
+  <!-- <script type="text/javascript">
     var sharedConfig = {{{ sharedConfig }}};
     owaspPasswordStrengthTest.config(sharedConfig.owasp);
-  </script>
+  </script> -->
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script> -->
   {{#if livereload}}
   <!--Livereload script rendered -->
