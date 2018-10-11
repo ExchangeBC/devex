@@ -50,16 +50,11 @@ const paths = {
 
 // Clean task
 gulp.task('clean', () => {
-	return (
-		gulp
-			.src(`${paths.build}*`)
-			// .pipe(gprint())
-			.pipe(vinylPaths(del))
-	);
+	return gulp.src(`${paths.build}*`).pipe(vinylPaths(del));
 });
 
 // Webpack task
-gulp.task('webpack', gulp.series('clean'), () => {
+gulp.task('webpack', () => {
 	return webpack_stream(webpack_config).pipe(gulp.dest(`${paths.build}`));
 });
 
@@ -266,16 +261,16 @@ gulp.task('templatecache', () => {
 gulp.task('lint', gulp.series('less', 'sass', 'themecss', gulp.parallel('csslint', 'eslint')));
 
 // Lint project files and run webpack
-gulp.task('build', gulp.series('env:dev', 'lint', 'webpack'));
+gulp.task('build', gulp.series('env:dev', 'lint', 'clean', 'webpack'));
 
 // Run without watch - used when developing containerized solution to keep machines from spinning up
 gulp.task('quiet', gulp.series('env:dev', 'lint', 'nodemon'));
 
 // Run the project in development mode
-gulp.task('default', gulp.series('env:dev', 'lint', 'webpack', gulp.parallel('nodemon', 'watch')));
+gulp.task('default', gulp.series('env:dev', 'lint', 'clean', 'webpack', gulp.parallel('nodemon', 'watch')));
 
 // Run the project but automatically break on init - used for debugging startup issues
 gulp.task('debug', gulp.series('env:dev', 'lint', gulp.parallel('nodemon-debug', 'watch')));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('templatecache', 'webpack', 'env:prod', gulp.parallel('nodemon', 'watch')));
+gulp.task('prod', gulp.series('templatecache', 'clean', 'webpack', 'env:prod', gulp.parallel('nodemon', 'watch')));

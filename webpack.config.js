@@ -40,6 +40,7 @@ module.exports = {
 		path: path.join(__dirname, './public/dist'),
 		filename: '[name].bundle.js'
 	},
+	devtool: 'source-map',
 	resolve: {
 		mainFiles: ['index', 'compile/minified/ng-img-crop']
 	},
