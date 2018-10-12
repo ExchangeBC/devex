@@ -15,6 +15,7 @@
     "npm": ">=2.0.0"
   },
   "scripts": {
+    "start": "node --inspect=5858 server.js",
     "postinstall": "bower install --quiet --config.interactive=false --allow-root && bower prune --allow-root",
     "build": "gulp build",
     "dev": "gulp default",
