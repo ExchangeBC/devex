@@ -61,12 +61,16 @@ module.exports = {
     sandbox: true
   },
   mailer: {
-    from: process.env.MAILER_FROM || 'MAILER_FROM',
+    from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
-      auth: {
-        user: process.env.MAILER_EMAIL_ID || 'MAILER_EMAIL_ID',
-        pass: process.env.MAILER_PASSWORD || 'MAILER_PASSWORD'
+      host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
+      port: process.env.MAILER_PORT || 25,
+      secure: false,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      ignoreTLS: false,
+      tls: {
+        rejectUnauthorized: false
       }
     }
   },
