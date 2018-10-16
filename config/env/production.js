@@ -89,10 +89,15 @@ module.exports = {
   mailer: {
     from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
     options: {
-      service: process.env.MAILER_SERVICE_PROVIDER || 'MAILER_SERVICE_PROVIDER',
-      host: 'apps.smtp.gov.bc.ca',
-      ignoreTLS: true,
-      secure: false
+      host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
+      port: process.env.MAILER_PORT || 25,
+      secure: false,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      ignoreTLS: false,
+      tls: {
+        rejectUnauthorized: false
+      }
     }
   },
   seedDB: {
