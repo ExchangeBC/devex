@@ -10,16 +10,19 @@
 
 <section class="detail-page-background">
 
-  <!-- If opportunity is still open, show proposal stats -->
-  <div class="row" ng-if="!vm.loggedIn && vm.closing !=='CLOSED'">
-    <div class=" col">
-      <proposal-list ng-if="vm.closing !== 'CLOSED' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'"
-        context="opportunity" opportunity="vm.opportunity"></proposal-list>
+  <div class="container">
+    <!-- If opportunity is still open, show proposal stats -->
+    <div class="row" ng-if="vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
+      <div class="col border p-4">
+        <proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity"
+          opportunity="vm.opportunity"></proposal-list>
+      </div>
     </div>
+
+    <!-- SWU Proposal section for Admins to view and enter evaluation -->
+    <opportunity-evaluation ng-if="vm.closing === 'CLOSED'" opportunity="vm.opportunity"></opportunity-evaluation>
   </div>
 
-  <!-- SWU Proposal section for Admins to view and enter evaluation -->
-  <opportunity-evaluation ng-if="vm.closing === 'CLOSED'" opportunity="vm.opportunity"></opportunity-evaluation>
 
   <br>
 

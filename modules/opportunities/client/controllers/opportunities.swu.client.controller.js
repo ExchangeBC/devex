@@ -146,7 +146,7 @@
 			vm.isGov = isGov;
 			vm.hasEmail = isUser && Authentication.user.email !== '';
 			var isMemberOrWaiting = opportunity.userIs.member || opportunity.userIs.request;
-			vm.loggedIn = isUser;
+			vm.loggedIn = !!isUser;
 			vm.canRequestMembership = isGov && !isMemberOrWaiting;
 			vm.canEdit = isAdmin || opportunity.userIs.admin;
 			vm.isMember = opportunity.userIs.member;
