@@ -43,10 +43,12 @@
 
 <!-- Open Opportunity Card Body -->
 <div class="card-body" id="opportunities.view" ng-click="vm.goToView(opportunity)">
-  <div class="label-list">
+  <div ng-if="opportunity.skills.length > 0" class="label-list">
     <label class="label label-skill" ng-repeat="code in opportunity.skills">{{code}}</label>
   </div>
   <div class="label-title" ng-bind="opportunity.name"></div>
   <div class="label-teaser" ng-bind="opportunity.short"></div>
+
+
 </div>
 </div>
