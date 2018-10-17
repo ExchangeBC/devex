@@ -35,41 +35,45 @@
     </div>
   </div>
 
-  <!-- Open Opportunities List -->
-  <div class="container" ng-if="!vm.isLoading">
+  <div ng-if="!vm.isLoading">
+    <!-- Open Opportunities List -->
+    <div class="container">
 
-    <div class="row">
-      <div class="col px-0">
-        <h6>Open Opportunities</h6>
-        <h6 ng-if="vm.countOpenOpportnities() === 0">
-          <emoji>🌵</emoji> No open opportunities right now
-        </h6>
+      <div ng-cloak class="row">
+        <div class="col px-0">
+          <h6>Open Opportunities</h6>
+          <h6 ng-if="vm.countOpenOpportnities() === 0">
+            <emoji>🌵</emoji> No open opportunities right now
+          </h6>
 
-        <opportunity-card class="card my-3" ng-repeat="opportunity in vm.opportunities | orderBy: 'created': true | filter: vm.filterOpen"
-          opportunity="opportunity" />
+          <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterOpen | orderBy: 'created': true track by $index"
+            opportunity="opportunity" />
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <!-- Close Opportunities List -->
+    <div class="container">
+
+      <div class="row">
+        <div class="col px-0">
+          <h6 class="float-left">Closed Opportunities</h6>
+          <h6 class="float-right">Total value: {{vm.getTotalClosedAmount() | currency}}</h6>
+
+        </div>
+      </div>
+
+      <div ng-cloak class="row">
+        <div class="col px-0">
+          <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterClosed | orderBy: 'created' : true track by $index"
+            opportunity="opportunity" />
+        </div>
       </div>
     </div>
   </div>
 
-  <hr>
 
-  <!-- Close Opportunities List -->
-  <div class="container" ng-if="!vm.isLoading">
-
-    <div class="row">
-      <div class="col px-0">
-        <h6 class="float-left">Closed Opportunities</h6>
-        <h6 class="float-right">Total value: {{vm.getTotalClosedAmount() | currency}}</h6>
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col px-0">
-        <opportunity-card class="card my-3" ng-repeat="opportunity in vm.opportunities | orderBy: 'created': true | filter: vm.filterClosed"
-          opportunity="opportunity" />
-      </div>
-    </div>
-  </div>
 
 </section>
