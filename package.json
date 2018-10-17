@@ -89,6 +89,7 @@
     "wiredep": "~4.0.0"
   },
   "devDependencies": {
+    "bower-npm-resolver": "~0.9.1",
     "coveralls": "~3.0.1",
     "del": "^3.0.0",
     "dotenv": "^5.0.1",
