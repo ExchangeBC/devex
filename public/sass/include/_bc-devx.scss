@@ -67,20 +67,6 @@ a.accordion-toggle {
   color: $theme-success;
 }
 
-// Containers
-// .container {
-//   max-width: 1040px;
-//   padding: 0 10px;
-//   > .navbar-collapse {
-//     margin-left: -10px;
-//     margin-right: -10px;
-//   }
-//   > .navbar-header {
-//     margin-left: 0;
-//     margin-right: 0;
-//   }
-// }
-
 .blockquote {
   padding: 10px 20px;
   margin: 0 0 20px;
@@ -88,6 +74,11 @@ a.accordion-toggle {
   border-left: 5px solid #f6f8fa;
 }
 
+.modal-timeout-dialog .modal-dialog,
+.modal-timeout-warning-dialog .modal-dialog {
+  width: 400px;
+  max-width: 400px !important;
+}
 // Opportunity detail views
 
 // Spacing on tables in opportunity details

@@ -96,7 +96,7 @@
 				size: 'sm',
 				animation: true,
 				templateUrl: '/modules/core/client/views/modal.timeout.warning.html',
-				windowClass: 'modal-danger',
+				windowClass: 'modal-timeout-warning-dialog',
 				backdrop: 'static',
 				bindToController: true,
 				controllerAs: 'qqq',
@@ -116,7 +116,7 @@
 			$scope.timedout = $uibModal.open({
 				size: 'sm',
 				templateUrl: '/modules/core/client/views/modal.timeout.html',
-				windowClass: 'modal-danger',
+				windowClass: 'modal-timeout-dialog',
 				backdrop: 'static',
 				bindToController: true,
 				controllerAs: 'qqq',
