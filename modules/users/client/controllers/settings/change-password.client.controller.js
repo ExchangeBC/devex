@@ -30,12 +30,12 @@
 
     function onChangePasswordSuccess() {
       // If successful show success message and clear form
-      Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Password Changed Successfully' });
+      Notification.success({ message: '<i class="fa fa-ok"></i> Password Changed Successfully' });
       vm.passwordDetails = null;
     }
 
     function onChangePasswordError(response) {
-      Notification.error({ message: response.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Password change failed!' });
+      Notification.error({ message: response.data.message, title: '<i class="fa fa-remove"></i> Password change failed!' });
     }
   }
 }());

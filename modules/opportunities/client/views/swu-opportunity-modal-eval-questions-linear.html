@@ -1,69 +1,58 @@
-<div class="modal-header">
-	<button class="close" data-ng-click="close()"><i class="fa fa-times-thin"></i></button>
-	<div class="modal-title">Rank Questionnaire Responses</div>
-</div>
-<div class="modal-body">
-	<div class="row">
-		<div class="col-sm-12 text-center">
-			<p>For each question we have randomized the responses that teams submitted.</p>
-			<h4>Drag the individual responses to rank the responses from best (top) to worst (bottom) for all {{data.model.questions.length}} questions.</h4>
-			<ul uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage" ng-change="pageChanged()"></ul>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-sm-12">
-			<table width="100%">
-				<tr>
-					<td width="65%">
-						<div class="panel panel-primary" ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
-							<div class="panel-heading text-center">
-								<strong>
-								Question: <span ng-bind-html="question[0].question"></span>
-								</strong>
-							</div>
-							<table width="100%">
-								<tr>
-									<td width="15%">
-                    <div>
-                        <ul dnd-list="question">
-                            <li ng-repeat="response in question" style="text-align:center; max-height:42px;">
-                              Rank {{$index + 1}}
-                            </li>
-                          </ul>
-                    </div>
-									</td>
-									<td width="100%">
-                    <div>
-                      <ul dnd-list="question"
-                        dnd-inserted="inserted(item, index)">
-                        <li ng-repeat="response in question"
-                          dnd-draggable="response"
-                          dnd-moved="question.splice($index, 1)"
-                          dnd-effect-allowed="move"
-                          dnd-selected="data.model.selected = response"
-                          ng-class="{'selected': data.model.selected === response}"
-                          ng-bind-html="response.response"
-                          style="max-height:42px; min-height: 42px; overflow-y: hidden">
-                        </li>
-                      </ul>
-                    </div>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</td>
-					<td width="35%" style="margin-left: 5px;">
-						<div class="long-question">
-              <div ng-bind-html="data.model.selected.response"></div>
-						</div>
-					</td>
-				</tr>
-			</table>
-		</div>
-	</div>
-</div>
-<div class="modal-footer text-right">
-	<button class="btn btn-primary" data-ng-click="save()">Save my work & Close</button>
-	<button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-lock"></i> Lock in all rankings</button>
-	<button class="btn btn-default" data-ng-click="close()">Cancel</button>
+<div class="row">
+  <div class="col m-3">
+
+    <h5>Rank Questionnaire Responses</h5>
+    <br>
+    <div class="row">
+      <div class="col text-center">
+        <p>For each question we have randomized the responses that teams submitted.</p>
+        <h4>Drag the individual responses to rank the responses from best (top) to worst (bottom) for all
+          {{data.model.questions.length}} questions.</h4>
+        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage"
+          ng-change="pageChanged()"></ul>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
+          <div class="bg-primary text-white text-center">
+            <strong>
+              Question: <span ng-bind-html="question[0].question"></span>
+            </strong>
+          </div>
+          <div class="row">
+            <div class="col-2 pr-0">
+              <ul dnd-list="question">
+                <li ng-repeat="response in question" class="question-ranking-item text-nowrap">
+                  Rank {{$index + 1}}
+                </li>
+              </ul>
+            </div>
+            <div class="col pl-0">
+              <div>
+                <ul dnd-list="question" dnd-inserted="inserted(item, index)">
+                  <li class="question-ranking-item" ng-repeat="response in question" dnd-draggable="response" dnd-moved="question.splice($index, 1)"
+                    dnd-effect-allowed="move" dnd-selected="data.model.selected = response" ng-class="{'selected': data.model.selected === response}"
+                    ng-bind-html="response.response">
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="question-viewer border p-2 h-100">
+          <div ng-bind-html="data.model.selected.response"></div>
+        </div>
+      </div>
+    </div>
+    <div class="my-3 text-right">
+      <button class="btn btn-default" data-ng-click="close()">Cancel</button>
+      <button class="btn btn-success" data-ng-click="commit()"><i class="fa fa-lock"></i> Lock in all rankings</button>
+      <button class="btn btn-primary" data-ng-click="save()">Save my work & Close</button>
+    </div>
+
+  </div>
 </div>

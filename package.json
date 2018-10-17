@@ -83,6 +83,7 @@
     "simple-line-icons": "^2.4.1",
     "socket.io": "^2.1.1",
     "tinymce": "^4.7.13",
+    "ui-bootstrap4": "^3.0.5",
     "validator": "~10.2.0",
     "winston": "^2.2.0",
     "wiredep": "~4.0.0"

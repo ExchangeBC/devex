@@ -1,0 +1,50 @@
+.caret-off::before {
+  display: none;
+}
+
+.caret-off::after {
+  display: none;
+}
+
+.navbar-header-user-image {
+  border-radius: 50%;
+  height: 34px;
+  width: 34px;
+  opacity: none;
+}
+
+.navbar-brand {
+  height: 45px;
+  width: auto;
+  padding: 0;
+}
+
+.navbar-toggler {
+  float: right;
+}
+
+@media (max-width: 991px) { // This keeps the hamburger menu aligned right
+  .navbar-header {
+    width: 100%;
+  }
+}
+/* Added the following three @media queries to make the navbar-brand 
+align with body content at different breakpoints 
+(I think this is necessary due to the div.container in the navbar??*/
+@media (min-width: 992px) {
+  .navbar-brand {
+    margin-left: -8px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  .navbar-brand {
+    margin-left: 5px;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar-brand {
+    margin-left: -9px;
+  }
+}

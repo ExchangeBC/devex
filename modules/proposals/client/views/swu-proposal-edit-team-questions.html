@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col m-4">
+    <uib-accordion>
+      <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
+        <uib-accordion-heading>
+          <i class="fa fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click
+              to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+        </uib-accordion-heading>
+        <div class="row">
+          <p>The Proponent should provide responses to the Team-based questions contained in this tab. The
+            Team-based questions are specific to the Opportunity and are intended to demonstrate the Team's: (i)
+            experience working as a team; (ii) experience with Agile software development; and (iii) experience
+            working on a similar Product, with a similar scope and technical background.</p>
+          <p>The Proponent’s responses should not reference organization name, Resource name, or specific company
+            software. No points will be awarded for any Proponent answer to any question in this step that
+            references the Proponent’s organization name, Resource name, or specific company software.</p>
+        </div>
+      </div>
+    </uib-accordion>
+
+    <br>
+    <div class="alert alert-danger">
+      <i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong> Do not include anything in
+      your responses that would reveal the Organization name, Resource name, or specific company software!
+    </div>
+    <h6>
+      Please note the word limit for each response, as responses exceeding that limit will receive a score of 0.
+      The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in
+      determining what information to provide.
+    </h6>
+    <br>
+    <div ng-repeat="question in ppp.responses">
+      <strong>Question {{$index + 1}} &nbsp;&nbsp;</strong><em>({{question.wordLimit}}
+        word limit, worth {{question.questionScore}} points):</em><br>
+      <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
+
+      <div ng-show="question.cleanGuideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i>
+        Response Guideline <i>(<span ng-if="question.showGuidance">click
+            to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
+      <div class="alert alert-info" ng-show="question.showGuidance && question.cleanGuideline" ng-bind-html="question.cleanGuideline"></div>
+      <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.tinymceOptions" ng-model="question.response">
+						</textarea>
+    </div>
+  </div>
+</div>

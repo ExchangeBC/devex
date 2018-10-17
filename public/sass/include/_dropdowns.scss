@@ -1,0 +1,67 @@
+.dropdown-menu {
+  margin-top: 0px;
+  background-color: $gray-dark;
+  > li > a {
+    color: #fff;
+    font-size: 0.95em;
+    font-weight: 400;
+    padding: 15px;
+  }
+  > li > a:hover {
+    background-color: transparent;
+    color: #000;
+  }
+  > li > a.message,
+  a.message:hover {
+    background-color: #fff;
+    color: $gray-dark;
+    padding: 25px 15px;
+  }
+
+  > li > a.message:last-child {
+    border-bottom: none;
+  }
+
+  > li > .message {
+    background-color: #fff;
+    color: $gray-dark;
+    font-weight: 400;
+    font-size: 0.95em;
+    padding: 25px 15px;
+    > button.pull-right {
+      font-size: 0.95em;
+      margin: -8px 0 15px 5px;
+    }
+  }
+  > li > .message-linked:hover {
+    cursor: pointer;
+    background: $gray-lighter;
+  }
+}
+@media (max-width: 767px) {
+  .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 15px;
+  }
+  .navbar-nav .open .dropdown-menu > li > a {
+    padding: 15px;
+  }
+}
+.messages-menu {
+  background-color: #fff;
+  > li {
+    border-bottom: 1px solid #e3e3e3;
+  }
+  > li:last-child {
+    border-bottom: none;
+  }
+}
+@media (min-width: 768px) {
+  .messages-menu {
+    width: 430px;
+  }
+}
+@media (max-width: 767px) {
+  .messages-menu {
+    width: 100vw;
+  }
+}

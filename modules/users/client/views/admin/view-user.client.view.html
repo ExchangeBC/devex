@@ -1,7 +1,9 @@
-<div class="sub-nav">
+<div class="back-nav">
   <div class="container">
-    <div class="breadcrumb-nav">
-      <a href="/admin/users" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Users</a>
+    <div class="row">
+      <div class="col">
+        <a href="/admin/users"><i class="fa fa-chevron-left"></i> All Users</a>
+      </div>
     </div>
   </div>
 </div>
@@ -33,17 +35,20 @@
             <tr>
               <td class="user-attribute">Notifications:</td>
               <td>
-                <div ng-if="vm.user.notifyOpportunities"><i class="fa fa-lg fa-check-circle success"></i> Listening for new opportunities</div>
-                <div ng-if="!vm.user.notifyOpportunities" class="light">Not listening for new opportunities</div>
+                <div ng-if="vm.user.notifyOpportunities"><i class="fa fa-lg fa-check-circle success"></i> Listening for
+                  new opportunities</div>
+                <div ng-if="!vm.user.notifyOpportunities" class="text-black-50">Not listening for new opportunities</div>
               </td>
-              <td><a class="btn btn-sm btn-default pull-right"  id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i class="fa fa-pencil"></i> Edit</a></td>
+              <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
+                    class="fa fa-pencil"></i> Edit</a></td>
             </tr>
             <tr>
               <td class="user-attribute">Roles:</td>
               <td>
                 <div ng-bind="vm.user.roles"></div>
               </td>
-              <td><a class="btn btn-sm btn-default pull-right"  id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i class="fa fa-pencil"></i> Edit</a></td>
+              <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
+                    class="fa fa-pencil"></i> Edit</a></td>
             </tr>
           </tbody>
         </table>

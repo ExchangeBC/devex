@@ -13,7 +13,7 @@
 
 				<div uib-accordion-group class="panel-default" ng-repeat="capability in vm.capabilities" ng-if="(capability.isPrototype && vm.opportunity.isPrototype) || (capability.isInception && vm.opportunity.isInception) || (capability.isImplementation && vm.opportunity.isImplementation)">
 					<uib-accordion-heading>
-						<i class="pull-left glyphicon" ng-class="{'glyphicon-check':vm.iOppCapabilities[capability.code], 'glyphicon-unchecked':!vm.iOppCapabilities[capability.code]}"></i>
+						<i class="pull-left fa" ng-class="{'fa-check':vm.iOppCapabilities[capability.code], 'fa-unchecked':!vm.iOppCapabilities[capability.code]}"></i>
 						&nbsp; &nbsp;
 						{{capability.name}}
 						<span class="label label-success pull-right" ng-if="capability.isImplementation">Implementation</span>

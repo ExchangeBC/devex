@@ -5,7 +5,7 @@
   position: relative;
   white-space: normal;
 }
-.select-bool-control .btn .glyphicon.guttered {
+.select-bool-control .btn .fa.guttered {
   left: 6px;
   position: absolute;
   top: 8px;
@@ -21,8 +21,8 @@
 .select-bool-control .btn.btn-has-icon {
   padding-left: 28px;
 }
-.select-bool-control .btn.btn-info .glyphicon,
-.select-bool-control .btn.btn-primary .glyphicon {
+.select-bool-control .btn.btn-info .fa,
+.select-bool-control .btn.btn-primary .fa {
   color: white;
 }
 ul.list-blocked li {

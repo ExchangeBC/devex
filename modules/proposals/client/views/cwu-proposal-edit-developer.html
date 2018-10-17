@@ -1,0 +1,35 @@
+<div class="m-4">
+  <div class="alert alert-info">Please enter contact information and a billing address for the <span class="strong">person
+      who is proposing to do the work</span>. If you would like payment to be made to a company, please check
+    the box below and complete the Company tab.
+  </div>
+  <div class="form-group">
+    <label>
+      <input type="checkbox" name="isCompany" ng-model="ppp.proposal.isCompany" autofocus>&nbsp;
+      Payment can be made to a company
+    </label>
+    <br><br>
+    <label for="firstName">First Name</label>
+    <input type="text" id="firstName" name="firstName" class="form-control" ng-model="ppp.user.firstName" placeholder="First Name">
+  </div>
+  <div class="form-group">
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" name="lastName" class="form-control" ng-model="ppp.user.lastName" placeholder="Last Name">
+  </div>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" class="form-control" ng-model="ppp.user.email" placeholder="Email"
+      lowercase>
+    <div ng-messages="ppp.userForm.email.$error" role="alert">
+      <p class="help-block error-text" ng-message="email">Email address is invalid.</p>
+    </div>
+  </div>
+  <div class="form-group" ng-if="!ppp.proposal.isCompany">
+    <label for="address">Address</label>
+    <input type="text" id="address" name="address" class="form-control" ng-model="ppp.user.address" placeholder="Address">
+  </div>
+  <div class="form-group">
+    <label for="phone">Phone</label>
+    <input type="text" id="phone" name="phone" class="form-control" ng-model="ppp.user.phone" placeholder="Phone">
+  </div>
+</div>

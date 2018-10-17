@@ -112,7 +112,7 @@
 							}
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="glyphicon glyphicon-remove"></i> Proposal Assignment failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-remove"></i> Proposal Assignment failed!' });
 						}
 					);
 				}

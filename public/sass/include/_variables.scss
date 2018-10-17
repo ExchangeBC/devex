@@ -1,0 +1,57 @@
+// Variables
+
+// Gray and Brand Colors for use across theme
+
+//YouTube colors
+// Black: #111111;
+// Light gray for subtitles #c6c6c6
+// Red #ff0000
+
+$brand-lightblue:	#1a9ad6;
+$brand-darkblue:	#0a4d8d;
+$brand-orange: 		#f26925;
+$brand-yellow:		#fdb917;
+
+$theme-primary:   #0074f0;
+$theme-success:   #009900;
+$theme-info:      #cceeff;
+$theme-important: #ffe066;
+$theme-warning:   #fcf8e3;
+$theme-danger:    #a63c08;
+
+$white:			   #fff;
+$gray-base:        #000;
+$gray-darker:      lighten($gray-base, 13.5%); // #222
+$gray-dark:        lighten($gray-base, 20%);   // #333
+$gray:             lighten($gray-base, 33.5%); // #555
+$gray-light:       #b3b3b3;
+$gray-lighter:     #f6f8fa; // This is same as GitHub
+$gray-lightest:	   #f8f8f8;
+
+$theme-lighter-blue: #ebf3ff;
+$theme-light-blue:  #E0F2FA;
+$theme-dark-blue:   #004fa3;
+$theme-red:         #cc3300;
+$theme-pink:        rgb(207,0,114);
+$theme-purple:      rgb(79,45,127);
+$theme-light-green: rgb(18,173,43);
+$theme-dark-green:  #336600;
+$theme-yellow:     	#fdb917;
+$theme-orange:      #f26925;
+$theme-deeporange:  #a63c08;
+
+$brand-twitter:		#1da1f2;
+$brand-facebook:	#3b5998;
+$brand-google-plus:	#dd4b39;
+
+// fix glyphicons path
+$icon-font-path:    "../lib/bootstrap/fonts/";
+
+$header-bg:         url("/modules/core/client/img/theme/inspiration-geometry.png");
+
+// 75 instead of 85
+$font-size-small:   ceil(($font-size-base * 0.75));
+
+// image size
+$thumb-md:          75px;
+$thumb-lg:          120px;

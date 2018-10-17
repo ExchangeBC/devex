@@ -1,7 +1,6 @@
 (function() {
 	'use strict';
 
-	WarningModalController.$inject = ['$scope', 'Idle'];
 	angular
 		.module('core')
 		.controller('HeaderController', HeaderController)
@@ -38,14 +37,32 @@
 		vm.menu = menuService.getMenu('topbar');
 
 		if (Authentication.user) {
+			updateMessageCount();
+			setAvatarImage(vm.authentication.user);
+		}
+
+		$rootScope.$on('updateMessageCount', function() {
+			updateMessageCount();
+		});
+
+		$rootScope.$on('userSignedIn', function(event, data) {
+			setAvatarImage(data);
+		});
+
+		function setAvatarImage(userData) {
+			if (
+				userData.profileImageURL.indexOf('http://') !== 0 &&
+				userData.profileImageURL.indexOf('https://') !== 0
+			) {
+				vm.avatarImageURL = window.location.origin + '/' + userData.profileImageURL;
+			} else {
+				vm.avatarImageURL = userData.profileImageURL;
+			}
+		}
+
+		function updateMessageCount() {
 			MessagesService.mycount(function(response) {
 				vm.messageCount = response.count;
-			});
-
-			$rootScope.$on('updateMessageCount', function() {
-				MessagesService.mycount(function(response) {
-					vm.messageCount = response.count;
-				});
 			});
 		}
 
@@ -62,8 +79,7 @@
 			if (mr) route = mr[1];
 			if (ma) active = ma[1];
 			if (route === active) return true;
-			if (route === 'admin' && active.substring(0, 5) === 'admin')
-				return true;
+			if (route === 'admin' && active.substring(0, 5) === 'admin') return true;
 		};
 
 		/**
@@ -79,8 +95,7 @@
 			vm.warning = $uibModal.open({
 				size: 'sm',
 				animation: true,
-				templateUrl:
-					'/modules/core/client/views/modal.timeout.warning.html',
+				templateUrl: '/modules/core/client/views/modal.timeout.warning.html',
 				windowClass: 'modal-danger',
 				backdrop: 'static',
 				bindToController: true,

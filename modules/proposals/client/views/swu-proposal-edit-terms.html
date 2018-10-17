@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col m-4">
+    <h4>Terms &amp; Conditions</h4>
+    <p>To submit a Proposal to this RFP, you must agree to the terms and conditions that the Proponent must
+      download, and which are incorporated herein by this reference. Proponents should note that, apart from
+      the terms and conditions set out below, there are other terms and conditions that apply to this RFP and
+      are described throughout the RFP.</p>
+
+    <a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank" ng-click="ppp.downloadTermsClicked()">
+      <i class="fa fa-download"></i> Download the Terms &amp; Conditions
+    </a>
+    <br><br>
+    <label class="checkbox-inline checkbox-alone">
+      <input type="checkbox" name="isInception" ng-disabled="!ppp.termsDownloaded || ppp.proposal.isAcceptedTerms"
+        ng-model="ppp.checkBoxModel.value"> The Proponent acknowledges that it has read,
+      fully
+      understands,
+      and agrees to the Terms &amp; Conditions.
+    </label>
+    <br><br>
+  </div>
+</div>

@@ -1,0 +1,110 @@
+// "Back Nav" (e.g. "All Opportunities") sit at the top of detail pages to go back to list page
+.back-nav {
+  padding: .75rem 0;
+  background: $gray-lightest;
+  border-bottom: 1px solid $gray-light;
+  z-index: 2;
+  position: sticky;
+  top: 0;
+  a {
+    color: $gray;
+    display: flex;
+    align-items: center;
+    &:hover,
+    &:active:hover {
+      color: $gray;
+    }
+    &:active,
+    &:focus {
+      color: $gray;
+    }
+    i {
+      font-size: 1.3rem;
+      margin-right: .25rem;
+    }  
+  }
+}
+
+@media (min-width: 992px) {
+  .back-nav {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+// Nav Pills
+.nav-pills {
+  > li > a {
+    border-radius: 4px;
+  }
+}
+
+.nav-pills {
+  margin: 0 0 2em;
+  > li {
+    > a:hover {
+      background-color: transparent;
+    }
+  }
+  > li.active,
+  li.active:hover {
+    > a {
+      background-color: $theme-primary;
+      color: #fff;
+    }
+  }
+}
+
+// Navigation tabs
+// .nav-tabs {
+//   border-bottom: 2px solid #f26925;
+//   margin-left: -15px;
+//   margin-right: -15px;
+//   > li {
+//     float: left;
+//     // Make the list-items overlay the bottom border
+//     margin-bottom: -1px;
+//     > :first-child {
+//       margin-left: 17px;
+//     }
+
+//     // Actual tabs (as links)
+//     > a {
+//       color: $gray;
+//       font-weight: 500;
+//       background: none;
+//       // padding: 4px 15px;
+//       padding-bottom: 3px;
+//       padding-top: 6px;
+//       margin-right: 2px;
+//       line-height: $line-height-base;
+//       border: none;
+//       border-radius: none;
+//       &:hover {
+//         color: $gray-dark;
+//         background: none;
+//         transition: all 0.3s ease;
+//       }
+//     }
+
+//     // Active state, and its :hover to override normal :hover
+//     &.active > a {
+//       &,
+//       &:hover,
+//       &:focus {
+//         color: #fff;
+//         font-weight: 700;
+//         border: none;
+//         background: #f26925;
+//         border-radius: 4px 4px 0 0;
+//         transition: none;
+//         cursor: default;
+//       }
+//     }
+//   }
+// }
+
+// .edit-form-tabs {
+//   padding: 10px 15px 0;
+//   background: #f8f8f8;
+// }

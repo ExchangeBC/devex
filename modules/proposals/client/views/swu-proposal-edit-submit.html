@@ -1,0 +1,186 @@
+<div class="row">
+  <div class="col m-4">
+    <h4>
+      Review and Submit Your Proposal
+    </h4>
+    <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
+      <i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
+      You won't be able to submit this Proposal until you:
+      <ul>
+        <li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
+        <li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in
+          each phase</li>
+        <li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With
+          Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
+      </ul>
+    </div>
+    <h5>
+      Here's a summary of your complete Proposal. Make sure it all looks right before you submit. Good luck!
+    </h5>
+
+    <div class="border border-primary p-4">
+      <h6>Company Info</h6>
+
+      <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company
+          profile</a>.
+      </span>
+      <br><br>
+      <table>
+        <tr>
+          <td class="strong small text-right">Company: </td>
+          <td class="small text-left">{{ ppp.org.name }}</td>
+        </tr>
+        <tr>
+          <td class="strong small text-right">Address: </td>
+          <td class="small text-left">{{ ppp.org.address }}</td>
+        </tr>
+        <tr>
+          <td class="strong small text-right">City: </td>
+          <td class="small text-left">{{ ppp.org.city }}</td>
+        </tr>
+        <tr ng-if="ppp.org.postalcode">
+          <td class="strong small text-right">Postal Code: </td>
+          <td class="small text-left">{{ ppp.org.postalcode }}</td>
+        </tr>
+        <tr ng-if="ppp.org.contactName">
+          <td class="strong small text-right">Contact: </td>
+          <td class="small text-left">{{ ppp.org.contactName }}</td>
+        </tr>
+        <tr ng-if="ppp.org.contactPhone">
+          <td class="strong small text-right">Phone: </td>
+          <td class="small text-left">{{ ppp.org.contactPhone }}</td>
+        </tr>
+        <tr ng-if="ppp.org.contactEmail">
+          <td class="strong small text-right">Email: </td>
+          <td class="small text-left">{{ ppp.org.contactEmail }}</td>
+        </tr>
+      </table>
+
+      <hr>
+      <div class="row">
+        <div class="col">
+          <h6>Team &amp; Price</h6>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center" ng-if="ppp.oinp.isInception">
+          <div>
+            <h5><i class="fa fa-map"></i> Inception Phase</h5>
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}}
+              &#8212;
+              {{ppp.oinp.f_endDate}}</div>
+            <hr>
+          </div>
+          <div>
+            Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.inception.cost
+              | currency}}</span>
+            <hr>
+          </div>
+
+          <div class="p-2 text-left" ng-repeat=" member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
+            <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+          </div>
+        </div>
+
+        <div class="col text-center" ng-if="ppp.oprp.isPrototype">
+          <div>
+
+            <h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}}
+              &#8212;
+              {{ppp.oprp.f_endDate}}
+            </div>
+            <hr>
+            <div>
+              Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.proto.cost |
+                currency}}</span>
+              <hr>
+            </div>
+            <div class="p-2 text-left" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
+              <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col text-center" ng-if="ppp.oimp.isImplementation">
+          <div class="panel panel-default">
+            <div>
+              <h5 class="strong"><i class="fa fa-gears"></i> Implementation Phase</h5>
+              <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}}
+                &#8212;
+                {{ppp.oimp.f_endDate}}</div>
+              <hr>
+              <div>
+                Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.implementation.cost
+                  | currency}}</span>
+                <hr>
+              </div>
+              <div class="p-2 text-left" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
+                <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-right">
+          <h4><span class="text-black-50">Total Price:</span> {{ppp.proposal.phases.inception.cost +
+            ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col">
+          <h6>Responses to Team Questions</h6>
+          <div class="m-2 small" ng-repeat="response in ppp.responses">
+            <uib-accordion>
+              <div uib-accordion-group is-open="response.displayInSummary" ng-click="vm.toggleResponseAccordian($index)"
+                class="panel-default">
+                <uib-accordion-heading>
+                  <span class="small">
+                    {{$index + 1}}.&nbsp;
+                  </span>
+                  <span class="small" ng-bind-html="response.question"></span>
+                  <span class="small font-italic" ng-if="!response.displayInSummary">(click to show response)</span>
+                  <span class="small font-italic" ng-if="response.displayInSummary">(click to hide response)</span>
+                </uib-accordion-heading>
+                <div class="row">
+                  <div ng-bind-html="response.response"></div>
+                </div>
+              </div>
+            </uib-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col w-100"></div>
+      <div class="col-5 d-inline pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
+        <div class="panel panel-success">
+          <div class="panel-body">
+            <label class="small">
+              <input type="checkbox" ng-model="ppp.agreeConfirm">&nbsp;
+              &#42;By pushing submit the Proponent is confirming it is submitting its Proposal to the RFP and
+              agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully
+              read and examined the entire RFP; (b) the Proponent has conducted such other investigations as were
+              prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the
+              statements and representations made in its Proposal.
+            </label>
+            <button type="button" class="btn btn-block btn-lg btn-success pull-right" ng-click="ppp.submit()"
+              ng-disabled="!ppp.agreeConfirm"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+            <p class="small">After you submit, you can still make updates to your Proposal until the Closing
+              Time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

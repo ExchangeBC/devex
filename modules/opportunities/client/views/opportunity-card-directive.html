@@ -1,0 +1,52 @@
+<!-- Open Opportunity Card Header -->
+<div class="card-header p-0">
+
+  <div class="label-list float-left ml-3">
+    <label ng-if="opportunity.opportunityTypeCd === 'code-with-us'" class="label label-price">{{ opportunity.earn |
+      currency }}</label>
+    <label ng-if="opportunity.opportunityTypeCd === 'sprint-with-us'" class="label label-price">{{ opportunity.budget |
+      currency }}</label>
+    <label ng-if="opportunity.opportunityTypeCd === 'sprint-with-us'" class="label label-swu"><i class="fa fa-users"></i>
+      Sprint With Us</label>
+    <label ng-if="opportunity.opportunityTypeCd === 'code-with-us'" class="label label-swu"><i class="fa fa-users"></i>
+      Code With Us</label>
+    <label class="label label-success" ng-if="vm.closing(opportunity) !== 'CLOSED'">OPEN</label>
+    <label class="label label-danger" ng-if="vm.closing(opportunity) === 'CLOSED'">CLOSED</label>
+    <label class="label label-location"><i class="fa fa-map-marker fa-lg"></i> {{opportunity.location}}</label>
+    <label class="label label-location">
+      <span ng-if="opportunity.onsite == 'offsite'">In-person work NOT required</span>
+      <span ng-if="opportunity.onsite == 'onsite'">In-person work required</span>
+      <span ng-if="opportunity.onsite == 'mixed'">Some in-person work required</span>
+    </label>
+  </div>
+
+  <div class="float-right">
+    <label class="label label-default" ng-if="!opportunity.isPublished">
+      <i class="fa fa-exclamation-triangle"></i> Unpublished</label>
+    <a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && opportunity.isPublished" href=""
+      ng-click="vm.publish(opportunity, false)" title="Unpublish">
+      <i class="fa fa-ban"></i>
+    </a>
+    <a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href=""
+      ng-click="vm.publish(opportunity, true)" title="Publish">
+      <i class="fa fa-bullhorn"></i>
+    </a>
+    <a class="btn btn-text-only" ng-if="vm.isUser && vm.closing(opportunity) !== 'CLOSED'" ng-click="vm.toggleWatch(opportunity)">
+      <i class="fa fa-eye fa-lg" ng-class="{'text-secondary': !vm.isWatching(opportunity), 'text-primary': vm.isWatching(opportunity)}"></i>
+    </a>
+    <a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin)" ng-click="vm.goToEditView(opportunity)"
+      href="" id="opportunityadmin.edit" title="Edit">
+      <i class="fa fa-gear"></i>
+    </a>
+  </div>
+</div>
+
+<!-- Open Opportunity Card Body -->
+<div class="card-body" id="opportunities.view" ng-click="vm.goToView(opportunity)">
+  <div class="label-list">
+    <label class="label label-skill" ng-repeat="code in opportunity.skills">{{code}}</label>
+  </div>
+  <div class="label-title" ng-bind="opportunity.name"></div>
+  <div class="label-teaser" ng-bind="opportunity.short"></div>
+</div>
+</div>

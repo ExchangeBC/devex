@@ -1,93 +1,88 @@
-<section class="edit-form-background">
-	<div class="container edit-form" role="main">
-		<form name="vm.orgForm" id="vm.orgForm" warn-on-exit ng-submit="vm.add(vm.orgForm.$valid)" class="signin" novalidate autocomplete="off">
-		<div class="edit-form-header">
-			<div class="row">
-				<div class="col-xs-12">
-					Register Your Company on the BCDevExchange
-				</div>
-			</div>
-		</div>
-		<div class="edit-form-body">
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="alert alert-info">
-						Registering your company means that any site viewer will be able to see:
-								<ul>
-									<li>Your company name</li>
-									<li>A link to your website if you choose to share it</li>
-									<li>A list of the <a href="/capabilities" target="_blank">Sprint With Us capabilities</a> your company possesses by virtue of its members&#42;</li>
-								</ul>
-						<br>
-						<span class="light">&#42;The individual members you associate to your company profile will NOT be seen by site viewers; they will only be seen by the issuer of a government opportunity to which you've put those members forward in a Proposal.</span>
-					</div>
-				</div>
-			</div>
-			<hr>
-					<div class="row">
-						<div class="col-xs-12 col-sm-6">
-							<fieldset>
-								<form-input
-									ng-model="vm.org.name"
-									class="col-sm-12"
-									x-form="vm.orgForm"
-									x-options='{
+<section class="bg-secondary">
+  <div class="container bg-white rounded p-0" role="main">
+    <form name="vm.orgForm" id="vm.orgForm" warn-on-exit ng-submit="vm.add(vm.orgForm.$valid)" novalidate autocomplete="off">
+      <div class="bg-light rounded px-4 py-3 font-weight-bold">
+        <div class="row">
+          <div class="col">
+            Register Your Company on the BCDevExchange
+          </div>
+        </div>
+      </div>
+      <div class="px-3">
+        <div class="row">
+          <div class="col">
+            <div class=" alert alert-info">
+              Registering your company means that any site viewer will be able to see:
+              <ul>
+                <li>Your company name</li>
+                <li>A link to your website if you choose to share it</li>
+                <li>A list of the <a href="/capabilities" target="_blank">Sprint With Us capabilities</a> your company
+                  possesses by virtue of its members *</li>
+              </ul>
+              <br>
+              <span class="text-black-50">* The individual members you associate to your company profile will NOT be
+                seen by
+                site viewers; they will only be seen by the issuer of a government opportunity to which you've put
+                those members forward in a Proposal.</span>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col">
+            <fieldset>
+              <form-input ng-model="vm.org.name" x-form="vm.orgForm" x-options='{
 										"title":"Legal Name of Company",
 										"id":"companyname",
 										"name":"companyname",
 										"placeholder":"The legal name of your company",
 										"required":"A name is required"
 									}'>
-								</form-input>
-							</fieldset>
-							<fieldset>
-								<form-input
-									ng-model="vm.org.businessJurisdiction"
-									class="col-xs-12"
-									x-form="vm.orgForm"
-									x-options='{
+              </form-input>
+            </fieldset>
+            <fieldset>
+              <form-input ng-model="vm.org.businessJurisdiction" x-form="vm.orgForm" x-options='{
 										"title":"Jurisdiction",
 										"id":"businessJurisdiction",
 										"name":"businessJurisdiction",
 										"placeholder":"Where your company is registered (e.g. British Columbia)",
 										"required":"This information is required"
 									}'>
-								</form-input>
-							</fieldset>
-							<fieldset>
-								<form-input
-									ng-model="vm.org.businessNumber"
-									class="col-xs-12"
-									x-form="vm.orgForm"
-										x-options='{
+              </form-input>
+            </fieldset>
+            <fieldset>
+              <form-input ng-model="vm.org.businessNumber" x-form="vm.orgForm" x-options='{
 										"title":"Business ID",
 										"id":"businessNumber",
 										"name":"businessNumber",
 										"placeholder":"Your company&#39;s unique Business ID or Business Number",
 										"required":"This information is required"
 									}'>
-								</form-input>
-							</fieldset>
-						</div>
-					<div class="hidden-xs col-sm-1"></div>
-					<div class="col-xs-12 col-sm-5 pull pull-right">
-						<br><br><br>
-						<label class="light">
-							<input type="checkbox" ng-model="vm.hasAgreed">&nbsp;
-							&#42;By clicking Continue, I agree that the information I provide is truthful and that I have authority to act on behalf of this company for the purposes of listing basic information, associating members to the company, and submitting Proposals on behalf of those individuals and the company.
-						</label>
-					</div>
-				</div>
-		</div>
-		<div class="edit-form-footer">
-			<div class="row">
-				<div class="col-xs-12">
-					<!-- // The Continue button should be disabled until: information has been entered into all of the three fields, AND the checkbox has been checked // -->
-					<button type="submit" class="btn btn-primary pull-right" ng-disabled="!vm.orgForm.$valid || !vm.hasAgreed"><i class="fa fa-arrow-circle-right"></i> Continue</button>
-					<button class="btn btn-default pull-right" ng-click="vm.delete()">Cancel</button>
-				</div>
-			</div>
-		</div>
-		</form>
-	</div>
+              </form-input>
+            </fieldset>
+          </div>
+          <div class="col-xs"></div>
+          <div class="col">
+            <br><br><br>
+            <label class="text-black-50">
+              <input type="checkbox" ng-model="vm.hasAgreed">&nbsp;
+              *By clicking Continue, I agree that the information I provide is truthful and that I have authority
+              to act on behalf of this company for the purposes of listing basic information, associating members to
+              the company, and submitting Proposals on behalf of those individuals and the company.
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="bg-light rounded px-3 py-2">
+        <div class="row">
+          <div class="col">
+            <!-- // The Continue button should be disabled until: information has been entered into all of the three fields, AND the checkbox has been checked // -->
+            <button type="submit" class="btn btn-primary float-right" ng-disabled="!vm.orgForm.$valid || !vm.hasAgreed"><i
+                class="fa fa-arrow-circle-right"></i> Continue</button>
+            <button class="btn btn-default float-right" ng-click="vm.delete()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </section>

@@ -65,8 +65,10 @@ RUN apt-get update -q \
 #COPY phantom /opt/mean.js/node_modules
 
 # Install MEAN.JS Prerequisites
-RUN yarn global add gulp bower yo mocha karma-cli gulp-if --silent \
+RUN yarn global add gulp bower yo mocha karma-cli gulp-if bower-npm-resolver --silent \
  && yarn cache clean
+
+RUN npm install -g bower-npm-resolver
 
 RUN mkdir -p /opt/mean.js/public/lib
 WORKDIR /opt/mean.js

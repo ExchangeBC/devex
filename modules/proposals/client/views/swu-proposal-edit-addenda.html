@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col m-4">
+    <div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently
+      check this tab for any Addenda.</div>
+    <br>
+    <div class="alert" ng-if="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
+      There are currently no addenda for this RFP.
+    </div>
+
+    <ol>
+      <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
+        <div>
+          <span ng-bind-html="addendum.description"></span>
+          <div class="addendum-created">
+            Added on {{addendum.createdOn | date}}
+          </div>
+        </div>
+      </li>
+    </ol>
+  </div>
+</div>

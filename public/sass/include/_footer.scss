@@ -1,0 +1,64 @@
+/* Footer links */
+.footer-distributed {
+  > a {
+    color: $navbar-dark-color;
+    display: inline-block;
+
+    &:hover,
+    &:focus {
+      color: $navbar-dark-hover-color;
+    }
+  }
+  > .active > a {
+    &,
+    &:hover,
+    &:focus {
+      color: $navbar-dark-active-color;
+    }
+  }
+  > .disabled > a {
+    &,
+    &:hover,
+    &:focus {
+      color: $navbar-dark-disabled-color;
+    }
+  }
+}
+
+.footer-distributed p {
+  color: $gray-light;
+  font-size: 14px;
+}
+
+.footer {
+  width: 100%;
+  min-height: 200px;
+  text-align: left;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: $gray-dark;
+}
+
+// Sign-in admin card
+.footer-card {
+  background-color: $white !important;
+  padding: 1em;
+}
+
+/* If you don't want the footer to be responsive, remove these media queries */
+
+@media (max-width: 600px) {
+  .footer-distributed .footer-left,
+  .footer-distributed .footer-right {
+    text-align: center;
+  }
+
+  .footer-distributed .footer-right {
+    float: none;
+    margin: 0 auto 20px;
+  }
+
+  .footer-distributed .footer-left p.footer-links {
+    line-height: 1.8;
+  }
+}

@@ -1,47 +1,45 @@
-<div class="sub-nav">
+<div class="back-nav">
 	<div class="container">
-		<div class="breadcrumb-nav">
-			<a href="/programs" class="breadcrumb-nav"><i class="fa fa-chevron-left"></i> All Programs</a>
+		<div class="row">
+			<div class="col">
+				<a href="/programs"><i class="fa fa-chevron-left"></i> All Programs</a>
+			</div>
 		</div>
 	</div>
 </div>
 
-<section class="detail-page-background">
-
-	<div class="container detail-view">
-		<div class="row">
-			<div class="col-xs-12 text-right">
-			<!-- // Admin Control Buttons // -->
-				<!-- // Edit // -->
-				<button data-automation-id="button-program-edit" type="button" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i></button>
+<section class="main-section">
+	<div class="container">
+		<!-- // Labels & Admin control buttons // -->
+		<div class="row mb-2" ng-if="vm.canEdit || vm.canRequestMembership">
+			<div class="col text-right">
 				<!-- // Unpublish // -->
-				<a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-text-only" ng-click="vm.publish(false)" title="Unpublish program">
-				<i class="fa fa-lg fa-ban"></i></a>
+				<a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish program">
+				Unpublish</a>
 				<!-- // Publish // -->
-				<a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary pull-right" ng-click="vm.publish(true)" title="Publish this program page"><i class="fa fa-bullhorn"></i> Publish</a>
+				<a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this program page">Publish</a>
+				<!-- // Edit // -->
+				<button data-automation-id="button-program-edit" type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-pencil"></i> Edit</button>
 			<!-- // If user is not a member, request membership // -->
-				<button data-automation-id="button-program-request-membership" type="button" class="btn btn-lg btn-text-only" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-lg fa-user"></i></button>
+				<button data-automation-id="button-program-request-membership" type="button" class="btn btn-primary" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-user"></i></button>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-12 text-center">
-				<img style="max-height: 50px;" src="/{{vm.program.logo}}"/>
+			<div class="col">
+				<div class="d-flex align-self-start mb-3">
+					<img height="50" width="50" class="mr-3" src="/{{vm.program.logo}}"/>
+					<h3 ng-bind="vm.program.title"></h3>
+				</div>
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-xs-12 text-center">
-				<h1 class="opp-detail" ng-bind="vm.program.title"></h1>
+			<div class="col">
+				<h5 class="py-2 text-truncate" ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow">{{vm.program.website}}</a></h5>
 				<p ng-bind="vm.program.short"></p>
-				<h4 ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow"><i class="fa fa-external-link"></i> Program website</a></h4>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-12">
 				<p ng-bind-html="vm.display.description"></p>
 			</div>
 		</div>
-
 	</div>
 
 	<div class="container">

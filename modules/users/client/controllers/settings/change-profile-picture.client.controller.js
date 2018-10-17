@@ -33,7 +33,7 @@
 		// Called after the user has successfully uploaded a new picture
 		function onSuccessItem(response) {
 			// Show success message
-			Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
+			Notification.success({ message: '<i class="fa fa-ok"></i> Change profile picture successful!' });
 
 			// Populate user object
 			vm.user = Authentication.user = response;
@@ -48,7 +48,7 @@
 			vm.fileSelected = false;
 
 			// Show error message
-			Notification.error({ message: response.message, title: '<i class="glyphicon glyphicon-remove"></i> Change profile picture failed!' });
+			Notification.error({ message: response.message, title: '<i class="fa fa-remove"></i> Change profile picture failed!' });
 		}
 	}
 }());

@@ -51,7 +51,7 @@
 // 			.then (function (result) {
 // 				qqq.superbasicForm.$setPristine ();
 // 				Notification.success ({
-// 					message : '<i class="glyphicon glyphicon-ok"></i> superbasic saved successfully!'
+// 					message : '<i class="fa fa-ok"></i> superbasic saved successfully!'
 // 				});
 // 				if (leavenow) $state.go ('superbasics.view', {superbasicId:qqq.superbasic.code});
 // 			})
@@ -61,7 +61,7 @@
 // 			.catch (function (res) {
 // 				Notification.error ({
 // 					message : res.data.message,
-// 					title   : '<i class=\'glyphicon glyphicon-remove\'></i> superbasic save error!'
+// 					title   : '<i class=\'fa fa-remove\'></i> superbasic save error!'
 // 				});
 // 			});
 // 		};

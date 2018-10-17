@@ -51,7 +51,7 @@
 			.then (function (result) {
 				qqq.propsalQuestionForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> propsalQuestion saved successfully!'
+					message : '<i class="fa fa-ok"></i> propsalQuestion saved successfully!'
 				});
 				if (leavenow) $state.go ('propsalQuestions.view', {propsalQuestionId:qqq.propsalQuestion.code});
 			})
@@ -61,7 +61,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> propsalQuestion save error!'
+					title   : '<i class=\'fa fa-remove\'></i> propsalQuestion save error!'
 				});
 			});
 		};

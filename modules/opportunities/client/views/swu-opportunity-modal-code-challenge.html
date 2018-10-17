@@ -1,23 +1,30 @@
-<div class="modal-header">
-	<div class="modal-title">Code Challenge Scores</div>
-</div>
-<div class="modal-body">
-	<div class="text-center">Enter Code Challenge scores for each company:</div>
-	<div class="score-form">
-		<div class="row">
-			<form name="scoreForm">
-				<table>
-					<tr class="spaceUnder" ng-repeat="proposal in data.proposalScores">
-						<td><input class="scoreBox" name="input" type="number" min="0" max="{{data.maxCodeChallengePoints}}" ng-model="proposal.score"/></td>
-						<td>&nbsp;&nbsp;{{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}</td>
-					</tr>
-				</table>
-			</form>
-		</div>
-	</div>
-</div>
-<div class="modal-footer">
-	<span>Scores must be a number between 0 and {{data.maxCodeChallengePoints}}</span>
-	<button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()"><i class="fa fa-lock"></i> Lock in Scores</button>
-	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+<div class="row">
+  <div class="col m-3">
+
+    <h5>Code Challenge Scores</h5>
+    <br>
+    <div>
+      <div class="text-center">Enter Code Challenge scores for each company:</div>
+
+      <form name="scoreForm">
+        <div class="row my-2 mx-auto" ng-repeat="proposal in data.proposalScores">
+          <div class="col"></div>
+          <div class="col-2 pr-0">
+            <input class="scoreBox" name="input" type="number" min="0" max="{{data.maxCodeChallengePoints}}" ng-model="proposal.score" />
+          </div>
+          <div class="col pl-0 text-left">
+            {{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}
+          </div>
+          <div class="col"></div>
+        </div>
+      </form>
+
+    </div>
+    <div class="my-3">
+      <span>Scores must be a number between 0 and {{data.maxCodeChallengePoints}}</span>
+      <button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+      <button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()"><i
+          class="fa fa-lock"></i> Lock in Scores</button>
+    </div>
+  </div>
 </div>

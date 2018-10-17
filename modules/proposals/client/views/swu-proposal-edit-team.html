@@ -1,0 +1,211 @@
+<div class="row">
+  <div class="col m-4">
+    <uib-accordion>
+      <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
+        <uib-accordion-heading>
+          <i class="fa fa-lg fa-info-circle"></i> Things you should know as you compose your team <i>(<span ng-if="!accordian1">click
+              to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+        </uib-accordion-heading>
+        <div class="row">
+          <p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its
+            Team
+            by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfy the
+            required Capabilities set out for the applicable Phase and Phase Window and, where indicated and
+            if
+            applicable, whether the Resource can fulfill a Full-Time commitment. A green check mark will
+            appear
+            next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based
+            on
+            current Resource Profiles.</p>
+          <p>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory
+            Capabilities
+            requirement is satisfied.</p>
+          <p>The RFP system will also automatically populate the Proponent’s Proposal for the Preferred
+            Technical
+            Skills identified below. If a green check mark does not appear next to a Preferred Technical
+            Skill, a
+            Proponent’s Proposal will not receive full points for that category set forth in the evaluation
+            criteria scoring table.</p>
+          <p>Proponents should note that both Resource Capabilities and Preferred Technical Skills are
+            claimed as
+            part of the Resource profile. It is the responsibility of the Proponent to ensure that the
+            Resource
+            profiles for a Proponent’s Team are fully accurate and up-to-date. Resource profiles can be
+            updated
+            at any time before the Closing Time.</p>
+        </div>
+      </div>
+    </uib-accordion>
+  </div>
+</div>
+
+<div class="row mx-2">
+  <div class="col d-flex flex-column mx-auto" ng-if="ppp.oinp.isInception">
+    <h5 class="text-center"><i class="fa fa-map"></i> Inception Phase</h5>
+    <div class="text-center small">
+      Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212;
+      {{ppp.oinp.f_endDate}}
+    </div>
+    <br>
+
+    <div class="border border-primary rounded">
+      <div class="text-center p-1 small text-white bg-primary rounded-top">
+        Click on member(s) to add them to team:
+      </div>
+
+      <!-- Team member filter box (inception) -->
+      <input class="form-control w-50 mx-auto mt-2" type="text" ng-model="ppp.inception.search" placeholder="Start typing to filter:"
+        ng-change="ppp.inception.figureOutItemsToDisplay()" />
+
+      <!-- Team member list Inception) -->
+      <div class="row">
+        <div class="col-10 px-0 py-2 mx-auto">
+          <div ng-repeat=" member in ppp.inception.filteredItems" class="font-weight-bold p-2 border" ng-class="{'bg-primary text-white':ppp.inTeam[member.email]}"
+            ng-click="ppp.clickMember(member, ppp.inTeam)">
+            <avatar-display size="25" url="member.profileImageURL"></avatar-display>
+            <name>{{member.displayName}}</name>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="my-3 ml-5">
+      <h6>Required Capabilities</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
+            <th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x text-muted"></i></th>
+            <td><label class="label label-lg label-cap-default {{capability.labelClass}} m-auto"></i>
+                {{capability.name}}</label></td>
+            <td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected m-auto">F/T</label></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h6 class="mt-3">Preferred Technical Skills</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
+            <th scope="row" ng-if="ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg text-muted"></i></th>
+            <td><label class="label label-skill m-auto">{{capabilitySkill.name}}</label></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="col" ng-if="ppp.oprp.isPrototype">
+    <h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
+    <div class="text-center small">
+      Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212;
+      {{ppp.oprp.f_endDate}}
+    </div>
+
+    <br>
+
+    <div class="border border-primary rounded">
+      <div class="text-center p-1 small text-white bg-primary rounded-top">
+        Click on member(s) to add them to team:
+      </div>
+
+      <!-- Team member filter box (poc) -->
+      <input class="form-control w-50 mx-auto mt-2" type="text" ng-model="ppp.poc.search" placeholder="Start typing to filter:"
+        ng-change="ppp.poc.figureOutItemsToDisplay()" />
+
+      <!-- Team member list Inception) -->
+      <div class="row">
+        <div class="col-10 px-0 py-2 mx-auto">
+          <div ng-repeat=" member in ppp.poc.filteredItems" class="font-weight-bold p-2 border" ng-class="{'bg-primary text-white':ppp.prTeam[member.email]}"
+            ng-click="ppp.clickMember(member, ppp.prTeam)">
+            <avatar-display size="25" url="member.profileImageURL"></avatar-display>
+            <name>{{member.displayName}}</name>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="my-3 ml-5">
+      <h6>Required Capabilities</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
+            <th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x text-muted"></i></th>
+            <td><label class="label label-lg label-cap-default {{capability.labelClass}} m-auto">{{capability.name}}</label></td>
+            <td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected m-auto">F/T</label></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h6 class="mt-3">Preferred Technical Skills</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
+            <th scope="row" ng-if="ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg text-muted"></i></th>
+            <td><label class="label label-skill m-auto">{{capabilitySkill.name}}</label></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col" ng-if="ppp.oimp.isImplementation">
+    <h5 class="text-center"><i class="fa fa-gears"></i> Implementation Phase</h5>
+    <div class="text-center small">
+      Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212;
+      {{ppp.oimp.f_endDate}}
+    </div>
+
+    <br>
+
+    <div class="border border-primary rounded">
+      <div class="text-center p-1 small text-white bg-primary rounded-top">
+        Click on member(s) to add them to team:
+      </div>
+
+      <!-- Team member filter box (poc) -->
+      <input class="form-control w-50 mx-auto mt-2" type="text" ng-model="ppp.implementation.search" placeholder="Start typing to filter:"
+        ng-change="ppp.implementation.figureOutItemsToDisplay()" />
+
+      <!-- Team member list Inception) -->
+      <div class="row">
+        <div class="col-10 px-0 py-2 mx-auto">
+          <div ng-repeat=" member in ppp.implementation.filteredItems" class="font-weight-bold p-2 border" ng-class="{'bg-primary text-white':ppp.imTeam[member.email]}"
+            ng-click="ppp.clickMember(member, ppp.imTeam)">
+            <avatar-display size="25" url="member.profileImageURL"></avatar-display>
+            <name>{{member.displayName}}</name>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="my-3 ml-5">
+      <h6>Required Capabilities</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
+            <th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x text-muted"></i></th>
+            <td><label class="label label-lg label-cap-default {{capability.labelClass}} m-auto">{{capability.name}}</label></td>
+            <td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected m-auto">F/T</label></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h6 class="mt-3">Preferred Technical Skills</h6>
+      <table>
+        <tbody>
+          <tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
+            <th scope="row" ng-if="ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg text-success"></i></th>
+            <th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg text-muted"></i></th>
+            <td><label class="label label-skill m-auto">{{capabilitySkill.name}}</label></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

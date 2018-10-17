@@ -1,0 +1,1406 @@
+a {
+  @include transition-all;
+  color: $theme-primary;
+  &:hover,
+  &:focus {
+    text-decoration: none;
+    color: darken($theme-primary, 10%);
+  }
+}
+
+a.secondary {
+  @include transition-all;
+  color: lighten($theme-success, 40%);
+  &:hover,
+  &:focus {
+    color: lighten($theme-success, 30%);
+  }
+}
+
+a.accordion-toggle {
+  color: $theme-primary;
+  &:hover,
+  &:active,
+  &:visited,
+  &:focus {
+    color: darken($theme-primary, 10%);
+    outline: none;
+  }
+}
+
+.page-header {
+  padding: 0;
+  margin: 15px 0 30px;
+  border: none;
+}
+
+.strong {
+  font-weight: bold;
+}
+
+// Global color classes
+
+.default {
+  color: $gray-dark;
+  &:hover {
+    color: $gray;
+  }
+  &:hover,
+  &:focus {
+    color: $gray;
+  }
+}
+
+.inverse {
+  color: #fff;
+}
+
+.danger {
+  color: $theme-danger;
+}
+
+.warning {
+  color: $theme-warning;
+}
+
+.success {
+  color: $theme-success;
+}
+
+// Containers
+// .container {
+//   max-width: 1040px;
+//   padding: 0 10px;
+//   > .navbar-collapse {
+//     margin-left: -10px;
+//     margin-right: -10px;
+//   }
+//   > .navbar-header {
+//     margin-left: 0;
+//     margin-right: 0;
+//   }
+// }
+
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 17.5px;
+  border-left: 5px solid #f6f8fa;
+}
+
+// Opportunity detail views
+
+// Spacing on tables in opportunity details
+div.opp-dl-description > dt,
+dd {
+  display: table-cell;
+  margin: 0px 0px;
+}
+
+.opp-detail-header {
+  font-size: 0.85em;
+  font-weight: 300;
+  color: $gray-light;
+  padding-bottom: 3em;
+  > .btn {
+    margin-top: -0.5em;
+  }
+}
+
+h1.opp-detail {
+  padding: 0.5em 0;
+  margin-top: 0.5em;
+  font-size: 1.6em;
+}
+
+h3.opp-detail {
+  margin: 0.25em 0 0.75em;
+  font-size: 1.2em;
+}
+
+h4.opp-detail {
+  margin-top: 0.25em;
+  font-size: 1.1em;
+}
+
+// Capability detail views
+
+h1.capability-detail {
+  margin: 0 0 1em;
+  font-size: 2em;
+}
+
+//--------------------
+// CWU Evaluation
+//--------------------
+
+.cwu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 1em;
+}
+
+//--------------------
+// SWU Evaluation
+//--------------------
+
+table.swu-eval-table {
+  > th,
+  td {
+    white-space: nowrap;
+  }
+}
+
+.question-rank-modal .modal-dialog,
+.question-review-modal .modal-dialog {
+  width: 800px;
+  max-width: 800px !important;
+}
+
+.code-challenge-modal .modal-dialog {
+  width: 600px;
+  max-width: 600px !important;
+}
+
+.interview-modal .modal-dialog {
+  width: 600px;
+  max-width: 600px !important;
+}
+
+li.question-ranking-item {
+  max-height: 42px;
+  min-height: 42px;
+  overflow-y: hidden;
+}
+
+div.question-viewer {
+  max-height: 200px;
+  white-space: nowrap;
+  overflow-y: scroll;
+}
+
+.swu-evaluation {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 0;
+}
+
+.swu-evaluation-progress {
+  > step {
+    display: inline-block;
+    padding: 9px 0;
+    font-size: 0.9em;
+    > icon {
+      color: #fff;
+      background: #333;
+      border: 4px solid #333;
+      border-radius: 50%;
+      padding: 4px 8px;
+      text-align: center;
+      font: 13px Arial, sans-serif;
+      font-weight: bold;
+      margin: 0 2px 0 6px;
+    }
+    > step-name {
+      position: relative;
+      z-index: 0;
+      margin-right: 20px;
+    }
+  }
+  > step.active {
+    > step-name {
+      font-weight: bold;
+    }
+  }
+  > step.disabled {
+    > step-name {
+      opacity: 0.2;
+    }
+    > icon {
+      opacity: 0.1;
+    }
+  }
+  > step.complete {
+    > step-name {
+      opacity: 0.2;
+    }
+    > icon {
+      opacity: 0.1;
+    }
+  }
+}
+
+.swu-evaluation-cta {
+  padding: 20px;
+  margin: 0 40px;
+  border-radius: 5px;
+  background: $theme-warning;
+  > p {
+    font-size: 1.1em;
+    font-weight: normal;
+    margin: 15px 0;
+  }
+  > button {
+    margin: 15px 0;
+  }
+}
+
+ul[dnd-list] .dndPlaceholder {
+  background-color: #ddd;
+  display: block;
+  min-height: 42px;
+}
+
+ul[dnd-list] li {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: -1px;
+}
+
+ul.question-input-list {
+  list-style-type: none;
+}
+
+li.question-input {
+  text-align: right;
+  max-height: 42px;
+}
+
+ul.question-list {
+  list-style-type: none;
+}
+li.question-item {
+  max-height: 42px;
+  min-height: 42px;
+  overflow-y: hidden;
+}
+div.question-cell {
+  border: solid;
+  border-width: 1px;
+  border-color: lightgray;
+  height: 42px;
+  overflow-y: hidden;
+}
+
+ul[dnd-list] {
+  min-height: 42px;
+  padding-left: 0px;
+}
+
+ul[dnd-list] .dndDraggingSource {
+  display: none;
+}
+
+.question-rank-modal {
+  > ul li.selected,
+  td.selected,
+  div.selected {
+    background-color: #dff0d8;
+    color: #3c763d;
+  }
+}
+
+// Sections
+
+section {
+  padding: 20px 0;
+}
+section.fill-view {
+  min-height: 80vh;
+}
+section.gray-lightest {
+  background: $gray-lightest;
+}
+
+section.gray-lighter {
+  background: $gray-lighter;
+}
+
+section.gray-light {
+  background: $gray-light;
+}
+
+section.gray {
+  background: $gray;
+}
+
+section.gray-dark {
+  background: $gray-dark;
+}
+
+section.gray-darker {
+  background: $gray-darker;
+}
+
+section.proposals-admin-view {
+  background: $theme-important;
+}
+
+section.list-page {
+  background: $gray-lighter;
+}
+
+section.form-page {
+  background: $gray-lighter;
+}
+
+section.signup {
+  background: #fff;
+  height: 95vh; /* This is to hide the footer from view when the user is signing in; less distraction */
+}
+
+// Forms / Might use these later to simplify html
+// ----------------------------------------------
+
+.form {
+  max-width: 1350px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: none;
+}
+
+.form-header {
+  padding: 10px 15px;
+  margin: none;
+  background: #e3e3e3;
+  border-radius: 4px 4px 0px 0px;
+}
+
+form-title {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.form-body {
+  display: block;
+  padding: 10px 15px;
+  margin: none;
+  background: #fff;
+}
+
+.form-footer {
+  padding: 10px 15px;
+  margin: none;
+  background: #e3e3e3;
+  border-radius: 0px 0px 4px 4px;
+}
+
+// Wider form for SWU proposal
+.swu-proposal {
+  max-width: 1360px;
+}
+
+// Formatting for proposal amount error messages
+.proposal-amount-error {
+  font-size: 9pt;
+  color: red;
+}
+.proposal-amount-wrapper {
+  height: 35px;
+  text-align: right;
+}
+.proposal-total-amount-wrapper {
+  text-align: right;
+  padding-bottom: 2.5em;
+}
+
+// Bootstrap Overrides
+
+.bg-primary {
+  background: $theme-primary;
+  background: -webkit-linear-gradient($theme-primary, darken($theme-primary, 5%));
+  background: linear-gradient($theme-primary, darken($theme-primary, 5%));
+}
+
+// .text-primary {
+//   color: $theme-primary;
+// }
+
+.no-gutter > [class*='col-'] {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+// Jumbotron
+.jumbotron-primary {
+  color: white;
+  box-shadow: inset 0 0 0 1000px fade($theme-primary, 50%);
+}
+
+// Button Styles
+
+.btn {
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+  border-radius: 3px;
+  box-shadow: none;
+  @include transition-all(0.15s);
+  text-decoration: none;
+  margin-left: 2px;
+}
+
+.btn-sm {
+  font-size: 0.76rem;
+  padding: 0.2rem 0.4rem;
+  border: none;
+}
+
+/* Size form controls in px instead of em */
+// .form-control {
+//   font-size: 14px !important;
+//   padding: 10px;
+//   height: 42px;
+// }
+
+/* Size input-groups and their buttons in px instead of em so they align with the form-control */
+.input-group-btn {
+  > .btn {
+    font-size: 13px !important;
+    padding: 11px;
+    border-color: #ccc;
+  }
+}
+
+.btn-default {
+  color: $gray-dark;
+  background-color: #e6e6e6;
+  border-color: #e6e6e6;
+  .input-group-btn & {
+    border-color: $input-border-color;
+  }
+  .has-success .input-group-btn & {
+    border-color: $success;
+    color: $success;
+  }
+  .has-warning .input-group-btn & {
+    border-color: $warning;
+    color: $warning;
+  }
+  .has-error .input-group-btn & {
+    border-color: $danger;
+    color: $danger;
+    background: $danger;
+  }
+  &:hover {
+    color: $gray-dark;
+    background-color: darken(#e6e6e6, 7%);
+    border-color: darken(#e6e6e6, 7%);
+  }
+  &:hover,
+  &:focus {
+    color: $gray-dark;
+    background-color: darken(#e6e6e6, 7%);
+    border-color: darken(#e6e6e6, 7%);
+  }
+  &:active,
+  &.active {
+    background-image: none;
+  }
+  &.btn-default-primary {
+    color: darken($theme-primary, 8%);
+    border-color: darken($theme-primary, 8%);
+  }
+  &.btn-default-success {
+    color: $theme-success;
+    border-color: $theme-success;
+  }
+  &.btn-default-danger {
+    color: $theme-danger;
+    border-color: $theme-danger;
+  }
+}
+
+.btn-radio {
+  color: $gray;
+  background-color: $gray-lighter;
+  border-color: $gray-lighter;
+  &:hover {
+    color: $gray;
+    background-color: darken($gray-lighter, 7%);
+    border-color: darken($gray-lighter, 7%);
+  }
+  &:active {
+    color: #fff;
+    background-color: $theme-primary;
+    border-color: $theme-primary;
+  }
+  &:active,
+  &:hover {
+    color: #fff;
+    background-color: $theme-primary;
+    border-color: $theme-primary;
+  }
+  &:focus,
+  &:hover {
+    color: #fff;
+    background-color: $theme-primary;
+    border-color: $theme-primary;
+  }
+  &:active,
+  &:visited {
+    color: #fff;
+    background-color: $theme-primary;
+    border-color: $theme-primary;
+  }
+}
+
+.btn-default-inverse {
+  color: #fff;
+  background: $gray-dark;
+  border-color: $gray-dark;
+  &:hover {
+    color: #fff;
+    background: lighten($gray-dark, 10%);
+    border-color: lighten($gray-dark, 10%);
+  }
+  &:hover,
+  &:focus {
+    color: #fff;
+    background: lighten($gray-dark, 7%);
+    border-color: lighten($gray-dark, 7%);
+  }
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: $gray;
+  border-color: $gray;
+  &:hover,
+  &:active:hover {
+    color: #fff;
+    background-color: darken($gray, 8%);
+    border-color: darken($gray, 8%);
+  }
+  &:active,
+  &:focus {
+    color: #fff;
+    background-color: darken($gray, 10%);
+    border-color: darken($gray, 10%);
+  }
+}
+
+.btn-primary {
+  color: white;
+  background-color: $theme-primary;
+  border-color: $theme-primary;
+  &:hover,
+  &:active:hover {
+    color: #fff;
+    background-color: darken($theme-primary, 8%);
+    border-color: darken($theme-primary, 8%);
+    box-shadow: none;
+  }
+  &:active,
+  &:focus {
+    color: #fff;
+    background-color: darken($theme-primary, 10%);
+    border-color: darken($theme-primary, 10%);
+    box-shadow: none;
+  }
+}
+
+.btn-success {
+  background-color: $theme-success;
+  border-color: $theme-success;
+  &:hover,
+  &:active:hover {
+    background-color: lighten($theme-success, 8%);
+    border-color: lighten($theme-success, 8%);
+  }
+  &:active,
+  &:focus {
+    background-color: lighten($theme-success, 10%);
+    border-color: lighten($theme-success, 10%);
+  }
+}
+
+.btn-info {
+  background-color: darken($theme-info, 2%);
+  border-color: darken($theme-info, 14%);
+  &:hover,
+  &:active:hover {
+    background-color: darken($theme-info, 8%);
+  }
+  &:active,
+  &:focus {
+    background-color: darken($theme-info, 10%);
+  }
+}
+
+.btn-warning {
+  background-color: $theme-yellow;
+  border-color: $theme-yellow;
+  color: $gray-dark;
+  &:hover,
+  &:active:hover {
+    background-color: darken($theme-yellow, 8%);
+    border-color: darken($theme-yellow, 8%);
+    color: $gray-dark;
+  }
+  &:active,
+  &:focus {
+    background-color: darken($theme-yellow, 8%);
+    border-color: darken($theme-yellow, 8%);
+    color: $gray-dark;
+  }
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: $theme-danger;
+  border-color: $theme-danger;
+  &:hover,
+  &:active:hover {
+    color: #fff;
+    background-color: lighten($theme-danger, 10%);
+    border-color: lighten($theme-danger, 10%);
+  }
+  &:active,
+  &:focus {
+    color: #fff;
+    background-color: lighten($theme-danger, 10%);
+    border-color: lighten($theme-danger, 10%);
+  }
+}
+
+.btn-link {
+  color: $theme-primary;
+  background: none;
+}
+
+.btn-text-only {
+  color: $gray;
+  background: transparent;
+  border-color: none;
+  &:hover,
+  &:active:hover {
+    color: $gray-darker;
+    background: transparent;
+    border-color: none;
+    box-shadow: none;
+  }
+  &:active,
+  &:focus {
+    color: $gray-darker;
+    background: transparent;
+    border-color: none;
+    box-shadow: none;
+  }
+}
+
+.btn-text-only-inverse {
+  color: $gray-lightest;
+  background: transparent;
+  border-color: none;
+  &:hover,
+  &:active:hover {
+    color: #fff;
+    background: transparent;
+    border-color: none;
+  }
+  &:active,
+  &:focus {
+    color: #fff;
+    background: transparent;
+    border-color: none;
+  }
+}
+
+//------------------------
+// Filter
+//------------------------
+
+.list-filter {
+  background: #ced9e4;
+  padding: 10px;
+  border-top: 1px solid #e2e2e2;
+  border-bottom: 1px solid #e2e2e2;
+  > .btn {
+    font-size: 13px;
+    padding: 3px 5px;
+    vertical-align: top;
+  }
+}
+
+.btn-filter-selected {
+  transition: none;
+  color: #fff;
+  background: $gray;
+  border: 1px solid;
+  border-color: transparent;
+  box-shadow: none;
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+    background: $gray;
+    box-shadow: none;
+  }
+}
+
+.btn-filter-unselected {
+  transition: none;
+  color: $gray;
+  background: transparent;
+  border: 1px solid;
+  border-color: $gray-light;
+  &:hover,
+  &:focus,
+  &:active {
+    color: $gray;
+    background: transparent;
+    border-color: $gray-light;
+    box-shadow: none;
+  }
+}
+
+.btn-table-heading {
+  padding: 4px 0;
+  margin: 0;
+  font-weight: bold;
+  color: $gray-dark;
+  background: transparent;
+  &:hover,
+  &:active:hover {
+    color: $theme-primary;
+  }
+  &:active,
+  &:focus {
+    outline: none;
+    box-shadow: none;
+    color: $theme-primary;
+  }
+}
+
+// Proposal stats list
+// --------------------------------------------------
+.proposal-stats {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 10px;
+}
+
+//---------------------
+// Custom panel styles
+//---------------------
+
+.panel-default {
+  > .panel-heading,
+  .panel-footer {
+    background-color: $gray-lighter;
+  }
+}
+
+.panel-primary {
+  > .panel-heading,
+  .panel-footer {
+    background-color: $theme-primary;
+    color: #fff;
+  }
+  border-color: $theme-primary;
+}
+
+.panel-group {
+  margin-bottom: 0;
+}
+
+.panel-title {
+  margin-top: 3px;
+  font-size: 1.07em;
+  font-weight: 500;
+}
+
+// Panels with logo images on the side
+
+.list-img-outer {
+  position: relative;
+}
+.list-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: ($thumb-md + 75);
+  text-align: center;
+  img {
+    position: relative;
+    margin-top: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    width: $thumb-md;
+    height: $thumb-md;
+    border-radius: $border-radius;
+  }
+  + .list-img-body {
+    border-left: none;
+    margin-left: ($thumb-md + 80);
+    min-height: $thumb-md;
+  }
+  @media (max-width: 767px) {
+    width: ($thumb-md + 35);
+    + .list-img-body {
+      margin-left: ($thumb-md + 40);
+    }
+  }
+  .panel-default & {
+    background: $headings-color;
+  }
+  .panel-info & {
+    background: lighten($theme-info, 10%);
+  }
+  .panel-primary & {
+    background: lighten($theme-primary, 15%);
+  }
+  .panel-success & {
+    background: lighten($theme-success, 15%);
+  }
+  .panel-warning & {
+    background: lighten($theme-warning, 15%);
+  }
+  .panel-danger & {
+    background: lighten($theme-danger, 15%);
+  }
+}
+.img-logo {
+  margin-left: auto;
+  margin-right: auto;
+  max-height: $thumb-lg;
+}
+.img-logo2 {
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 100%;
+  max-width: 100%;
+}
+.img-avatar {
+  width: 65px;
+  height: 65px;
+  margin: 6px;
+  border-radius: 40px;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  &:hover {
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1.03);
+    transform: scale(1.03);
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+}
+
+.img-avatar-sm {
+  width: 50px;
+  height: 50px;
+}
+
+.img-avatar-flat {
+  border-radius: 40px;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.company-member {
+  display: inline-block;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  padding: 10px 5px;
+  margin: 5px 0px;
+}
+
+// Form header
+
+.col-text-buttons a {
+  margin-left: 0.5em;
+}
+
+.form-head .col-form-buttons {
+  margin-bottom: 10px;
+}
+.form-foot {
+  margin-top: 10px;
+}
+
+@media (min-width: 768px) {
+  .form-head .col-form-buttons {
+    margin-top: 20px;
+    padding-left: 10px;
+  }
+  .form-head .col-text-buttons {
+    margin-top: 15px;
+  }
+}
+
+.input-help-source {
+  color: $theme-primary;
+  &:hover,
+  &:focus {
+    color: darken($theme-primary, 10%);
+  }
+  cursor: pointer;
+}
+
+// List Groups
+
+.list-group-item.active {
+  background-color: $theme-primary;
+  border-color: darken($theme-primary, 5%);
+}
+.list-group-item > h2 {
+  margin-top: 10px;
+}
+.list-group-item > h2 a {
+  display: block;
+}
+.panel-tools {
+  text-align: right;
+  margin: 0;
+}
+
+.list-group-item-selected {
+  background: $theme-important;
+}
+
+.team-selection-list {
+  > .team-member {
+    display: block;
+    padding: 0.5em;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    > img {
+      width: 35px;
+      height: 35px;
+      border-radius: 15px;
+      margin: 5px 5px 5px 0px;
+    }
+    > name {
+      color: $gray-dark;
+      font-weight: bold;
+      font-size: 1em;
+    }
+  }
+  > .selected {
+    background-color: $theme-primary;
+    > name {
+      color: #fff;
+    }
+    > .label-list {
+      > label {
+        color: #fff;
+      }
+    }
+  }
+}
+
+.capability-selection-list {
+  capability {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    border: 1px solid #ddd;
+    > label {
+      margin: -1px -5px;
+    }
+  }
+  capability.selected {
+    background: $gray-lighter;
+  }
+  capability:first-child {
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+  capability:last-child {
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+}
+
+// User Avatar
+
+.avatar-user {
+  position: relative;
+  display: flex;
+  padding: 10px 5px;
+  > img {
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 0px;
+  }
+  > .avatar-body {
+    margin: 10px 5px 0px;
+    > .avatar-name {
+      font-weight: 500;
+    }
+  }
+}
+
+.avatar-user-with-email {
+  position: relative;
+  display: flex;
+  padding: 10px 5px;
+  > img {
+    float: left;
+    height: 40px;
+    width: 40px;
+    margin: 0px;
+  }
+  > .avatar-body {
+    margin: 0px 5px 0px;
+    > .avatar-name {
+      font-weight: 500;
+    }
+  }
+}
+
+.img-testimonial {
+  max-height: 85px;
+  @media (max-width: 767px) {
+    max-width: 70px;
+    min-height: 50px;
+  }
+  @media (min-width: 768px) {
+    max-width: 50%;
+  }
+}
+
+// Wells
+
+.well {
+  max-width: 1040px;
+  padding: 20px;
+  margin: 10px 0px;
+  border: none;
+  border-radius: 4px;
+  box-shadow: none;
+  background: $gray-lighter;
+  > p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    margin-top: 0;
+  }
+}
+
+.well-important {
+  background: $theme-important;
+}
+
+.well-warning {
+  background: $theme-warning;
+}
+
+.well-transparent {
+  background: transparent;
+  border: 1px solid #b3b3b3;
+}
+
+.instructions-for-dev {
+  color: #fff;
+  background: #222;
+}
+
+// Banners
+
+.banner {
+  padding: 10px;
+  margin: 0px;
+  text-align: center;
+}
+
+.banner p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.banner-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+}
+
+.banner-info {
+  background-color: $theme-info;
+}
+
+.banner-important {
+  background-color: $theme-important;
+}
+
+.banner-gray {
+  background-color: $gray-lightest;
+}
+
+// Offset the bottom margin of navbar-default
+.banner-under-nav {
+  margin-top: -20px;
+}
+
+// Page Controls
+
+.page-controls {
+  background-color: $gray;
+  padding: 2px 0px;
+  p {
+    margin: 0px;
+  }
+}
+
+// Checkboxes that are isolated
+
+.checkbox-alone {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.checkbox-subtext {
+  font-size: 80%;
+  display: inline-block;
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+// Carousel
+.carousel-control {
+  opacity: 0.3;
+
+  .fa-chevron-right,
+  .fa-chevron-left {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  &:hover {
+    opacity: 0.6;
+  }
+}
+
+// Extras
+// -- Highlight Color Customization
+::-moz-selection,
+::selection {
+  color: white;
+  text-shadow: none;
+  background: $gray-dark;
+}
+
+img::selection,
+img::-moz-selection {
+  color: white;
+  background: transparent;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.25em 0.4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+.tag-default {
+  background-color: #818a91;
+}
+
+// Customize breadcrumbs
+
+.breadcrumb {
+  margin-bottom: 0;
+}
+.breadcrumb .active {
+  // only interested in ancestors
+  display: none;
+}
+.breadcrumb li:first-child:before {
+  content: '< ';
+  color: $gray-light;
+  margin-right: 2px;
+}
+
+// hide titles only on list pages
+// .list-page .list-page-hide {
+//   display: none;
+// }
+
+// Utility styles
+
+.pre-line {
+  white-space: pre-line;
+}
+.med-desc,
+.long-desc {
+  color: $gray;
+  margin: 15px 25px;
+}
+.long-desc {
+  font-size: ($font-size-base - 1);
+}
+
+.margin-top {
+  margin-top: $grid-gutter-width;
+}
+.margin-top-lg {
+  margin-top: ($grid-gutter-width * 2);
+}
+.margin-bottom {
+  margin-bottom: $grid-gutter-width;
+}
+.margin-bottom-lg {
+  margin-bottom: ($grid-gutter-width * 2);
+}
+
+// iframe
+// ------------------------------------
+
+iframe {
+  display: block;
+  width: 100%;
+}
+
+iframe.terms {
+  min-height: 360px;
+}
+
+// Capabilities List
+// -------------------------------------
+
+// table.capabilities-list {
+//   > tbody {
+//     > tr {
+//       > th {
+//         text-align: center;
+//         width: 45px;
+//         border: none;
+//         vertical-align: middle;
+//         padding: 1px 2px;
+//       }
+//       > td {
+//         border: none;
+//         vertical-align: middle;
+//         padding: 0px;
+//         > label.label-fulltime-selected {
+//           margin: 1px 0px;
+//         }
+//       }
+//     }
+//   }
+// }
+
+table.preferred-skills {
+  > tbody {
+    > tr {
+      > th {
+        text-align: left;
+        width: 220px;
+        border: none;
+        vertical-align: middle;
+        padding: 3px 2px;
+      }
+      > td {
+        border: none;
+        padding: 1px 2px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+div.team-member-divider {
+  padding: 0px;
+}
+
+div.selected {
+  color: #fff;
+  background: $gray-dark;
+}
+
+.username {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+// UI Notification
+
+.ui-notification {
+  position: fixed;
+  top: 40%;
+  left: 5%;
+  right: 5%;
+  margin: 0 auto;
+  z-index: 9999;
+  max-width: 400px;
+  max-height: 150px;
+  border-radius: 3px;
+  color: #fff;
+  background: $gray-darker;
+  @include transition(all ease 0.5s);
+  > message {
+    text-align: center;
+    padding: 1em;
+    margin: 0;
+  }
+  > title {
+    text-align: center;
+    padding: 1em;
+    margin: 0;
+    text-decoration: none;
+  }
+
+  &.clickable {
+    cursor: pointer;
+  }
+  &.killed {
+    opacity: 0;
+    @include transition(opacity ease 1s);
+  }
+  & > h3 {
+    display: block;
+    margin: 10px 10px 0 10px;
+    padding: 0 0 5px 0;
+    text-align: left;
+    font-size: $font-size-base;
+    font-weight: bold;
+    border-bottom: 1px solid fadeout($primary, 70%);
+  }
+  & a {
+    color: $primary;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  &.warning {
+    color: #fff;
+    background: $theme-warning;
+  }
+  &.error {
+    color: #fff;
+    background: $theme-danger;
+  }
+  &.success {
+    color: #fff;
+    background: $gray-darker;
+    > .title {
+      border: none;
+      text-align: center;
+      padding: 1em;
+      margin: 0;
+    }
+    > .message {
+      text-align: center;
+      padding: 1em;
+      margin: 0;
+    }
+  }
+  &.info {
+    color: #fff;
+    background: $gray-darker;
+  }
+}

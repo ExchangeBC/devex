@@ -1,0 +1,15 @@
+//body {
+//  padding-top: 61px !important; // To accommodate fixed navbar
+//}
+
+main {
+  min-height: 80vh !important; // Prevent footer from appearing in the middle of the view with whitespace below
+}
+
+.main-section {
+  min-height: 80vh !important;
+}
+
+.unpublished {
+	opacity: 0.3;
+}

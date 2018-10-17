@@ -1,62 +1,61 @@
-<section class="edit-form-background" role="main">
-	<form id="programForm" warn-on-exit name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)" novalidate>
-		<div class="edit-form">
+<section class="bg-secondary" role=" main">
+  <form id="programForm" warn-on-exit name="vm.form.programForm" class="form" ng-submit="vm.save(vm.form.programForm.$valid)"
+    novalidate>
+    <div class="bg-light rounded p-0">
 
-			<div class="edit-form-header">
-				<span ng-if="vm.editing">
-					<span class="light small">EDITING:</span>
-					{{::vm.program.title}}
-				</span>
-				<span ng-if="!vm.editing">
-					New Program
-				</span>
-				<a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fa fa-lg fa-times"></i></a>
-			</div>
+      <div class="bg-light rounded px-4 py-3 font-weight-bold">
+        <span ng-if="vm.editing">
+          <span class="text-black-50 small">EDITING:</span>
+          {{::vm.program.title}}
+        </span>
+        <span ng-if="!vm.editing">
+          New Program
+        </span>
+        <a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fa fa-lg fa-times"></i></a>
+      </div>
 
-			<div class="edit-form-body">
-				<div class="row">
-					<div class="col-xs-12">
-						<fieldset>
-							<div class="form-group" show-errors>
-								<label class="control-label" for="title">Title</label>
+      <div class="px-3">
+        <div class="row">
+          <div class="col-xs-12">
+            <fieldset>
+              <div class="form-group" show-errors>
+                <label class="control-label" for="title">Title</label>
 
-								<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="stitle = !stitle"></i>
-								<div class="input-help alert alert-info" ng-show="stitle">The name of your public sector program or organization</div>
+                <i class="fa fa-question-circle input-help-source" ng-click="stitle = !stitle"></i>
+                <div class="input-help alert alert-info" ng-show="stitle">The name of your public sector program or
+                  organization</div>
 
-								<input data-automation-id="text-program-title" name="title" type="text" ng-model="vm.program.title" id="title" class="form-control" placeholder="Title" required>
-								<div ng-messages="vm.form.programForm.title.$error" role="alert">
-									<p class="help-block error-text" ng-message="required">A program title is required.</p>
-								</div>
-							</div>
-							<div class="form-group" show-errors>
-								<label class="control-label" for="short">Short Description</label>
+                <input data-automation-id="text-program-title" name="title" type="text" ng-model="vm.program.title" id="title"
+                  class="form-control" placeholder="Title" required>
+                <div ng-messages="vm.form.programForm.title.$error" role="alert">
+                  <p class="help-block error-text" ng-message="required">A program title is required.</p>
+                </div>
+              </div>
+              <div class="form-group" show-errors>
+                <label class="control-label" for="short">Short Description</label>
 
-								<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="ssdesc = !ssdesc"></i>
-								<div class="input-help alert alert-info" ng-show="ssdesc">A brief of your mandate or mission.
-								</div>
+                <i class="fa fa-question-circle input-help-source" ng-click="ssdesc = !ssdesc"></i>
+                <div class="input-help alert alert-info" ng-show="ssdesc">A brief of your mandate or mission.
+                </div>
 
-								<textarea  data-automation-id="text-program-short-description" name="short" data-ng-model="vm.program.short" id="short" class="form-control" cols="30" rows="3" placeholder="A short description of your program's mandate or mission" required></textarea>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="description">Description</label>
+                <textarea data-automation-id="text-program-short-description" name="short" data-ng-model="vm.program.short"
+                  id="short" class="form-control" cols="30" rows="3" placeholder="A short description of your program's mandate or mission"
+                  required></textarea>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="description">Description</label>
 
-								<i class="glyphicon glyphicon-question-sign input-help-source" ng-click="sdesc = !sdesc"></i>
-								<div class="input-help alert alert-info" ng-show="sdesc">
-									You can provide a fuller description, including links here.
-								</div>
+                <i class="fa fa-question-circle input-help-source" ng-click="sdesc = !sdesc"></i>
+                <div class="input-help alert alert-info" ng-show="sdesc">
+                  You can provide a fuller description, including links here.
+                </div>
 
-								<!-- <textarea name="description" data-ng-model="vm.program.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the program"></textarea> -->
-								<textarea
-									name="description"
-									id="description"
-                  data-automation-id="text-program-description"
-									class="form-control input-sm"
-									ui-tinymce="vm.tinymceOptions"
-									placeholder="A fuller description..."
-									ng-model="vm.program.description">
+                <!-- <textarea name="description" data-ng-model="vm.program.description" id="description" class="form-control" cols="30" rows="10" placeholder="A full description of the program"></textarea> -->
+                <textarea name="description" id="description" data-automation-id="text-program-description" class="form-control input-sm"
+                  ui-tinymce="vm.tinymceOptions" placeholder="A fuller description..." ng-model="vm.program.description">
 								</textarea>
-							</div>
-			<!--
+              </div>
+              <!--
 							<div class="form-group">
 								<label class="control-label" for="owner">Owner</label>
 								<input name="owner" type="text" ng-model="vm.program.owner" id="owner" class="form-control" placeholder="Program owner (ministry, organization, etc)" required>
@@ -66,54 +65,60 @@
 								<input type="text" name="taglist" ng-model="vm.program.taglist" id="taglist" class="form-control" placeholder="Tag List"></input>
 							</div>
 			-->
-							<div class="form-group">
-								<label class="control-label" for="website">Website</label>
-								<input  data-automation-id="text-program-website" name="website" type="text" ng-model="vm.program.website" id="website" class="form-control" placeholder="https://yoururlhere.ca" required>
-							</div>
-							<div class="form-group">
-								<label class="control-label" for="logo">Logo</label>
-							</div>
-							<div class="form-group">
-								<fieldset>
-									<div ng-show="vm.fileSelected" class="text-center form-group">
-										<p>Crop your picture then press save</p>
-										<div ngf-drop ng-model="vm.picFile" ngf-pattern="image/*" class="text-center cropArea">
-											<img-crop image="vm.picFile | ngfDataUrl" result-image="vm.croppedDataUrl" ng-init="vm.croppedDataUrl=''" area-type="square"></img-crop>
-										</div>
-									</div>
-									<div class="form-group text-center">
-										<img ng-src="{{vm.fileSelected ? vm.croppedDataUrl : '/' + vm.program.logo}}" alt="Program Logo" class="img-thumbnail user-profile-picture" ngf-drop>
-									</div>
-									<div ng-show="!vm.fileSelected" class="text-center form-group">
-										<button type="button" class="btn btn-default btn-file" ngf-select="vm.onSelectPicture($file)" ng-model="vm.picFile" accept="image/*">
-										Select Picture (Max Size 1M)
-									</button>
-									</div>
-									<div ng-show="0 && vm.fileSelected" class="text-center form-group">
-										<button  type="button" class="btn btn-primary" ng-click="vm.upload(vm.croppedDataUrl, vm.picFile.name)">Upload</button>
-										<button  type="button" class="btn btn-default" ng-click="vm.fileSelected = false">Cancel</button>
-									</div>
-									<div ng-show="vm.fileSelected" class="progress text-center">
-										<div class="progress-bar" role="progressbar" aria-valuenow="{{vm.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{vm.progress}}%" ng-bind="vm.progress + '%'">
-											<span class="sr-only">{{vm.progress}}% Complete</span>
-										</div>
-									</div>
-								</fieldset>
-							</div>
-						</fieldset>
-					</div>
-				</div>
-			</div>
+              <div class="form-group">
+                <label class="control-label" for="website">Website</label>
+                <input data-automation-id="text-program-website" name="website" type="text" ng-model="vm.program.website"
+                  id="website" class="form-control" placeholder="https://yoururlhere.ca" required>
+              </div>
+              <div class="form-group">
+                <label class="control-label" for="logo">Logo</label>
+              </div>
+              <div class="form-group">
+                <fieldset>
+                  <div ng-show="vm.fileSelected" class="text-center form-group">
+                    <p>Crop your picture then press save</p>
+                    <div ngf-drop ng-model="vm.picFile" ngf-pattern="image/*" class="text-center cropArea">
+                      <img-crop image="vm.picFile | ngfDataUrl" result-image="vm.croppedDataUrl" ng-init="vm.croppedDataUrl=''"
+                        area-type="square"></img-crop>
+                    </div>
+                  </div>
+                  <div class="form-group text-center">
+                    <img ng-src="{{vm.fileSelected ? vm.croppedDataUrl : '/' + vm.program.logo}}" alt="Program Logo"
+                      class="img-thumbnail user-profile-picture" ngf-drop>
+                  </div>
+                  <div ng-show="!vm.fileSelected" class="text-center form-group">
+                    <button type="button" class="btn btn-default btn-file" ngf-select="vm.onSelectPicture($file)"
+                      ng-model="vm.picFile" accept="image/*">
+                      Select Picture (Max Size 1M)
+                    </button>
+                  </div>
+                  <div ng-show="0 && vm.fileSelected" class="text-center form-group">
+                    <button type="button" class="btn btn-primary" ng-click="vm.upload(vm.croppedDataUrl, vm.picFile.name)">Upload</button>
+                    <button type="button" class="btn btn-default" ng-click="vm.fileSelected = false">Cancel</button>
+                  </div>
+                  <div ng-show="vm.fileSelected" class="progress text-center">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{vm.progress}}" aria-valuemin="0"
+                      aria-valuemax="100" style="width:{{vm.progress}}%" ng-bind="vm.progress + '%'">
+                      <span class="sr-only">{{vm.progress}}% Complete</span>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
 
-			<div class="edit-form-footer">
-				<div class="row">
-					<div class="col-xs-12">
-						<a data-automation-id="button-program-save" class="btn btn-primary pull-right" ng-click="vm.saveme(vm.form.programForm.$valid)" title="Save"><i class="fa fa-save"></i> Save &amp; Close</a>
-						<a data-automation-id="button-program-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()" title="Remove"><i class="fa fa-trash"></i> Delete this Program</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</form>
+      <div class="bg-light rounded px-3 py-2">
+        <div class="row">
+          <div class="col-xs-12">
+            <a data-automation-id="button-program-save" class="btn btn-primary pull-right" ng-click="vm.saveme(vm.form.programForm.$valid)"
+              title="Save"><i class="fa fa-save"></i> Save &amp; Close</a>
+            <a data-automation-id="button-program-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
+              title="Remove"><i class="fa fa-trash"></i> Delete this Program</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
 </section>
-

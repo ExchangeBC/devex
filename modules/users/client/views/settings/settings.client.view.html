@@ -1,31 +1,31 @@
 <div class="container" role="main">
-	<div class="row">
-		<div class="col-xs-12 col-sm-3">
-			<section>
-				<ul class="nav nav-pills nav-stacked">
-					<li ui-sref-active="active">
-						<a  id="settings.profile" ui-sref="settings.profile">About Me</a>
-					</li>
-					<li ui-sref-active="active">
-						<a  id="settings.privacy" ui-sref="settings.privacy">Notifications & Privacy</a>
-					</li>
-					<li ui-sref-active="active">
-						<a  id="settings.skills" ui-sref="settings.skills">My Capabilities & Skills</a>
-					</li>
-					<li ui-sref-active="active">
-						<a  id="settings.messages" ui-sref="settings.messages">Messages</a>
-          			</li>
-         			<li ui-sref-active="active">
-              			<a  id="settings.affiliations" ui-sref="settings.affiliations">Company Affiliations</a>
-            		</li>
-				</ul>
-			</section>
-		</div>
-		<div class="hidden-xs col-sm-1"></div>
-		<div class="col-xs-12 col-sm-8">
-			<section class="fill-view">
-				<div ui-view></div>
-			</section>
-		</div>
-	</div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-3">
+      <section>
+        <ul class="nav nav-pills flex-column">
+          <li ui-sref-active="active nav-item">
+            <a class="nav-link" id="settings.profile" ui-sref="settings.profile">About Me</a>
+          </li>
+          <li ui-sref-active="active nav-item">
+            <a class="nav-link" id="settings.privacy" ui-sref="settings.privacy">Notifications & Privacy</a>
+          </li>
+          <li ui-sref-active="active nav-item">
+            <a class="nav-link" id="settings.skills" ui-sref="settings.skills">My Capabilities & Skills</a>
+          </li>
+          <li ui-sref-active="active nav-item">
+            <a class="nav-link" id="settings.messages" ui-sref="settings.messages">Messages</a>
+          </li>
+          <li ui-sref-active="active nav-item">
+            <a class="nav-link" id="settings.affiliations" ui-sref="settings.affiliations">Company Affiliations</a>
+          </li>
+        </ul>
+      </section>
+    </div>
+    <div class="hidden-xs col-sm-1"></div>
+    <div class="col-xs-12 col-sm-8">
+      <section class="fill-view">
+        <div ui-view></div>
+      </section>
+    </div>
+  </div>
 </div>

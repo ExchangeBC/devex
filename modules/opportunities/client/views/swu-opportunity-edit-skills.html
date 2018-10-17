@@ -1,20 +1,22 @@
-<div class="row">
-	<div class="col-xs-12">
-		<div class="alert alert-info">
-			Here are the capabilities you selected for your opportunity. If there are any preferred technical skills you would like the team to have, select them here.<br>
-			<span class="strong">Note:</span> If teams don't have the preferred technical skills, they won't be disqualified from applying on your opportunity as long as they have the required capabilities.
-		</div>
-		<table class="table preferred-skills">
-			<tbody>
-				<tr ng-repeat="c in vm.all.capabilities" ng-if="vm.all.iOppCapabilities[c.code]">
-					<th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}"><i class="fa fa-circle"></i> {{c.name}}</label></th>
-					<td>
-						<label-list>
-							<label ng-repeat="s in c.skills" class="label" ng-class="{'label-preferred-skill':!vm.all.iOppCapabilitySkills[s.code],'label-preferred-skill-selected':vm.all.iOppCapabilitySkills[s.code]}" ng-click="vm.all.iOppCapabilitySkills[s.code]=!vm.all.iOppCapabilitySkills[s.code];vm.inp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.prp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.imp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];">{{s.name}}</label>
-						</label-list>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+<div class="m-4">
+  <div class="alert alert-primary" role="alert">
+    Here are the capabilities you selected for your opportunity. If there are any preferred technical skills you
+    would like the team to have, select them here.<br>
+    <span class="strong">Note:</span> If teams don't have the preferred technical skills, they won't be disqualified
+    from applying on your opportunity as long as they have the required capabilities.
+  </div>
+  <table>
+    <tbody>
+      <tr ng-repeat="c in vm.all.capabilities" ng-if="vm.all.iOppCapabilities[c.code]">
+        <th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}"><i class="fa fa-circle"></i>
+            {{c.name}}</label></th>
+        <td>
+          <label-list>
+            <label ng-repeat="s in c.skills" class="label mx-1" ng-class="{'label-preferred-skill':!vm.all.iOppCapabilitySkills[s.code],'label-preferred-skill-selected':vm.all.iOppCapabilitySkills[s.code]}"
+              ng-click="vm.all.iOppCapabilitySkills[s.code]=!vm.all.iOppCapabilitySkills[s.code];vm.inp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.prp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.imp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];">{{s.name}}</label>
+          </label-list>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -26,7 +26,7 @@
         } else {
           vm.user.$remove(function () {
             $state.go('admin.users');
-            Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> User deleted successfully!' });
+            Notification.success({ message: '<i class="fa fa-ok"></i> User deleted successfully!' });
           });
         }
       }

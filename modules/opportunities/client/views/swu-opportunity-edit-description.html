@@ -1,23 +1,15 @@
-<div class="edit-form-tab-content">
-	<fieldset>
+<div class="mx-5 my-4">
+  <fieldset>
 
-		<form-display
-			class="col-sm-12"
-			x-options='{
+    <form-display class="col-sm-12" x-options='{
 				"title":"Background",
 				"name":"description",
 				"help":"Here is where you can fully describe any useful background, and what you are trying to accomplish by offering this paid opportunity."
 			}'>
-			<textarea
-				name="description"
-				id="description"
-				class="form-control input-sm"
-				ui-tinymce="vm.tinymceOptions"
-				placeholder="A full description of the opportunity"
-				ng-model="vm.opportunity.description">
+      <textarea name="description" id="description" class="form-control input-sm" ui-tinymce="vm.tinymceOptions"
+        placeholder="A full description of the opportunity" ng-model="vm.opportunity.description">
 			</textarea>
-		</form-display>
+    </form-display>
 
-	</fieldset>
+  </fieldset>
 </div>
-

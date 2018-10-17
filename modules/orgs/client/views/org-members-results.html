@@ -1,16 +1,15 @@
 <div class="modal-header">
-	<button class="close" data-ng-click="close()"><i class="fa fa-lg fa-times-thin"></i></button>
-	<div class="modal-title"><i class="fa fa-lg fa-check-circle success"></i>&nbsp; Invitations sent!</div>
+  <button class="close" data-ng-click="close()"><i class="fa fa-lg fa-times-thin"></i></button>
+  <div class="modal-title"><i class="fa fa-lg fa-check-circle success"></i>&nbsp; Invitations sent!</div>
 </div>
 <div class="modal-body">
-	<div class="row" ng-if="data.found.length > 0">
-		<div ng-repeat="p in data.found | orderBy:'email'">{{p.email}}</div>
-	</div>
-	<!-- Can we get rid of this now? There should no longer be a case where we can't find someone ... unless we can implement something where the system detects if an email address does not exist... -->
-	<div class="row" ng-if="data.notfound.length > 0">
-		<div ng-repeat="p in data.notfound | orderBy:'email'">{{p.email}}</div>
-	</div>
+  <div class="row" ng-if="data.found.length > 0">
+    <div ng-repeat="p in data.found | orderBy:'email'">{{p.email}}</div>
+  </div>
+  <div class="row" ng-if="data.notfound.length > 0">
+    <div ng-repeat="p in data.notfound | orderBy:'email'">{{p.email}}</div>
+  </div>
 </div>
 <div class="modal-footer text-right">
-	<button class="btn btn-lg btn-default" data-ng-click="close()">Close</button>
+  <button class="btn btn-lg btn-default" data-ng-click="close()">Close</button>
 </div>

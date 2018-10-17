@@ -51,7 +51,7 @@
 							}).$promise
 							.then (function (org) {
 								loadAffiliations();
-								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> You have been removed from ' + affiliation.name });
+								Notification.success({ message: '<i class="fa fa-ok"></i> You have been removed from ' + affiliation.name });
 							});
 						}
 					});
@@ -134,7 +134,7 @@
 							// Called after the user has successfully uploaded a new picture
 							function onSuccessItem(response) {
 								// Show success message
-								Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Change profile picture successful!' });
+								Notification.success({ message: '<i class="fa fa-ok"></i> Change profile picture successful!' });
 								// Populate user object
 								qqq.user = Authentication.user = response;
 								// Reset form
@@ -148,7 +148,7 @@
 							function onErrorItem(response) {
 								qqq.fileSelected = false;
 								// Show error message
-								Notification.error({ message: response.message, title: '<i class="glyphicon glyphicon-remove"></i> Change profile picture failed!' });
+								Notification.error({ message: response.message, title: '<i class="fa fa-remove"></i> Change profile picture failed!' });
 							}
 
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }

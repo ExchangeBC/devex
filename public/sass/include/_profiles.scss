@@ -1,0 +1,40 @@
+.profile-header {
+	display: block;
+	margin-bottom: 20px;
+	font-size: 24px;
+	font-weight: 600;
+}
+.profile-header-content {
+	display: inline-block;
+}
+.profile-header-image {
+	height: 75px;
+	width: 75px;
+	float: left;
+	margin: 0 20px 0 0;
+}
+.profile-title {
+	display: flex;
+	font-weight: bold;
+	font-size: 1.6em;
+	margin: 5px 0 10px;
+}
+.profile-stats {
+	display: flex;
+	font-size: 1.1em;
+}
+.profile-body {
+	min-height: 500px;
+}
+.profile-body-heading {
+	margin: 32px 0 15px;
+	font-size: 1.4em;
+	font-weight: 600;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #f8f8f8;
+}
+@media (min-width: 768px) {
+	.profile-body-heading {
+	margin: 40px 0 15px;
+	}
+}

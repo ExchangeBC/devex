@@ -1,52 +1,72 @@
-<div class="edit-form-tab-content">
-	<form ng-cloak name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
-		<div class="row">
-			<div class="col-xs-12 col-sm-7">
-				<p>This is where you make your Statement of Qualifications which will comprise your Response to the RFQ.</p>
-				<p>Make sure your team members have <strong>claimed their capabilities</strong> in their BCDevExchange profile.</p>
-				<h4>Invite team members</h4>
-				<div class="input-group">
-				  <input type="text" class="form-control" my-enter="vm.addMembers()" placeholder="name@example.com, name@example.com" ng-model="vm.emaillist">
-				  <span class="input-group-btn">
-					<button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
-				  </span>
-				</div>
-				<span class="small gray-light">Add multiple emails separated with a comma.</span>
-				<h5>My Members:</h5>
-				<div ng-cloak ng-if="!vm.loading">
-					<!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
-					<div ng-cloak class="alert alert-warning" ng-if="vm.org.members.length<2">
-						<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
-					</div>
-					<div ng-cloak class="card card-user" ng-repeat="member in vm.org.members">
-						<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-						<button class="btn btn-text-only pull-right btn-remove" ng-click="vm.removeMember(member)" title="Remove member"><i class="fa fa-lg fa-times"></i></button>
-						<div class="card-body">
-							<label-list>
-								<label ng-cloak ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i class="fa fa-circle"></i> {{capability.name}}</label>
-								<label ng-cloak ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-							</label-list>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="hidden-xs col-sm-1"></div>
-			<div class="col-xs-12 col-sm-4">
-				<h4>Team Capabilities</h4>
-				<!-- // Update logic about when this alert appears if necessary .... should appear until all capabilities are covered, then disappear when they're covered // -->
-				<div class="alert alert-warning" ng-if="!vm.org.isCapable">
-					<i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;Your team members must cover all these capabilities:
-				</div>
-				<table class="table capabilities-list">
-					<tbody>
-						<tr ng-cloak ng-repeat="capability in vm.capabilities">
-							<th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
-							<th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
-							<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</form>
+<div class="bg-white rounded p-4">
+  <form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
+    <div class="row">
+      <div class="col">
+        <p>This is where you make your Statement of Qualifications which will comprise your Response to the RFQ.</p>
+        <p>Make sure your team members have <strong>claimed their capabilities</strong> in their BCDevExchange profile.</p>
+
+        <h5>Invite team members</h5>
+        <div class="input-group">
+          <input class="input w-75" type="text" my-enter="vm.addMembers()" placeholder="name@example.com, name@example.com"
+            ng-model="vm.emaillist">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
+          </span>
+        </div>
+        <span class="small text-black-50">Add multiple emails separated with a comma.</span>
+
+        <div class="pl-0 col-10">
+          <h6 class="pt-4">My Members:</h6>
+          <div ng-if="!vm.loading">
+            <!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
+            <div class="alert alert-warning" ng-if="vm.org.members.length<2">
+              <i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
+            </div>
+
+
+            <div class="card p-2 my-3" ng-repeat="member in vm.org.members">
+              <div class="row p-0 m-0">
+                <div class="col p-0 m-0">
+                  <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
+                  <button class="btn btn-text-only float-right" ng-click="vm.removeMember(member)" title="Remove member">
+                    <i class="fa fa-lg fa-times"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <label-list>
+                  <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}">
+                    <i class="fa fa-circle"></i> {{capability.name}}
+                  </label>
+                  <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">
+                    {{capabilitySkill.name}}
+                  </label>
+                </label-list>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="hidden-xs col-sm-1"></div>
+      <div class="col-xs-12 col-sm-4">
+        <h4>Team Capabilities</h4>
+        <!-- // Update logic about when this alert appears if necessary .... should appear until all capabilities are covered, then disappear when they're covered // -->
+        <div class="alert alert-warning" ng-if="!vm.org.isCapable">
+          <i class="fa fa-lg fa-exclamation-circle"></i> &nbsp;Your team members must cover all these capabilities:
+        </div>
+        <table class="table capabilities-list">
+          <tbody>
+            <tr ng-cloak ng-repeat="capability in vm.capabilities">
+              <th scope="row" ng-if="vm.iOppCapabilities[capability.code]"><i class="fa fa-check-circle-o fa-2x success"></i></th>
+              <th scope="row" ng-if="!vm.iOppCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
+              <td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
 </div>

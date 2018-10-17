@@ -1,39 +1,42 @@
 <div class="row">
-	<div class="col-xs-12 text-center">
-			<div class="proposal-stats">
-				<span uib-tooltip="People following this opportunity"><i class="fa fa-user"></i> {{vm.stats.following}} Followers</span>
-				&nbsp;&nbsp;&nbsp;
-				<span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals started</span>
-				&nbsp;&nbsp;&nbsp;
-				<span uib-tooltip="Proposal submitted"><i class="fa fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
-			</div>
-	</div>
+  <div class="col text-center">
+    <div class="proposal-stats">
+      <span uib-tooltip="People following this opportunity"><i class="fa fa-user"></i> {{vm.stats.following}} Followers</span>
+      &nbsp;&nbsp;&nbsp;
+      <span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals
+        started</span>
+      &nbsp;&nbsp;&nbsp;
+      <span uib-tooltip="Proposal submitted"><i class="fa fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
+    </div>
+  </div>
 </div>
 
-<div class="row">
-	<div class="col-xs-12 text-center" ng-if="!vm.isclosed">
-		<div class="alert alert-warning">You'll be able to view submitted Proposals here when the opportunity closes.</div>
-	</div>
+<div class="row justify-content-center">
+  <div class="col-md-auto text-center" ng-if="!vm.isclosed">
+    <div class="alert alert-warning">You'll be able to view submitted Proposals here when the opportunity closes.</div>
+  </div>
 </div>
 
-<div class="row" ng-if="vm.isclosed && ! vm.proposals.length">
-	<div class="col-xs-12 text-center">
-		<div class="alert">🙁 No proposals were submitted...</div>
-	</div>
+<div class="row justify-content-center" ng-if="vm.isclosed && ! vm.proposals.length">
+  <div class="col-md-auto text-center">
+    <div class="alert">🙁 No proposals were submitted...</div>
+  </div>
 </div>
 
-<div class="row" ng-if="vm.isclosed && vm.proposals.length">
-	<div class="col-xs-12 text-center">
-		<div class="alert">🎉 You've got proposals! 🎉</div>
-		<div class="row">
-			<div class="col-xs-1 col-sm-4"></div>
-			<div class="col-xs-10 col-sm-4">
-				<h4>Proposals received:</h4>
-				<div class="list-group">
-					<strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })" title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}} {{proposal.user.lastName}}<i class="fa fa-file pull-right"></i></a></strong>
-				</div>
-			</div>
-			<div class="col-xs-1 col-sm-4"></div>
-		</div>
-	</div>
+<div class="row justify-content-center" ng-if="vm.isclosed && vm.proposals.length">
+  <div class="col-md-auto text-center">
+    <div class="alert">🎉 You've got proposals! 🎉</div>
+    <div class="row">
+      <div class="col"></div>
+      <div class="col">
+        <h4>Proposals received:</h4>
+        <div class="list-group">
+          <strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
+              title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}}
+              {{proposal.user.lastName}}<i class="fa fa-file pull-right"></i></a></strong>
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+  </div>
 </div>

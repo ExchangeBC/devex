@@ -1,0 +1,261 @@
+.label {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  letter-spacing: -0.02rem;
+}
+
+// Label list
+
+.label-list {
+  display: inline-block;
+  .label {
+    margin: 0.1rem;
+  }
+}
+
+//Sizes
+
+.label-lg {
+  font-size: 0.9rem;
+}
+
+// Generic classes
+
+.label-default {
+  color: $gray;
+  background: transparent;
+}
+
+.label-primary {
+  background: $theme-primary;
+}
+
+.label-info {
+  background: $theme-info;
+  color: $gray-dark;
+  font-weight: bold;
+}
+
+.label-warning {
+  color: $gray-dark;
+  background: $theme-warning;
+  font-weight: bold;
+}
+
+.label-danger {
+  background: $theme-danger;
+  color: #fff;
+}
+
+.label-success {
+  background: $theme-success;
+  color: #fff;
+}
+
+.label-text-only {
+  background: transparent;
+  color: $gray;
+}
+
+.label-input {
+  font-weight: normal;
+  font-size: 0.95em;
+}
+
+.label-orange {
+  background: $theme-orange;
+}
+
+// Project labels
+
+.label-project-tags {
+  color: $white;
+  background: $brand-lightblue;
+}
+
+// Opportunity labels
+
+.label-price {
+  color: $theme-red;
+  font-size: 0.9rem;
+  padding-left: 0;
+}
+
+.label-skill {
+  background: $theme-orange;
+  color: $white;
+}
+
+.label-deadline {
+  background: transparent;
+  color: $gray-dark;
+  font-weight: bold;
+}
+
+.label-location {
+  background: transparent;
+  color: $gray-dark;
+  font-weight: bold;
+}
+
+.label-watching {
+  background: transparent;
+  font-weight: bold;
+  font-size: 1.05em;
+  color: $gray;
+  margin: 10px 0;
+}
+
+.label-fulltime {
+  background: transparent;
+  color: $gray-light;
+  border: 1px solid $gray-light;
+  margin: -2px;
+  padding: 0.4em 0.4em 0.3em;
+}
+
+.label-fulltime-selected {
+  background: $gray;
+  color: #fff;
+  border: 1px solid $gray;
+  margin: -2px;
+  padding: 0.4em 0.4em 0.3em;
+}
+
+.label-preferred-skill {
+  background: transparent;
+  color: $gray-light;
+  border: 1px solid $gray-light;
+}
+
+.label-preferred-skill-selected {
+  background: $theme-orange;
+  color: #fff;
+  border: 1px solid $theme-orange;
+}
+
+.label-swu {
+  background: $gray-darker;
+  color: #fff;
+}
+
+.label-title {
+  font-size: 1.15em;
+  font-weight: 700;
+  margin: 0.75em 0 0.5em;
+}
+
+.label-teaser {
+  color: $gray-light;
+  font-size: 0.95em;
+}
+
+// Capability Labels
+
+.label-cap-default {
+  color: $gray-dark;
+  background: transparent;
+  letter-spacing: -0.02em;
+}
+
+.label-agilecoaching {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: black;
+  }
+}
+
+.label-deliverymgmt {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: black;
+  }
+}
+
+.label-uxresearch {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: violet;
+  }
+}
+
+.label-uxdesign {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: violet;
+  }
+}
+
+.label-frontend {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: blue;
+  }
+}
+
+.label-backend {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: blue;
+  }
+}
+
+.label-devops {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: red;
+  }
+}
+
+.label-technicalarch {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: blue;
+  }
+}
+
+.label-securityeng {
+  background: transparent;
+  color: $gray-dark;
+  letter-spacing: -0.02em;
+  > i {
+    color: red;
+  }
+}
+
+.label-form {
+  max-width: 100%;
+  font-weight: 700;
+}
+
+// Labels for list pages
+.label-unpublished {
+  color: $theme-red;
+}
+
+.label-member {
+  background: $theme-yellow;
+}
+
+.label-admin {
+  background: $gray-light;
+}

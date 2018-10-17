@@ -1,20 +1,21 @@
-<section class="edit-form-background" role="main">
+<section class="bg-secondary">
 
-	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)" novalidate>
+	<form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)"
+	 novalidate>
 
-		<div class="edit-form">
+		<div class="bg-light rounded p-0">
 
-			<div class="edit-form-header">		
+			<div class="bg-light rounded px-4 py-3 font-weight-bold">
 				<button class="close" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fa fa-times-thin"></i></button>
-				<span class="light">Proposal from:</span>
+				<span class="text-black-50">Proposal from:</span>
 				&nbsp;
 				<strong>{{ppp.proposal.user.displayName}}</strong>
 			</div>
 
-			<div class="edit-form-body">
+			<div class="px-3">
 				<div class="row">
 					<div class="col-xs-12 col-sm-6">
-						<h4 class="edit-form-body">Applicant</h4>
+						<h4 class="px-3">Applicant</h4>
 						<span class="strong">{{ppp.user.firstName}} {{ppp.user.lastName}}</span><br>
 						<span>{{ppp.user.email}}</span>
 						<span ng-if="!ppp.proposal.isCompany"><br>{{ppp.user.address}}<br></span>
@@ -22,26 +23,26 @@
 					</div>
 					<div class="col-xs-12 col-sm-6">
 						<div ng-if="ppp.proposal.isCompany">
-							<h4 class="edit-form-body">Company</h4>
+							<h4 class="px-3">Company</h4>
 							<span class="strong">{{ppp.proposal.businessName}}</span><br>
 							<span>{{ppp.proposal.businessAddress}}</span><br>
 							<span>Contact: &nbsp;{{ppp.proposal.businessContactName}}</span><br>
 							<span>{{ppp.proposal.businessContactPhone}}</span><br>
 							<span>{{ppp.proposal.businessContactEmail}}</span>
-						</div>		
+						</div>
 					</div>
 				</div>
 				<hr>
 				<div class="row">
 					<div class="col-xs-12">
-						<h4 class="edit-form-body">Proposal</h4>
+						<h4 class="px-3">Proposal</h4>
 						<p ng-bind-html="ppp.detail"></p>
 					</div>
 				</div>
 				<hr>
 				<div class="row">
 					<div class="col-xs-12">
-						<h5 class="edit-form-body">Attachments</h5>
+						<h5 class="px-3">Attachments</h5>
 						<table class="table table-striped">
 							<tr ng-repeat="file in ppp.proposal.attachments">
 								<td class=" text-right">
@@ -163,15 +164,16 @@
 			-->
 
 
-			<div class="edit-form-footer">
+			<div class="bg-light rounded px-3 py-2">
 				<div class="row">
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-success" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> Assign this Applicant</button>
+						<button type="button" class="btn btn-success" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i>
+							Assign this Applicant</button>
 						<button class="btn btn-default pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close">Close</button>
 					</div>
 				</div>
 			</div>
-		<!--
+			<!--
 			<div class="row">
 				<div class="col-xs-12">
 					<button type="button" class="btn btn-primary" data-ng-click="ppp.assign()"><i class="fa fa-trophy"></i> ASSIGN THIS APPLICANT</button>

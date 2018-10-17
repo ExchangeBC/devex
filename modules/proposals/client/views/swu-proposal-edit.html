@@ -1,838 +1,131 @@
-
 <!-- // Banner if Proposal is Submitted // -->
 <div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'">
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<span class="strong"><i class="fa fa-check-circle"></i> This proposal has been submitted!</span> &nbsp;&nbsp; You can make updates or withdraw your proposal until <strong>16:00 Pacific Time</strong> on <span class="strong" ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span>.
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span class="strong"><i class="fa fa-check-circle"></i> This proposal has been submitted!</span> &nbsp;&nbsp;
+        You can make updates or withdraw your proposal until <strong>16:00 Pacific Time</strong> on <span class="strong"
+          ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span>.
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- // Banner if Proposal is in Draft // -->
 <div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
-	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
-				<span class="strong"><i class="fa fa-file"></i> Your Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before <span class="strong">16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></span> to be considered for this opportunity!
-				<span ng-if="!ppp.proposal.isAcceptedTerms"><br>Before you can submit your Proposal, you must agree to the Terms.</span>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <span class="strong"><i class="fa fa-file"></i> Your Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
+        <span class="strong">16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></span>
+        to be considered for this opportunity!
+        <span ng-if="!ppp.proposal.isAcceptedTerms"><br>Before you can submit your Proposal, you must agree to the
+          Terms.</span>
+      </div>
+    </div>
+  </div>
 </div>
 
-<section class="edit-form-background" style="min-height: 750px" role="main">
+<section class="main-section bg-secondary">
 
-	<form id="proposalform" name="ppp.form.proposalform" class="form swu-proposal" novalidate>
+  <form id="proposalform" name="ppp.form.proposalform" class="form" novalidate>
 
-		<div class="edit-form swu-proposal">
+    <div class="bg-light rounded p-0">
 
-			<div class="edit-form-header">
-				<span class="gray">Proposal from:</span> {{ppp.org.name}}
-				<a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i class="fa fa-lg fa-times"></i></a>
-			</div>
+      <div class="bg-light rounded p-3 font-weight-bold">
+        <span>Proposal from:</span> {{ppp.org.name}}
+        <a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close">
+          <i class="fa fa-lg fa-times"></i>
+        </a>
+      </div>
 
-			<uib-tabset active="ppp.activeTab" class="edit-form-tabs">
+      <uib-tabset active="ppp.activeTab">
 
-				<uib-tab index="1">
-					<uib-tab-heading>
-						1. Evaluation
-					</uib-tab-heading>
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Evaluation Process</h4>
-							<p>Evaluation of proposals will be by a committee formed by the Province and may include employees and contractors of the Province and other appropriate participants.</p>
-							<p>The Province’s intent is to enter into a Contract with the Proponent who has met all mandatory criteria and minimum scores (if any) and who has the highest overall ranking.</p>
-							<p>Proposals will be assessed in accordance with the entire requirement of the RFP, including mandatory and weighted criteria.</p>
-							<p>The mandatory criteria are set forth in the following table. Proposals not clearly demonstrating that they meet the following mandatory criteria will be excluded from further consideration during the evaluation process.</p>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<div class="panel-title">Mandatory Criteria</div>
-								</div>
-								<div class="panel-body">
-									<ul>
-										<li>The Proponent must be a Qualified Supplier pursuant to the RFQ.</li>
-										<li>The Proposal must be received at the Closing Location before the Closing Time.</li>
-										<li>The Proposal must be in English.</li>
-										<li>The Proposal must be submitted using the submission method described in section 1.3 of the terms and conditions set out on the Terms tab and on the Review & Submit tab.</li>
-										<li>The Proponent must configure its Team for each Phase and Phase Window in the manner required by the Select Team tab.</li>
-										<li>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</li>
-										<li>The Total Proponent Cost must not exceed the maximum budgeted amount for any individual Phase (if indicated) or the total budget in the aggregate, all as set forth on the Pricing tab.</li>
-										<li>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</li>
-										<li>On the References tab, the Proponent must submit three references including company name, contact name, phone number and email address.</li>
-									</ul>
-								</div>
-							</div>
-
-							<p>Proposals that meet the mandatory criteria above will be evaluated with respect to the weighted criteria described in the scoring table below. The overall evaluation process is described by the following steps:</p>
-
-							<h5>Step 1 - Technical Skills Screening</h5>
-							<p>The Province will evaluate Proposals and assign points based on the preferred technical skills of Resources claimed by Proponents against the requirements set forth on the Select Team tab.</p>
-							<p>The RFP system will automatically populate the Proponent’s Proposal for the preferred technical skills identified on the Select Team tab. Proponents should note that both Resource Capabilities and preferred technical skills are claimed as part of the Resource profile. It is the responsibility of the Proponent to ensure that the Resource profiles for a Proponent’s Team are fully accurate and up-to-date. Resource profiles can be updated at any time before the Closing Time.</p>
-							<p>Proposals that have satisfied this step move on to step 2 below.</p>
-							<h5>Step 2 - Team Questions</h5>
-							<p>The Province will then evaluate the Proponent responses to the Team-based questions contained in the Team Questions tab that are specific to the Opportunity and are intended to (i) demonstrate a Proponent’s Resource experience working as a team; (ii) a Proponent’s experience with Agile software development; and (iii) demonstrate a Proponent’s experience working on a similar Product, with a similar scope and technical background.</p>
-							<p>The Proponent’s responses to the Team-based questions should not reference organization name, Resource name, past projects or specific company software. No points will be awarded for any Proponent answer to any question in this step that references the Proponent’s organization name, Resource name, or specific company software.</p>
-							<h5>Step 3 - Shortlisting</h5>
-							<p>Based on their cumulative scores for steps 1 and 2, only the top four ranked Proponents (the “Shortlisted Proponents”) will then proceed to step 4 of the RFP process. The Shortlisted Proponents will be notified that they will be eligible to participate in the code challenge set out in step 4 below.</p>
-							<p>Notwithstanding the above, in the event that the fourth and fifth ranked Proponents are tied, the fifth ranked Proponent shall also be a Shortlisted Proponent and proceed to step 4 as outlined below.</p>
-							<h5>Step 4 - Code Challenge</h5>
-							<p>Shortlisted Proponents, who have progressed to this step will be invited to complete a code challenge, which will be comprised of user stories that outlines a basic business problem that needs to be solved by building a technical solution.</p>
-							<p>Shortlisted Proponents will be notified of the details and applicable deadline of the code challenge. Shortlisted Proponents will be given two (2) Business Days to complete the challenge from the time they are notified. The code challenge will be evaluated according to the following criteria:</p>
-							<ol type="1">
-								<li>functionality of the app;</li>
-								<li>knowledge of the technology;</li>
-								<li>code quality; and</li>
-								<li>code organization.</li>
-							</ol>
-							<p>For further details, Proponents should download the code challenge instructions located <a href="/api/proposals/download/terms/codechallenge" target="_blank">here</a>.</p>
-							<p>Only those Shortlisted Proponents that have met the minimum score for step 4 will be eligible to participate in the in-person scenario described in step 5 below.</p>
-							<p>Failure to meet the minimum score will mean that the Proponent’s Proposal will receive no further consideration and the Proponent will be eliminated from the competition.</p>
-							<h5>Step 5 - Team Scenario</h5>
-							<p>Shortlisted Proponents who have progressed to this step will be invited to participate in a Team scenario role-playing exercise. The eligible Proponent will be invited to arrange a date, time and place for the scenario, which must be completed within ten (10) Business Days from the deadline of the code challenge. Proponents may reschedule that date once within that time period, but if a Proponent otherwise fails to be available during the applicable time period for this step, such Proponent’s Proposal will receive no further consideration and the Proponent will be eliminated from the competition.</p>
-							<p>In the team scenario, eligible Proponents will be given 1.5 hours to work as a team to role play and work with an individual role-playing a government product owner. Teams will be required to provide a solution to a fictitious business need or problem. At the beginning of this exercise, a Proponent Team will be given information regarding the problem, which is designed to require Proponents to demonstrate their Capabilities and demonstrate how they work as a team under pressure. Qualities to be evaluated will be leadership, teamwork and approach.</p>
-							<p>Following the role-playing, this step will also include an interview component.</p>
-							<p>The Team Scenario can be facilitated in person or by video conference. For further details, Proponents should download the team scenario exercise instructions located <a href="/api/proposals/download/terms/teamscenario" target="_blank">here</a>.</p>
-							<h5>Step 6 - Price</h5>
-							<p>The Total Proponent Cost (price) will be evaluated according to the following formula:</p>
-							<p>The Proposal with the lowest overall Total Proponent Cost of all Proposals will receive the maximum points allocated to price.</p>
-							<p>All other Proposals’ Total Proponent Cost will be evaluated using the following formula:</p>
-							<div class="alert">
-								<h5>S = <span style="text-decoration: underline">(Min x M)</span><br><span style="margin-left: 53px">P</span>
-								</h5>
-								S = score<br>
-								M = total points available for price<br>
-								Min = lowest priced proposal<br>
-								P = price on this proposal
-							</div>
-
-							<h4>Scoring Table</h4>
-							<table class="table table-bordered">
-								<tr>
-									<th>Evaluation Criteria</th>
-									<th>Score Range</th>
-									<th>Weightings</th>
-									<th>Minimum Score</th>
-								</tr>
-								<tr>
-									<td>Step 1 - Technical Skills Screening</td>
-									<td>0 - 5</td>
-									<td>5&#37;</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Step 2 – Team-Based Questions</td>
-									<td>0 - 25</td>
-									<td>25&#37;</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Step 3 - Shortlisting</td>
-									<td>N/A</td>
-									<td>N/A</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Step 4 - Code Challenge</td>
-									<td>0 - 35</td>
-									<td>35&#37;</td>
-									<td>28</td>
-								</tr>
-								<tr>
-									<td>Step 5 - Team Scenario</td>
-									<td>0 - 25</td>
-									<td>25&#37;</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td>Step 6 - Price</td>
-									<td>0 - 10</td>
-									<td>10&#37;</td>
-									<td></td>
-								</tr>
-								<tr>
-									<td class="strong">TOTAL</td>
-									<td class="strong">100</td>
-									<td></td>
-									<td></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</uib-tab>
-
-				<uib-tab index="2">
-					<uib-tab-heading>
-						2. Terms <i class="fa fa-handshake-o"></i>
-					</uib-tab-heading>
-
-					<div class="row">
-						<div class="col-xs-12">
-							<h4>Terms &amp; Conditions</h4>
-							<p>To submit a Proposal to this RFP, you must agree to the terms and conditions that the Proponent must download, and which are incorporated herein by this reference.  Proponents should note that, apart from the terms and conditions set out below, there are other terms and conditions that apply to this RFP and are described throughout the RFP.</p> 
-						</div>
-					</div>
-					<!--
-					<iframe class="row" style="height: 400px;" src="/sprint-with-us-terms-2018-01-23.pdf" ng-if="!ppp.proposal.isAcceptedTerms"></iframe>
-					-->
-					<br>
-
-					<a class="btn btn-primary" href="/api/proposals/download/terms/swu1" target="_blank" ng-click="ppp.downloadTermsClicked()"><i class="fa fa-download"></i> Download the Terms &amp; Conditions</a>
-				<!-- Moved Service Agreement to the Opportunity detail page -->
-				<!--
-					<a class="btn btn-primary" href="/api/proposals/download/terms/serviceagreement" target="_blank"><i class="fa fa-download"></i> Download the Service Agreement</a>
-				-->
-					<br><br>
-					<label class="checkbox-inline checkbox-alone">
-						<input type="checkbox" name="isInception" ng-disabled="!ppp.termsDownloaded || ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms"> The Proponent acknowledges that it has read, fully understands, and agrees to the Terms &amp; Conditions.
-					</label>
-					<br><br>
-
-						<!-- // No point showing business info here if user can't edit it from here // -->
-						<!--
-						<div class="form-group" show-errors>
-							<label for="businessName">Legal Name of Company</label>
-							<input disabled type="text" id="businessName" name="businessName" class="form-control" ng-model="ppp.org.name" placeholder="Legal Name">
-						</div>
-						<div class="form-group" show-errors>
-							<label for="businessAddress">Company Mailing Address</label>
-							<input disabled type="text" id="businessAddress" name="businessAddress" class="form-control" ng-model="ppp.org.fullAddress" placeholder="Company Mailing Address">
-						</div>
-						<div class="form-group" show-errors>
-							<label for="businessContactName">Contact Name</label>
-							<input disabled type="text" id="businessContactName" name="businessContactName" class="form-control" ng-model="ppp.org.contactName" placeholder="Contact Name">
-						</div>
-						<div class="form-group" show-errors>
-							<label for="businessContactPhone">Contact Phone</label>
-							<input disabled type="text" id="businessContactPhone" name="businessContactPhone" class="form-control" ng-model="ppp.org.contactPhone" placeholder="Contact Phone">
-						</div>
-						<div class="form-group" show-errors>
-							<label for="businessContactEmail">Contact Email</label>
-							<input disabled type="businessContactEmail" id="businessContactEmail" name="businessContactEmail" class="form-control" ng-model="ppp.org.contactEmail" placeholder="Contact Email" lowercase>
-						</div>
-						-->
-
-				</uib-tab>
-
-				<uib-tab index="3">
-					<uib-tab-heading>
-						3. Select Team <i class="fa fa-group"></i>
-					</uib-tab-heading>
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Things you should know as you compose your team <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<p>For each of the Phases and Phase Windows specified on this tab, the Proponent must select its Team by clicking on each of its proposed Resources (a minimum of two for each Phase), and satisfy the required Capabilities set out for the applicable Phase and Phase Window and, where indicated and if applicable, whether the Resource can fulfill a Full-Time commitment.  A green check mark will appear next to all required Capabilities that your Team’s Resources have been deemed to satisfy, based on current Resource Profiles.</p>
-								<p>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory Capabilities requirement is satisfied.</p>
-								<p>The RFP system will also automatically populate the Proponent’s Proposal for the Preferred Technical Skills identified below.  If a green check mark does not appear next to a Preferred Technical Skill, a Proponent’s Proposal will not receive full points for that category set forth in the evaluation criteria scoring table.</p>
-								<p>Proponents should note that both Resource Capabilities and Preferred Technical Skills are claimed as part of the Resource profile.  It is the responsibility of the Proponent to ensure that the Resource profiles for a Proponent’s Team are fully accurate and up-to-date.  Resource profiles can be updated at any time before the Closing Time.</p>
-							</div>
-						</div>
-					</uib-accordion>
-					<div class="row">
-						<div class="col-xs-12 col-sm-4" ng-if="ppp.oinp.isInception">
-							<h5 class="text-center"><i class="fa fa-map"></i> Inception Phase</h5>
-							<div class="text-center">
-								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}
-							</div>
-							<br>
-							<div class="panel panel-primary">
-
-								<div class="panel-heading">
-									Click on member(s) to add them to team:
-								</div>
-
-								<!-- Team member filter box (inception) -->
-								<div class="proposal-searchbox-wrapper">
-									<input 	class="form-control proposal-searchbox"
-											type="text"
-											ng-model="ppp.inception.search"
-											placeholder="Start typing to filter:"
-											ng-change="ppp.inception.figureOutItemsToDisplay()"/>
-								</div>
-								<!-- Team member list Iinception) -->
-								<div class="panel-body team-selection-wrapper">
-									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.inception.filteredItems"
-												class="team-member"
-												ng-class="{'selected':ppp.inTeam[member.email]}"
-												ng-click="ppp.clickMember(member, ppp.inTeam)">
-											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
-											<name>{{member.displayName}}</name>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div >
-								<h5>Required Capabilities</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capability in ppp.inp.capabilities" ng-if="ppp.inp.iOppCapabilities[capability.code]">
-											<th scope="row" ng-if="ppp.p_inp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
-											<td><label class="label label-lg label-cap-default {{capability.labelClass}}"></i> {{capability.name}}</label></td>
-											<td ng-if="ppp.inp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-										</tr>
-									</tbody>
-								</table>
-
-								<h5>Preferred Technical Skills</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capabilitySkill in ppp.inp.capabilitySkills" ng-if="ppp.inp.iOppCapabilitySkills[capabilitySkill.code]">
-											<th scope="row" ng-if="ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_inp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
-											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4" ng-if="ppp.oprp.isPrototype">
-							<h5 class="text-center"><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
-							<div class="text-center">
-								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}
-							</div>
-
-							<br>
-
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									Click on member(s) to add them to team:
-								</div>
-
-								<!-- Team member filter box (poc) -->
-								<div class="proposal-searchbox-wrapper">
-									<input 	class="form-control proposal-searchbox"
-											type="text"
-											ng-model="ppp.poc.search"
-											placeholder="Start typing to filter:"
-											ng-change="ppp.poc.figureOutItemsToDisplay()"/>
-								</div>
-								<!-- Team member list (poc) -->
-								<div class="panel-body team-selection-wrapper">
-									<div class="team-selection-list" >
-										<div 	ng-repeat="member in ppp.poc.filteredItems"
-												class="team-member"
-												ng-class="{'selected':ppp.prTeam[member.email]}"
-												ng-click="ppp.clickMember(member, ppp.prTeam)">
-											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
-											<name>{{member.displayName}}</name>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div>
-								<h5>Required Capabilities</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capability in ppp.prp.capabilities" ng-if="ppp.prp.iOppCapabilities[capability.code]">
-											<th scope="row" ng-if="ppp.p_prp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
-											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-											<td ng-if="ppp.prp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-										</tr>
-									</tbody>
-								</table>
-
-								<h5>Preferred Technical Skills</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capabilitySkill in ppp.prp.capabilitySkills" ng-if="ppp.prp.iOppCapabilitySkills[capabilitySkill.code]">
-											<th scope="row" ng-if="ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_prp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
-											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-4" ng-if="ppp.oimp.isImplementation">
-							<h5 class="text-center"><i class="fa fa-gears"></i> Implementation Phase</h5>
-							<div class="text-center">
-								Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}
-							</div>
-
-							<br>
-
-							<div class="panel panel-primary">
-								<div class="panel-heading">
-									Click on member(s) to add them to team:
-								</div>
-								<!-- Team member filter box (implementation) -->
-								<div class="proposal-searchbox-wrapper">
-									<input 	class="form-control proposal-searchbox"
-											type="text"
-											ng-model="ppp.implementation.search"
-											placeholder="Start typing to filter:"
-											ng-change="ppp.implementation.figureOutItemsToDisplay()"/>
-								</div>
-								<!-- Team member list (implementation) -->
-								<div class="panel-body team-selection-wrapper">
-									<div class="team-selection-list" >
-										<div ng-repeat="member in ppp.implementation.filteredItems"
-												class="team-member"
-												ng-class="{'selected':ppp.imTeam[member.email]}"
-												ng-click="ppp.clickMember(member, ppp.imTeam)">
-											<avatar-display size="25" url="member.profileImageURL"></avatar-display>
-											<name>{{member.displayName}}</name>
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<div>
-								<h5>Required Capabilities</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capability in ppp.imp.capabilities" ng-if="ppp.imp.iOppCapabilities[capability.code]">
-											<th scope="row" ng-if="ppp.p_imp.iPropCapabilities[capability.code]" ><i class="fa fa-check-circle-o fa-2x success"></i></th>
-											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilities[capability.code]"><i class="fa fa-circle-o fa-2x gray-light"></i></th>
-											<td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>
-											<td ng-if="ppp.imp.iOppCapabilitiesCore[capability.code]"><label class="label label-fulltime-selected">F/T</label></td>
-										</tr>
-									</tbody>
-								</table>
-
-								<h5>Preferred Technical Skills</h5>
-								<table class="table capabilities-list">
-									<tbody>
-										<tr ng-repeat="capabilitySkill in ppp.imp.capabilitySkills" ng-if="ppp.imp.iOppCapabilitySkills[capabilitySkill.code]">
-											<th scope="row" ng-if="ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-check-circle-o fa-lg success"></i></th>
-											<th scope="row" ng-if="!ppp.p_imp.iPropCapabilitySkills[capabilitySkill.code]"><i class="fa fa-circle-o fa-lg gray-light"></i></th>
-											<td><label class="label label-skill">{{capabilitySkill.name}}</label></td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</uib-tab>
-
-				<uib-tab index="4">
-					<uib-tab-heading>
-						4. Pricing <i class="fa fa-usd"></i>
-					</uib-tab-heading>
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Things you should know about proposing pricing <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.  If a maximum budget amount is identified in this tab for any Phase(s), the Total Phase Cost must not exceed the maximum amount for that Phase.  The automated system will add the Total Phase Costs and calculate the Total Proponent Cost displayed on this tab.  The Total Proponent Cost must also be within the total maximum budget amount specified on this tab.</p>
-								<p>The Proponent is free to nominate a Team with as many of its Resources as it believes appropriate for the Opportunity, provided that the Proponent stays within the maximum budget amounts specified in this tab.</p>
-								<p>The RFP system will not permit a Proponent to submit a Proposal unless this mandatory requirement is satisfied.</p>
-							</div>
-						</div>
-					</uib-accordion>
-
-					<div class="row">
-						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-map"></i> Inception Phase</h5>
-							<!-- If Phase not included -->
-							<div ng-if="!ppp.oinp.isInception">This phase is not required
-							</div>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oinp.isInception">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}</div>
-              <br>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oinp.isInception">
-								<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
-									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-								</div>
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										Enter Your Total Phase Cost for this Phase:
-									</div>
-									<div class="panel-body">
-										<p class="small">Phase Cost for Inception must not exceed {{ppp.opportunity.phases.inception.maxCost | currency : "$" : 0}}</p>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input 	type="text"
-													ng-model="ppp.proposal.phases.inception.cost"
-													model-format="currency"
-													id="budget-inception"
-													class="form-control text-right"
-													aria-label="Amount (to the nearest dollar)"
-													placeholder=0.00
-													ng-blur="ppp.validateInceptionAmount()"
-													select-on-click>
-										</div>
-                                        <span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.proposal.phases.inception.invalidAmount">
-										<i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.inceptionMax | currency : "$" : 0}}</strong></span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
-							<!-- If Phase not included -->
-							<div ng-if="!ppp.oprp.isPrototype">This phase is not required
-							</div>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oprp.isPrototype">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
-              <br>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oprp.isPrototype">
-								<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
-									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-								</div>
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										Enter Your Total Phase Cost for this Phase:
-									</div>
-									<div class="panel-body">
-										<p class="small">Phase Cost for Proof of Concept must not exceed {{ppp.opportunity.phases.proto.maxCost | currency : "$" : 0}}</p>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input 	type="text"
-													  ng-model="ppp.proposal.phases.proto.cost"
-													  model-format="currency"
-													  id="budget-poc"
-													  class="form-control text-right"
-													  aria-label="Amount (to the nearest dollar)"
-													  ng-blur="ppp.validatePrototypeAmount()"
-													  placeholder=0.00
-													  select-on-click>
-										</div>
-                    <span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.proposal.phases.proto.invalidAmount"><i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.protoMax | currency : "$" : 0}}</strong></span>
-									</div>
-								</div>
-							</div>
-						</div>
-
-						<div class="col-xs-12 col-sm-4 text-center">
-							<h5><i class="fa fa-gears"></i> Implementation Phase</h5>
-							<!-- If Phase not included -->
-							<div ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oimp.isImplementation">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}</div>
-							<br>
-							<!-- If Phase is included -->
-							<div ng-if="ppp.oimp.isImplementation">
-								<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
-									<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-								</div>
-								<div class="panel panel-primary">
-									<div class="panel-heading">
-										Enter Your Total Phase Cost for this Phase:
-									</div>
-									<div class="panel-body">
-										<p class="small">Phase Cost for Implementation must not exceed {{ppp.opportunity.phases.implementation.maxCost | currency : "$" : 0}}</p>
-										<div class="input-group">
-										  <span class="input-group-addon">$</span>
-										  <input type="text"
-										  ng-model="ppp.proposal.phases.implementation.cost"
-										  model-format="currency"
-										  id="budget-imp"
-										  class="form-control text-right"
-										  aria-label="Amount (to the nearest dollar)"
-										  placeholder=0.00
-										  select-on-click
-										  ng-blur="ppp.validateImplementationAmount()">
-										</div>
-                    <span 	class="proposal-amount-error alert alert-danger"
-                            ng-if="ppp.proposal.phases.implementation.invalidAmount">
-                            <i class="fa fa-exclamation-triangle"></i> Your price for this phase must not exceed <strong>{{ppp.implMax | currency : "$" : 0}}</strong>
-                    </span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="col-xs-12 text-right">
-							<h4><span class="light">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
-							<div height="35px" class="proposal-total-amount-wrapper">
-								<span 	class="proposal-amount-error alert alert-danger"
-										ng-if="ppp.exceededOpportunityAmount"><i class="fa fa-exclamation-triangle"></i> Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency : "$" : 0}}</strong></span>
-							</div>
-						</div>
-					</div>
-
-				</uib-tab>
-
-				<uib-tab index="5">
-					<uib-tab-heading>
-						5. Team Questions <i class="fa fa-pencil"></i>
+        <uib-tab index="1">
+          <uib-tab-heading>
+            1. Evaluation
           </uib-tab-heading>
-
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<p>The Proponent should provide responses to the Team-based questions contained in this tab.  The Team-based questions are specific to the Opportunity and are intended to demonstrate the Team's: (i) experience working as a team; (ii) experience with Agile software development; and (iii) experience working on a similar Product, with a similar scope and technical background.</p>
-								<p>The Proponent’s responses should not reference organization name, Resource name, or specific company software.  No points will be awarded for any Proponent answer to any question in this step that references the Proponent’s organization name, Resource name, or specific company software.</p>
-							</div>
-						</div>
-					</uib-accordion>
-					<br>
-					<div class="alert alert-danger">
-						<i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong>  Do not include anything in your responses that would reveal the Organization name, Resource name, or specific company software!
-					</div>
-					<h5>
-						Please note the word limit for each response, as responses exceeding that limit will receive a score of 0. The Response Guidelines are not intended to be comprehensive.  Proponents should use their own judgement in determining what information to provide.
-					</h5>
-          <br>
-          <div ng-repeat="question in ppp.responses" class="form-group">
-            <b style="vertical-align: top;">Question {{$index + 1}} &nbsp;&nbsp;</b><em style="vertical-align: top;">({{question.wordLimit}} word limit, worth {{question.questionScore}} points):</em><br>
-            <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
-            &nbsp;&nbsp;
-            <div ng-show="question.cleanGuideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i> Response Guideline <i>(<span ng-if="question.showGuidance">click to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
-            <div class="input-help alert alert-info" ng-show="question.showGuidance && question.cleanGuideline" ng-bind-html="question.cleanGuideline"></div>
-            <textarea
-							name="teamQuestion"
-							id="teamQuestion"
-              class="form-control"
-              ui-tinymce="ppp.tinymceOptions"
-							ng-model="question.response">
-						</textarea>
-          </div>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-evaluation.html'"></div>
         </uib-tab>
 
-				<!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
-				<uib-tab index="6">
-					<uib-tab-heading>
-						6. References
-					</uib-tab-heading>
-					<uib-accordion>
-						<div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1" class="panel-default" style="border: none; box-shadow: none;">
-							<uib-accordion-heading>
-								<i class="fa fa-lg fa-info-circle"></i> Things to know about your proposed references <i>(<span ng-if="!accordian1">click to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
-							</uib-accordion-heading>
-							<div class="row">
-								<p>The Province will require Proponents to support their claims of over-all experience by supplying references who can verify the quality of work provided specific to the relevant experience of the Proponent.  Using the upload function below, the Proponent must submit three references setting forth company name, contact name, phone number and email address for each reference. References from the Proponent’s own organization or Team are not acceptable for the Proponent.</p>
-								<p>The Province may in its sole discretion, but is under no obligation to, check Proponent references without first notifying the Proponent.  The Province reserves the right to seek additional references independent of those supplied by the Proponent, including internal references in relation to the Proponent’s performance under any past or current contracts with the Province or other verifications as are deemed necessary by it to verify the information contained in the Proposal and to confirm the suitability of the Proponent.</p>
-								<p>Further to the Province’s reservation of rights under section 1.21 of the terms and conditions set out on the Terms tab, if the Proponent is deemed unsuitable by the Province in its sole discretion due to any unsatisfactory reference, or if the Proposal is found to contain material errors, omissions or misrepresentations, the Proponent’s proposal will receive no further consideration and the Proponent will be eliminated from the competition.</p>
-								<p>The Province may only check the lead Shortlisted Proponent’s references but reserves the right to check the references of other Shortlisted Proponents in the event the lead Shortlisted Proponent is deemed unsatisfactory.</p>
-							</div>
-						</div>
-					</uib-accordion>
-					<div class="row">
-						<div class="col-xs-12">
-							<br><br>
-							<a href class="btn btn-primary" ngf-select="ppp.upload($file)" ng-disabled="!ppp.proposal._id"><i class="fa fa-upload"></i> Upload your references document (max size 3MB per file)</a>
-							<br><br>
-							<p>You must save your Proposal before uploading references.</p>
-							<table class="table table-striped">
-								<tr ng-repeat="file in ppp.proposal.attachments">
-									<td class=" text-right">
-										<i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
-									</td>
-									<td class="text-left">
-										{{file.name}}
-									</td>
-									<td class=" text-left">
-										<i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
+        <uib-tab index="2">
+          <uib-tab-heading>
+            2. Terms <i class="fa fa-handshake-o"></i>
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-terms.html'"></div>
+        </uib-tab>
+
+        <uib-tab index="3">
+          <uib-tab-heading>
+            3. Select Team <i class="fa fa-group"></i>
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-team.html'"></div>
+        </uib-tab>
+
+        <uib-tab index="4">
+          <uib-tab-heading>
+            4. Pricing <i class="fa fa-usd"></i>
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-pricing.html'"></div>
+        </uib-tab>
+
+        <uib-tab index="5">
+          <uib-tab-heading>
+            5. Team Questions <i class="fa fa-pencil"></i>
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-team-questions.html'"></div>
+        </uib-tab>
+
+        <!-- // This originally was the Attachments tab. For 1st SWU opportunity, we're going to ask proponents to upload their references on this tab. // -->
+        <uib-tab index="6">
+          <uib-tab-heading>
+            6. References
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-references.html'"></div>
         </uib-tab>
 
         <!-- Addenda tab -->
         <uib-tab index="7">
-					<uib-tab-heading>
-						7. Addenda
-					</uib-tab-heading>
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="alert alert-warning"><i class="fa fa-exclamation-triangle"></i> Proponents need to frequently check this tab for any Addenda.</div>
-              <br>
-							<div class="alert" ng-if ="!ppp.opportunity.addenda || ppp.opportunity.addenda.length == 0">
-								There are currently no addenda for this RFP.
-              </div>
+          <uib-tab-heading>
+            7. Addenda
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-addenda.html'"></div>
+        </uib-tab>
 
-              <ol>
-                <li ng-repeat="addendum in ppp.opportunity.addenda" class="addendum-list-item">
-                  <div>
-                    <span ng-bind-html="addendum.description"></span>
-                    <div class="addendum-created">
-                      Added on {{addendum.createdOn | date}}
-                    </div>
-                  </div>
-                </li>
-              </ol>
-						</div>
-					</div>
-				</uib-tab>
-
-				<!-- // New Review & Submit tab // -->
-				<uib-tab index="8">
-					<uib-tab-heading>
-						8. Review &amp; Submit <i class="fa fa-paper-plane"></i>
-					</uib-tab-heading>
-					<h4>
-						Review and Submit Your Proposal
-					</h4>
-					<div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
-						<i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
-						You won't be able to submit this Proposal until you:
-						<ul>
-							<li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
-							<li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in each phase</li>
-							<li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
-						</ul>
-					</div>
-					<h5>
-						Here's a summary of your complete Proposal. Make sure it all looks right before you submit. Good luck!
-					</h5>
-
-					<div class="row">
-						<div class="panel panel-primary" style="border-width: 3px; border-radius: 0;">
-							<div class="panel-body">
-								<div class="row">
-									<div class="col-xs-12">
-										<h3 class="opp-detail">Company &nbsp;&nbsp;&nbsp;&nbsp; <span class="small light">If this info is incorrect, update it in your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>.</span></h3>
-										<p>
-											<strong>{{ppp.org.name}}</strong><br/>
-											{{ppp.org.address}} <span ng-if="ppp.org.address2"><br/>{{ppp.org.address2}},</span><br/>
-											{{ppp.org.city}}<span ng-if="ppp.org.province">{{ppp.org.province}}</span><br/>
-											<span ng-if="ppp.org.postalcode">{{ppp.org.postalcode}}<br/></span>
-											<span>
-												<strong ng-if="ppp.org.contactName">Contact: {{ppp.org.contactName}}</strong><br/>
-												<span ng-if="ppp.org.contactPhone"><i>Contact Phone: {{ppp.org.contactPhone}}</i><br/></span>
-												<span ng-if="ppp.org.contactEmail"><i>Contact Email: {{ppp.org.contactEmail}}</i></span>
-											</span>
-										</p>
-									</div>
-								</div>
-								<hr>
-								<div class="row">
-									<div class="col-xs-12">
-										<h3 class="opp-detail">Team &amp; Price</h3>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oinp.isInception">
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<h5><i class="fa fa-map"></i> Inception Phase</h5>
-												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}</div>
-												<hr>
-												<div class="avatar-user" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
-														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-												</div>
-											</div>
-											<div class="panel-footer">
-												Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.inception.cost | currency}}</span>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oprp.isPrototype">
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
-												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
-												<hr>
-												<div class="avatar-user" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
-														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-												</div>
-											</div>
-											<div class="panel-footer">
-												Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.proto.cost | currency}}</span>
-											</div>
-										</div>
-									</div>
-
-									<div class="col-xs-12 col-sm-4 text-center" ng-if="ppp.oimp.isImplementation">
-										<div class="panel panel-default">
-											<div class="panel-body">
-												<h5 class="strong"><i class="fa fa-gears"></i> Implementation Phase</h5>
-												<div>Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}</div>
-												<hr>
-												<div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
-														<avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-												</div>
-											</div>
-											<div class="panel-footer">
-												Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.implementation.cost | currency}}</span>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div class="row">
-									<div class="col-xs-12">
-										<h4><span class="light">Total Price:</span> {{ppp.proposal.phases.inception.cost + ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
-									</div>
-								</div>
-
-								<hr>
-
-								<div class="row">
-									<div class="col-xs-12">
-                    <h3 class="opp-detail">Responses to Team Questions</h3>
-                    <div ng-repeat="response in ppp.responses">
-                      <uib-accordion>
-                        <div uib-accordion-group is-open="response.displayInSummary" ng-click="vm.toggleResponseAccordian($index)" class="panel-default" style="border: none; box-shadow: none;">
-                          <uib-accordion-heading style="float: none">
-                            <div style="float: left">
-                                {{$index + 1}}.&nbsp;
-                            </div>
-                            <span style="float: left" ng-bind-html="response.question"></span>
-                            <i>&nbsp;&nbsp;(<span ng-if="!response.displayInSummary">click to show response</span><span ng-if="response.displayInSummary">click to hide response</span>)</i>
-                          </uib-accordion-heading>
-                          <div style="float: left" class="row">
-                            <div ng-bind-html="response.response"></div>
-                          </div>
-                        </div>
-                      </uib-accordion>
-                    </div>
-									</div>
-								</div>
-								<br>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-xs-12 col-sm-4 pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
-							<div class="panel panel-success">
-								<div class="panel-body">
-									<label class="small">
-										<input type="checkbox" ng-model="ppp.agreeConfirm">&nbsp;
-										&#42;By pushing submit the Proponent is confirming it is submitting its Proposal to the RFP and agrees to all of the terms and conditions of the RFP including: (a) the Proponent has carefully read and examined the entire RFP; (b) the Proponent has conducted such other investigations as were prudent and reasonable in preparing the Proposal; and (c) the Proponent agrees to be bound by the statements and representations made in its Proposal.
-									</label>
-									<button type="button" class="btn btn-block btn-lg btn-success pull-right" ng-click="ppp.submit()" ng-disabled="!ppp.agreeConfirm"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
-									<p class="small">After you submit, you can still make updates to your Proposal until the Closing Time.</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</uib-tab>
+        <!-- // New Review & Submit tab // -->
+        <uib-tab index="8">
+          <uib-tab-heading>
+            8. Review &amp; Submit <i class="fa fa-paper-plane"></i>
+          </uib-tab-heading>
+          <div ng-include="'/modules/proposals/client/views/swu-proposal-edit-submit.html'"></div>
+        </uib-tab>
 
 
-			</uib-tabset>
+      </uib-tabset>
 
-				<div class="edit-form-footer">
-					<div class="row">
-						<div class="col-xs-12">
-							<!-- <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities"><i class="fa fa-paper-plane"></i> Submit Proposal</button> -->
-							<button type="button" class="btn btn-primary pull-right" ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Submitted'"><i class="fa fa-save"></i> Resubmit Proposal</button>
-							<button type="button" class="btn btn-primary pull-right" ng-click="ppp.save(ppp.form.proposalform.$valid)" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save Changes</button>
-							<button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.delete()" uib-tooltip="This will blow up all the work you've saved in this proposal!"><i class="fa fa-trash"></i> Delete This Proposal</button>
-							<button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()" uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i class="fa fa-ban"></i> Withdraw Proposal</button>
-							<a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/proposals/export/opportunity/{{ppp.opportunity._id}}" target="_blank"><i class="fa fa-file"></i> Export Proposal</a>
-						</div>
-					</div>
-				</div>
-			</div>
+      <div class="bg-light rounded px-3 py-2">
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-primary pull-right" ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Submitted'"><i
+                class="fa fa-save"></i> Resubmit Proposal</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="ppp.save(ppp.form.proposalform.$valid)"
+              ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fa fa-save"></i> Save
+              Changes</button>
+            <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only"
+              data-ng-click="ppp.delete()" uib-tooltip="This will blow up all the work you've saved in this proposal!"><i
+                class="fa fa-trash"></i> Delete This Proposal</button>
+            <button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()"
+              uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i
+                class="fa fa-ban"></i> Withdraw Proposal</button>
+            <a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/proposals/export/opportunity/{{ppp.opportunity._id}}"
+              target="_blank"><i class="fa fa-file"></i> Export Proposal</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
-		</div>
+    </div>
 
-	</form>
+  </form>
 
 </section>

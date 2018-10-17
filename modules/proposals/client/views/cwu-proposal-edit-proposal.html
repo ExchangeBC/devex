@@ -1,0 +1,13 @@
+<div>
+  <div class="m-4">
+    <div class="alert alert-info">Draft your complete Proposal here, or write a short message and upload your
+      Proposal in the Attachments tab. Make sure you address the <span class="strong">Proposal Evaluation
+        Criteria</span>:</div>
+    <div class="well" ng-bind-html="ppp.display.evaluation"></div>
+
+    <label class="control-label" for="detail">My Proposal</label>
+    <textarea name="detail" id="detail" class="form-control input-sm" ui-tinymce="ppp.tinymceOptions" placeholder="Proposal Detail"
+      ng-model="ppp.proposal.detail">
+      </textarea>
+  </div>
+</div>

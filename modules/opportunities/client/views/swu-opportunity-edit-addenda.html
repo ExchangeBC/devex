@@ -1,4 +1,4 @@
-<div class="edit-form-tab-content">
+<div class="mx-5 my-4">
 
   <!-- List of addendum -->
   <ol>
@@ -17,31 +17,24 @@
 
       <!-- editing view -->
       <div ng-if="vm.editingAddenda && vm.addendaEditIndex === $index" class="addendum-item-editing">
-          <div>&nbsp;</div>
-          <fieldset>
+        <div>&nbsp;</div>
+        <fieldset>
 
-              <form-display
-                class="col-sm-12"
-                x-options='{
+          <form-display class="col-sm-12" x-options='{
                   "title":"New Addenda",
                   "name":"addenda",
                   "help":"List any addenda to the opportunity in the textbox below"
                 }'>
-                <textarea
-                  name="addenda"
-                  id="addenda"
-                  class="form-control input-sm"
-                  ui-tinymce="vm.tinymceOptions"
-                  placeholder="Addendum to the opportunity"
-                  ng-model="vm.currentAddendaText">
+            <textarea name="addenda" id="addenda" class="form-control input-sm" ui-tinymce="vm.tinymceOptions"
+              placeholder="Addendum to the opportunity" ng-model="vm.currentAddendaText">
                 </textarea>
-              </form-display>
+          </form-display>
 
-            </fieldset>
-            <div>
-              <button type="button" class="btn btn-sm btn-default" ng-click="vm.cancelEditAddendum()">Cancel</button>
-              <button type="button" class="btn btn-sm btn-primary" ng-click="vm.saveEditAddendum()">Save</button>
-            </div>
+        </fieldset>
+        <div>
+          <button type="button" class="btn btn-sm btn-default" ng-click="vm.cancelEditAddendum()">Cancel</button>
+          <button type="button" class="btn btn-sm btn-primary" ng-click="vm.saveEditAddendum()">Save</button>
+        </div>
       </div>
 
     </li>
@@ -49,7 +42,7 @@
 
   <!-- Add new addendum button -->
   <div class="add-button-wrapper">
-      <button ng-show="!vm.editingAddenda" type="button" class="btn btn-sm btn-default" ng-click="vm.addNewAddendum()"><i class="fa fa-plus"></i> Add New</button>
+    <button ng-show="!vm.editingAddenda" type="button" class="btn btn-sm btn-default" ng-click="vm.addNewAddendum()"><i
+        class="fa fa-plus"></i> Add New</button>
   </div>
 </div>
-

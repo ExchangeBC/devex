@@ -26,7 +26,7 @@
         } else {
           vm.user.$remove(function () {
             $state.go('admin.govs');
-            Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> User deleted successfully!' });
+            Notification.success({ message: '<i class="fa fa-ok"></i> User deleted successfully!' });
           });
         }
       }
@@ -45,9 +45,9 @@
         $state.go('admin.gov', {
           userId: user._id
         });
-        Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> User saved successfully!' });
+        Notification.success({ message: '<i class="fa fa-ok"></i> User saved successfully!' });
       }, function (errorResponse) {
-        Notification.error({ message: errorResponse.data.message, title: '<i class="glyphicon glyphicon-remove"></i> User update error!' });
+        Notification.error({ message: errorResponse.data.message, title: '<i class="fa fa-remove"></i> User update error!' });
       });
     }
 

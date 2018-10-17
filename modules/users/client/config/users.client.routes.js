@@ -1,10 +1,8 @@
-(function () {
+(function() {
 	'use strict';
 
 	// Setting up route
-	angular
-		.module('users.routes')
-		.config(routeConfig);
+	angular.module('users.routes').config(routeConfig);
 
 	routeConfig.$inject = ['$stateProvider'];
 
@@ -21,21 +19,29 @@
 					roles: ['user', 'admin', 'gov-request', 'gov']
 				},
 				resolve: {
-					capabilities: ['CapabilitiesService', function (CapabilitiesService) {
-						return CapabilitiesService.query ();
-					}]
+					capabilities: [
+						'CapabilitiesService',
+						function(CapabilitiesService) {
+							return CapabilitiesService.query().$promise;
+						}
+					]
 				}
 			})
-			.state ('settings.skills', {
+			.state('settings.skills', {
 				url: '/skills',
 				templateUrl: '/modules/users/client/views/settings/profile-skills.html',
 				controller: 'ProfileSkillsController',
 				controllerAs: 'vm',
 				data: {
 					pageTitle: 'Skills'
+				},
+				resolve: {
+					capabilities: function(CapabilitiesService) {
+						return CapabilitiesService.query().$promise;
+					}
 				}
 			})
-			.state ('settings.privacy', {
+			.state('settings.privacy', {
 				url: '/privacy',
 				templateUrl: '/modules/users/client/views/settings/profile-privacy.html',
 				controller: 'ProfilePrivacyController',
@@ -44,7 +50,7 @@
 					pageTitle: 'Privacy'
 				}
 			})
-			.state ('settings.messages', {
+			.state('settings.messages', {
 				url: '/messages',
 				templateUrl: '/modules/users/client/views/settings/profile-messages.html',
 				controller: 'ProfileMessagesController',
@@ -53,7 +59,7 @@
 					pageTitle: 'Messages'
 				}
 			})
-			.state ('settings.affiliations', {
+			.state('settings.affiliations', {
 				url: '/affiliations',
 				templateUrl: '/modules/users/client/views/settings/profile-affiliations.html',
 				controller: 'ProfileAffiliationsController',
@@ -96,9 +102,14 @@
 				controller: 'AuthenticationController',
 				controllerAs: 'vm',
 				resolve: {
-					usercount: ['UsersService', function (UsersService) {
-						return UsersService.countUsers ().then (function (o) {return o.count});
-					}]
+					usercount: [
+						'UsersService',
+						function(UsersService) {
+							return UsersService.countUsers().then(function(o) {
+								return o.count;
+							});
+						}
+					]
 				}
 			})
 			.state('authentication.gov', {
@@ -119,7 +130,7 @@
 					pageTitle: 'Signin'
 				}
 			})
-		 .state('signup', {
+			.state('signup', {
 				url: '/signup',
 				templateUrl: '/modules/users/client/views/authentication/signup.client.view.html',
 				controller: 'AuthenticationController',

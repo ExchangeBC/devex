@@ -33,7 +33,7 @@
 		var isMemberOrWaiting      = project.userIs.member || project.userIs.request;
 		vm.isAdmin                 = isAdmin;
 		vm.loggedIn                = isUser;
-		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
+		vm.canRequestMembership    = !isMemberOrWaiting;
 		vm.canEdit                 = isAdmin || project.userIs.admin;
 		// -------------------------------------------------------------------------
 		//
@@ -44,7 +44,7 @@
 			ProjectsService.makeRequest({
 				projectId: project._id
 			}).$promise.then (function () {
-				Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> Membership request sent successfully!' });
+				Notification.success({ message: '<i class="fa fa-ok"></i> Membership request sent successfully!' });
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -62,7 +62,7 @@
 			//
 			.then (function () {
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> Project '+t+' Successfully!'
+					message : '<i class="fa fa-ok"></i> Project '+t+' Successfully!'
 				});
 			})
 			//
@@ -72,7 +72,7 @@
 				project.isPublished = publishedState;
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> Project '+t+' Error!'
+					title   : '<i class=\'fa fa-remove\'></i> Project '+t+' Error!'
 				});
 			});
 		};
@@ -154,7 +154,7 @@
 			if ($window.confirm('Are you sure you want to delete?')) {
 				vm.project.$remove(function() {
 					$state.go('projects.list');
-					Notification.success({ message: '<i class="glyphicon glyphicon-ok"></i> project deleted successfully!' });
+					Notification.success({ message: '<i class="fa fa-ok"></i> project deleted successfully!' });
 				});
 			}
 		};
@@ -194,7 +194,7 @@
 			.then (function () {
 				vm.form.projectForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="glyphicon glyphicon-ok"></i> project saved successfully!'
+					message : '<i class="fa fa-ok"></i> project saved successfully!'
 				});
 				$state.go('projects.view', {projectId:project.code});
 			})
@@ -204,7 +204,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'glyphicon glyphicon-remove\'></i> project save error!'
+					title   : '<i class=\'fa fa-remove\'></i> project save error!'
 				});
 			});
 		};
