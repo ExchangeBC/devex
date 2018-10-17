@@ -35,7 +35,6 @@
     "angular-ui-tinymce": "^0.0.19",
     "async": "~2.6.1",
     "body-parser": "~1.18.3",
-    "bootstrap": "~3.3.6",
     "bower": "~1.8.4",
     "chalk": "~2.4.1",
     "compression": "~1.7.2",
