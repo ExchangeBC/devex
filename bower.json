@@ -37,6 +37,9 @@
 		"font-awesome": {
 			"main": ["css/font-awesome.min.css"]
 		},
+		"ui-bootstrap4": {
+			"main": ["dist/ui-bootstrap-tpls.js"]
+		},
 		"jquery": {
 			"main": []
 		}
