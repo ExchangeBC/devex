@@ -42,9 +42,7 @@
 			opportunity,
 			Authentication,
 			OpportunitiesService,
-			ProposalsService,
 			Notification,
-			modalService,
 			ask,
 			myproposal,
 			CapabilitiesMethods,
@@ -106,6 +104,8 @@
 			vm.imp = {};
 			vm.inp = {};
 			vm.prp = {};
+			vm.all = {};
+			CapabilitiesMethods.init(vm.all, {}, capabilities);
 			CapabilitiesMethods.init(vm.imp, vm.oimp, capabilities);
 			CapabilitiesMethods.init(vm.inp, vm.oinp, capabilities);
 			CapabilitiesMethods.init(vm.prp, vm.oprp, capabilities);

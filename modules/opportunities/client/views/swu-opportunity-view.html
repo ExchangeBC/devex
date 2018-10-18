@@ -149,7 +149,7 @@
           <dt class="col-6 text-right">Required skills:</dt>
           <dd class="col-6 text-left">
             <div class="label-list">
-              <label class="label label-skill" ng-repeat="code in vm.opportunity.skills">{{code}}</label>
+              <label class="label label-skill" ng-repeat="skill in vm.capabilitySkills">{{skill.name}}</label>
             </div>
           </dd>
         </dl>
@@ -308,9 +308,9 @@
             Schedule:
             <div>
               <i class="fa fa-calendar"></i> &nbsp;
-              <span class="strong">{{vm.opportunity.phases.inception.fstartDate}}</span>
+              <span class="small">{{vm.opportunity.phases.inception.fstartDate}}</span>
               to
-              <span class="strong">{{vm.opportunity.phases.inception.fendDate}}</span>
+              <span class="small">{{vm.opportunity.phases.inception.fendDate}}</span>
             </div>
             <hr>
             <h5>Required Capabilities*</h5>
@@ -342,9 +342,9 @@
             Schedule:
             <div>
               <i class="fa fa-calendar"></i> &nbsp;
-              <span class="strong">{{vm.opportunity.phases.proto.fstartDate}}</span>
+              <span class="small">{{vm.opportunity.phases.proto.fstartDate}}</span>
               to
-              <span class="strong">{{vm.opportunity.phases.proto.fendDate}}</span>
+              <span class="small">{{vm.opportunity.phases.proto.fendDate}}</span>
             </div>
             <hr>
             <h5>Required Capabilities&#42;</h5>
@@ -376,9 +376,9 @@
             Schedule:
             <div>
               <i class="fa fa-calendar"></i> &nbsp;
-              <span class="strong">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+              <span class="small">{{vm.opportunity.phases.implementation.fstartDate}}</span>
               to
-              <span class="strong">{{vm.opportunity.phases.implementation.fendDate}}</span>
+              <span class="small">{{vm.opportunity.phases.implementation.fendDate}}</span>
             </div>
             <hr>
             <h5>Required Capabilities&#42;</h5>
