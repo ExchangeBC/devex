@@ -35,7 +35,7 @@
 						opportunity: '='
 					},
 					templateUrl: '/modules/opportunities/client/views/opportunity-card-directive.html',
-					controller: function(Authentication, OpportunitiesCommon, OpportunitiesService, ask) {
+					controller: function(Authentication, OpportunitiesCommon, OpportunitiesService, ask, Notification) {
 						var vm = this;
 						vm.isUser = Authentication.user;
 						vm.isAdmin = vm.isUser && !!~Authentication.user.roles.indexOf('admin');
@@ -81,7 +81,7 @@
 									//
 									opportunity.isPublished = publishedState;
 									Notification.error({
-										message: res.data.message,
+										message: res.message,
 										title: '<i class=\'fa fa-remove\'></i> Opportunity ' + t + ' Error!'
 									});
 								});
