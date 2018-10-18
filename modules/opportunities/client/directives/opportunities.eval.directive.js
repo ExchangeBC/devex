@@ -845,6 +845,7 @@
 							modalService.showModal({
 								size: 'md',
 								templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
+								windowClass: 'swu-proposal-view-modal',
 								controller: function($scope, $uibModalInstance) {
 									$scope.data = {};
 									$scope.data.proposal = proposal;

@@ -1,27 +1,25 @@
-<div class="modal-header">
-  <button class="close" data-ng-click="close()"><i class="fa fa-times-thin"></i></button>
-  <div class="modal-title">{{data.proposal.businessName}}</div>
-</div>
-<div class="modal-body">
-  <div class="row">
-    <div class="col-xs-12">
-      <dl class="dl-horizontal">
-        <dt>Company:</dt>
-        <dd>{{data.proposal.businessName}}<br>{{data.proposal.businessAddress}}</dd>
-        <dt>Contact:</dt>
-        <dd>{{data.proposal.businessContactName}}<br>{{data.proposal.businessContactPhone}}<br>{{data.proposal.businessContactEmail}}
-        </dd>
-      </dl>
+<div class="row">
+  <div class='col m-3'>
+    <h5>{{data.proposal.businessName}}</h5>
+
+    <div class="row">
+      <div class="col">
+        <dl class="m-3">
+          <dt>Company:</dt>
+          <dd>{{data.proposal.businessName}}<br>{{data.proposal.businessAddress}}</dd>
+          <dt>Contact:</dt>
+          <dd>{{data.proposal.businessContactName}}<br>{{data.proposal.businessContactPhone}}<br>{{data.proposal.businessContactEmail}}
+          </dd>
+        </dl>
+      </div>
     </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-xs-12 col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <i class="fa fa-map"></i> Inception
-        </div>
-        <div class="panel-body">
+    <hr>
+
+    <div class="row">
+      <div class="col m-3 text-center">
+        <i class="fa fa-map"></i> Inception
+
+        <div class="m-2">
           <div>
             <li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
               <div class="team-member">
@@ -29,28 +27,19 @@
                 <name>{{member.displayName}}</name>
                 <div>
                   <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                      class="fa fa-circle"></i> {{capability.name}}</label><br />
-                  <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+                      class="fa fa-circle"></i> {{capability.name}}</label><br>
+                  <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{capabilitySkill.name}}</label>
                 </div>
               </div>
             </li>
           </div>
         </div>
-        <!-- Hiding pricing in case we want to make it viewable later -->
-        <!--
-				<div class="panel-footer">
-					Price: <span class="strong">{{data.proposal.phases.inception.cost | currency}}</span>
-				</div>
-			-->
-      </div>
-    </div>
 
-    <div class="col-xs-12 col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <i class="fa fa-rocket"></i> Proof of Concept
-        </div>
-        <div class="panel-body">
+      </div>
+
+      <div class="col text-center m-3">
+        <i class="fa fa-rocket"></i> Proof of Concept
+        <div class="m-2">
           <div>
             <li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
               <div class="team-member">
@@ -58,79 +47,70 @@
                 <name>{{member.displayName}}</name>
                 <div>
                   <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                      class="fa fa-circle"></i> {{capability.name}}</label>
-                  <label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
+                      class="fa fa-circle"></i> {{capability.name}}</label><br>
+                  <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{capabilitySkill.name}}</label>
                 </div>
               </div>
             </li>
           </div>
         </div>
-        <!-- Hiding pricing in case we want to make it viewable later -->
-        <!--
-				<div class="panel-footer">
-					Price: <span class="strong">{{data.proposal.phases.proto.cost | currency}}</span>
-				</div>
-			-->
+      </div>
+
+      <div class="col m-3 text-center">
+
+        <i class="fa fa-gears"></i> Implementation
+        <div class="m-2">
+
+          <li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
+            <div class="team-member">
+              <avatar-display size="35" url="member.profileImageURL"></avatar-display>
+              <name>{{member.displayName}}</name>
+              <div>
+                <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
+                    class="fa fa-circle"></i> {{capability.name}}</label><br>
+                <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{capabilitySkill.name}}</label>
+              </div>
+            </div>
+          </li>
+
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col m-3">
+        <h4>References</h4>
+        <table class="table table-striped">
+          <tr ng-repeat="file in data.proposal.attachments">
+            <td class="text-right">
+              <i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+            </td>
+            <td class="text-left">
+              {{file.name}}
+            </td>
+            <td class=" text-left">
+              <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col m-3">
+        <h4>Team Questions</h4>
+        <div ng-repeat="response in data.proposal.teamQuestionResponses">
+          <b>Question {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.question"></span>
+          <b>Response {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.response"></span>
+        </div>
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <i class="fa fa-gears"></i> Implementation
-        </div>
-        <div class="panel-body">
-          <div>
-            <li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-              <div class="team-member">
-                <avatar-display size="35" url="member.profileImageURL"></avatar-display>
-                <name>{{member.displayName}}</name>
-                <div>
-                  <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                      class="fa fa-circle"></i> {{capability.name}}</label>
-                  <label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-                </div>
-              </div>
-            </li>
-          </div>
-        </div>
+    <div class="row">
+      <div class="col m-3 text-right">
+        <button class="btn btn-default" data-ng-click="close()">Close</button>
       </div>
     </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-xs-12">
-      <h4>References</h4>
-      <table class="table table-striped">
-        <tr ng-repeat="file in data.proposal.attachments">
-          <td class=" text-right">
-            <i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
-          </td>
-          <td class="text-left">
-            {{file.name}}
-          </td>
-          <td class=" text-left">
-            <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-xs-12">
-      <h4>Team Questions</h4>
-      <div ng-repeat="response in data.proposal.teamQuestionResponses">
-        <b>Question {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.question"></span>
-        <b>Response {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.response"></span>
-      </div>
-    </div>
-  </div>
-</div> <!-- End of modal-body -->
-<div class="modal-footer">
-  <div class="row">
-    <div class="col-xs-12 text-right">
-      <button class="btn btn-default" data-ng-click="close()">Close</button>
-    </div>
+
   </div>
 </div>

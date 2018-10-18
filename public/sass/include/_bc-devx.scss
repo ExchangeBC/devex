@@ -236,6 +236,11 @@ div.question-viewer {
   }
 }
 
+.swu-proposal-view-modal .modal-dialog {
+  width: 1000px;
+  max-width: 1000px !important;
+}
+
 ul[dnd-list] .dndPlaceholder {
   background-color: #ddd;
   display: block;
@@ -250,6 +255,10 @@ ul[dnd-list] li {
   display: block;
   padding: 10px 15px;
   margin-bottom: -1px;
+}
+
+.question-ranking-item.selected {
+  background: rgb(212, 169, 140);
 }
 
 ul.question-input-list {
@@ -439,13 +448,6 @@ form-title {
   padding: 0.2rem 0.4rem;
   border: none;
 }
-
-/* Size form controls in px instead of em */
-// .form-control {
-//   font-size: 14px !important;
-//   padding: 10px;
-//   height: 42px;
-// }
 
 /* Size input-groups and their buttons in px instead of em so they align with the form-control */
 .input-group-btn {
@@ -1259,31 +1261,6 @@ iframe {
 iframe.terms {
   min-height: 360px;
 }
-
-// Capabilities List
-// -------------------------------------
-
-// table.capabilities-list {
-//   > tbody {
-//     > tr {
-//       > th {
-//         text-align: center;
-//         width: 45px;
-//         border: none;
-//         vertical-align: middle;
-//         padding: 1px 2px;
-//       }
-//       > td {
-//         border: none;
-//         vertical-align: middle;
-//         padding: 0px;
-//         > label.label-fulltime-selected {
-//           margin: 1px 0px;
-//         }
-//       }
-//     }
-//   }
-// }
 
 table.preferred-skills {
   > tbody {
