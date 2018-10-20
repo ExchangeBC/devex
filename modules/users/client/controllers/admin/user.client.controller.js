@@ -26,7 +26,7 @@
         } else {
           vm.user.$remove(function () {
             $state.go('admin.users');
-            Notification.success({ message: '<i class="fa fa-ok"></i> User deleted successfully!' });
+            Notification.success({ message: '<i class="fas fa-ok"></i> User deleted successfully!' });
           });
         }
       }
@@ -45,9 +45,9 @@
         $state.go('admin.user', {
           userId: user._id
         });
-        Notification.success({ message: '<i class="fa fa-2x fa-check-circle"></i><br><h4>Changes saved!</h4>' });
+        Notification.success({ message: '<i class="fas fa-2x fa-check-circle"></i><br><h4>Changes saved!</h4>' });
       }, function (errorResponse) {
-        Notification.error({ message: errorResponse.data.message, title: '<i class="fa fa-2x fa-exclamation-triangle"></i><br><h4>User update error!</h4>' });
+        Notification.error({ message: errorResponse.data.message, title: '<i class="fas fa-2x fa-exclamation-triangle"></i><br><h4>User update error!</h4>' });
       });
     }
 

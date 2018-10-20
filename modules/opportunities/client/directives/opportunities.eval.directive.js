@@ -816,7 +816,7 @@
 											proposal = response;
 											Notification.success({
 												message:
-													'<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'
+													'<i class="fas fa-3x fa-check-circle"></i> Company has been assigned'
 											});
 											$state.go('opportunities.viewswu', { opportunityId: vm.opportunity.code });
 											vm.opportunity.evaluationStage = vm.stages.assigned;
@@ -829,7 +829,7 @@
 										function(error) {
 											Notification.error({
 												message: error.data.message,
-												title: '<i class="fa fa-remove"></i> Proposal Assignment failed!'
+												title: '<i class="fas fa-remove"></i> Proposal Assignment failed!'
 											});
 										}
 									);

@@ -102,7 +102,7 @@
 							function(response) {
 								ppp.proposal = response;
 								Notification.success({
-									message: '<i class="fa fa-3x fa-check-circle"></i> Company Assigned'
+									message: '<i class="fas fa-3x fa-check-circle"></i> Company Assigned'
 								});
 								if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 									$state.go('opportunities.viewswu', { opportunityId: ppp.opportunity.code });
@@ -113,7 +113,7 @@
 							function(error) {
 								Notification.error({
 									message: error.data.message,
-									title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error - Assignment failed!'
+									title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Error - Assignment failed!'
 								});
 							}
 						);
@@ -606,7 +606,7 @@
 				if (!validPriceAmounts) {
 					Notification.error({
 						message: 'Invalid price amounts entered',
-						title: '<i class="fa fa-remove"</i> Error submitting proposal'
+						title: '<i class="fas fa-remove"</i> Error submitting proposal'
 					});
 					ppp.activateTab(4);
 					window.scrollTo(0, 0);
@@ -626,7 +626,7 @@
 						function(response) {
 							Notification.success({
 								message:
-									goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
+									goodmessage || '<i class="fas fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
 							});
 							resolve();
 						},
@@ -634,7 +634,7 @@
 							Notification.error({
 								message: badmessage || error.data.message,
 								title:
-									'<i class="fa fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved'
+									'<i class="fas fa-3x fa-exclamation-triangle"></i> Error - your changes were not saved'
 							});
 							reject();
 						}
@@ -674,7 +674,7 @@
 						ppp.proposal.$remove(
 							function() {
 								Notification.success({
-									message: '<i class="fa fa-3x fa-check-circle"></i> Proposal deleted'
+									message: '<i class="fas fa-3x fa-check-circle"></i> Proposal deleted'
 								});
 								$state.go('opportunities.viewswu', { opportunityId: ppp.opportunity.code });
 							},
@@ -682,7 +682,7 @@
 								Notification.error({
 									message: error.data.message,
 									title:
-										'<i class="fa fa-3x fa-exclamation-triangle"></i> Error - could not delete your proposal'
+										'<i class="fas fa-3x fa-exclamation-triangle"></i> Error - could not delete your proposal'
 								});
 							}
 						);
@@ -727,7 +727,7 @@
 				if (!validPriceAmounts) {
 					Notification.error({
 						message: 'Invalid price amounts entered',
-						title: '<i class="fa fa-remove"</i> Error submitting proposal'
+						title: '<i class="fas fa-remove"</i> Error submitting proposal'
 					});
 					ppp.activateTab(4);
 					window.scrollTo(0, 0);
@@ -743,7 +743,7 @@
 								'Word count exceeded for Question ' +
 								(index + 1) +
 								'.  Please edit your response before submitting',
-							title: '<i class="fa fa-remove"</i> Error'
+							title: '<i class="fas fa-remove"</i> Error'
 						});
 						invalidResponseIndex = index + 1;
 					}
@@ -759,7 +759,7 @@
 					Notification.error({
 						message:
 							'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
-						title: '<i class="fa fa-remove"</i> Error'
+						title: '<i class="fas fa-remove"</i> Error'
 					});
 					return;
 				}
@@ -789,7 +789,7 @@
 					Notification.error({
 						delay: 6000,
 						title:
-							'<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+							'<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
 						message:
 							'<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
 					});
@@ -803,13 +803,13 @@
 						function(response) {
 							ppp.proposal = new ProposalsService(response.data);
 							Notification.success({
-								message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'
+								message: '<i class="fas fa-3x fa-check-circle"></i> Attachment Uploaded'
 							});
 						},
 						function(response) {
 							Notification.error({
 								message: response.data,
-								title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment'
+								title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment'
 							});
 						},
 						function(evt) {

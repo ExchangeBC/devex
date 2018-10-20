@@ -3,7 +3,7 @@
     <uib-accordion>
       <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
         <uib-accordion-heading>
-          <i class="fa fa-lg fa-info-circle"></i> Things to know about your proposed references <i>(<span ng-if="!accordian1">click
+          <i class="fas fa-lg fa-info-circle"></i> Things to know about your proposed references <i>(<span ng-if="!accordian1">click
               to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
         </uib-accordion-heading>
         <div class="row">
@@ -32,20 +32,20 @@
     <div class="row">
       <div class="col">
         <br><br>
-        <a href class="btn btn-primary" ngf-select="ppp.upload($file)" ng-disabled="!ppp.proposal._id"><i class="fa fa-upload"></i>
+        <a href class="btn btn-primary" ngf-select="ppp.upload($file)" ng-disabled="!ppp.proposal._id"><i class="fas fa-upload"></i>
           Upload your references document (max size 3MB per file)</a>
         <br><br>
         <p>You must save your Proposal before uploading references.</p>
         <table class="table table-striped">
           <tr ng-repeat="file in ppp.proposal.attachments">
             <td class="text-right">
-              <i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
+              <i class="fas fa-file-{{ppp.type(file.type)}}-o"></i>
             </td>
             <td class="text-left">
               {{file.name}}
             </td>
             <td class="text-left">
-              <i class="fa fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+              <i class="fas fa-trash" ng-click="ppp.deletefile(file._id)"></i>
             </td>
           </tr>
         </table>

@@ -71,11 +71,11 @@
 				}
 				if (this.help) {
 					this.tmpl +=
-						' &nbsp; <i class="fa fa-question-circle input-help-source" ng-click="$scope.' +
+						' &nbsp; <span class="p-0 m-0" ng-click="$scope.' +
 						fieldtoggle +
 						' = !$scope.' +
 						fieldtoggle +
-						'"></i>';
+						'"><i class="fas fa-sm fa-question-circle input-help-source"></i></span>';
 					this.tmpl +=
 						'<div class="alert alert-info" data-field="' +
 						this.name +
@@ -174,7 +174,7 @@
 			this.tmpl += '/>';
 			this.tmpl += '<span class="input-group-btn">';
 			this.tmpl +=
-				'<button type="button" class="btn btn-default" ng-click="openPopupDate()"><i class="fa fa-calendar"></i></button>';
+				'<button type="button" class="btn btn-default" ng-click="openPopupDate()"><i class="fas fa-calendar"></i></button>';
 			this.tmpl += '</span>';
 			this.tmpl += '</div>';
 			return this;

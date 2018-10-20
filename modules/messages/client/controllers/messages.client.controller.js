@@ -154,7 +154,7 @@
 			.then (function (result) {
 				qqq.templateForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="fa fa-ok"></i> template saved successfully!'
+					message : '<i class="fas fa-ok"></i> template saved successfully!'
 				});
 				if (leavenow) $state.go ('messagetemplates.list');
 			})
@@ -164,7 +164,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fa fa-remove\'></i> template save error!'
+					title   : '<i class=\'fas fa-remove\'></i> template save error!'
 				});
 			});
 		};

@@ -4,7 +4,7 @@
       <div class="col-centered col-sm-10 col-md-8">
         
         <div class="message" ng-if="!vm.haveresult">
-		  <button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times-thin"></i></button>
+		  <button class="close" ui-sref="settings.messages"><i class="fas fa-lg fa-times-thin"></i></button>
 		  <div class="message-date-sent">{{vm.message.datePosted}}</div>
           <div ng-bind-html="vm.trust(vm.message.messageBody)"></div>
           <div class="message-actions">
@@ -13,7 +13,7 @@
         </div>
         
         <div class="message" ng-if="vm.haveresult">
-          <button class="close" ui-sref="settings.messages"><i class="fa fa-lg fa-times-thin"></i></button>
+          <button class="close" ui-sref="settings.messages"><i class="fas fa-lg fa-times-thin"></i></button>
           <div class="message-result" ng-if="vm.haveresult" ng-bind-html="vm.resultmsg"></div>
         </div>
         

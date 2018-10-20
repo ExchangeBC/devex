@@ -51,7 +51,7 @@
 							}).$promise
 							.then (function (org) {
 								loadAffiliations();
-								Notification.success({ message: '<i class="fa fa-ok"></i> You have been removed from ' + affiliation.name });
+								Notification.success({ message: '<i class="fas fa-ok"></i> You have been removed from ' + affiliation.name });
 							});
 						}
 					});
@@ -106,7 +106,7 @@
 								if (file.size > (1 * 1024 * 1024)) {
 									Notification.error ({
 										delay   : 6000,
-										title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+										title   : '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
 										message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
 									});
 								}
@@ -134,7 +134,7 @@
 							// Called after the user has successfully uploaded a new picture
 							function onSuccessItem(response) {
 								// Show success message
-								Notification.success({ message: '<i class="fa fa-ok"></i> Change profile picture successful!' });
+								Notification.success({ message: '<i class="fas fa-ok"></i> Change profile picture successful!' });
 								// Populate user object
 								qqq.user = Authentication.user = response;
 								// Reset form
@@ -148,7 +148,7 @@
 							function onErrorItem(response) {
 								qqq.fileSelected = false;
 								// Show error message
-								Notification.error({ message: response.message, title: '<i class="fa fa-remove"></i> Change profile picture failed!' });
+								Notification.error({ message: response.message, title: '<i class="fas fa-remove"></i> Change profile picture failed!' });
 							}
 
 							qqq.quitnow = function () { $uibModalInstance.dismiss('cancel'); }

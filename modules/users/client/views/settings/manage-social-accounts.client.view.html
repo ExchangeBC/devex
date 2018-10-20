@@ -4,13 +4,13 @@
     <!-- If the user's provider field (primary) is a social account, show it here -->
     <div ng-if="vm.user.provider !== 'local'" class="social-account-container">
       <img ng-src="/modules/users/client/img/buttons/{{vm.user.provider}}.png">
-      <i class="fa fa-check text-success user-primary-account" data-toggle="popover" title="Primary: {{vm.user.provider}}"></i>
+      <i class="fas fa-check text-success user-primary-account" data-toggle="popover" title="Primary: {{vm.user.provider}}"></i>
     </div>
     <div ng-repeat="(providerName, providerData) in vm.user.additionalProvidersData" class="social-account-container">
       <a href ng-click="vm.removeUserSocialAccount(providerName)">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/{{::providerName}}.png">
         <span class="btn btn-danger btn-add-remove-account">
-          <i class="fa fa-trash"></i>
+          <i class="fas fa-trash"></i>
         </span>
       </a>
     </div>
@@ -22,7 +22,7 @@
       <a href="/api/auth/facebook" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/facebook.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>
@@ -32,7 +32,7 @@
       <a href="/api/auth/twitter" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/twitter.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>
@@ -42,7 +42,7 @@
       <a href="/api/auth/google" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/google.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>
@@ -52,7 +52,7 @@
       <a href="/api/auth/linkedin" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/linkedin.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>
@@ -61,7 +61,7 @@
       <a href="/api/auth/github" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/github.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>
@@ -70,7 +70,7 @@
       <a href="/api/auth/paypal" target="_self">
         <img class="social-button" ng-src="/modules/users/client/img/buttons/paypal.png">
         <span class="btn btn-success btn-add-remove-account">
-          <i class="fa fa-plus"></i>
+          <i class="fas fa-plus"></i>
         </span>
       </a>
     </div>

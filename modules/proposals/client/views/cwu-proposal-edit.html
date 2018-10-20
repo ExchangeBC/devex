@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <span class="strong"><i class="fa fa-check-circle"></i> This Proposal has been submitted!</span> &nbsp;&nbsp;
+        <span class="strong"><i class="fas fa-check-circle"></i> This Proposal has been submitted!</span> &nbsp;&nbsp;
         You can make updates or withdraw your Proposal until <strong> 16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>.
       </div>
     </div>
@@ -15,7 +15,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <p><span class="strong"><i class="fa fa-file"></i> This Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
+        <p><span class="strong"><i class="fas fa-file"></i> This Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
           <strong>16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></strong>
           to be considered for this opportunity!</p>
         <p class="alert alert-danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your Proposal, you
@@ -36,42 +36,42 @@
       <div class="bg-light rounded p-3 font-weight-bold">
         <span class="text-muted">My Proposal to Work On:</span> {{ppp.opportunity.name}}
         <a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i
-            class="fa fa-lg fa-times"></i></a>
+            class="fas fa-lg fa-times"></i></a>
       </div>
 
       <uib-tabset>
 
         <uib-tab index="0">
           <uib-tab-heading>
-            <i class="fa fa-user"></i> Developer
+            <i class="fas fa-user"></i> Developer
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-developer.html'"></div>
         </uib-tab>
 
         <uib-tab index="1" disable="!ppp.proposal.isCompany">
           <uib-tab-heading>
-            <i class="fa fa-building"></i> Company
+            <i class="fas fa-building"></i> Company
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-company.html'"></div>
         </uib-tab>
 
         <uib-tab index="2">
           <uib-tab-heading>
-            <i class="fa fa-pencil"></i> Proposal
+            <i class="fas fa-pencil-alt"></i> Proposal
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-proposal.html'"></div>
         </uib-tab>
 
         <uib-tab index="3" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
           <uib-tab-heading>
-            <i class="fa fa-file"></i> Attachments
+            <i class="fas fa-file"></i> Attachments
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
         </uib-tab>
 
         <uib-tab index="4" ng-if="!ppp.isSprintWithUs">
           <uib-tab-heading>
-            <i class="fa fa-handshake-o"></i> Terms
+            <i class="far fa-handshake"></i> Terms
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
         </uib-tab>
@@ -81,16 +81,16 @@
         <div class="row">
           <div class="col">
             <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i
-                class="fa fa-paper-plane"></i> Submit</button>
+                class="fas fa-paper-plane"></i> Submit</button>
             <button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i
-                class="fa fa-save"></i>
+                class="fas fa-save"></i>
               Save Updates</button>
             <button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i
-                class="fa fa-save"></i> Save Changes</button>
+                class="fas fa-save"></i> Save Changes</button>
             <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only"
-              data-ng-click="ppp.delete()" "><i class=" fa fa-trash"></i> Delete My Proposal</button>
+              data-ng-click="ppp.delete()" "><i class=" fas fa-trash"></i> Delete My Proposal</button>
             <button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()"
-              "><i class=" fa fa-ban"></i> Withdraw Proposal</button>
+              "><i class=" fas fa-ban"></i> Withdraw Proposal</button>
           </div>
         </div>
       </div>

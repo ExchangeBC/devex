@@ -4,7 +4,7 @@
   <div class="row" ng-if="qaz.case === 'canadd'">
     <div class="col">
       <button id="proposaladmin.create" ui-sref="proposaladmin.createswu({opportunityId:qaz.opportunity._id})" class="btn btn-primary float-right">
-        <i class="fa fa-paper-plane"></i> Start a Proposal
+        <i class="fas fa-paper-plane"></i> Start a Proposal
       </button>
     </div>
   </div>
@@ -12,7 +12,7 @@
   <!-- // All other cases (user not signed in; no company; company doesn't meet RFQ requirements) // -->
   <div class="row" ng-if="qaz.case !== 'canadd' && qaz.case !== 'canedit'">
     <div class="col">
-      <a class="btn btn-primary" style="margin-bottom: 10px" href="/sprintwithus-howtoapply"><i class="fa fa-lg fa-info-circle"></i>
+      <a class="btn btn-primary" style="margin-bottom: 10px" href="/sprintwithus-howtoapply"><i class="fas fa-lg fa-info-circle"></i>
         &nbsp;How to use this website to respond to the Sprint With Us RFQ</a>
     </div>
   </div>
@@ -22,23 +22,24 @@
     <div class="col">
       <!-- If Proposal has been SUBMITTED -->
       <div class="alert alert-success" ng-if="qaz.proposal.status === 'Submitted'">
-        <span class="strong"><i class="fa fa-lg fa-check-circle"></i>&nbsp; Your Proposal has been submitted!</span>
+        <span class="strong"><i class="fas fa-lg fa-check-circle"></i>&nbsp; Your Proposal has been submitted!</span>
         &nbsp; You can make updates or withdraw your proposal until <strong>16:00 Pacific Time</strong> on <span class="strong"
           ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>. &nbsp;
         <div class="update-proposal-link">
           <a id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i
-              class="fa fa-pencil"></i> Update my proposal</a>
+              class="fas fa-pencil-alt"></i> Update my proposal</a>
         </div>
       </div>
       <!-- If Proposal is in DRAFT -->
       <div class="col">
         <div class="alert alert-warning" ng-if="qaz.proposal.status === 'Draft'">
-          <span class="strong"><i class="fa fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;&nbsp; Submit
+          <span class="strong"><i class="fas fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;&nbsp;
+          Submit
           before <strong>16:00 Pacific Time</strong> on <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>
           to be considered for this opportunity. &nbsp;
           <div class="update-proposal-link">
             <a id="proposaladmin.edit" ui-sref="proposaladmin.editswu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i
-                class="fa fa-pencil"></i> Update my Proposal</a>
+                class="fas fa-pencil-alt"></i> Update my Proposal</a>
           </div>
         </div>
 
@@ -53,7 +54,7 @@
   <div class="row" ng-if="qaz.case === 'canadd'">
     <div class="col px-0 pb-3">
       <button id="proposaladmin.create" ui-sref="proposaladmin.createcwu({opportunityId:qaz.opportunity._id})" class="btn btn-primary float-right">
-        <i class="fa fa-paper-plane"></i> Start a Proposal
+        <i class="fas fa-paper-plane"></i> Start a Proposal
       </button>
     </div>
   </div>
@@ -64,24 +65,24 @@
     <!-- If Proposal has been SUBMITTED -->
     <div class="alert alert-success" ng-if="qaz.proposal.status === 'Submitted'">
       <div class="col">
-        <span class="strong"><i class="fa fa-lg fa-check-circle-o"></i>&nbsp; Your Proposal has been submitted!</span>
+        <span class="strong"><i class="fas fa-lg fa-check-circle"></i>&nbsp; Your Proposal has been submitted!</span>
         &nbsp;You can make updates or withdraw your Proposal until <strong>16:00 Pacific Time on <span ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span></strong>.
         &nbsp;
         <div class="update-proposal-link">
           <a id="proposaladmin.edit" ui-sref="proposaladmin.editcwu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i
-              class="fa fa-pencil"></i> Update my Proposal</a>
+              class="fas fa-pencil-alt"></i> Update my Proposal</a>
         </div>
       </div>
     </div>
     <!-- If Proposal is in DRAFT -->
     <div class="col">
       <div class="alert alert-warning" ng-if="qaz.proposal.status === 'Draft'">
-        <span class="strong"><i class="fa fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;Submit before
+        <span class="strong"><i class="fas fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;Submit before
         <strong>16:00 Pacific Time</strong> on <span class="strong" ng-bind="qaz.opportunity.deadline | date:'mediumDate'"></span>
         to be considered for this opportunity. &nbsp;
         <div class="update-proposal-link">
           <a id="proposaladmin.edit" ui-sref="proposaladmin.editcwu({proposalId:qaz.proposal._id, opportunityId:qaz.opportunity._id})"><i
-              class="fa fa-pencil"></i> Update my Proposal</a>
+              class="fas fa-pencil-alt"></i> Update my Proposal</a>
         </div>
       </div>
     </div>

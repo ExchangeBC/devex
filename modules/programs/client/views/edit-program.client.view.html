@@ -11,7 +11,7 @@
         <span ng-if="!vm.editing">
           New Program
         </span>
-        <a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fa fa-lg fa-times"></i></a>
+        <a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fas fa-lg fa-times"></i></a>
       </div>
 
       <div class="row m-4">
@@ -20,7 +20,7 @@
             <div class="form-group" show-errors>
               <label class="control-label" for="title">Title</label>
 
-              <i class="fa fa-question-circle input-help-source" ng-click="stitle = !stitle"></i>
+              <i class="fas fa-question-circle input-help-source" ng-click="stitle = !stitle"></i>
               <div class="input-help alert alert-info" ng-show="stitle">The name of your public sector program or
                 organization</div>
 
@@ -33,7 +33,7 @@
             <div class="form-group" show-errors>
               <label class="control-label" for="short">Short Description</label>
 
-              <i class="fa fa-question-circle input-help-source" ng-click="ssdesc = !ssdesc"></i>
+              <i class="fas fa-question-circle input-help-source" ng-click="ssdesc = !ssdesc"></i>
               <div class="input-help alert alert-info" ng-show="ssdesc">A brief of your mandate or mission.
               </div>
 
@@ -44,7 +44,7 @@
             <div class="form-group">
               <label class="control-label" for="description">Description</label>
 
-              <i class="fa fa-question-circle input-help-source" ng-click="sdesc = !sdesc"></i>
+              <i class="fas fa-question-circle input-help-source" ng-click="sdesc = !sdesc"></i>
               <div class="input-help alert alert-info" ng-show="sdesc">
                 You can provide a fuller description, including links here.
               </div>
@@ -101,9 +101,9 @@
         <div class="row">
           <div class="col">
             <a data-automation-id="button-program-save" class="btn btn-primary pull-right" ng-click="vm.saveme(vm.form.programForm.$valid)"
-              title="Save"><i class="fa fa-save"></i> Save &amp; Close</a>
+              title="Save"><i class="fas fa-save"></i> Save &amp; Close</a>
             <a data-automation-id="button-program-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
-              title="Remove"><i class="fa fa-trash"></i> Delete this Program</a>
+              title="Remove"><i class="fas fa-trash"></i> Delete this Program</a>
           </div>
         </div>
       </div>

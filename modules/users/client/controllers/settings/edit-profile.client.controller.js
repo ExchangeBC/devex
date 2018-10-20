@@ -77,12 +77,12 @@
 			user.$update(function (response) {
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');
 
-				Notification.success({ delay:2000, message: '<i class="fa fa-3x fa-check-circle"></i> '+successMessage});
+				Notification.success({ delay:2000, message: '<i class="fas fa-3x fa-check-circle"></i> '+successMessage});
 				Authentication.user = response;
 				vm.user = angular.copy(Authentication.user);
 				pristineUser = angular.toJson(Authentication.user);
 			}, function (response) {
-				Notification.error({ message: response.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
+				Notification.error({ message: response.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 			});
 		}
 
@@ -98,12 +98,12 @@
 							vm.pendingGovRequest = true;
 							Authentication.user = response;
 							Notification.success({
-								message: '<i class="fa fa-3x fa-check-circle"></i> Verification request sent!'
+								message: '<i class="fas fa-3x fa-check-circle"></i> Verification request sent!'
 							});
 						},
 						function(err) {
 							Notification.error({
-								message: err.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Verification request failed!'
+								message: err.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Verification request failed!'
 							});
 						}
 					);

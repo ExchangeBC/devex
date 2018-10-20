@@ -148,7 +148,7 @@
 				OpportunitiesService.addWatch ({
 					opportunityId: o._id
 				});
-				Notification.success({ message: '<i class="fa fa-eye fa-3x"></i><br/><br/>You are now watching<br/>'+o.name });
+				Notification.success({ message: '<i class="fas fa-eye fa-3x"></i><br/><br/>You are now watching<br/>'+o.name });
 				return true;
 			},
 			// -------------------------------------------------------------------------
@@ -161,7 +161,7 @@
 				OpportunitiesService.removeWatch ({
 					opportunityId: o._id
 				});
-				Notification.success({ message: '<i class="fa fa-eye-slash fa-3x"></i><br/><br/>You are no longer watching<br/>'+o.name });
+				Notification.success({ message: '<i class="fas fa-eye-slash fa-3x"></i><br/><br/>You are no longer watching<br/>'+o.name });
 				return false;
 			},
 			// -------------------------------------------------------------------------

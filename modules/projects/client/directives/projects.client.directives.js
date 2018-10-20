@@ -60,7 +60,7 @@
 					//
 					.then (function () {
 						Notification.success ({
-							message : '<i class="fa fa-ok"></i> Project '+t+' Successfully!'
+							message : '<i class="fas fa-ok"></i> Project '+t+' Successfully!'
 						});
 					})
 					//
@@ -70,7 +70,7 @@
 						project.isPublished = publishedState;
 						Notification.error ({
 							message : res.data.message,
-							title   : '<i class=\'fa fa-remove\'></i> Project '+t+' Error!'
+							title   : '<i class=\'fas fa-remove\'></i> Project '+t+' Error!'
 						});
 					});
 				};
@@ -80,12 +80,12 @@
 					}).$promise
 					.then (function () {
 						project.userIs.request = true;
-						Notification.success({ message: '<i class="fa fa-ok"></i> Membership request sent successfully!' });
+						Notification.success({ message: '<i class="fas fa-ok"></i> Membership request sent successfully!' });
 					})
 					.catch (function (res) {
 						Notification.error ({
 							message : res.data.message,
-							title   : '<i class=\'fa fa-remove\'></i> Membership Request Error!'
+							title   : '<i class=\'fas fa-remove\'></i> Membership Request Error!'
 						});
 					});
 				};

@@ -104,7 +104,7 @@
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Company has been assigned'});
+							Notification.success({ message: '<i class="fas fa-3x fa-check-circle"></i> Company has been assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {
@@ -112,7 +112,7 @@
 							}
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-remove"></i> Proposal Assignment failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fas fa-remove"></i> Proposal Assignment failed!' });
 						}
 					);
 				}
@@ -347,7 +347,7 @@
 							resolve ();
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 							 reject ();
 						}
 					);
@@ -398,12 +398,12 @@
 			copyteam();
 			return ppp.proposal.createOrUpdate()
 				.then (function(proposal) {
-					Notification.success({message: goodmessage || '<i class="fa fa-3x fa-check-circle"></i><br><h4>Changes Saved</h4>'});
+					Notification.success({message: goodmessage || '<i class="fas fa-3x fa-check-circle"></i><br><h4>Changes Saved</h4>'});
 					ppp.proposal = proposal;
 					ppp.subscribe(true);
 					ppp.form.proposalform.$setPristine();
 				}, function (error) {
-					Notification.error ({message: badmessage || error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit Proposal failed!'});
+					Notification.error ({message: badmessage || error.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Edit Proposal failed!'});
 				});
 		};
 		// -------------------------------------------------------------------------
@@ -442,7 +442,7 @@
 				.then(function(r) {
 					if (r) {
 						ppp.proposal.$remove(function() {
-							Notification.success({message: '<i class="fa fa-3x fa-trash"></i><br> <h4>Your proposal has been deleted</h4>'});
+							Notification.success({message: '<i class="fas fa-3x fa-trash"></i><br> <h4>Your proposal has been deleted</h4>'});
 							ppp.form.proposalform.$setPristine();
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu', {opportunityId:ppp.opportunity.code});
@@ -450,7 +450,7 @@
 								$state.go ('opportunities.viewcwu', {opportunityId:ppp.opportunity.code});
 							}
 						}, function(error) {
-							Notification.error({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Remove Proposal failed!'});
+							Notification.error({message: error.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Remove Proposal failed!'});
 						});
 					}
 				});
@@ -491,10 +491,10 @@
 						.then (function(proposal) {
 							ppp.proposal = proposal;
 							ppp.form.proposalform.$setPristine();
-							Notification.success({message: '<i class="fa fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
+							Notification.success({message: '<i class="fas fa-3x fa-check-circle"></i><br> <h4>Your proposal has been submitted</h4>'});
 						}, function(error) {
 
-							Notification.error ({message: error.data.message, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Submitting Proposal'});
+							Notification.error ({message: error.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Error Submitting Proposal'});
 						});
 				});
 		}
@@ -509,7 +509,7 @@
 			if (file.size > (3 * 1024 * 1024)) {
 				Notification.error ({
 					delay   : 6000,
-					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					title   : '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
 					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
 				});
 			}
@@ -523,10 +523,10 @@
 				.then(
 					function (response) {
 						ppp.proposal = new ProposalsService (response.data);
-						Notification.success({ message: '<i class="fa fa-3x fa-check-circle"></i> Attachment Uploaded'});
+						Notification.success({ message: '<i class="fas fa-3x fa-check-circle"></i> Attachment Uploaded'});
 					},
 					function (response) {
-						Notification.error ({ message: response.data, title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
+						Notification.error ({ message: response.data, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Error Uploading Attachment' });
 					},
 					function (evt) {
 						ppp.progress = parseInt(100.0 * evt.loaded / evt.total, 10);

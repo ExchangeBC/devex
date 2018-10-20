@@ -14,7 +14,7 @@
         <span ng-if="!vm.editing">
           New Project
         </span>
-        <a href="{{vm.previousState.url}}" title="Close" class="btn btn-text-only pull-right"><i class="fa fa-lg fa-times"></i></a>
+        <a href="{{vm.previousState.url}}" title="Close" class="btn btn-text-only pull-right"><i class="fas fa-lg fa-times"></i></a>
       </div>
 
       <div class="px-3">
@@ -22,13 +22,13 @@
           <div class="col-sm-12">
             <fieldset>
               <div class="form-group" ng-if="vm.programLink">
-                <a id="programs.view" ui-sref="programs.view({programId:vm.programId})"><i class="fa fa-university"></i>
+                <a id="programs.view" ui-sref="programs.view({programId:vm.programId})"><i class="fas fa-university"></i>
                   {{vm.programTitle}}</a>
               </div>
               <div class="form-group" ng-if="!vm.programLink">
                 <label class="control-label" for="program">Program</label>
-                <!-- <i class="fa fa-question-circle field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i> -->
-                <i class="fa fa-question-circle input-help-source" ng-click="sprogram = !sprogram"></i>
+                <!-- <i class="fas fa-question-circle field-tt-source" ng-required="true" uib-tooltip="Program offering this opportunity" tooltip-placement="bottom"></i> -->
+                <i class="fas fa-question-circle input-help-source" ng-click="sprogram = !sprogram"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="sprogram">
                   Select the program that is the owner/sponsor of this project.
                 </div>
@@ -38,7 +38,7 @@
               </div>
               <div class="form-group" show-errors>
                 <label class="control-label" for="title">Name</label>
-                <i class="fa fa-question-circle input-help-source" ng-click="sname = !sname"></i>
+                <i class="fas fa-question-circle input-help-source" ng-click="sname = !sname"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="sname">
                   Enter a name for your project. It's best if the name matches the name of your GitHub repo.
                 </div>
@@ -50,7 +50,7 @@
               </div>
               <div class="form-group" show-errors>
                 <label class="control-label" for="short">Short Description</label>
-                <i class="fa fa-question-circle input-help-source" ng-click="ssdesc = !ssdesc"></i>
+                <i class="fas fa-question-circle input-help-source" ng-click="ssdesc = !ssdesc"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="ssdesc">
                   This is a teaser to interest developers in contributing to your project. Summarize the goals,
                   end-user benefits and value for British Columbians!
@@ -61,7 +61,7 @@
               </div>
               <div class="form-group" show-errors>
                 <label class="control-label" for="description">Description</label>
-                <i class="fa fa-question-circle input-help-source" ng-click="sdesc = !sdesc"></i>
+                <i class="fas fa-question-circle input-help-source" ng-click="sdesc = !sdesc"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="sdesc">
                   Here’s where you can go into more detail...
                 </div>
@@ -72,7 +72,7 @@
               </div>
               <div class="form-group">
                 <label class="control-label" for="github">GitHub</label>
-                <i class="fa fa-question-circle input-help-source" ng-click="sgit = !sgit"></i>
+                <i class="fas fa-question-circle input-help-source" ng-click="sgit = !sgit"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="sgit">
                   Paste the URL of the GitHub repo for this project.
                 </div>
@@ -83,7 +83,7 @@
               </div>
               <div class="form-group">
                 <label class="control-label" for="taglist">Tags (comma delimited list)</label>
-                <i class="fa fa-question-circle input-help-source" ng-click="stags = !stags"></i>
+                <i class="fas fa-question-circle input-help-source" ng-click="stags = !stags"></i>
                 <div class="input-help alert alert-info" data-field="title" ng-show="stags">
                   Create tags as quick cues for interested developers. For example, the code language, or other
                   keywords that indicate what’s involved in the work.
@@ -105,9 +105,9 @@
         <div class="row">
           <div class="col-xs-12">
             <button data-automation-id="button-project-save" type="submit" class="btn btn-primary pull-right" title="Save">
-              <i class="fa fa-save"></i> Save &amp; Close</button>
+              <i class="fas fa-save"></i> Save &amp; Close</button>
             <a data-automation-id="button-project-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
-              title="Delete"><i class="fa fa-trash"></i> Delete this Project</a>
+              title="Delete"><i class="fas fa-trash"></i> Delete this Project</a>
           </div>
         </div>
       </div>

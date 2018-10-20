@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <a href="/admin/users"><i class="fa fa-chevron-left"></i> All Users</a>
+        <a href="/admin/users"><i class="fas fa-chevron-left"></i>&nbsp;&nbsp;All Users</a>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
               <td></td>
             </tr>
             <tr>
-              <td class="user-attribute"><i class="fa fa-lg fa-github"></i> GitHub Handle:</td>
+              <td class="user-attribute"><i class="fab fa-lg fa-github"></i> GitHub Handle:</td>
               <td><a href="https://github.com/{{vm.user.username}}" target="_blank"> @<span ng-bind="vm.user.username"></span></a></td>
               <td></td>
             </tr>
@@ -35,12 +35,13 @@
             <tr>
               <td class="user-attribute">Notifications:</td>
               <td>
-                <div ng-if="vm.user.notifyOpportunities"><i class="fa fa-lg fa-check-circle success"></i> Listening for
+                <div ng-if="vm.user.notifyOpportunities"><i class="fas fa-lg fa-check-circle success"></i> Listening
+                  for
                   new opportunities</div>
                 <div ng-if="!vm.user.notifyOpportunities" class="text-black-50">Not listening for new opportunities</div>
               </td>
               <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
-                    class="fa fa-pencil"></i> Edit</a></td>
+                    class="fas fa-pencil-alt"></i> Edit</a></td>
             </tr>
             <tr>
               <td class="user-attribute">Roles:</td>
@@ -48,7 +49,7 @@
                 <div ng-bind="vm.user.roles"></div>
               </td>
               <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
-                    class="fa fa-pencil"></i> Edit</a></td>
+                    class="fas fa-pencil-alt"></i> Edit</a></td>
             </tr>
           </tbody>
         </table>

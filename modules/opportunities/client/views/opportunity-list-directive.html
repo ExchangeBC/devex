@@ -6,7 +6,7 @@
       <div class="col">
         <button ng-if="vm.userCanAdd" class="btn btn-primary float-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}"
           ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})">
-          <i class="fa fa-plus"></i> Post an Opportunity
+          <i class="fas fa-plus"></i> Post an Opportunity
         </button>
       </div>
     </div>
@@ -15,9 +15,15 @@
     <div class="row pt-3">
       <div class="col" ng-if="vm.isUser">
         <a class="btn btn-textonly float-right" ng-click="vm.toggleSubscription()" uib-tooltip="Click to get notified when new opportunities are posted">
-          <i class="fa fa-bell fa-lg text-muted" ng-class="{'text-muted': !vm.user.notifyOpportunities, 'text-primary': vm.user.notifyOpportunities}"></i>
-          <span ng-if="!vm.user.notifyOpportunities" class="text-muted">Not listening for new opportunities</span>
-          <span ng-if="vm.user.notifyOpportunities">Listening for new opportunities</span>
+          <!-- <i class="fas fa-bell fa-lg text-muted" ng-class="{'text-muted': !vm.user.notifyOpportunities, 'text-primary': vm.user.notifyOpportunities}"></i> -->
+          <span ng-if="!vm.user.notifyOpportunities" class="text-muted">
+            <i class="fas fa-bell fa-lg text-muted"></i>
+            Not listening for new opportunities
+          </span>
+          <span ng-if="vm.user.notifyOpportunities">
+            <i class="fas fa-bell fa-lg text-primary"></i>
+            Listening for new opportunities
+          </span>
         </a>
       </div>
     </div>
@@ -30,7 +36,7 @@
   <div class="container" ng-if="vm.isLoading">
     <div class="row">
       <div class="col px-0">
-        <h6><i class="fa fa-lg fa-spinner fa-spin"></i> Loading Opportunities...</h6>
+        <h6><i class="fas fa-lg fa-spinner fa-spin"></i> Loading Opportunities...</h6>
       </div>
     </div>
   </div>

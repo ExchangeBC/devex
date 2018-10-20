@@ -4,7 +4,7 @@
       Review and Submit Your Proposal
     </h4>
     <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
-      <i class="fa fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
+      <i class="fas fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
       You won't be able to submit this Proposal until you:
       <ul>
         <li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
@@ -65,8 +65,8 @@
       <div class="row">
         <div class="col text-center" ng-if="ppp.oinp.isInception">
           <div>
-            <h5><i class="fa fa-map"></i> Inception Phase</h5>
-            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oinp.f_startDate}}
+            <h5><i class="fas fa-map"></i> Inception Phase</h5>
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oinp.f_startDate}}
               &#8212;
               {{ppp.oinp.f_endDate}}</div>
             <hr>
@@ -85,8 +85,8 @@
         <div class="col text-center" ng-if="ppp.oprp.isPrototype">
           <div>
 
-            <h5><i class="fa fa-rocket"></i> Proof of Concept Phase</h5>
-            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oprp.f_startDate}}
+            <h5><i class="fas fa-rocket"></i> Proof of Concept Phase</h5>
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oprp.f_startDate}}
               &#8212;
               {{ppp.oprp.f_endDate}}
             </div>
@@ -106,8 +106,8 @@
         <div class="col text-center" ng-if="ppp.oimp.isImplementation">
           <div class="panel panel-default">
             <div>
-              <h5 class="strong"><i class="fa fa-gears"></i> Implementation Phase</h5>
-              <div class="small">Phase Window: &nbsp;&nbsp;<i class="fa fa-calendar"></i> {{ppp.oimp.f_startDate}}
+              <h5 class="strong"><i class="fas fa-gears"></i> Implementation Phase</h5>
+              <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oimp.f_startDate}}
                 &#8212;
                 {{ppp.oimp.f_endDate}}</div>
               <hr>
@@ -174,7 +174,7 @@
               statements and representations made in its Proposal.
             </label>
             <button type="button" class="btn btn-block btn-lg btn-success pull-right" ng-click="ppp.submit()"
-              ng-disabled="!ppp.agreeConfirm"><i class="fa fa-paper-plane"></i> Submit Proposal</button>
+              ng-disabled="!ppp.agreeConfirm"><i class="fas fa-paper-plane"></i> Submit Proposal</button>
             <p class="small">After you submit, you can still make updates to your Proposal until the Closing
               Time.</p>
           </div>

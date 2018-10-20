@@ -43,7 +43,7 @@
 			ProgramsService.makeRequest ({
 				programId: program._id
 			}).$promise.then (function () {
-				Notification.success({ message: '<i class="fa fa-ok"></i> Membership request sent successfully!' });
+				Notification.success({ message: '<i class="fas fa-ok"></i> Membership request sent successfully!' });
 			});
 		};
 		// -------------------------------------------------------------------------
@@ -61,7 +61,7 @@
 			//
 			.then (function () {
 				Notification.success ({
-					message : '<i class="fa fa-ok"></i> Program '+t+' Successfully!'
+					message : '<i class="fas fa-ok"></i> Program '+t+' Successfully!'
 				});
 			})
 			//
@@ -71,7 +71,7 @@
 				program.isPublished = publishedState;
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fa fa-remove\'></i> Program '+t+' Error!'
+					title   : '<i class=\'fas fa-remove\'></i> Program '+t+' Error!'
 				});
 			});
 		};
@@ -120,7 +120,7 @@
 			if ($window.confirm('Are you sure you want to delete?')) {
 				vm.program.$remove(function() {
 					$state.go('programs.list');
-					Notification.success({ message: '<i class="fa fa-ok"></i> program deleted successfully!' });
+					Notification.success({ message: '<i class="fas fa-ok"></i> program deleted successfully!' });
 				});
 			}
 		};
@@ -148,7 +148,7 @@
 			.then (function () {
 				vm.form.programForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="fa fa-ok"></i> program saved successfully!'
+					message : '<i class="fas fa-ok"></i> program saved successfully!'
 				});
 				//
 				// saved the record, now we can upload the logo if it was changed at all
@@ -164,7 +164,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fa fa-remove\'></i> program save error!'
+					title   : '<i class=\'fas fa-remove\'></i> program save error!'
 				});
 			});
 		};
@@ -184,7 +184,7 @@
 				.then (
 					function () {
 						$timeout (function () {
-							Notification.success ({ message: '<i class="fa fa-ok"></i> Update of logo successful!' });
+							Notification.success ({ message: '<i class="fas fa-ok"></i> Update of logo successful!' });
 							vm.fileSelected = false;
 							vm.progress = 0;
 						});
@@ -193,7 +193,7 @@
 					function (response) {
 						if (response.status > 0) {
 							vm.fileSelected = false;
-							Notification.error ({ message: response.message, title: '<i class="fa fa-remove"></i> Update of logo failed!' });
+							Notification.error ({ message: response.message, title: '<i class="fas fa-remove"></i> Update of logo failed!' });
 						}
 						reject ();
 					},
@@ -214,7 +214,7 @@
 			if (file.size > (1 * 1024 * 1024)) {
 				Notification.error ({
 					delay   : 6000,
-					title   : '<div class="text-center"><i class="fa fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
+					title   : '<div class="text-center"><i class="fas fa-exclamation-triangle fa-2x"></i> File Too Large</div>',
 					message : '<div class="text-center">This file exceeds the max allowed size of 1M. Please select another image, or reduce the size or density of this image.</div>'
 				});
 			}

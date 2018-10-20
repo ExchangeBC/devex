@@ -9,7 +9,11 @@
       <uib-accordion close-others="false">
         <div uib-accordion-group ng-repeat="capability in vm.capabilities">
           <uib-accordion-heading>
-            <div class="w-100 h-100 py-0 my-0"><i class="pull-left fa fa-lg" ng-class="{'fa-check-circle success':vm.iOppCapabilities[capability.code], 'fa-question-circle inverse':!vm.iOppCapabilities[capability.code]}"></i>{{capability.name}}</div>
+            <div class="w-100 h-100 py-0 my-0">
+              <span ng-if="vm.iOppCapabilities[capability.code]"><i class="fas fa-check-circle text-success"></i></span>
+              <span ng-if="!vm.iOppCapabilities[capability.code]"><i class="far fa-circle text-dark"></i></span>
+              {{capability.name}}
+            </div>
           </uib-accordion-heading>
           <div class="row">
 

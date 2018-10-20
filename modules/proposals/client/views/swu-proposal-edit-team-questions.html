@@ -3,7 +3,7 @@
     <uib-accordion>
       <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
         <uib-accordion-heading>
-          <i class="fa fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click
+          <i class="fas fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click
               to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
         </uib-accordion-heading>
         <div class="row">
@@ -20,7 +20,7 @@
 
     <br>
     <div class="alert alert-danger">
-      <i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong> Do not include anything in
+      <i class="fas fa-lg fa-exclamation-triangle"></i> <strong>Important!</strong> Do not include anything in
       your responses that would reveal the Organization name, Resource name, or specific company software!
     </div>
     <h6>
@@ -34,7 +34,7 @@
         word limit, worth {{question.questionScore}} points):</em><br>
       <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
 
-      <div ng-show="question.cleanGuideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fa fa-lg fa-info-circle"></i>
+      <div ng-show="question.cleanGuideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fas fa-lg fa-info-circle"></i>
         Response Guideline <i>(<span ng-if="question.showGuidance">click
             to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
       <div class="alert alert-info" ng-show="question.showGuidance && question.cleanGuideline" ng-bind-html="question.cleanGuideline"></div>

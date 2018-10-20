@@ -18,12 +18,12 @@
 				<img class="rounded-circle" width="50" height="50" src="{{((member.profileImageURL.substr(0,1) == '/' || member.profileImageURL.substr(0,4) == 'http') ? '' : '/') + member.profileImageURL}}"/>
 			</div>
 			<div class="strong my-auto w-100 text-truncate">{{member.firstName}} {{member.lastName}}</div>
-			<div><span ng-if="member.email && member.isDisplayEmail"><br><a class="small" href="mailto:{{member.email}}"><i class="fa fa-envelope"></i> Email</a></span></div>
+			<div><span ng-if="member.email && member.isDisplayEmail"><br><a class="small" href="mailto:{{member.email}}"><i class="fas fa-envelope"></i> Email</a></span></div>
 			<div>
 				<!-- // Admin can remove any member // -->
-				<a href="javascript:void(0);" class="btn btn-text-only" ng-if="vm.isAdmin || vm.model.userIs.admin" ng-click="vm.delete(member._id, member.username, 'admin')" title="Remove"><i class="fa fa-times"></i></a>
+				<a href="javascript:void(0);" class="btn btn-text-only" ng-if="vm.isAdmin || vm.model.userIs.admin" ng-click="vm.delete(member._id, member.username, 'admin')" title="Remove"><i class="fas fa-times"></i></a>
 				<!-- // User can remove themself // -->
-				<a href="javascript:void(0);" class="btn btn-text-only" ng-if="vm.isUser &&  member.username == vm.userid && !vm.isAdmin" ng-click="vm.delete(member._id, member.username, 'member')" title="Remove Me"><i class="fa fa-times"></i></a>
+				<a href="javascript:void(0);" class="btn btn-text-only" ng-if="vm.isUser &&  member.username == vm.userid && !vm.isAdmin" ng-click="vm.delete(member._id, member.username, 'member')" title="Remove Me"><i class="fas fa-times"></i></a>
 			</div>
 		</div>
 	</div>

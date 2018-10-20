@@ -9,7 +9,6 @@ module.exports = {
 				// bower:css
 				'public/lib/ng-img-crop/compile/unminified/ng-img-crop.css',
 				'public/lib/angular-ui-notification/dist/angular-ui-notification.css',
-				'public/lib/font-awesome/css/font-awesome.min.css',
 				'public/lib/simple-line-icons/css/simple-line-icons.css',
 				'public/device-mockups/device-mockups.min.css'
 				// endbower
@@ -32,6 +31,7 @@ module.exports = {
 				'public/lib/tinymce/tinymce.js',
 				'public/lib/angular-ui-tinymce/src/tinymce.js',
 				'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+				'public/lib/font-awesome/svg-with-js/js/fontawesome-all.min.js',
 				'public/jquery/jquery.min.js',
 				'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
 				'public/lib/ng-idle/angular-idle.min.js',
@@ -51,11 +51,7 @@ module.exports = {
 				watch: ['public/sass/include/*.scss']
 			}
 		},
-		css: [
-			'public/dist/theme.css',
-			'public/css/*.css',
-			'modules/*/client/css/*.css'
-		],
+		css: ['public/dist/theme.css', 'public/css/*.css', 'modules/*/client/css/*.css'],
 		less: ['modules/*/client/less/*.less'],
 		sass: ['modules/*/client/scss/*.scss'],
 		js: [
@@ -78,10 +74,7 @@ module.exports = {
 		gulpConfig: ['gulpfile.js'],
 		allJS: ['server.js', 'config/**/*.js', 'modules/*/server/**/*.js'],
 		models: 'modules/*/server/models/**/*.js',
-		routes: [
-			'modules/!(core)/server/routes/**/*.js',
-			'modules/core/server/routes/**/*.js'
-		],
+		routes: ['modules/!(core)/server/routes/**/*.js', 'modules/core/server/routes/**/*.js'],
 		sockets: 'modules/*/server/sockets/**/*.js',
 		config: ['modules/*/server/config/*.js'],
 		policies: 'modules/*/server/policies/*.js',

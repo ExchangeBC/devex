@@ -72,7 +72,7 @@
 										? 'Your opportunity has been published and we\'ve notified subscribers!'
 										: 'Your opportunity has been unpublished!';
 									Notification.success({
-										message: '<i class="fa fa-ok"></i> ' + m
+										message: '<i class="fas fa-ok"></i> ' + m
 									});
 								})
 								.catch(function(res) {
@@ -81,8 +81,8 @@
 									//
 									opportunity.isPublished = publishedState;
 									Notification.error({
-										message: res.message,
-										title: '<i class=\'fa fa-remove\'></i> Opportunity ' + t + ' Error!'
+										message: res.data.message,
+										title: '<i class=\'fas fa-remove\'></i> Opportunity ' + t + ' Error!'
 									});
 								});
 						};
@@ -226,10 +226,10 @@
 							var message;
 							if (Authentication.user.notifyOpportunities) {
 								message =
-									'<i class="fa fa-bell fa-3x"></i><br/><br/>You will be notified of new Opportunities';
+									'<i class="fas fa-bell fa-3x"></i><br/><br/>You will be notified of new Opportunities';
 							} else {
 								message =
-									'<i class="fa fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities';
+									'<i class="fas fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities';
 							}
 
 							Notification.success({

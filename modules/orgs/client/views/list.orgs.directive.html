@@ -2,7 +2,7 @@
   <div class="col px-0">
     <button ng-if="vm.userCanAdd" class="btn btn-primary mx-0 float-right" ui-sref="orgs.create()" data-automation-id="button-register-a-company"
       title="Register a Company">
-      <i class="fa fa-plus"></i> Register a Company
+      <i class="fas fa-plus"></i> Register a Company
     </button>
   </div>
 </div>
@@ -15,8 +15,10 @@
       </div>
 
       <div class="strong my-auto w-100">{{ org.name }}</div>
-      <a class="btn btn-text-only float-right my-0 py-0 fa fa-sm fa-gear" title="Edit" ng-if="org.canEdit" ui-sref="orgadmin.profile({ orgId: org._id })"
-        ng-click="$event.stopPropagation()"></a>
+      <a class="btn btn-text-only float-right my-0 py-0" title="Edit" ng-if="org.canEdit" ui-sref="orgadmin.profile({ orgId: org._id })"
+        ng-click="$event.stopPropagation()">
+        <i class="fas fa-cog"></i>
+      </a>
     </div>
   </div>
 </div>

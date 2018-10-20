@@ -17,7 +17,7 @@
         <li class="nav-item" ng-repeat="item in vm.menu.items | orderBy: position" ng-if="item.shouldRender(vm.authentication.user)"
           ng-switch="item.type" uib-dropdown="item.type === 'dropdown'">
           <a ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
-            <i class="nav-icon" ng-class="item.icon || 'fa fa-puzzle-piece'" aria-hidden="true"></i>
+            <i class="nav-icon" ng-class="item.icon || 'fas fa-puzzle-piece'" aria-hidden="true"></i>
             {{item.title}}
           </a>
           <ul ng-switch-when="dropdown" class="dropdown-menu" uib-dropdown-menu>
@@ -28,7 +28,7 @@
           </ul>
           <!-- Navbar items without subitems -->
           <a ng-switch-default ui-sref="{{item.state}}" class="nav-link">
-            <i class="nav-icon" ng-class="item.icon || 'fa fa-puzzle-piece'" aria-hidden="true"></i>
+            <i class="nav-icon" ng-class="item.icon || 'fas fa-puzzle-piece'" aria-hidden="true"></i>
             {{item.title}}
           </a>
         </li>
@@ -38,7 +38,7 @@
       <ul class="nav navbar-nav ml-auto" ng-hide="vm.authentication.user">
         <li ui-sref-active="active" class="nav-item">
           <a id="authentication.signin" ui-sref="authentication.signin" class="nav-link">
-            <i class="fa fa-lg fa-github" aria-hidden="true"></i> Sign In</a>
+            <i class="fab fa-lg fa-github" aria-hidden="true"></i> Sign In</a>
         </li>
       </ul>
 
@@ -46,9 +46,8 @@
       <ul class="nav navbar-nav ml-auto" ng-show="vm.authentication.user">
         <li class="nav-item">
           <a href="/settings/messages" class="nav-link">
-            <i class="fa fa-envelope-o messages-icon" style="position: relative;">
-              <span class="unread-badge" ng-if="vm.messageCount > 0" ng-bind="vm.messageCount"></span>
-            </i>
+            <i class="far fa-2x fa-envelope"></i>
+            <span class="unread-badge" ng-if="vm.messageCount > 0" ng-bind="vm.messageCount"></span>
           </a>
         </li>
 

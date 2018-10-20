@@ -1,12 +1,13 @@
 <div class="row">
   <div class="col text-center">
     <div class="proposal-stats">
-      <span uib-tooltip="People following this opportunity"><i class="fa fa-user"></i> {{vm.stats.following}} Followers</span>
+      <span uib-tooltip="People following this opportunity"><i class="fas fa-user"></i> {{vm.stats.following}}
+        Followers</span>
       &nbsp;&nbsp;&nbsp;
-      <span uib-tooltip="Proposals currently in DRAFT"><i class="fa fa-file-o"></i> {{vm.stats.draft}} Proposals
+      <span uib-tooltip="Proposals currently in DRAFT"><i class="far fa-file"></i> {{vm.stats.draft}} Proposals
         started</span>
       &nbsp;&nbsp;&nbsp;
-      <span uib-tooltip="Proposal submitted"><i class="fa fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
+      <span uib-tooltip="Proposal submitted"><i class="fas fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
     </div>
   </div>
 </div>
@@ -33,7 +34,7 @@
         <div class="list-group">
           <strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
               title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}}
-              {{proposal.user.lastName}}<i class="fa fa-file pull-right"></i></a></strong>
+              {{proposal.user.lastName}}<i class="fas fa-file pull-right"></i></a></strong>
         </div>
       </div>
       <div class="col"></div>

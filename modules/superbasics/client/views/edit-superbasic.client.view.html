@@ -1,37 +1,33 @@
-<section class="form-page"><div class="container" role="main"><form name="qqq.superbasicForm" id="qqq.superbasicForm" warn-on-exit novalidate autocomplete="off">
-	<div class="row">
-		<form-input
-			class="col-sm-12"
-			ng-model="qqq.superbasic.name"
-			x-form="qqq.superbasicForm"
-			x-options='{
+<section class="form-page">
+	<div class="container" role="main">
+		<form name="qqq.superbasicForm" id="qqq.superbasicForm" warn-on-exit novalidate autocomplete="off">
+			<div class="row">
+				<form-input class="col-sm-12" ng-model="qqq.superbasic.name" x-form="qqq.superbasicForm" x-options='{
 				"title":"Superbasic Name",
 				"id":"name",
 				"name":"name",
 				"placeholder":"name",
 				"required":"Must supply a superbasic name"
 			}'>
-		</form-input>
-		<form-display
-			class="col-sm-12"
-			x-options='{
+				</form-input>
+				<form-display class="col-sm-12" x-options='{
 				"title":"Superbasic Description",
 				"id":"description",
 				"name":"description"
 			}'>
-			<textarea
-				name="description"
-				id="description"
-				class="form-control"
-				placeholder="A brief description of the superbasic"
-				ng-model="qqq.superbasic.description">
+					<textarea name="description" id="description" class="form-control" placeholder="A brief description of the superbasic"
+					 ng-model="qqq.superbasic.description">
 			</textarea>
-		</form-display>
-	</div>
-	<div class="row form-foot text-right">
-		<button class="btn btn-danger" ui-sref="superbasics.view({superbasicId:qqq.superbasic.code})"> Cancel</button>
-		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
-		<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid, true)"><i class="fa fa-thumbs-o-up"></i> Save and Exit</button>
-	</div>
+				</form-display>
+			</div>
+			<div class="row form-foot text-right">
+				<button class="btn btn-danger" ui-sref="superbasics.view({superbasicId:qqq.superbasic.code})"> Cancel</button>
+				<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid)"><i class="fas fa-thumbs-up"></i>
+					Save</button>
+				<button class="btn btn-primary" ng-click="qqq.savenow(qqq.superbasicForm.$valid, true)"><i class="fas fa-thumbs-up"></i>
+					Save and Exit</button>
+			</div>
 
-</form></div></section>
+		</form>
+	</div>
+</section>

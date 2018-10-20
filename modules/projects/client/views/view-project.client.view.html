@@ -2,67 +2,82 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <a href="/projects"><i class="fa fa-chevron-left"></i> All Projects</a>
+        <a href="/projects"><i class="fas fa-chevron-left"></i>&nbsp;&nbsp;All Projects</a>
       </div>
     </div>
   </div>
 </div>
 
 <section class="main-section">
-	<div class="container">
-		<!-- // Labels & Admin control buttons // -->
-		<div class="row" ng-if="vm.canEdit || vm.canRequestMembership">
-			<div class="col text-right">
-				<!-- // Unpublish // -->
-				<a data-automation-id="button-project-unpublish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish this project"><i class="fa fa-lg fa-ban"></i> Unpublish</a>
-				<!-- // Publish // -->
-				<a data-automation-id="button-project-publish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished" class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this page"><i class="fa fa-bullhorn"></i> Publish</a>
-				<!-- // Edit // -->
-				<button type="button" data-automation-id="button-project-edit" class="btn btn-default" ng-if="vm.canEdit" ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fa fa-lg fa-pencil"></i> Edit</button>
-				<!-- // If user is not a member, request membership // -->
-				<button type="button" data-automation-id="button-project-request-membership" class="btn btn-primary" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()"><i class="fa fa-user" title="Request Membership"></i> Request Membership</button>
-			</div>
-		</div>
+  <div class="container">
+    <!-- // Labels & Admin control buttons // -->
+    <div class="row" ng-if="vm.canEdit || vm.canRequestMembership">
+      <div class="col text-right">
+        <!-- // Unpublish // -->
+        <a data-automation-id="button-project-unpublish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished"
+          class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish this project"><i class="fas fa-lg fa-ban"></i>
+          Unpublish</a>
+        <!-- // Publish // -->
+        <a data-automation-id="button-project-publish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished"
+          class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this page"><i class="fas fa-bullhorn"></i>
+          Publish</a>
+        <!-- // Edit // -->
+        <button type="button" data-automation-id="button-project-edit" class="btn btn-default" ng-if="vm.canEdit"
+          ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fas fa-lg fa-pencil-alt"></i>
+          Edit</button>
+        <!-- // If user is not a member, request membership // -->
+        <button type="button" data-automation-id="button-project-request-membership" class="btn btn-primary" ng-if="vm.canRequestMembership"
+          href="javascript:void(0);" ng-click="vm.request()"><i class="fas fa-user" title="Request Membership"></i>
+          Request
+          Membership</button>
+      </div>
+    </div>
 
-		<div class="row">
-			<div class="col">
-				<h3>{{vm.project.name}}</h1>
-				<p ng-bind="vm.project.short"></p>
-				<p ng-bind-html="vm.display.description"></p>
-			</div>
-		</div>
-		<hr>
-		<div class="row">
-			<div class="col-sm-6">
-				<p class="label-list" ng-if="vm.project.tags">
-				<span class="label label-project-tags" ng-repeat="code in vm.project.tags">{{code}}</span></p>
-			</div>
-			<div class="col-sm-6">
-				<dl class="dl-horizontal">
-				<dt>Program:</dt>
-				<dd>
-				<a ng-if="vm.project.program"  id="programs.view" ui-sref="programs.view({programId:vm.project.program.code})"><i class="fa fa-university"></i> {{vm.project.program.title}}</a>
-				<span ng-if="!vm.project.program" class="text-muted">No program</span>
-				</dd>
-				<!-- github link -->
-				<dt>Code:</dt>
-				<dd>
-				<a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fa fa-github"></i> View Code Repository on GitHub</a>
-				</dd>
-				</dl>
-			</div>
-		</div>
-		<hr>
-		<core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
-		<br>
-		<core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
-		<div class="row">
-			<div class="col">
-				<p class="text-right mb-0">
-					<small class="text-muted">Created on <span ng-bind="vm.project.created | date:'mediumDate'"></span> by <span ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span><span ng-if="!vm.project.createdBy">Deleted User</span>. Last updated on <span ng-bind="vm.project.updated | date:'mediumDate'"></span> by <span ng-if="vm.project.updatedBy" ng-bind="vm.project.updatedBy.displayName"></span><span ng-if="!vm.project.updatedBy">Deleted User</span>
-					</small>
-				</p>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+      <div class="col">
+        <h3>{{vm.project.name}}</h1>
+          <p ng-bind="vm.project.short"></p>
+          <p ng-bind-html="vm.display.description"></p>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-6">
+        <p class="label-list" ng-if="vm.project.tags">
+          <span class="label label-project-tags" ng-repeat="code in vm.project.tags">{{code}}</span></p>
+      </div>
+      <div class="col-sm-6">
+        <dl class="dl-horizontal">
+          <dt>Program:</dt>
+          <dd>
+            <a ng-if="vm.project.program" id="programs.view" ui-sref="programs.view({programId:vm.project.program.code})"><i
+                class="fas fa-university"></i> {{vm.project.program.title}}</a>
+            <span ng-if="!vm.project.program" class="text-muted">No program</span>
+          </dd>
+          <!-- github link -->
+          <dt>Code:</dt>
+          <dd>
+            <a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fab fa-github"></i>
+                View Code Repository on GitHub</a>
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <hr>
+    <core-member-list model="vm.project" idstring="vm.idString" service="vm.ProjectsService" title="Project Members"></core-member-list>
+    <br>
+    <core-member-requests ng-if="vm.canEdit" model="vm.project" idstring="vm.idString" service="vm.ProjectsService"></core-member-requests>
+    <div class="row">
+      <div class="col">
+        <p class="text-right mb-0">
+          <small class="text-muted">Created on <span ng-bind="vm.project.created | date:'mediumDate'"></span> by <span
+              ng-if="vm.project.createdBy" ng-bind="vm.project.createdBy.displayName"></span><span ng-if="!vm.project.createdBy">Deleted
+              User</span>. Last
+            updated on <span ng-bind="vm.project.updated | date:'mediumDate'"></span> by <span ng-if="vm.project.updatedBy"
+              ng-bind="vm.project.updatedBy.displayName"></span><span ng-if="!vm.project.updatedBy">Deleted User</span>
+          </small>
+        </p>
+      </div>
+    </div>
+  </div>
 </section>

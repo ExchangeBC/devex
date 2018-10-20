@@ -102,7 +102,7 @@ angular.module('core')
 				});
 
 				tmpl +=	'}">'+
-						'<span ng-show="itemStatus[item].pos === 2 && !closed && !single" class="pull-right fa fa-star" style="margin-top: 2px"></span>'+
+						'<span ng-show="itemStatus[item].pos === 2 && !closed && !single" class="pull-right fas fa-star" style="margin-top: 2px"></span>'+
 						'<span ng-if="!single && closed && primary" class="pull-right">{{ ngModel.length || 0 }}</span>'+
 						'{{ item ' + (attrs.textFilter ? ('|' + attrs.textFilter) : '') + '}}'+
 						'</button>';
@@ -121,7 +121,7 @@ angular.module('core')
 
 				tmpl += '}">'+
 						'<span ng-show="itemStatus[item.' + options.objectKeyAttribute + '].pos === 2 && !closed && !single" '+
-						'class="pull-right fa fa-star" style="margin-top: 2px"></span>'+
+						'class="pull-right fas fa-star" style="margin-top: 2px"></span>'+
 						'<span ng-if="!single && closed && primary" class="pull-right">{{ ngModel.length || 0 }}</span>'+
 						'{{' + options.objectDisplayAttribute + (attrs.textFilter ? ('|' + attrs.textFilter) : '') + '}}'+
 						'</button>';
@@ -130,13 +130,13 @@ angular.module('core')
 			// if (attrs.source === 'key' || attrs.source === 'array') {
 			// 	tmpl += 	'<li ng-repeat="item in items track by $index" ng-show="!closed || expandTo === $index">'+
 			// 			'<button type="button" ng-click="toggleSelect(item)" class="btn  btn-full-left" ng-class="{\'btn-default\':itemPos(item) === -1, \'btn-info\':itemPos(item) > 0, \'btn-primary\':itemPos(item) === 0}">'+
-			// 			'<span ng-show="itemPos(item) === 0 && !closed && !single" class="pull-right fa fa-star"></span>{{ item }}'+
+			// 			'<span ng-show="itemPos(item) === 0 && !closed && !single" class="pull-right fas fa-star"></span>{{ item }}'+
 			// 			'</button>';
 			// }
 			// if (attrs.source === 'object') {
 			// 	tmpl += 	'<li ng-repeat="item in items track by ' + attrs.objectKeyAttribute + '" ng-show="!closed || expandTo === $index">'+
 			// 			'<button type="button" ng-click="toggleSelect(item.' + attrs.objectKeyAttribute + ')" class="btn  btn-full-left" ng-class="{\'btn-default\':itemPos(item.' + attrs.objectKeyAttribute + ') === -1, \'btn-info\':itemPos(item.' + attrs.objectKeyAttribute + ') > 0, \'btn-primary\':itemPos(item.' + attrs.objectKeyAttribute + ') === 0}">'+
-			// 			'<span ng-show="itemPos(item.' + attrs.objectKeyAttribute + ') === 0 && !closed && !single" class="pull-right fa fa-star"></span>';
+			// 			'<span ng-show="itemPos(item.' + attrs.objectKeyAttribute + ') === 0 && !closed && !single" class="pull-right fas fa-star"></span>';
 
 			// 	if (attrs.objectDisplayAttribute) {
 			// 		tmpl += '{{ item.' + attrs.objectDisplayAttribute + '}}';

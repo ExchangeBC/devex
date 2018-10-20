@@ -9,8 +9,7 @@ module.exports = {
 				// bower:css
 				'public/lib/angular-ui-notification/dist/angular-ui-notification.min.css',
 				'public/lib/ng-img-crop/compile/minified/ng-img-crop.css',
-				'public/lib/font-awesome/css/font-awesome.min.css',
-				'public/lib/simple-line-icons/css/simple-line-icons.css'
+				'public/lib/simple-line-icons/css/simple-line-icons.css',
 				// endbower
 			],
 			js: [
@@ -31,9 +30,10 @@ module.exports = {
 				'public/lib/ng-file-upload/ng-file-upload.min.js',
 				'public/lib/ng-img-crop/compile/minified/ng-img-crop.js',
 				'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+				'public/lib/font-awesome/svg-with-js/js/fontawesome-all.min.js',
 				'public/lib/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js',
 				'public/lib/ng-idle/angular-idle.min.js',
-				'public/lib/angular-touch/angular-touch.min.js'
+				'public/lib/angular-touch/angular-touch.min.js',
 				// endbower
 			]
 		},

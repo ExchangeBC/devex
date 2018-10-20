@@ -22,7 +22,7 @@
   padding-left: 28px;
 }
 .select-bool-control .btn.btn-info .fa,
-.select-bool-control .btn.btn-primary .fa {
+.select-bool-control .btn.btn-primary .fas {
   color: white;
 }
 ul.list-blocked li {

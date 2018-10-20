@@ -33,7 +33,7 @@
 						$scope.$broadcast('show-errors-reset', 'vm.userForm');
 						Notification.success({
 							delay: 2000,
-							message: '<i class="fa fa-3x fa-check-circle"></i> ' + successMessage
+							message: '<i class="fas fa-3x fa-check-circle"></i> ' + successMessage
 						});
 						Authentication.user = response;
 						vm.user = angular.copy(Authentication.user);
@@ -41,7 +41,7 @@
 					function(response) {
 						Notification.error({
 							message: response.data.message,
-							title: '<i class="fa fa-3x fa-exclamation-triangle"></i> Edit profile failed!'
+							title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Edit profile failed!'
 						});
 					}
 				);
@@ -97,14 +97,14 @@
 						$scope.$broadcast('show-errors-reset', 'vm.userForm');
 						Notification.success({
 							delay: 2000,
-							message: '<i class="fa fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'
+							message: '<i class="fas fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'
 						});
 						CapabilitiesMethods.init(vm, vm.user, capabilities);
 					},
 					function(response) {
 						Notification.error({
 							message: response.data.message,
-							title: '<i class="fa fa-alert-triangle"></i> Changes were not saved!'
+							title: '<i class="fas fa-alert-triangle"></i> Changes were not saved!'
 						});
 					}
 				);

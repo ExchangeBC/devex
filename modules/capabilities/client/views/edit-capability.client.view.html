@@ -25,7 +25,7 @@
 								"id":"flags",
 								"name":"flags"
 							}'>
-              <label class="label label-lg label-cap-default {{qqq.capability.labelClass}}"><i class="fa fa-circle"></i>
+              <label class="label label-lg label-cap-default {{qqq.capability.labelClass}}"><i class="fas fa-circle"></i>
                 {{qqq.capability.name}}</label>
               <label class="label">{{qqq.capability.name}}</label>
             </form-display>
@@ -61,9 +61,9 @@
                 <li class="list-group-item" ng-repeat="skill in qqq.capability.skills">
                   {{skill.name}}
                   <button type="button" title="Delete Skill" class="btn-link pull-right" ng-click="qqq.deleteSkill(skill)"><i
-                      class="fa fa-minus-square"></i></button>
+                      class="fas fa-minus-square"></i></button>
                   <button type="button" title="Edit Skill" class="btn-link pull-right" ng-click="qqq.editSkill(skill)"><i
-                      class="fa fa-edit"></i></button>
+                      class="fas fa-edit"></i></button>
                 </li>
               </ul>
             </div>
@@ -73,14 +73,14 @@
 
       <div class="bg-light rounded px-3 py-2">
         <div class="row form-foot text-right">
-          <button type="button" class="btn btn-text-only" ng-click="qqq.remove()"><i class="fa fa-trash"></i> Delete</button>
+          <button type="button" class="btn btn-text-only" ng-click="qqq.remove()"><i class="fas fa-trash"></i> Delete</button>
           <button type="button" class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})">
             Cancel</button>
           <!--
-					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i class="fa fa-thumbs-o-up"></i> Save</button>
+					<button class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i class="fas fa-thumbs-up"></i> Save</button>
 				-->
           <button type="button" class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid, true)"><i
-              class="fa fa-save"></i> Save &amp; Close</button>
+              class="fas fa-save"></i> Save &amp; Close</button>
         </div>
       </div>
     </div>

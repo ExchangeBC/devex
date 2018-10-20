@@ -1,7 +1,7 @@
 <div ng-if="vm.canEdit && vm.opportunity.isPublished" class="container swu-evaluation border-0 m-3">
 
   <div class="alert" ng-show="vm.isLoading">
-    <i class="fa fa-lg fa-spinner fa-spin"></i>&nbsp; Loading Evaluation...</a>
+    <i class="fas fa-lg fa-spinner fa-spin"></i>&nbsp; Loading Evaluation...</a>
   </div>
   <div ng-show="!vm.isLoading">
     <div>
@@ -45,14 +45,14 @@
 
       <!-- Stage 1a: Questions: Questions are pending review by someone with the 'vetter' role -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.pending_review">
-        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
-        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Well, you got one response!</div>
-        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fas fa-lg fa-frown-o"></i>
           &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
         <div class="swu-evaluation-cta">
-          <p><i class="fa fa-lg fa-hourglass-1"></i> &nbsp; Review in progress .... Check back soon!</p>
+          <p><i class="fas fa-lg fa-hourglass-1"></i> &nbsp; Review in progress .... Check back soon!</p>
           <p>A procurement specialist is reviewing the responses to the Team Questions to make sure they don't contain
             any self-identifying information. Once this is done, you'll be able to start the evaluation.</p>
         </div>
@@ -60,11 +60,11 @@
 
       <!-- Stage 1b: Questions: Choose question grading type as linear or weighted -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.choose_grade_type">
-        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
-        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Well, you got one response!</div>
-        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fas fa-lg fa-frown-o"></i>
           &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
         <div class="swu-evaluation-cta">
           <p>Your first step is to choose how you would like to grade the responses that were submitted to the Team
@@ -74,23 +74,23 @@
           <p><em>or</em></p>
           <p><b>Weighted Grading</b> to assign a score from 1 to 5 to each individual response.</p>
           <button class="btn btn-lg btn-primary" ng-click="vm.selectLinearGrading()">&nbsp;&nbsp;&nbsp;Linear &nbsp;<i
-              class="fa fa-lg fa-sort"></i></button>
-          <button class="btn btn-lg btn-primary" ng-click="vm.selectWeightedGrading()">Weighted &nbsp;<i class="fa fa-lg fa-balance-scale"></i></button>
+              class="fas fa-lg fa-sort"></i></button>
+          <button class="btn btn-lg btn-primary" ng-click="vm.selectWeightedGrading()">Weighted &nbsp;<i class="fas fa-lg fa-balance-scale"></i></button>
         </div>
       </div>
 
       <!-- Stage 1c: Questions: Questionnaire response ranking (modal) has not been saved yet -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.questions">
-        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length > 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
-        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fa fa-lg fa-smile-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 1"><i class="fas fa-lg fa-smile-o"></i>
           &nbsp;Well, you got one response!</div>
-        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fa fa-lg fa-frown-o"></i>
+        <div class="py-3" ng-if="vm.proposals.length === 0"><i class="fas fa-lg fa-frown-o"></i>
           &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
         <div class="swu-evaluation-cta">
           <p>Your first step is to comparatively rank the responses that teams submitted to the Team Questions.</p>
           <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length >= 1" ng-click="vm.openQuestionRankingModal()">Rank
-            responses &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+            responses &nbsp;<i class="fas fa-lg fa-chevron-circle-right"></i></button>
         </div>
       </div>
 
@@ -101,7 +101,7 @@
         <div class="swu-evaluation-cta">
           <p>When you have all the rankings the way you want them, click the Commit button to lock in your decisions.</p>
           <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length > 0" ng-click="vm.openQuestionRankingModal()">Finish
-            and commit rankings &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+            and commit rankings &nbsp;<i class="fas fa-lg fa-chevron-circle-right"></i></button>
         </div>
       </div>
 
@@ -115,7 +115,7 @@
           <p>Once the Code Challenge submissions have been evaluated, come back here to enter the scores for each
             company. </p>
           <button class="btn btn-lg btn-primary" ng-click="vm.openCodeChallengeModal()">Enter Code Challenge scores
-            &nbsp;<i class="fa fa-lg fa-chevron-circle-right"></i></button>
+            &nbsp;<i class="fas fa-lg fa-chevron-circle-right"></i></button>
         </div>
       </div>
 
@@ -130,7 +130,7 @@
           <p>Once all of the Team Scenarios have taken place and your evaluation panel has come to consensus on the
             overall scores for each company, come back here to enter the total scores.</p>
           <button class="btn btn-lg btn-primary" ng-click="vm.openInterviewModal()">Enter Team Scenario scores &nbsp;<i
-              class="fa fa-lg fa-chevron-circle-right"></i></button>
+              class="fas fa-lg fa-chevron-circle-right"></i></button>
         </div>
       </div>
 
@@ -149,7 +149,7 @@
       <!-- Edge case: All proponents failed the code challenge -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.all_failed">
         <div class="alert alert-danger">
-          <i class="fa fa-lg fa-exclamation-triangle"></i> <strong>Uh oh!</strong> This evaluation can't continue
+          <i class="fas fa-lg fa-exclamation-triangle"></i> <strong>Uh oh!</strong> This evaluation can't continue
           because no proponents passed the Code Challenge!
         </div>
       </div>

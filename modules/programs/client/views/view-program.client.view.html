@@ -1,55 +1,60 @@
 <div class="back-nav">
-	<div class="container">
-		<div class="row">
-			<div class="col">
-				<a href="/programs"><i class="fa fa-chevron-left"></i> All Programs</a>
-			</div>
-		</div>
-	</div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <a href="/programs"><i class="fas fa-chevron-left"></i>&nbsp;&nbsp;All Programs</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <section class="main-section">
-	<div class="container">
-		<!-- // Labels & Admin control buttons // -->
-		<div class="row mb-2" ng-if="vm.canEdit || vm.canRequestMembership">
-			<div class="col text-right">
-				<!-- // Unpublish // -->
-				<a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished" class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish program">
-				Unpublish</a>
-				<!-- // Publish // -->
-				<a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished" class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this program page">Publish</a>
-				<!-- // Edit // -->
-				<button data-automation-id="button-program-edit" type="button" class="btn btn-default" ng-if="vm.canEdit" ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fa fa-pencil"></i> Edit</button>
-			<!-- // If user is not a member, request membership // -->
-				<button data-automation-id="button-program-request-membership" type="button" class="btn btn-primary" ng-if="vm.canRequestMembership" href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fa fa-user"></i></button>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col">
-				<div class="d-flex align-self-start mb-3">
-					<img height="50" width="50" class="mr-3" src="/{{vm.program.logo}}"/>
-					<h3 ng-bind="vm.program.title"></h3>
-				</div>
-			</div>
-		</div>
+  <div class="container">
+    <!-- // Labels & Admin control buttons // -->
+    <div class="row mb-2" ng-if="vm.canEdit || vm.canRequestMembership">
+      <div class="col text-right">
+        <!-- // Unpublish // -->
+        <a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished"
+          class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish program">
+          Unpublish</a>
+        <!-- // Publish // -->
+        <a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished"
+          class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this program page">Publish</a>
+        <!-- // Edit // -->
+        <button data-automation-id="button-program-edit" type="button" class="btn btn-default" ng-if="vm.canEdit"
+          ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fas fa-pencil-alt"></i>
+          Edit</button>
+        <!-- // If user is not a member, request membership // -->
+        <button data-automation-id="button-program-request-membership" type="button" class="btn btn-primary" ng-if="vm.canRequestMembership"
+          href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fas fa-user"></i></button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <div class="d-flex align-self-start mb-3">
+          <img height="50" width="50" class="mr-3" src="/{{vm.program.logo}}" />
+          <h3 ng-bind="vm.program.title"></h3>
+        </div>
+      </div>
+    </div>
 
-		<div class="row">
-			<div class="col">
-				<h5 class="py-2 text-truncate" ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow">{{vm.program.website}}</a></h5>
-				<p ng-bind="vm.program.short"></p>
-				<p ng-bind-html="vm.display.description"></p>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+      <div class="col">
+        <h5 class="py-2 text-truncate" ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow">{{vm.program.website}}</a></h5>
+        <p ng-bind="vm.program.short"></p>
+        <p ng-bind-html="vm.display.description"></p>
+      </div>
+    </div>
+  </div>
 
-	<div class="container">
-		<core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Members"></core-member-list>
-		<br>
-		<core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.canEdit"></core-member-requests>
-		<br>
-		<project-list program="vm.program" title="Projects" context="program"></project-list>
-	<!-- // Hiding Opportunity list on this page because there is formatting funkiness going on I don't know how to fix right now // -->
-	<!--
+  <div class="container">
+    <core-member-list model="vm.program" idstring="vm.idString" service="vm.ProgramsService" title="Members"></core-member-list>
+    <br>
+    <core-member-requests model="vm.program" idstring="vm.idString" service="vm.ProgramsService" ng-if="vm.canEdit"></core-member-requests>
+    <br>
+    <project-list program="vm.program" title="Projects" context="program"></project-list>
+    <!-- // Hiding Opportunity list on this page because there is formatting funkiness going on I don't know how to fix right now // -->
+    <!--
 		<br>
 		<opportunity-list program="vm.program" title="Opportunities" context="program"></opportunity-list>
 	</div>

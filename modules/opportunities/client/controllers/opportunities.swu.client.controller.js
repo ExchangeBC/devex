@@ -216,9 +216,16 @@
 				OpportunitiesService.makeRequest({
 					opportunityId: opportunity._id
 				}).$promise.then(function() {
-					Notification.success({ message: '<i class="fa fa-ok"></i> Successfully Applied!' });
+					Notification.success({ message: '<i class="fas fa-ok"></i> Successfully Applied!' });
 				});
 			};
+
+			vm.requestADMApproval = function(opportunity) {
+				$state.go('opportunityadmin.approvalrequestswu', {
+					opportunityId: vm.opportunity.code
+				});
+			};
+
 			// -------------------------------------------------------------------------
 			//
 			// publish or un publish the opportunity
@@ -235,10 +242,13 @@
 				var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
 				var isToBeSaved = true;
 				var promise = Promise.resolve();
-				if (isToBePublished)
+
+				if (isToBePublished) {
 					promise = ask.yesNo(publishQuestion).then(function(r) {
 						isToBeSaved = r;
 					});
+				}
+
 				promise.then(function() {
 					if (isToBeSaved) {
 						opportunity.isPublished = isToBePublished;
@@ -248,7 +258,7 @@
 								// success, notify
 								//
 								Notification.success({
-									message: '<i class="fa fa-ok"></i> ' + publishSuccess
+									message: '<i class="fas fa-ok"></i> ' + publishSuccess
 								});
 							})
 							.catch(function(res) {
@@ -258,7 +268,7 @@
 								opportunity.isPublished = publishedState;
 								Notification.error({
 									message: res.data.message,
-									title: '<i class=\'fa fa-remove\'></i> ' + publishError
+									title: '<i class=\'fas fa-remove\'></i> ' + publishError
 								});
 							});
 					}
@@ -292,13 +302,13 @@
 							function(response) {
 								vm.opportunity = response;
 								Notification.success({
-									message: '<i class="fa fa-ok"></i> Proposal Un-Assignment successful!'
+									message: '<i class="fas fa-ok"></i> Proposal Un-Assignment successful!'
 								});
 							},
 							function(error) {
 								Notification.error({
 									message: error.data.message,
-									title: '<i class="fa fa-remove"></i> Proposal Un-Assignment failed!'
+									title: '<i class="fas fa-remove"></i> Proposal Un-Assignment failed!'
 								});
 							}
 						);
@@ -774,7 +784,7 @@
 				if ($window.confirm('Are you sure you want to delete?')) {
 					vm.opportunity.$remove(function() {
 						$state.go('opportunities.list');
-						Notification.success({ message: '<i class="fa fa-ok"></i> opportunity deleted successfully!' });
+						Notification.success({ message: '<i class="fas fa-ok"></i> opportunity deleted successfully!' });
 					});
 				}
 			};
@@ -783,7 +793,7 @@
 				if (vm.opportunity.budget > 2000000) {
 					Notification.error({
 						message: 'You cannot enter an overall budget greater than $2,000,000',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -794,7 +804,7 @@
 				) {
 					Notification.error({
 						message: 'You cannot enter an Inception budget greater than the total budget.',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -805,7 +815,7 @@
 				) {
 					Notification.error({
 						message: 'You cannot enter a Proof of Concept budget greater than the total budget.',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -813,7 +823,7 @@
 				if (vm.opportunity.phases.implementation.maxCost > vm.opportunity.budget) {
 					Notification.error({
 						message: 'You cannot enter an Implementation budget greater than the total budget.',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -838,7 +848,7 @@
 				if (!vm.opportunity.name) {
 					Notification.error({
 						message: 'You must enter a title for your opportunity',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -854,7 +864,7 @@
 					$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 					Notification.error({
 						message: 'There are errors on the page, please review your work and re-save',
-						title: '<i class=\'fa fa-remove\'></i> Errors on Page'
+						title: '<i class=\'fas fa-remove\'></i> Errors on Page'
 					});
 					return false;
 				}
@@ -949,7 +959,7 @@
 					.then(function() {
 						vm.opportunityForm.$setPristine();
 						Notification.success({
-							message: '<i class="fa fa-ok"></i> opportunity saved successfully!'
+							message: '<i class="fas fa-ok"></i> opportunity saved successfully!'
 						});
 
 						$state.go('opportunities.viewswu', { opportunityId: opportunity.code });
@@ -960,7 +970,7 @@
 					.catch(function(res) {
 						Notification.error({
 							message: res.data.message,
-							title: '<i class=\'fa fa-remove\'></i> opportunity save error!'
+							title: '<i class=\'fas fa-remove\'></i> opportunity save error!'
 						});
 					});
 			};
