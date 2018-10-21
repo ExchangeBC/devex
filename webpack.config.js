@@ -22,7 +22,8 @@ module.exports = {
 			'angular-drag-and-drop-lists',
 			'angular-sanitize',
 			'jquery',
-			'bootstrap'
+			'bootstrap',
+			'ui-bootstrap4'
 		],
 		appConfig: './modules/core/client/app/config.js',
 		appInit: './modules/core/client/app/init.js',
