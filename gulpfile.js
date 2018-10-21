@@ -257,7 +257,7 @@ gulp.task('templatecache', () => {
 });
 
 // Lint CSS and JavaScript files.
-gulp.task('lint', gulp.series('less', 'sass', 'themecss', gulp.parallel('csslint', 'eslint')));
+gulp.task('lint', gulp.series('sass', 'themecss', 'eslint'));
 
 // Lint project files and run webpack
 gulp.task('build', gulp.series('env:dev', 'lint', 'clean', 'webpack'));
