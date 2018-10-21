@@ -105,7 +105,6 @@ gulp.task('watch', () => {
 				'change',
 				plugins.refresh.changed
 			);
-			gulp.watch(defaultAssets.client.theme.less.watch, gulp.parallel('themecss', 'csslint'));
 
 			if (process.env.NODE_ENV === 'production') {
 				gulp.watch(defaultAssets.server.gulpConfig, gulp.parallel('templatecache', 'eslint'));
@@ -133,8 +132,8 @@ gulp.task('csslint', () => {
 // Compile theme CSS
 gulp.task('themecss', () => {
 	return gulp
-		.src(defaultAssets.client.theme.less.entry)
-		.pipe(plugins.less())
+		.src(defaultAssets.client.theme.sass.entry)
+		.pipe(plugins.sass())
 		.pipe(plugins.autoprefixer())
 		.pipe(plugins.concat('theme.css'))
 		.pipe(gulp.dest('public/dist'));

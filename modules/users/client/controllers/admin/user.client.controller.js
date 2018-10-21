@@ -1,4 +1,4 @@
-import '../css/users.css';
+import '../../css/users.css';
 
 (function() {
 	'use strict';
