@@ -98,7 +98,6 @@
     "wiredep": "~4.0.0"
   },
   "devDependencies": {
-    "bower-npm-resolver": "~0.9.1",
     "coveralls": "3.0.2",
     "css-loader": "^1.0.0",
     "del": "3.0.0",
