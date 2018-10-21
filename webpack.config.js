@@ -12,7 +12,6 @@ module.exports = {
 			'angular-messages',
 			'angular-mocks',
 			'angular-resource',
-			'angular-ui-bootstrap',
 			'angular-ui-notification',
 			'angular-ui-router',
 			'angular-ui-tinymce',

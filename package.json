@@ -35,7 +35,7 @@
     "angular-resource": "^1.7.5",
     "angular-sanitize": "^1.7.5",
     "angular-ui-bootstrap": "~1.2.1",
-    "angular-ui-notification": "~0.2.0",
+    "angular-ui-notification": "~0.3.6",
     "angular-ui-router": "^1.0.20",
     "angular-ui-tinymce": "0.0.19",
     "async": "~2.6.1",
@@ -96,7 +96,6 @@
     "wiredep": "~4.0.0"
   },
   "devDependencies": {
-    "bower-npm-resolver": "~0.9.1",
     "coveralls": "^3.0.2",
     "css-loader": "^1.0.0",
     "del": "^3.0.0",
