@@ -35,8 +35,8 @@ angular.module('core')
 				tmpl += '<span>' + options.title + '</span>';
 			}
 			if (options.icon) {
-				tmpl += '<span ng-if="ngModel" class="fas fa-ok guttered" aria-hidden="true"> &nbsp;</span>';
-				tmpl += '<span ng-if="!ngModel" class="fas fa-remove guttered" aria-hidden="true"> &nbsp;</span>';
+				tmpl += '<span ng-if="ngModel" class="fas fa-check-circle guttered" aria-hidden="true"> &nbsp;</span>';
+				tmpl += '<span ng-if="!ngModel" class="fas fa-exclamation-triangle guttered" aria-hidden="true"> &nbsp;</span>';
 			}
 			tmpl += '<span ng-transclude></span>';
 			tmpl += '</div></div>';

@@ -158,7 +158,7 @@
 									// Show success message
 									Notification.success({
 										message:
-											'<i class="fas fa-ok"></i> Change profile picture successful!'
+											'<i class="fas fa-check-circle"></i> Change profile picture successful!'
 									});
 									// Populate user object
 									qqq.user = response;
@@ -174,7 +174,7 @@
 									Notification.error({
 										message: response.message,
 										title:
-											'<i class="fas fa-remove"></i> Change profile picture failed!'
+											'<i class="fas fa-exclamation-triangle"></i> Change profile picture failed!'
 									});
 								}
 

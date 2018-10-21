@@ -30,7 +30,7 @@
 					//
 					.then (function () {
 						Notification.success ({
-							message : '<i class="fas fa-ok"></i> Program '+t+' Successfully!'
+							message : '<i class="fas fa-check-circle"></i> Program '+t+' Successfully!'
 						});
 					})
 					//
@@ -40,7 +40,7 @@
 						program.isPublished = publishedState;
 						Notification.error ({
 							message : res.data.message,
-							title   : '<i class=\'fas fa-remove\'></i> Program '+t+' Error!'
+							title   : '<i class=\'fas fa-exclamation-triangle\'></i> Program '+t+' Error!'
 						});
 					});
 				};
@@ -50,12 +50,12 @@
 					}).$promise
 					.then (function () {
 						program.userIs.request = true;
-						Notification.success({ message: '<i class="fas fa-ok"></i> Membership request sent successfully!' });
+						Notification.success({ message: '<i class="fas fa-check-circle"></i> Membership request sent successfully!' });
 					})
 					.catch (function (res) {
 						Notification.error ({
 							message : res.data.message,
-							title   : '<i class=\'fas fa-remove\'></i> Membership Request Error!'
+							title   : '<i class=\'fas fa-exclamation-triangle\'></i> Membership Request Error!'
 						});
 					});
 				};

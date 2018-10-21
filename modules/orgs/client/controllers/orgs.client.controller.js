@@ -64,7 +64,7 @@
 						vm.orgForm.$setPristine();
 						newId = result._id;
 						Notification.success({
-							message: '<i class="fas fa-ok"></i> Company saved successfully!'
+							message: '<i class="fas fa-check-circle"></i> Company saved successfully!'
 						});
 					})
 					.then(function() {
@@ -90,7 +90,7 @@
 					.catch(function(res) {
 						Notification.error({
 							message: res.data.message,
-							title: '<i class=\'fas fa-remove\'></i> Company save error!'
+							title: '<i class=\'fas fa-exclamation-triangle\'></i> Company save error!'
 						});
 					});
 			};
@@ -209,7 +209,7 @@
 				if ($window.confirm('Are you sure you want to delete?')) {
 					vm.org.$remove(function() {
 						Notification.success({
-							message: '<i class="fas fa-ok"></i> org deleted successfully!'
+							message: '<i class="fas fa-check-circle"></i> org deleted successfully!'
 						});
 						vm.user.orgsMember = vm.user.orgsMember.filter(function(el) {
 							return el !== orgId;
@@ -259,7 +259,7 @@
 					.catch(function(res) {
 						Notification.error({
 							message: res.data.message,
-							title: '<i class=\'fas fa-remove\'></i> org save error!'
+							title: '<i class=\'fas fa-exclamation-triangle\'></i> org save error!'
 						});
 					});
 			};
@@ -285,7 +285,7 @@
 					//
 					.then(function() {
 						Notification.success({
-							message: '<i class="fas fa-ok"></i> capabilities saved successfully!'
+							message: '<i class="fas fa-check-circle"></i> capabilities saved successfully!'
 						});
 					})
 					//
@@ -294,7 +294,7 @@
 					.catch(function(res) {
 						Notification.error({
 							message: res.data.message,
-							title: '<i class=\'fas fa-remove\'></i> capabilities save error!'
+							title: '<i class=\'fas fa-exclamation-triangle\'></i> capabilities save error!'
 						});
 					});
 			};
@@ -372,7 +372,7 @@
 						.catch(function(res) {
 							Notification.error({
 								message: res.message,
-								title: '<i class=\'fas fa-remove\'></i> invitations send error!'
+								title: '<i class=\'fas fa-exclamation-triangle\'></i> invitations send error!'
 							});
 						});
 				}

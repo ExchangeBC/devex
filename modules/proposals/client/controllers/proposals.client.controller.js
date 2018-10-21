@@ -112,7 +112,7 @@
 							}
 						},
 						function (error) {
-							 Notification.error ({ message: error.data.message, title: '<i class="fas fa-remove"></i> Proposal Assignment failed!' });
+							 Notification.error ({ message: error.data.message, title: '<i class="fas fa-exclamation-triangle"></i> Proposal Assignment failed!' });
 						}
 					);
 				}

@@ -72,7 +72,7 @@
 										? 'Your opportunity has been published and we\'ve notified subscribers!'
 										: 'Your opportunity has been unpublished!';
 									Notification.success({
-										message: '<i class="fas fa-ok"></i> ' + m
+										message: '<i class="fas fa-check-circle"></i> ' + m
 									});
 								})
 								.catch(function(res) {
@@ -82,7 +82,7 @@
 									opportunity.isPublished = publishedState;
 									Notification.error({
 										message: res.data.message,
-										title: '<i class=\'fas fa-remove\'></i> Opportunity ' + t + ' Error!'
+										title: '<i class=\'fas fa-exclamation-triangle\'></i> Opportunity ' + t + ' Error!'
 									});
 								});
 						};

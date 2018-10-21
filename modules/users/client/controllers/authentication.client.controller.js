@@ -101,7 +101,7 @@
 			// If successful we assign the response to the global user model
 			vm.authentication.user = response;
 			Notification.success({
-				message: '<i class="fas fa-ok"></i> Signup successful!'
+				message: '<i class="fas fa-check-circle"></i> Signup successful!'
 			});
 			// And redirect to the previous or home page
 			if ($state.previous && $state.previous.state) {
@@ -114,7 +114,7 @@
 		function onUserSignupError(response) {
 			Notification.error({
 				message: response.data.message,
-				title: '<i class="fas fa-remove"></i> Signup Error!',
+				title: '<i class="fas fa-exclamation-triangle"></i> Signup Error!',
 				delay: 6000
 			});
 		}
@@ -135,7 +135,7 @@
 		function onUserSigninError(response) {
 			Notification.error({
 				message: response.message,
-				title: '<i class="fas fa-remove"></i> Signin Error!',
+				title: '<i class="fas fa-exclamation-triangle"></i> Signin Error!',
 				delay: 6000
 			});
 		}

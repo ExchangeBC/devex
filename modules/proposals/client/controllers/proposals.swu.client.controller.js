@@ -606,7 +606,7 @@
 				if (!validPriceAmounts) {
 					Notification.error({
 						message: 'Invalid price amounts entered',
-						title: '<i class="fas fa-remove"</i> Error submitting proposal'
+						title: '<i class="fas fa-exclamation-triangle"</i> Error submitting proposal'
 					});
 					ppp.activateTab(4);
 					window.scrollTo(0, 0);
@@ -727,7 +727,7 @@
 				if (!validPriceAmounts) {
 					Notification.error({
 						message: 'Invalid price amounts entered',
-						title: '<i class="fas fa-remove"</i> Error submitting proposal'
+						title: '<i class="fas fa-exclamation-triangle"</i> Error submitting proposal'
 					});
 					ppp.activateTab(4);
 					window.scrollTo(0, 0);
@@ -743,7 +743,7 @@
 								'Word count exceeded for Question ' +
 								(index + 1) +
 								'.  Please edit your response before submitting',
-							title: '<i class="fas fa-remove"</i> Error'
+							title: '<i class="fas fa-exclamation-triangle"</i> Error'
 						});
 						invalidResponseIndex = index + 1;
 					}
@@ -759,7 +759,7 @@
 					Notification.error({
 						message:
 							'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
-						title: '<i class="fas fa-remove"</i> Error'
+						title: '<i class="fas fa-exclamation-triangle"</i> Error'
 					});
 					return;
 				}

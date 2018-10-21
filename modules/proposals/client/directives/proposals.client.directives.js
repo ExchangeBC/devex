@@ -150,7 +150,7 @@
 							//
 							.then(function() {
 								Notification.success({
-									message: '<i class="fas fa-ok"></i> Proposal ' + t + ' Successfully!'
+									message: '<i class="fas fa-check-circle"></i> Proposal ' + t + ' Successfully!'
 								});
 							})
 							//
@@ -160,7 +160,7 @@
 								proposal.isPublished = publishedState;
 								Notification.error({
 									message: res.data.message,
-									title: '<i class=\'fas fa-remove\'></i> Proposal ' + t + ' Error!'
+									title: '<i class=\'fas fa-exclamation-triangle\'></i> Proposal ' + t + ' Error!'
 								});
 							});
 					};
@@ -171,13 +171,13 @@
 							.$promise.then(function() {
 								proposal.userIs.request = true;
 								Notification.success({
-									message: '<i class="fas fa-ok"></i> Membership request sent successfully!'
+									message: '<i class="fas fa-check-circle"></i> Membership request sent successfully!'
 								});
 							})
 							.catch(function(res) {
 								Notification.error({
 									message: res.data.message,
-									title: '<i class=\'fas fa-remove\'></i> Membership Request Error!'
+									title: '<i class=\'fas fa-exclamation-triangle\'></i> Membership Request Error!'
 								});
 							});
 					};

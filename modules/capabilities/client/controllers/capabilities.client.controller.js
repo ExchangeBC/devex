@@ -68,7 +68,7 @@
 			.then (function (result) {
 				qqq.capabilityForm.$setPristine ();
 				Notification.success ({
-					message : '<i class="fas fa-ok"></i> capability saved successfully!'
+					message : '<i class="fas fa-check-circle"></i> capability saved successfully!'
 				});
 				if (leavenow) $state.go ('capabilities.view', {capabilityId:qqq.capability.code});
 				qqq.capability = result;
@@ -79,7 +79,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fas fa-remove\'></i> capability save error!'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> capability save error!'
 				});
 			});
 		};
@@ -95,7 +95,7 @@
 			if (!qqq.newskill) {
 				Notification.error ({
 					message : 'No Skill was supplied',
-					title   : '<i class=\'fas fa-remove\'></i> Missing Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Missing Skill'
 				});
 				qqq.newskill = '';
 				return;
@@ -106,7 +106,7 @@
 			if (qqq.isDuplicateSkill (qqq.newskill, qqq.capability.skills)) {
 				Notification.error ({
 					message : 'Duplicate Skill',
-					title   : '<i class=\'fas fa-remove\'></i> Duplicate Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Duplicate Skill'
 				});
 				qqq.newskill = '';
 				return;
@@ -125,7 +125,7 @@
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fas fa-remove\'></i> Error Saving Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Error Saving Skill'
 				});
 			});
 			qqq.newskill = '';
@@ -146,7 +146,7 @@
 			if (!qqq.newskill) {
 				Notification.error ({
 					message : 'No Skill was supplied',
-					title   : '<i class=\'fas fa-remove\'></i> Missing Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Missing Skill'
 				});
 				qqq.newskill = '';
 				return;
@@ -157,7 +157,7 @@
 			if (qqq.isDuplicateSkill (qqq.newskill, qqq.capability.skills)) {
 				Notification.error ({
 					message : 'Duplicate Skill',
-					title   : '<i class=\'fas fa-remove\'></i> Duplicate Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Duplicate Skill'
 				});
 				qqq.newskill = '';
 				return;
@@ -166,13 +166,13 @@
 			(new CapabilitySkillsService (qqq.editingskill)).createOrUpdate ()
 			.then (function (result) {
 				Notification.success ({
-					message : '<i class="fas fa-ok"></i> skill saved successfully!'
+					message : '<i class="fas fa-check-circle"></i> skill saved successfully!'
 				});
 			})
 			.catch (function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fas fa-remove\'></i> Error Saving Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Error Saving Skill'
 				});
 			});
 			qqq.newskill     = '';
@@ -195,7 +195,7 @@
 			function (res) {
 				Notification.error ({
 					message : res.data.message,
-					title   : '<i class=\'fas fa-remove\'></i> Error Removing Skill'
+					title   : '<i class=\'fas fa-exclamation-triangle\'></i> Error Removing Skill'
 				});
 			});
 		};
@@ -211,7 +211,7 @@
 				});
 				qqq.capability.$remove(function() {
 					$state.go('capabilities.list');
-					Notification.success({ message: '<i class="fas fa-ok"></i> deleted successfully!' });
+					Notification.success({ message: '<i class="fas fa-check-circle"></i> deleted successfully!' });
 				});
 			}
 		};
