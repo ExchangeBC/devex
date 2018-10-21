@@ -16,24 +16,27 @@
 				},
 				template:
 					'<span><img class="rounded-circle" width="{{ avat.size }}" height="{{ avat.size }}" src="{{ avat.fullurl }}"> &nbsp; {{ avat.text }}</img></span>',
-				controller: function($scope) {
-					var avat = this;
-					var seturl = function() {
-						var url = $scope.url;
-						var fullPath;
-						if (!url) fullPath = '';
-						else fullPath = (url.substr(0, 1) === '/' || url.substr(0, 4) === 'http' ? '' : '/') + url;
-						avat.fullurl = fullPath;
-					};
-					avat.size = $scope.size || 50;
-					avat.text = $scope.text || '';
-					seturl();
-					$scope.$watch('url', function(newValue, oldValue) {
-						if (newValue) {
-							seturl();
-						}
-					});
-				},
+				controller: [
+					'$scope',
+					function($scope) {
+						var avat = this;
+						var seturl = function() {
+							var url = $scope.url;
+							var fullPath;
+							if (!url) fullPath = '';
+							else fullPath = (url.substr(0, 1) === '/' || url.substr(0, 4) === 'http' ? '' : '/') + url;
+							avat.fullurl = fullPath;
+						};
+						avat.size = $scope.size || 50;
+						avat.text = $scope.text || '';
+						seturl();
+						$scope.$watch('url', function(newValue, oldValue) {
+							if (newValue) {
+								seturl();
+							}
+						});
+					}
+				],
 				controllerAs: 'avat',
 				restrict: 'EAC'
 			};

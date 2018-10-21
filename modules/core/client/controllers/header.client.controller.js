@@ -19,6 +19,8 @@
 		'MessagesService'
 	];
 
+	WarningModalController.$inject = ['$scope', 'Idle'];
+
 	function HeaderController(
 		$rootScope,
 		$scope,

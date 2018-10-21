@@ -36,9 +36,12 @@
 					pageTitle: 'Skills'
 				},
 				resolve: {
-					capabilities: function(CapabilitiesService) {
-						return CapabilitiesService.query().$promise;
-					}
+					capabilities: [
+						'CapabilitiesService',
+						function(CapabilitiesService) {
+							return CapabilitiesService.query().$promise;
+						}
+					]
 				}
 			})
 			.state('settings.privacy', {

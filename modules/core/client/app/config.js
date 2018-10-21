@@ -37,22 +37,29 @@
 	}
 
 	// Angular-ui-notification configuration
-	angular.module('ui-notification').config(function(NotificationProvider) {
-		NotificationProvider.setOptions({
-			delay: 2000,
-			startTop: 20,
-			startRight: 10,
-			verticalSpacing: 20,
-			horizontalSpacing: 20,
-			positionX: 'right',
-			positionY: 'bottom'
-		});
-	});
+	angular.module('ui-notification').config([
+		'NotificationProvider',
+		function(NotificationProvider) {
+			NotificationProvider.setOptions({
+				delay: 2000,
+				startTop: 20,
+				startRight: 10,
+				verticalSpacing: 20,
+				horizontalSpacing: 20,
+				positionX: 'right',
+				positionY: 'bottom'
+			});
+		}
+	]);
 
 	// Angular idle configuration
-	angular.module('ngIdle').config(function(IdleProvider, KeepaliveProvider) {
-		IdleProvider.idle(Number(window.sessionTimeoutWarning));
-		IdleProvider.timeout(Number(window.sessionTimeout));
-		KeepaliveProvider.interval(2);
-	});
+	angular.module('ngIdle').config([
+		'IdleProvider',
+		'KeepaliveProvider',
+		function(IdleProvider, KeepaliveProvider) {
+			IdleProvider.idle(Number(window.sessionTimeoutWarning));
+			IdleProvider.timeout(Number(window.sessionTimeout));
+			KeepaliveProvider.interval(2);
+		}
+	]);
 }(window));

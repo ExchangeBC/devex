@@ -32,9 +32,12 @@
 					controller: 'OrgCreateController',
 					controllerAs: 'vm',
 					resolve: {
-						org: function(OrgsService) {
-							return new OrgsService();
-						}
+						org: [
+							'OrgsService',
+							function(OrgsService) {
+								return new OrgsService();
+							}
+						]
 					}
 				})
 				// -------------------------------------------------------------------------
@@ -53,9 +56,12 @@
 						label: 'All orgs'
 					},
 					resolve: {
-						orgs: function(OrgsService) {
-							return OrgsService.query().$promise;
-						}
+						orgs: [
+							'OrgsService',
+							function(OrgsService) {
+								return OrgsService.query().$promise;
+							}
+						]
 					},
 					controller: 'OrgsListController',
 					controllerAs: 'vm'
@@ -71,14 +77,21 @@
 					controller: 'OrgViewController',
 					controllerAs: 'vm',
 					resolve: {
-						org: function($stateParams, OrgsService) {
-							return OrgsService.get({
-								orgId: $stateParams.orgId
-							}).$promise;
-						},
-						capabilities: function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
-						}
+						org: [
+							'$stateParams',
+							'OrgsService',
+							function($stateParams, OrgsService) {
+								return OrgsService.get({
+									orgId: $stateParams.orgId
+								}).$promise;
+							}
+						],
+						capabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
 					}
 				})
 				// -------------------------------------------------------------------------
@@ -93,14 +106,21 @@
 					controller: 'OrgAdminController',
 					controllerAs: 'vm',
 					resolve: {
-						org: function($stateParams, OrgsService) {
-							return OrgsService.get({
-								orgId: $stateParams.orgId
-							}).$promise;
-						},
-						capabilities: function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
-						}
+						org: [
+							'$stateParams',
+							'OrgsService',
+							function($stateParams, OrgsService) {
+								return OrgsService.get({
+									orgId: $stateParams.orgId
+								}).$promise;
+							}
+						],
+						capabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
 					},
 					data: {
 						roles: ['user', 'admin']
@@ -115,14 +135,21 @@
 						pageTitle: 'Company Settings'
 					},
 					resolve: {
-						org: function($stateParams, OrgsService) {
-							return OrgsService.get({
-								orgId: $stateParams.orgId
-							}).$promise;
-						},
-						capabilities: function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
-						}
+						org: [
+							'$stateParams',
+							'OrgsService',
+							function($stateParams, OrgsService) {
+								return OrgsService.get({
+									orgId: $stateParams.orgId
+								}).$promise;
+							}
+						],
+						capabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
 					}
 				})
 				.state('orgadmin.members', {
@@ -134,14 +161,21 @@
 						pageTitle: 'Company Members'
 					},
 					resolve: {
-						org: function($stateParams, OrgsService) {
-							return OrgsService.get({
-								orgId: $stateParams.orgId
-							}).$promise;
-						},
-						capabilities: function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
-						}
+						org: [
+							'$stateParams',
+							'OrgsService',
+							function($stateParams, OrgsService) {
+								return OrgsService.get({
+									orgId: $stateParams.orgId
+								}).$promise;
+							}
+						],
+						capabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
 					}
 				})
 				.state('orgadmin.terms', {
@@ -153,11 +187,15 @@
 						pageTitle: 'Company Terms'
 					},
 					resolve: {
-						org: function($stateParams, OrgsService) {
-							return OrgsService.get({
-								orgId: $stateParams.orgId
-							}).$promise;
-						}
+						org: [
+							'$stateParams',
+							'OrgsService',
+							function($stateParams, OrgsService) {
+								return OrgsService.get({
+									orgId: $stateParams.orgId
+								}).$promise;
+							}
+						]
 					}
 				});
 		}
