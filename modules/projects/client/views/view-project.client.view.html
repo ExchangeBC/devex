@@ -11,7 +11,7 @@
 <section class="main-section">
   <div class="container">
     <!-- // Labels & Admin control buttons // -->
-    <div class="row" ng-if="vm.canEdit || vm.canRequestMembership">
+    <div class="row py-3" ng-if="vm.canEdit">
       <div class="col text-right">
         <!-- // Unpublish // -->
         <a data-automation-id="button-project-unpublish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished"
@@ -26,14 +26,17 @@
           ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fas fa-lg fa-pencil-alt"></i>
           Edit</button>
         <!-- // If user is not a member, request membership // -->
+        <!-- Hide this until we implement notifications to program administrators when there are pending membership requests -->
+        <!--
         <button type="button" data-automation-id="button-project-request-membership" class="btn btn-primary" ng-if="vm.canRequestMembership"
           href="javascript:void(0);" ng-click="vm.request()"><i class="fas fa-user" title="Request Membership"></i>
           Request
           Membership</button>
+        -->
       </div>
     </div>
 
-    <div class="row">
+    <div class="row py-3">
       <div class="col">
         <h3>{{vm.project.name}}</h1>
           <p ng-bind="vm.project.short"></p>
@@ -41,22 +44,29 @@
       </div>
     </div>
     <hr>
+    
     <div class="row">
-      <div class="col-sm-6">
-        <p class="label-list" ng-if="vm.project.tags">
-          <span class="label label-project-tags" ng-repeat="code in vm.project.tags">{{code}}</span></p>
+      <div class="col-lg-5 opp-dl-description">  
+        <dl class="row">
+          <dt class="col-4 text-right">Tags:</dt>
+          <dd class="col-8 text-left">
+            <div class="label-list" ng-if="vm.project.tags">
+              <span class="label label-project-tags" ng-repeat="code in vm.project.tags">{{code}}</span>
+            </div>
+          </dd>
+        </dl>
       </div>
-      <div class="col-sm-6">
-        <dl class="dl-horizontal">
-          <dt>Program:</dt>
-          <dd>
+      <div class="col-lg-7 opp-dl-description">
+        <dl class="row">
+          <dt class="col-4 text-right">Program:</dt>
+          <dd class="col-8 text-left">
             <a ng-if="vm.project.program" id="programs.view" ui-sref="programs.view({programId:vm.project.program.code})"><i
                 class="fas fa-university"></i> {{vm.project.program.title}}</a>
             <span ng-if="!vm.project.program" class="text-muted">No program</span>
           </dd>
           <!-- github link -->
-          <dt>Code:</dt>
-          <dd>
+          <dt class="col-4 text-right">Code:</dt>
+          <dd class="col-8 text-left">
             <a ng-if="vm.project.github"><a href="{{vm.project.github}}" rel="nofollow"><i class="fab fa-github"></i>
                 View Code Repository on GitHub</a>
           </dd>
