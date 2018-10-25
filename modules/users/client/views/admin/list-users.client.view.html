@@ -1,17 +1,24 @@
-<section class="list-page" style="min-height: 80vh;">
-  <div class="container" role="main">
+<section class="main-section bg-light">
+  <div class="container">
       <div class="row" ng-if="0">
         <button ng-click="vm.listOpps()">Users to notify of Opportunities</button>
         <button ng-click="vm.listMeets()">Users to notify of Events</button>
       </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <h1>All the Users</h1>
-        
+      <div class="row py-3">
+        <div class="col">
+          <h3>
+            <i class="fas fa-users"></i>
+            Users
+          </h3>
+        </div>
+      </div>
+      
+      <div class="row py-3">
+        <div class="col">
           <div style="padding-bottom: 40px"><input class="form-control" type="text" ng-model="vm.search" placeholder="Search by user's name or GitHub handle..." ng-change="vm.figureOutItemsToDisplay()" /></div>
       
           <div class="list-group">
-            <a ng-repeat="user in vm.pagedItems"  id="admin.user" ui-sref="admin.user({userId: user._id})" class="list-group-item">
+            <a ng-repeat="user in vm.pagedItems"  id="admin.user" ui-sref="admin.user({userId: user._id})" class="list-group-item list-group-item-action">
               <div class="row">
                 <div class="col-xs-12 col-sm-4">
                   <div class="list-group-item-text strong" ng-bind="user.displayName"></div>
@@ -26,7 +33,7 @@
             </a>
           </div>
 
-          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+          <uib-pagination boundary-links="true" max-size="10" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
 
         </div>
       </div>  
