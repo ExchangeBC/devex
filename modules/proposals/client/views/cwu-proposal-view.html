@@ -1,29 +1,27 @@
-<section class="bg-secondary">
+<section class="main-section bg-secondary">
+  <div class="container">
+    <form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)"
+      novalidate>
 
-  <form id="proposalform" name="ppp.form.proposalform" class="form" ng-submit="ppp.save(ppp.form.proposalform.$valid)"
-    novalidate>
+      <div class="bg-light border rounded">
 
-    <div class="bg-light rounded p-0">
+        <div class="bg-light px-4 py-3">
+          <span class="text-muted">Proposal from:</span> &nbsp;
+          <strong>{{ppp.proposal.user.displayName}}</strong>
+          <button class="close float-right" data-ng-click="ppp.close()" title="Close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
 
-      <div class="bg-light rounded px-4 py-3 font-weight-bold">
-        <button class="close" data-ng-click="ppp.close()" title="Close" aria-label="Close"><i class="fas fa-times-thin"></i></button>
-        <span class="text-black-50">Proposal from:</span>
-        &nbsp;
-        <strong>{{ppp.proposal.user.displayName}}</strong>
-      </div>
-
-      <div class="px-3">
-        <div class="row">
-          <div class="col-xs-12 col-sm-6">
-            <h4 class="px-3">Applicant</h4>
-            <span class="strong">{{ppp.user.firstName}} {{ppp.user.lastName}}</span><br>
-            <span>{{ppp.user.email}}</span>
-            <span ng-if="!ppp.proposal.isCompany"><br>{{ppp.user.address}}<br></span>
-            <span><br>{{ppp.user.phone}}</span>
-          </div>
-          <div class="col-xs-12 col-sm-6">
-            <div ng-if="ppp.proposal.isCompany">
-              <h4 class="px-3">Company</h4>
+        <div class="bg-white px-4 py-3">
+          <div class="row">
+            <div class="col-sm-6 my-3">
+              <h5 class="text-muted">Applicant</h5>
+              <span class="strong">{{ppp.user.firstName}} {{ppp.user.lastName}}</span><br>
+              <span>{{ppp.user.email}}</span>
+              <span ng-if="!ppp.proposal.isCompany"><br>{{ppp.user.address}}<br></span>
+              <span><br>{{ppp.user.phone}}</span>
+            </div>
+            <div class="col-sm-6 my-3" ng-if="ppp.proposal.isCompany">
+              <h5 class="text-muted">Company</h5>
               <span class="strong">{{ppp.proposal.businessName}}</span><br>
               <span>{{ppp.proposal.businessAddress}}</span><br>
               <span>Contact: &nbsp;{{ppp.proposal.businessContactName}}</span><br>
@@ -31,45 +29,43 @@
               <span>{{ppp.proposal.businessContactEmail}}</span>
             </div>
           </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col-xs-12">
-            <h4 class="px-3">Proposal</h4>
-            <p ng-bind-html="ppp.detail"></p>
+          <hr>
+          <div class="row my-3">
+            <div class="col">
+              <h5 class="text-muted">Proposal</h5>
+              <p ng-bind-html="ppp.detail"></p>
+            </div>
+          </div>
+          <hr>
+          <div class="row my-3">
+            <div class="col">
+              <h5 class="text-muted">Attachments</h5>
+              <table class="table table-striped">
+                <tr ng-repeat="file in ppp.proposal.attachments">
+                  <td class=" text-right">
+                    <i class="fas fa-file-{{ppp.type(file.type)}}-o"></i>
+                  </td>
+                  <td class="text-left">
+                    {{file.name}}
+                  </td>
+                  <td class=" text-left">
+                    <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fas fa-download"></i></a>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
-        <hr>
-        <div class="row">
-          <div class="col-xs-12">
-            <h5 class="px-3">Attachments</h5>
-            <table class="table table-striped">
-              <tr ng-repeat="file in ppp.proposal.attachments">
-                <td class=" text-right">
-                  <i class="fas fa-file-{{ppp.type(file.type)}}-o"></i>
-                </td>
-                <td class="text-left">
-                  {{file.name}}
-                </td>
-                <td class=" text-left">
-                  <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fas fa-download"></i></a>
-                </td>
-              </tr>
-            </table>
+
+        <div class="bg-light px-4 py-3 form-footer">
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-warning" data-ng-click="ppp.assign()"><i class="fas fa-trophy"></i>
+                Assign this Applicant</button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="bg-light rounded px-3 py-2">
-        <div class="row">
-          <div class="col-xs-12">
-            <button type="button" class="btn btn-success" data-ng-click="ppp.assign()"><i class="fas fa-trophy"></i>
-              Assign this Applicant</button>
-            <button class="btn btn-default pull-right" data-ng-click="ppp.close()" title="Close" aria-label="Close">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-
+    </form>
+  </div>
 </section>

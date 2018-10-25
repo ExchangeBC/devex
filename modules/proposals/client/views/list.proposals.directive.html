@@ -1,43 +1,58 @@
-<div class="row">
+<!-- Proposal Stats -->
+<div class="row mb-3">
   <div class="col text-center">
-    <div class="proposal-stats">
-      <span uib-tooltip="People following this opportunity"><i class="fas fa-user"></i> {{vm.stats.following}}
-        Followers</span>
+      Proposal Activity:
       &nbsp;&nbsp;&nbsp;
-      <span uib-tooltip="Proposals currently in DRAFT"><i class="far fa-file"></i> {{vm.stats.draft}} Proposals
-        started</span>
+      <span uib-tooltip="{{vm.stats.following}} users are watching your opportunity"><i class="fas fa-user"></i> {{vm.stats.following}}</span>
       &nbsp;&nbsp;&nbsp;
-      <span uib-tooltip="Proposal submitted"><i class="fas fa-inbox"></i> {{vm.stats.submitted}} Proposals submitted</span>
-    </div>
+      <span uib-tooltip="{{vm.stats.draft}} proposals currently in DRAFT"><i class="far fa-file"></i> {{vm.stats.draft}}</span>
+      &nbsp;&nbsp;&nbsp;
+      <span uib-tooltip="{{vm.stats.submitted}} proposals have been submitted"><i class="fas fa-inbox"></i> {{vm.stats.submitted}}</span>
   </div>
 </div>
 
-<div class="row justify-content-center">
-  <div class="col-md-auto text-center" ng-if="!vm.isclosed">
-    <div class="alert alert-warning">You'll be able to view submitted Proposals here when the opportunity closes.</div>
+<!-- Message while opportunity is still open -->
+<div class="row text-center">
+  <div class="col" ng-if="!vm.isclosed">
+    <div class="alert alert-warning mb-0">You'll be able to view submitted proposals here when the opportunity closes.</div>
   </div>
 </div>
 
-<div class="row justify-content-center" ng-if="vm.isclosed && ! vm.proposals.length">
-  <div class="col-md-auto text-center">
-    <div class="alert">🙁 No proposals were submitted...</div>
+<!-- Message if no proposal are submitted -->
+<div class="row py-3 text-center" ng-if="vm.isclosed && ! vm.proposals.length">
+  <div class="col">
+    <h5 class="mb-0">🙁 No proposals were submitted...</h5>
   </div>
 </div>
 
-<div class="row justify-content-center" ng-if="vm.isclosed && vm.proposals.length">
-  <div class="col-md-auto text-center">
-    <div class="alert">🎉 You've got proposals! 🎉</div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col">
-        <h4>Proposals received:</h4>
-        <div class="list-group">
-          <strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
-              title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}}
-              {{proposal.user.lastName}}<i class="fas fa-file pull-right"></i></a></strong>
-        </div>
-      </div>
-      <div class="col"></div>
+<!-- Message if one proposal is submitted -->
+<div class="row py-3 text-center" ng-if="vm.isclosed && vm.proposals.length === 1">
+  <div class="col">
+    <h5 class="mb-0">🎉 Well, you got one proposal! 🎉</h5>
+  </div>
+</div>
+
+<!-- Message if more than one proposal is submitted -->
+<div class="row py-3 text-center" ng-if="vm.isclosed && vm.proposals.length > 1">
+  <div class="col">
+    <h5 class="mb-0">🎉 You've got {{vm.proposals.length}} proposals! 🎉</h5>
+  </div>
+</div>
+
+
+
+<!-- Proposals list after opportunity is closed -->
+<div class="row justify-content-center py-3" ng-if="vm.isclosed && vm.proposals.length">
+  <div class="col-sm-8 col-md-6 col-lg-4">
+    <h6 class="text-muted">View proposals:</h6>
+    <div class="list-group">
+      <a    class="list-group-item list-group-item-action"      ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" 
+            ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
+            title="View {{proposal.user.firstName}}'s proposal">
+              <i class="fas fa-file"></i> &nbsp;
+              {{proposal.user.firstName}}
+              {{proposal.user.lastName}}
+      </a>
     </div>
   </div>
 </div>
