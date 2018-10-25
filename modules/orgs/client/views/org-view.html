@@ -8,39 +8,51 @@
   </div>
 </div>
 
-<section>
-  <div class="container border">
-    <div class="row" ng-if="vm.canEdit">
-      <div class="col"></div>
-      <button type="button" class="btn btn-text-only float-right" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company">
-        <i class="fas fa-2x fa-cog"></i>
-      </button>
-    </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <img class="rounded" src="/{{vm.org.orgImageURL}}" height="75" width="75">
+<section class="main-section">
+  <div class="container">
+    <!-- Labels & Admin control buttons -->
+    <div class="row d-none d-sm-block text-right" ng-if="vm.canEdit">
+      <div class="col">
+        <button type="button" class="btn btn-text-only" ui-sref="orgadmin.profile({orgId:vm.org._id})" title="Manage Company">
+          <i class="fa fa-cog"></i> Manage Info & Members
+        </button>
       </div>
     </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <h2 ng-bind="vm.org.name"></h2>
-        <h4 class="my-4" ng-if="vm.org.website">
-          <a href="{{vm.org.website}}" target="_blank" rel="nofollow">
-            <i class="fas fa-external-link-alt"></i>Company Website
-          </a>
-        </h4>
+    <div class="row py-5">
+      <div class="col">
+        <div class="d-flex align-items-top">
+          <img class="mr-4" src="/{{vm.org.orgImageURL}}" height="70" width="70">
+          <div>
+            <h3 ng-bind="vm.org.name" class="mb-2"></h3>
+            <div ng-if="vm.org.members.length>=1">
+              <span ng-if="vm.org.website"><a href="{{vm.org.website}}" target="_blank" rel="nofollow">
+                Website <i class="fas fa-external-link-square-alt"></i></a></span>
+              &nbsp;&nbsp;
+              <i class="fas fa-users"></i> 
+              <span ng-bind="vm.org.members.length"></span> Members              
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <hr>
-    <div class="row py-3">
-      <div class="col text-center">
 
-        <label-list>
-          <label ng-repeat="capability in vm.org.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-              class="fas fa-circle"></i> {{capability.name}}</label>
-          <label ng-repeat="capabilitySkill in vm.org.capabilitySkills" class="label label-preferred-skill-selected mx-1">{{capabilitySkill.name}}</label>
-        </label-list>
-      </div>
+    
+    <div class="row py-5 px-3">
+        <div class="col-md p-3 mr-md-3 my-3 border rounded bg-light">
+          <h5 class="mb-3">Capabilities</h5>
+          <div class="label-list">
+            <label ng-repeat="capability in vm.org.capabilities" class="label label-lg label-cap-default"><i class="fa fa-check-circle success"></i> {{capability.name}}</label>
+          </div>
+        </div>
+      
+        <div class="col-md p-3 ml-md-3 my-3 border rounded bg-light">
+          <h5 class="mb-3">Preferred Technical Skills</h5>
+          <div class="label-list">
+            <label ng-repeat="capabilitySkill in vm.org.capabilitySkills" class="label label-preferred-skill-selected mx-1">{{capabilitySkill.name}}</label>
+          </div>
+        </div>
+
+
     </div>
   </div>
 </section>

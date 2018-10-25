@@ -11,36 +11,40 @@
 <section class="main-section">
   <div class="container">
     <!-- // Labels & Admin control buttons // -->
-    <div class="row mb-2" ng-if="vm.canEdit || vm.canRequestMembership">
-      <div class="col text-right">
+    <div class="row d-none d-sm-block text-right" ng-if="vm.canEdit">
+      <div class="col">
         <!-- // Unpublish // -->
         <a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished"
-          class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish program">
+          class="btn btn-text-only" ng-click="vm.publish(false)" title="Unpublish this page">
+          <i class="fas fa-times"></i>
           Unpublish</a>
         <!-- // Publish // -->
         <a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished"
-          class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this program page">Publish</a>
+          class="btn btn-text-only" ng-click="vm.publish(true)" title="Publish this page">
+          <i class="fas fa-bullhorn"></i>
+          Publish</a> 
         <!-- // Edit // -->
-        <button data-automation-id="button-program-edit" type="button" class="btn btn-default" ng-if="vm.canEdit"
+        <button data-automation-id="button-program-edit" type="button" class="btn btn-text-only" ng-if="vm.canEdit"
           ui-sref="programadmin.edit({programId:vm.program.code})" title="Edit this page"><i class="fas fa-pencil-alt"></i>
-          Edit</button>
-        <!-- // If user is not a member, request membership // -->
-        <button data-automation-id="button-program-request-membership" type="button" class="btn btn-primary" ng-if="vm.canRequestMembership"
-          href="javascript:void(0);" ng-click="vm.request()" title="Request membership"><i class="fas fa-user"></i></button>
-      </div>
+          Edit</button>          
+        </div>         
     </div>
-    <div class="row">
+    <div class="row py-5">
       <div class="col">
-        <div class="d-flex align-self-start mb-3">
-          <img height="50" width="50" class="mr-3" src="/{{vm.program.logo}}" />
-          <h3 ng-bind="vm.program.title"></h3>
+        <div class="d-flex align-items-top">
+          <img height="70" width="70" class="mr-4" src="/{{vm.program.logo}}" />
+          <div>
+            <h3 ng-bind="vm.program.title"></h3>
+            <div ng-if="vm.program.website"><a href="{{vm.program.website}}" target="_blank" rel="nofollow">
+                Website <i class="fas fa-external-link-square-alt"></i></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row py-5">
       <div class="col">
-        <h5 class="py-2 text-truncate" ng-if="vm.program.website"><a href="{{vm.program.website}}" rel="nofollow">{{vm.program.website}}</a></h5>
         <p ng-bind="vm.program.short"></p>
         <p ng-bind-html="vm.display.description"></p>
       </div>

@@ -8,161 +8,142 @@
   </div>
 </div>
 
-<section>
+<!-- Proposal evaluation section for opportunity admins -->
+<section class="bg-dark" ng-if="vm.canEdit && vm.opportunity.isPublished">
+  <div class="container">
+    <!-- // Proposal Evaluation // -->
+    <div class="border rounded bg-white p-4">
 
-  <!-- // If user is not signed in // -->
-  <div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
-    <div class="alert alert-warning">
-      <i class="fas fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to
-      <a ui-sref="authentication.signin">
-        Sign In
-      </a>
+      <!-- Proposal list -->
+      <proposal-list ng-if="vm.opportunity.status === 'Pending' " isclosed="vm.closing === 'CLOSED'"
+            context="opportunity" opportunity="vm.opportunity"></proposal-list>           
+        
+
+      <!-- If opportunity has been asssigned, show the assignee -->
+      <div class="row py-3" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
+        <div class="col text-center">
+          <span class="text-black-50">Opportunity assigned to:</span>
+          &nbsp;
+          <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+          &nbsp;
+          {{vm.opportunity.proposal.user.displayName}}
+          &nbsp;&nbsp;&nbsp;
+          <a id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.viewcwu({ proposalId: vm.opportunity.proposal._id })">View
+            Proposal</a>&nbsp;&nbsp;
+          <button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fas fa-ban"></i>
+            Unassign</button>
+        </div>
+      </div>
+      
+      <!-- Download archive of proposals if opportunity is closed -->
+      <div class="row py-3" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
+        <div class="col text-center">
+          <a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" class="btn btn-outline-secondary" target="_blank"><i class="fas fa-file-archive"></i>
+            Download Proposals Archive</a>
+        </div>
+      </div>
+
     </div>
   </div>
+</section><!-- END: Proposal evaluation section for opportunity admins -->
 
-  <!-- // If user doesn't have an email address in their profile // -->
-  <div class="container" ng-if="vm.notifyMe && !vm.hasEmail">
-    <div class="alert alert-warning">
-      <p>Want <span class="hidden-sm hidden-xs">to get </span>updates about this opportunity? <a href id="settings.profile"
-          ui-sref="settings.profile"> Add your email address.</a></p>
+<!-- Section for opportunity admin if opportunity is in draft and incomplete  -->
+<section ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'" class="bg-light">
+  <div class="container">
+    <div class="row py-3">
+      <div class="col">
+        <div class="alert alert-warning">
+          <span class="strong"><i class="fas fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span>
+          Before you can publish, you'll need to define these things:
+          <ul style="text-align: left;">
+            <li ng-repeat="fname in vm.errorFields">{{fname}}</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
+</section>
 
-  <!-- // Admin View for Proposal Evaluation // -->
-  <div class="container" ng-if="vm.opportunity.isPublished && vm.canEdit">
 
-    <div class="row">
-      <div class="col border p-4">
-        <proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'"
-          context="opportunity" opportunity="vm.opportunity"></proposal-list>
+<!-- Main opportunity detail view -->
+<section class="main-section">
+  <div class="container">
+
+    <!-- Watch buttons if user is signed in, has an email in their profile, and is not admin for the opportunity -->
+    <div class="row py-2 text-right" ng-if="vm.loggedIn && !vm.canEdit && vm.hasEmail">
+      <div class="col">
+        <!-- If user is not watching -->
+        <button class="btn btn-primary" ng-if="!vm.isWatching"
+        title="Get email notifications if this opportunity changes" ng-click="vm.toggleWatch()">
+          <i class="fas fa-eye"></i>
+        Watch
+        </button>
+        <!-- If user is watching -->
+        <button class="btn btn-secondary" ng-if="vm.isWatching"
+        title="You're subscribed to get email notifications if this opportunity changes" ng-click="vm.toggleWatch()">
+          <i class="fas fa-eye"></i>
+        Watching
+        </button>
+      </div>
+    </div>    
+
+    <!-- Edit / Publish buttons for Admin -->
+    <div class="row d-none d-sm-block text-right" ng-if="vm.canEdit">
+      <div class="col">
+          
+          <!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
+          <button data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && !vm.opportunity.isPublished"
+            class="btn btn-text-only" ng-click="vm.publish(vm.opportunity, true)" title="Publish this opportunity"><i
+              class="fas fa-bullhorn"></i> Publish</button>
+
+          <!-- UNPUBLISH (if opportunity is PUBLISHED) -->
+          <a data-automation-id="button-opportunity-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished"
+            class="btn btn-text-only" ng-click="vm.publish(vm.opportunity, false)" title="Unpublish this opportunity">
+            <i class="fas fa-times"></i> Unpublish
+          </a>
+          
+          <!-- EDIT -->
+          <a data-automation-id="button-opportunity-edit" class="btn btn-text-only" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"
+            title="Edit this opportunity">
+            <i class="fas fa-pencil-alt"></i> Edit
+          </a>
+
       </div>
     </div>
 
+    <!-- // Closing deadline while opportunity is still open // -->
+    <div class="row py-1" ng-if="vm.opportunity.isPublished">
+      <div class="col">
+        <div ng-if="vm.closing !== 'CLOSED'">
+          <p class="text-muted mb-0"><label class="label label-lg label-success">OPEN</label> Proposals must be received through this website before {{vm.deadline}}.</p>
+        </div>
+        <div ng-if="vm.closing === 'CLOSED'">
+          <p class="text-muted mb-0"><label class="label label-lg label-danger">CLOSED</label> This opportunity closed on {{vm.deadline}}.</p>
+        </div>
+      </div>
+    </div>
 
-    <div class="row" ng-if="vm.opportunity.status !== 'Pending' && vm.opportunity.proposal">
-      <div class="col text-center">
+    <!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
+    <div class="row py-3" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
+      <div class="col">
         <span class="text-black-50">Opportunity assigned to:</span>
         &nbsp;
         <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
         &nbsp;
         {{vm.opportunity.proposal.user.displayName}}
-        &nbsp;&nbsp;&nbsp;
-        <a id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.viewcwu({ proposalId: vm.opportunity.proposal._id })">View
-          Proposal</a>&nbsp;&nbsp;
-        <button class="btn btn-sm btn-text-only" ng-if="vm.canEdit" ng-click="vm.unassign()"><i class="fas fa-ban"></i>
-          Unassign</button>
-      </div>
-    </div>
-    <br>
-    <div class="row">
-      <div class="col text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
-        <a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fas fa-file-zip-o"></i>
-          Download Proposals Archive</a>
-      </div>
-    </div>
-  </div>
-
-  <br>
-
-  <div class="container">
-    <!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-    <div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
-      <div class="alert alert-warning">
-        <span class="strong"><i class="fas fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span>
-        Before you can publish, you'll need to define these things:
-        <ul style="text-align: left;">
-          <li ng-repeat="fname in vm.errorFields">{{fname}}</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- // Proposal Application Directive // -->
-    <div class="row" ng-if="vm.closing !== 'CLOSED'">
-      <div class="col">
-        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="container border p-4">
-
-    <div class="opp-detail-header">
-      Published on <span ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy"
-        ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>
-      &nbsp; &nbsp;
-      Last updated on <span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy"
-        ng-bind="vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
-
-      <!-- // Opportunity Admin control buttons // -->
-
-      <!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
-      <button data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished"
-        class="btn btn-primary float-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i
-          class="fas fa-bullhorn"></i> Publish</button>
-
-      <!-- EDIT -->
-      <a data-automation-id="button-opportunity-edit" class="btn btn-text-only float-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"
-        uib-tooltip="Edit this Opportunity">
-        <i class="fas fa-pencil-alt"></i>
-      </a>
-
-      <!-- WATCH -->
-      <a class="btn btn-text-only float-right" ng-if="vm.hasEmail" ng-class="{'text-primary': vm.isWatching, 'text-secondary': !vm.isWatching }"
-        uib-tooltip="Youll get an email if this opportunity changes" ng-click="vm.toggleWatch()">
-        <i class="fas fa-eye"></i>
-      </a>
-
-      <!-- UNPUBLISH (if opportunity is PUBLISHED) -->
-      <a data-automation-id="button-opportunity-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished"
-        class="btn btn-text-only float-right" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Unpublish Opportunity">
-        <i class="fas fa-ban"></i>
-      </a>
-
-
-
-
-    </div>
-
-    <!-- // Status // -->
-    <div>
-      <!-- // Closing deadline while opportunity is still open // -->
-      <div class="row" ng-if="vm.opportunity.isPublished">
-        <div class="col text-center">
-          <div ng-if="vm.closing !== 'CLOSED'">
-            <p><label class="label label-lg label-success">OPEN</label> &nbsp; <i class="far fa-lg fa-clock"></i>
-              &nbsp;Proposals must be received through this website before <strong>{{vm.deadline}}</strong>.</p>
-          </div>
-          <div ng-if="vm.closing === 'CLOSED'">
-            <p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{vm.deadline}}</strong>.</p>
-          </div>
-
-          <!-- // Non-admin view of assignee AFTER the opportunity is assigned // -->
-          <div class="col text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
-            <span class="text-black-50">Opportunity assigned to:</span>
-            &nbsp;
-            <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
-            &nbsp;
-            {{vm.opportunity.proposal.user.displayName}}
-          </div>
-        </div>
       </div>
     </div>
 
     <!-- // Title and Teaser // -->
-    <div class="row">
-      <div class="col text-center">
-        <h1 data-automation-id="text-opportunity-name" class="opp-detail">{{vm.opportunity.name}}</h1>
+    <div class="row py-5">
+      <div class="col">
+        <label class="label label-swu"><i class="fas fa-tag"></i> Code With Us</label>
+        <h2 data-automation-id="text-opportunity-name">{{vm.opportunity.name}}</h2>
         <p ng-bind="vm.opportunity.short"></p>
-        <br>
       </div>
     </div>
-    <hr>
-    <br>
-
-    <div class="row">
-
+    
+    <div class="row p-3 my-5 bg-light rounded">
       <div class="col-lg-5 opp-dl-description">
         <dl class="row">
           <dt class="col-6 text-right">Value:</dt>
@@ -185,12 +166,6 @@
       </div>
       <div class="col-lg-7 opp-dl-description">
         <dl class="row">
-          <dt class="col-6 text-right">Government Contact:</dt>
-          <dd class="col-6 text-left">
-            <i class="far fa-user-circle"></i>
-            <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
-            <span ng-if="!vm.opportunity.createdBy">Deleted User</span>
-          </dd>
           <dt class="col-6 text-right">Program:</dt>
           <dd class="col-6 text-left">
             <a ng-if="vm.opportunity.program" id="programs.view" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i
@@ -212,19 +187,19 @@
         </dl>
       </div>
     </div>
-
-    <hr>
-    <div class="row">
+    
+    <div class="row py-5">
       <div class="col">
-
-        <h3 class="opp-detail">Background</h3>
+        <h4>Background</h4>
         <p ng-bind-html="vm.display.description"></p>
+      </div>
+    </div>
 
-        <hr>
-
-        <h3 class="opp-detail">Acceptance Criteria</h3>
+    <div class="row py-5">
+      <div class="col">
+        <h4>Acceptance Criteria</h4>
         <p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1"
-            target="_blank"><i class="fas fa-download"></i> terms</a> of our lightweight procurement model, <a href="/codewithus"
+            target="_blank"> terms</a> of our lightweight procurement model, <a href="/codewithus"
             target="_blank">Code With Us</a>.</p> To be paid the fixed price for this opportunity, you need to meet
         all
         of the following criteria:</p>
@@ -232,46 +207,46 @@
       </div>
     </div>
 
-    <hr>
-
-    <div class="row">
+    <div class="row py-5">
       <div class="col">
-        <h3 class="opp-detail">How to Apply</h3>
+        <h4>How to Apply</h4>
         <p>Submit your Proposal before <span class="strong">{{vm.deadline}}</span>.</p>
-        <p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on
-          <span class="strong">{{vm.start}}</span>.</p>
-      </div>
-      <div class="col">
-        <div class="well well-warning">
-          <h4>Got Questions?</h4>
-          <a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this
-            opportunity</a> and post a comment.<br><br>
-          <i class="fas fa-comments fa-2x"></i>
-        </div>
-      </div>
-
-    </div>
-
-    <div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-warning">
-      To apply on this opportunity you need to <a ui-sref="authentication.signin"> Sign In</a>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <div class="col">
-        <h3 class="opp-detail">Proposal Evaluation Criteria</h3>
+        <p>We plan to assign this opportunity by <span class="strong">{{vm.assignment}}</span> with work to start on <span class="strong">{{vm.start}}</span>.</p>
+        <h5>Proposal Evaluation Criteria</h5>
         <p>Your Proposal will be scored by this criteria:</p>
         <p ng-bind-html="vm.display.evaluation"></p>
+      </div>
+    </div>
 
-        <!-- // Proposal Application Directive // -->
-        <div class="row" ng-if="true && vm.closing !== 'CLOSED'">
-          <div class="col">
-            <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-          </div>
+    <!-- // Proposal Application Directive // -->
+    <div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+      <div class="col">
+        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+        <!-- Alert if user is not signed in -->
+        <div ng-if="!vm.loggedIn && vm.closing != 'CLOSED'" class="alert alert-warning">
+          To apply on this opportunity you need to <a ui-sref="authentication.signin"> Sign In</a>
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="alert alert-warning">
+          <span class="font-weight-bold">Got Questions?</span> <a href="{{vm.opportunity.issueUrl}}" rel="nofollow" target="_blank">Visit the GitHub issue for this opportunity</a> and post a comment. <i class="fas fa-comments fa-lg"></i>
+        </div>        
+      </div>
+    </div>
+
+    <div class="row pt-5">
+      <div class="col">
+        <div class="small text-muted">
+          Published on <span ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.createdBy"
+          ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted User</span>. Last updated on <span ng-bind="vm.opportunity.updated | date:'mediumDate'"></span> by <span ng-if="vm.opportunity.updatedBy"
+          ng-bind="vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted User</span>.
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </section>
