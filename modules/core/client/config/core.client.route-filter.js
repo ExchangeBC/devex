@@ -5,54 +5,9 @@
 		.module('core')
 		.run(routeFilter);
 
-	routeFilter.$inject = ['$rootScope', '$state', 'Authentication'];
+	routeFilter.$inject = ['$transitions', '$state', 'Authentication'];
 
-	function routeFilter($rootScope, $state, Authentication) {
-		$rootScope.$on('$stateChangeStart', stateChangeStart);
-		$rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
-
-		function stateChangeStart(event, toState, toParams) {
-			// Check authentication before changing state
-			var userroles   = (Authentication.user && Authentication.user.roles !== undefined) ? Authentication.user.roles : ['guest'];
-			var hasroles    = (toState.data && toState.data.roles && toState.data.roles.length > 0);
-			var hasnotroles = (toState.data && toState.data.notroles && toState.data.notroles.length > 0);
-			var allowed     = true;
-			var roles;
-			var i;
-			if (hasroles) {
-				allowed = false;
-				for (i = 0, roles = toState.data.roles; i < roles.length; i++) {
-					if ((roles[i] === 'guest') || (!!~userroles.indexOf(roles[i]))) {
-						allowed = true;
-						break;
-					}
-				}
-			}
-			if (allowed && hasnotroles) {
-				for (i = 0, roles = toState.data.notroles; i < roles.length; i++) {
-					if (!!~userroles.indexOf(roles[i])) {
-						allowed = false;
-						break;
-					}
-				}
-			}
-			if (!allowed) {
-				event.preventDefault();
-				if (Authentication.user !== null && typeof Authentication.user === 'object') {
-					$state.transitionTo('forbidden');
-				} else {
-					$state.go('authentication.signin').then(function () {
-						// Record previous state
-						storePreviousState(toState, toParams);
-					});
-				}
-			}
-		}
-
-		function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
-			// Record previous state
-			storePreviousState(fromState, fromParams);
-		}
+	function routeFilter($transitions, $state, Authentication) {
 
 		// Store previous state
 		function storePreviousState(state, params) {
@@ -65,5 +20,47 @@
 				};
 			}
 		}
+
+
+		$transitions.onStart({}, function(trans) {
+			var stateService = trans.router.stateService;
+			var userRoles = (Authentication.user && Authentication.user.roles !== undefined) ? Authentication.user.roles : ['guest'];
+			var toState = trans.to();
+
+			var allowedRoles = (toState.data && toState.data.roles) ? toState.data.roles : [];
+			var deniedRoles = (toState.data && toState.data.notroles) ? toState.data.notrole : [];
+
+			var userHasAccess = true;
+			if (allowedRoles.length > 0) {
+				userHasAccess = false;
+				allowedRoles.forEach(function(allowedRole) {
+					if (allowedRole === 'guest' || userRoles.indexOf(allowedRole) >= 0) {
+						userHasAccess = true;
+					}
+				});
+			}
+
+			if (deniedRoles.length > 0) {
+				deniedRoles.forEach(function(deniedRole) {
+					if (userRoles.indexOf(deniedRole) >= 0) {
+						userHasAccess = false;
+					}
+				});
+			}
+
+			// If the user does not have access to this route do one of the following
+			// Redirect to sign-in if they haven't authenticated
+			// Redirect to 'Forbidden' if they aren't authorized
+			if (!userHasAccess) {
+				if (!Authentication.user) {
+					storePreviousState(toState, trans.params('to'));
+					return $state.target('authentication.signin');
+				}
+				else {
+					return $state.target('forbidden');
+				}
+			}
+
+		});
 	}
 }());
