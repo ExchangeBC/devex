@@ -383,10 +383,8 @@ form-title {
 }
 
 .form-footer {
-  padding: 10px 15px;
-  margin: none;
-  background: #e3e3e3;
-  border-radius: 0px 0px 4px 4px;
+  position: sticky;
+  bottom: 0;
 }
 
 // Wider form for SWU proposal
@@ -434,20 +432,20 @@ form-title {
 // Button Styles
 
 .btn {
-  letter-spacing: 0.025em;
-  white-space: nowrap;
-  border-radius: 3px;
-  box-shadow: none;
-  @include transition-all(0.15s);
-  text-decoration: none;
+//  letter-spacing: 0.025em;
+//  white-space: nowrap;
+//  border-radius: 3px;
+//  box-shadow: none;
+//  @include transition-all(0.15s);
+//  text-decoration: none;
   margin-left: 2px;
 }
 
-.btn-sm {
-  font-size: 0.76rem;
-  padding: 0.2rem 0.4rem;
-  border: none;
-}
+//.btn-sm {
+//  font-size: 0.76rem;
+//  padding: 0.2rem 0.4rem;
+//  border: none;
+//}
 
 /* Size input-groups and their buttons in px instead of em so they align with the form-control */
 .input-group-btn {
@@ -668,19 +666,19 @@ form-title {
 .btn-text-only {
   color: $gray;
   background: transparent;
-  border-color: none;
+  border-color: transparent;
   &:hover,
   &:active:hover {
     color: $gray-darker;
-    background: transparent;
-    border-color: none;
+    background: $gray-lightest;
+    border-color: $gray-lightest;
     box-shadow: none;
   }
   &:active,
   &:focus {
     color: $gray-darker;
-    background: transparent;
-    border-color: none;
+    background: $gray-lightest;
+    border-color: $gray-lightest;
     box-shadow: none;
   }
 }
@@ -688,18 +686,18 @@ form-title {
 .btn-text-only-inverse {
   color: $gray-lightest;
   background: transparent;
-  border-color: none;
+  border-color: transparent;
   &:hover,
   &:active:hover {
     color: #fff;
     background: transparent;
-    border-color: none;
+    border-color: transparent;
   }
   &:active,
   &:focus {
     color: #fff;
     background: transparent;
-    border-color: none;
+    border-color: transparent;
   }
 }
 
