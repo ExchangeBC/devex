@@ -10,22 +10,24 @@
   </div>
 </div>
 
-<section class="bg-secondary" role=" main">
+<section class="bg-secondary main-section">
 
   <form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)"
     novalidate>
 
 
-    <div class="bg-light rounded p-0">
+    <div class="bg-light border rounded">
 
-      <div class="bg-light rounded px-4 py-3 font-weight-bold">
-        <span class="gray"><i class="fas fa-users"></i> Sprint With Us Opportunity:</span> &nbsp;
+      <div class="bg-light px-4 py-3">
+        <span class="text-muted"><i class="fas fa-users"></i> Sprint With Us Opportunity:</span> &nbsp;
         <span ng-if="vm.editing">{{vm.opportunity.name}}</span>
         <span ng-if="!vm.editing">New Opportunity {{vm.opportunity.name}}</span>
-        <a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only pull-right"
-          title="Close"><i class="fas fa-lg fa-times"></i></a>
-        <a ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right" title="Close"><i
-            class="fas fa-lg fa-times"></i></a>
+        
+        <!-- Close button if opportunity is being editing -->
+        <button class="close float-right" ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        
+        <!-- Close button if user is opportunity is not in draft yet -->
+        <button class="close float-right" ui-sref="opportunities.list()" ng-if="!vm.opportunity._id" class="btn btn-text-only pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
 
 
@@ -92,7 +94,7 @@
         </uib-tab>
       </uib-tabset>
 
-      <div class="bg-light rounded px-3 py-2">
+      <div class="bg-light px-3 py-2 form-footer">
         <div class="row">
           <div class="col">
             <button type="submit" href="javascript:void(0);" class="btn btn-primary pull-right"><i class="fas fa-save"></i>

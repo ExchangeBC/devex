@@ -1,44 +1,45 @@
 <section class="main-section bg-secondary">
+  <div class="container">
+    <div class="form bg-light border rounded">
 
-  <div class="form bg-light rounded p-0">
+      <div class="bg-light rounded px-4 py-3">
+        {{::vm.org.name}}
+        <button type="button" class="close float-right" ui-sref="orgs.view({ orgId: vm.org._id })" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+      </div>
 
-    <div class="bg-light rounded px-4 py-3 font-weight-bold">
-      {{::vm.org.name}}
-      <button type="button" class="close float-right" ui-sref="orgs.view({ orgId: vm.org._id })" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
+      <div class="px-3">
+        <!-- // Show this alert if all three conditions are met // -->
+        <div class="alert alert-success" ng-if="vm.org.metRFQ">
+          <i class="far fa-lg fa-thumbs-up"></i> <strong>Bingo!</strong> &nbsp;Your company is now qualified to apply
+          on
+          <strong>Sprint With Us</strong> opportunities!
+        </div>
+        <!-- // Show this alert if just missing a 2nd team member OR 1 or more capabilities // -->
+        <div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && vm.org.isAcceptedTerms">
+          <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
+          need to fill out your <strong>Team Members</strong> <i class="fas fa-users"></i>
+        </div>
+        <!-- // Show this alert if missing a 2nd team member OR 1 or more capabilities AND accepting the Terms // -->
+        <div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
+          <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
+          need to fill out your <strong>Team Members</strong> <i class="fas fa-users"></i> and accept the <strong>Terms</strong>
+          <i class="far fa-handshake"></i>
+        </div>
+        <!-- // Show this alert if only missing accepting the Terms // -->
+        <div class="alert alert-warning" ng-if="(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
+          <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
+          need to accept the <strong>Terms</strong> <i class="far fa-handshake"></i>
+        </div>
+      </div>
+
+      <uib-tabset>
+        <uib-tab index="$index" ng-repeat="tab in vm.tabs" ng-click="vm.openTab(tab)">
+          <uib-tab-heading>{{tab.name}}</uib-tab-heading>
+          <div ui-view></div>
+        </uib-tab>
+
+      </uib-tabset>
     </div>
-
-    <div class="px-3">
-      <!-- // Show this alert if all three conditions are met // -->
-      <div class="alert alert-success" ng-if="vm.org.metRFQ">
-        <i class="far fa-lg fa-thumbs-up"></i> <strong>Bingo!</strong> &nbsp;Your company is now qualified to apply
-        on
-        <strong>Sprint With Us</strong> opportunities!
-      </div>
-      <!-- // Show this alert if just missing a 2nd team member OR 1 or more capabilities // -->
-      <div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && vm.org.isAcceptedTerms">
-        <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
-        need to fill out your <strong>Team Members</strong> <i class="fas fa-users"></i>
-      </div>
-      <!-- // Show this alert if missing a 2nd team member OR 1 or more capabilities AND accepting the Terms // -->
-      <div class="alert alert-warning" ng-if="!(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
-        <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
-        need to fill out your <strong>Team Members</strong> <i class="fas fa-users"></i> and accept the <strong>Terms</strong>
-        <i class="far fa-handshake"></i>
-      </div>
-      <!-- // Show this alert if only missing accepting the Terms // -->
-      <div class="alert alert-warning" ng-if="(vm.org.isCapable && vm.org.members.length>=2) && !vm.org.isAcceptedTerms">
-        <i class="fas fa-lg fa-exclamation-circle"></i> To apply on <strong>Sprint With Us</strong> opportunities, you
-        need to accept the <strong>Terms</strong> <i class="far fa-handshake"></i>
-      </div>
-    </div>
-
-    <uib-tabset>
-      <uib-tab index="$index" ng-repeat="tab in vm.tabs" ng-click="vm.openTab(tab)">
-        <uib-tab-heading>{{tab.name}}</uib-tab-heading>
-        <div ui-view></div>
-      </uib-tab>
-
-    </uib-tabset>
   </div>
 </section>
