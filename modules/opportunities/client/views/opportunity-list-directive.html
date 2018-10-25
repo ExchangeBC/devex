@@ -1,81 +1,99 @@
-<section>
+<section class="pb-0">
   <div class="container">
 
-    <!-- Post an Opportunity button -->
-    <div class="row py-3">
-      <div class="col">
-        <button ng-if="vm.userCanAdd" class="btn btn-primary float-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}"
+    <div class="row py-5">
+      <div class="col-sm-9">
+        <h3>
+          <i class="fas fa-dollar-sign"></i>&nbsp;
+          Opportunities
+        </h3>
+      </div>
+      <div class="col-sm-3 d-none d-sm-block">
+        <button ng-if="vm.userCanAdd" class="btn btn-text-only float-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}"
           ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})">
-          <i class="fas fa-plus"></i> Post an Opportunity
+          <i class="fas fa-lg fa-plus-circle"></i> Post an Opportunity
         </button>
       </div>
     </div>
 
-    <!-- Notify of new opportunities toggle -->
-    <div class="row pt-3">
-      <div class="col" ng-if="vm.isUser">
-        <a class="btn btn-textonly float-right" ng-click="vm.toggleSubscription()" uib-tooltip="Click to get notified when new opportunities are posted">
-          <!-- <i class="fas fa-bell fa-lg text-muted" ng-class="{'text-muted': !vm.user.notifyOpportunities, 'text-primary': vm.user.notifyOpportunities}"></i> -->
-          <span ng-if="!vm.user.notifyOpportunities" class="text-muted">
-            <i class="fas fa-bell fa-lg text-muted"></i>
-            Not listening for new opportunities
-          </span>
-          <span ng-if="vm.user.notifyOpportunities">
-            <i class="fas fa-bell fa-lg text-primary"></i>
-            Listening for new opportunities
-          </span>
-        </a>
+    <div class="row py-3">
+      <div class="col-sm">
+        <div class="alert alert-light">
+          <i class="fas fa-tag"></i> <strong>Code With Us</strong> opportunities pay a <strong>fixed-price</strong> for
+          meeting acceptance criteria. &nbsp;<a href="/codewithus">Learn more</a>
+        </div>
+      </div>
+      <div class="col-sm">
+        <div class="alert alert-light">
+          <i class="fas fa-users"></i> <strong>Sprint With Us</strong> opportunities are for registered companies who can
+          supply <strong>teams</strong>. &nbsp;<a href="/sprintwithus">Learn more</a>
+        </div>
       </div>
     </div>
+
   </div>
 </section>
 
-<section>
+<section class="py-5 bg-dark">
 
   <!-- Loading opportunities placeholder -->
   <div class="container" ng-if="vm.isLoading">
     <div class="row">
-      <div class="col px-0">
-        <h6><i class="fas fa-lg fa-spinner fa-spin"></i> Loading Opportunities...</h6>
+      <div class="col">
+        <h6 class="text-light"><i class="fas fa-lg fa-spinner fa-spin"></i> Loading Opportunities...</h6>
       </div>
     </div>
   </div>
 
-  <div ng-if="!vm.isLoading">
+  <div class="container" ng-if="!vm.isLoading">
+    
     <!-- Open Opportunities List -->
-    <div class="container">
+    <div ng-cloak class="row py-3">
+      <div class="col-sm-9">
+        <h4 class="text-light">Open Opportunities</h4>
+      </div>
+      <div class="col-sm-3 d-none d-sm-block" ng-if="vm.isUser">
+        <button class="btn btn-warning float-right" ng-if="!vm.user.notifyOpportunities" ng-click="vm.toggleSubscription()" title="Get email notifications when new opportunities are posted">
+          <i class="fas fa-bell"></i> Get Notifications
+        </button>
+        <button class="btn btn-text-only-inverse float-right" ng-if="vm.user.notifyOpportunities" ng-click="vm.toggleSubscription()" title="You're receiving email notifications when new opportunities are posted">
+          <i class="fas fa-bell"></i> Subscribed
+        </button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <h6 class="text-light" ng-if="vm.countOpenOpportunities() === 0">
+          <emoji>🌵</emoji> No open opportunities right now
+        </h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterOpen | orderBy: 'created': true track by $index"
+          opportunity="opportunity" />
+      </div>
+    </div>
+  
+  </div>
+</section>
 
-      <div ng-cloak class="row">
-        <div class="col px-0">
-          <h6>Open Opportunities</h6>
-          <h6 ng-if="vm.countOpenOpportnities() === 0">
-            <emoji>🌵</emoji> No open opportunities right now
-          </h6>
 
-          <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterOpen | orderBy: 'created': true track by $index"
-            opportunity="opportunity" />
-        </div>
+<section class="py-5 bg-light">
+  <div class="container">
+    <!-- Close Opportunities List -->
+    <div class="row py-3">
+      <div class="col">
+        <h4 class="float-left">Closed Opportunities</h4>
+        <h4 class="text-muted float-right">Total value: {{vm.getTotalClosedAmount() | currency}}</h4>
+
       </div>
     </div>
 
-    <hr>
-
-    <!-- Close Opportunities List -->
-    <div class="container">
-
-      <div class="row">
-        <div class="col px-0">
-          <h6 class="float-left">Closed Opportunities</h6>
-          <h6 class="float-right">Total value: {{vm.getTotalClosedAmount() | currency}}</h6>
-
-        </div>
-      </div>
-
-      <div ng-cloak class="row">
-        <div class="col px-0">
-          <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterClosed | orderBy: 'created' : true track by $index"
-            opportunity="opportunity" />
-        </div>
+    <div ng-cloak class="row">
+      <div class="col">
+        <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterClosed | orderBy: 'created' : true track by $index"
+          opportunity="opportunity" />
       </div>
     </div>
   </div>

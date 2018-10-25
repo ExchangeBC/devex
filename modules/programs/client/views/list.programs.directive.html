@@ -1,18 +1,19 @@
-<div class="row mb-4">
+<div class="row py-5">
   <div class="col-sm-9">
     <h3>
+      <i class="fas fa-university"></i>&nbsp;
       Government Programs
     </h3>
   </div>
   <div class="col-sm-3 d-none d-sm-block">
-    <button data-automation-id="button-list-a-program" ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="programadmin.create()"
+    <button data-automation-id="button-list-a-program" ng-if="vm.userCanAdd" class="btn btn-text-only float-right" ui-sref="programadmin.create()"
       title="New">
-      <i class="fas fa-plus"></i> List a Program
+      <i class="fas fa-lg fa-plus-circle"></i> List a Program
     </button>
   </div>
 </div>
 
-<div class="row">
+<div class="row py-3">
   <div class="col">
     <div class="list-group">
 
@@ -20,22 +21,25 @@
         ng-class="{'unpublished': !program.isPublished}">
 
         <div ng-if="!program.isPublished || program.userIs.member || program.userIs.request || program.userIs.admin"
-          class="text-right text-truncate mb-2">
+          class="text-right mb-2">
           <div class="label-list">
             <label ng-if="!program.isPublished" class="label label-unpublished"><i class="fas fa-exclamation-triangle"></i>
               Unpublished</label>
-            <label ng-if="program.userIs.member" class="label label-member">Member</label>
+            <label ng-if="program.userIs.member" class="label label-member"><i class="fas fa-user"></i> Member</label>
+            <!-- Hide until we implement a workflow for member requests -->
+            <!--
             <label ng-if="program.userIs.request" class="label label-member" title="Your membership request is pending approval">Pending
               Member</label>
-            <label ng-if="program.userIs.admin" class="label label-admin">Admin</label>
+            -->
+            <label ng-if="program.userIs.admin" class="label label-admin"><i class="fas fa-user-shield"></i> Admin</label>
           </div>
         </div>
 
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center" ng-class="{'unpublished': !program.isPublished}">
           <div>
             <img class="rounded mr-3" width="36" height="36" src="/{{program.logo}}" alt="Program Logo">
           </div>
-          <div class="text-truncate" ng-bind="program.title"></div>
+          <div class="font-weight-bold text-truncate" ng-bind="program.title"></div>
         </div>
       </a>
     </div>
