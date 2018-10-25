@@ -83,7 +83,7 @@
 				},
 				controllerAs: 'wsx',
 				restrict: 'EAC',
-				template: '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
+				template: '<button class="btn btn-sm btn-text-only" ng-click="wsx.edit()">Update logo</button>',
 				controller: [
 					'$uibModal',
 					'$scope',
