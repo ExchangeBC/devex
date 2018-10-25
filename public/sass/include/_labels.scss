@@ -19,7 +19,9 @@
 //Sizes
 
 .label-lg {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid;
 }
 
 // Generic classes
@@ -138,7 +140,7 @@
 }
 
 .label-swu {
-  background: $gray-darker;
+  background: $gray;
   color: #fff;
 }
 
@@ -157,6 +159,7 @@
 
 .label-cap-default {
   color: $gray-dark;
+  border-color: transparent;
   background: transparent;
   letter-spacing: -0.02em;
 }
@@ -248,14 +251,23 @@
 }
 
 // Labels for list pages
+.label-published {
+  border-color: transparent;
+  color: $gray;
+}
+
 .label-unpublished {
+  border-color: transparent;
   color: $theme-red;
 }
 
 .label-member {
   background: $theme-yellow;
+  border-color: $theme-yellow;
 }
 
 .label-admin {
-  background: $gray-light;
+  color: $gray;
+  background: transparent;
+  border-color: transparent;
 }
