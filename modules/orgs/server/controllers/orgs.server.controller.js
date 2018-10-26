@@ -575,6 +575,14 @@ exports.read = function(req, res) {
 //
 // -------------------------------------------------------------------------
 exports.update = function(req, res) {
+
+	if (!req.user || !isUserAdmin(req.org, req.user)) {
+		res.status(403).send({
+			message: 'You are not authorized to edit this organization'
+		});
+		return;
+	}
+
 	var list = null;
 	if (req.body.additions) {
 		list = req.body.additions.split(/[ ,]+/);
