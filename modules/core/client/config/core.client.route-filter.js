@@ -5,9 +5,9 @@
 		.module('core')
 		.run(routeFilter);
 
-	routeFilter.$inject = ['$transitions', '$state', '$stateParams', 'Authentication', 'OrgsService'];
+	routeFilter.$inject = ['$transitions', '$state', 'Authentication'];
 
-	function routeFilter($transitions, $state, $stateParams, Authentication, OrgsService) {
+	function routeFilter($transitions, $state, Authentication) {
 
 		// Store previous state
 		function storePreviousState(state, params) {
