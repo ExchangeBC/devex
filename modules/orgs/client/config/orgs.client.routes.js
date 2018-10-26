@@ -135,21 +135,21 @@
 						pageTitle: 'Company Settings'
 					},
 					resolve: {
-						org: [
-							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
-									orgId: $stateParams.orgId
-								}).$promise;
-							}
-						],
-						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
-							}
-						]
+						// org: [
+						// 	'$stateParams',
+						// 	'OrgsService',
+						// 	function($stateParams, OrgsService) {
+						// 		return OrgsService.get({
+						// 			orgId: $stateParams.orgId
+						// 		}).$promise;
+						// 	}
+						// ],
+						// capabilities: [
+						// 	'CapabilitiesService',
+						// 	function(CapabilitiesService) {
+						// 		return CapabilitiesService.query().$promise;
+						// 	}
+						// ]
 					}
 				})
 				.state('orgadmin.members', {

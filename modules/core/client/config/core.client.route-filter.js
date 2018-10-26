@@ -5,9 +5,9 @@
 		.module('core')
 		.run(routeFilter);
 
-	routeFilter.$inject = ['$transitions', '$state', 'Authentication'];
+	routeFilter.$inject = ['$transitions', '$state', '$stateParams', 'Authentication', 'OrgsService'];
 
-	function routeFilter($transitions, $state, Authentication) {
+	function routeFilter($transitions, $state, $stateParams, Authentication, OrgsService) {
 
 		// Store previous state
 		function storePreviousState(state, params) {
@@ -21,9 +21,31 @@
 			}
 		}
 
+		// Route filter for org editing - makes sure current user is admin when routing to org editing views
+		$transitions.onStart({ to: 'orgadmin.**'}, function(trans) {
 
+			return new Promise(function(resolve, reject) {
+				// If not signed redirect to sign-in
+				if (!Authentication.user) {
+					storePreviousState(trans.to(), trans.params('to'));
+					resolve($state.target('authentication.signin'));
+				}
+
+				// Wait for the org to resolve on the route
+				trans.injector().getAsync('org')
+				.then(function(org) {
+					if (org.admins.map(function(admin) { return admin._id; }).indexOf(Authentication.user._id) < 0) {
+						resolve($state.target('forbidden'));
+					}
+					else {
+						resolve();
+					}
+				});
+			})
+		});
+
+		// Main route filter - checks for allowed/denied roles and redirects apppropriately
 		$transitions.onStart({}, function(trans) {
-			var stateService = trans.router.stateService;
 			var userRoles = (Authentication.user && Authentication.user.roles !== undefined) ? Authentication.user.roles : ['guest'];
 			var toState = trans.to();
 
@@ -40,7 +62,7 @@
 				});
 			}
 
-			if (deniedRoles.length > 0) {
+			if (deniedRoles && deniedRoles.length > 0) {
 				deniedRoles.forEach(function(deniedRole) {
 					if (userRoles.indexOf(deniedRole) >= 0) {
 						userHasAccess = false;
