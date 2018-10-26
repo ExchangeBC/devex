@@ -133,23 +133,6 @@
 					controllerAs: 'vm',
 					data: {
 						pageTitle: 'Company Settings'
-					},
-					resolve: {
-						// org: [
-						// 	'$stateParams',
-						// 	'OrgsService',
-						// 	function($stateParams, OrgsService) {
-						// 		return OrgsService.get({
-						// 			orgId: $stateParams.orgId
-						// 		}).$promise;
-						// 	}
-						// ],
-						// capabilities: [
-						// 	'CapabilitiesService',
-						// 	function(CapabilitiesService) {
-						// 		return CapabilitiesService.query().$promise;
-						// 	}
-						// ]
 					}
 				})
 				.state('orgadmin.members', {
@@ -159,23 +142,6 @@
 					controllerAs: 'vm',
 					data: {
 						pageTitle: 'Company Members'
-					},
-					resolve: {
-						org: [
-							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
-									orgId: $stateParams.orgId
-								}).$promise;
-							}
-						],
-						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
-							}
-						]
 					}
 				})
 				.state('orgadmin.terms', {
@@ -185,17 +151,6 @@
 					controllerAs: 'vm',
 					data: {
 						pageTitle: 'Company Terms'
-					},
-					resolve: {
-						org: [
-							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
-									orgId: $stateParams.orgId
-								}).$promise;
-							}
-						]
 					}
 				});
 		}
