@@ -35,7 +35,7 @@
 
       <div class="bg-light rounded p-3 font-weight-bold">
         <span class="text-muted">My Proposal to Work On:</span> {{ppp.opportunity.name}}
-        <a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i
+        <a class="btn btn-text-only float-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close"><i
             class="fas fa-lg fa-times"></i></a>
       </div>
 
@@ -80,12 +80,12 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-success pull-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i
+            <button type="button" class="btn btn-success float-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i
                 class="fas fa-paper-plane"></i> Submit</button>
-            <button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'Submitted'"><i
+            <button type="submit" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'Submitted'"><i
                 class="fas fa-save"></i>
               Save Updates</button>
-            <button type="submit" class="btn btn-primary pull-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i
+            <button type="submit" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i
                 class="fas fa-save"></i> Save Changes</button>
             <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only"
               data-ng-click="ppp.delete()" "><i class=" fas fa-trash"></i> Delete My Proposal</button>
