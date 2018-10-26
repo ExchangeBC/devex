@@ -34,6 +34,7 @@
 				vm.isGov = vm.user && !!~Authentication.user.roles.indexOf('gov');
 				vm.isOrgAdmin =
 					vm.user &&
+					vm.org.admins &&
 					vm.org.admins
 						.map(function(u) {
 							return vm.user._id === u._id;

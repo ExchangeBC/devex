@@ -28,7 +28,6 @@ var path = require('path'),
 	User = mongoose.model('User'),
 	Capability = mongoose.model('Capability'),
 	Proposal = mongoose.model('Proposal'),
-	// Notifications = require(path.resolve('./modules/notifications/server/controllers/notifications.server.controller')),
 	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
@@ -37,6 +36,20 @@ var path = require('path'),
 	_ = require('lodash');
 
 var popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
+
+// Utility function which determines whether the given user is an administrator of the given organization
+var isUserAdmin = function(org, user) {
+	if (!user || !org) {
+		return false;
+	}
+
+	if (org.admins.map(function(admin) { return admin.id; }).indexOf(user.id) >= 0) {
+		return true;
+	}
+
+	return false;
+}
+
 var getOrgById = function(id) {
 	return new Promise(function(resolve, reject) {
 		Org.findById(id)
@@ -92,18 +105,7 @@ var saveUser = function(user) {
 		});
 	});
 };
-// var notifyUser = function (org) {
-// 	return function (user) {
-// 		Notifications.notifyUserAdHoc ('user-added-to-company', {
-// 			username    : user.displayName,
-// 			useremail   : user.email,
-// 			adminname   : org.adminName,
-// 			adminemail  : org.adminEmail,
-// 			companyname : org.name
-// 		});
-// 		return Promise.resolve ();
-// 	};
-// };
+
 // -------------------------------------------------------------------------
 //
 // find a user give the passed in search
@@ -551,7 +553,15 @@ exports.create = function(req, res) {
 //
 // -------------------------------------------------------------------------
 exports.read = function(req, res) {
-	res.json(req.org);
+	// If user is not authenticated, only send the publicly available org info
+	if (!req.user || !isUserAdmin(req.org, req.user)) {
+		var org = _.pick(req.org, ['_id', 'orgImageURL', 'name', 'website', 'capabilities'])
+		res.json(org);
+	}
+	// If user is authenticated, and they are an admin, send full info
+	else {
+		res.json(req.org);
+	}
 };
 
 // -------------------------------------------------------------------------
