@@ -666,6 +666,14 @@ var removeAllProposals = function(orgId) {
 	};
 };
 exports.delete = function(req, res) {
+
+	if (!req.user || !isUserAdmin(req.org, req.user)) {
+		res.status(403).send({
+			message: 'You are not authorized to delete this organization'
+		});
+		return;
+	}
+
 	var org = req.org;
 	var orgId = org._id;
 	org.remove(function(err) {
@@ -676,7 +684,6 @@ exports.delete = function(req, res) {
 		} else {
 			getAllAffectedMembers(orgId)
 				.then(removeAllCompanyReferences(orgId))
-				// .then (removeAllProposals (orgId))
 				.then(function() {
 					res.json(org);
 				})
