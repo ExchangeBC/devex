@@ -25,6 +25,12 @@
 		$transitions.onStart({ to: 'orgadmin.**'}, function(trans) {
 
 			return new Promise(function(resolve, reject) {
+
+				// If administrator account, allow
+				if (!!~Authentication.user.roles.indexOf('admin')) {
+					resolve();
+				}
+
 				// If not signed redirect to sign-in
 				if (!Authentication.user) {
 					storePreviousState(trans.to(), trans.params('to'));
