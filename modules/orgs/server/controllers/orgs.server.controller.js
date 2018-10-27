@@ -43,6 +43,10 @@ var isUserAdmin = function(org, user) {
 		return false;
 	}
 
+	if (user.roles.indexOf('admin') >= 0) {
+		return true;
+	}
+
 	if (org.admins.map(function(admin) { return admin.id; }).indexOf(user.id) >= 0) {
 		return true;
 	}
