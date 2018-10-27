@@ -843,40 +843,8 @@ exports.orgByID = function(req, res, next, id) {
 		.catch(function(err) {
 			next(err);
 		});
-	// Org.findById (id)
-	// .populate ('owner', '_id lastName firstName displayName profileImageURL')
-	// .populate ('createdBy', 'displayName')
-	// .populate ('updatedBy', 'displayName')
-	// .populate ('admins', popfields)
-	// .populate ('capabilities', 'code name')
-	// .populate ('capabilitySkills', 'code name')
-	// .populate ({
-	// 	path: 'members',
-	// 	select: popfields,
-	// 	populate: [{
-	// 		path : 'capabilities',
-	// 		model: 'Capability',
-	// 		select: 'name code labelClass'
-	// 	},
-	// 	{
-	// 		path : 'capabilitySkills',
-	// 		model: 'CapabilitySkill',
-	// 		select: 'name code'
-	// 	}]
-	// })
-	// .exec (function (err, org) {
-	// 	if (err) {
-	// 		return next(err);
-	// 	} else if (!org) {
-	// 		return res.status(200).send ({});
-	// 		// return res.status(404).send({
-	// 		// 	message: 'No org with that identifier has been found'
-	// 		// });
-	// 	}
-	// 	req.org = org;
-	// 	next();
-	// });
 };
+
 exports.orgByIDSmall = function(req, res, next, id) {
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).send({
@@ -901,6 +869,14 @@ exports.orgByIDSmall = function(req, res, next, id) {
 //
 // -------------------------------------------------------------------------
 exports.logo = function(req, res) {
+
+	if (!req.user || !isUserAdmin(req.org, req.user)) {
+		res.status(403).send({
+			message: 'You are not authorized to edit this organization'
+		});
+		return;
+	}
+
 	var org = req.org;
 	var storage = multer.diskStorage(config.uploads.diskStorage);
 	var upload = multer({ storage: storage }).single('orgImageURL');
