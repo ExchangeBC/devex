@@ -281,6 +281,7 @@ var resolveOrg = function(org) {
 		return org;
 	};
 };
+
 var saveOrg = function(req, res) {
 	return function(org) {
 		var additionsList = org.additionsList;
@@ -323,6 +324,7 @@ var saveOrg = function(req, res) {
 		});
 	};
 };
+
 var saveOrgReturnMessage = function(req, res) {
 	return function(org) {
 		helpers.applyAudit(org, req.user);
@@ -396,21 +398,12 @@ var removeUserFromProposals = function(user) {
 		});
 	};
 };
+
 // -------------------------------------------------------------------------
 //
-// given a user and an org, associate the two by updatying their respective
-// ids on each other's member lists
+// Add in the passed in user as an admin to the passed in org
 //
 // -------------------------------------------------------------------------
-var addMember = function(user, org) {
-	return (
-		Promise.resolve(user)
-			.then(addUserTo(org, 'members'))
-			.then(saveUser)
-			// .then (notifyUser (org))
-			.then(resolveOrg(org))
-	);
-};
 var addAdmin = function(user, org) {
 	return Promise.resolve(user)
 		.then(addUserTo(org, 'members'))
@@ -418,27 +411,7 @@ var addAdmin = function(user, org) {
 		.then(saveUser)
 		.then(resolveOrg(org));
 };
-//
-// same as above but a list
-//
-var addMembers = function(org) {
-	return function(users) {
-		return Promise.all(
-			users.map(function(user) {
-				return addMember(user, org);
-			})
-		).then(resolveOrg(org));
-	};
-};
-var addAdmins = function(org) {
-	return function(users) {
-		return Promise.all(
-			users.map(function(user) {
-				return addAdmin(user, org);
-			})
-		).then(resolveOrg(org));
-	};
-};
+
 // -------------------------------------------------------------------------
 //
 // given a user and an org, dissociate the two by removing their respective
@@ -451,15 +424,7 @@ var removeMember = function(user, org) {
 		.then(removeUserFromProposals(user))
 		.then(resolveOrg(org));
 };
-var removeAdmin = function(user, org) {
-	return (
-		Promise.resolve(user)
-			.then(removeUserFrom(org, 'members'))
-			.then(removeUserFrom(org, 'admins'))
-			// .then (saveUser)
-			.then(resolveOrg(org))
-	);
-};
+
 // -------------------------------------------------------------------------
 //
 // given a list of emails, find the user accounts and add them to the member
@@ -524,10 +489,20 @@ var inviteMembersWithMessages = function(emaillist, org) {
 		});
 };
 
+// -------------------------------------------------------------------------
+//
+// invite the members with the given emails to the passed in org
+//
+// -------------------------------------------------------------------------
 var inviteMembers = function(emaillist, org) {
 	return inviteMembersWithMessages(emaillist, org);
 };
 
+// -------------------------------------------------------------------------
+//
+// remove passed in user from the members of the passed in org
+//
+// -------------------------------------------------------------------------
 exports.removeUserFromMemberList = function(req, res) {
 
 	if (!req.user || !isUserAdmin(req.org, req.user)) {
@@ -557,7 +532,7 @@ exports.create = function(req, res) {
 
 // -------------------------------------------------------------------------
 //
-// this just takes the already queried object and pass it back
+// this just takes the already queried object and pass it back (after ensuring required access)
 //
 // -------------------------------------------------------------------------
 exports.read = function(req, res) {
@@ -626,10 +601,7 @@ exports.update = function(req, res) {
 
 // -------------------------------------------------------------------------
 //
-// delete the org
-//
-// TBD : In future we should NOT allow deletion of companies that have
-// submitted proposals as we may need the data and linkage for public record
+// get all members that are a member, admin, or pending member of the passed in org
 //
 // -------------------------------------------------------------------------
 var getAllAffectedMembers = function(orgId) {
@@ -649,6 +621,12 @@ var getAllAffectedMembers = function(orgId) {
 		);
 	});
 };
+
+// -------------------------------------------------------------------------
+//
+// Remove references to a deleted org from all relevant user objects
+//
+// -------------------------------------------------------------------------
 var removeAllCompanyReferences = function(orgId) {
 	return function(users) {
 		return Promise.all(
@@ -664,15 +642,12 @@ var removeAllCompanyReferences = function(orgId) {
 		);
 	};
 };
-var removeAllProposals = function(orgId) {
-	//
-	// this actually needs a bit of thinking. Do we want to delete all proposals, or are
-	// some of them needed for a matter of public record ?
-	//
-	return function() {
-		return Proposals.deleteForOrg();
-	};
-};
+
+// -------------------------------------------------------------------------
+//
+// Delete the passed in organization
+//
+// -------------------------------------------------------------------------
 exports.delete = function(req, res) {
 
 	if (!req.user || !isUserAdmin(req.org, req.user)) {
@@ -728,7 +703,7 @@ exports.list = function(req, res) {
 
 // -------------------------------------------------------------------------
 //
-// get a list of orgs that the user is an Admin for
+// get a list of orgs that the user is a member of
 //
 // -------------------------------------------------------------------------
 exports.my = function(req, res) {
@@ -750,6 +725,12 @@ exports.my = function(req, res) {
 			}
 		});
 };
+
+// -------------------------------------------------------------------------
+//
+// get a list of orgs that the user is an admin for
+//
+// -------------------------------------------------------------------------
 exports.myadmin = function(req, res) {
 	Org.find({
 		admins: { $in: [req.user._id] }
@@ -769,26 +750,7 @@ exports.myadmin = function(req, res) {
 			}
 		});
 };
-// -------------------------------------------------------------------------
-//
-// add the current user to the passed in org
-//
-// -------------------------------------------------------------------------
-exports.addMeToOrg = function(req, res) {
-	var org = req.org;
-	var user = req.user;
-	var orgO = org.toObject();
-	var userO = user.toObject();
-	if (orgO && orgO.invited && orgO.invited.indexOf(userO.email) !== -1) {
-		Promise.resolve(user)
-			.then(addUserTo(org, 'members'))
-			.then(saveUser)
-			.then(function() {
-				return org;
-			})
-			.then(saveOrg(req, res));
-	}
-};
+
 exports.addUserToOrg = function(req, res) {
 	req.user = req.model;
 	var org = req.org;
