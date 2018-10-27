@@ -34,7 +34,7 @@
 				// Wait for the org to resolve on the route
 				trans.injector().getAsync('org')
 				.then(function(org) {
-					if (org.admins.map(function(admin) { return admin._id; }).indexOf(Authentication.user._id) < 0) {
+					if (!org.admins || org.admins.map(function(admin) { return admin._id; }).indexOf(Authentication.user._id) < 0) {
 						resolve($state.target('forbidden'));
 					}
 					else {
