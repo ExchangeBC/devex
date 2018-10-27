@@ -529,6 +529,14 @@ var inviteMembers = function(emaillist, org) {
 };
 
 exports.removeUserFromMemberList = function(req, res) {
+
+	if (!req.user || !isUserAdmin(req.org, req.user)) {
+		res.status(403).send({
+			message: 'You are not authorized to edit this organization'
+		});
+		return;
+	}
+
 	removeMember(req.profile, req.org).then(saveOrg(req, res));
 };
 
