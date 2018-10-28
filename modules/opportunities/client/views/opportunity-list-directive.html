@@ -5,7 +5,7 @@
     <div class="row py-3">
       <div class="col">
         <button ng-if="vm.userCanAdd" class="btn btn-primary float-right" ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}"
-          ui-sref="opportunityadmin.createlanding({programId:vm.programId, projectId:vm.projectId, programTitle:vm.programTitle, projectTitle:vm.projectTitle, context:vm.context})">
+          ui-sref="oppcreatelanding()">
           <i class="fas fa-plus"></i> Post an Opportunity
         </button>
       </div>

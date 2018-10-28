@@ -63,10 +63,10 @@ var TeamQuestionSchema = new Schema({
 //
 // -------------------------------------------------------------------------
 var ApprovalSchema = new Schema({
-	name: { type: String },
-	email: { type: String },
+	name: { type: String, default: '' },
+	email: { type: String, default: '' },
 	twoFAMethod: { type: String, default: 'email' },
-	mobileNumber: { type: String },
+	mobileNumber: { type: String, default: '' },
 	sentDate: { type: Date, default: null },
 	actionDate: { type: Date, default: null },
 	action: { type: String, default: 'pending' }
@@ -195,8 +195,8 @@ var OpportunitySchema = new Schema(
 		addenda: { type: [AddendumSchema], default: [] },
 		teamQuestions: { type: [TeamQuestionSchema], default: [] },
 		teamQuestionGradingType: { type: String, default: 'Linear', enum: ['Linear', 'Weighted'] },
-		intermediateApproval: { type: ApprovalSchema, default: {} },
-		finalApproval: { type: ApprovalSchema, default: {} }
+		intermediateApproval: { type: ApprovalSchema },
+		finalApproval: { type: ApprovalSchema }
 	},
 	{ usePushEach: true }
 );

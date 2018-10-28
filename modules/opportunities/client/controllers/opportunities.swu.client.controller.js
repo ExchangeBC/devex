@@ -372,7 +372,7 @@ import '../css/opportunities.css';
 		])
 		// =========================================================================
 		//
-		// Controller the view of the opportunity page
+		// Controller for editing the opportunity page
 		//
 		// =========================================================================
 		.controller('OpportunityEditSWUController', [
@@ -388,11 +388,8 @@ import '../css/opportunities.css';
 			'Authentication',
 			'Notification',
 			'dataService',
-			'modalService',
-			'$q',
 			'ask',
 			'uibButtonConfig',
-			'CapabilitySkillsService',
 			'CapabilitiesMethods',
 			'TINYMCE_OPTIONS',
 			'OpportunitiesCommon',
@@ -409,11 +406,8 @@ import '../css/opportunities.css';
 				Authentication,
 				Notification,
 				dataService,
-				modalService,
-				$q,
 				ask,
 				uibButtonConfig,
-				CapabilitySkillsService,
 				CapabilitiesMethods,
 				TINYMCE_OPTIONS,
 				OpportunitiesCommon
@@ -962,14 +956,14 @@ import '../css/opportunities.css';
 					// if any context pieces were being set then copy in to the
 					// right place here (only when adding)
 					//
-					if (!vm.editing) {
-						if (vm.context === 'allopportunities') {
-							vm.opportunity.project = vm.projectId;
-							vm.opportunity.program = vm.programId;
-						} else if (vm.context === 'program') {
-							vm.opportunity.project = vm.projectId;
-						}
-					}
+					// if (!vm.editing) {
+					// 	if (vm.context === 'allopportunities') {
+					// 		vm.opportunity.project = vm.projectId;
+					// 		vm.opportunity.program = vm.programId;
+					// 	} else if (vm.context === 'program') {
+					// 		vm.opportunity.project = vm.projectId;
+					// 	}
+					// }
 					//
 					// ensure that there is a trailing '/' on the github field
 					//
@@ -1049,7 +1043,7 @@ import '../css/opportunities.css';
 						//
 						.catch(function(res) {
 							Notification.error({
-								message: res.data.message,
+								message: res.message,
 								title: '<i class=\'fas fa-exclamation-triangle\'></i> opportunity save error!'
 							});
 						});

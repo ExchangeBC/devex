@@ -57,20 +57,7 @@
 			'ask',
 			'myproposal',
 			'OpportunitiesCommon',
-			function(
-				$state,
-				$stateParams,
-				$sce,
-				opportunity,
-				Authentication,
-				OpportunitiesService,
-				ProposalsService,
-				Notification,
-				modalService,
-				ask,
-				myproposal,
-				OpportunitiesCommon
-			) {
+			function($state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -139,50 +126,14 @@
 					else if (dh > 0) vm.closing = dh + ' hours ' + dm + ' minutes';
 					else vm.closing = dm + ' minutes';
 				}
-				var monthNames = [
-					'January',
-					'February',
-					'March',
-					'April',
-					'May',
-					'June',
-					'July',
-					'August',
-					'September',
-					'October',
-					'November',
-					'December'
-				];
+				var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 				var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 				var dt = vm.opportunity.deadline;
-				vm.deadline =
-					dt.getHours() +
-					':00 Pacific Time, ' +
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.deadline = dt.getHours() + ':00 Pacific Time, ' + dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				dt = vm.opportunity.assignment;
-				vm.assignment =
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				dt = vm.opportunity.start;
-				vm.start =
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				// -------------------------------------------------------------------------
 				//
 				// can this be published?
@@ -229,9 +180,7 @@
 				//
 				// -------------------------------------------------------------------------
 				if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					ProposalsService.forOpportunity({ opportunityId: vm.opportunity._id }).$promise.then(function(
-						proposals
-					) {
+					ProposalsService.forOpportunity({ opportunityId: vm.opportunity._id }).$promise.then(function(proposals) {
 						vm.proposals = proposals;
 						//
 						// removed hack as this is now in the right place in the edit opportunity
@@ -447,11 +396,8 @@
 				vm.publish = function(opportunity, isToBePublished) {
 					var publishedState = opportunity.isPublished;
 					var publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
-					var publishQuestion =
-						'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
-					var publishSuccess = isToBePublished
-						? 'Your opportunity has been published and we\'ve notified subscribers!'
-						: 'Your opportunity has been unpublished!';
+					var publishQuestion = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
+					var publishSuccess = isToBePublished ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!';
 					var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
 					var isToBeSaved = true;
 					var promise = Promise.resolve();
@@ -512,15 +458,13 @@
 								function(response) {
 									vm.opportunity = response;
 									Notification.success({
-										message:
-											'<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
+										message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
 									});
 								},
 								function(error) {
 									Notification.error({
 										message: error.data.message,
-										title:
-											'<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
+										title: '<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
 									});
 								}
 							);
@@ -549,22 +493,7 @@
 			'ask',
 			'TINYMCE_OPTIONS',
 			'OpportunitiesCommon',
-			function(
-				$scope,
-				$state,
-				$stateParams,
-				$window,
-				$sce,
-				opportunity,
-				editing,
-				projects,
-				Authentication,
-				Notification,
-				dataService,
-				ask,
-				TINYMCE_OPTIONS,
-				OpportunitiesCommon
-			) {
+			function($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 				var vm = this;
 				vm.trust = $sce.trustAsHtml;
 				var originalPublishedState = opportunity.isPublished;
@@ -601,8 +530,7 @@
 				var i;
 				for (i = minAmount; i <= maxAmount; i += step) vm.amounts.push(i);
 
-				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '')
-					vm.opportunity.opportunityTypeCd = 'code-with-us';
+				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
 				//
 				// if the user doesn't have the right access then kick them out
 				//
@@ -659,8 +587,7 @@
 				//
 				if (vm.projects.length === 0) {
 					Notification.error({
-						message:
-							'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
+						message: 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
 					});
 					$state.go('opportunities.list');
 				}
@@ -683,10 +610,7 @@
 					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
 					vm.opportunity.prototypeTarget = Number(vm.opportunity.prototypeTarget);
 					vm.opportunity.implementationTarget = Number(vm.opportunity.implementationTarget);
-					vm.opportunity.totalTarget =
-						vm.opportunity.inceptionTarget +
-						vm.opportunity.prototypeTarget +
-						vm.opportunity.implementationTarget;
+					vm.opportunity.totalTarget = vm.opportunity.inceptionTarget + vm.opportunity.prototypeTarget + vm.opportunity.implementationTarget;
 				};
 				vm.totalTargets = function() {
 					return 1234;
@@ -767,9 +691,7 @@
 					//
 					// ensure that there is a trailing '/' on the github field
 					//
-					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/')
-						vm.opportunity.github += '/';
-
+					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/') vm.opportunity.github += '/';
 					//
 					// set the time on the 2 dates that care about it
 					//
@@ -790,8 +712,7 @@
 					var savemeSeymour = true;
 					var promise = Promise.resolve();
 					if (!originalPublishedState && vm.opportunity.isPublished) {
-						var question =
-							'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
+						var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
 						promise = ask.yesNo(question).then(function(result) {
 							savemeSeymour = result;
 						});
@@ -799,10 +720,7 @@
 					//
 					// update target total
 					//
-					vm.opportunity.totalTarget =
-						vm.opportunity.implementationTarget +
-						vm.opportunity.prototypeTarget +
-						vm.opportunity.inceptionTarget;
+					vm.opportunity.totalTarget = vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget;
 					//
 					// Create a new opportunity, or update the current instance
 					//

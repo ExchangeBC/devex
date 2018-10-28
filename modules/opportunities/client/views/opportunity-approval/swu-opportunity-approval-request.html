@@ -1,10 +1,10 @@
 <section class="main-section bg-secondary">
-  <form id=" opportunityForm" warn-on-exit name="vm.sendRequestForm" class="form bg-white rounded" ng-submit="vm.save(vm.sendRequestForm.$valid)"
+  <form id="opportunityForm" warn-on-exit name="vm.sendRequestForm" class="form bg-white rounded" ng-submit="vm.save(vm.sendRequestForm.$valid)"
     novalidate>
 
-    <div class="bg-light rounded p-0 m-4">
+    <div class="rounded p-4 bg-light">
 
-      <div class="bg-light rounded px-4 py-3 font-weight-bold">
+      <div class="rounded px-4 py-3 font-weight-bold">
         <span><i class="fas fa-envelope-open"></i> Send Approval Request:</span> &nbsp;
         <span>{{vm.opportunity.name}}</span>
         <a ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})" ng-if="vm.opportunity._id" class="btn btn-text-only float-right"
@@ -40,14 +40,14 @@
             <div class="row">
               <div class="col-xs-12 col-md-6">
                 <form-display x-options='{
-                    "title":"Two-Factor Authentication",
+                    "title":"2FA Method",
                     "name":"twoFAMethod",
-                    "help":"<p>Choose the 2FA method to be used by the approving authority: SMS message or email.</p>",
+                    "help":"<p>Choose the two-factor authentication method to be used by the approving authority: SMS message or email.</p>",
                     "required": "true"
                   }'>
                   <select name="twoFAselect" ng-model="vm.opportunity.intermediateApproval.twoFAMethod" id="twoFAselect"
                     class="form-control">
-                    <option value="sms">SMS Message</option>
+                    <option value="sms">SMS</option>
                     <option value="email">Email</option>
                   </select>
                 </form-display>
@@ -91,14 +91,14 @@
             <div class="row">
               <div class="col-xs-12 col-md-6">
                 <form-display x-options='{
-                      "title":"Two-Factor Authentication",
+                      "title":"2FA Method",
                       "name":"twoFAMethod",
-                      "help":"<p>Choose the 2FA method to be used by the approving authority: SMS message or email.</p>",
+                      "help":"<p>Choose the two-factor authentication method to be used by the approving authority: SMS message or email.</p>",
                       "required": "true"
                     }'>
                   <select name="twoFAselect" ng-model="vm.opportunity.finalApproval.twoFAMethod" id="twoFAselect" class="form-control"
                     required>
-                    <option value="sms">SMS Message</option>
+                    <option value="sms">SMS</option>
                     <option value="email">Email</option>
                   </select>
                 </form-display>
