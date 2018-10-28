@@ -74,10 +74,11 @@
         <!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
         <!-- PUBLISH -->
         <div class="col-sm-4">
-          <a ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary float-right text-white"
-            ng-click="vm.requestADMApproval(vm.opportunity)" uib-tooltip="Request approval to publish this opportunity">
-            <i class="fas fa-envelope-open"></i>
-            Request ADM Approval
+          <a ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary float-right"
+            ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity">
+            <i class="fa fa-bullhorn"></i>
+            Publish
+
           </a>
 
           <!-- EDIT -->
