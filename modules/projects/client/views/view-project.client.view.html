@@ -25,11 +25,14 @@
         <button type="button" data-automation-id="button-project-edit" class="btn btn-default" ng-if="vm.canEdit"
           ui-sref="projectadmin.edit({projectId:vm.project.code})" title="Edit this page"><i class="fas fa-lg fa-pencil-alt"></i>
           Edit</button>
+        
         <!-- // If user is not a member, request membership // -->
+        <!--
         <button type="button" data-automation-id="button-project-request-membership" class="btn btn-primary" ng-if="vm.canRequestMembership"
           href="javascript:void(0);" ng-click="vm.request()"><i class="fas fa-user" title="Request Membership"></i>
           Request
           Membership</button>
+        -->
       </div>
     </div>
 

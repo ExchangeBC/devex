@@ -13,7 +13,7 @@
 
 <!--<div ng-class="'col-md-'+(12 / vm.columnCount)" ng-repeat="column in vm.projects | columnRanges:vm.columnCount">-->
 
-<div class="card" ng-repeat="project in vm.projects | slice:column.start:column.end">
+<div class="card my-3" ng-repeat="project in vm.projects | slice:column.start:column.end">
 
   <div class="card-header py-1 text-right text-truncate" ng-if="vm.isAdmin || project.userIs.admin || project.userIs.member || project.userIs.request">
 
