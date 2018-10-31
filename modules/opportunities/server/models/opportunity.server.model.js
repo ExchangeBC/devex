@@ -7,20 +7,7 @@ var mongoose = require('mongoose'),
 	helpers = require(require('path').resolve('./modules/core/server/controllers/core.server.helpers')),
 	Schema = mongoose.Schema;
 
-var monthNames = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December'
-];
+var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // -------------------------------------------------------------------------
@@ -67,9 +54,24 @@ var ApprovalSchema = new Schema({
 	email: { type: String, default: '' },
 	twoFAMethod: { type: String, default: 'email' },
 	mobileNumber: { type: String, default: '' },
-	sentDate: { type: Date, default: null },
-	actionDate: { type: Date, default: null },
-	action: { type: String, default: 'pending' }
+	initiated: { type: Date, default: null },
+	actioned: { type: Date, default: null },
+	state: { type: String, default: 'draft', enum: ['draft', 'ready-to-send', 'sent', 'actioned'] },
+	action: { type: String, default: 'pending', enum: ['pending', 'approved', 'denied'] }
+});
+
+var ContractSchema = new Schema({
+	managerName: { type: String, default: '' },
+	managerEmail: { type: String, default: '' },
+	businessArea: { type: String, default: '' },
+	estimatedValue: { type: Number, default: 0 },
+	contractType: { type: String, default: 'new', enum: ['new', 'renewal', 'amendment'] },
+	stobType: { type: String, default: '6001/02', enum: ['6001/02', '6003/04', '6020/21', '6302', '6309'] },
+	stobBudget: { type: Number, default: 0 },
+	stobExpenditures: { type: Number, default: 0 },
+	summary: { type: String, default: '' },
+	legallyRequired: { type: Boolean, default: false },
+	impactNotApproved: { type: String, default: '' }
 });
 
 // -------------------------------------------------------------------------
@@ -196,7 +198,8 @@ var OpportunitySchema = new Schema(
 		teamQuestions: { type: [TeamQuestionSchema], default: [] },
 		teamQuestionGradingType: { type: String, default: 'Linear', enum: ['Linear', 'Weighted'] },
 		intermediateApproval: { type: ApprovalSchema },
-		finalApproval: { type: ApprovalSchema }
+		finalApproval: { type: ApprovalSchema },
+		contract: { type: ContractSchema }
 	},
 	{ usePushEach: true }
 );

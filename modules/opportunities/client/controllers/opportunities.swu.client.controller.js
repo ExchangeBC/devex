@@ -9,20 +9,7 @@ import '../css/opportunities.css';
 (function() {
 	'use strict';
 	var formatDate = function(d) {
-		var monthNames = [
-			'January',
-			'February',
-			'March',
-			'April',
-			'May',
-			'June',
-			'July',
-			'August',
-			'September',
-			'October',
-			'November',
-			'December'
-		];
+		var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var day = d.getDate();
 		var monthIndex = d.getMonth();
 		var year = d.getFullYear();
@@ -52,23 +39,7 @@ import '../css/opportunities.css';
 			'myproposal',
 			'CapabilitiesMethods',
 			'OpportunitiesCommon',
-			function(
-				capabilities,
-				$state,
-				$stateParams,
-				$sce,
-				org,
-				opportunity,
-				Authentication,
-				OpportunitiesService,
-				ProposalsService,
-				Notification,
-				modalService,
-				ask,
-				myproposal,
-				CapabilitiesMethods,
-				OpportunitiesCommon
-			) {
+			function(capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, Notification, ask, myproposal, CapabilitiesMethods, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -88,21 +59,15 @@ import '../css/opportunities.css';
 				vm.opportunity.phases.inception.endDate = new Date(vm.opportunity.phases.inception.endDate);
 				vm.opportunity.phases.proto.startDate = new Date(vm.opportunity.phases.proto.startDate);
 				vm.opportunity.phases.proto.endDate = new Date(vm.opportunity.phases.proto.endDate);
-				vm.opportunity.phases.implementation.startDate = new Date(
-					vm.opportunity.phases.implementation.startDate
-				);
+				vm.opportunity.phases.implementation.startDate = new Date(vm.opportunity.phases.implementation.startDate);
 				vm.opportunity.phases.implementation.endDate = new Date(vm.opportunity.phases.implementation.endDate);
 
 				vm.opportunity.phases.inception.fstartDate = formatDate(vm.opportunity.phases.inception.startDate);
 				vm.opportunity.phases.inception.fendDate = formatDate(vm.opportunity.phases.inception.endDate);
 				vm.opportunity.phases.proto.fstartDate = formatDate(vm.opportunity.phases.proto.startDate);
 				vm.opportunity.phases.proto.fendDate = formatDate(vm.opportunity.phases.proto.endDate);
-				vm.opportunity.phases.implementation.fstartDate = formatDate(
-					vm.opportunity.phases.implementation.startDate
-				);
-				vm.opportunity.phases.implementation.fendDate = formatDate(
-					vm.opportunity.phases.implementation.endDate
-				);
+				vm.opportunity.phases.implementation.fstartDate = formatDate(vm.opportunity.phases.implementation.startDate);
+				vm.opportunity.phases.implementation.fendDate = formatDate(vm.opportunity.phases.implementation.endDate);
 
 				vm.authentication = Authentication;
 				vm.OpportunitiesService = OpportunitiesService;
@@ -138,21 +103,7 @@ import '../css/opportunities.css';
 				//
 				// what capabilities are required ?
 				//
-				var allclist = [
-					'c01',
-					'c02',
-					'c03',
-					'c04',
-					'c05',
-					'c06',
-					'c07',
-					'c08',
-					'c09',
-					'c10',
-					'c11',
-					'c12',
-					'c13'
-				];
+				var allclist = ['c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13'];
 				vm.clist = [];
 				allclist.forEach(function(id) {
 					if (vm.opportunity[id + '_minimumYears'] > 0) {
@@ -207,50 +158,14 @@ import '../css/opportunities.css';
 					else if (dh > 0) vm.closing = dh + ' hours ' + dm + ' minutes';
 					else vm.closing = dm + ' minutes';
 				}
-				var monthNames = [
-					'January',
-					'February',
-					'March',
-					'April',
-					'May',
-					'June',
-					'July',
-					'August',
-					'September',
-					'October',
-					'November',
-					'December'
-				];
+				var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 				var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 				var dt = vm.opportunity.deadline;
-				vm.deadline =
-					dt.getHours() +
-					':00 Pacific Time, ' +
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.deadline = dt.getHours() + ':00 Pacific Time, ' + dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				dt = vm.opportunity.assignment;
-				vm.assignment =
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				dt = vm.opportunity.start;
-				vm.start =
-					dayNames[dt.getDay()] +
-					', ' +
-					monthNames[dt.getMonth()] +
-					' ' +
-					dt.getDate() +
-					', ' +
-					dt.getFullYear();
+				vm.start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				// -------------------------------------------------------------------------
 				//
 				// can this be published?
@@ -285,11 +200,8 @@ import '../css/opportunities.css';
 				vm.publish = function(opportunity, isToBePublished) {
 					var publishedState = opportunity.isPublished;
 					var publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
-					var publishQuestion =
-						'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
-					var publishSuccess = isToBePublished
-						? 'Your opportunity has been published and we\'ve notified subscribers!'
-						: 'Your opportunity has been unpublished!';
+					var publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
+					var publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
 					var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
 					var isToBeSaved = true;
 					var promise = Promise.resolve();
@@ -319,7 +231,7 @@ import '../css/opportunities.css';
 									opportunity.isPublished = publishedState;
 									Notification.error({
 										message: res.data.message,
-										title: '<i class=\'fas fa-exclamation-triangle\'></i> ' + publishError
+										title: "<i class='fas fa-exclamation-triangle'></i> " + publishError
 									});
 								});
 						}
@@ -353,15 +265,13 @@ import '../css/opportunities.css';
 								function(response) {
 									vm.opportunity = response;
 									Notification.success({
-										message:
-											'<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
+										message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
 									});
 								},
 								function(error) {
 									Notification.error({
 										message: error.data.message,
-										title:
-											'<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
+										title: '<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
 									});
 								}
 							);
@@ -498,22 +408,12 @@ import '../css/opportunities.css';
 					vm.codeChallengePercentage = vm.opportunity.weights.codechallenge * 100;
 					vm.teamScenarioPercentage = vm.opportunity.weights.interview * 100;
 					vm.pricePercentage = vm.opportunity.weights.price * 100;
-					vm.totalPercentage =
-						vm.skillsPercentage +
-						vm.questionPercentage +
-						vm.codeChallengePercentage +
-						vm.teamScenarioPercentage +
-						vm.pricePercentage;
+					vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
 				}
 
 				// Save edited scoring weights for evaluation to the opportunity (does not save the opportunity itself)
 				vm.saveWeights = function() {
-					vm.totalPercentage =
-						vm.skillsPercentage +
-						vm.questionPercentage +
-						vm.codeChallengePercentage +
-						vm.teamScenarioPercentage +
-						vm.pricePercentage;
+					vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
 
 					if (isNaN(vm.totalPercentage)) {
 						vm.totalPercentage = 0;
@@ -690,8 +590,7 @@ import '../css/opportunities.css';
 				var i;
 				for (i = minAmount; i <= maxAmount; i += step) vm.amounts.push(i);
 
-				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '')
-					vm.opportunity.opportunityTypeCd = 'code-with-us';
+				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
 				// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 				//
 				// if the user doesn't have the right access then kick them out
@@ -755,8 +654,7 @@ import '../css/opportunities.css';
 				//
 				if (vm.projects.length === 0) {
 					Notification.error({
-						message:
-							'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
+						message: 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
 					});
 					$state.go('opportunities.list');
 				}
@@ -774,6 +672,43 @@ import '../css/opportunities.css';
 				}
 
 				vm.tinymceOptions = TINYMCE_OPTIONS;
+
+				// -------------------------------------------------------------------------
+				//
+				// Send an approval request
+				//
+				// -------------------------------------------------------------------------
+				vm.sendRequest = function(isValid) {
+					if (!isValid) {
+						Notification.error({
+							message: '<i class="fas fa-exclamation-triangle"></i> Please fill out all required fields.',
+							title: 'Error'
+						});
+					}
+
+					var confirmMessage = 'Are you sure you are ready to send the requests with the entered contact information?';
+					ask.yesNo(confirmMessage).then(function(choice) {
+						if (choice) {
+							vm.opportunity.intermediateApproval.action = 'to-send';
+							vm.opportunity
+								.createOrUpdate()
+								.then(function(savedOpportunity) {
+									vm.opportunity = savedOpportunity;
+									Notification.success({
+										message: '<i class="fas fa-check-circle"></i> Approval request sent!',
+										title: 'Success'
+									});
+									$state.go('opportunities.viewswu', { opportunityId: vm.opportunity.code });
+								})
+								.catch(function(res) {
+									Notification.error({
+										message: '<i class="fas fa-exclamation-triangle"></i> Error: ' + res.message,
+										title: 'Error'
+									});
+								});
+						}
+					});
+				};
 
 				// -------------------------------------------------------------------------
 				//
@@ -796,29 +731,20 @@ import '../css/opportunities.css';
 					// in the aggregate
 					//
 					Object.keys(vm.all.iCapabilities).forEach(function(code) {
-						vm.all.iOppCapabilities[code] =
-							vm.inp.iOppCapabilities[code] ||
-							vm.prp.iOppCapabilities[code] ||
-							vm.imp.iOppCapabilities[code];
+						vm.all.iOppCapabilities[code] = vm.inp.iOppCapabilities[code] || vm.prp.iOppCapabilities[code] || vm.imp.iOppCapabilities[code];
 					});
 					//
 					// same with the most current view of skills
 					//
 					Object.keys(vm.all.iCapabilitySkills).forEach(function(code) {
-						vm.all.iOppCapabilitySkills[code] =
-							vm.inp.iOppCapabilitySkills[code] ||
-							vm.prp.iOppCapabilitySkills[code] ||
-							vm.imp.iOppCapabilitySkills[code];
+						vm.all.iOppCapabilitySkills[code] = vm.inp.iOppCapabilitySkills[code] || vm.prp.iOppCapabilitySkills[code] || vm.imp.iOppCapabilitySkills[code];
 					});
 				};
 				vm.changeTargets = function() {
 					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
 					vm.opportunity.prototypeTarget = Number(vm.opportunity.prototypeTarget);
 					vm.opportunity.implementationTarget = Number(vm.opportunity.implementationTarget);
-					vm.opportunity.totalTarget =
-						vm.opportunity.inceptionTarget +
-						vm.opportunity.prototypeTarget +
-						vm.opportunity.implementationTarget;
+					vm.opportunity.totalTarget = vm.opportunity.inceptionTarget + vm.opportunity.prototypeTarget + vm.opportunity.implementationTarget;
 				};
 				vm.totalTargets = function() {
 					return 1234;
@@ -866,29 +792,23 @@ import '../css/opportunities.css';
 					if (vm.opportunity.budget > 2000000) {
 						Notification.error({
 							message: 'You cannot enter an overall budget greater than $2,000,000',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
 
-					if (
-						vm.opportunity.phases.inception.isInception &&
-						vm.opportunity.phases.inception.maxCost > vm.opportunity.budget
-					) {
+					if (vm.opportunity.phases.inception.isInception && vm.opportunity.phases.inception.maxCost > vm.opportunity.budget) {
 						Notification.error({
 							message: 'You cannot enter an Inception budget greater than the total budget.',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
 
-					if (
-						vm.opportunity.phases.proto.isPrototype &&
-						vm.opportunity.phases.proto.maxCost > vm.opportunity.budget
-					) {
+					if (vm.opportunity.phases.proto.isPrototype && vm.opportunity.phases.proto.maxCost > vm.opportunity.budget) {
 						Notification.error({
 							message: 'You cannot enter a Proof of Concept budget greater than the total budget.',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
@@ -896,7 +816,7 @@ import '../css/opportunities.css';
 					if (vm.opportunity.phases.implementation.maxCost > vm.opportunity.budget) {
 						Notification.error({
 							message: 'You cannot enter an Implementation budget greater than the total budget.',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
@@ -921,7 +841,7 @@ import '../css/opportunities.css';
 					if (!vm.opportunity.name) {
 						Notification.error({
 							message: 'You must enter a title for your opportunity',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
@@ -937,7 +857,7 @@ import '../css/opportunities.css';
 						$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
 						Notification.error({
 							message: 'There are errors on the page, please review your work and re-save',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
@@ -967,8 +887,7 @@ import '../css/opportunities.css';
 					//
 					// ensure that there is a trailing '/' on the github field
 					//
-					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/')
-						vm.opportunity.github += '/';
+					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/') vm.opportunity.github += '/';
 					//
 					// set the time on the 2 dates that care about it
 					//
@@ -1005,8 +924,7 @@ import '../css/opportunities.css';
 					var savemeSeymour = true;
 					var promise = Promise.resolve();
 					if (!originalPublishedState && vm.opportunity.isPublished) {
-						var question =
-							'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
+						var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
 						promise = ask.yesNo(question).then(function(result) {
 							savemeSeymour = result;
 						});
@@ -1014,10 +932,7 @@ import '../css/opportunities.css';
 					//
 					// update target total
 					//
-					vm.opportunity.totalTarget =
-						vm.opportunity.implementationTarget +
-						vm.opportunity.prototypeTarget +
-						vm.opportunity.inceptionTarget;
+					vm.opportunity.totalTarget = vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget;
 					//
 					// Create a new opportunity, or update the current instance
 					//
@@ -1044,7 +959,7 @@ import '../css/opportunities.css';
 						.catch(function(res) {
 							Notification.error({
 								message: res.message,
-								title: '<i class=\'fas fa-exclamation-triangle\'></i> opportunity save error!'
+								title: "<i class='fas fa-exclamation-triangle'></i> opportunity save error!"
 							});
 						});
 				};

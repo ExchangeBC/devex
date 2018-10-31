@@ -164,14 +164,8 @@ var setNotificationData = function(opportunity) {
 		name: opportunity.name,
 		short: opportunity.short,
 		description: opportunity.description,
-		earn_format_mnoney: helpers.formatMoney(
-			opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn,
-			2
-		),
-		earn: helpers.formatMoney(
-			opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn,
-			2
-		),
+		earn_format_mnoney: helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
+		earn: helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
 		dateDeadline: helpers.formatDate(new Date(opportunity.deadline)),
 		timeDeadline: helpers.formatTime(new Date(opportunity.deadline)),
 		dateAssignment: helpers.formatDate(new Date(opportunity.assignment)),
@@ -186,17 +180,9 @@ var setNotificationData = function(opportunity) {
 	};
 };
 var setMessageData = function(opportunity) {
-	opportunity.path =
-		'/opportunities/' +
-		(opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu') +
-		'/' +
-		opportunity.code;
-	opportunity.earn_format_mnoney = helpers.formatMoney(
-		opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn,
-		2
-	);
-	opportunity.earn =
-		opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
+	opportunity.path = '/opportunities/' + (opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu') + '/' + opportunity.code;
+	opportunity.earn_format_mnoney = helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2);
+	opportunity.earn = opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
 	opportunity.dateDeadline = helpers.formatDate(new Date(opportunity.deadline));
 	opportunity.timeDeadline = helpers.formatTime(new Date(opportunity.deadline));
 	opportunity.dateAssignment = helpers.formatDate(new Date(opportunity.assignment));
@@ -235,9 +221,7 @@ exports.members = function(opportunity, cb) {
 	mongoose
 		.model('User')
 		.find({ roles: memberRole(opportunity) })
-		.select(
-			'isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle'
-		)
+		.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 		.exec(cb);
 };
 
@@ -251,34 +235,17 @@ exports.requests = function(opportunity, cb) {
 	mongoose
 		.model('User')
 		.find({ roles: requestRole(opportunity) })
-		.select(
-			'isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle'
-		)
+		.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 		.exec(cb);
 };
 
 var oppBody = function(opp) {
 	var dt = opp.deadline;
-	var monthNames = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December'
-	];
+	var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-	var deadline =
-		dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
+	var deadline = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 	dt = opp.assignment;
-	var assignment =
-		dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
+	var assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 	dt = opp.start;
 	var start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 	var earn = helpers.formatMoney(opp.earn, 2);
@@ -293,19 +260,6 @@ var oppBody = function(opp) {
 		earn = helpers.formatMoney(opp.phases.aggregate.target, 2);
 	}
 	var ret = '';
-	// ret += 'Value: '+earn;
-	// ret += 'Closes: '+deadline;
-	// ret += 'Location: '+opp.location+' '+locs[opp.onsite];
-	// ret += '<h2>Opportunity Description</h2>';
-	// ret += opp.description;
-	// ret += '<h2>Acceptance Criteria</h2>';
-	// ret += opp.criteria;
-	// ret += '<h2>How to Apply</h2>';
-	// ret += '<p>Go to the <a href="https://bcdevexchange.org/opportunities/'+opptype+'/'+opp.code+'">Opportunity Page</a>, click the Apply button above and submit your proposal by 16:00 Pacific Time on '+deadline+'</b>.</p>';
-	// ret += '<p>We plan to assign this opportunity by <b>'+assignment+'</b> with work to start on <b>'+start+'</b>.</p>';
-	// // ret += '<p>If your proposal is accepted and you are assigned to the opportunity, you will be notified by email and asked to confirm your agreement to the <a href="https://github.com/BCDevExchange/devex/raw/master/Code-with-Us%20Terms_BC%20Developers%20Exchange.pdf"><i>Code With Us</i> terms and contract.</a></p>';
-	// ret += '<h2>Proposal Evaluation Criteria</h2>';
-	// ret += opp.evaluation;
 
 	ret +=
 		'<p>This issue has been auto-generated to facilitate questions about <a href="https://bcdevexchange.org/opportunities/' +
@@ -470,7 +424,18 @@ exports.update = function(req, res) {
 	//
 	updateSave(opportunity)
 		.then(function() {
-			// BA-694: only send out notifications on published opportunities that are still open
+			// send out approval request messages as needed
+			if (!opportunity.isApproved) {
+				if (opportunity.intermediateApproval.action === 'to-send') {
+					// send intermediate approval request
+					sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], {});
+				}
+				if (opportunity.finalApproval.action === 'to-send') {
+					// send final approval request
+				}
+			}
+
+			// send out opportunity update notifications on published opportunities that are still open
 			if (opportunity.isPublished && opportunity.deadline - new Date() > 0) {
 				sendMessages('opportunity-update', opportunity.watchers, { opportunity: setMessageData(opportunity) });
 				github
@@ -490,8 +455,7 @@ exports.update = function(req, res) {
 					})
 					.catch(function() {
 						res.status(422).send({
-							message:
-								'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
+							message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 						});
 					});
 			} else res.json(decorate(opportunity, req.user ? req.user.roles : []));
@@ -550,10 +514,7 @@ var pub = function(req, res, isToBePublished) {
 			var data = setNotificationData(opportunity);
 			if (firstTime) {
 				getSubscribedUsers().then(function(users) {
-					var messageCode =
-						opportunity.opportunityTypeCd === 'code-with-us'
-							? 'opportunity-add-cwu'
-							: 'opportunity-add-swu';
+					var messageCode = opportunity.opportunityTypeCd === 'code-with-us' ? 'opportunity-add-cwu' : 'opportunity-add-swu';
 					sendMessages(messageCode, users, { opportunity: setMessageData(opportunity) });
 				});
 			} else if (isToBePublished) {
@@ -574,8 +535,7 @@ var pub = function(req, res, isToBePublished) {
 				})
 				.catch(function() {
 					res.status(422).send({
-						message:
-							'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
+						message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
 					});
 				});
 			// res.json (decorate (opportunity, req.user ? req.user.roles : []));

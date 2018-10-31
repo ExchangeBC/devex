@@ -1,0 +1,295 @@
+<div class="m-5">
+  <div>
+    <div class="row">
+      <div class="col-xs-12">
+        <h3>Contract Approval Request</h3>
+      </div>
+    </div>
+
+    <div class="row py-3 my-3 rounded border border-primary">
+      <div class="col-xs-12 col-sm-6">
+        <h4>Pre-Approval</h4>
+        <fieldset>
+          <form-input ng-model="vm.opportunity.intermediateApproval.name" x-options='{
+                  "title":"Authority Name",
+                  "name":"intermediateApprovalName",
+                  "help":"<p>This is the full name of the intermediate approval authority.  This person will receive an email and will recommend or not recommend publishing this opportunity.</p>",
+                  "id": "intermediateApprovalName",
+                  "required": "true"
+                }'>
+          </form-input>
+          <form-input ng-model="vm.opportunity.intermediateApproval.email" x-options='{
+              "title": "Authority Email",
+              "name": "intermediateApprovalEmail",
+              "help": "<p>This is the email address where the intermediate approval authority will receive the request</p>",
+              "id": "intermediateApprovalEmail",
+              "required": "true"
+            }'>
+          </form-input>
+
+          <div class="row">
+            <div class="col-xs-12 col-md-6">
+              <form-display x-options='{
+                    "title":"2FA Method",
+                    "name":"twoFAMethod",
+                    "help":"<p>Choose the two-factor authentication method to be used by the approving authority: SMS message or email.</p>",
+                    "required": "true"
+                  }'>
+                <select name="twoFAselect" ng-model="vm.opportunity.intermediateApproval.twoFAMethod" id="twoFAselect"
+                  class="form-control">
+                  <option value="sms">SMS</option>
+                  <option value="email">Email</option>
+                </select>
+              </form-display>
+            </div>
+            <div class="col-xs-12 col-md-6">
+              <form-input ng-if="vm.opportunity.intermediateApproval.twoFAMethod === 'sms'" ng-model="vm.opportunity.intermediateApproval.mobileNumber"
+                x-options='{
+                  "title": "Authority Mobile Number",
+                  "name": "intermediateApprovalMobile",
+                  "help": "<p>This is the mobile number to be used for SMS 2FA</p>",
+                  "id": "intermediateApprovalMobile",
+                  "required": "{{vm.opportunity.intermediateApproval.twoFAMethod === \"sms\""
+                }'>
+                </form-input>
+              </div>
+            </div>
+            <div ng-if="vm.opportunity.intermediateApproval.twoFAMethod === 'email'" class="alert alert-warning"><i class="fas fa-envelope"></i> An authentication code will be sent in a separate email</div>
+            <div ng-if="vm.opportunity.intermediateApproval.twoFAMethod === 'sms'" class="alert alert-warning"><i class="fas fa-mobile-alt"></i> An authentication code will be sent via text message</div>
+
+          </fieldset>
+        </div>
+        <div class="col-xs-12 col-sm-6">
+          <h4>Final Approval</h4>
+          <fieldset>
+            <form-input ng-model="vm.opportunity.finalApproval.name" x-options='{
+              "title": "Authority Name",
+              "name": "finalApprovalName",
+              "help": "<p>This is the full name of the final approval authority.  This person will receive an email and will approve or reject your request to publish this opportunity.</p>",
+              "id": "finalApprovalName",
+              "required": "true"
+            }'>
+            </form-input>
+            <form-input ng-model="vm.opportunity.finalApproval.email" x-options='{
+              "title": "Authority Email",
+              "name": "finalApprovalEmail",
+              "help": "<p>This is the email the final approval authority will receive the request at.</p>",
+              "id": "finalApprovalEmail",
+              "required": "true"
+            }'>
+            </form-input>
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                <form-display x-options='{
+                      "title":"2FA Method",
+                      "name":"twoFAMethod",
+                      "help":"<p>Choose the two-factor authentication method to be used by the approving authority: SMS message or email.</p>",
+                      "required": "true"
+                    }'>
+                  <select name="twoFAselect" ng-model="vm.opportunity.finalApproval.twoFAMethod" id="twoFAselect" class="form-control"
+                    required>
+                    <option value="sms">SMS</option>
+                    <option value="email">Email</option>
+                  </select>
+                </form-display>
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <form-input ng-if="vm.opportunity.finalApproval.twoFAMethod === 'sms'" ng-model="vm.opportunity.finalApproval.mobileNumber"
+                  x-options='{
+                    "title": "Authority Mobile Number",
+                    "name": "finalApprovalMobile",
+                    "help": "<p>This is the mobile number to be used for SMS 2FA</p>",
+                    "id": "finalApprovalMobile",
+                    "required": "{{vm.opportunity.finalApproval.twoFAMethod === \"sms\""
+                  }'>
+                </form-input>
+              </div>
+            </div>
+            <div ng-if="vm.opportunity.finalApproval.twoFAMethod === 'email'" class="alert alert-warning"><i class="fas fa-envelope"></i> An authentication code will be sent in a separate email</div>
+            <div ng-if="vm.opportunity.finalApproval.twoFAMethod === 'sms'" class="alert alert-warning"><i class="fas fa-mobile-alt"></i> An authentication code will be sent via text message</div>
+
+          </fieldset>
+        </div>
+      </div>
+
+    <div class="row py-3 my-3 border border-primary rounded">
+      <div class="col">
+          <h4>Contract Details</h4>
+          <fieldset>
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <form-input ng-model="vm.opportunity.approval.contractManagerName" x-form="vm.approvalForm" x-options='{
+                          "title":"Contract Manager Name",
+                          "id":"contractManagerName",
+                          "name":"contractManagerName",
+                          "required": true
+                        }'>
+                  </form-input>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <form-input ng-model="vm.opportunity.approval.contractManagerEmail" x-form="vm.approvalForm" x-options='{
+                          "title":"Contract Manager Email",
+                          "id":"contractManagerEmail",
+                          "name":"contractManagerEmail",
+                          "placeholder": "name@gov.bc.ca",
+                          "required": true
+                        }'>
+                  </form-input>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <form-input ng-model="vm.opportunity.approval.businessArea" x-form="vm.approvalForm" x-options='{
+                    "title":"Business Area",
+                    "id":"businessArea",
+                    "name":"businessArea",
+                    "placeholder": "e.g. BC Developer&rsquo;s Exchange",
+                    "required": true
+                  }'>
+                  </form-input>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <form-display class="w-50" x-options='{
+                      "title":"Estimated Contract Value",
+                      "name":"estimatedValue",
+                      "required": true
+                    }'>
+                    <select name="value" ng-model="vm.opportunity.approval.estimatedValue" id="value" class="form-control"
+                      ng-options="v as (v|currency) for v in vm.amounts">
+                      <option value="">Select amount</option>
+                    </select>
+                  </form-display>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                  <form-display x-options='{
+                      "title":"Contract Type",
+                      "name":"contractType",
+                      "required": true
+                    }'>
+                    <label class="radio-inline pr-2">
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.contractType" value="new">&nbsp;&nbsp;New
+                    </label>
+                    <label class="radio-inline pr-2">
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.contractType" value="renewal">&nbsp;&nbsp;Renewal
+                    </label>
+                    <label class="radio-inline pr-2">
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.contractType" value="amendment">&nbsp;&nbsp;Amendment
+                    </label>
+                  </form-display>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                  <form-input class="w-50" ng-model="vm.opportunity.approval.estimatedTerm" x-form="vm.approvalForm" x-options='{
+                      "title":"Estimated term",
+                      "id":"estimatedTerm",
+                      "name":"estimatedTerm",
+                      "required": true
+                    }'>
+                  </form-input>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <form-display x-options='{
+                          "title":"STOB",
+                          "name":"stob",
+                          "required" : true
+                        }'>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6001/02">&nbsp;&nbsp;6001/02
+                    </label>
+                    <br>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6003/04">&nbsp;&nbsp;6003/04
+                    </label>
+                    <br>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6020/21">&nbsp;&nbsp;6020/21
+                    </label>
+                    <br>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6101">&nbsp;&nbsp;6101
+                    </label>
+                    <br>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6302">&nbsp;&nbsp;6302
+                    </label>
+                    <br>
+                    <label>
+                      <input type="radio" name="contractType" ng-model="vm.opportunity.approval.stobType" value="6309">&nbsp;&nbsp;6309
+                    </label>
+                  </form-display>
+                </div>
+
+                <div class="col-xs-12 col-sm-6">
+                  <div class="d-flex flex-column">
+                    <form-input class="w-50" ng-model="vm.opportunity.approval.stobBudget" x-form="vm.approvalForm" x-options='{
+                        "title":"STOB Budget",
+                        "id":"stobBudget",
+                        "name":"stobBudget",
+                        "required": true
+                      }'>
+                    </form-input>
+                    <form-input class="w-50" ng-model="vm.opportunity.approval.stobExpenditures" x-form="vm.approvalForm"
+                      x-options='{
+                        "title":"STOB Expenditures to date",
+                        "id":"stobExpenditures",
+                        "name":"stobExpenditures",
+                        "required": true
+                      }'>
+                    </form-input>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <form-display x-options='{
+                      "title" :"Summary of Services",
+                      "name"  :"summary"
+                    }'>
+                    <textarea name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.tinymceOptions"
+                      ng-model="vm.opportunity.approval.summary">
+                    </textarea>
+                  </form-display>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <form-display x-options='{
+                          "title":"Is this required to fulfill a legal or formal provincial commitment?",
+                          "name":"legalRequirement",
+                          "required": true
+                        }'>
+                    <label class="radio-inline pr-2">
+                      <input type="radio" name="legalRequirement" ng-model="vm.opportunity.approval.legalRequirement" value="true">&nbsp;&nbsp;Required
+                    </label>
+                    <label class="radio-inline pr-2">
+                      <input type="radio" name="legalRequirement" ng-model="vm.opportunity.approval.legalRequirement" value="false">&nbsp;&nbsp;Not
+                      required
+                    </label>
+                  </form-display>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <form-display x-options='{
+                      "title" :"What will be the impact if this contract is not approved?",
+                      "name"  :"impact"
+                    }'>
+                    <textarea name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.tinymceOptions"
+                      ng-model="vm.opportunity.approval.impact">
+                    </textarea>
+                  </form-display>
+                </div>
+              </div>
+            </fieldset>
+      </div>
+
+  </div>

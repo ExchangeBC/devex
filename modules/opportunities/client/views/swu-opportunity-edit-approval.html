@@ -1,5 +1,6 @@
 <section class="main-section bg-secondary">
-  <form id="opportunityForm" warn-on-exit name="vm.sendRequestForm" class="form bg-white rounded" novalidate>
+  <form id="opportunityForm" warn-on-exit name="vm.sendRequestForm" class="form bg-white rounded" ng-submit="vm.save(vm.sendRequestForm.$valid)"
+    novalidate>
 
     <div class="rounded p-4 bg-light">
 
@@ -124,11 +125,11 @@
       <div class="bg-light rounded py-2">
         <div class="row">
           <div class="col">
-            <button data-automation-id="button-swu-approval-send-request" type="button" ng-click="vm.sendRequest(vm.sendRequestForm.$valid)"
+            <button data-automation-id="button-swu-approval-send-request" type="button" ng-click="vm.sendRequest()"
               class="btn btn-success float-right">
               <i class="fas fa-envelope"></i>
               Send</button>
-            <button data-automation-id="button-swu-approval-save-changes" type="button" ng-click="vm.save()" class="btn btn-primary float-right">
+            <button data-automation-id="button-swu-approval-save-changes" type="submit" class="btn btn-primary float-right">
               <i class="fas fa-save"></i>
               Save</button>
             <a data-automation-id="button-swu-cancel-request" class="btn btn-text-only float-right" ui-sref="opportunities.viewswu({opportunityId:vm.opportunity.code})"

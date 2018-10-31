@@ -12,7 +12,7 @@ module.exports = {
 		eqeqeq: [2, 'smart'],
 		'func-names': 0,
 		'guard-for-in': 2,
-		// indent: [2, 2, { SwitchCase: 1 }],
+		// 'indent': ['error', 'tab'],
 		// 'key-spacing': [2, { beforeColon: false, afterColon: true }],
 		'keyword-spacing': [2, { before: true, after: true }],
 		'max-len': 0,
@@ -40,12 +40,12 @@ module.exports = {
 		'one-var': [0, 'never'],
 		'one-var-declaration-per-line': [2, 'always'],
 		'padded-blocks': 0,
-		'space-before-function-paren': 0,
+		// 'space-before-function-paren': ['error', 'never'],
 		// 'space-in-parens': [2, 'never'],
 		'spaced-comment': [2, 'always'],
 		strict: 0,
 		'quote-props': 0,
-		quotes: [1, 'single'],
+		// quotes: [1, 'single'],
 		'wrap-iife': [2, 'outside'],
 		'vars-on-top': 0
 	},
@@ -70,8 +70,5 @@ module.exports = {
 		__TESTING__: true,
 		_: false,
 		ApplicationConfiguration: true
-	},
-	parserOptions: {
-		sourceType: 'module'
 	}
 };
