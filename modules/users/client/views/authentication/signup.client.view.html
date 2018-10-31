@@ -1,0 +1,25 @@
+<div >
+  
+  <div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4">
+    <form name="vm.governmentForm" ng-submit="vm.government(vm.governmentForm.$valid)" class="signin" novalidate autocomplete="off">
+      <fieldset style="width: auto">
+	      <h3 class="col-xs-12 text-center">Sign Up Government</h3>
+<!--
+        <div class="form-group" show-errors>
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" class="form-control" ng-model="vm.credentials.firstName" placeholder="First Name" required autofocus>
+          <div ng-messages="vm.userForm.firstName.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">First name is required.</p>
+          </div>
+        </div>
+-->
+        <div style="height:150px;padding-top:90px">
+          <button type="button" ng-click="vm.gov(vm.governmentForm.$valid)" class="btn btn-primary">Government User</button>
+          &nbsp; or&nbsp;
+          <button type="button" ng-click="vm.non_gov(vm.governmentForm.$valid)"  class="btn btn-primary">non-Government User</button>
+        </div>
+       
+      </fieldset>
+    </form>
+  </div>
+</div>
