@@ -2,8 +2,8 @@
 
   <div class="message-list" ng-repeat="message in vm.messages | orderBy : 'datePosted' : true">
 
-    <div class="message-list-item" ng-if="!message.actionTaken">
-      <div class="message-list-item-date pull-right">{{message.datePosted | date : 'MMMM d'}}</div>
+    <div class="p-3 border rounded my-3" ng-if="!message.actionTaken">
+      <div class="font-weight-bold text-muted mb-3">{{message.datePosted | date : 'MMMM d'}}</div>
       <div class="message-list-item-body">
         <p ng-bind-html="message.messageBody"></p>
         <div class="message-actions">
