@@ -1,52 +1,43 @@
 <div class="modal-header">
-	<h3>Update Profile Picture</h3>
+	<h4 class="m-0">Update Profile Picture</h4>
+	<button type="button" class="close" ng-click="qqq.quitnow()" data-dismiss="alert" aria-label="Close">
+    	<span aria-hidden="true">&times;</span>
+  	</button>
 </div>
-<div class="modal-body">
-	<form class="signin form-horizontal">
-		<div class="text-center">
-			<p>Crop your picture then press upload below:</p>
-		</div>
 
-		<table class="image-upload-table">
-			<tr>
-				<td>
-					<div ng-show="qqq.fileSelected" ngf-drop ng-model="picFile" ngf-pattern="image/*" class="cropArea text-center image-upload-child">
-						<img-crop image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="rectangle"/>
-					</div>
-				</td>
-				<td>
-					<div class="image-upload-child">
-						<img ng-src="{{qqq.fileSelected ? croppedDataUrl :  qqq.user.profileImageURL}}" alt="{{qqq.user.displayName}}" class="img-thumbnail user-profile-picture" ngf-drop>
-					</div>
-				</td>
-			</tr>
-			<tr ng-show="!qqq.fileSelected">
-				<td colspan="2" align="center">
-					<button class="btn btn-default btn-file image-upload-button" ngf-select="qqq.onSelectPicture($file)" ng-model="picFile" accept="image/*">
-						Select Picture (Max Size 1M)
-					</button>
-				</td>
-			</tr>
-			<tr ng-show="qqq.fileSelected">
-				<td colspan="2" align="center">
-					<button class="btn btn-primary image-upload-button" ng-click="qqq.upload(croppedDataUrl, picFile.name)">
-						Upload
-					</button>
-					<button class="btn btn-default image-upload-button" ng-click="qqq.fileSelected = false">
-						Cancel
-					</button>
-				</td>
-			</tr>
-			<tr ng-show="qqq.fileSelected">
-				<td>
-					<div class="progress-bar" role="progressbar" aria-valuenow="{{qqq.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{qqq.progress}}%" ng-bind="qqq.progress + '%'">
-						<span class="sr-only">{{qqq.progress}}% Complete</span>
-					</div>
-				</td>
-			</tr>
-		</table>
-	</form>
+<div class="modal-body text-center">
+				
+	<div ng-show="qqq.fileSelected" ngf-drop ng-model="picFile" ngf-pattern="image/*" class="cropArea m-auto image-upload-child">
+		<img-crop image="picFile | ngfDataUrl" result-image="croppedDataUrl" ng-init="croppedDataUrl=''" area-type="rectangle"/>
+	</div>
+
+	<div class="image-upload-child my-3">
+		<img ng-src="{{qqq.fileSelected ? croppedDataUrl :  qqq.user.profileImageURL}}" alt="{{qqq.user.displayName}}" class="rounded-circle border" height="70" width="70" ngf-drop>
+	</div>
+						
+	<div ng-show="!qqq.fileSelected" class="my-3">
+		<button class="btn btn-primary" ngf-select="qqq.onSelectPicture($file)" ng-model="picFile" accept="image/*">
+			Select Picture
+		</button>
+	</div>
+	
+	<div ng-show="qqq.fileSelected">
+		<button class="btn btn-primary image-upload-button" ng-click="qqq.upload(croppedDataUrl, picFile.name)">
+			Upload
+		</button>
+		<button class="btn btn-default image-upload-button" ng-click="qqq.fileSelected = false">
+			Cancel
+		</button>
+	</div>
+	
+	<div ng-show="qqq.fileSelected">
+		<div class="progress-bar" role="progressbar" aria-valuenow="{{qqq.progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{qqq.progress}}%" ng-bind="qqq.progress + '%'">
+			<span class="sr-only">{{qqq.progress}}% Complete</span>
+		</div>
+	</div>
+	
 </div>
+
 <div class="modal-footer">
-		<button class="btn btn-primary" ng-click="qqq.quitnow()">Done</button>
+	<button class="btn btn-default" ng-click="qqq.quitnow()">Done</button>
 </div>
