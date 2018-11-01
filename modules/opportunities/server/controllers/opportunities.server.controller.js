@@ -190,6 +190,13 @@ var setMessageData = function(opportunity) {
 	opportunity.datePublished = helpers.formatDate(new Date(opportunity.lastPublished));
 	opportunity.deadline_format_date = helpers.formatDate(new Date(opportunity.deadline));
 	opportunity.deadline_format_time = helpers.formatTime(new Date(opportunity.deadline));
+
+	opportunity.contract.estimatedValue_formatted = helpers.formatMoney(opportunity.contract.estimatedValue);
+	opportunity.contract.stobExpenditures_formatted = helpers.formatMoney(opportunity.contract.stobExpenditures);
+	opportunity.contract.stobBudget_formatted = helpers.formatMoney(opportunity.contract.stobBudget);
+	opportunity.contract.contractType_formatted = opportunity.contract.contractType.charAt(0).toUpperCase() + opportunity.contract.contractType.slice(1);
+	opportunity.contract.legallyRequired_formatted = opportunity.contract.legallyRequired ? 'Yes' : 'No';
+
 	return opportunity;
 };
 // -------------------------------------------------------------------------
@@ -426,11 +433,11 @@ exports.update = function(req, res) {
 		.then(function() {
 			// send out approval request messages as needed
 			if (!opportunity.isApproved) {
-				if (opportunity.intermediateApproval.action === 'to-send') {
+				if (opportunity.intermediateApproval.state === 'ready-to-send') {
 					// send intermediate approval request
-					sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], {});
+					sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { requestingUser: req.user, opportunity: setMessageData(opportunity) });
 				}
-				if (opportunity.finalApproval.action === 'to-send') {
+				if (opportunity.finalApproval.state === 'ready-to-send') {
 					// send final approval request
 				}
 			}

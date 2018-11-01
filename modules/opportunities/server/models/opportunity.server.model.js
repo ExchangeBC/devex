@@ -65,6 +65,7 @@ var ContractSchema = new Schema({
 	managerEmail: { type: String, default: '' },
 	businessArea: { type: String, default: '' },
 	estimatedValue: { type: Number, default: 0 },
+	estimatedTerm: { type: Number, default: 0 },
 	contractType: { type: String, default: 'new', enum: ['new', 'renewal', 'amendment'] },
 	stobType: { type: String, default: '6001/02', enum: ['6001/02', '6003/04', '6020/21', '6302', '6309'] },
 	stobBudget: { type: Number, default: 0 },
@@ -197,9 +198,10 @@ var OpportunitySchema = new Schema(
 		addenda: { type: [AddendumSchema], default: [] },
 		teamQuestions: { type: [TeamQuestionSchema], default: [] },
 		teamQuestionGradingType: { type: String, default: 'Linear', enum: ['Linear', 'Weighted'] },
-		intermediateApproval: { type: ApprovalSchema },
-		finalApproval: { type: ApprovalSchema },
-		contract: { type: ContractSchema }
+		intermediateApproval: { type: ApprovalSchema, default: () => ({}) },
+		finalApproval: { type: ApprovalSchema, default: () => ({}) },
+		contract: { type: ContractSchema, default: () => ({}) },
+		isApproved: { type: Boolean, default: false }
 	},
 	{ usePushEach: true }
 );

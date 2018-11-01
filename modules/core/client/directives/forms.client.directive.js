@@ -26,12 +26,7 @@
 			this.name = options.name;
 			this.titleTransclude = options.hasOwnProperty('titleTransclude') && options.titleTransclude;
 			this.isRequired = options.hasOwnProperty('required');
-			this.required =
-				this.isRequired && typeof options.required === 'string'
-					? options.required
-					: this.isTitle
-						? this.title + ' is required'
-						: 'This field is required';
+			this.required = this.isRequired && typeof options.required === 'string' ? options.required : this.isTitle ? this.title + ' is required' : 'This field is required';
 			return this;
 		},
 		// -------------------------------------------------------------------------
@@ -45,10 +40,7 @@
 				this.tmpl += 'class="form-group "';
 			}
 			if (this.isRequired) {
-				this.tmpl +=
-					'show-errors ng-class="{\'has-error\': (parentForm.$submitted && parentForm.' +
-					this.name +
-					'.$error)}" ';
+				this.tmpl += "show-errors ng-class=\"{'has-error': (parentForm.$submitted && parentForm." + this.name + '.$error)}" ';
 			}
 			this.tmpl += '>';
 			return this;
@@ -71,17 +63,8 @@
 				}
 				if (this.help) {
 					this.tmpl +=
-						' &nbsp; <span class="p-0 m-0" ng-click="$scope.' +
-						fieldtoggle +
-						' = !$scope.' +
-						fieldtoggle +
-						'"><i class="fas fa-sm fa-question-circle input-help-source"></i></span>';
-					this.tmpl +=
-						'<div class="alert alert-info" data-field="' +
-						this.name +
-						'" ng-show="$scope.' +
-						fieldtoggle +
-						'">';
+						' &nbsp; <span class="p-0 m-0" ng-click="$scope.' + fieldtoggle + ' = !$scope.' + fieldtoggle + '"><i class="fas fa-sm fa-question-circle input-help-source"></i></span>';
+					this.tmpl += '<div class="alert alert-info" data-field="' + this.name + '" ng-show="$scope.' + fieldtoggle + '">';
 					this.tmpl += '<p>' + this.help + '</p>';
 					this.tmpl += '</div>';
 				}
@@ -98,8 +81,7 @@
 		// -------------------------------------------------------------------------
 		error: function() {
 			if (this.isRequired) {
-				this.tmpl +=
-					'<div ng-messages="parentForm.$submitted && parentForm.' + this.name + '.$error" role="alert">';
+				this.tmpl += '<div ng-messages="parentForm.$submitted && parentForm.' + this.name + '.$error" role="alert">';
 				this.tmpl += '<p class="help-block error-text" ng-message="required">' + this.required + '</p>';
 				this.tmpl += '</div>';
 			}
@@ -148,6 +130,9 @@
 			if (this.options.hasOwnProperty('disabled')) {
 				this.tmpl += ' disabled';
 			}
+			if (this.options.hasOwnProperty('ng-currency')) {
+				this.tmpl += ' ng-currency';
+			}
 			this.tmpl += '/>';
 			return this;
 		},
@@ -159,12 +144,8 @@
 		dateControl: function() {
 			var dateformat = this.options.hasOwnProperty('format') ? this.options.format : 'dd-MMMM-yyyy';
 			this.tmpl += '<div class="input-group">';
-			this.tmpl +=
-				'<input uib-datepicker-popup="' +
-				dateformat +
-				'" type="text" is-open="popupDate.opened" datepicker-options="dateOptions" show-button-bar="false"';
-			this.tmpl +=
-				' id="' + this.options.id + '" name="' + this.name + '" class="form-control " ng-model="ngModel"';
+			this.tmpl += '<input uib-datepicker-popup="' + dateformat + '" type="text" is-open="popupDate.opened" datepicker-options="dateOptions" show-button-bar="false"';
+			this.tmpl += ' id="' + this.options.id + '" name="' + this.name + '" class="form-control " ng-model="ngModel"';
 			if (this.options.hasOwnProperty('placeholder')) {
 				this.tmpl += ' placeholder="' + this.options.placeholder + '"';
 			}
@@ -173,8 +154,7 @@
 			}
 			this.tmpl += '/>';
 			this.tmpl += '<span class="input-group-btn">';
-			this.tmpl +=
-				'<button type="button" class="btn btn-default" ng-click="openPopupDate()"><i class="fas fa-calendar"></i></button>';
+			this.tmpl += '<button type="button" class="btn btn-default" ng-click="openPopupDate()"><i class="fas fa-calendar"></i></button>';
 			this.tmpl += '</span>';
 			this.tmpl += '</div>';
 			return this;
@@ -393,11 +373,7 @@
 					};
 					var $stateChangeStartUnbind = $scope.$on('$stateChangeStart', function(event, next, current) {
 						if ($scope.parentForm.$dirty) {
-							if (
-								!confirm(
-									'You are about to leave the page with unsaved data. Click Cancel to remain here.'
-								)
-							) {
+							if (!confirm('You are about to leave the page with unsaved data. Click Cancel to remain here.')) {
 								// Stay on current route if user cancels.
 								event.preventDefault();
 							}

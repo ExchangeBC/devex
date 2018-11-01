@@ -361,7 +361,7 @@ function seedTestMessageTemplate() {
 					messageTitleTemplate: '',
 					emailBodyTemplate: fs.readFileSync('config/message-templates/pre-approval-request.html'),
 					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Pre-Approval",
-					modelsRequired: ['opportunity'],
+					modelsRequired: ['requestingUser', 'opportunity'],
 					daysToArchive: 0,
 					linkTemplate: '/defaultonly',
 					actions: [

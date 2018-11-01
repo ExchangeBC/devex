@@ -396,8 +396,8 @@
 				vm.publish = function(opportunity, isToBePublished) {
 					var publishedState = opportunity.isPublished;
 					var publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
-					var publishQuestion = 'When you publish this opportunity, we\'ll notify all our subscribed users. Are you sure you\'ve got it just the way you want it?';
-					var publishSuccess = isToBePublished ? 'Your opportunity has been published and we\'ve notified subscribers!' : 'Your opportunity has been unpublished!';
+					var publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
+					var publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
 					var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
 					var isToBeSaved = true;
 					var promise = Promise.resolve();
@@ -424,7 +424,7 @@
 									opportunity.isPublished = publishedState;
 									Notification.error({
 										message: res.data.message,
-										title: '<i class=\'fas fa-exclamation-triangle\'></i> ' + publishError
+										title: "<i class='fas fa-exclamation-triangle'></i> " + publishError
 									});
 								});
 						}
@@ -644,6 +644,45 @@
 				};
 				// -------------------------------------------------------------------------
 				//
+				// send a request for administrative approval
+				//
+				// -------------------------------------------------------------------------
+				vm.sendApprovalRequest = function() {
+					if (!vm.opportunityForm.$valid) {
+						if (vm.opportunityForm.$error.required) {
+							Notification.error({
+								title: 'Error',
+								message: 'Please fill out all required fields (*) before sending'
+							});
+						}
+						return;
+					}
+
+					var confirmMessage = 'Are you sure you are ready to send the requests with the entered contact information?';
+					ask.yesNo(confirmMessage).then(function(choice) {
+						if (choice) {
+							vm.opportunity.intermediateApproval.state = 'ready-to-send';
+							vm.opportunity
+								.createOrUpdate()
+								.then(function(savedOpportunity) {
+									vm.opportunity = savedOpportunity;
+									Notification.success({
+										message: '<i class="fas fa-check-circle"></i> Approval request sent!',
+										title: 'Success'
+									});
+									$state.go('opportunities.viewcwu', { opportunityId: vm.opportunity.code });
+								})
+								.catch(function(res) {
+									Notification.error({
+										message: '<i class="fas fa-exclamation-triangle"></i> Error: ' + res.message,
+										title: 'Error'
+									});
+								});
+						}
+					});
+				};
+				// -------------------------------------------------------------------------
+				//
 				// save the opportunity, could be added or edited (post or put)
 				//
 				// CC: changes to questions about notifications - we decided to simply warn
@@ -655,19 +694,11 @@
 				vm.saveme = function() {
 					this.save(true);
 				};
-				vm.save = function(isValid) {
+				vm.save = function() {
 					if (!vm.opportunity.name) {
 						Notification.error({
 							message: 'You must enter a title for your opportunity',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
-						});
-						return false;
-					}
-					if (!isValid) {
-						$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
-						Notification.error({
-							message: 'There are errors on the page, please review your work and re-save',
-							title: '<i class=\'fas fa-exclamation-triangle\'></i> Errors on Page'
+							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
 						});
 						return false;
 					}
@@ -736,7 +767,8 @@
 						.then(function() {
 							vm.opportunityForm.$setPristine();
 							Notification.success({
-								message: '<i class="fas fa-check-circle"></i> opportunity saved successfully!'
+								title: 'Success',
+								message: '<i class="fas fa-check-circle"></i> Opportunity saved'
 							});
 
 							$state.go('opportunities.viewcwu', { opportunityId: opportunity.code });
@@ -746,8 +778,8 @@
 						//
 						.catch(function(res) {
 							Notification.error({
-								message: res.data.message,
-								title: '<i class=\'fas fa-exclamation-triangle\'></i> opportunity save error!'
+								message: 'Error',
+								title: "<i class='fas fa-exclamation-triangle'></i>" + res.data.message
 							});
 						});
 				};

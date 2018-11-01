@@ -22,7 +22,10 @@ import angular from 'angular';
 			'ncy-angular-breadcrumb',
 			'dndLists',
 			'ngIdle',
-			'ngSanitize'
+			'ngSanitize',
+			'ui.bootstrap',
+			'ngTouch',
+			'ng-currency'
 		],
 		registerModule: registerModule
 	};

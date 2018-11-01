@@ -383,7 +383,7 @@
         <div class="content">
 
           <!-- START CENTERED WHITE CONTAINER -->
-          <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+          <span class="preheader">Contract Pre-approval Request</span>
           <table class="main">
 
             <!-- START MAIN CONTENT AREA -->
@@ -398,67 +398,57 @@
                         <tbody>
                           <tr>
                             <td class="light">Requestor:</td>
-                            <td><span class="strong">Paul Roberts</span> (<a href="mailto:Paul.A.Roberts@gov.bc.ca">Paul.A.Roberts@gov.bc.ca</a>)</td>
+                            <td><span class="strong">{{ requestingUser.displayName }}</span> (<a href="{{ requestingUser.email }}">{{
+                                requestingUser.email }}</a>)</td>
                           </tr>
                           <tr>
                             <td class="light">Contract Manager:</td>
-                            <td class="strong">Paul Roberts</td>
+                            <td><span class="strong">{{opportunity.contract.managerName}}</span> (<a href="{{ opportunity.contract.managerEmail }}">{{
+                                opportunity.contract.managerEmail }}</a>)</td>
                           </tr>
                           <tr>
                             <td class="light">Business Area:</td>
-                            <td class="strong">BC Developers' Exchange</td>
+                            <td class="strong">{{ opportunity.contract.businessArea }}</td>
                           </tr>
                           <tr>
                             <td class="light">STOB:</td>
-                            <td class="strong">6309</td>
+                            <td class="strong">{{ opportunity.contract.stobType }}</td>
                           </tr>
                           <tr>
                             <td class="light">STOB Budget:</td>
-                            <td>$1,300,000</td>
+                            <td class="strong">{{ opportunity.contract.stobBudget_formatted }}</td>
                           </tr>
                           <tr>
                             <td class="light">STOB Expenditures to Date:</td>
-                            <td>$800,000</td>
+                            <td class="strong">{{ opportunity.contract.stobExpenditures_formatted }}</td>
                           </tr>
                           <tr>
                             <td class="light">Estimated Contract Value:</td>
-                            <td class="strong">$10,000</td>
+                            <td class="strong">{{ opportunity.contract.estimatedValue_formatted }}</td>
                           </tr>
                           <tr>
                             <td class="light">Estimated Term:</td>
-                            <td class="strong">2 months</td>
+                            <td class="strong">{{ opportunity.contract.estimatedTerm }}</td>
                           </tr>
                           <tr>
                             <td class="light">Contract Type:</td>
-                            <td class="strong">New</td>
+                            <td class="strong">{{ opportunity.contract.contractType_formatted }}</td>
                           </tr>
                         </tbody>
                       </table>
                       <hr>
                       <h4>Summary of Services</h4>
-                      <p>The BC Developers' Exchange application includes an extensive REST API. This API allows both
-                        users and administrators to navigate the application, access information and respond to posted
-                        opportunities. We would like to conduct a review of the existing API and implement improvements
-                        identified during the review. Additionally, we want to add documentation for the API and add an
-                        automated test suite. To complete this work, we have identified three distinct milestones:</p>
-                      <p><strong>Milestone 1</strong> - Review of Current BCDevExchange REST API. Review the existing
-                        state of the REST API and prepare a detailed analysis of recommended improvements.</p>
-                      <p><strong>Milestone 2</strong> - Document REST API and Add Test Suite. Implement API
-                        documentation using Swagger, Implement an automated test suite using Postman and Newman.</p>
-                      <p><strong>Milestone 3</strong> - Implement Identified Improvements. Implement an agreed upon
-                        suite of improvements up to a value of $2,500.</p>
+                      <p>{{{ opportunity.contract.summary }}}</p>
                       <h4>Is this required to fulfill a legal or formal provincial commitment?</h4>
-                      <p>No</p>
-                      <h4>Why could existing staff resources not fill the need?</h4>
-                      <p>Government resources are fully committed at this time.</p>
+                      <p>{{ opportunity.contract.legallyRequired_formatted }}</p>
                       <h4>Impact if not approved</h4>
-                      <p>The project would not meet its deadlines</p>
+                      <p>{{{ opportunity.contract.impactNotApproved }}}</p>
                       <hr>
                       <table>
                         <tbody>
                           <tr>
-                            <td align="left" class="well">If you approve this request, it will be sent to <span class="strong">CJ
-                                Ritchie</span> for final approval.</td>
+                            <td align="left" class="well">If you approve this request, it will be sent to
+                              <span class="strong">{{ opportunity.finalApproval.name }}</span> for final approval.</td>
                           </tr>
                         </tbody>
                       </table>
@@ -466,12 +456,14 @@
                       <table border="0" cellpadding="0" cellspacing="0" class="btn btn-group">
                         <tbody>
                           <tr>
-                            <td align="left">
+                            <td align="center">
                               <table border="0" cellpadding="0" cellspacing="0">
                                 <tbody>
                                   <tr>
-                                    <td> <a class="primary" href="http://htmlemail.io" target="_blank">Approve</a> </td>
-                                    <td> <a class="secondary" href="http://htmlemail.io" target="_blank">Reject</a>
+                                    <td> <a class="primary" href="{{ domain }}/opportunities/{{ opportunity.code }}/pre-approve.html"
+                                        target="_blank">Approve</a> </td>
+                                    <td> <a class="secondary" href="{{ domain }}/opportunities/{{ opportunity.code }}/approve.html"
+                                        target="_blank">Reject</a>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -488,18 +480,6 @@
 
             <!-- END MAIN CONTENT AREA -->
           </table>
-
-          <!-- START FOOTER -->
-          <div class="footer">
-            <table border="0" cellpadding="0" cellspacing="0">
-              <tr>
-                <td class="content-block">
-                  <span class="apple-link">This is a BC Developers' Exchange mockup for user testing</span>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <!-- END FOOTER -->
 
           <!-- END CENTERED WHITE CONTAINER -->
         </div>
