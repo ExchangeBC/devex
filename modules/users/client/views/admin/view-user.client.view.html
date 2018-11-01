@@ -8,56 +8,69 @@
   </div>
 </div>
 
-<section class="fill-view">
-  <div class="container" role="main">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="profile-header">
-          <avatar-display url="vm.user.profileImageURL" text="vm.user.displayName" size="50"></avatar-display>
+<section class="main-section">
+  <div class="container">
+    
+    <div class="row py-5">
+      <div class="col">
+        <div class="d-flex align-items-center">
+          <img class="rounded-circle mr-4" src="{{vm.user.profileImageURL}}" height="70" width="70">
+          <div>
+            <h3 ng-bind="vm.user.displayName" class="mb-2"></h3>
+          </div>
         </div>
-        <table class="table">
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col">
+        <table class="table table-responsive">
           <tbody>
             <tr>
-              <td class="user-attribute">Signed up on:</td>
+              <td class="text-muted fit">Signed up on:</td>
               <td ng-bind="vm.user.created"></td>
               <td></td>
             </tr>
             <tr>
-              <td class="user-attribute"><i class="fab fa-lg fa-github"></i> GitHub Handle:</td>
+              <td class="text-muted fit"><i class="fab fa-lg fa-github"></i> GitHub Handle:</td>
               <td><a href="https://github.com/{{vm.user.username}}" target="_blank"> @<span ng-bind="vm.user.username"></span></a></td>
               <td></td>
             </tr>
             <tr>
-              <td class="user-attribute">Email:</td>
+              <td class="text-muted fit">Email:</td>
               <td><a href="mailto:{{vm.user.email}}"><span ng-bind="vm.user.email"></span></a></td>
               <td></td>
             </tr>
             <tr>
-              <td class="user-attribute">Notifications:</td>
+              <td class="text-muted fit">Notifications:</td>
               <td>
-                <div ng-if="vm.user.notifyOpportunities"><i class="fas fa-lg fa-check-circle success"></i> Listening
+                <div ng-if="vm.user.notifyOpportunities"><i class="fas fa-check-circle success"></i> Listening
                   for
                   new opportunities</div>
                 <div ng-if="!vm.user.notifyOpportunities" class="text-black-50">Not listening for new opportunities</div>
               </td>
-              <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
+              <td><a class="btn btn-sm btn-text-only pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
                     class="fas fa-pencil-alt"></i> Edit</a></td>
             </tr>
             <tr>
-              <td class="user-attribute">Roles:</td>
+              <td class="text-muted fit">Roles:</td>
               <td>
                 <div ng-bind="vm.user.roles"></div>
               </td>
-              <td><a class="btn btn-sm btn-default pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
+              <td><a class="btn btn-sm btn-text-only pull-right" id="admin.user" ui-sref="admin.user-edit({userId: vm.user._id})"><i
                     class="fas fa-pencil-alt"></i> Edit</a></td>
             </tr>
           </tbody>
         </table>
-        <br><br><br><br>
-        <div class="button-spacer">
-          <a class="btn btn-danger" ng-click="vm.remove()" ng-if="!vm.isContextUserSelf()">Delete This User</a>
+
+        <div class="row py-5">
+          <div class="col">
+            <button class="btn btn-outline-danger" ng-click="vm.remove()" ng-if="!vm.isContextUserSelf()">Delete This User</button>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 </section>

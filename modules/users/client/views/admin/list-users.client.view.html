@@ -1,34 +1,41 @@
-<section class="list-page" style="min-height: 80vh;">
-  <div class="container" role="main">
-      <div class="row" ng-if="0">
-        <button ng-click="vm.listOpps()">Users to notify of Opportunities</button>
-        <button ng-click="vm.listMeets()">Users to notify of Events</button>
-      </div>
-      <div class="row">
-        <div class="col-xs-12">
-          <h1>All the Users</h1>
-        
-          <div style="padding-bottom: 40px"><input class="form-control" type="text" ng-model="vm.search" placeholder="Search by user's name or GitHub handle..." ng-change="vm.figureOutItemsToDisplay()" /></div>
-      
-          <div class="list-group">
-            <a ng-repeat="user in vm.pagedItems"  id="admin.user" ui-sref="admin.user({userId: user._id})" class="list-group-item">
-              <div class="row">
-                <div class="col-xs-12 col-sm-4">
-                  <div class="list-group-item-text strong" ng-bind="user.displayName"></div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                  <div class="list-group-item-text">@<span ng-bind="user.username"></span></div>
-                </div>
-                <div class="col-xs-12 col-sm-4">
-                  <div class="list-group-item-text" ng-bind="user.email"></div>
-                </div>
-              </div> 
-            </a>
-          </div>
+<section class="bg-light main-section">
+  <div class="container">
 
-          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+    <div class="row" ng-if="0">
+      <button ng-click="vm.listOpps()">Users to notify of Opportunities</button>
+      <button ng-click="vm.listMeets()">Users to notify of Events</button>
+    </div>
 
+    <div class="row">
+      <div class="col">
+
+        <h3>Users</h3>
+
+        <div class="py-5">
+          <input class="form-control" type="text" ng-model="vm.search" placeholder="Search by user's name or GitHub handle..."
+            ng-change="vm.figureOutItemsToDisplay()" />
         </div>
-      </div>  
+        <div class="font-weight-light">Showing first {{vm.pagedItems.length}} results</div>
+        <div class="list-group py-3">
+          <a ng-repeat="user in vm.pagedItems" id="admin.user" ui-sref="admin.user({userId: user._id})" class="list-group-item list-group-item-action">
+            <div class="row">
+              <div class="col-xs-12 col-sm-4">
+                <div class="list-group-item-text strong" ng-bind="user.displayName"></div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="list-group-item-text">@<span ng-bind="user.username"></span></div>
+              </div>
+              <div class="col-xs-12 col-sm-4">
+                <div class="list-group-item-text" ng-bind="user.email"></div>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <uib-pagination boundary-links="true" max-size="10" items-per-page="vm.itemsPerPage" total-items="vm.filterLength"
+          ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+
+      </div>
+    </div>
   </div>
 </section>
