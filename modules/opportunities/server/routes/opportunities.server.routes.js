@@ -8,32 +8,31 @@ var opportunitiesPolicy = require('../policies/opportunities.server.policy'),
 
 module.exports = function(app) {
 	// Opportunities Routes
-	app.route('/api/opportunities').all(opportunitiesPolicy.isAllowed)
+	app.route('/api/opportunities')
+		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.list)
 		.post(opportunities.create);
 
-	app.route('/api/opportunities/:opportunityId').all(opportunitiesPolicy.isAllowed)
+	app.route('/api/opportunities/:opportunityId')
+		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.read)
 		.put(opportunities.update)
 		.delete(opportunities.delete);
 
-
-	app.route('/api/my/opportunities').all(opportunitiesPolicy.isAllowed)
+	app.route('/api/my/opportunities')
+		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.my);
 
 	//
 	// opportunities for project
 	//
-	app.route('/api/opportunities/for/project/:projectId')
-		.get(opportunities.forProject);
-	app.route('/api/opportunities/for/program/:programId')
-		.get(opportunities.forProgram);
+	app.route('/api/opportunities/for/project/:projectId').get(opportunities.forProject);
+	app.route('/api/opportunities/for/program/:programId').get(opportunities.forProgram);
 
 	//
 	// get lists of users
 	//
-	app.route('/api/opportunities/members/:opportunityId')
-		.get(opportunities.listMembers);
+	app.route('/api/opportunities/members/:opportunityId').get(opportunities.listMembers);
 	app.route('/api/opportunities/requests/:opportunityId')
 		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.listRequests);
@@ -58,25 +57,25 @@ module.exports = function(app) {
 		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.denyMember);
 
-	app.route('/api/new/opportunity')
-		.get(opportunities.new);
+	app.route('/api/new/opportunity').get(opportunities.new);
 
-	app.route('/api/request/opportunity/:opportunityId')
-		.get(opportunities.request);
+	app.route('/api/request/opportunity/:opportunityId').get(opportunities.request);
 
 	//
 	// allow users to watch or unwatch opportunities
 	//
-	app.route('/api/opportunities/watch/add/:opportunityId')
-		.get(opportunities.addWatch);
-	app.route('/api/opportunities/watch/remove/:opportunityId')
-		.get(opportunities.removeWatch);
+	app.route('/api/opportunities/watch/add/:opportunityId').get(opportunities.addWatch);
+	app.route('/api/opportunities/watch/remove/:opportunityId').get(opportunities.removeWatch);
 
 	//
 	// add route for querying the status of an opportunity
 	//
-	app.route('/api/opportunities/deadline/status/:opportunityId')
-		.get(opportunities.deadlineStatus);
+	app.route('/api/opportunities/deadline/status/:opportunityId').get(opportunities.deadlineStatus);
+
+	//
+	// add route for initiating a 2FA code being sent to approval authority
+	//
+	app.route('/api/opportunities/:opportunityId/sendcode').get(opportunities.send2FA);
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);

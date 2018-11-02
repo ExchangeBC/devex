@@ -11,7 +11,7 @@
 <section>
 
   <!-- // If user is not signed in // -->
-  <div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED'">
+  <div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED' && !vm.preapprovalParam && !vm.approvalParam">
     <div class="alert alert-warning">
       <i class="fas fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to
       <a ui-sref="authentication.signin">
@@ -27,6 +27,20 @@
           ui-sref="settings.profile"> Add your email address.</a></p>
     </div>
   </div>
+
+  <!-- View for approving/rejecting an opportunity -->
+  <div class="container">
+    <div class="row text-center alert" ng-if="vm.showPreApproval" ng-class="{'alert-success': vm.approvalAction === 'Approve', 'alert-danger': vm.approvalAction === 'Reject'}">
+      <div class="col">
+        To {{ vm.approvalAction }} this opportunity, enter the 6 digit code you have been sent separately<br>
+        <input class="form-control w-25 mx-auto text-center my-2" type="number" input-max-length="6" ng-model="vm.toFAcode"
+          ng-change="vm.validateApprovalCode()">
+        <button class="btn text-white my-2" ng-class="{'btn-success': vm.approvalAction === 'Approve', 'btn-danger': vm.approvalAction === 'Reject'}"
+          type="button" ng-disabled="vm.validApprovalCode">{{ vm.approvalAction }}</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- // Admin View for Proposal Evaluation // -->
   <div class="container" ng-if="vm.opportunity.isPublished && vm.canEdit">
@@ -67,10 +81,10 @@
   <div class="container">
     <!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
     <div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
-      <div class="alert alert-warning">
+      <div class="col alert alert-warning">
         <span class="strong"><i class="fas fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span>
         Before you can publish, you'll need to define these things:
-        <ul style="text-align: left;">
+        <ul>
           <li ng-repeat="fname in vm.errorFields">{{fname}}</li>
         </ul>
       </div>

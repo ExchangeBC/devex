@@ -27,7 +27,8 @@ var path = require('path'),
 	_ = require('lodash'),
 	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
 	Proposals = require(path.resolve('./modules/proposals/server/controllers/proposals.server.controller')),
-	github = require(path.resolve('./modules/core/server/controllers/core.server.github'));
+	github = require(path.resolve('./modules/core/server/controllers/core.server.github')),
+	Nexmo = require('nexmo');
 
 // -------------------------------------------------------------------------
 //
@@ -433,13 +434,7 @@ exports.update = function(req, res) {
 		.then(function() {
 			// send out approval request messages as needed
 			if (!opportunity.isApproved) {
-				if (opportunity.intermediateApproval.state === 'ready-to-send') {
-					// send intermediate approval request
-					sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { requestingUser: req.user, opportunity: setMessageData(opportunity) });
-				}
-				if (opportunity.finalApproval.state === 'ready-to-send') {
-					// send final approval request
-				}
+				sendApprovalMessages(req.user, opportunity);
 			}
 
 			// send out opportunity update notifications on published opportunities that are still open
@@ -1073,3 +1068,56 @@ exports.unPublishOpportunities = function(programId, projectId) {
 		);
 	});
 };
+
+exports.send2FA = function(req, res) {
+	var opportunity = req.opportunity;
+	var intermediateApproval = opportunity.intermediateApproval;
+	var finalApproval = opportunity.finalApproval;
+
+	var approvalToAction = intermediateApproval.state === 'sent' ? intermediateApproval : finalApproval;
+
+	// generate a new 2FA code and save to opportunity
+	var twoFA = Math.floor(100000 + Math.random() * 900000);
+	approvalToAction.twoFACode = twoFA;
+	updateSave(opportunity).then(function(savedOpportunity) {
+		opportunity = savedOpportunity;
+		if (approvalToAction.twoFAMethod === 'email') {
+			send2FAviaEmail(approvalToAction);
+		} else {
+			send2FAviaSMS(approvalToAction);
+		}
+
+		res.status(200).send();
+	});
+};
+
+function sendApprovalMessages(requestingUser, opportunity) {
+	if (opportunity.intermediateApproval.state === 'ready-to-send') {
+		// send intermediate approval request
+		sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { requestingUser: requestingUser, opportunity: setMessageData(opportunity) });
+		opportunity.intermediateApproval.state = 'sent';
+		updateSave(opportunity);
+	}
+	if (opportunity.finalApproval.state === 'ready-to-send') {
+		// send final approval request
+	}
+}
+
+function send2FAviaSMS(approvalInfo) {
+	console.log('send via text, code = ' + approvalInfo.twoFACode);
+
+	const nexmo = new Nexmo({
+		apiKey: process.env.NEXMO_API_KEY,
+		apiSecret: process.env.NEXMO_API_SECRET
+	});
+
+	const from = process.env.NEXMO_FROM_NUMBER;
+	const to = approvalInfo.mobileNumber;
+	const msg = approvalInfo.twoFACode;
+
+	nexmo.message.sendSms(from, to, msg);
+}
+
+function send2FAviaEmail(approvalInfo) {
+	console.log('send via email, code = ' + approvalInfo.twoFACode);
+}

@@ -52,12 +52,15 @@ var TeamQuestionSchema = new Schema({
 var ApprovalSchema = new Schema({
 	name: { type: String, default: '' },
 	email: { type: String, default: '' },
-	twoFAMethod: { type: String, default: 'email' },
+	twoFAMethod: { type: String, default: 'email', enum: ['email', 'sms'] },
 	mobileNumber: { type: String, default: '' },
 	initiated: { type: Date, default: null },
 	actioned: { type: Date, default: null },
 	state: { type: String, default: 'draft', enum: ['draft', 'ready-to-send', 'sent', 'actioned'] },
-	action: { type: String, default: 'pending', enum: ['pending', 'approved', 'denied'] }
+	action: { type: String, default: 'pending', enum: ['pending', 'approved', 'denied'] },
+	routeCode: { type: String, default: '' },
+	twoFACode: { type: Number, default: 0 },
+	twoFASendCount: { type: Number, default: 0 }
 });
 
 var ContractSchema = new Schema({

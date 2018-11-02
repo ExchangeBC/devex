@@ -48,6 +48,7 @@
 			'$state',
 			'$stateParams',
 			'$sce',
+			'$location',
 			'opportunity',
 			'Authentication',
 			'OpportunitiesService',
@@ -57,7 +58,7 @@
 			'ask',
 			'myproposal',
 			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
+			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -79,6 +80,32 @@
 				vm.display.evaluation = $sce.trustAsHtml(vm.opportunity.evaluation);
 				vm.display.criteria = $sce.trustAsHtml(vm.opportunity.criteria);
 				vm.trust = $sce.trustAsHtml;
+
+				//
+				// Are the approval or preapproval url params present?
+				//
+				if ($location.search().hasOwnProperty('approvalaction')) {
+					vm.approvalAction = $location.search()['approvalaction'];
+					vm.approvalAction = vm.approvalAction.charAt(0).toUpperCase() + vm.approvalAction.slice(1);
+				}
+				if ($location.search().hasOwnProperty('approvaltype')) {
+					vm.approvalType = $location.search()['approvaltype'];
+				}
+				if ($location.search().hasOwnProperty('approvalcode')) {
+					vm.approvalCode = $location.search()['approvalcode'];
+				}
+				vm.showPreApproval = !vm.isPublished && !vm.isApproved && vm.approvalType === 'pre' && vm.approvalCode === vm.opportunity.intermediateApproval.routeCode;
+				vm.showFinalApproval = !vm.isPublished && !vm.isApproved && vm.approvalType === 'final' && vm.approvalCode === vm.opportunity.finalApproval.routeCode;
+
+				// if the pre-approval or approval parameters are in place, send a request to an endpoint to generate the 2FA
+				if (vm.showPreApproval || vm.showFinalApproval) {
+					var client = new XMLHttpRequest();
+					var endpointURL = '/api/opportunities/' + vm.opportunity.code + '/sendcode';
+					client.open('GET', endpointURL);
+					client.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+					client.send();
+				}
+
 				//
 				// am I watchng?
 				//
@@ -661,6 +688,8 @@
 					var confirmMessage = 'Are you sure you are ready to send the requests with the entered contact information?';
 					ask.yesNo(confirmMessage).then(function(choice) {
 						if (choice) {
+							// Generate a route code that will be used to provide some protection on the route used to approve
+							vm.opportunity.intermediateApproval.routeCode = new Date().valueOf();
 							vm.opportunity.intermediateApproval.state = 'ready-to-send';
 							vm.opportunity
 								.createOrUpdate()
