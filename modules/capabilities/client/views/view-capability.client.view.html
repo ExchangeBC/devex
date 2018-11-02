@@ -8,36 +8,36 @@
   </div>
 </div>
 
-<section class="detail-page-background">
+<section class="main-section">
+  <div class="container">
 
-  <div class="container detail-view">
-    <div class="row" ng-if="vm.canEdit">
-      <div class="col-xs-12 text-right">
+    <div class="row py-3" ng-if="vm.canEdit">
+      <div class="col text-right">
         <button type="button" class="btn btn-text-only" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})"
-          title="Edit capability"><i class="fas fa-lg fa-pencil-alt"></i></button>
+          title="Edit capability"><i class="fas fa-pencil-alt"></i> Edit</button>
       </div>
     </div>
-    <br>
-    <div class="row">
-      <div class="col-xs-12 col-sm-8">
+
+    <div class="row py-3">
+      <div class="col-md-8 my-3">
         <h1 class="capability-detail" ng-bind="vm.capability.name"></h1>
         <div ng-bind-html="vm.trust(vm.capability.description)"></div>
       </div>
-      <div class="col-xs-12 col-sm-4">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <strong>Preferred Technical Skills</strong>
-          </div>
-          <ul class="list-group">
-            <li class="list-group-item" ng-repeat="skill in vm.capability.skills">{{skill.name}}</li>
-          </ul>
-        </div>
-        <br>
+      <div class="col-md-4 my-3" ng-if="vm.capability.skills.length">
+        <div class="p-3 bg-light border rounded">
+          <h5 class="mb-3">Preferred Technical Skills</h5>
+          <div ng-repeat="skill in vm.capability.skills"><label class="label label-lg label-skill">{{skill.name}}</label></div>
+        </div>        
+      </div>
+    </div>
+
+    <div class="row py-3">
+      <div class="col">
         <div class="alert alert-warning">
-          <h4>Got this capability?</h4>
-          Claim it in your <a href="/settings/skills">personal profile</a>.
+          <strong>Got this capability?</strong> Claim it in your <a href="/settings/skills">personal profile</a>.
         </div>
       </div>
     </div>
+
   </div>
 </section>
