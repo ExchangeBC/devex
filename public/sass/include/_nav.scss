@@ -55,6 +55,12 @@
   }
 }
 
+@media (max-width: 575px) {
+  .nav-pills {
+    display: block;
+  }
+} /* Make nav-pills stack on xs displays */
+
 // Navigation tabs
 // .nav-tabs {
 //   border-bottom: 2px solid #f26925;
