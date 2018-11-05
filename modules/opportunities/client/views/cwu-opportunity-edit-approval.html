@@ -6,15 +6,21 @@
       </div>
       <div class="col pr-0 mr-0">
         <button type="button" class="btn btn-success text-white float-right" ng-disable="vm.opportunity.isPublished || vm.closed === 'CLOSED'"
-          ng-click="vm.sendApprovalRequest()"><i class="fas fa-envelope"></i>
-          Send</button>
+          ng-click="vm.sendApprovalRequest()" ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'"><i
+            class="fas fa-envelope"></i>
+          Send
+        </button>
+        <button type="button" class="btn btn-primary text-white float-right" ng-if="vm.isAdmin" ng-click="vm.resetApprovalRequest()">
+          Reset Approval Request
+        </button>
       </div>
     </div>
 
-    <div class="row py-3 my-3 rounded border border-primary">
-      <div class="col-xs-12 col-sm-6">
-        <h4>Pre-Approval</h4>
-        <fieldset>
+    <fieldset ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'">
+      <div class="row py-3 my-3 rounded border border-primary">
+        <div class="col-xs-12 col-sm-6">
+          <h4>Pre-Approval</h4>
+
           <form-input ng-model="vm.opportunity.intermediateApproval.name" x-options='{
                   "title":"Authority Name",
                   "name":"intermediateApprovalName",
@@ -23,8 +29,6 @@
                   "required": true
                 }'>
           </form-input>
-          <!-- <label for="intermediateName">Authority Name</label><br>
-          <input type="text" ng-model="vm.opportunity.intermediateApproval.name" id="intermediateName"> -->
 
           <form-input ng-model="vm.opportunity.intermediateApproval.email" x-options='{
               "title": "Authority Email",
@@ -66,11 +70,9 @@
           <div ng-if="vm.opportunity.intermediateApproval.twoFAMethod === 'sms'" class="alert alert-warning"><i class="fas fa-mobile-alt"></i>
             An authentication code will be sent via text message</div>
 
-        </fieldset>
       </div>
       <div class="col-xs-12 col-sm-6">
         <h4>Final Approval</h4>
-        <fieldset>
           <form-input ng-model="vm.opportunity.finalApproval.name" x-options='{
               "title": "Authority Name",
               "name": "finalApprovalName",
@@ -117,14 +119,12 @@
           <div ng-if="vm.opportunity.finalApproval.twoFAMethod === 'sms'" class="alert alert-warning"><i class="fas fa-mobile-alt"></i>
             An authentication code will be sent via text message</div>
 
-        </fieldset>
       </div>
     </div>
 
     <div class="row py-3 my-3 border border-primary rounded">
       <div class="col">
         <h4>Contract Details</h4>
-        <fieldset>
           <div class="row">
             <div class="col-xs-12 col-sm-6">
               <form-input ng-model="vm.opportunity.contract.managerName" x-form="vm.approvalForm" x-options='{
@@ -265,7 +265,7 @@
                       "title" :"Summary of Services",
                       "name"  :"summary"
                     }'>
-                <textarea name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.tinymceOptions"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.tinymceOptions"
                   ng-model="vm.opportunity.contract.summary">
                     </textarea>
               </form-display>
@@ -297,7 +297,7 @@
                       "name"  :"impact",
                       "required": true
                     }'>
-                <textarea name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.tinymceOptions"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.tinymceOptions"
                   ng-model="vm.opportunity.contract.impactNotApproved">
                     </textarea>
               </form-display>

@@ -76,6 +76,10 @@ module.exports = function(app) {
 	// add route for initiating a 2FA code being sent to approval authority
 	//
 	app.route('/api/opportunities/:opportunityId/sendcode').get(opportunities.send2FA);
+	//
+	// add route for actioning a pre-approval or approval request via a POST operation
+	//
+	app.route('/api/opportunities/:opportunityId/action').post(opportunities.action);
 
 	// Finish by binding the Opportunity middleware
 	app.param('opportunityId', opportunities.opportunityByID);

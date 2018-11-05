@@ -94,17 +94,65 @@
 				if ($location.search().hasOwnProperty('approvalcode')) {
 					vm.approvalCode = $location.search()['approvalcode'];
 				}
-				vm.showPreApproval = !vm.isPublished && !vm.isApproved && vm.approvalType === 'pre' && vm.approvalCode === vm.opportunity.intermediateApproval.routeCode;
-				vm.showFinalApproval = !vm.isPublished && !vm.isApproved && vm.approvalType === 'final' && vm.approvalCode === vm.opportunity.finalApproval.routeCode;
 
-				// if the pre-approval or approval parameters are in place, send a request to an endpoint to generate the 2FA
-				if (vm.showPreApproval || vm.showFinalApproval) {
-					var client = new XMLHttpRequest();
-					var endpointURL = '/api/opportunities/' + vm.opportunity.code + '/sendcode';
-					client.open('GET', endpointURL);
-					client.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
-					client.send();
+				vm.showPreApproval =
+					!vm.isPublished &&
+					!vm.isApproved &&
+					vm.approvalType === 'pre' &&
+					vm.approvalCode === vm.opportunity.intermediateApproval.routeCode &&
+					vm.opportunity.intermediateApproval.action === 'pending';
+
+				vm.showFinalApproval =
+					!vm.isPublished && !vm.isApproved && vm.approvalType === 'final' && vm.approvalCode === vm.opportunity.finalApproval.routeCode && vm.opportunity.finalApproval.action === 'pending';
+
+				vm.requestApprovalCode = function() {
+					if (OpportunitiesCommon.requestApprovalCode(vm.opportunity)) {
+						OpportunitiesService.get({
+							opportunityId: vm.opportunity._id
+						}).$promise.then(function(updatedOpportunity) {
+							vm.opportunity = updatedOpportunity;
+							Notification.success({
+								title: 'Success',
+								message: 'Approval code sent for 2FA!'
+							});
+						});
+					} else {
+						Notification.error({
+							title: 'Error',
+							message: 'Limit exceeded for number of codes sent.  Please have the requestor re-send'
+						});
+					}
+				};
+
+				// Automatically send code if the first time it's been opened
+				if (vm.showPreApproval && vm.opportunity.intermediateApproval.twoFASendCount === 0) {
+					vm.requestApprovalCode();
 				}
+				if (vm.showFinalApproval && vm.opportunity.finalApproval.twoFASendCount === 0) {
+					vm.requestApprovalCode();
+				}
+
+				vm.submitApprovalCode = function() {
+					OpportunitiesCommon.submitApprovalCode(vm.opportunity, vm.toFAcode, vm.approvalAction)
+						.then(function(responseMessage) {
+							OpportunitiesService.get({
+								opportunityId: vm.opportunity._id
+							}).$promise.then(function(updatedOpportunity) {
+								vm.opportunity = updatedOpportunity;
+								Notification.success({
+									title: 'Success',
+									message: '<i class="fas fa-thumbs-up"></i> ' + responseMessage
+								});
+								$state.go('home');
+							});
+						})
+						.catch(function(err) {
+							Notification.error({
+								title: 'Error',
+								message: 'Invalid code'
+							});
+						});
+				};
 
 				//
 				// am I watchng?
@@ -691,6 +739,9 @@
 							// Generate a route code that will be used to provide some protection on the route used to approve
 							vm.opportunity.intermediateApproval.routeCode = new Date().valueOf();
 							vm.opportunity.intermediateApproval.state = 'ready-to-send';
+							vm.opportunity.intermediateApproval.requestor = Authentication.user;
+							vm.opportunity.intermediateApproval.initiated = Date.now();
+							vm.opportunity.finalApproval.requestor = Authentication.user;
 							vm.opportunity
 								.createOrUpdate()
 								.then(function(savedOpportunity) {
@@ -710,6 +761,43 @@
 						}
 					});
 				};
+				// -------------------------------------------------------------------------
+				//
+				// reset the approval request process (this is an admin only function, mostly for development)
+				//
+				// -------------------------------------------------------------------------
+				vm.resetApprovalRequest = function() {
+					if (!vm.isAdmin) {
+						return;
+					}
+
+					opportunity.intermediateApproval.state = 'draft';
+					opportunity.intermediateApproval.action = 'pending';
+					opportunity.intermediateApproval.initiated = null;
+					opportunity.intermediateApproval.actioned = null;
+
+					opportunity.finalApproval.state = 'draft';
+					opportunity.finalApproval.action = 'pending';
+					opportunity.finalApproval.initiated = null;
+					opportunity.finalApproval.actioned = null;
+
+					vm.opportunity
+						.createOrUpdate()
+						.then(function(savedOpportunity) {
+							vm.opportunity = savedOpportunity;
+							Notification.success({
+								title: 'Success',
+								message: 'Approval request reset'
+							});
+						})
+						.catch(function(err) {
+							Notification.error({
+								title: 'Error',
+								message: err.message
+							});
+						});
+				};
+
 				// -------------------------------------------------------------------------
 				//
 				// save the opportunity, could be added or edited (post or put)

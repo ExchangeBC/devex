@@ -371,6 +371,27 @@ function seedTestMessageTemplate() {
 							isDefault: true
 						}
 					]
+				}),
+				new T({
+					messageCd: 'opportunity-approval-request',
+					messageLevel: 'request',
+					description: 'Send an approval for publishing an opportunity',
+					isSubscriptionType: false,
+					messageBodyTemplate: fs.readFileSync('config/message-templates/approval-request.html'),
+					messageShortTemplate: '',
+					messageTitleTemplate: '',
+					emailBodyTemplate: fs.readFileSync('config/message-templates/approval-request.html'),
+					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Approval",
+					modelsRequired: ['opportunity'],
+					daysToArchive: 0,
+					linkTemplate: '/defaultonly',
+					actions: [
+						{
+							actionCd: 'ok',
+							linkTitleTemplate: 'OK',
+							isDefault: true
+						}
+					]
 				})
 			].map(saveT)
 		);

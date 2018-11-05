@@ -4,7 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width" />
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>Email for First Approver</title>
+  <title>Email for Final Approver</title>
   <style>
     /* -------------------------------------
           GLOBAL RESETS
@@ -383,7 +383,7 @@
         <div class="content">
 
           <!-- START CENTERED WHITE CONTAINER -->
-          <span class="preheader">Contract Pre-approval Request</span>
+          <span class="preheader">Contract Approval Request</span>
           <table class="main">
 
             <!-- START MAIN CONTENT AREA -->
@@ -392,19 +392,19 @@
                 <table border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td>
-                      <h1>Contract Pre-Approval Request</h1>
+                      <h1>Contract Approval Request</h1>
                       <hr>
                       <table>
                         <tbody>
                           <tr>
                             <td class="light">Requestor:</td>
-                            <td><span class="strong">{{ opportunity.intermediateApproval.requestor.displayName }}</span>
-                              (<a href="{{ opportunity.intermediateApproval.requestor.email }}">{{
-                                opportunity.intermediateApproval.requestor.email }}</a>)</td>
+                            <td><span class="strong">{{ opportunity.finalApproval.requestor.displayName }}</span> (<a
+                                href="{{ opportunity.finalApproval.requestor.email }}">{{
+                                opportunity.finalApproval.requestor.email }}</a>)</td>
                           </tr>
                           <tr>
                             <td class="light">Contract Manager:</td>
-                            <td><span class="strong">{{opportunity.contract.managerName}}</span> (<a href="{{ opportunity.contract.managerEmail }}">{{
+                            <td><span class="strong">{{ opportunity.contract.managerName }}</span> (<a href="{{ opportunity.contract.managerEmail }}">{{
                                 opportunity.contract.managerEmail }}</a>)</td>
                           </tr>
                           <tr>
@@ -448,8 +448,9 @@
                       <table>
                         <tbody>
                           <tr>
-                            <td align="left" class="well">If you approve this request, it will be sent to
-                              <span class="strong">{{ opportunity.finalApproval.name }}</span> for final approval.</td>
+                            <td align="left" class="well"><span class="strong">{{ opportunity.intermediateApproval.name
+                                }}</span> pre-approved this
+                              request on <span class="strong">{{ opportunity.intermediateApproval.actioned_formatted }}</span>.</td>
                           </tr>
                         </tbody>
                       </table>
@@ -461,9 +462,9 @@
                               <table border="0" cellpadding="0" cellspacing="0">
                                 <tbody>
                                   <tr>
-                                    <td> <a class="primary" href="{{ domain }}{{ opportunity.path }}?approvalcode={{ opportunity.intermediateApproval.routeCode }}&approvalaction=approve&approvaltype=pre"
+                                    <td> <a class="primary" href="{{ domain }}{{ opportunity.path }}?approvalcode={{ opportunity.finalApproval.routeCode }}&approvalaction=approve&approvaltype=final"
                                         target="_blank">Approve</a> </td>
-                                    <td> <a class="secondary" href="{{ domain }}{{ opportunity.path }}?approvalcode={{ opportunity.intermediateApproval.routeCode }}&approvalaction=reject&approvaltype=pre"
+                                    <td> <a class="secondary" href="{{ domain }}{{ opportunity.path }}?approvalcode={{ opportunity.finalApproval.routeCode }}&approvalaction=reject&approvaltype=final"
                                         target="_blank">Reject</a>
                                     </td>
                                   </tr>
@@ -481,6 +482,18 @@
 
             <!-- END MAIN CONTENT AREA -->
           </table>
+
+          <!-- START FOOTER -->
+          <div class="footer">
+            <table border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="content-block">
+                  <span class="apple-link">This is a BC Developers' Exchange mockup for user testing</span>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- END FOOTER -->
 
           <!-- END CENTERED WHITE CONTAINER -->
         </div>

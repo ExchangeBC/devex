@@ -197,6 +197,7 @@ var setMessageData = function(opportunity) {
 	opportunity.contract.stobBudget_formatted = helpers.formatMoney(opportunity.contract.stobBudget);
 	opportunity.contract.contractType_formatted = opportunity.contract.contractType.charAt(0).toUpperCase() + opportunity.contract.contractType.slice(1);
 	opportunity.contract.legallyRequired_formatted = opportunity.contract.legallyRequired ? 'Yes' : 'No';
+	opportunity.intermediateApproval.actioned_formatted = helpers.formatDate(new Date(opportunity.intermediateApproval.actioned));
 
 	return opportunity;
 };
@@ -969,6 +970,8 @@ exports.opportunityByID = function(req, res, next, id) {
 			.populate('phases.aggregate.capabilities', 'code name')
 			.populate('phases.aggregate.capabilitiesCore', 'code name')
 			.populate('phases.aggregate.capabilitySkills', 'code name')
+			.populate('intermediateApproval.requestor', 'displayName email')
+			.populate('finalApproval.requestor', 'displayName email')
 			.populate({
 				path: 'proposal',
 				model: 'Proposal',
@@ -1020,6 +1023,8 @@ exports.opportunityByID = function(req, res, next, id) {
 			.populate('phases.aggregate.capabilities', 'code name')
 			.populate('phases.aggregate.capabilitiesCore', 'code name')
 			.populate('phases.aggregate.capabilitySkills', 'code name')
+			.populate('intermediateApproval.requestor', 'displayName email')
+			.populate('finalApproval.requestor', 'displayName email')
 			.populate({
 				path: 'proposal',
 				model: 'Proposal',
@@ -1069,6 +1074,57 @@ exports.unPublishOpportunities = function(programId, projectId) {
 	});
 };
 
+exports.action = function(req, res) {
+	var code = Number(req.body.code);
+	var action = req.body.action;
+	var isPreApproval = req.body.preapproval === 'true';
+	var opportunity = req.opportunity;
+
+	var approvalInfo = isPreApproval ? opportunity.intermediateApproval : opportunity.finalApproval;
+
+	// if code matches, action and then return 200
+	if (approvalInfo.twoFACode === code) {
+		// mark as approved
+		if (action === 'approve') {
+			approvalInfo.state = 'actioned';
+			approvalInfo.action = 'approved';
+			approvalInfo.actioned = Date.now();
+
+			if (isPreApproval === false) {
+				opportunity.isApproved = true;
+				updateSave(opportunity).then(function() {
+					res.status(200).json({ message: 'Opportunity approved!', succeed: true });
+				});
+			} else {
+				// now that pre-approval is done, initiate the final approval process
+				opportunity.finalApproval.routeCode = new Date().valueOf();
+				opportunity.finalApproval.state = 'sent';
+				opportunity.finalApproval.initiated = Date.now();
+				updateSave(opportunity).then(function(savedOpportunity) {
+					opportunity = savedOpportunity;
+					sendMessages('opportunity-approval-request', [{ email: opportunity.finalApproval.email }], { opportunity: setMessageData(opportunity) });
+					res.status(200).json({ message: 'Opportunity pre-approved!', succeed: true });
+				});
+			}
+		}
+		// mark as rejected
+		else {
+			approvalInfo.state = 'actioned';
+			approvalInfo.action = 'denied';
+			approvalInfo.actioned = Date.now();
+
+			updateSave(opportunity).then(function() {
+				res.status(200).json({ message: 'Opportunity rejected', succeed: true });
+			});
+		}
+	} else {
+		approvalInfo.twoFAAttemptCount++;
+		updateSave(opportunity).then(function() {
+			res.status(200).json({ message: 'Invalid code', succeed: false });
+		});
+	}
+};
+
 exports.send2FA = function(req, res) {
 	var opportunity = req.opportunity;
 	var intermediateApproval = opportunity.intermediateApproval;
@@ -1079,6 +1135,7 @@ exports.send2FA = function(req, res) {
 	// generate a new 2FA code and save to opportunity
 	var twoFA = Math.floor(100000 + Math.random() * 900000);
 	approvalToAction.twoFACode = twoFA;
+	approvalToAction.twoFASendCount++;
 	updateSave(opportunity).then(function(savedOpportunity) {
 		opportunity = savedOpportunity;
 		if (approvalToAction.twoFAMethod === 'email') {
@@ -1096,6 +1153,8 @@ function sendApprovalMessages(requestingUser, opportunity) {
 		// send intermediate approval request
 		sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { requestingUser: requestingUser, opportunity: setMessageData(opportunity) });
 		opportunity.intermediateApproval.state = 'sent';
+		opportunity.intermediateApproval.twoFASendCount = 0;
+		opportunity.intermediateApproval.twoFAAttemptCount = 0;
 		updateSave(opportunity);
 	}
 	if (opportunity.finalApproval.state === 'ready-to-send') {

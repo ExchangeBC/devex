@@ -50,6 +50,7 @@ var TeamQuestionSchema = new Schema({
 //
 // -------------------------------------------------------------------------
 var ApprovalSchema = new Schema({
+	requestor: { type: Schema.ObjectId, ref: 'User', default: null },
 	name: { type: String, default: '' },
 	email: { type: String, default: '' },
 	twoFAMethod: { type: String, default: 'email', enum: ['email', 'sms'] },
@@ -60,7 +61,8 @@ var ApprovalSchema = new Schema({
 	action: { type: String, default: 'pending', enum: ['pending', 'approved', 'denied'] },
 	routeCode: { type: String, default: '' },
 	twoFACode: { type: Number, default: 0 },
-	twoFASendCount: { type: Number, default: 0 }
+	twoFASendCount: { type: Number, default: 0 },
+	twoFAAttempCount: { type: Number, default: 0 }
 });
 
 var ContractSchema = new Schema({
