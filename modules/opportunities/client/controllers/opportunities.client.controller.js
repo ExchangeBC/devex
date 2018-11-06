@@ -595,7 +595,6 @@
 		//
 		// =========================================================================
 		.controller('OpportunityEditController', [
-			'$scope',
 			'$state',
 			'$stateParams',
 			'$window',
@@ -609,10 +608,11 @@
 			'ask',
 			'TINYMCE_OPTIONS',
 			'OpportunitiesCommon',
-			function($scope, $state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+			function($state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 				var vm = this;
 				vm.trust = $sce.trustAsHtml;
 				var originalPublishedState = opportunity.isPublished;
+
 				//
 				// what can the user do here?
 				//
@@ -621,21 +621,18 @@
 				vm.isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
 				vm.projects = projects;
 				vm.editing = editing;
-				vm.opportunity = opportunity;
-				vm.opportunity.opportunityTypeCd = 'code-with-us';
-				vm.opportunity.deadline = new Date(vm.opportunity.deadline);
-				vm.opportunity.assignment = new Date(vm.opportunity.assignment);
-				vm.opportunity.start = new Date(vm.opportunity.start);
-				vm.opportunity.endDate = new Date(vm.opportunity.endDate);
+
+				// Refresh the view model to use the given opportunity
+				refreshOpportunity(opportunity);
+
 				vm.authentication = Authentication;
-				vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join(', ') : '';
-				// -------------------------------------------------------------------------
+
 				//
 				// can this be published?
 				//
-				// -------------------------------------------------------------------------
 				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
 				vm.canPublish = vm.errorFields > 0;
+
 				//
 				// set up the dropdown amounts for code with us earnings
 				//
@@ -646,7 +643,6 @@
 				var i;
 				for (i = minAmount; i <= maxAmount; i += step) vm.amounts.push(i);
 
-				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
 				//
 				// if the user doesn't have the right access then kick them out
 				//
@@ -665,39 +661,7 @@
 				// cities list
 				//
 				vm.cities = dataService.cities;
-				//
-				// if editing, set from existing
-				//
-				if (vm.editing) {
-					vm.programId = opportunity.program._id;
-					vm.programTitle = opportunity.program.title;
-					vm.projectId = opportunity.project._id;
-					vm.projectTitle = opportunity.project.name;
-				} else {
-					if (vm.context === 'allopportunities') {
-						vm.projectLink = false;
-					} else if (vm.context === 'program') {
-						vm.projectLink = false;
-						vm.opportunity.program = vm.programId;
-						var lprojects = [];
-						vm.projects.forEach(function(o) {
-							if (o.program._id === vm.programId) lprojects.push(o);
-						});
-						vm.projects = lprojects;
-					} else if (vm.context === 'project') {
-						vm.projectLink = true;
-						vm.opportunity.project = vm.projectId;
-						vm.opportunity.program = vm.programId;
-					}
-					//
-					// if not editing, set some conveinient default dates
-					//
-					vm.opportunity.deadline = new Date();
-					vm.opportunity.assignment = new Date();
-					vm.opportunity.start = new Date();
-					vm.opportunity.endDate = new Date();
-				}
-				//
+
 				// if there are no available projects then post a warning and kick the user back to
 				// where they came from
 				//
@@ -721,6 +685,52 @@
 				}
 
 				vm.tinymceOptions = TINYMCE_OPTIONS;
+
+				//
+				// Refresh the view model to use the given opportunity
+				// This is mostly used after an opportunity is saved using the api and
+				// we want to ensure we have the most recent version loaded in the UI
+				//
+				function refreshOpportunity(newOpportunity) {
+					vm.opportunity = newOpportunity;
+					vm.opportunity.opportunityTypeCd = 'code-with-us';
+					vm.opportunity.deadline = new Date(vm.opportunity.deadline);
+					vm.opportunity.assignment = new Date(vm.opportunity.assignment);
+					vm.opportunity.start = new Date(vm.opportunity.start);
+					vm.opportunity.endDate = new Date(vm.opportunity.endDate);
+					vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join(', ') : '';
+
+					// If editing an existing opportunity...
+					if (vm.editing) {
+						vm.programId = opportunity.program._id;
+						vm.programTitle = opportunity.program.title;
+						vm.projectId = opportunity.project._id;
+						vm.projectTitle = opportunity.project.name;
+					} else {
+						if (vm.context === 'allopportunities') {
+							vm.projectLink = false;
+						} else if (vm.context === 'program') {
+							vm.projectLink = false;
+							vm.opportunity.program = vm.programId;
+							var lprojects = [];
+							vm.projects.forEach(function(o) {
+								if (o.program._id === vm.programId) lprojects.push(o);
+							});
+							vm.projects = lprojects;
+						} else if (vm.context === 'project') {
+							vm.projectLink = true;
+							vm.opportunity.project = vm.projectId;
+							vm.opportunity.program = vm.programId;
+						}
+						//
+						// if not editing, set some conveinient default dates
+						//
+						vm.opportunity.deadline = new Date();
+						vm.opportunity.assignment = new Date();
+						vm.opportunity.start = new Date();
+						vm.opportunity.endDate = new Date();
+					}
+				}
 
 				vm.changeTargets = function() {
 					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
@@ -786,7 +796,7 @@
 							vm.opportunity
 								.createOrUpdate()
 								.then(function(savedOpportunity) {
-									vm.opportunity = savedOpportunity;
+									refreshOpportunity(savedOpportunity);
 									Notification.success({
 										message: '<i class="fas fa-check-circle"></i> Approval request sent!',
 										title: 'Success'
@@ -827,10 +837,10 @@
 					vm.opportunity
 						.createOrUpdate()
 						.then(function(savedOpportunity) {
-							vm.opportunity = savedOpportunity;
+							refreshOpportunity(savedOpportunity);
 							Notification.success({
 								title: 'Success',
-								message: 'Approval request reset'
+								message: '<i class="fas fa-check-circle"></i> Approval Request Reset'
 							});
 						})
 						.catch(function(err) {
