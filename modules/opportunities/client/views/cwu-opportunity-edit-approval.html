@@ -6,7 +6,7 @@
           opportunity.</span>
         <span ng-if="!vm.opportunity.intermediateApproval.initiated"> You have not yet sent an approval request.</span>
         <span ng-if="vm.opportunity.intermediateApproval.initiated">
-          <span ng-if="vm.opportunity.intermediateApproval.action === 'pending' || (vm.opportunity.intermediateApproval.actioned && vm.opportunity.finalApproval.action === 'pending'">You
+          <span ng-if="vm.opportunity.intermediateApproval.action === 'pending' || (vm.opportunity.intermediateApproval.actioned && vm.opportunity.finalApproval.action === 'pending')">You
             have an approval request pending and will be notified once it is actioned.</span>
           <span ng-if="vm.opportunity.intermediateApproval.action === 'denied' || vm.opportunity.finalApproval.action === 'denied'">Your
             approval request was denied. If you feel this was in error, please contact an administrator.</span>

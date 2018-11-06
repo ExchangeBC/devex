@@ -1181,4 +1181,5 @@ function send2FAviaSMS(approvalInfo) {
 
 function send2FAviaEmail(approvalInfo) {
 	console.log('send via email, code = ' + approvalInfo.twoFACode);
+	sendMessages('opportunity-approval-2FA', [{ email: approvalInfo.email }], { approvalInfo: approvalInfo });
 }
