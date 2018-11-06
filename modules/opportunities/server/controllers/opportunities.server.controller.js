@@ -1155,10 +1155,10 @@ function sendApprovalMessages(requestingUser, opportunity) {
 		opportunity.intermediateApproval.state = 'sent';
 		opportunity.intermediateApproval.twoFASendCount = 0;
 		opportunity.intermediateApproval.twoFAAttemptCount = 0;
+		opportunity.finalApproval.state = 'draft';
+		opportunity.finalApproval.twoFASendCount = 0;
+		opportunity.finalApproval.twoFAAttemptCount = 0;
 		updateSave(opportunity);
-	}
-	if (opportunity.finalApproval.state === 'ready-to-send') {
-		// send final approval request
 	}
 }
 

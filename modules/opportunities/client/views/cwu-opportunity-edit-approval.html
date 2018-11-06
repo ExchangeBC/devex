@@ -1,5 +1,24 @@
 <div class="m-5">
   <div>
+    <div class="row" ng-if="vm.opportunity.approvalRequired && !vm.opportunity.isApproved">
+      <div class="col alert alert-warning">
+        <span class="strong"><i class="fas fa-exclamation-triangle"></i> Approval is required to publish this
+          opportunity.</span>
+        <span ng-if="!vm.opportunity.intermediateApproval.initiated"> You have not yet sent an approval request.</span>
+        <span ng-if="vm.opportunity.intermediateApproval.initiated">
+          <span ng-if="vm.opportunity.intermediateApproval.action === 'pending' || (vm.opportunity.intermediateApproval.actioned && vm.opportunity.finalApproval.action === 'pending'">You
+            have an approval request pending and will be notified once it is actioned.</span>
+          <span ng-if="vm.opportunity.intermediateApproval.action === 'denied' || vm.opportunity.finalApproval.action === 'denied'">Your
+            approval request was denied. If you feel this was in error, please contact an administrator.</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved">
+      <div class="col alert alert-success">
+        <i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!
+      </div>
+    </div>
     <div class="row">
       <div class="col">
         <h3>Contract Approval Request</h3>

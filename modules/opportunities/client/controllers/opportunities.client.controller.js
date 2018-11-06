@@ -215,7 +215,7 @@
 				//
 				// -------------------------------------------------------------------------
 				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
-				vm.canPublish = vm.errorFields.length === 0;
+				vm.canPublish = vm.errorFields.length === 0 && (!vm.opportunity.approvalRequired || vm.opportunity.isApproved);
 				// -------------------------------------------------------------------------
 				//
 				// issue a request for membership
@@ -780,6 +780,8 @@
 					opportunity.finalApproval.action = 'pending';
 					opportunity.finalApproval.initiated = null;
 					opportunity.finalApproval.actioned = null;
+
+					opportunity.isApproved = false;
 
 					vm.opportunity
 						.createOrUpdate()

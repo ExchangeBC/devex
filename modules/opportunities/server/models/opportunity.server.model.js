@@ -206,6 +206,7 @@ var OpportunitySchema = new Schema(
 		intermediateApproval: { type: ApprovalSchema, default: () => ({}) },
 		finalApproval: { type: ApprovalSchema, default: () => ({}) },
 		contract: { type: ContractSchema, default: () => ({}) },
+		approvalRequired: { type: Boolean, default: true },
 		isApproved: { type: Boolean, default: false }
 	},
 	{ usePushEach: true }
