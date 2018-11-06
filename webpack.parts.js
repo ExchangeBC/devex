@@ -85,6 +85,7 @@ exports.extractCSS = ({ include, exclude, filename } = {}) => ({
 				use: [
 					MiniCssExtractPlugin.loader,
 					'css-loader',
+					postCSSLoader,
 					'sass-loader',
 				],
 			},
@@ -95,6 +96,7 @@ exports.extractCSS = ({ include, exclude, filename } = {}) => ({
 				use: [
 					MiniCssExtractPlugin.loader,
 					'css-loader',
+					postCSSLoader,
 					'less-loader',
 				],
 			},
