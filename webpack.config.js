@@ -62,17 +62,20 @@ const commonConfig = merge([
 				'bootstrap',
 				'ui-bootstrap4'
 			],
-			appConfig: './modules/core/client/app/config.js',
-			appInit: './modules/core/client/app/init.js',
-			moduleConfig: glob.sync('./modules/*/client/*.js'),
-			modules: glob.sync('./modules/*/client/**/*.js', {
-				ignore: [
-					'./modules/*/client/*.js',
-					'./main.js',
-					'./modules/core/client/app/config.js',
-					'./modules/core/client/app/init.js'
-				]
-			})
+			main: [
+				'./modules/core/client/app/config.js',
+				'./modules/core/client/app/init.js',
+			].concat(
+				glob.sync('./modules/*/client/*.js'),
+				glob.sync('./modules/*/client/**/*.js', {
+					ignore: [
+						'./modules/*/client/*.js',
+						'./main.js',
+						'./modules/core/client/app/config.js',
+						'./modules/core/client/app/init.js'
+					]
+				}),
+			),
 		},
 		resolve: {
 			// These files are tried when trying to resolve a directory...
