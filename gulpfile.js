@@ -22,6 +22,9 @@ var _ = require('lodash'),
 	webpack_stream = require('webpack-stream'),
 	webpack_config = require('./webpack.config.js');
 
+	// Define paths for webpack
+	const paths = require('./paths');
+
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function() {
 	process.env.NODE_ENV = 'test';
@@ -43,19 +46,16 @@ gulp.task('env:prod', () => {
 	});
 });
 
-// Define paths for webpack
-const paths = {
-	build: 'public/dist/'
-};
-
 // Clean task
 gulp.task('clean', () => {
-	return gulp.src(`${paths.build}*`).pipe(vinylPaths(del));
+	return gulp.src(`${paths.build}/*`).pipe(vinylPaths(del));
 });
 
 // Webpack task
 gulp.task('webpack', () => {
-	return webpack_stream(webpack_config).pipe(gulp.dest(`${paths.build}`));
+	// load separate webpack configurations for each environment
+	const config = webpack_config(process.env.NODE_ENV);
+	return webpack_stream(config).pipe(gulp.dest(`${paths.build}`));
 });
 
 // Nodemon task
@@ -260,7 +260,7 @@ gulp.task('templatecache', () => {
 gulp.task('lint', gulp.series('sass', 'themecss', 'eslint'));
 
 // Lint project files and run webpack
-gulp.task('build', gulp.series('env:dev', 'lint', 'clean', 'webpack'));
+gulp.task('build', gulp.series('env:prod', 'lint', 'clean', 'webpack'));
 
 // Run without watch - used when developing containerized solution to keep machines from spinning up
 gulp.task('quiet', gulp.series('env:dev', 'lint', 'nodemon'));
