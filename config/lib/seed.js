@@ -361,7 +361,7 @@ function seedTestMessageTemplate() {
 					messageTitleTemplate: '',
 					emailBodyTemplate: fs.readFileSync('config/message-templates/pre-approval-request.html'),
 					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Pre-Approval",
-					modelsRequired: ['requestingUser', 'opportunity'],
+					modelsRequired: ['opportunity'],
 					daysToArchive: 0,
 					linkTemplate: '/defaultonly',
 					actions: [
@@ -382,6 +382,48 @@ function seedTestMessageTemplate() {
 					messageTitleTemplate: '',
 					emailBodyTemplate: fs.readFileSync('config/message-templates/approval-request.html'),
 					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Approval",
+					modelsRequired: ['opportunity'],
+					daysToArchive: 0,
+					linkTemplate: '/defaultonly',
+					actions: [
+						{
+							actionCd: 'ok',
+							linkTitleTemplate: 'OK',
+							isDefault: true
+						}
+					]
+				}),
+				new T({
+					messageCd: 'opportunity-approved-notification',
+					messageLevel: 'info',
+					description: 'Send a notification that an approval request has been approved',
+					isSubscriptionType: false,
+					messageBodyTemplate: fs.readFileSync('config/message-templates/request-approved.html'),
+					messageShortTemplate: '',
+					messageTitleTemplate: '',
+					emailBodyTemplate: fs.readFileSync('config/message-templates/request-approved.html'),
+					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Approved",
+					modelsRequired: ['opportunity'],
+					daysToArchive: 0,
+					linkTemplate: '/defaultonly',
+					actions: [
+						{
+							actionCd: 'ok',
+							linkTitleTemplate: 'OK',
+							isDefault: true
+						}
+					]
+				}),
+				new T({
+					messageCd: 'opportunity-denied-notification',
+					messageLevel: 'info',
+					description: 'Send a notification that an approval request has been denied',
+					isSubscriptionType: false,
+					messageBodyTemplate: fs.readFileSync('config/message-templates/request-denied.html'),
+					messageShortTemplate: '',
+					messageTitleTemplate: '',
+					emailBodyTemplate: fs.readFileSync('config/message-templates/request-denied.html'),
+					emailSubjectTemplate: "BC Developer's Exchange - Opportunity Denied",
 					modelsRequired: ['opportunity'],
 					daysToArchive: 0,
 					linkTemplate: '/defaultonly',

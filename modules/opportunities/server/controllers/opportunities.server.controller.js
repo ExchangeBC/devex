@@ -1093,6 +1093,8 @@ exports.action = function(req, res) {
 			if (isPreApproval === false) {
 				opportunity.isApproved = true;
 				updateSave(opportunity).then(function() {
+					// send a notification message to original requestor notifying of approval
+					sendMessages('opportunity-approved-notification', [opportunity.finalApproval.requestor], { opportunity: setMessageData(opportunity) });
 					res.status(200).json({ message: 'Opportunity approved!', succeed: true });
 				});
 			} else {
@@ -1114,6 +1116,8 @@ exports.action = function(req, res) {
 			approvalInfo.actioned = Date.now();
 
 			updateSave(opportunity).then(function() {
+				// send a notification message to original requestor notifying of rejection
+				sendMessages('opportunity-denied-notification', [opportunity.finalApproval.requestor], { opportunity: setMessageData(opportunity) });
 				res.status(200).json({ message: 'Opportunity rejected', succeed: true });
 			});
 		}
@@ -1163,8 +1167,6 @@ function sendApprovalMessages(requestingUser, opportunity) {
 }
 
 function send2FAviaSMS(approvalInfo) {
-	console.log('send via text, code = ' + approvalInfo.twoFACode);
-
 	const nexmo = new Nexmo({
 		apiKey: process.env.NEXMO_API_KEY,
 		apiSecret: process.env.NEXMO_API_SECRET
