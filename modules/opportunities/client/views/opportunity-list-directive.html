@@ -48,8 +48,8 @@
       <div ng-cloak class="row">
         <div class="col px-0">
           <h6>Open Opportunities</h6>
-          <h6 ng-if="vm.countOpenOpportnities() === 0">
-            <emoji>🌵</emoji> No open opportunities right now
+          <h6 class="small mt-3" ng-if="vm.countOpenOpportunities() === 0">
+            <emoji>🌵</emoji> No open opportunities right now, check back soon!
           </h6>
 
           <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterOpen | orderBy: 'created': true track by $index"

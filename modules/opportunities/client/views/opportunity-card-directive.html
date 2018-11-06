@@ -27,8 +27,8 @@
       ng-click="vm.publish(opportunity, false)" title="Unpublish">
       <i class="fas fa-ban"></i>
     </a>
-    <a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished" href=""
-      ng-click="vm.publish(opportunity, true)" title="Publish">
+    <a class="btn btn-text-only" ng-if="(vm.isAdmin || opportunity.userIs.admin) && !opportunity.isPublished && (!opportunity.approvalRequired || opportunity.isApproved)"
+      href="" ng-click="vm.publish(opportunity, true)" title="Publish">
       <i class="fas fa-bullhorn"></i>
     </a>
     <a class="btn btn-text-only" ng-if="vm.isUser && vm.closing(opportunity) !== 'CLOSED'" ng-click="vm.toggleWatch(opportunity)">
