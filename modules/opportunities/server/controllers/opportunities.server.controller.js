@@ -1074,6 +1074,10 @@ exports.unPublishOpportunities = function(programId, projectId) {
 	});
 };
 
+//
+// Action an opportunity approval request (pre-approval or final approval)
+// Upon actioning, the appropriate follow up notifications are dispatched
+//
 exports.action = function(req, res) {
 	var code = Number(req.body.code);
 	var action = req.body.action;
@@ -1129,6 +1133,9 @@ exports.action = function(req, res) {
 	}
 };
 
+//
+// Sends a 2FA code using the opportunity and approval info in the request
+//
 exports.send2FA = function(req, res) {
 	var opportunity = req.opportunity;
 	var intermediateApproval = opportunity.intermediateApproval;
@@ -1152,6 +1159,9 @@ exports.send2FA = function(req, res) {
 	});
 };
 
+//
+// Initiate the opportunity approval workflow by sending the initial pre-approval email and configuring the opportunity as required
+//
 function sendApprovalMessages(requestingUser, opportunity) {
 	if (opportunity.intermediateApproval.state === 'ready-to-send') {
 		// send intermediate approval request
@@ -1166,6 +1176,9 @@ function sendApprovalMessages(requestingUser, opportunity) {
 	}
 }
 
+//
+// Send a 2FA token via SMS using the passed approval info
+//
 function send2FAviaSMS(approvalInfo) {
 	const nexmo = new Nexmo({
 		apiKey: process.env.NEXMO_API_KEY,
@@ -1179,7 +1192,9 @@ function send2FAviaSMS(approvalInfo) {
 	nexmo.message.sendSms(from, to, msg);
 }
 
+//
+// Send a 2FA token via email using the passed approval info
+//
 function send2FAviaEmail(approvalInfo) {
-	console.log('send via email, code = ' + approvalInfo.twoFACode);
 	sendMessages('opportunity-approval-2FA', [{ email: approvalInfo.email }], { approvalInfo: approvalInfo });
 }
