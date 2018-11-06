@@ -155,6 +155,42 @@
 				};
 
 				//
+				// (Admin Only) - Removes the opportunity approval requirement
+				//
+				vm.bypassApproval = function() {
+					if (!vm.isAdmin || vm.opportunity.isPublished) {
+						return;
+					}
+
+					vm.opportunity.approvalRequired = false;
+					vm.opportunity.createOrUpdate().then(function(savedOpportunity) {
+						vm.opportunity = savedOpportunity;
+						Notification.success({
+							title: 'Success',
+							message: '<i class="fas fa-check-circle"></i> Approval Requirement Bypassed'
+						});
+					});
+				};
+
+				//
+				// (Admin Only) - Reinstates the opportunity approval requirement
+				//
+				vm.reinstateApproval = function() {
+					if (!vm.isAdmin || vm.opportunity.isPublished) {
+						return;
+					}
+
+					vm.opportunity.approvalRequired = true;
+					vm.opportunity.createOrUpdate().then(function(savedOpportunity) {
+						vm.opportunity = savedOpportunity;
+						Notification.success({
+							title: 'Success',
+							message: '<i class="fas fa-check-circle"></i> Approval Requirement Reinstated'
+						});
+					});
+				};
+
+				//
 				// am I watchng?
 				//
 				vm.isWatching = OpportunitiesCommon.isWatchng(vm.opportunity);
@@ -186,6 +222,7 @@
 				vm.isMember = opportunity.userIs.member;
 				vm.isSprintWithUs = vm.opportunity.opportunityTypeCd === 'sprint-with-us';
 				vm.showProposals = vm.canEdit && vm.opportunity.isPublished;
+				vm.isAdmin = isAdmin;
 				//
 				// dates
 				//
@@ -215,7 +252,11 @@
 				//
 				// -------------------------------------------------------------------------
 				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
-				vm.canPublish = vm.errorFields.length === 0 && (!vm.opportunity.approvalRequired || vm.opportunity.isApproved);
+
+				vm.canPublish = function() {
+					return vm.errorFields.length === 0 && (!vm.opportunity.approvalRequired || vm.opportunity.isApproved);
+				};
+
 				// -------------------------------------------------------------------------
 				//
 				// issue a request for membership

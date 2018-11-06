@@ -1,6 +1,6 @@
 <div class="m-5">
   <div>
-    <div class="row" ng-if="vm.opportunity.approvalRequired && !vm.opportunity.isApproved">
+    <div class="row" ng-if="vm.opportunity.approvalRequired && !vm.opportunity.isApproved && !vm.opportunity.isPublished">
       <div class="col alert alert-warning">
         <span class="strong"><i class="fas fa-exclamation-triangle"></i> Approval is required to publish this
           opportunity.</span>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved">
+    <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved && !vm.opportunity.isPublished">
       <div class="col alert alert-success">
         <i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!
       </div>
@@ -24,18 +24,19 @@
         <h3>Contract Approval Request</h3>
       </div>
       <div class="col pr-0 mr-0">
-        <button type="button" class="btn btn-success text-white float-right" ng-disable="vm.opportunity.isPublished || vm.closed === 'CLOSED'"
-          ng-click="vm.sendApprovalRequest()" ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'"><i
+        <button type="button" class="btn btn-success text-white float-right" ng-click="vm.sendApprovalRequest()"
+          ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft' || vm.opportunity.isPublished || vm.closed === 'CLOSED'"><i
             class="fas fa-envelope"></i>
           Send
         </button>
-        <button type="button" class="btn btn-primary text-white float-right" ng-if="vm.isAdmin" ng-click="vm.resetApprovalRequest()">
+        <button type="button" class="btn btn-danger float-right" ng-if="vm.isAdmin && !vm.opportunity.isPublished"
+          ng-click="vm.resetApprovalRequest()" uib-tooltip="(Admin Only) This will allow a new approval request to be dispatched">
           Reset Approval Request
         </button>
       </div>
     </div>
 
-    <fieldset ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'">
+    <fieldset ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft' || vm.opportunity.isPublished">
       <div class="row py-3 my-3 rounded border border-primary">
         <div class="col-xs-12 col-sm-6">
           <h4>Pre-Approval</h4>

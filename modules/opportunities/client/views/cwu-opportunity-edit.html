@@ -59,7 +59,7 @@
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/cwu-opportunity-edit-acceptance.html'"></div>
         </uib-tab>
-        <uib-tab index="6" data-automation-id="tab-cwu-approval">
+        <uib-tab index="6" data-automation-id="tab-cwu-approval" ng-if="vm.opportunity.approvalRequired">
           <uib-tab-heading>
             Approval
           </uib-tab-heading>

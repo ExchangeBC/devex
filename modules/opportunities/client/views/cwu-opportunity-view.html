@@ -81,7 +81,7 @@
 
   <div class="container">
     <!-- // Admin View / if opportunity is in DRAFT and INCOMPLETE // -->
-    <div class="row" ng-if="!vm.canPublish && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED' && vm.errorFields.length > 0">
+    <div class="row" ng-if="!vm.canPublish() && !vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED' && vm.errorFields.length > 0">
       <div class="col alert alert-warning">
         <span class="strong"><i class="fas fa-exclamation-triangle"></i> Your opportunity is missing stuff!</span>
         Before you can publish, you'll need to define these things:
@@ -102,12 +102,24 @@
           <span ng-if="vm.opportunity.intermediateApproval.action === 'denied' || vm.opportunity.finalApproval.action === 'denied'">Your
             approval request was denied. If you feel this was in error, please contact an administrator.</span>
         </span>
+        <button type="button" class="btn btn-danger float-right" ng-if="vm.isAdmin" ng-click="vm.bypassApproval()"
+          uib-tooltip="(Admin Only) This will allow the opportunity to be published without ADM approval">
+          Bypass Approval
+        </button>
       </div>
     </div>
 
     <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved && vm.canEdit && !vm.opportunity.isPublished && vm.closing !== 'CLOSED'">
       <div class="col alert alert-success">
         <i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!
+      </div>
+    </div>
+
+    <div class="row" ng-if="vm.isAdmin && !vm.opportunity.approvalRequired && !vm.opportunity.isPublished && vm.closing !== 'CLOSED'">
+      <div class="col pr-0 my-3">
+        <button type="button" class="btn btn-danger float-right" ng-click="vm.reinstateApproval()" uib-tooltip="(Admin Only) This will reinstate the approval requirement needed to publish">
+          Reinstate Approval Requirement
+        </button>
       </div>
     </div>
 
@@ -133,7 +145,7 @@
       <!-- // Opportunity Admin control buttons // -->
 
       <!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
-      <button data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished"
+      <button data-automation-id="button-opportunity-publish" ng-if="vm.canPublish() && vm.canEdit && !vm.opportunity.isPublished"
         class="btn btn-primary float-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i
           class="fas fa-bullhorn"></i> Publish</button>
 
