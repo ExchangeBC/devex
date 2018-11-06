@@ -675,43 +675,6 @@ import '../css/opportunities.css';
 
 				// -------------------------------------------------------------------------
 				//
-				// Send an approval request
-				//
-				// -------------------------------------------------------------------------
-				vm.sendRequest = function(isValid) {
-					if (!isValid) {
-						Notification.error({
-							message: '<i class="fas fa-exclamation-triangle"></i> Please fill out all required fields.',
-							title: 'Error'
-						});
-					}
-
-					var confirmMessage = 'Are you sure you are ready to send the requests with the entered contact information?';
-					ask.yesNo(confirmMessage).then(function(choice) {
-						if (choice) {
-							vm.opportunity.intermediateApproval.action = 'to-send';
-							vm.opportunity
-								.createOrUpdate()
-								.then(function(savedOpportunity) {
-									vm.opportunity = savedOpportunity;
-									Notification.success({
-										message: '<i class="fas fa-check-circle"></i> Approval request sent!',
-										title: 'Success'
-									});
-									$state.go('opportunities.viewswu', { opportunityId: vm.opportunity.code });
-								})
-								.catch(function(res) {
-									Notification.error({
-										message: '<i class="fas fa-exclamation-triangle"></i> Error: ' + res.message,
-										title: 'Error'
-									});
-								});
-						}
-					});
-				};
-
-				// -------------------------------------------------------------------------
-				//
 				// if the skills tab was selected we need to collapse all the capabilities and
 				// currently selected skills into the aggregate
 				//
