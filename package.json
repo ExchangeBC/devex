@@ -20,7 +20,10 @@
     "quiet": "gulp quiet",
     "debug": "gulp debug",
     "prod": "gulp prod",
-    "pack": "webpack"
+    "webpack": "gulp webpack",
+    "build-webpack": "webpack --env production",
+    "build-webpack-dev": "webpack --env development",
+    "start": "node server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.4.1",
@@ -96,8 +99,16 @@
     "wiredep": "~4.0.0"
   },
   "devDependencies": {
-    "coveralls": "3.0.2",
+    "@babel/core": "~7.1.2",
+    "@babel/preset-env": "~7.1.0",
+    "autoprefixer": "~8.5.0",
+    "babel-loader": "~8.0.4",
+    "clean-webpack-plugin": "~0.1.19",
+    "compression-webpack-plugin": "~1.1.11",
+    "copy-webpack-plugin": "~4.5.1",
+    "coveralls": "^3.0.2",
     "css-loader": "^1.0.0",
+    "cssnano": "~3.10.0",
     "del": "3.0.0",
     "dotenv": "6.0.0",
     "eslint": "5.4.0",
@@ -130,22 +141,28 @@
     "gulp-sass": "4.0.1",
     "gulp-uglify": "3.0.1",
     "gulp-util": "3.0.8",
+    "image-webpack-loader": "~3.6.0",
     "imports-loader": "^0.8.0",
     "lcov-result-merger": "~2.0.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.4",
+    "minimatch": "~3.0.4",
     "mock-fs": "4.6.0",
+    "optimize-css-assets-webpack-plugin": "~4.0.1",
+    "postcss-loader": "~2.1.5",
     "run-sequence": "2.2.1",
     "sass-loader": "^7.1.0",
     "semver": "^5.6.0",
     "should": "13.2.3",
     "style-loader": "^0.23.1",
     "supertest": "3.1.0",
+    "uglifyjs-webpack-plugin": "~1.2.5",
     "url-loader": "^1.1.2",
     "vinyl-paths": "^2.1.0",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.2",
-    "webpack-stream": "^5.1.1"
+    "webpack": "~4.20.2",
+    "webpack-cli": "~3.1.2",
+    "webpack-merge": "~4.1.4",
+    "webpack-stream": "~5.1.1"
   }
 }
