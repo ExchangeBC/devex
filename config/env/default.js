@@ -1,10 +1,9 @@
 'use strict';
 
-
 var path = require('path');
 module.exports = {
 	app: {
-		title: 'BCDevExchange - The BC Developer\'s Exchange',
+		title: "BCDevExchange - The BC Developer's Exchange",
 		description: 'Better ways for government and developers to work together',
 		keywords: 'developer, government, codewithus, agile, digitial service',
 		googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID',
@@ -32,37 +31,37 @@ module.exports = {
 	sessionTimeoutWarning: process.env.SESSION_WARNING || 300,
 	home: process.env.PWD || '/opt/mean.js',
 	terms: {
-		'cwu1': {
-			path: 'public/code-with-us-terms-2018-01-23.pdf',
+		cwu1: {
+			path: 'public/code-with-us-terms-2018-11-05.pdf',
 			name: 'code-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
-		'user1': {
+		user1: {
 			path: 'public/terms-bc-developers-exchange-2018-04-19.pdf',
 			name: 'terms-bc-developers-exchange-2018-04-19.pdf',
 			type: 'application/pdf'
 		},
-		'rfq1': {
+		rfq1: {
 			path: 'public/rfq-sprint-with-us-company-2018-05-15.pdf',
 			name: 'rfq-sprint-with-us-company.pdf',
 			type: 'application/pdf'
 		},
-		'swu1': {
+		swu1: {
 			path: 'public/sprint-with-us-terms-2018-05-14.pdf',
 			name: 'sprint-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
-		'serviceagreement': {
+		serviceagreement: {
 			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
 			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		},
-		'codechallenge': {
+		codechallenge: {
 			path: 'public/code-challenge-rules-2018-08-10.pdf',
 			name: 'code-challenge.pdf',
 			type: 'application/pdf'
 		},
-		'teamscenario': {
+		teamscenario: {
 			path: 'public/team-scenario-rules-2018-08-10.pdf',
 			name: 'team-scenario.pdf',
 			type: 'application/pdf'
@@ -92,13 +91,20 @@ module.exports = {
 	favicon: 'modules/core/client/img/brand/favicon.ico',
 	uploads: {
 		diskStorage: {
-			destination: function (req, file, cb) {
-				cb (null, path.resolve('public/uploads/'))
+			destination: function(req, file, cb) {
+				cb(null, path.resolve('public/uploads/'));
 			},
-			filename: function (req, file, cb) {
+			filename: function(req, file, cb) {
 				var datetimestamp = Date.now();
 				// console.log ('file.originalname', file.originalname);
-				cb (null, file.fieldname + '-' + datetimestamp + '.' + file.originalname.split('.')[file.originalname.split('.').length -1])
+				cb(
+					null,
+					file.fieldname +
+						'-' +
+						datetimestamp +
+						'.' +
+						file.originalname.split('.')[file.originalname.split('.').length - 1]
+				);
 			}
 		},
 		profileUpload: {
@@ -126,5 +132,4 @@ module.exports = {
 			minOptionalTestsToPass: 4
 		}
 	}
-
 };
