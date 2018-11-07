@@ -90,6 +90,9 @@ const commonConfig = merge([
 			limit: 10 * 1024,
 		}
 	}),
+	parts.loadTypeScript({
+		exclude: /node_modules/,
+	}),
 	{
 		plugins: [
 			new webpack.ProvidePlugin({
