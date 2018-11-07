@@ -769,13 +769,20 @@
 					//
 					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/')
 						vm.opportunity.github += '/';
+
 					//
 					// set the time on the 2 dates that care about it
 					//
 					vm.opportunity.deadline.setHours(16);
+					vm.opportunity.deadline.setMinutes(0);
+					vm.opportunity.deadline.setSeconds(0);
 					vm.opportunity.assignment.setHours(16);
-					if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date();
+					if (!vm.opportunity.endDate) {
+						vm.opportunity.endDate = new Date();
+					}
 					vm.opportunity.endDate.setHours(16);
+					vm.opportunity.endDate.setMinutes(0);
+					vm.opportunity.endDate.setSeconds(0);
 
 					//
 					// confirm save only if the user is also publishing
