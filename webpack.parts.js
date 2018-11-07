@@ -33,11 +33,15 @@ exports.devServer = ({ host, port } = {}) => ({
 	},
 });
 
-exports.loadJS = ({ include, exclude } = {}) => ({
+exports.loadTypeScript = ({ include, exclude } = {}) => ({
+	resolve: {
+		extensions: ['.ts', '.tsx', '.js', '.json'],
+	},
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
+				// Include ts, tsx, and js files.
+				test: /\.(tsx?)|(js)$/,
 				include,
 				exclude,
 				loader: 'babel-loader',
