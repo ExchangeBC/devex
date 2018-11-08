@@ -8,6 +8,7 @@ const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TSLintPlugin = require('tslint-webpack-plugin');
 
 const postCSSLoader = {
 	loader: 'postcss-loader',
@@ -33,7 +34,7 @@ exports.devServer = ({ host, port } = {}) => ({
 	},
 });
 
-exports.loadTypeScript = ({ include, exclude } = {}) => ({
+exports.loadTS = ({ include, exclude } = {}) => ({
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.json'],
 	},
@@ -48,6 +49,14 @@ exports.loadTypeScript = ({ include, exclude } = {}) => ({
 			},
 		],
 	},
+});
+
+exports.lintTS = ({ files } = {}) => ({
+	plugins: [
+		new TSLintPlugin({
+			files
+		}),
+	],
 });
 
 exports.loadCSS = ({ include, exclude } = {}) => ({
@@ -205,6 +214,14 @@ exports.gZipCompression = () => ({
 	plugins: [
 		new CompressionPlugin({
 			algorithm: 'gzip',
+		}),
+	],
+});
+
+exports.provideJQuery = () => ({
+	plugins: [
+		new webpack.ProvidePlugin({
+			jQuery: 'jquery'
 		}),
 	],
 });

@@ -66,10 +66,10 @@ const commonConfig = merge([
 				'./modules/core/client/app/config.js',
 				'./modules/core/client/app/init.js',
 			].concat(
-				glob.sync('./modules/*/client/*.js'),
-				glob.sync('./modules/*/client/**/*.js', {
+				glob.sync('./modules/*/client/*.{js,ts}'),
+				glob.sync('./modules/*/client/**/*.{js,ts}', {
 					ignore: [
-						'./modules/*/client/*.js',
+						'./modules/*/client/*.{js,ts}',
 						'./main.js',
 						'./modules/core/client/app/config.js',
 						'./modules/core/client/app/init.js'
@@ -90,16 +90,13 @@ const commonConfig = merge([
 			limit: 10 * 1024,
 		}
 	}),
-	parts.loadTypeScript({
+	parts.loadTS({
 		exclude: /node_modules/,
 	}),
-	{
-		plugins: [
-			new webpack.ProvidePlugin({
-				jQuery: 'jquery'
-			}),
-		],
-	}
+	parts.lintTS({
+		files: ['./modules/*/client/**/*.ts']
+	}),
+	parts.provideJQuery(),
 ]);
 
 const devConfig = merge([
@@ -112,17 +109,6 @@ const devConfig = merge([
 	},
 	parts.generateSourceMaps({
 		type: "source-map",
-	}),
-	parts.devServer({
-		// Parse host and port from env to allow customization.
-		//
-		// If you use Docker, set
-		// host: HOST || "0.0.0.0";
-		//
-		// 0.0.0.0 is available to all network devices
-		// unlike default `localhost`.
-		host: HOST || '0.0.0.0',
-		port: PORT,
 	}),
 	parts.loadCSS(),
 	parts.loadTinyMCE(),
