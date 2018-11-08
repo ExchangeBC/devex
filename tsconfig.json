@@ -16,7 +16,7 @@
 		"esModuleInterop": true
 	},
 	"include": [
-		"modules/*/client"
+		"./modules/*/client/**/*"
 	],
 	"exclude": [
 		"node_modules"
