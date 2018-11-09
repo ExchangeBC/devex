@@ -36,7 +36,7 @@ if (dotenv.parsed) {
 const BUILD_FILE_NAMES = {
 	css: '[name].css',
 	bundle: '[name].bundle.js',
-	vendor: '[id].[chunkhash:4].js',
+	vendor: '[name].bundle.js',
 	assets: 'assets/[name].[hash:4].[ext]',
 };
 
@@ -127,7 +127,6 @@ const prodConfig = merge([
 			cacheGroups: {
 				commons: {
 					test: /[\\/]node_modules[\\/]/,
-					filename: "vendor.bundle.js",
 					name: "vendor",
 					chunks: "initial",
 				},
