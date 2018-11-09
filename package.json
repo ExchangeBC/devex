@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.4.1",
+    "@types/angular": "^1.6.51",
     "acl": "~0.4.9",
     "angular": "^1.7.5",
     "angular-animate": "^1.7.5",
