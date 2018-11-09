@@ -64,7 +64,7 @@ gulp.task('nodemon', () => {
 		plugins.nodemon({
 			script: 'server.js',
 			nodeArgs: ['--inspect=0.0.0.0:9229', '-r', 'dotenv/config'],
-			ext: 'js,html',
+			ext: 'ts,js,html',
 			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
 		});
 		resolve();
@@ -77,7 +77,7 @@ gulp.task('nodemon-debug', function() {
 		plugins.nodemon({
 			script: 'server.js',
 			nodeArgs: ['--inspect-brk=0.0.0.0:9229', '-r', 'dotenv/config'],
-			ext: 'js,html',
+			ext: 'ts,js,html',
 			verbose: true,
 			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
 		});
@@ -95,7 +95,7 @@ gulp.task('watch', () => {
 			// Add watch rules
 			gulp.watch(defaultAssets.server.views).on('change', plugins.refresh.changed);
 			gulp.watch(defaultAssets.server.allJS, gulp.series('eslint')).on('change', plugins.refresh.changed);
-			gulp.watch(defaultAssets.client.js, gulp.series('eslint')).on('change', plugins.refresh.changed);
+			// gulp.watch(defaultAssets.client.js, gulp.series('eslint')).on('change', plugins.refresh.changed);
 			gulp.watch(defaultAssets.client.css, gulp.series('csslint')).on('change', plugins.refresh.changed);
 			gulp.watch(defaultAssets.client.sass, gulp.parallel('sass', 'csslint')).on(
 				'change',
@@ -144,7 +144,7 @@ gulp.task('eslint', () => {
 	var assets = _.union(
 		defaultAssets.server.gulpConfig,
 		defaultAssets.server.allJS,
-		defaultAssets.client.js,
+		// defaultAssets.client.js,
 		testAssets.tests.server,
 		testAssets.tests.client,
 		testAssets.tests.e2e

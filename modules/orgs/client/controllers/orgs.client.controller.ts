@@ -1,5 +1,7 @@
+/* tslint:disable */
 // Import certain style elements here so that webpack picks them up
 import '../css/orgs.css';
+import angular from 'angular';
 
 (function() {
 	'use strict';
