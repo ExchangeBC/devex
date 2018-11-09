@@ -144,7 +144,6 @@
     "gulp-sass": "4.0.1",
     "gulp-uglify": "3.0.1",
     "gulp-util": "3.0.8",
-    "image-webpack-loader": "~3.6.0",
     "imports-loader": "^0.8.0",
     "lcov-result-merger": "~2.0.0",
     "less": "^3.8.1",
