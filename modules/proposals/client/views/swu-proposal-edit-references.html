@@ -39,13 +39,13 @@
         <table class="table table-striped">
           <tr ng-repeat="file in ppp.proposal.attachments">
             <td class="text-right">
-              <i class="fas fa-file-{{ppp.type(file.type)}}-o"></i>
+              <i class="fas {{ ppp.getIconName(file.type) }}"></i>
             </td>
             <td class="text-left">
               {{file.name}}
             </td>
             <td class="text-left">
-              <i class="fas fa-trash" ng-click="ppp.deletefile(file._id)"></i>
+              <span ng-click="ppp.deletefile(file._id)"><i class="fas fa-trash" title="remove"></i></span>
             </td>
           </tr>
         </table>
