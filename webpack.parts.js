@@ -36,7 +36,7 @@ exports.devServer = ({ host, port } = {}) => ({
 
 exports.loadTS = ({ include, exclude } = {}) => ({
 	resolve: {
-		extensions: ['.ts', '.tsx', '.js', '.json'],
+		extensions: ['.ts', '.tsx', '.js'],
 	},
 	module: {
 		rules: [
@@ -186,6 +186,7 @@ exports.generateSourceMaps = ({ type } = {}) => ({
 
 exports.minifyJS = ({ options } = {}) => ({
 	optimization: {
+		splitChunks: options,
 		minimize: true
 	},
 });

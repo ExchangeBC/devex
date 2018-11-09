@@ -1,10 +1,13 @@
+/* tslint:disable */
+import angular from 'angular';
+
 (function(window) {
 	'use strict';
 
 	var applicationModuleName = 'mean';
 
 	var service = {
-		applicationEnvironment: window.env,
+		applicationEnvironment: (window as any).env,
 		applicationModuleName: applicationModuleName,
 		applicationModuleVendorDependencies: [
 			'ngAnimate',
@@ -24,7 +27,7 @@
 		registerModule: registerModule
 	};
 
-	window.ApplicationConfiguration = service;
+	(window as any).ApplicationConfiguration = service;
 
 	// Add a new vertical module
 	function registerModule(moduleName, dependencies) {
@@ -56,8 +59,8 @@
 		'IdleProvider',
 		'KeepaliveProvider',
 		function(IdleProvider, KeepaliveProvider) {
-			IdleProvider.idle(Number(window.sessionTimeoutWarning));
-			IdleProvider.timeout(Number(window.sessionTimeout));
+			IdleProvider.idle(Number((window as any).sessionTimeoutWarning));
+			IdleProvider.timeout(Number((window as any).sessionTimeout));
 			KeepaliveProvider.interval(2);
 		}
 	]);

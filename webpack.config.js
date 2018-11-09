@@ -43,36 +43,18 @@ const BUILD_FILE_NAMES = {
 const commonConfig = merge([
 	{
 		entry: {
-			vendor: [
-				'angular',
-				'angular-animate',
-				'angular-breadcrumb',
-				'angular-messages',
-				'angular-mocks',
-				'angular-resource',
-				'angular-ui-notification',
-				'angular-ui-router',
-				'angular-ui-tinymce',
-				'ng-img-crop',
-				'ng-file-upload',
-				'ng-idle',
-				'angular-drag-and-drop-lists',
-				'angular-sanitize',
-				'jquery',
-				'bootstrap',
-				'ui-bootstrap4'
-			],
 			main: [
-				'./modules/core/client/app/config.js',
-				'./modules/core/client/app/init.js',
+				'./vendor.ts',
+				'./modules/core/client/app/config.ts',
+				'./modules/core/client/app/init.ts',
 			].concat(
 				glob.sync('./modules/*/client/*.{js,ts}'),
 				glob.sync('./modules/*/client/**/*.{js,ts}', {
 					ignore: [
 						'./modules/*/client/*.{js,ts}',
 						'./main.js',
-						'./modules/core/client/app/config.js',
-						'./modules/core/client/app/init.js'
+						'./modules/core/client/app/config.ts',
+						'./modules/core/client/app/init.ts'
 					]
 				}),
 			),
@@ -140,7 +122,18 @@ const prodConfig = merge([
 			limit: 10 * 1024,
 		},
 	}),
-	parts.minifyJS(),
+	parts.minifyJS({
+		options: {
+			cacheGroups: {
+				commons: {
+					test: /[\\/]node_modules[\\/]/,
+					filename: "vendor.bundle.js",
+					name: "vendor",
+					chunks: "initial",
+				},
+			},
+		},
+	}),
 ]);
 
 module.exports = (mode) => {

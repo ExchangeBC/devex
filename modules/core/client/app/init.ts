@@ -1,3 +1,8 @@
+/* tslint:disable */
+import angular from 'angular';
+
+declare var ApplicationConfiguration: any;
+
 (function (app) {
   'use strict';
 
@@ -36,7 +41,7 @@
   function init() {
     // Fixing facebook bug with redirect
     if ((window.location.hash && window.location.hash === '#_=_') && (window.history && history.pushState)) {
-        window.history.pushState('', document.title, window.location.pathname);
+      window.history.pushState('', document.title, window.location.pathname);
     }
 
     // Then init the app

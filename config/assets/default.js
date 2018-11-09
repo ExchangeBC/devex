@@ -54,13 +54,7 @@ module.exports = {
 		css: ['public/dist/theme.css', 'public/css/*.css', 'modules/*/client/css/*.css'],
 		less: ['modules/*/client/less/*.less'],
 		sass: ['modules/*/client/scss/*.scss'],
-		js: [
-			'modules/core/client/app/config.js',
-			'modules/core/client/app/init.js',
-			'modules/*/client/*.js',
-			'modules/*/client/**/*.js',
-			'public/js/bc-devx.js'
-		],
+		js: [],
 		img: [
 			'modules/**/*/img/**/*.jpg',
 			'modules/**/*/img/**/*.png',
