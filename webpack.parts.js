@@ -51,14 +51,6 @@ exports.loadTS = ({ include, exclude } = {}) => ({
 	},
 });
 
-exports.lintTS = ({ files } = {}) => ({
-	plugins: [
-		new TSLintPlugin({
-			files
-		}),
-	],
-});
-
 exports.loadCSS = ({ include, exclude } = {}) => ({
 	module: {
 		rules: [

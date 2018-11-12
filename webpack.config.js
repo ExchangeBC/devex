@@ -75,9 +75,7 @@ const commonConfig = merge([
 	parts.loadTS({
 		exclude: /node_modules/,
 	}),
-	parts.lintTS({
-		files: ['./modules/*/client/**/*.ts']
-	}),
+	parts.provideJQuery(),
 	parts.provideJQuery(),
 ]);
 
