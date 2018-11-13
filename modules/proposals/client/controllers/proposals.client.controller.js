@@ -200,11 +200,11 @@
 		var copyUserInfo = function(proposalToModify) {
 			proposalToModify.opportunity          = ppp.opportunity;
 
-			proposalToModify.businessName         = ppp.org.name;
-			proposalToModify.businessAddress      = ppp.org.fullAddress;
-			proposalToModify.businessContactName  = ppp.org.contactName;
-			proposalToModify.businessContactEmail = ppp.org.contactEmail;
-			proposalToModify.businessContactPhone = ppp.org.contactPhone;
+			proposalToModify.businessName         = ppp.user.businessName;
+			proposalToModify.businessAddress      = ppp.user.businessAddress;
+			proposalToModify.businessContactName  = ppp.user.businessContactName;
+			proposalToModify.businessContactEmail = ppp.user.businessContactEmail;
+			proposalToModify.businessContactPhone = ppp.user.businessContactPhone;
 		};
 
 		// -------------------------------------------------------------------------
