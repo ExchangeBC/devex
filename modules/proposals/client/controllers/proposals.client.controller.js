@@ -83,12 +83,30 @@
 				$state.go ('opportunities.viewcwu',{opportunityId:ppp.opportunity.code});
 			}
 		};
-		ppp.type = function (type) {
-			if (type.indexOf ('pdf') > -1) return 'pdf';
-			else if (type.indexOf ('image') > -1) return 'image';
-			else if (type.indexOf ('word') > -1) return 'word';
-			else if (type.indexOf ('excel') > -1) return 'excel';
-			else if (type.indexOf ('powerpoint') > -1) return 'powerpoint';
+		// -------------------------------------------------------------------------
+		//
+		// Get a font-awesome icon name for the given file type
+		//
+		// -------------------------------------------------------------------------
+		ppp.getIconName = function (type) {
+			if (type.indexOf ('pdf') > -1) {
+				return 'fa-file-pdf';
+			}
+			else if (type.indexOf ('image') > -1) {
+				return 'fa-file-image';
+			}
+			else if (type.indexOf ('word') > -1) {
+				return 'fa-file-word';
+			}
+			else if (type.indexOf ('excel') > -1 || type.indexOf('sheet') > -1) {
+				return 'fa-file-excel';
+			}
+			else if (type.indexOf ('powerpoint') > -1) {
+				return 'fa-file-powerpoint';
+			}
+			else {
+				return 'fa-file'
+			}
 		};
 		ppp.downloadfile = function (fileid) {
 			ProposalsService.downloadDoc ({

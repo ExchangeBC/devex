@@ -1,168 +1,118 @@
-<div class="modal-header">
-  <button class="close" data-ng-click="close()"><i class="fas fa-times-thin"></i></button>
-  <div class="modal-title">{{data.proposal.businessName}}</div>
+<div class="row p-3">
+  <div class="col">
+    <button class="close" data-ng-click="close()"><i class="fas fa-times"></i></button>
+    <div class="strong">{{ data.proposal.businessName }}</div>
+  </div>
 </div>
-<div class="modal-body">
+
+<div class="container">
   <div class="row">
-    <div class="col-xs-12">
+    <div class="col">
       <dl class="dl-horizontal">
         <dt>Company:</dt>
-        <dd>{{data.proposal.businessName}}<br>{{data.proposal.businessAddress}}</dd>
+        <dd>{{ data.proposal.businessName }}<br />{{ data.proposal.businessAddress }}</dd>
         <dt>Contact:</dt>
-        <dd>{{data.proposal.businessContactName}}<br>{{data.proposal.businessContactPhone}}<br>{{data.proposal.businessContactEmail}}
+        <dd>
+          {{ data.proposal.businessContactName }}<br />{{ data.proposal.businessContactPhone }}<br />{{
+            data.proposal.businessContactEmail
+          }}
         </dd>
       </dl>
     </div>
   </div>
-  <hr>
+  <hr />
+
+  <!-- Phases View -->
   <div class="row">
-    <div class="col-xs-12 col-sm-4">
-      <div class="panel panel-default">
-        <div class="panel-heading text-center">
-          <i class="fas fa-map"></i> Inception
+    <!-- Inception Phase View -->
+    <div class="col-xs-12 col-sm-4 text-center">
+      <div><i class="fas fa-map"></i> Inception</div>
+      <div class="my-2" ng-repeat="member in data.proposal.phases.inception.team">
+        <avatar-display size="35" url="member.profileImageURL"></avatar-display>
+        <name>{{ member.displayName }}</name>
+        <div>
+          <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"
+            ><i class="fas fa-circle"></i> {{ capability.name }}</label
+          ><br />
+          <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{
+            capabilitySkill.name
+          }}</label>
         </div>
-        <div class="panel-body">
-          <div>
-            <li class="avatar-user" ng-repeat="member in data.proposal.phases.inception.team">
-              <div class="team-member">
-                <avatar-display size="35" url="member.profileImageURL"></avatar-display>
-                <name>{{member.displayName}}</name>
-                <div>
-                  <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                      class="fas fa-circle"></i> {{capability.name}}</label><br />
-                  <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-                </div>
-              </div>
-            </li>
-          </div>
-        </div>
-
       </div>
-
-      <<<<<<< Updated upstream <div class="col text-center m-3">
-        <i class="fa fa-rocket"></i> Proof of Concept
-        <div class="m-2">
-          =======
-          <div class="col-xs-12 col-sm-4">
-            <div class="panel panel-default">
-              <div class="panel-heading text-center">
-                <i class="fas fa-rocket"></i> Proof of Concept
-              </div>
-              <div class="panel-body">
-                >>>>>>> Stashed changes
-                <div>
-                  <li class="avatar-user" ng-repeat="member in data.proposal.phases.proto.team">
-                    <div class="team-member">
-                      <avatar-display size="35" url="member.profileImageURL"></avatar-display>
-                      <name>{{member.displayName}}</name>
-                      <div>
-                        <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                            <<<<<<< Updated upstream class="fa fa-circle"></i> {{capability.name}}</label><br>
-                        <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{capabilitySkill.name}}</label>
-                        =======
-                        class="fas fa-circle"></i> {{capability.name}}</label>
-                        <label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-                        >>>>>>> Stashed changes
-                      </div>
-                    </div>
-                  </li>
-                </div>
-              </div>
-            </div>
-
-            <<<<<<< Updated upstream <div class="col m-3 text-center">
-
-              <i class="fa fa-gears"></i> Implementation
-              <div class="m-2">
-
-                <li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-                  <div class="team-member">
-                    <avatar-display size="35" url="member.profileImageURL"></avatar-display>
-                    <name>{{member.displayName}}</name>
-                    <div>
-                      <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                          class="fa fa-circle"></i> {{capability.name}}</label><br>
-                      <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{capabilitySkill.name}}</label>
-                      =======
-                      <div class="col-xs-12 col-sm-4">
-                        <div class="panel panel-default">
-                          <div class="panel-heading text-center">
-                            <i class="fas fa-gears"></i> Implementation
-                          </div>
-                          <div class="panel-body">
-                            <div>
-                <li class="avatar-user" ng-repeat="member in data.proposal.phases.implementation.team">
-                  <div class="team-member">
-                    <avatar-display size="35" url="member.profileImageURL"></avatar-display>
-                    <name>{{member.displayName}}</name>
-                    <div>
-                      <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-                          class="fas fa-circle"></i> {{capability.name}}</label>
-                      <label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{capabilitySkill.name}}</label>
-                    </div>
-                    >>>>>>> Stashed changes
-                  </div>
-              </div>
-              </li>
-
-          </div>
-        </div>
     </div>
-    <<<<<<< Updated upstream <hr>
-      <div class="row">
-        <div class="col m-3">
-          <h4>References</h4>
-          <table class="table table-striped">
-            <tr ng-repeat="file in data.proposal.attachments">
-              <td class="text-right">
-                <i class="fa fa-file-{{ppp.type(file.type)}}-o"></i>
-              </td>
-              <td class="text-left">
-                {{file.name}}
-              </td>
-              <td class=" text-left">
-                <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fa fa-download"></i></a>
-              </td>
-            </tr>
-          </table>
-        </div>
-        =======
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-xs-12">
-          <h4>References</h4>
-          <table class="table table-striped">
-            <tr ng-repeat="file in data.proposal.attachments">
-              <td class=" text-right">
-                <i class="fas fa-file-{{ppp.type(file.type)}}-o"></i>
-              </td>
-              <td class="text-left">
-                {{file.name}}
-              </td>
-              <td class=" text-left">
-                <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"><i class="fas fa-download"></i></a>
-              </td>
-            </tr>
-          </table>
-          >>>>>>> Stashed changes
-        </div>
-        <hr>
-        <div class="row">
-          <div class="col m-3">
-            <h4>Team Questions</h4>
-            <div ng-repeat="response in data.proposal.teamQuestionResponses">
-              <b>Question {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.question"></span>
-              <b>Response {{$index + 1}}: &nbsp;&nbsp;</b><span ng-bind-html="response.response"></span>
-            </div>
-          </div>
-        </div>
 
-        <div class="row">
-          <div class="col m-3 text-right">
-            <button class="btn btn-default" data-ng-click="close()">Close</button>
-          </div>
-        </div>
+    <!-- POC Phase View -->
+    <div class="col-xs-12 col-sm-4 text-center">
+      <div><i class="fa fa-rocket"></i> Proof of Concept</div>
 
+      <div class="my-2" ng-repeat="member in data.proposal.phases.proto.team">
+        <avatar-display size="35" url="member.profileImageURL"></avatar-display>
+        <name>{{ member.displayName }}</name>
+        <div>
+          <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"
+            ><i class="fa fa-circle"></i> {{ capability.name }}</label
+          ><br />
+          <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{
+            capabilitySkill.name
+          }}</label>
+          <label ng-repeat="capabilitySkill in makeember.capabilitySkills" class="label label-preferred-skill">{{
+            capabilitySkill.name
+          }}</label>
+        </div>
       </div>
+    </div>
+
+    <!-- Implementation Phase View -->
+    <div class="col-xs-12 col-sm-4 text-center">
+      <div><i class="fas fa-cogs"></i> Implementation</div>
+
+      <div class="my-2" ng-repeat="member in data.proposal.phases.implementation.team">
+        <avatar-display size="35" url="member.profileImageURL"></avatar-display>
+        <name>{{ member.displayName }}</name>
+        <div>
+          <label ng-repeat="capability in member.capabilities" class="label label-cap-default {{capability.labelClass}}"
+            ><i class="fa fa-circle"></i> {{ capability.name }}</label
+          ><br />
+          <label ng-repeat="capabilitySkill in member.capabilitySkills" class="label label-preferred-skill mx-1">{{
+            capabilitySkill.name
+          }}</label>
+        </div>
+      </div>
+    </div>
   </div>
+  <hr />
+
+  <!-- References -->
+  <div class="row">
+    <div class="col">
+      <h4>References</h4>
+      <table class="table table-striped">
+        <tr ng-repeat="file in data.proposal.attachments">
+          <td class=" text-right"><i class="fas fa-file-{{ppp.type(file.type)}}-o"></i></td>
+          <td class="text-left">{{ file.name }}</td>
+          <td class=" text-left">
+            <a href="/api/proposal/{{ppp.proposal._id}}/download/doc/{{file._id}}" target="_blank"
+              ><i class="fas fa-download"></i
+            ></a>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <hr />
+
+  <!-- Team Questions -->
+  <div class="row">
+    <div class="col">
+      <h4>Team Questions</h4>
+      <div ng-repeat="response in data.proposal.teamQuestionResponses">
+        <b>Question {{ $index + 1 }}: &nbsp;&nbsp;</b><span ng-bind-html="response.question"></span>
+        <b>Response {{ $index + 1 }}: &nbsp;&nbsp;</b><span ng-bind-html="response.response"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col m-3"><button class="btn btn-default float-right" data-ng-click="close()">Close</button></div>
+  </div>
+</div>

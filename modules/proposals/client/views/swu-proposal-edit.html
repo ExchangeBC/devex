@@ -34,7 +34,7 @@
 
       <div class="bg-light rounded p-3 font-weight-bold">
         <span>Proposal from:</span> {{ppp.org.name}}
-        <a class="btn btn-text-only pull-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close">
+        <a class="btn btn-text-only float-right" data-ng-click="ppp.close()" title="Close Proposal" aria-label="Close">
           <i class="fas fa-lg fa-times"></i>
         </a>
       </div>
@@ -106,9 +106,9 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary pull-right" ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Submitted'"><i
+            <button type="button" class="btn btn-primary float-right" ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Submitted'"><i
                 class="fas fa-save"></i> Resubmit Proposal</button>
-            <button type="button" class="btn btn-primary pull-right" ng-click="ppp.save(ppp.form.proposalform.$valid)"
+            <button type="button" class="btn btn-primary float-right" ng-click="ppp.save(ppp.form.proposalform.$valid)"
               ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i class="fas fa-save"></i> Save
               Changes</button>
             <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only"

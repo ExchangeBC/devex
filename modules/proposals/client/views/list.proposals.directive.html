@@ -27,17 +27,11 @@
 <div class="row justify-content-center" ng-if="vm.isclosed && vm.proposals.length">
   <div class="col-md-auto text-center">
     <div class="alert">🎉 You've got proposals! 🎉</div>
-    <div class="row">
-      <div class="col"></div>
-      <div class="col">
-        <h4>Proposals received:</h4>
-        <div class="list-group">
-          <strong><a class="list-group-item" ng-repeat="proposal in vm.proposals" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
-              title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}}
-              {{proposal.user.lastName}}<i class="fas fa-file pull-right"></i></a></strong>
-        </div>
-      </div>
-      <div class="col"></div>
+    <h4>Proposals received:</h4>
+    <div ng-repeat="proposal in vm.proposals">
+      <a class="strong" id="proposals.viewcwu" ui-sref="proposals.viewcwu({ proposalId: proposal._id })"
+          title="View {{proposal.user.firstName}}'s proposal">{{proposal.user.firstName}}
+          {{proposal.user.lastName}} <i class="fas fa-file"></i></a>
     </div>
   </div>
 </div>
