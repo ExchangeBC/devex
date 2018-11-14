@@ -30,11 +30,11 @@
 
   <!-- View for approving/rejecting an opportunity -->
   <div class="container">
-    <div class="row text-center alert" ng-if="vm.showPreApproval || vm.showFinalApproval" ng-class="{'alert-success': vm.approvalAction === 'Approve', 'alert-danger': vm.approvalAction === 'Reject'}">
-      <div class="col">
+    <div class="row alert justify-content-center" ng-if="vm.showPreApproval || vm.showFinalApproval" ng-class="{'alert-success': vm.approvalAction === 'Approve', 'alert-danger': vm.approvalAction === 'Reject'}">
+      <div class="col-md-6 text-center margin-auto">
         To {{ vm.approvalAction }} this opportunity, enter the 6 digit code you have been sent separately (<a href=""
           ng-click="vm.requestApprovalCode()">Resend</a>)<br>
-        <input class="form-control w-25 mx-auto text-center my-2" type="number" input-max-length="6" ng-model="vm.toFAcode"
+        <input class="form-control mx-auto text-center my-2" type="number" input-max-length="6" ng-model="vm.toFAcode"
           ng-change="vm.validateApprovalCode()">
         <button class="btn text-white my-2" ng-class="{'btn-success': vm.approvalAction === 'Approve', 'btn-danger': vm.approvalAction === 'Reject'}"
           type="button" ng-click="vm.submitApprovalCode()" ng-disabled="vm.validApprovalCode">{{ vm.approvalAction }}</button>
