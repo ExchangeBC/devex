@@ -11,18 +11,14 @@
       </form-display>
     </div>
 
-    <div class="row">
-      <form-display ng-if="!vm.projectLink && (vm.context === 'program' || vm.context === 'allopportunities')" class="col-sm"
+    <div class="row w-25">
+      <form-display ng-if="!vm.projectLink && (vm.context === 'program' || vm.context === 'allopportunities')" class="col"
         x-options='{
           "title":"Project",
           "name":"project",
           "help":"Select the project that this opportunity falls under. If you do not see the project in the dropdown list, you will need to go to the Projects tab and create a new project page first."
         }'>
-        <select ng-if="!vm.projectLink && vm.context === 'program'" name="project" ng-model="vm.projectId" id="project"
-          ng-options="obj._id as obj.name for obj in vm.projects">
-          <option value="">Select Project</option>
-        </select>
-        <select ng-if="!vm.projectLink && vm.context === 'allopportunities'" name="project" ng-change="vm.updateProgramProject()"
+        <select class="form-control" ng-if="!vm.projectLink && vm.context === 'allopportunities'" name="project" ng-change="vm.updateProgramProject()"
           ng-model="vm.projectobj" id="project" ng-options="obj as obj.name group by obj.program.title for obj in vm.projects">
           <option value="">Select Project</option>
         </select>

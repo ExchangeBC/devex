@@ -596,7 +596,6 @@
 		// =========================================================================
 		.controller('OpportunityEditController', [
 			'$state',
-			'$stateParams',
 			'$window',
 			'$sce',
 			'opportunity',
@@ -608,7 +607,7 @@
 			'ask',
 			'TINYMCE_OPTIONS',
 			'OpportunitiesCommon',
-			function($state, $stateParams, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+			function($state, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
 				var vm = this;
 				vm.trust = $sce.trustAsHtml;
 				var originalPublishedState = opportunity.isPublished;
@@ -646,17 +645,10 @@
 				//
 				// if the user doesn't have the right access then kick them out
 				//
-				if (editing && !vm.isAdmin && !opportunity.userIs.admin) $state.go('forbidden');
-				//
-				// do we have existing contexts for program and project ?
-				// deal with all that noise right here
-				//
-				vm.projectLink = true;
-				vm.context = $stateParams.context || 'allopportunities';
-				vm.programId = $stateParams.programId || null;
-				vm.programTitle = $stateParams.programTitle || null;
-				vm.projectId = $stateParams.projectId || null;
-				vm.projectTitle = $stateParams.projectTitle || null;
+				if (editing && !vm.isAdmin && !opportunity.userIs.admin) {
+					$state.go('forbidden');
+				}
+
 				//
 				// cities list
 				//
@@ -706,22 +698,11 @@
 						vm.programTitle = opportunity.program.title;
 						vm.projectId = opportunity.project._id;
 						vm.projectTitle = opportunity.project.name;
+						vm.projectLink = true;
 					} else {
-						if (vm.context === 'allopportunities') {
-							vm.projectLink = false;
-						} else if (vm.context === 'program') {
-							vm.projectLink = false;
-							vm.opportunity.program = vm.programId;
-							var lprojects = [];
-							vm.projects.forEach(function(o) {
-								if (o.program._id === vm.programId) lprojects.push(o);
-							});
-							vm.projects = lprojects;
-						} else if (vm.context === 'project') {
-							vm.projectLink = true;
-							vm.opportunity.project = vm.projectId;
-							vm.opportunity.program = vm.programId;
-						}
+						vm.context = 'allopportunities';
+						vm.projectLink = false;
+
 						//
 						// if not editing, set some conveinient default dates
 						//
