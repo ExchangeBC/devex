@@ -90,7 +90,6 @@
     "simple-line-icons": "^2.4.1",
     "socket.io": "2.1.1",
     "tinymce": "^4.8.3",
-    "tinymce": "^4.8.3",
     "ui-bootstrap4": "^3.0.5",
     "validator": "10.5.0",
     "winston": "^2.4.4"
