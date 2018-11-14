@@ -76,7 +76,6 @@ const commonConfig = merge([
 		exclude: /node_modules/,
 	}),
 	parts.provideJQuery(),
-	parts.provideJQuery(),
 ]);
 
 const devConfig = merge([
@@ -86,11 +85,26 @@ const devConfig = merge([
 			publicPath: ASSET_PATH,
 			filename: BUILD_FILE_NAMES.bundle,
 		},
+
+		optimization: {
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /node_modules/,
+						chunks: 'initial',
+						name: 'vendor',
+						enforce: true
+					}
+				}
+			}
+		}
 	},
 	parts.generateSourceMaps({
 		type: "source-map",
 	}),
-	parts.loadCSS(),
+	parts.extractCSS({
+		filename: BUILD_FILE_NAMES.css,
+	}),
 	parts.loadTinyMCE(),
 	parts.loadImages({
 		urlLoaderOptions: {
@@ -105,9 +119,21 @@ const prodConfig = merge([
 		output: {
 			path: paths.build,
 			publicPath: ASSET_PATH,
-			chunkFilename: BUILD_FILE_NAMES.vendor,
 			filename: BUILD_FILE_NAMES.bundle,
 		},
+
+		optimization: {
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /node_modules/,
+						chunks: 'initial',
+						name: 'vendor',
+						enforce: true
+					}
+				}
+			}
+		}
 	},
 	parts.clean(paths.build),
 	parts.extractCSS({

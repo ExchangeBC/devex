@@ -272,4 +272,4 @@ gulp.task('default', gulp.series('env:dev', 'lint', 'clean', 'webpack', gulp.par
 gulp.task('debug', gulp.series('env:dev', 'lint', gulp.parallel('nodemon-debug', 'watch')));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('templatecache', 'clean', 'webpack', 'env:prod', gulp.parallel('nodemon', 'watch')));
+gulp.task('prod', gulp.series('env:prod', 'lint', 'clean', 'webpack', gulp.parallel('nodemon', 'watch')));
