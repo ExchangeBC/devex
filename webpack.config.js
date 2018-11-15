@@ -91,18 +91,6 @@ const devConfig = merge([
 			filename: BUILD_FILE_NAMES.bundle,
 		},
 		watch: true,
-		optimization: {
-			splitChunks: {
-				cacheGroups: {
-					vendor: {
-						test: /node_modules/,
-						chunks: 'initial',
-						name: 'vendor',
-						enforce: true
-					}
-				}
-			}
-		},
 		plugins: [
 			new LiveReloadPlugin()
 		]
