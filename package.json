@@ -92,6 +92,8 @@
     "tinymce": "^4.8.3",
     "ui-bootstrap4": "^3.0.5",
     "validator": "10.5.0",
+    "webpack-dev-middleware": "^3.4.0",
+    "webpack-hot-middleware": "^2.24.3",
     "winston": "^2.4.4"
   },
   "devDependencies": {
@@ -163,6 +165,7 @@
     "vinyl-paths": "^2.1.0",
     "webpack": "~4.20.2",
     "webpack-cli": "~3.1.2",
+    "webpack-livereload-plugin": "^2.1.1",
     "webpack-merge": "~4.1.4",
     "webpack-stream": "~5.1.1"
   }

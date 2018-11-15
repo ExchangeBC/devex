@@ -19,6 +19,7 @@ var _ = require('lodash'),
 	endOfLine = require('os').EOL,
 	del = require('del'),
 	vinylPaths = require('vinyl-paths'),
+	webpack = require('webpack'),
 	webpack_stream = require('webpack-stream'),
 	webpack_config = require('./webpack.config.js');
 
@@ -51,12 +52,41 @@ gulp.task('clean', () => {
 	return gulp.src(`${paths.build}/*`).pipe(vinylPaths(del));
 });
 
-// Webpack task
-gulp.task('webpack', () => {
+// Webpack task with watch
+gulp.task('webpack-watch', (callback) => {
+
+	var webpackStatsConfig = {
+		colors: true,
+		hash: false,
+		version: false,
+		timings: false,
+		assets: true,
+		chunks: false,
+		chunkModules: false,
+		modules: false,
+		children: false,
+		cached: false,
+		cachedAssets: false,
+		reasons: false,
+		source: false,
+		errorDetails: false,
+		chunkOrigins: false
+    };
+
 	// load separate webpack configurations for each environment
 	const config = webpack_config(process.env.NODE_ENV);
-	return webpack_stream(config).pipe(gulp.dest(`${paths.build}`));
+	return webpack_stream(config, webpack, (err, stats) => {
+		console.log(stats.toString(webpackStatsConfig));
+		callback();
+	})
+	.pipe(gulp.dest(`${paths.build}`));
 });
+
+// Webpack
+gulp.task('webpack', (callback) => {
+	const config = webpack_config(process.env.NODE_ENV);
+	return webpack_stream(config).pipe(gulp.dest(`${paths.build}`));
+})
 
 // Nodemon task
 gulp.task('nodemon', () => {
@@ -85,60 +115,6 @@ gulp.task('nodemon-debug', function() {
 	});
 });
 
-// Watch Files For Changes
-gulp.task('watch', () => {
-	return new Promise((resolve, reject) => {
-		// Start livereload
-		plugins.refresh.listen();
-
-		if (!process.env.DISABLE_WATCH) {
-			// Add watch rules
-			gulp.watch(defaultAssets.server.views).on('change', plugins.refresh.changed);
-			gulp.watch(defaultAssets.server.allJS, gulp.series('eslint')).on('change', plugins.refresh.changed);
-			// gulp.watch(defaultAssets.client.js, gulp.series('eslint')).on('change', plugins.refresh.changed);
-			gulp.watch(defaultAssets.client.css, gulp.series('csslint')).on('change', plugins.refresh.changed);
-			gulp.watch(defaultAssets.client.sass, gulp.parallel('sass', 'csslint')).on(
-				'change',
-				plugins.refresh.changed
-			);
-			gulp.watch(defaultAssets.client.less, gulp.parallel('less', 'csslint')).on(
-				'change',
-				plugins.refresh.changed
-			);
-
-			if (process.env.NODE_ENV === 'production') {
-				gulp.watch(defaultAssets.server.gulpConfig, gulp.parallel('templatecache', 'eslint'));
-				gulp.watch(defaultAssets.client.views, gulp.parallel('templatecache')).on(
-					'change',
-					plugins.refresh.changed
-				);
-			} else {
-				gulp.watch(defaultAssets.server.gulpConfig, gulp.series('eslint'));
-				gulp.watch(defaultAssets.client.views).on('change', plugins.refresh.changed);
-			}
-		}
-		resolve();
-	});
-});
-
-// CSS linting task
-gulp.task('csslint', () => {
-	return gulp
-		.src(defaultAssets.client.css)
-		.pipe(plugins.csslint('.csslintrc'))
-		.pipe(plugins.csslint.formatter());
-});
-
-// Compile theme CSS
-gulp.task('themecss', () => {
-	return gulp
-		.src(defaultAssets.client.theme.sass.entry)
-		.pipe(plugins.sass())
-		.pipe(plugins.autoprefixer())
-		.pipe(plugins.concat('theme.css'))
-		.pipe(gulp.dest('public/dist'));
-});
-
 // ESLint JS linting task
 gulp.task('eslint', () => {
 	var assets = _.union(
@@ -156,64 +132,6 @@ gulp.task('eslint', () => {
 		.pipe(plugins.eslint.format());
 });
 
-// JS minifying task
-gulp.task('uglify', () => {
-	var assets = _.union(defaultAssets.client.js, defaultAssets.client.templates);
-	del(['public/dist/*.js']);
-
-	return gulp
-		.src(assets)
-		.pipe(plugins.ngAnnotate())
-		.pipe(
-			plugins.uglify({
-				mangle: false
-			})
-		)
-		.pipe(plugins.concat('application.min.js'))
-		.pipe(plugins.rev())
-		.pipe(gulp.dest('public/dist'));
-});
-
-// CSS minifying task
-gulp.task('cssmin', () => {
-	del(['public/dist/application*.css']);
-
-	return gulp
-		.src(defaultAssets.client.css)
-		.pipe(plugins.csso())
-		.pipe(plugins.concat('application.min.css'))
-		.pipe(plugins.rev())
-		.pipe(gulp.dest('public/dist'));
-});
-
-// Sass task
-gulp.task('sass', () => {
-	return gulp
-		.src(defaultAssets.client.sass)
-		.pipe(plugins.sass())
-		.pipe(plugins.autoprefixer())
-		.pipe(
-			plugins.rename(file => {
-				file.dirname = file.dirname.replace(path.sep + 'scss', path.sep + 'css');
-			})
-		)
-		.pipe(gulp.dest('./modules/'));
-});
-
-// Less task
-gulp.task('less', () => {
-	return gulp
-		.src(defaultAssets.client.less)
-		.pipe(plugins.less())
-		.pipe(plugins.autoprefixer())
-		.pipe(
-			plugins.rename(file => {
-				file.dirname = file.dirname.replace(path.sep + 'less', path.sep + 'css');
-			})
-		)
-		.pipe(gulp.dest('./modules/'));
-});
-
 // Make sure upload directory exists
 gulp.task('makeUploadsDir', () => {
 	return fs.mkdir('modules/core/client/img/uploads', err => {
@@ -223,53 +141,17 @@ gulp.task('makeUploadsDir', () => {
 	});
 });
 
-// Angular template cache task
-gulp.task('templatecache', () => {
-	return gulp
-		.src(defaultAssets.client.views)
-		.pipe(
-			plugins.templateCache('templates.js', {
-				root: 'modules/',
-				module: 'core',
-				templateHeader:
-					'(function () {' +
-					endOfLine +
-					'	\'use strict\';' +
-					endOfLine +
-					endOfLine +
-					'	angular' +
-					endOfLine +
-					'		.module(\'<%= module %>\'<%= standalone %>)' +
-					endOfLine +
-					'		.run(templates);' +
-					endOfLine +
-					endOfLine +
-					'	templates.$inject = [\'$templateCache\'];' +
-					endOfLine +
-					endOfLine +
-					'	function templates($templateCache) {' +
-					endOfLine,
-				templateBody: '		$templateCache.put(\'<%= url %>\', \'<%= contents %>\');',
-				templateFooter: '	}' + endOfLine + '})();' + endOfLine
-			})
-		)
-		.pipe(gulp.dest('build'));
-});
-
-// Lint CSS and JavaScript files.
-gulp.task('lint', gulp.series('sass', 'themecss', 'eslint'));
-
 // Lint project files and run webpack
-gulp.task('build', gulp.series('env:prod', 'lint', 'clean', 'webpack'));
+gulp.task('build', gulp.series('env:prod', 'eslint', 'clean', 'webpack'));
 
 // Run without watch - used when developing containerized solution to keep machines from spinning up
-gulp.task('quiet', gulp.series('env:dev', 'lint', 'nodemon'));
+gulp.task('quiet', gulp.series('env:dev', 'eslint', 'clean', 'webpack', 'nodemon'));
 
-// Run the project in development mode
-gulp.task('default', gulp.series('env:dev', 'lint', 'clean', 'webpack', gulp.parallel('nodemon', 'watch')));
+// Run the project in development mode (watch/livereload on webpack)
+gulp.task('default', gulp.series('env:dev', 'eslint', 'clean', 'webpack-watch', 'nodemon'));
 
 // Run the project but automatically break on init - used for debugging startup issues
-gulp.task('debug', gulp.series('env:dev', 'lint', gulp.parallel('nodemon-debug', 'watch')));
+gulp.task('debug', gulp.series('env:dev', 'eslint', 'clean', 'webpack-watch', 'nodemon-debug'));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('env:prod', 'lint', 'clean', 'webpack', gulp.parallel('nodemon', 'watch')));
+gulp.task('prod', gulp.series('env:prod', 'eslint', 'clean', 'webpack', 'nodemon'));

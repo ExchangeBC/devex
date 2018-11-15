@@ -16,7 +16,9 @@ const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
 const HOST = process.env.HOST;
 const PORT = process.env.PORT;
-const ASSET_PATH = process.env.ASSET_PATH || '/';
+const ASSET_PATH = process.env.ASSET_PATH || '/dist';
+
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const envFile = {};
 envFile['BASE_PATH'] = JSON.stringify('');
@@ -85,6 +87,22 @@ const devConfig = merge([
 			publicPath: ASSET_PATH,
 			filename: BUILD_FILE_NAMES.bundle,
 		},
+		watch: true,
+		optimization: {
+			splitChunks: {
+				cacheGroups: {
+					vendor: {
+						test: /node_modules/,
+						chunks: 'initial',
+						name: 'vendor',
+						enforce: true
+					}
+				}
+			}
+		},
+		plugins: [
+			new LiveReloadPlugin()
+		]
 	},
 	parts.generateSourceMaps({
 		type: "source-map",

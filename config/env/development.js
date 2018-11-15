@@ -136,7 +136,7 @@ if (process.env.MAILER_SERVICE_PROVIDER) {
 // ...otherwise, use the bcgov SMTP (which will only work when on the gov network)
 else {
 	devConfig.mailer = {
-		from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
+		from: process.env.MAILER_FROM || '"BC Developer\'s Exchange" <noreply@bcdevexchange.org>',
 		options: {
 		  host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
 		  port: process.env.MAILER_PORT || 25,
