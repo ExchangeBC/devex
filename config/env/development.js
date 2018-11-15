@@ -2,7 +2,7 @@
 
 var defaultEnvConfig = require('./default');
 
-module.exports = {
+var devConfig = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.MONGODB_SERVICE_HOST || process.env.DB_DEVEX_PORT_27017_TCP_ADDR || 'localhost') + ':27017' + '/' + (process.env.MONGODB_DATABASE || 'mean-dev'),
     options: {
@@ -84,20 +84,6 @@ module.exports = {
     callbackURL: '/api/auth/paypal/callback',
     sandbox: true
   },
-  mailer: {
-    from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
-    options: {
-      host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
-      port: process.env.MAILER_PORT || 25,
-      secure: false,
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      ignoreTLS: false,
-      tls: {
-        rejectUnauthorized: false
-      }
-    }
-  },
   shared: {
     owasp: {
       allowPassphrases: true,
@@ -133,3 +119,36 @@ module.exports = {
     }
   }
 };
+
+// If a mailer service provider (such as gmail) is specified, use the provider...
+if (process.env.MAILER_SERVICE_PROVIDER) {
+	devConfig.mailer = {
+		from: process.env.MAILER_FROM || '"BC Developer\'s Exchange" <noreply@bcdevexchange.org>',
+		options: {
+			service: process.env.MAILER_SERVICE_PROVIDER,
+			auth: {
+				user: process.env.MAILER_EMAIL_ID,
+				pass: process.env.MAILER_PASSWORD
+			}
+		}
+	}
+}
+// ...otherwise, use the bcgov SMTP (which will only work when on the gov network)
+else {
+	devConfig.mailer = {
+		from: process.env.MAILER_FROM || '"BC Developers Exchange" <noreply@bcdevexchange.org>',
+		options: {
+		  host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
+		  port: process.env.MAILER_PORT || 25,
+		  secure: false,
+		  connectionTimeout: 5000,
+		  greetingTimeout: 5000,
+		  ignoreTLS: false,
+		  tls: {
+			rejectUnauthorized: false
+		  }
+		}
+	  }
+}
+
+module.exports = devConfig;
