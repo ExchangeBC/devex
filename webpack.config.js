@@ -85,23 +85,11 @@ const devConfig = merge([
 			publicPath: ASSET_PATH,
 			filename: BUILD_FILE_NAMES.bundle,
 		},
-
-		optimization: {
-			splitChunks: {
-				cacheGroups: {
-					vendor: {
-						test: /node_modules/,
-						chunks: 'initial',
-						name: 'vendor',
-						enforce: true
-					}
-				}
-			}
-		}
 	},
 	parts.generateSourceMaps({
 		type: "source-map",
 	}),
+	parts.splitVendorChunks(),
 	parts.extractCSS({
 		filename: BUILD_FILE_NAMES.css,
 	}),
@@ -121,21 +109,9 @@ const prodConfig = merge([
 			publicPath: ASSET_PATH,
 			filename: BUILD_FILE_NAMES.bundle,
 		},
-
-		optimization: {
-			splitChunks: {
-				cacheGroups: {
-					vendor: {
-						test: /node_modules/,
-						chunks: 'initial',
-						name: 'vendor',
-						enforce: true
-					}
-				}
-			}
-		}
 	},
 	parts.clean(paths.build),
+	parts.splitVendorChunks(),
 	parts.extractCSS({
 		filename: BUILD_FILE_NAMES.css,
 	}),
@@ -146,17 +122,7 @@ const prodConfig = merge([
 			limit: 10 * 1024,
 		},
 	}),
-	parts.minifyJS({
-		options: {
-			cacheGroups: {
-				commons: {
-					test: /[\\/]node_modules[\\/]/,
-					name: "vendor",
-					chunks: "initial",
-				},
-			},
-		},
-	}),
+	parts.minifyJS(),
 ]);
 
 module.exports = (mode) => {

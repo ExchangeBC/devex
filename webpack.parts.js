@@ -176,10 +176,24 @@ exports.generateSourceMaps = ({ type } = {}) => ({
 	devtool: type,
 });
 
-exports.minifyJS = ({ options } = {}) => ({
+exports.minifyJS = () => ({
 	optimization: {
-		splitChunks: options,
 		minimize: true
+	},
+});
+
+exports.splitVendorChunks = () => ({
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				vendor: {
+					test: /node_modules/,
+					chunks: 'initial',
+					name: 'vendor',
+					enforce: true
+				}
+			}
+		}
 	},
 });
 
