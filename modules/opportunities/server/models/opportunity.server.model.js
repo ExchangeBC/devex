@@ -62,7 +62,7 @@ var ApprovalSchema = new Schema({
 	routeCode: { type: String, default: '' },
 	twoFACode: { type: Number, default: 0 },
 	twoFASendCount: { type: Number, default: 0 },
-	twoFAAttempCount: { type: Number, default: 0 }
+	twoFAAttemptCount: { type: Number, default: 0 }
 });
 
 var ContractSchema = new Schema({

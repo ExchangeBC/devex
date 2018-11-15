@@ -133,7 +133,7 @@
 				}
 
 				vm.submitApprovalCode = function() {
-					OpportunitiesCommon.submitApprovalCode(vm.opportunity, vm.toFAcode, vm.approvalAction)
+					OpportunitiesCommon.submitApprovalCode(vm.opportunity, vm.twoFAcode, vm.approvalAction)
 						.then(function(responseMessage) {
 							OpportunitiesService.get({
 								opportunityId: vm.opportunity._id

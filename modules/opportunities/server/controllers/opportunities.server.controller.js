@@ -1165,7 +1165,7 @@ exports.send2FA = function(req, res) {
 function sendApprovalMessages(requestingUser, opportunity) {
 	if (opportunity.intermediateApproval.state === 'ready-to-send') {
 		// send intermediate approval request
-		sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { requestingUser: requestingUser, opportunity: setMessageData(opportunity) });
+		sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { opportunity: setMessageData(opportunity) });
 		opportunity.intermediateApproval.state = 'sent';
 		opportunity.intermediateApproval.twoFASendCount = 0;
 		opportunity.intermediateApproval.twoFAAttemptCount = 0;
