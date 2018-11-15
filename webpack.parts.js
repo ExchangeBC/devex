@@ -118,19 +118,12 @@ exports.loadImages = ({ include, exclude, urlLoaderOptions, fileLoaderOptions, i
 	module: {
 		rules: [
 			{
-				test: /\.(gif|png|jpe?g)$/,
+				test: /\.(gif|png|jpe?g|svg)$/,
 				include,
 				exclude,
 				loader: 'url-loader',
 				options: urlLoaderOptions,
-			},
-			{
-				test: /\.svg$/,
-				include,
-				exclude,
-				loader: 'file-loader',
-				options: fileLoaderOptions,
-			},
+			}
 		],
 	},
 });
@@ -140,19 +133,14 @@ exports.loadFonts = ({ include, exclude, urlLoaderOptions, fileLoaderOptions } =
 		rules: [
 			{
 				// Match woff2 in addition to patterns like .woff?v=1.1.1
-				test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+				test: /\.(eot|ttf|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
 				include,
 				exclude,
 				use: {
 					loader: 'url-loader',
 					options: urlLoaderOptions,
 				},
-			},
-			{
-				test: /\.(eot|ttf)$/,
-				loader: 'file-loader',
-				options: fileLoaderOptions,
-			},
+			}
 		],
 	},
 });

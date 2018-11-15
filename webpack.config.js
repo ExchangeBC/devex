@@ -72,6 +72,9 @@ const commonConfig = merge([
 		urlLoaderOptions: {
 			// Inline files smaller than 10 kB (10240 bytes)
 			limit: 10 * 1024,
+			name: 'fonts/[name].[ext]',
+			publicPath: ASSET_PATH,
+			fallback: 'file-loader',
 		}
 	}),
 	parts.loadTS({
@@ -116,7 +119,10 @@ const devConfig = merge([
 		urlLoaderOptions: {
 			// Inline files smaller than 10 kB (10240 bytes)
 			limit: 10 * 1024,
-		}
+			name: 'images/[name].[ext]',
+			publicPath: ASSET_PATH,
+			fallback: 'file-loader',
+		},
 	}),
 ]);
 
@@ -138,6 +144,9 @@ const prodConfig = merge([
 		urlLoaderOptions: {
 			// Inline files smaller than 10 kB (10240 bytes)
 			limit: 10 * 1024,
+			name: 'fonts/[name].[ext]',
+			publicPath: ASSET_PATH,
+			fallback: 'file-loader',
 		},
 	}),
 	parts.minifyJS(),
