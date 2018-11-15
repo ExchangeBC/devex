@@ -52,7 +52,7 @@ module.exports = {
 			type: 'application/pdf'
 		},
 		serviceagreement: {
-			path: 'public/sprint-with-us-service-agreement-2018-05-13.pdf',
+			path: 'public/sprint-with-us-service-agreement-2018-11-13.pdf',
 			name: 'service-agreement.pdf',
 			type: 'application/pdf'
 		},
