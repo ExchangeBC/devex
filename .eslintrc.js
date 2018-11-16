@@ -1,19 +1,13 @@
 module.exports = {
-	// extends: [
-	//   'airbnb/legacy'
-	// ],
 	rules: {
-		camelcase: 0,
+		'camelcase': 0,
 		'comma-dangle': [2, 'never'],
-		// 'comma-spacing': [2, { before: false, after: true }],
 		'consistent-return': 0,
-		curly: 0,
+		'curly': 0,
 		'default-case': 0,
-		eqeqeq: [2, 'smart'],
+		'eqeqeq': [2, 'smart'],
 		'func-names': 0,
 		'guard-for-in': 2,
-		// 'indent': ['error', 'tab'],
-		// 'key-spacing': [2, { beforeColon: false, afterColon: true }],
 		'keyword-spacing': [2, { before: true, after: true }],
 		'max-len': 0,
 		'new-cap': [2, { newIsCapExceptions: ['acl.memoryBackend', 'acl'] }],
@@ -22,10 +16,8 @@ module.exports = {
 		'no-console': 0,
 		'no-else-return': 0,
 		'no-empty-class': 0,
-		// 'no-multi-spaces': 2,
 		'no-param-reassign': 0,
 		'no-shadow': 0,
-		// 'no-spaced-func': 2,
 		'no-throw-literal': 2,
 		'no-trailing-spaces': 2,
 		'no-undef': 2,
@@ -36,16 +28,13 @@ module.exports = {
 		'no-unused-vars': 0,
 		'no-use-before-define': [1, 'nofunc'],
 		'no-var': 0,
-		// 'object-curly-spacing': [2, 'always'],
 		'one-var': [0, 'never'],
 		'one-var-declaration-per-line': [2, 'always'],
 		'padded-blocks': 0,
-		// 'space-before-function-paren': ['error', 'never'],
-		// 'space-in-parens': [2, 'never'],
 		'spaced-comment': [2, 'always'],
-		strict: 0,
+		'strict': 0,
 		'quote-props': 0,
-		// quotes: [1, 'single'],
+		'quotes': [0, 'single'],
 		'wrap-iife': [2, 'outside'],
 		'vars-on-top': 0
 	},
@@ -70,5 +59,8 @@ module.exports = {
 		__TESTING__: true,
 		_: false,
 		ApplicationConfiguration: true
+	},
+	parserOptions: {
+		sourceType: 'module'
 	}
 };

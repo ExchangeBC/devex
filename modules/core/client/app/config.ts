@@ -24,7 +24,6 @@ import angular from 'angular';
 			'ngIdle',
 			'ngSanitize',
 			'ui.bootstrap',
-			'ngTouch',
 			'ng-currency'
 		],
 		registerModule: registerModule

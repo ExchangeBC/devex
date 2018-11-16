@@ -11,6 +11,7 @@ import 'angular-ui-router';
 import 'angular-ui-tinymce';
 import 'bootstrap';
 import 'jquery';
+import 'ng-currency';
 import 'ng-file-upload';
 import 'ng-idle';
 import 'ng-img-crop';
