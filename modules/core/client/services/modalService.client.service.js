@@ -37,7 +37,7 @@
 			angular.extend(tempModalOptions, modalOptions, customModalOptions);
 
 			if (!tempModalDefaults.controller) {
-				tempModalDefaults.controller = function ($scope, $uibModalInstance) {
+				tempModalDefaults.controller = ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
 					$scope.modalOptions = tempModalOptions;
 					$scope.modalOptions.ok = function (result) {
 							$uibModalInstance.close(result);
@@ -45,7 +45,7 @@
 					$scope.modalOptions.close = function () {
 							$uibModalInstance.dismiss('cancel');
 					};
-				};
+				}];
 			}
 
 			return $uibModal.open(tempModalDefaults).result;
