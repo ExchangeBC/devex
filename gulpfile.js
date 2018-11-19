@@ -3,28 +3,19 @@
 /**
  * Module dependencies.
  */
-var _ = require('lodash'),
+const _ = require('lodash'),
 	fs = require('fs'),
 	defaultAssets = require('./config/assets/default'),
 	testAssets = require('./config/assets/test'),
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
-	runSequence = require('run-sequence'),
-	plugins = gulpLoadPlugins({
-		rename: {
-			'gulp-angular-templatecache': 'templateCache'
-		}
-	}),
-	path = require('path'),
-	endOfLine = require('os').EOL,
-	del = require('del'),
-	vinylPaths = require('vinyl-paths'),
+	plugins = gulpLoadPlugins(),
 	webpack = require('webpack'),
 	webpack_stream = require('webpack-stream'),
 	webpack_config = require('./webpack.config.js');
 
-	// Define paths for webpack
-	const paths = require('./paths');
+// Define paths for webpack
+const paths = require('./paths');
 
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function() {
@@ -47,14 +38,8 @@ gulp.task('env:prod', () => {
 	});
 });
 
-// Clean task
-gulp.task('clean', () => {
-	return gulp.src(`${paths.build}/*`).pipe(vinylPaths(del));
-});
-
 // Webpack task with watch
-gulp.task('webpack-watch', (callback) => {
-
+gulp.task('webpack-watch', callback => {
 	var webpackStatsConfig = {
 		colors: true,
 		hash: false,
@@ -71,22 +56,21 @@ gulp.task('webpack-watch', (callback) => {
 		source: false,
 		errorDetails: false,
 		chunkOrigins: false
-    };
+	};
 
 	// load separate webpack configurations for each environment
 	const config = webpack_config(process.env.NODE_ENV);
 	return webpack_stream(config, webpack, (err, stats) => {
 		console.log(stats.toString(webpackStatsConfig));
 		callback();
-	})
-	.pipe(gulp.dest(`${paths.build}`));
+	}).pipe(gulp.dest(`${paths.build}`));
 });
 
 // Webpack
-gulp.task('webpack', (callback) => {
+gulp.task('webpack', callback => {
 	const config = webpack_config(process.env.NODE_ENV);
 	return webpack_stream(config).pipe(gulp.dest(`${paths.build}`));
-})
+});
 
 // Nodemon task
 gulp.task('nodemon', () => {
@@ -142,16 +126,16 @@ gulp.task('makeUploadsDir', () => {
 });
 
 // Lint project files and run webpack
-gulp.task('build', gulp.series('env:prod', 'eslint', 'clean', 'webpack'));
+gulp.task('build', gulp.series('env:prod', 'eslint', 'webpack'));
 
 // Run without watch - used when developing containerized solution to keep machines from spinning up
-gulp.task('quiet', gulp.series('env:dev', 'eslint', 'clean', 'webpack', 'nodemon'));
+gulp.task('quiet', gulp.series('env:dev', 'eslint', 'webpack', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
-gulp.task('default', gulp.series('env:dev', 'eslint', 'clean', 'webpack-watch', 'nodemon'));
+gulp.task('default', gulp.series('env:dev', 'eslint', 'webpack-watch', 'nodemon'));
 
 // Run the project but automatically break on init - used for debugging startup issues
-gulp.task('debug', gulp.series('env:dev', 'eslint', 'clean', 'webpack-watch', 'nodemon-debug'));
+gulp.task('debug', gulp.series('env:dev', 'eslint', 'webpack-watch', 'nodemon-debug'));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('env:prod', 'eslint', 'clean', 'webpack', 'nodemon'));
+gulp.task('prod', gulp.series('env:prod', 'eslint', 'webpack', 'nodemon'));

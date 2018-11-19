@@ -1,33 +1,28 @@
-(function () {
+(() => {
 	'use strict';
 
-	angular
-		.module('core')
-		.run(routeFilter);
+	angular.module('core').run(routeFilter);
 
 	routeFilter.$inject = ['$transitions', '$state', 'Authentication'];
 
 	function routeFilter($transitions, $state, Authentication) {
-
 		// Store previous state
 		function storePreviousState(state, params) {
 			// only store this state if it shouldn't be ignored
 			if (!state.data || !state.data.ignoreState) {
 				$state.previous = {
-					state: state,
-					params: params,
+					state,
+					params,
 					href: $state.href(state, params)
 				};
 			}
 		}
 
 		// Route filter for org editing - makes sure current user is admin when routing to org editing views
-		$transitions.onStart({ to: 'orgadmin.**'}, function(trans) {
-
-			return new Promise(function(resolve, reject) {
-
+		$transitions.onStart({ to: 'orgadmin.**' }, trans => {
+			return new Promise(resolve => {
 				// If administrator account, allow
-				if (!!~Authentication.user.roles.indexOf('admin')) {
+				if (Authentication.user.roles.indexOf('admin') !== -1) {
 					resolve();
 				}
 
@@ -38,38 +33,54 @@
 				}
 
 				// Wait for the org to resolve on the route
-				trans.injector().getAsync('org')
-				.then(function(org) {
-					if (!org.admins || org.admins.map(function(admin) { return admin._id; }).indexOf(Authentication.user._id) < 0) {
-						resolve($state.target('forbidden'));
-					}
-					else {
-						resolve();
-					}
-				});
-			})
+				trans
+					.injector()
+					.getAsync('org')
+					.then(org => {
+						if (
+							!org.admins ||
+							org.admins
+								.map(admin => admin._id)
+								.indexOf(Authentication.user._id) < 0
+						) {
+							resolve($state.target('forbidden'));
+						} else {
+							resolve();
+						}
+					});
+			});
 		});
 
 		// Main route filter - checks for allowed/denied roles and redirects apppropriately
-		$transitions.onStart({}, function(trans) {
-			var userRoles = (Authentication.user && Authentication.user.roles !== undefined) ? Authentication.user.roles : ['guest'];
-			var toState = trans.to();
+		$transitions.onStart({}, trans => {
+			const userRoles =
+				Authentication.user && Authentication.user.roles !== undefined
+					? Authentication.user.roles
+					: ['guest'];
+			const toState = trans.to();
 
-			var allowedRoles = (toState.data && toState.data.roles) ? toState.data.roles : [];
-			var deniedRoles = (toState.data && toState.data.notroles) ? toState.data.notrole : [];
+			const allowedRoles =
+				toState.data && toState.data.roles ? toState.data.roles : [];
+			const deniedRoles =
+				toState.data && toState.data.notroles
+					? toState.data.notrole
+					: [];
 
-			var userHasAccess = true;
+			let userHasAccess = true;
 			if (allowedRoles.length > 0) {
 				userHasAccess = false;
-				allowedRoles.forEach(function(allowedRole) {
-					if (allowedRole === 'guest' || userRoles.indexOf(allowedRole) >= 0) {
+				allowedRoles.forEach(allowedRole => {
+					if (
+						allowedRole === 'guest' ||
+						userRoles.indexOf(allowedRole) >= 0
+					) {
 						userHasAccess = true;
 					}
 				});
 			}
 
 			if (deniedRoles && deniedRoles.length > 0) {
-				deniedRoles.forEach(function(deniedRole) {
+				deniedRoles.forEach(deniedRole => {
 					if (userRoles.indexOf(deniedRole) >= 0) {
 						userHasAccess = false;
 					}
@@ -83,12 +94,10 @@
 				if (!Authentication.user) {
 					storePreviousState(toState, trans.params('to'));
 					return $state.target('authentication.signin');
-				}
-				else {
+				} else {
 					return $state.target('forbidden');
 				}
 			}
-
 		});
 	}
-}());
+})();

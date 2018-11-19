@@ -7,7 +7,6 @@ var validator = require('validator'),
 /**
  * Render the main application page
  */
- // CC:USERFIELDS
 exports.renderIndex = function (req, res) {
   var safeUserObject = null;
   if (req.user) {
@@ -63,23 +62,10 @@ exports.renderIndex = function (req, res) {
       capabilitySkills : req.user.capabilitySkills
     };
   }
-  // var features = config.features.split ('-');
-  // var featureObject = {};
-  // features.forEach (function (el) {
-  //   featureObject[el] = true;
-  // });
 
-  res.render('modules/core/server/views/index', {
+  res.render('public/dist/server-views/index', {
     user: JSON.stringify(safeUserObject),
     sharedConfig: JSON.stringify(config.shared)
-    //
-    // CC:FEATURES
-    //
-    // in prod, config.feature_hide will be true. in dev and test false
-    // use this fact to hide and show features in the front end
-    //
-    // feature_hide: config.feature_hide
-    // features: JSON.stringify (featureObject)
   });
 };
 
@@ -87,7 +73,7 @@ exports.renderIndex = function (req, res) {
  * Render the server error page
  */
 exports.renderServerError = function (req, res) {
-  res.status(500).render('modules/core/server/views/500', {
+  res.status(500).render('public/dist/server-views/500', {
     error: 'Oops! Something went wrong...'
   });
 };
@@ -100,7 +86,7 @@ exports.renderNotFound = function (req, res) {
 
   res.status(404).format({
     'text/html': function () {
-      res.render('modules/core/server/views/404', {
+      res.render('public/dist/server-views/404', {
         url: req.originalUrl
       });
     },
@@ -114,9 +100,3 @@ exports.renderNotFound = function (req, res) {
     }
   });
 };
-
-// exports.getFlags = function () {
-//   return {
-//     featureHide: config.feature_hide
-//   };
-// };

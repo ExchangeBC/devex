@@ -9,6 +9,8 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TSLintPlugin = require('tslint-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 
 const postCSSLoader = {
 	loader: 'postcss-loader',
@@ -32,6 +34,57 @@ exports.devServer = ({ host, port } = {}) => ({
 			warnings: true,
 		},
 	},
+});
+
+exports.loadLiveReload = () => ({
+	plugins: [
+		new LiveReloadPlugin()
+	],
+})
+
+exports.loadServerViews = () => ({
+	plugins: [
+		// Copy the server views to the public/dist folder
+		// This is required so that webpack can inject the <script> tags referencing the hashed bundles
+		new HtmlWebpackPlugin({
+			template: 'modules/core/server/views/layout.server.view.html',
+			filename: 'server-views/layout.server.view.html'
+		}),
+		new HtmlWebpackPlugin({
+			template: 'modules/core/server/views/index.server.view.html',
+			filename: 'server-views/index.server.view.html'
+		}),
+		new HtmlWebpackPlugin({
+			template: 'modules/core/server/views/500.server.view.html',
+			filename: 'server-views/500.server.view.html'
+		}),
+		new HtmlWebpackPlugin({
+			template: 'modules/core/server/views/404.server.view.html',
+			filename: 'server-views/404.server.view.html'
+		}),
+	],
+});
+
+exports.loadHashedModuleIds = () => ({
+	plugins: [
+		new webpack.HashedModuleIdsPlugin()
+	],
+});
+
+exports.loadHtml = () => ({
+	resolve: {
+		extensions: ['.html'],
+	},
+	module: {
+		rules: [
+			{
+				test: /\.(html)$/,
+				use: {
+					loader: 'html-loader',
+				}
+			}
+		]
+	}
 });
 
 exports.loadTS = ({ include, exclude } = {}) => ({
@@ -114,7 +167,7 @@ exports.extractCSS = ({ include, exclude, filename } = {}) => ({
 	],
 });
 
-exports.loadImages = ({ include, exclude, urlLoaderOptions, fileLoaderOptions, imageLoaderOptions } = {}) => ({
+exports.loadImages = ({ include, exclude, urlLoaderOptions } = {}) => ({
 	module: {
 		rules: [
 			{
@@ -128,7 +181,7 @@ exports.loadImages = ({ include, exclude, urlLoaderOptions, fileLoaderOptions, i
 	},
 });
 
-exports.loadFonts = ({ include, exclude, urlLoaderOptions, fileLoaderOptions } = {}) => ({
+exports.loadFonts = ({ include, exclude, urlLoaderOptions } = {}) => ({
 	module: {
 		rules: [
 			{
@@ -178,7 +231,7 @@ exports.splitVendorChunks = () => ({
 					test: /node_modules/,
 					chunks: 'initial',
 					name: 'vendor',
-					enforce: true
+					enforce: true,
 				}
 			}
 		}

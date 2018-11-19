@@ -1,4 +1,4 @@
-(function() {
+(() => {
 	'use strict';
 
 	angular.module('core.admin').run(menuConfig);
@@ -14,4 +14,4 @@
 			icon: 'fas fa-cog'
 		});
 	}
-}());
+})();

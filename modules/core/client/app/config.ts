@@ -1,14 +1,13 @@
-/* tslint:disable */
 import angular from 'angular';
 
-(function(window) {
+(window => {
 	'use strict';
 
-	var applicationModuleName = 'mean';
+	const applicationModuleName = 'mean';
 
-	var service = {
-		applicationEnvironment: (window as any).env,
-		applicationModuleName: applicationModuleName,
+	const service = {
+		applicationEnvironment: window.env,
+		applicationModuleName,
 		applicationModuleVendorDependencies: [
 			'ngAnimate',
 			'ngResource',
@@ -26,10 +25,10 @@ import angular from 'angular';
 			'ui.bootstrap',
 			'ng-currency'
 		],
-		registerModule: registerModule
+		registerModule
 	};
 
-	(window as any).ApplicationConfiguration = service;
+	window.ApplicationConfiguration = service;
 
 	// Add a new vertical module
 	function registerModule(moduleName, dependencies) {
@@ -43,15 +42,15 @@ import angular from 'angular';
 	// Angular-ui-notification configuration
 	angular.module('ui-notification').config([
 		'NotificationProvider',
-		function(NotificationProvider) {
+		NotificationProvider => {
 			NotificationProvider.setOptions({
 				delay: 2000,
-				startTop: 20,
-				startRight: 10,
-				verticalSpacing: 20,
 				horizontalSpacing: 20,
 				positionX: 'right',
-				positionY: 'bottom'
+				positionY: 'bottom',
+				startRight: 10,
+				startTop: 20,
+				verticalSpacing: 20
 			});
 		}
 	]);
@@ -60,10 +59,10 @@ import angular from 'angular';
 	angular.module('ngIdle').config([
 		'IdleProvider',
 		'KeepaliveProvider',
-		function(IdleProvider, KeepaliveProvider) {
+		(IdleProvider, KeepaliveProvider) => {
 			IdleProvider.idle(Number((window as any).sessionTimeoutWarning));
 			IdleProvider.timeout(Number((window as any).sessionTimeout));
 			KeepaliveProvider.interval(2);
 		}
 	]);
-}(window));
+})(window);

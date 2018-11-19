@@ -1,0 +1,230 @@
+(() => {
+	'use strict';
+
+	angular.module('core').factory('menuService', menuService);
+
+	function menuService() {
+		let shouldRender;
+		const service = {
+			addMenu,
+			addMenuItem,
+			addSubMenuItem,
+			defaultRoles: ['user', 'admin'],
+			getMenu,
+			menus: {},
+			removeMenu,
+			removeMenuItem,
+			removeSubMenuItem,
+			validateMenuExistence
+		};
+
+		init();
+
+		return service;
+
+		// Add new menu object by menu id
+		function addMenu(menuId, options) {
+			options = options || {};
+
+			// Create the new menu
+			service.menus[menuId] = {
+				roles: options.roles || service.defaultRoles,
+				items: options.items || [],
+				shouldRender
+			};
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		// Add menu item object
+		function addMenuItem(menuId, options) {
+			options = options || {};
+
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			// Push new menu item
+			service.menus[menuId].items.push({
+				title: options.title || '',
+				state: options.state || '',
+				type: options.type || 'item',
+				class: options.class,
+				roles:
+					options.roles === null ||
+					typeof options.roles === 'undefined'
+						? service.defaultRoles
+						: options.roles,
+				position: options.position || 0,
+				items: [],
+				shouldRender,
+				icon: options.icon || ''
+			});
+
+			// Add submenu items
+			if (options.items) {
+				for (const i in options.items) {
+					if (options.items.hasOwnProperty(i)) {
+						service.addSubMenuItem(
+							menuId,
+							options.state,
+							options.items[i]
+						);
+					}
+				}
+			}
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		// Add submenu item object
+		function addSubMenuItem(menuId, parentItemState, options) {
+			options = options || {};
+
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			// Search for menu item
+			for (const itemIndex in service.menus[menuId].items) {
+				if (
+					service.menus[menuId].items[itemIndex].state ===
+					parentItemState
+				) {
+					// Push new submenu item
+					service.menus[menuId].items[itemIndex].items.push({
+						title: options.title || '',
+						state: options.state || '',
+						params: options.params || {},
+						roles:
+							options.roles === null ||
+							typeof options.roles === 'undefined'
+								? service.menus[menuId].items[itemIndex].roles
+								: options.roles,
+						position: options.position || 0,
+						shouldRender
+					});
+				}
+			}
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		// Get the menu object by menu id
+		function getMenu(menuId) {
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		function init() {
+			// A private function for rendering decision
+			shouldRender = function(user) {
+				if (this.roles.indexOf('*') !== -1) {
+					return true;
+				} else {
+					if (!user) {
+						return false;
+					}
+
+					for (const userRoleIndex in user.roles) {
+						if (user.roles.hasOwnProperty(userRoleIndex)) {
+							for (const roleIndex in this.roles) {
+								if (
+									this.roles.hasOwnProperty(roleIndex) &&
+									this.roles[roleIndex] ===
+										user.roles[userRoleIndex]
+								) {
+									return true;
+								}
+							}
+						}
+					}
+				}
+
+				return false;
+			};
+
+			// Adding the topbar menu
+			addMenu('topbar', {
+				roles: ['*']
+			});
+		}
+
+		// Remove existing menu object by menu id
+		function removeMenu(menuId) {
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			delete service.menus[menuId];
+		}
+
+		// Remove existing menu object by menu id
+		function removeMenuItem(menuId, menuItemState) {
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			// Search for menu item to remove
+			for (const itemIndex in service.menus[menuId].items) {
+				if (
+					service.menus[menuId].items.hasOwnProperty(itemIndex) &&
+					service.menus[menuId].items[itemIndex].state ===
+						menuItemState
+				) {
+					service.menus[menuId].items.splice(itemIndex, 1);
+				}
+			}
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		// Remove existing menu object by menu id
+		function removeSubMenuItem(menuId, submenuItemState) {
+			// Validate that the menu exists
+			service.validateMenuExistence(menuId);
+
+			// Search for menu item to remove
+			for (const itemIndex in service.menus[menuId].items) {
+				if (this.menus[menuId].items.hasOwnProperty(itemIndex)) {
+					for (const subitemIndex in service.menus[menuId].items[
+						itemIndex
+					].items) {
+						if (
+							this.menus[menuId].items[
+								itemIndex
+							].items.hasOwnProperty(subitemIndex) &&
+							service.menus[menuId].items[itemIndex].items[
+								subitemIndex
+							].state === submenuItemState
+						) {
+							service.menus[menuId].items[itemIndex].items.splice(
+								subitemIndex,
+								1
+							);
+						}
+					}
+				}
+			}
+
+			// Return the menu object
+			return service.menus[menuId];
+		}
+
+		// Validate menu existance
+		function validateMenuExistence(menuId) {
+			if (menuId && menuId.length) {
+				if (service.menus[menuId]) {
+					return true;
+				} else {
+					throw new Error('Menu does not exist');
+				}
+			} else {
+				throw new Error('MenuId was not provided');
+			}
+		}
+	}
+})();

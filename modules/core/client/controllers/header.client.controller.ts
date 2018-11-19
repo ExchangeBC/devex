@@ -1,4 +1,4 @@
-(function() {
+(() => {
 	'use strict';
 
 	angular
@@ -32,7 +32,7 @@
 		Idle,
 		MessagesService
 	) {
-		var vm = this;
+		const vm = this;
 		vm.accountMenu = menuService.getMenu('account').items[0];
 		vm.authentication = Authentication;
 		vm.isCollapsed = false;
@@ -43,11 +43,11 @@
 			setAvatarImage(vm.authentication.user);
 		}
 
-		$rootScope.$on('updateMessageCount', function() {
+		$rootScope.$on('updateMessageCount', () => {
 			updateMessageCount();
 		});
 
-		$rootScope.$on('userSignedIn', function(event, data) {
+		$rootScope.$on('userSignedIn', (event, data) => {
 			setAvatarImage(data);
 		});
 
@@ -56,32 +56,41 @@
 				userData.profileImageURL.indexOf('http://') !== 0 &&
 				userData.profileImageURL.indexOf('https://') !== 0
 			) {
-				vm.avatarImageURL = window.location.origin + '/' + userData.profileImageURL;
+				vm.avatarImageURL =
+					window.location.origin + '/' + userData.profileImageURL;
 			} else {
 				vm.avatarImageURL = userData.profileImageURL;
 			}
 		}
 
 		function updateMessageCount() {
-			MessagesService.mycount(function(response) {
+			MessagesService.mycount(response => {
 				vm.messageCount = response.count;
 			});
 		}
 
 		$scope.$on('$stateChangeSuccess', stateChangeSuccess);
-		$scope.isHomePage = function() {
-			var path = $location.path();
+		$scope.isHomePage = () => {
+			const path = $location.path();
 			return !path || path === '/';
 		};
-		$scope.isActiveMenu = function(item) {
-			var route = item.state || '',
-				active = $state.current.name || '',
-				mr = route.match(/^(.*)\.(list)$/),
-				ma = active.match(/^(.*)\.(edit|view|list)$/);
-			if (mr) route = mr[1];
-			if (ma) active = ma[1];
-			if (route === active) return true;
-			if (route === 'admin' && active.substring(0, 5) === 'admin') return true;
+		$scope.isActiveMenu = item => {
+			let route = item.state || '';
+			let active = $state.current.name || '';
+			const mr = route.match(/^(.*)\.(list)$/);
+			const ma = active.match(/^(.*)\.(edit|view|list)$/);
+			if (mr) {
+				route = mr[1];
+			}
+			if (ma) {
+				active = ma[1];
+			}
+			if (route === active) {
+				return true;
+			}
+			if (route === 'admin' && active.substring(0, 5) === 'admin') {
+				return true;
+			}
 		};
 
 		/**
@@ -93,11 +102,12 @@
 			Idle.watch();
 		}
 
-		$scope.$on('IdleStart', function() {
+		$scope.$on('IdleStart', () => {
 			vm.warning = $uibModal.open({
 				size: 'sm',
 				animation: true,
-				templateUrl: '/modules/core/client/views/modal.timeout.warning.html',
+				templateUrl:
+					'/modules/core/client/views/modal.timeout.warning.html',
 				windowClass: 'modal-timeout-warning-dialog',
 				backdrop: 'static',
 				bindToController: true,
@@ -106,11 +116,11 @@
 			});
 		});
 
-		$scope.$on('IdleTimeout', function() {
+		$scope.$on('IdleTimeout', () => {
 			vm.warning.close();
 
 			// instruct the server to terminate the session
-			var client = new XMLHttpRequest();
+			const client = new XMLHttpRequest();
 			client.open('GET', '/api/auth/signout');
 			client.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
 			client.send();
@@ -126,7 +136,7 @@
 			});
 		});
 
-		$scope.$on('IdleEnd', function() {
+		$scope.$on('IdleEnd', () => {
 			vm.warning.close();
 		});
 
@@ -137,26 +147,26 @@
 	}
 
 	function WarningModalController($scope, Idle) {
-		var qqq = this;
+		const qqq = this;
 		qqq.countdown = Idle.getTimeout();
 		qqq.max = Idle.getTimeout();
 
-		qqq.getCountdownInMinutes = function() {
+		qqq.getCountdownInMinutes = () => {
 			return Math.floor(qqq.countdown / 60);
 		};
 
-		$scope.$on('IdleWarn', function(e, countdown) {
-			$scope.$apply(function() {
+		$scope.$on('IdleWarn', (e, countdown) => {
+			$scope.$apply(() => {
 				qqq.countdown = countdown;
 			});
 		});
 	}
 
 	function TimeoutModalController() {
-		var qqq = this;
+		const qqq = this;
 		// inform user and provide option to sign back in
-		qqq.handleClickOK = function() {
+		qqq.handleClickOK = () => {
 			window.location.href = '/authentication/signin';
 		};
 	}
-}());
+})();

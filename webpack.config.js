@@ -18,8 +18,6 @@ const HOST = process.env.HOST;
 const PORT = process.env.PORT;
 const ASSET_PATH = process.env.ASSET_PATH || '/dist';
 
-const LiveReloadPlugin = require('webpack-livereload-plugin');
-
 const envFile = {};
 envFile['BASE_PATH'] = JSON.stringify('');
 // Populate the env dict with Environment variables from the system
@@ -36,9 +34,8 @@ if (dotenv.parsed) {
 }
 
 const BUILD_FILE_NAMES = {
-	css: '[name].css',
-	bundle: '[name].bundle.js',
-	vendor: '[name].bundle.js',
+	css: '[name].[contentHash].css',
+	bundle: '[name].[contentHash].bundle.js',
 	assets: 'assets/[name].[hash:4].[ext]',
 };
 
@@ -59,6 +56,7 @@ const commonConfig = merge([
 						'./modules/core/client/app/init.ts'
 					]
 				}),
+				glob.sync('./modules/*/client/views/*.html'),
 			),
 		},
 		resolve: {
@@ -67,6 +65,7 @@ const commonConfig = merge([
 			mainFiles: ['index', 'compile/minified/ng-img-crop']
 		},
 	},
+	parts.loadServerViews(),
 	parts.setEnvironmentVariables(envFile),
 	parts.loadFonts({
 		urlLoaderOptions: {
@@ -91,14 +90,17 @@ const devConfig = merge([
 			filename: BUILD_FILE_NAMES.bundle,
 		},
 		watch: true,
-		plugins: [
-			new LiveReloadPlugin()
-		]
 	},
+	parts.clean(paths.build),
+	parts.loadLiveReload(),
+	parts.loadHashedModuleIds(),
 	parts.generateSourceMaps({
 		type: "source-map",
 	}),
-	parts.splitVendorChunks(),
+	parts.splitVendorChunks({
+		filename: BUILD_FILE_NAMES.vendor,
+	}),
+	parts.loadHtml(),
 	parts.extractCSS({
 		filename: BUILD_FILE_NAMES.css,
 	}),
@@ -123,7 +125,9 @@ const prodConfig = merge([
 		},
 	},
 	parts.clean(paths.build),
+	parts.loadHashedModuleIds(),
 	parts.splitVendorChunks(),
+	parts.loadHtml(),
 	parts.extractCSS({
 		filename: BUILD_FILE_NAMES.css,
 	}),
