@@ -1,12 +1,3 @@
-# Build:
-# docker build -t meanjs/mean .
-#
-# Run:
-# docker run -it meanjs/mean
-#
-# Compose:
-# docker-compose up -d
-
 FROM ubuntu:18.04
 LABEL maintainer=MEAN.JS
 
@@ -62,11 +53,8 @@ RUN apt-get update -q \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-#COPY phantom /opt/mean.js/node_modules
-
 # Install MEAN.JS Prerequisites
-RUN npm install -g bower-npm-resolver
-RUN yarn global add gulp bower yo mocha karma-cli gulp-if bower-npm-resolver --silent \
+RUN yarn global add gulp yo mocha karma-cli gulp-if --silent \
     && yarn cache clean
 
 RUN mkdir -p /opt/mean.js/public/lib
@@ -79,17 +67,9 @@ WORKDIR /opt/mean.js
 # Install npm packages
 COPY package.json yarn.lock /opt/mean.js/
 
-# Install bower packages
-COPY bower.json /opt/mean.js/bower.json
-COPY .bowerrc /opt/mean.js/.bowerrc
-
 # Install node_modules with yarn
 RUN yarn install --non-interactive --pure-lockfile \
     && yarn cache clean
-
-#RUN npm install --quiet && npm cache clean
-#RUN npm install && npm cache verify
-#RUN bower install --quiet --allow-root --config.interactive=false
 
 COPY . /opt/mean.js
 

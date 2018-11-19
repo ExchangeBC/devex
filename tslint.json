@@ -1,21 +1,21 @@
 {
 	"defaultSeverity": "error",
-	"extends": [
-		"tslint:recommended"
-	],
+	"extends": ["tslint:recommended"],
 	"jsRules": {},
 	"rules": {
 		"indent": [true, "tabs", 4],
 		"quotemark": [true, "single", "avoid-escape"],
-		"trailing-comma": [true, { "multiline": "never", "singleine": "never" }],
+		"trailing-comma": [
+			true,
+			{ "multiline": "never", "singleine": "never" }
+		],
 		"no-inferrable-types": true,
 		"object-literal-sort-keys": false,
-		"arrow-parens": false
+		"arrow-parens": false,
+		"interface-name": [false, "always-prefix"]
 	},
 	"rulesDirectory": [],
 	"linterOptions": {
-		"exclude": [
-			"**/node_modules/**"
-		]
+		"exclude": ["**/node_modules/**"]
 	}
 }
