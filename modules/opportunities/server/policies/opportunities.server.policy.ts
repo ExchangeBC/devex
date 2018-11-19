@@ -147,6 +147,10 @@ export class OpportunitiesPolicy {
 					{
 						resources: '/api/opportunities/:opportunityId/action',
 						permissions: ['post']
+					},
+					{
+						resources: '/api/opportunities/:opportunityId/myProposalArchive',
+						permissions: ['get']
 					}
 				]
 			},

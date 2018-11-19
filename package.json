@@ -107,6 +107,7 @@
     "@babel/preset-env": "~7.1.0",
     "@babel/preset-typescript": "~7.1.0",
     "@types/acl": "^0.4.35",
+    "@types/chalk": "^2.2.0",
     "@types/express": "^4.16.0",
     "@types/jquery": "^3.3.22",
     "@types/lodash": "^4.14.118",
