@@ -45,9 +45,8 @@
 					Are you sure you want to do this?';
 					ask.yesNo(question).then(function (result) {
 						if (result) {
-							OrgsService.removeUser ({
-								orgId: affiliation._id,
-								userId: vm.user._id
+							OrgsService.removeMeFromOrg ({
+								orgId: affiliation._id
 							}).$promise
 							.then (function (org) {
 								loadAffiliations();

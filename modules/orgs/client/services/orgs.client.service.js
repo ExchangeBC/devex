@@ -31,7 +31,13 @@
 				method: 'GET',
 				url: '/api/addmeto/org/:orgId',
 				isArray: false
+			},
+			removeMeFromOrg: {
+				method: 'GET',
+				url: '/api/orgs/:orgId/removeMeFromCompany',
+				isArray: false
 			}
+
 		});
 		angular.extend (Org.prototype, {
 			createOrUpdate: function () {

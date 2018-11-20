@@ -31,6 +31,10 @@ module.exports = function (app) {
 		.all (orgsPolicy.isAllowed)
 		.get (orgs.removeUserFromMemberList);
 
+	app.route('/api/orgs/:orgId/removeMeFromCompany')
+		.all(orgsPolicy.isAllowed)
+		.get(orgs.removeMeFromCompany);
+
 	// Finish by binding the org middleware
 	app.param('orgId', orgs.orgByID);
 	app.param('orgSmallId', orgs.orgByIDSmall);

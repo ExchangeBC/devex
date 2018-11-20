@@ -53,7 +53,12 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/orgs/:orgId/user/:userId/remove',
       permissions: ['*']
-    }, {
+	},
+	{
+		resources: '/api/orgs/:orgId/removeMeFromCompany',
+		permissions: ['*']
+	},
+	{
       resources: '/api/orgs/:orgId',
       permissions: ['*']
     }]

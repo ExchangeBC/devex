@@ -519,6 +519,24 @@ exports.removeUserFromMemberList = function(req, res) {
 	removeMember(req.profile, req.org).then(saveOrg(req, res));
 };
 
+exports.removeMeFromCompany = function(req, res) {
+
+	if (!req.user) {
+		res.status(422).send({
+			message: 'Valid user not provided'
+		});
+		return;
+	}
+
+	if (!req.org) {
+		res.status(422).send({
+			message: 'Valid company not provided'
+		});
+	}
+
+	removeMember(req.user, req.org).then(saveOrg(req, res));
+}
+
 // -------------------------------------------------------------------------
 //
 // create a new org. the user doing the creation will be set as the
