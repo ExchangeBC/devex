@@ -833,18 +833,11 @@ import '../css/opportunities.css';
 					CapabilitiesMethods.reconcile(vm.inp, vm.oinp);
 					CapabilitiesMethods.reconcile(vm.prp, vm.oprp);
 					CapabilitiesMethods.reconcile(vm.imp, vm.oimp);
-					//
-					// if any context pieces were being set then copy in to the
-					// right place here (only when adding)
-					//
-					// if (!vm.editing) {
-					// 	if (vm.context === 'allopportunities') {
-					// 		vm.opportunity.project = vm.projectId;
-					// 		vm.opportunity.program = vm.programId;
-					// 	} else if (vm.context === 'program') {
-					// 		vm.opportunity.project = vm.projectId;
-					// 	}
-					// }
+
+					if (!vm.editing) {
+						vm.opportunity.project = vm.projectId;
+						vm.opportunity.program = vm.programId;
+					}
 					//
 					// ensure that there is a trailing '/' on the github field
 					//
