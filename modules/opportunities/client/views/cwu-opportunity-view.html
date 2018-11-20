@@ -58,9 +58,10 @@
       <div class="col text-center">
         <span class="text-black-50">Opportunity assigned to:</span>
         &nbsp;
-        <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+        <img ng-if="!vm.opportunity.proposal.isCompany" class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
         &nbsp;
-        {{vm.opportunity.proposal.user.displayName}}
+        <span ng-if="!vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.user.displayName}}</span>
+        <span ng-if="vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.businessName}}</span>
         &nbsp;&nbsp;&nbsp;
         <a id="proposals.view" ng-if="vm.canEdit || vm.isMember" ui-sref="proposals.viewcwu({ proposalId: vm.opportunity.proposal._id })">View
           Proposal</a>&nbsp;&nbsp;
@@ -191,9 +192,10 @@
           <div class="col text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
             <span class="text-black-50">Opportunity assigned to:</span>
             &nbsp;
-            <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+            <img ng-if="!vm.opportunity.proposal.isCompany" class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
             &nbsp;
-            {{vm.opportunity.proposal.user.displayName}}
+            <span ng-if="!vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.user.displayName}}</span>
+            <span ng-if="vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.businessName}}</span>
           </div>
         </div>
       </div>
