@@ -52,13 +52,12 @@
 			'opportunity',
 			'Authentication',
 			'OpportunitiesService',
-			'ProposalsService',
 			'Notification',
 			'modalService',
 			'ask',
 			'myproposal',
 			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
+			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -296,7 +295,9 @@
 				//
 				// -------------------------------------------------------------------------
 				if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					ProposalsService.forOpportunity({ opportunityId: vm.opportunity._id }).$promise.then(function(proposals) {
+					OpportunitiesService.getProposals({ opportunityId: vm.opportunity._id }).$promise.then(function(
+						proposals
+					) {
 						vm.proposals = proposals;
 						//
 						// removed hack as this is now in the right place in the edit opportunity

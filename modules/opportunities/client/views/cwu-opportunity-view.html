@@ -71,7 +71,7 @@
     <br>
     <div class="row">
       <div class="col text-center" ng-if="vm.canEdit && vm.closing === 'CLOSED'">
-        <a href="/api/proposals/archive/opportunity/{{vm.opportunity._id}}" target="_blank"><i class="fas fa-file-archive"></i>
+        <a href="/api/opportunities/{{vm.opportunity._id}}/proposalArchive" target="_blank"><i class="fas fa-file-archive"></i>
           Download Proposals Archive</a>
       </div>
     </div>
@@ -272,7 +272,7 @@
         <hr>
 
         <h3 class="opp-detail">Acceptance Criteria</h3>
-        <p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/api/proposals/download/terms/cwu1"
+        <p>This is a <span class="strong">fixed-price</span> opportunity governed by the <a href="/terms/cwu1"
             target="_blank"><i class="fas fa-download"></i> terms</a> of our lightweight procurement model, <a href="/codewithus"
             target="_blank">Code With Us</a>.</p> To be paid the fixed price for this opportunity, you need to meet
         all

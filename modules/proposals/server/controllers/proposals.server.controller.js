@@ -19,7 +19,7 @@ request : <code>-request
 /**
  * Module dependencies.
  */
-var path 			= require('path'),
+const path 			= require('path'),
 	mongoose 		= require('mongoose'),
 	Proposal 		= mongoose.model('Proposal'),
 	User 			= mongoose.model('User'),
@@ -28,128 +28,36 @@ var path 			= require('path'),
 	Opportunities 	= require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
 	_ 				= require('lodash'),
 	multer 			= require('multer'),
-	config 			= require(path.resolve('./config/config'));
+	config 			= require(path.resolve('./config/config')),
+	fileStream = require(path.resolve('./config/lib/filestream'));
 
 var userfields = '_id displayName firstName lastName email phone address username profileImageURL \
 					businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 					roles provider';
 
-var streamFile = (res, file, name, mime) => {
-	var fs = require ('fs');
-	fs.exists (file, function (yes) {
-		if (!yes) {
-			return res.status(404).send ({
-				message: 'Not Found'
-			});
-		}
-		else {
-			res.setHeader ('Content-Type', mime);
-			res.setHeader ('Content-Type', 'application/octet-stream');
-			res.setHeader ('Content-Description', 'File Transfer');
-			res.setHeader ('Content-Transfer-Encoding', 'binary');
-			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+name+'"');
-			fs.createReadStream (file).pipe (res);
-		}
-	});
-};
-// -------------------------------------------------------------------------
-//
-// set a proposal role on a user
-//
-// -------------------------------------------------------------------------
-var adminRole = function (opportunity) {
-	return opportunity.code+'-admin';
-};
-var ensureAdmin = function (opportunity, user) {
+var ensureProposalOwner = function(proposal, user) {
 	if (!user) {
 		return false;
 	}
-	return !(!~user.roles.indexOf (adminRole(opportunity)) && !~user.roles.indexOf ('admin'));
-};
-var countStatus = function (id) {
-	return new Promise (function (resolve, reject) {
-		var cursor = Proposal.aggregate ([
-			{
-				$match: {
-					opportunity: id
-				}
-			},
-			{
-				$group: {
-					_id: '$status',
-					count: {$sum: 1}
-				}
-			}
-		])
-		.cursor()
-		.exec();
 
-		resolve(cursor);
-	});
-};
-// -------------------------------------------------------------------------
-//
-// stats
-//
-// -------------------------------------------------------------------------
-exports.stats = (req, res) => {
-	var op = req.opportunity;
-	var ret = {
-		following: 0
-	};
+	return proposal.user._id === user._id;
+}
 
-	Promise.resolve()
-	.then (() => {
-		if (op.watchers) {
-			ret.following = op.watchers.length;
-		}
-		ret.submitted = 0;
-		ret.draft = 0;
-		return countStatus (op._id);
-	})
-	.then (result => {
-		result.eachAsync(function(doc) {
-			ret[doc._id.toLowerCase()] = doc.count;
-		})
-		.then(function() {
-			res.json(ret);
-		});
-	})
-	.catch (err => {
-		res.status(422).send ({
-			message: errorHandler.getErrorMessage(err)
-		});
-	});
-};
 // -------------------------------------------------------------------------
 //
-// get a list of all my proposals, but only ones I have access to as a normal
-// member or admin, just not as request
+// Get a proposal for the given opportunity and user
 //
 // -------------------------------------------------------------------------
-exports.my = function (req, res) {
-	var me = helpers.myStuff ((req.user && req.user.roles)? req.user.roles : null );
-	var search = me.isAdmin ? {} : { code: { $in: me.proposals.member } };
-	Proposal.find (search)
-	.populate('opportunity', 'opportunityTypeCd name code')
-	.select ('code name short')
-	.exec (function (err, proposals) {
-		if (err) {
-			return res.status(422).send ({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json (proposals);
-		}
-	});
-};
-exports.myopp = function (req, res) {
-	if (!req.user) return res.json ({});
+exports.getUserProposalForOpp = function (req, res) {
+	if (!req.user) {
+		return res.json ({});
+	}
+
 	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
 	.populate('createdBy', 'displayName')
 	.populate('updatedBy', 'displayName')
 	.populate('opportunity')
-	.populate('user', userfields)
+	.populate('user')
 	.exec (function (err, proposals) {
 		if (err) {
 			return res.status(422).send ({
@@ -160,25 +68,7 @@ exports.myopp = function (req, res) {
 		}
 	});
 };
-exports.myorgopp = function (req, res) {
-	if (!req.user) return res.json ({});
-	if (!req.org) return res.json ({});
-	if (!req.opportunity) return res.json ({});
-	Proposal.findOne ({org:req.org._id, opportunity:req.opportunity._id})
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('opportunity')
-	.populate('user', userfields)
-	.exec (function (err, proposals) {
-		if (err) {
-			return res.status(422).send ({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json (proposals);
-		}
-	});
-};
+
 var getUserCapabilities = function (users) {
 	return new Promise (function (resolve, reject) {
 		var userids = users.map (function (o) {if (o._id) return o._id; else return o;});
@@ -217,6 +107,7 @@ var getPhaseCapabilities = function (proposal) {
 		});
 	});
 };
+
 // -------------------------------------------------------------------------
 //
 // set up internal aggregate states for phase information
@@ -334,13 +225,17 @@ exports.update = function (req, res) {
 };
 // -------------------------------------------------------------------------
 //
-// updatyes a proposal into submitted status
+// Sets the specified proposal to 'Submitted' status
 //
 // -------------------------------------------------------------------------
 exports.submit = function (req, res) {
+	if (!ensureProposalOwner(req.proposal, req.user)) {
+		return res.json ({ 'message': 'User is not authorized' });
+	}
 	req.body.status = 'Submitted';
 	return exports.update (req, res);
 };
+
 var updateUserRole = function (userid, oppcode) {
 	return new Promise (function (resolve, reject) {
 		User.findByIdAndUpdate (userid,
@@ -353,18 +248,7 @@ var updateUserRole = function (userid, oppcode) {
 		);
 	});
 };
-var removeUserRole = function (userid, oppcode) {
-	return new Promise (function (resolve, reject) {
-		User.findByIdAndUpdate (userid,
-		    { '$pop': { 'roles':  oppcode} },
-		    { 'new': true, 'upsert': true },
-		    function (err, m) {
-		        if (err) reject (err);
-		        else resolve (m);
-		    }
-		);
-	});
-};
+
 // -------------------------------------------------------------------------
 //
 // assigns a proposal to the opportunity, calls opportunities to complete the
@@ -418,10 +302,6 @@ exports.unassign = function (proposal, user) {
 		proposal.status = 'Submitted';
 		helpers.applyAudit (proposal, user);
 		saveProposal (proposal)
-		.then (function (p) {
-			proposal = p;
-			return removeUserRole (proposal.user._id, proposal.opportunity.code);
-		})
 		.then (resolve, reject);
 	});
 };
@@ -482,46 +362,6 @@ exports.list = function (req, res) {
 
 // -------------------------------------------------------------------------
 //
-// get proposals under opportunity, but only submitted ones
-//
-// -------------------------------------------------------------------------
-exports.forOpportunity = function (req, res) {
-	if (!ensureAdmin (req.opportunity, req.user)) {
-		return res.json ([]);
-	}
-	Proposal.find({opportunity:req.opportunity._id, $or: [{status:'Submitted'}, {status: 'Assigned'}]}).sort('created')
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('opportunity')
-	.populate('phases.proto.team')
-	.populate('phases.inception.team')
-	.populate('phases.implementation.team')
-	.populate('user', userfields)
-	.populate({
-		path: 'phases.proto.team',
-		populate: { path: 'capabilities capabilitySkills'}
-	})
-	.populate({
-		path: 'phases.inception.team',
-		populate: { path: 'capabilities capabilitySkills'}
-	})
-	.populate({
-		path: 'phases.implementation.team',
-		populate: { path: 'capabilities capabilitySkills'}
-	})
-	.exec(function (err, proposals) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			res.json(proposals);
-		}
-	});
-};
-
-// -------------------------------------------------------------------------
-//
 // given an opportunity and an organization, return all members that are
 // qualified to be assigned to each phase in the proposal
 //
@@ -538,9 +378,9 @@ exports.getPotentialResources = function (req, res) {
 	//
 	// if the user is not an admin of the org then bail out
 	//
-	if (!(user._id.toString () === org.owner._id.toString () || !!~org.admins.indexOf (user._id))) {
+	if (user._id.toString () !== org.owner._id.toString() && org.admins.indexOf (user._id) === -1) {
 		return res.status (422).send ({
-			message: 'Not Authorized Silly'
+			message: 'User is not authorized'
 		});
 	}
 	//
@@ -651,9 +491,10 @@ var addAttachment = function (req, res, proposal, name, path, type) {
 	});
 	return saveProposalRequest (req, res, proposal);
 }
+
 // -------------------------------------------------------------------------
 //
-// uploda an attachment to a proposal
+// Upload an attachment to a proposal
 //
 // -------------------------------------------------------------------------
 exports.uploaddoc = function (req, res) {
@@ -684,6 +525,7 @@ exports.uploaddoc = function (req, res) {
 		});
 	}
 };
+
 exports.removedoc = function (req, res) {
 	var proposal = req.proposal;
 	var user     = req.user;
@@ -693,6 +535,7 @@ exports.removedoc = function (req, res) {
 	req.proposal.attachments.id(req.params.documentId).remove();
 	saveProposalRequest (req, res, req.proposal);
 };
+
 exports.downloaddoc = function (req, res) {
 	var proposal = req.proposal;
 	var user     = req.user;
@@ -701,226 +544,6 @@ exports.downloaddoc = function (req, res) {
 	var isOwner  = user && (proposal.user._id.toString() === user._id.toString());
 	if ( ! (user && (isAdmin || isGov || isOwner))) return res.status(401).send({message: 'Not permitted'});
 	var fileobj = req.proposal.attachments.id(req.params.documentId);
-	return streamFile (res, fileobj.path, fileobj.name, fileobj.type);
-};
-exports.downloadTerms = function (req, res) {
-	var version = req.params.version;
-	var fileobj = config.terms[version];
-	var home = config.home;
-	if (fileobj) return streamFile (res, home+'/'+fileobj.path, fileobj.name, fileobj.type);
-	else res.status (401).send ({message: 'No terms file found'});
-}
-// -------------------------------------------------------------------------
-//
-// create the archive format and stream it back to the user
-//
-// -------------------------------------------------------------------------
-exports.downloadArchive = function (req, res) {
-	var zip = new (require ('jszip')) ();
-	var fs  = require('fs');
-	//
-	// make sure we are allowed to do this at all
-	//
-	if (!ensureAdmin (req.opportunity, req.user)) {
-		return res.json ([]);
-	}
-	//
-	// make the zip name from the opportunity name
-	//
-	var opportunityName = req.opportunity.name.replace(/\W/g,'-').replace(/-+/,'-');
-	var proponentName;
-	var email;
-	var files;
-	var links;
-	var proposalHtml;
-	var header;
-	var content;
-	//
-	// start the zip file;
-	//
-	zip.folder (opportunityName);
-	//
-	// get all submitted and assigned proposals
-	//
-	Proposal.find({opportunity:req.opportunity._id, status:{$in:['Submitted','Assigned']}}).sort('status created')
-	.populate('user', userfields)
-	.populate('opportunity', 'opportunityTypeCd name code')
-	.exec(function (err, proposals) {
-		if (err) {
-			return res.status(422).send({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			proposals.forEach (function (proposal) {
-				proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
-				if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
-				files = proposal.attachments;
-				email = proposal.user.email;
-				proposalHtml = proposal.detail;
-				//
-				// go through the files and build the internal links (reset links first)
-				// also build the index.html content
-				//
-				links = [];
-				files.forEach (function (file) {
-					links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
-				});
-				header = '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>';
-				header += email+'<br/>';
-				if (!proposal.isCompany) {
-					header += proposal.user.address+'<br/>';
-					header += proposal.user.phone+'<br/>';
-				}
-				else {
-					header += '<b><i>Company:</i></b>'+'<br/>';
-					header += proposal.user.businessName+'<br/>';
-					header += proposal.user.businessAddress+'<br/>';
-					header += '<b><i>Contact:</i></b>'+'<br/>';
-					header += proposal.user.businessContactName+'<br/>';
-					header += proposal.user.businessContactPhone+'<br/>';
-					header += proposal.user.businessContactEmail+'<br/>';
-				}
-				header += '<h2>Documents</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
-				content = '<html><body>'+header+'<h2>Proposal</h2>'+proposalHtml+'</body></html>';
-				//
-				// add the directory, content and documents for this proposal
-				//
-				zip.folder (opportunityName).folder (proponentName);
-				zip.folder (opportunityName).folder (proponentName).file ('index.html', content);
-				files.forEach (function (file) {
-					zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
-				});
-			});
-
-			res.setHeader ('Content-Type', 'application/zip');
-			res.setHeader ('Content-Type', 'application/octet-stream');
-			res.setHeader ('Content-Description', 'File Transfer');
-			res.setHeader ('Content-Transfer-Encoding', 'binary');
-			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+opportunityName+'.zip'+'"');
-
-			zip.generateNodeStream({base64:false, compression:'DEFLATE',streamFiles:true}).pipe (res);
-		}
-	});
-
+	return fileStream(res, fileobj.path, fileobj.name, fileobj.type);
 };
 
-exports.downloadSWUProposal = function(req, res) {
-	var zip = new (require ('jszip')) ();
-	var fs  = require('fs');
-	//
-	// make the zip name from the opportunity name
-	//
-	var opportunityName = req.opportunity.name.replace(/\W/g,'-').replace(/-+/,'-');
-
-	zip.folder(opportunityName);
-
-	Proposal.findOne ({user:req.user._id, opportunity:req.opportunity._id})
-	.populate('createdBy', 'displayName')
-	.populate('updatedBy', 'displayName')
-	.populate('opportunity')
-	.populate('phases.inception.team')
-	.populate('phases.proto.team')
-	.populate('phases.implementation.team')
-	.populate('user', userfields)
-	.exec (function (err, proposal) {
-		if (err) {
-			return res.status(422).send ({
-				message: errorHandler.getErrorMessage(err)
-			});
-		} else {
-			var proponentName = proposal.user.displayName.replace(/\W/g,'-').replace(/-+/,'-');
-			if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
-			var files = proposal.attachments;
-			var email = proposal.user.email;
-			//
-			// go through the files and build the internal links (reset links first)
-			// also build the index.html content
-			//
-			var links = [];
-			files.forEach (function (file) {
-				links.push ('<a href="docs/'+encodeURIComponent(file.name)+'" target="_blank">'+file.name+'</a>');
-			});
-			var questions = '<ol>';
-			proposal.teamQuestionResponses.forEach( function (question) {
-				questions += ('<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>');
-			});
-			questions += '</ol>';
-			var phases = '<h3>Inception</h3>';
-			phases += 'Team:<ol>';
-			proposal.phases.inception.team.forEach(function(teamMember) {
-				phases += '<li>' + teamMember.displayName + '</li>';
-			})
-			phases += '</ol>';
-			phases += 'Cost: ';
-			phases += '$' + proposal.phases.inception.cost.toFixed(2);
-
-			phases += '<h3>Prototype</h3>';
-			phases += 'Team:<ol>';
-			proposal.phases.proto.team.forEach(function(teamMember) {
-				phases += '<li>' + teamMember.displayName + '</li>';
-			})
-			phases += '</ol>';
-			phases += 'Cost: ';
-			phases += '$' + proposal.phases.proto.cost.toFixed(2);
-
-			phases += '<h3>Implementation</h3>';
-			phases += 'Team:<ol>';
-			proposal.phases.implementation.team.forEach(function(teamMember) {
-				phases += '<li>' + teamMember.displayName + '</li>';
-			})
-			phases += '</ol>';
-			phases += 'Cost: ';
-			phases += '$' + proposal.phases.implementation.cost.toFixed(2);
-
-			phases += '<br/><br/><b>Total Cost: ';
-			phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
-			phases += '</b><br/>';
-
-			var header = '<h2>Proposal</h2>';
-			header += 'Status: ';
-			header += proposal.status;
-			header += '<br/>';
-			header += 'Accepted Terms: ';
-			header += (proposal.isAcceptedTerms ? 'Yes' : 'No');
-			header += '<br/>';
-			header += 'Created on: ';
-			header += new Date(proposal.created).toDateString();
-			header += '<br/>';
-			header += 'Lasted updated: ';
-			header += new Date(proposal.updated).toDateString();
-			header += '<h2>Proponent</h2>'+proposal.user.displayName+'<br/>';
-			header += email+'<br/>';
-			header += '<b><i>Company:</i></b>'+'<br/>';
-			header += proposal.businessName+'<br/>';
-			header += proposal.businessAddress+'<br/>';
-			header += '<b><i>Contact:</i></b>'+'<br/>';
-			header += proposal.businessContactName+'<br/>';
-			header += proposal.businessContactPhone+'<br/>';
-			header += proposal.businessContactEmail+'<br/>';
-			if (links.length > 0) {
-				header += '<h2>Attachments/References</h2><ul><li>'+links.join('</li><li>')+'</li></ul>';
-			}
-			var content = '<html><body>';
-			content += header;
-			content += '<h2>Phases</h2>'+phases;
-			content += '<h2>Team Questions</h2>'+questions;
-			content += '</body></html>';
-			//
-			// add the directory, content and documents for this proposal
-			//
-			zip.folder (opportunityName).folder (proponentName);
-			zip.folder (opportunityName).folder (proponentName).file ('proposal-summary.html', content);
-			files.forEach (function (file) {
-				zip.folder (opportunityName).folder (proponentName).folder ('docs').file (file.name, fs.readFileSync (file.path), {binary:true});
-			});
-
-			res.setHeader ('Content-Type', 'application/zip');
-			res.setHeader ('Content-Type', 'application/octet-stream');
-			res.setHeader ('Content-Description', 'File Transfer');
-			res.setHeader ('Content-Transfer-Encoding', 'binary');
-			res.setHeader ('Content-Disposition', 'attachment; inline=false; filename="'+opportunityName+'.zip'+'"');
-
-			zip.generateNodeStream({base64:false, compression:'DEFLATE',streamFiles:true}).pipe (res);
-		}
-	});
-};

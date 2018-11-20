@@ -374,7 +374,8 @@
 					}
 					else {
 						copyUserInfo(proposalToSave);
-						proposalToSave.$submit()
+						proposalToSave.status = 'Submitted';
+						saveProposal(proposalToSave)
 						.then(function(updatedProposal) {
 							ppp.proposal = updatedProposal;
 							ppp.form.proposalform.$setPristine();
@@ -414,7 +415,7 @@
 			}
 			else {
 				Upload.upload({
-					url: '/api/proposal/'+ppp.proposal._id+'/upload/doc',
+					url: '/api/proposals/'+ppp.proposal._id+'/documents',
 					data: {
 						file: file
 					}

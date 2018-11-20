@@ -15,48 +15,25 @@
       update: {
         method: 'PUT'
       },
-      submit: {
-        method: 'PUT',
-        url: '/api/submit/proposal/:proposalId'
-      },
       assign: {
         method: 'PUT',
-        url: '/api/assign/proposal/:proposalId'
+        url: '/api/proposals/:proposalId/assignmentStatus'
       },
       assignswu: {
         method: 'PUT',
-        url: '/api/assign/proposalswu/:proposalId'
-      },
-      forOpportunity: {
-        method: 'GET',
-        url: '/api/proposals/for/opportunity/:opportunityId',
-        isArray: true
+        url: '/api/proposalsSWU/:proposalId/assignmentStatus'
       },
       removeDoc: {
-        method: 'GET',
-        url: '/api/proposal/:proposalId/remove/doc/:documentId'
-      },
-      getStats: {
-        method: 'GET',
-        url: '/api/proposals/stats/opportunity/:opportunityId',
-        isArray:false
+        method: 'DELETE',
+        url: '/api/proposals/:proposalId/documents/:documentId'
       },
       makeRequest: {
         method: 'GET',
         url :'/api/request/proposal/:proposalId'
       },
-      my: {
+      getMyProposal: {
         method: 'GET',
-        url: '/api/my/proposals',
-        isArray: true
-      },
-      myopp: {
-        method: 'GET',
-        url: '/api/myopp/proposal/:opportunityId'
-      },
-      myOrgOpp: {
-        method: 'GET',
-        url: '/api/myorgopp/:orgId/proposal/:opportunityId'
+        url: '/api/proposals/my/:opportunityId'
       },
       getPotentialResources: {
         method: 'GET',

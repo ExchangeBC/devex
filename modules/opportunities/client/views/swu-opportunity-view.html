@@ -11,7 +11,7 @@
 <section class="detail-page-background">
 
   <div class="container">
-    <!-- If opportunity is still open, show proposal stats -->
+<!-- If opportunity is still open, show proposal stats -->
     <div class="row" ng-if="vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
       <div class="col border p-4">
         <proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity"
@@ -20,7 +20,7 @@
     </div>
 
     <!-- SWU Proposal section for Admins to view and enter evaluation -->
-    <opportunity-evaluation ng-if="vm.closing === 'CLOSED'" opportunity="vm.opportunity"></opportunity-evaluation>
+    <opportunity-evaluation ng-if="vm.canEdit && vm.closing === 'CLOSED'" opportunity="vm.opportunity"></opportunity-evaluation>
   </div>
 
 
@@ -48,7 +48,7 @@
     <!-- Export button for downloading proposal submitted - visible to proposal submitters only -->
     <div class="row">
       <div class="alert alert-info" ng-if="vm.myproposal._id">
-        You started or submitted a proposal on this opportunity.&nbsp; <a href="/api/proposals/export/opportunity/{{vm.opportunity._id}}"
+        You started or submitted a proposal on this opportunity.&nbsp; <a href="/api/opportunities/{{vm.opportunity._id}}/myProposalArchive"
           target="_blank"><i class="fas fa-download"></i> Download My Proposal</a>
       </div>
     </div>
@@ -237,7 +237,7 @@
               services by other means, or do nothing.</p>
             <p><strong>Contract</strong></p>
             <p><strong>1. Form of Contract</strong></p>
-            <p>Proponents should review carefully all of the terms and conditions of the <a href="/api/proposals/download/terms/serviceagreement"
+            <p>Proponents should review carefully all of the terms and conditions of the <a href="/terms/serviceagreement"
                 target="_blank"> Contract </a>.</p>
             <p>Proponents should also refer to section 1.13 of the terms and conditions set out on the Terms tab.</p>
             <p>Without overshadowing any of the Contract content, Proponents should note the following service

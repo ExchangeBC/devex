@@ -22,6 +22,7 @@ request : <code>-request
 var path = require('path'),
 	mongoose = require('mongoose'),
 	Opportunity = mongoose.model('Opportunity'),
+	Proposal = mongoose.model('Proposal'),
 	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers = require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
 	_ = require('lodash'),
@@ -548,7 +549,31 @@ var pub = function(req, res, isToBePublished) {
 				message: errorHandler.getErrorMessage(err)
 			});
 		});
+	// res.json (decorate (opportunity, req.user ? req.user.roles : []));
 };
+
+var countStatus = function(id) {
+	return new Promise(function(resolve, reject) {
+		var cursor = Proposal.aggregate([
+			{
+				$match: {
+					opportunity: id
+				}
+			},
+			{
+				$group: {
+					_id: '$status',
+					count: { $sum: 1 }
+				}
+			}
+		])
+			.cursor()
+			.exec();
+
+		resolve(cursor);
+	});
+};
+
 exports.publish = function(req, res) {
 	return pub(req, res, true);
 };
@@ -605,6 +630,323 @@ exports.unassign = function(req, res) {
 			res.status(422).send({ message: errorHandler.getErrorMessage(err) });
 		});
 };
+
+// -------------------------------------------------------------------------
+//
+// Get proposals for a given opportunity
+//
+// -------------------------------------------------------------------------
+exports.getProposals = function(req, res) {
+	if (!req.opportunity) {
+		return res.status(422).send({
+			message: 'Valid opportunity not provided'
+		});
+	}
+
+	if (!ensureAdmin(req.opportunity, req.user)) {
+		return res.json({ message: 'User is not authorized' });
+	}
+
+	Proposal.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
+		.sort('created')
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('opportunity')
+		.populate('phases.proto.team')
+		.populate('phases.inception.team')
+		.populate('phases.implementation.team')
+		.populate('user')
+		.populate({
+			path: 'phases.proto.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.populate({
+			path: 'phases.inception.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.populate({
+			path: 'phases.implementation.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.exec(function(err, proposals) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(proposals);
+			}
+		});
+};
+
+// -------------------------------------------------------------------------
+//
+// Get proposal statistics for the given opportunity in the request
+//
+// -------------------------------------------------------------------------
+exports.getProposalStats = (req, res) => {
+	if (!req.opportunity) {
+		return res.status(422).send({
+			message: 'Valid opportunity not provided'
+		});
+	}
+
+	if (!ensureAdmin(req.opportunity, req.user)) {
+		return res.json({ message: 'User is not authorized' });
+	}
+
+	var op = req.opportunity;
+	var ret = {
+		following: 0
+	};
+
+	Promise.resolve()
+		.then(() => {
+			if (op.watchers) {
+				ret.following = op.watchers.length;
+			}
+			ret.submitted = 0;
+			ret.draft = 0;
+			return countStatus(op._id);
+		})
+		.then(result => {
+			result
+				.eachAsync(function(doc) {
+					ret[doc._id.toLowerCase()] = doc.count;
+				})
+				.then(function() {
+					res.json(ret);
+				});
+		})
+		.catch(err => {
+			res.status(422).send({
+				message: errorHandler.getErrorMessage(err)
+			});
+		});
+};
+
+// -------------------------------------------------------------------------
+//
+// Create an archive of all proposals for the given opportunity in the request
+//
+// -------------------------------------------------------------------------
+exports.getProposalArchive = (req, res) => {
+	const zip = new (require('jszip'))();
+	const fs = require('fs');
+
+	// Make sure user has admin access
+	if (!ensureAdmin(req.opportunity, req.user)) {
+		return res.json([]);
+	}
+
+	// Make a zip archive with the opportunity name
+	var opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
+	var proponentName;
+	var email;
+	var files;
+	var links;
+	var proposalHtml;
+	var header;
+	var content;
+
+	// Create the zip file;
+	zip.folder(opportunityName);
+
+	// Get all submitted and assigned proposals
+	Proposal.find({ opportunity: req.opportunity._id, status: { $in: ['Submitted', 'Assigned'] } })
+		.sort('status created')
+		.populate('user')
+		.populate('opportunity', 'opportunityTypeCd name code')
+		.exec(function(err, proposals) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				proposals.forEach(function(proposal) {
+					proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+					if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
+					files = proposal.attachments;
+					email = proposal.user.email;
+					proposalHtml = proposal.detail;
+
+					// Go through the files and build the internal links (reset links first)
+					// also build the index.html content
+					links = [];
+					files.forEach(function(file) {
+						links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
+					});
+					header = '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+					header += email + '<br/>';
+					if (!proposal.isCompany) {
+						header += proposal.user.address + '<br/>';
+						header += proposal.user.phone + '<br/>';
+					} else {
+						header += '<b><i>Company:</i></b>' + '<br/>';
+						header += proposal.user.businessName + '<br/>';
+						header += proposal.user.businessAddress + '<br/>';
+						header += '<b><i>Contact:</i></b>' + '<br/>';
+						header += proposal.user.businessContactName + '<br/>';
+						header += proposal.user.businessContactPhone + '<br/>';
+						header += proposal.user.businessContactEmail + '<br/>';
+					}
+					header += '<h2>Documents</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+					content = '<html><body>' + header + '<h2>Proposal</h2>' + proposalHtml + '</body></html>';
+
+					// Add the directory, content and documents for this proposal
+					zip.folder(opportunityName).folder(proponentName);
+					zip.folder(opportunityName)
+						.folder(proponentName)
+						.file('index.html', content);
+					files.forEach(function(file) {
+						zip.folder(opportunityName)
+							.folder(proponentName)
+							.folder('docs')
+							.file(file.name, fs.readFileSync(file.path), { binary: true });
+					});
+				});
+
+				res.setHeader('Content-Type', 'application/zip');
+				res.setHeader('Content-Type', 'application/octet-stream');
+				res.setHeader('Content-Description', 'File Transfer');
+				res.setHeader('Content-Transfer-Encoding', 'binary');
+				res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+				zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			}
+		});
+};
+
+// -------------------------------------------------------------------------
+//
+// Create an archive of a single proposal for the given opportunity and belong to the given user
+//
+// -------------------------------------------------------------------------
+exports.getMyProposalArchive = function(req, res) {
+	var zip = new (require('jszip'))();
+	var fs = require('fs');
+
+	// Create a zip archive from the opportunity name
+	var opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
+
+	zip.folder(opportunityName);
+
+	Proposal.findOne({ user: req.user._id, opportunity: req.opportunity._id })
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('opportunity')
+		.populate('phases.inception.team')
+		.populate('phases.proto.team')
+		.populate('phases.implementation.team')
+		.populate('user')
+		.exec(function(err, proposal) {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				var proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+				if (proposal.status === 'Assigned') proponentName += '-ASSIGNED';
+				var files = proposal.attachments;
+				var email = proposal.user.email;
+				//
+				// go through the files and build the internal links (reset links first)
+				// also build the index.html content
+				//
+				var links = [];
+				files.forEach(function(file) {
+					links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
+				});
+				var questions = '<ol>';
+				proposal.teamQuestionResponses.forEach(function(question) {
+					questions += '<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>';
+				});
+				questions += '</ol>';
+				var phases = '<h3>Inception</h3>';
+				phases += 'Team:<ol>';
+				proposal.phases.inception.team.forEach(function(teamMember) {
+					phases += '<li>' + teamMember.displayName + '</li>';
+				});
+				phases += '</ol>';
+				phases += 'Cost: ';
+				phases += '$' + proposal.phases.inception.cost.toFixed(2);
+
+				phases += '<h3>Prototype</h3>';
+				phases += 'Team:<ol>';
+				proposal.phases.proto.team.forEach(function(teamMember) {
+					phases += '<li>' + teamMember.displayName + '</li>';
+				});
+				phases += '</ol>';
+				phases += 'Cost: ';
+				phases += '$' + proposal.phases.proto.cost.toFixed(2);
+
+				phases += '<h3>Implementation</h3>';
+				phases += 'Team:<ol>';
+				proposal.phases.implementation.team.forEach(function(teamMember) {
+					phases += '<li>' + teamMember.displayName + '</li>';
+				});
+				phases += '</ol>';
+				phases += 'Cost: ';
+				phases += '$' + proposal.phases.implementation.cost.toFixed(2);
+
+				phases += '<br/><br/><b>Total Cost: ';
+				phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
+				phases += '</b><br/>';
+
+				var header = '<h2>Proposal</h2>';
+				header += 'Status: ';
+				header += proposal.status;
+				header += '<br/>';
+				header += 'Accepted Terms: ';
+				header += proposal.isAcceptedTerms ? 'Yes' : 'No';
+				header += '<br/>';
+				header += 'Created on: ';
+				header += new Date(proposal.created).toDateString();
+				header += '<br/>';
+				header += 'Lasted updated: ';
+				header += new Date(proposal.updated).toDateString();
+				header += '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+				header += email + '<br/>';
+				header += '<b><i>Company:</i></b>' + '<br/>';
+				header += proposal.businessName + '<br/>';
+				header += proposal.businessAddress + '<br/>';
+				header += '<b><i>Contact:</i></b>' + '<br/>';
+				header += proposal.businessContactName + '<br/>';
+				header += proposal.businessContactPhone + '<br/>';
+				header += proposal.businessContactEmail + '<br/>';
+				if (links.length > 0) {
+					header += '<h2>Attachments/References</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+				}
+				var content = '<html><body>';
+				content += header;
+				content += '<h2>Phases</h2>' + phases;
+				content += '<h2>Team Questions</h2>' + questions;
+				content += '</body></html>';
+				//
+				// add the directory, content and documents for this proposal
+				//
+				zip.folder(opportunityName).folder(proponentName);
+				zip.folder(opportunityName)
+					.folder(proponentName)
+					.file('proposal-summary.html', content);
+				files.forEach(function(file) {
+					zip.folder(opportunityName)
+						.folder(proponentName)
+						.folder('docs')
+						.file(file.name, fs.readFileSync(file.path), { binary: true });
+				});
+
+				res.setHeader('Content-Type', 'application/zip');
+				res.setHeader('Content-Type', 'application/octet-stream');
+				res.setHeader('Content-Description', 'File Transfer');
+				res.setHeader('Content-Transfer-Encoding', 'binary');
+				res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+				zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			}
+		});
+};
+
 // -------------------------------------------------------------------------
 //
 // assign the passed in proposal

@@ -20,7 +20,20 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/new/activity',
       permissions: ['get']
-    }, {
+	},
+	{
+		resources: '/api/opportunities/:opportunityId/proposals',
+		permissions: ['get']
+	},
+	{
+		resources: '/api/opportunities/:opportunityId/proposalStats',
+		permissions: ['get']
+	},
+	{
+		resources: '/api/opportunities/:opportunityId/proposalArchive',
+		permissions: ['get']
+	},
+	{
       resources: '/api/opportunities/members/:opportunityId',
       permissions: ['get']
     }, {
@@ -81,7 +94,11 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/opportunities/watch/remove/:opportunityId',
       permissions: ['get']
-    }
+	},
+	{
+		resources: '/api/opportunities/:opportunityId/myProposalArchive',
+		permissions: ['get']
+	}
     ]
   }, {
     roles: ['guest'],

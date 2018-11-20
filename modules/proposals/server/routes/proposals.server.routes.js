@@ -8,64 +8,48 @@ var proposalsPolicy = require('../policies/proposals.server.policy'),
 
 module.exports = function(app) {
 	// Proposals Routes
-	app.route('/api/proposals').all(proposalsPolicy.isAllowed)
+	app.route('/api/proposals')
+		.all(proposalsPolicy.isAllowed)
 		.get(proposals.list)
 		.post(proposals.create);
 
-	app.route('/api/proposals/:proposalId').all(proposalsPolicy.isAllowed)
+	// Retrieving and updating proposals
+	app.route('/api/proposals/:proposalId')
+		.all(proposalsPolicy.isAllowed)
 		.get(proposals.read)
 		.put(proposals.update)
 		.delete(proposals.delete);
 
-	app.route('/api/submit/proposal/:proposalId').all(proposalsPolicy.isAllowed)
-		.put(proposals.submit);
-	app.route('/api/assign/proposal/:proposalId').all(proposalsPolicy.isAllowed)
+	// Assignment of CWU proposals to individual
+	app.route('/api/proposals/:proposalId/assignmentStatus')
+		.all(proposalsPolicy.isAllowed)
 		.put(proposals.assign);
-	app.route('/api/assign/proposalswu/:proposalId').all(proposalsPolicy.isAllowed)
+
+	// Assignment of SWU proposals to organization
+	app.route('/api/proposalsSWU/:proposalId/assignmentStatus')
+		.all(proposalsPolicy.isAllowed)
 		.put(proposals.assignswu);
-	//
-	// proposals for opportunity
-	//
+
+	// Potential resources that match up to opportunity requirements
 	app.route('/api/proposals/resources/opportunity/:opportunityId/org/:orgSmallId')
+		.all(proposalsPolicy.isAllowed)
 		.get(proposals.getPotentialResources);
 
-	//
-	// potential resources that match up to opportunity requirements
-	//
-	app.route('/api/proposals/for/opportunity/:opportunityId')
-		.get(proposals.forOpportunity);
+	// Retrieve a proposal for a user and opportunity combination
+	app.route('/api/proposals/my/:opportunityId')
+		.all(proposalsPolicy.isAllowed)
+		.get(proposals.getUserProposalForOpp);
 
+	// Upload attachment on proposal
+	app.route('/api/proposals/:proposalId/documents')
+		.all(proposalsPolicy.isAllowed)
+		.post(proposals.uploaddoc);
 
-	app.route('/api/my/proposals').all(proposalsPolicy.isAllowed)
-		.get(proposals.my);
-	app.route('/api/myopp/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
-		.get(proposals.myopp);
-	app.route('/api/myorgopp/:orgId/proposal/:opportunityId').all(proposalsPolicy.isAllowed)
-		.get(proposals.myorgopp);
-
-	app.route ('/api/proposals/stats/opportunity/:opportunityId')
-		.get (proposals.stats);
-
-	app.route ('/api/proposal/:proposalId/upload/doc')
-		.post (proposals.uploaddoc);
-	app.route ('/api/proposal/:proposalId/remove/doc/:documentId')
-		.get (proposals.removedoc);
-	app.route ('/api/proposal/:proposalId/download/doc/:documentId')
-		.get (proposals.downloaddoc);
-
-	app.route ('/api/proposals/archive/opportunity/:opportunityId')
-		.get (proposals.downloadArchive);
-
-	app.route ('/api/proposals/export/opportunity/:opportunityId')
-		.get (proposals.downloadSWUProposal);
-
-	app.route ('/api/proposals/download/terms/:version')
-		.get (proposals.downloadTerms);
-
-	app.route('/api/new/proposal')
-		// .all(proposalsPolicy.isAllowed)
-		.get(proposals.new);
-
+	// Retrieve or delete attachment on proposal
+	app.route('/api/proposals/:proposalId/documents/:documentId')
+		.all(proposalsPolicy.isAllowed)
+		.get(proposals.downloaddoc)
+		.delete(proposals.removedoc);
 
 	// Finish by binding the Proposal middleware
 	app.param('proposalId', proposals.proposalByID);

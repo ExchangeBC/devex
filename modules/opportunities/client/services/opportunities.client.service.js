@@ -112,6 +112,15 @@
 						getDeadlineStatus: {
 							method: 'GET',
 							url: '/api/opportunities/deadline/status/:opportunityId'
+						},
+						getProposals: {
+							method: 'GET',
+							url: '/api/opportunities/:opportunityId/proposals',
+							isArray: true
+						},
+						getProposalStats: {
+							method: 'GET',
+							url: '/api/opportunities/:opportunityId/proposalStats'
 						}
 					}
 				);

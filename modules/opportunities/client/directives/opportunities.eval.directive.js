@@ -21,7 +21,8 @@
 					'ProposalsService',
 					'ask',
 					'modalService',
-					function($scope, $state, Authentication, Notification, ProposalsService, ask, modalService) {
+					'OpportunitiesService',
+					function($scope, $state, Authentication, Notification, ProposalsService, ask, modalService, OpportunitiesService) {
 						var vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.authentication = Authentication;
@@ -89,7 +90,7 @@
 						var buildQuestionPivot = function() {
 							return new Promise(function(resolve, reject) {
 								// Fetch the proposals for this opportunity and build the pivot out of the responses
-								ProposalsService.forOpportunity({ opportunityId: vm.opportunity._id }).$promise.then(
+								OpportunitiesService.getProposals({ opportunityId: vm.opportunity._id }).$promise.then(
 									function(proposals) {
 										var responses = [];
 										vm.opportunity.teamQuestions.forEach(function(teamQuestion, index) {

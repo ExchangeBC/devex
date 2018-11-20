@@ -80,7 +80,7 @@
 							'Authentication',
 							function($stateParams, ProposalsService, Authentication) {
 								if (!Authentication.user) return {};
-								return ProposalsService.myopp({
+								return ProposalsService.getMyProposal({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -133,8 +133,7 @@
 							function($stateParams, ProposalsService, Authentication, org) {
 								if (!Authentication.user) return {};
 								if (!org || !org._id) return {};
-								return ProposalsService.myOrgOpp({
-									orgId: org._id,
+								return ProposalsService.getMyProposal({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}

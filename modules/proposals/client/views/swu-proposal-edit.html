@@ -117,7 +117,7 @@
             <button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()"
               uib-tooltip="If you withdraw your proposal, your work will still be saved in DRAFT if you want to submit it later."><i
                 class="fas fa-ban"></i> Withdraw Proposal</button>
-            <a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/proposals/export/opportunity/{{ppp.opportunity._id}}"
+            <a ng-if="ppp.proposal._id" class="btn btn-text-only" href="/api/opportunities/{{ppp.opportunity._id}}/myProposalArchive"
               target="_blank"><i class="fas fa-file"></i> Export Proposal</a>
           </div>
         </div>

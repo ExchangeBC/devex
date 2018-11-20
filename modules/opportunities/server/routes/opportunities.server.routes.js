@@ -40,6 +40,27 @@ module.exports = function(app) {
 		.all(opportunitiesPolicy.isAllowed)
 		.get(opportunities.publish)
 		.delete(opportunities.unpublish);
+
+	// Get proposals for a given opportunity
+	app.route('/api/opportunities/:opportunityId/proposals')
+		.all(opportunitiesPolicy.isAllowed)
+		.get(opportunities.getProposals);
+
+	// Get proposal statistics for a given opportunity
+	app.route('/api/opportunities/:opportunityId/proposalStats')
+		.all(opportunitiesPolicy.isAllowed)
+		.get(opportunities.getProposalStats);
+
+	// Get a proposal archive including all proposals for the given opportunity
+	app.route('/api/opportunities/:opportunityId/proposalArchive')
+		.all(opportunitiesPolicy.isAllowed)
+		.get(opportunities.getProposalArchive);
+
+	// Get a proposal archive for a single proposal for the given opportunity and given user
+	app.route('/api/opportunities/:opportunityId/myProposalArchive')
+		.all(opportunitiesPolicy.isAllowed)
+		.get(opportunities.getMyProposalArchive);
+
 	//
 	// unassign the assigned proposal
 	//
