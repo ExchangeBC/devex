@@ -14,7 +14,7 @@
     }, {
       update: {
         method: 'PUT'
-      },
+	  },
       forProgram: {
         method: 'GET',
         url: '/api/projects/for/program/:programId',

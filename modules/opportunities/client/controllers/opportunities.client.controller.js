@@ -8,21 +8,6 @@
 		// Controller for the master list of programs
 		//
 		// =========================================================================
-		.controller('OpportunitiesListController', [
-			'OpportunitiesService',
-			'Authentication',
-			function(OpportunitiesService, Authentication) {
-				var vm = this;
-				vm.opportunities = OpportunitiesService.query();
-				var isUser = Authentication.user;
-				vm.isUser = isUser;
-			}
-		])
-		// =========================================================================
-		//
-		// Controller for the master list of programs
-		//
-		// =========================================================================
 		.controller('OpportunityLandingController', [
 			'Authentication',
 			'$stateParams',
@@ -258,18 +243,6 @@
 
 				// -------------------------------------------------------------------------
 				//
-				// issue a request for membership
-				//
-				// -------------------------------------------------------------------------
-				vm.request = function() {
-					OpportunitiesService.makeRequest({
-						opportunityId: opportunity._id
-					}).$promise.then(function() {
-						Notification.success({ message: '<i class="fas fa-check-circle"></i> Successfully Applied!' });
-					});
-				};
-				// -------------------------------------------------------------------------
-				//
 				// constants for evaluation stages for swu proposals
 				//
 				// -------------------------------------------------------------------------
@@ -499,12 +472,7 @@
 				vm.saveOpportunity = function() {
 					vm.opportunity.$update();
 				};
-				vm.assign = function(proposal) {
-					vm.opportunity.proposal = proposal;
-					vm.saveOpportunity();
-					proposal.isAssigned = true;
-					vm.saveProposal(proposal);
-				};
+
 				// -------------------------------------------------------------------------
 				//
 				// publish or un publish the opportunity
@@ -571,7 +539,7 @@
 					var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
 					ask.yesNo(q).then(function(r) {
 						if (r) {
-							OpportunitiesService.unassign({ opportunityId: opportunity._id }).$promise.then(
+							OpportunitiesService.unassign({ opportunityId: opportunity._id, proposalId: opportunity.proposal._id }).$promise.then(
 								function(response) {
 									vm.opportunity = response;
 									Notification.success({

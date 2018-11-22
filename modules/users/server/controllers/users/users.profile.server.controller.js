@@ -12,7 +12,7 @@ var multer        = require ('multer');
 var config        = require (path.resolve ('./config/config'));
 var User          = mongoose.model ('User');
 var validator     = require ('validator');
-var orgController = require (path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
+var orgController = require ('../../../../orgs/server/controllers/orgs.server.controller');
 var claimMessages = require (path.resolve ('./modules/messages/server/controllers/messages.controller')).claimMessages;
 var sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages;
 

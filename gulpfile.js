@@ -9,6 +9,9 @@ const _ = require('lodash'),
 	testAssets = require('./config/assets/test'),
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
+	ts = require('gulp-typescript'),
+	sourcemaps = require('gulp-sourcemaps'),
+	path = require('path'),
 	plugins = gulpLoadPlugins(),
 	webpack = require('webpack'),
 	webpack_stream = require('webpack-stream'),
@@ -72,11 +75,33 @@ gulp.task('webpack', callback => {
 	return webpack_stream(config).pipe(gulp.dest(`${paths.build}`));
 });
 
+// TypeScript (server)
+gulp.task('tsc-server', () => {
+	var compile = ts.createProject({
+		target: 'es2015',
+		module: 'commonjs',
+		moduleResolution: 'node',
+		sourceMap: true,
+		emitDecoratorMetadata: true,
+		experimentalDecorators: true,
+		removeComments: true,
+		noImplicitAny: false,
+		allowJs: true,
+		outDir: "./server-dist"
+	});
+
+	return gulp.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })
+		.pipe(sourcemaps.init())
+		.pipe(compile())
+		.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '' }))
+		.pipe(gulp.dest(path.resolve('./server-dist')));
+});
+
 // Nodemon task
 gulp.task('nodemon', () => {
 	return new Promise((resolve, reject) => {
 		plugins.nodemon({
-			script: 'server.js',
+			script: 'server-dist/server.js',
 			nodeArgs: ['--inspect=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
@@ -89,7 +114,7 @@ gulp.task('nodemon', () => {
 gulp.task('nodemon-debug', function() {
 	return new Promise((resolve, reject) => {
 		plugins.nodemon({
-			script: 'server.js',
+			script: 'server-dist/server.js',
 			nodeArgs: ['--inspect-brk=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			verbose: true,
@@ -132,7 +157,7 @@ gulp.task('build', gulp.series('env:prod', 'eslint', 'webpack'));
 gulp.task('quiet', gulp.series('env:dev', 'eslint', 'webpack', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
-gulp.task('default', gulp.series('env:dev', 'eslint', 'webpack-watch', 'nodemon'));
+gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon'));
 
 // Run the project but automatically break on init - used for debugging startup issues
 gulp.task('debug', gulp.series('env:dev', 'eslint', 'webpack-watch', 'nodemon-debug'));

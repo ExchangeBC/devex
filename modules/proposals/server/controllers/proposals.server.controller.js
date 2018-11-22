@@ -21,11 +21,11 @@ request : <code>-request
  */
 const path 			= require('path'),
 	mongoose 		= require('mongoose'),
-	Proposal 		= mongoose.model('Proposal'),
-	User 			= mongoose.model('User'),
+	{ Proposal } 		= require('../models/proposal.server.model'),
+	{ User } 			= require('../../../users/server/models/user.server.model'),
 	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	Opportunities 	= require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
+	{ OpportunitiesController } 	= require('../../../opportunities/server/controllers/opportunities.server.controller'),
 	_ 				= require('lodash'),
 	multer 			= require('multer'),
 	config 			= require(path.resolve('./config/config')),
@@ -34,6 +34,8 @@ const path 			= require('path'),
 var userfields = '_id displayName firstName lastName email phone address username profileImageURL \
 					businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 					roles provider';
+
+const Opportunities = new OpportunitiesController();
 
 var ensureProposalOwner = function(proposal, user) {
 	if (!user) {
@@ -236,44 +238,26 @@ exports.submit = function (req, res) {
 	return exports.update (req, res);
 };
 
-var updateUserRole = function (userid, oppcode) {
+// -------------------------------------------------------------------------
+//
+// Assigns the proposal to the given opportunity
+//
+// -------------------------------------------------------------------------
+exports.assign = function (proposal, user) {
 	return new Promise (function (resolve, reject) {
-		User.findByIdAndUpdate (userid,
-		    { '$push': { 'roles':  oppcode} },
-		    { 'new': true, 'upsert': true },
-		    function (err, m) {
-		        if (err) reject (err);
-		        else resolve (m);
-		    }
-		);
+		proposal.status = 'Assigned';
+
+		helpers.applyAudit (proposal, user);
+
+		saveProposal (proposal)
+		.then(function (p) {
+			proposal = p;
+			// return updateUserRole (proposal.user._id, proposal.opportunity.code);
+		})
+		.then(resolve, reject);
 	});
 };
 
-// -------------------------------------------------------------------------
-//
-// assigns a proposal to the opportunity, calls opportunities to complete the
-// work
-//
-// -------------------------------------------------------------------------
-exports.assign = function (req, res) {
-	var proposal = req.proposal;
-	proposal.status = 'Assigned';
-	helpers.applyAudit (proposal, req.user);
-	saveProposal (proposal)
-	.then (function (p) {
-		proposal = p;
-		return updateUserRole (proposal.user._id, proposal.opportunity.code);
-	})
-	.then (function () {
-		return Opportunities.assign (proposal.opportunity._id, proposal._id, proposal.user, req.user);
-	})
-	.then (function () {
-		res.json (proposal);
-	})
-	.catch (function (e) {
-		res.status(422).send ({ message: errorHandler.getErrorMessage(e)});
-	});
-};
 exports.assignswu = function (req, res) {
 	var proposal = req.proposal;
 	proposal.status = 'Assigned';
@@ -297,11 +281,14 @@ exports.assignswu = function (req, res) {
 // and return a promise
 //
 // -------------------------------------------------------------------------
-exports.unassign = function (proposal, user) {
+exports.unassign = (proposal, user) => {
 	return new Promise (function (resolve, reject) {
 		proposal.status = 'Submitted';
 		helpers.applyAudit (proposal, user);
 		saveProposal (proposal)
+		.then (function (p) {
+			proposal = p;
+		})
 		.then (resolve, reject);
 	});
 };

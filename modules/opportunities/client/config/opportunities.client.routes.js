@@ -26,13 +26,6 @@
 							function(CapabilitiesService) {
 								return CapabilitiesService.query().$promise;
 							}
-						],
-						opportunities: [
-							'$stateParams',
-							'OpportunitiesService',
-							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.query();
-							}
 						]
 					}
 				})
@@ -50,9 +43,7 @@
 					},
 					ncyBreadcrumb: {
 						label: 'All opportunities'
-					},
-					controller: 'OpportunitiesListController',
-					controllerAs: 'vm'
+					}
 				})
 				// -------------------------------------------------------------------------
 				//

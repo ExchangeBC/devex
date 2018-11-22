@@ -6,7 +6,7 @@
 	// Controller the view of the proposal page
 	//
 	// =========================================================================
-	.controller ('ProposalViewController', ['capabilities', '$sce', '$state', 'proposal', 'ProposalsService', 'Notification', 'ask', function (capabilities, $sce, $state, proposal, ProposalsService, Notification, ask) {
+	.controller ('ProposalViewController', ['capabilities', '$sce', '$state', 'proposal', 'ProposalsService', 'OpportunitiesService', 'Notification', 'ask', function (capabilities, $sce, $state, proposal, ProposalsService, OpportunitiesService, Notification, ask) {
 		var ppp           = this;
 		ppp.proposal      = angular.copy (proposal);
 		ppp.user          = ppp.proposal.user;
@@ -118,11 +118,11 @@
 			var q = 'Are you sure you want to assign this opportunity to this proponent?';
 			ask.yesNo (q).then (function (r) {
 				if (r) {
-					ProposalsService.assign (ppp.proposal).$promise
+					OpportunitiesService.assign({ opportunityId: ppp.opportunity.code, proposalId: ppp.proposal._id }).$promise
 					.then (
 						function (response) {
 							ppp.proposal = response;
-							Notification.success({ message: '<i class="fas fa-3x fa-check-circle"></i> Company has been assigned'});
+							Notification.success({ message: '<i class="fas fa-check-circle"></i> Proposal has been assigned'});
 							if (ppp.opportunity.opportunityTypeCd === 'sprint-with-us') {
 								$state.go ('opportunities.viewswu',{opportunityId:ppp.opportunity.code});
 							} else {

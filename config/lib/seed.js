@@ -6,6 +6,8 @@ var _ = require('lodash'),
 	chalk = require('chalk'),
 	fs = require('fs');
 
+const { User } = require('../../modules/users/server/models/user.server.model');
+
 // global seed options object
 var seedOptions = {};
 
@@ -491,7 +493,8 @@ module.exports.start = function start(options) {
 		seedOptions.seedAdmin = options.seedAdmin;
 	}
 
-	var User = mongoose.model('User');
+	// var User = mongoose.model('User');
+
 	return new Promise(function(resolve, reject) {
 		var adminAccount = new User(seedOptions.seedAdmin);
 		var userAccount = new User(seedOptions.seedUser);

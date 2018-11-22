@@ -1,8 +1,10 @@
 'use strict';
 var isUser = function(req, res, next) { return req.headers.host==='localhost:3000' ? next() : res.status(403).json({ message: 'User is not authorized' });};
 var path   = require('path');
-var orgs   = require(path.resolve ('./modules/orgs/server/controllers/orgs.server.controller'));
+var { OrgsController }   = require('../../../orgs/server/controllers/orgs.server.controller');
 var users  = require(path.resolve('./modules/users/server/controllers/users/users.authentication.server.controller'));
+
+const orgs = new OrgsController();
 // =========================================================================
 //
 // MESSAGE HANDLER ROUTES

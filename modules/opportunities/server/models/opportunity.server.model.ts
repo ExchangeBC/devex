@@ -1,33 +1,18 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
-var mongoose = require('mongoose'),
-	helpers = require(require('path').resolve('./modules/core/server/controllers/core.server.helpers')),
-	Schema = mongoose.Schema;
+import { Model, model, Schema } from 'mongoose';
+import * as helpers from '../../../core/server/controllers/core.server.helpers';
+import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
 
-var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-// -------------------------------------------------------------------------
-//
-// Opportunity capabilities
-//
-// -------------------------------------------------------------------------
-var OpportunityCapabilities = new Schema({
-	code: { type: String, default: '' },
-	experience: { type: String, default: '' },
-	minimumYears: { type: Number, default: 0 },
-	desiredYears: { type: Number, default: 0 },
-	skills: { type: [String], default: [] }
-});
 // -------------------------------------------------------------------------
 //
 // Opportunity addendum schema
 //
 // -------------------------------------------------------------------------
-var AddendumSchema = new Schema({
+const AddendumSchema = new Schema({
 	description: { type: String },
 	createdBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 	createdOn: { type: Date, default: null }
@@ -37,7 +22,7 @@ var AddendumSchema = new Schema({
 // Opportunity team question schema
 //
 // -------------------------------------------------------------------------
-var TeamQuestionSchema = new Schema({
+const TeamQuestionSchema = new Schema({
 	question: { type: String },
 	guideline: { type: String },
 	wordLimit: { type: Number, default: 300 },
@@ -49,30 +34,46 @@ var TeamQuestionSchema = new Schema({
 // Approval authority schema
 //
 // -------------------------------------------------------------------------
-var ApprovalSchema = new Schema({
-	requestor: { type: Schema.ObjectId, ref: 'User', default: null },
+const ApprovalSchema = new Schema({
+	requestor: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 	name: { type: String, default: '' },
 	email: { type: String, default: '' },
 	twoFAMethod: { type: String, default: 'email', enum: ['email', 'sms'] },
 	mobileNumber: { type: String, default: '' },
 	initiated: { type: Date, default: null },
 	actioned: { type: Date, default: null },
-	state: { type: String, default: 'draft', enum: ['draft', 'ready-to-send', 'sent', 'actioned'] },
-	action: { type: String, default: 'pending', enum: ['pending', 'approved', 'denied'] },
+	state: {
+		type: String,
+		default: 'draft',
+		enum: ['draft', 'ready-to-send', 'sent', 'actioned']
+	},
+	action: {
+		type: String,
+		default: 'pending',
+		enum: ['pending', 'approved', 'denied']
+	},
 	routeCode: { type: String, default: '' },
 	twoFACode: { type: Number, default: 0 },
 	twoFASendCount: { type: Number, default: 0 },
 	twoFAAttemptCount: { type: Number, default: 0 }
 });
 
-var ContractSchema = new Schema({
+const ContractSchema = new Schema({
 	managerName: { type: String, default: '' },
 	managerEmail: { type: String, default: '' },
 	businessArea: { type: String, default: '' },
 	estimatedValue: { type: Number, default: 0 },
 	estimatedTerm: { type: Number, default: 0 },
-	contractType: { type: String, default: 'new', enum: ['new', 'renewal', 'amendment'] },
-	stobType: { type: String, default: '6001/02', enum: ['6001/02', '6003/04', '6020/21', '6302', '6309'] },
+	contractType: {
+		type: String,
+		default: 'new',
+		enum: ['new', 'renewal', 'amendment']
+	},
+	stobType: {
+		type: String,
+		default: '6001/02',
+		enum: ['6001/02', '6003/04', '6020/21', '6302', '6309']
+	},
 	stobBudget: { type: Number, default: 0 },
 	stobExpenditures: { type: Number, default: 0 },
 	summary: { type: String, default: '' },
@@ -85,32 +86,58 @@ var ContractSchema = new Schema({
 // Opportunity schema
 //
 // -------------------------------------------------------------------------
-var OpportunitySchema = new Schema(
+export interface IOpportunityModel extends Model<IOpportunityDocument> {
+	findUniqueCode(title: string, suffix: string, callback: any): string;
+}
+
+export const OpportunitySchema: Schema = new Schema(
 	{
 		//
 		// common fields
 		//
 		code: { type: String, default: '' },
-		opportunityTypeCd: { type: String, default: 'code-with-us', enum: ['code-with-us', 'sprint-with-us'] },
+		opportunityTypeCd: {
+			type: String,
+			default: 'code-with-us',
+			enum: ['code-with-us', 'sprint-with-us']
+		},
 		name: { type: String, default: '', required: 'Name cannot be blank' },
 		short: { type: String, default: '' },
 		description: { type: String, default: '' },
 		background: { type: String, default: '' },
 		github: { type: String, default: '' },
 		views: { type: Number, default: 1 },
-		program: { type: Schema.ObjectId, ref: 'Program', default: null, required: 'Program cannot be blank' },
-		project: { type: Schema.ObjectId, ref: 'Project', default: null, required: 'Project cannot be blank' },
-		status: { type: String, default: 'Pending', enum: ['Pending', 'Assigned', 'In Progress', 'Completed'] },
-		onsite: { type: String, default: 'mixed', enum: ['mixed', 'onsite', 'offsite'] },
+		program: {
+			type: Schema.Types.ObjectId,
+			ref: 'Program',
+			default: null,
+			required: 'Program cannot be blank'
+		},
+		project: {
+			type: Schema.Types.ObjectId,
+			ref: 'Project',
+			default: null,
+			required: 'Project cannot be blank'
+		},
+		status: {
+			type: String,
+			default: 'Pending',
+			enum: ['Pending', 'Assigned', 'In Progress', 'Completed']
+		},
+		onsite: {
+			type: String,
+			default: 'mixed',
+			enum: ['mixed', 'onsite', 'offsite']
+		},
 		location: { type: String, default: '' },
 		isPublished: { type: Boolean, default: false },
 		wasPublished: { type: Boolean, default: false },
 		lastPublished: { type: Date, default: Date.now },
 		deadline: { type: Date, default: Date.now },
 		created: { type: Date, default: Date.now },
-		createdBy: { type: Schema.ObjectId, ref: 'User', default: null },
+		createdBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 		updated: { type: Date, default: null },
-		updatedBy: { type: Schema.ObjectId, ref: 'User', default: null },
+		updatedBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 		issueUrl: { type: String, default: '' },
 		issueNumber: { type: String, default: '' },
 		assignment: { type: Date, default: Date.now },
@@ -124,17 +151,30 @@ var OpportunitySchema = new Schema(
 		earn: { type: Number, default: 0 },
 		start: { type: Date, default: Date.now },
 		endDate: { type: Date, default: Date.now },
-		assignedTo: { type: Schema.ObjectId, ref: 'User', default: null },
+		assignedTo: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 		//
 		// specific to sprint with us
 		//
-		proposal: { type: Schema.ObjectId, ref: 'Proposal', default: null },
+		proposal: {
+			type: Schema.Types.ObjectId,
+			ref: 'Proposal',
+			default: null
+		},
 		phases: {
 			implementation: {
 				isImplementation: { type: Boolean, default: false },
-				capabilities: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitiesCore: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitySkills: { type: [{ type: Schema.ObjectId, ref: 'CapabilitySkill' }], default: [] },
+				capabilities: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitiesCore: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitySkills: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
+					default: []
+				},
 				contract: { type: String, default: '' },
 				endDate: { type: Date, default: Date.now },
 				startDate: { type: Date, default: Date.now },
@@ -143,9 +183,18 @@ var OpportunitySchema = new Schema(
 			},
 			inception: {
 				isInception: { type: Boolean, default: false },
-				capabilities: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitiesCore: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitySkills: { type: [{ type: Schema.ObjectId, ref: 'CapabilitySkill' }], default: [] },
+				capabilities: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitiesCore: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitySkills: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
+					default: []
+				},
 				contract: { type: String, default: '' },
 				endDate: { type: Date, default: Date.now },
 				startDate: { type: Date, default: Date.now },
@@ -154,9 +203,18 @@ var OpportunitySchema = new Schema(
 			},
 			proto: {
 				isPrototype: { type: Boolean, default: false },
-				capabilities: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitiesCore: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitySkills: { type: [{ type: Schema.ObjectId, ref: 'CapabilitySkill' }], default: [] },
+				capabilities: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitiesCore: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitySkills: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
+					default: []
+				},
 				contract: { type: String, default: '' },
 				endDate: { type: Date, default: Date.now },
 				startDate: { type: Date, default: Date.now },
@@ -164,9 +222,18 @@ var OpportunitySchema = new Schema(
 				maxCost: { type: Number, default: 0 }
 			},
 			aggregate: {
-				capabilities: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitiesCore: { type: [{ type: Schema.ObjectId, ref: 'Capability' }], default: [] },
-				capabilitySkills: { type: [{ type: Schema.ObjectId, ref: 'CapabilitySkill' }], default: [] },
+				capabilities: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitiesCore: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+					default: []
+				},
+				capabilitySkills: {
+					type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
+					default: []
+				},
 				endDate: { type: Date, default: Date.now },
 				startDate: { type: Date, default: Date.now },
 				target: { type: Number, default: 0 }
@@ -199,10 +266,17 @@ var OpportunitySchema = new Schema(
 		// each time a new opp was created we had to create a su7bscrption type. this
 		// is much simpler and easier to maintain
 		//
-		watchers: { type: [{ type: Schema.ObjectId, ref: 'User' }], default: [] },
+		watchers: {
+			type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+			default: []
+		},
 		addenda: { type: [AddendumSchema], default: [] },
 		teamQuestions: { type: [TeamQuestionSchema], default: [] },
-		teamQuestionGradingType: { type: String, default: 'Linear', enum: ['Linear', 'Weighted'] },
+		teamQuestionGradingType: {
+			type: String,
+			default: 'Linear',
+			enum: ['Linear', 'Weighted']
+		},
 		intermediateApproval: { type: ApprovalSchema, default: () => ({}) },
 		finalApproval: { type: ApprovalSchema, default: () => ({}) },
 		contract: { type: ContractSchema, default: () => ({}) },
@@ -213,82 +287,83 @@ var OpportunitySchema = new Schema(
 );
 
 OpportunitySchema.virtual('closingIn').get(function() {
-	var closing = 'CLOSED';
-	var d = new Date(this.deadline) - new Date();
+	let closing = 'CLOSED';
+	const d = new Date(this.deadline).getTime() - new Date().getTime();
 	if (d > 0) {
-		var dd = Math.floor(d / 86400000); // days
-		var dh = Math.floor((d % 86400000) / 3600000); // hours
-		var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
-		if (dd > 0) closing = dd + ' days ' + dh + ' hours ' + dm + ' minutes';
-		else if (dh > 0) closing = dh + ' hours ' + dm + ' minutes';
-		else closing = dm + ' minutes';
+		const dd = Math.floor(d / 86400000); // days
+		const dh = Math.floor((d % 86400000) / 3600000); // hours
+		const dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
+		if (dd > 0) {
+			closing = dd + ' days ' + dh + ' hours ' + dm + ' minutes';
+		} else if (dh > 0) {
+			closing = dh + ' hours ' + dm + ' minutes';
+		} else {
+			closing = dm + ' minutes';
+		}
 	}
 	return closing;
 });
+
 OpportunitySchema.virtual('isOpen').get(function() {
 	return new Date(this.deadline) < new Date();
 });
+
 OpportunitySchema.virtual('deadlineDisplay').get(function() {
-	var dt = new Date(this.deadline);
+	const dt = new Date(this.deadline);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('assignmentDisplay').get(function() {
-	var dt = new Date(this.assignment);
+	const dt = new Date(this.assignment);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('startDisplay').get(function() {
-	var dt = new Date(this.start);
+	const dt = new Date(this.start);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('endDateDisplay').get(function() {
-	var dt = new Date(this.endDate);
+	const dt = new Date(this.endDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('inceptionStartDateDisplay').get(function() {
-	var dt = new Date(this.inceptionStartDate);
+	const dt = new Date(this.inceptionStartDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('inceptionEndDateDisplay').get(function() {
-	var dt = new Date(this.inceptionEndDate);
+	const dt = new Date(this.inceptionEndDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('prototypeStartDateDisplay').get(function() {
-	var dt = new Date(this.prototypeStartDate);
+	const dt = new Date(this.prototypeStartDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('prototypeEndDateDisplay').get(function() {
-	var dt = new Date(this.prototypeEndDate);
+	const dt = new Date(this.prototypeEndDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('implementationStartDateDisplay').get(function() {
-	var dt = new Date(this.implementationStartDate);
+	const dt = new Date(this.implementationStartDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
+
 OpportunitySchema.virtual('implementationEndDateDisplay').get(function() {
-	var dt = new Date(this.implementationEndDate);
+	const dt = new Date(this.implementationEndDate);
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
 
 OpportunitySchema.statics.findUniqueCode = function(title, suffix, callback) {
 	return helpers.modelFindUniqueCode(this, 'opp', title, suffix, callback);
-	// var _this = this;
-	// var possible = 'opp-' + (title.toLowerCase().replace(/\W/g,'-').replace(/-+/,'-')) + (suffix || '');
-
-	// _this.findOne({
-	// 	code: possible
-	// }, function (err, user) {
-	// 	if (!err) {
-	// 		if (!user) {
-	// 			callback(possible);
-	// 		} else {
-	// 			return _this.findUniqueCode(title, (suffix || 0) + 1, callback);
-	// 		}
-	// 	} else {
-	// 		callback(null);
-	// 	}
-	// });
 };
 
-mongoose.model('Opportunity', OpportunitySchema);
-mongoose.model('TeamQuestion', TeamQuestionSchema);
-mongoose.model('Approval', ApprovalSchema);
+export const Opportunity: IOpportunityModel = model<IOpportunityDocument, IOpportunityModel>('Opportunity', OpportunitySchema);
+model('TeamQuestion', TeamQuestionSchema);
+model('Approval', ApprovalSchema);
+
+export default Opportunity;

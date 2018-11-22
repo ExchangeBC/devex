@@ -51,67 +51,39 @@
 								return data;
 							}
 						},
-						forProject: {
-							method: 'GET',
-							url: '/api/opportunities/for/project/:projectId',
-							isArray: true
-						},
-						forProgram: {
-							method: 'GET',
-							url: '/api/opportunities/for/program/:programId',
-							isArray: true
-						},
-						my: {
-							method: 'GET',
-							url: '/api/my/opportunities',
-							isArray: true
-						},
 						publish: {
-							method: 'GET',
-							url: '/api/opportunities/publish/:opportunityId'
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/publish',
+							params: { opportunityId: '@opportunityId' }
 						},
 						unpublish: {
-							method: 'DELETE',
-							url: '/api/opportunities/publish/:opportunityId'
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/unpublish',
+							params: { opportunityId: '@opportunityId' }
+						},
+						assign: {
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/assign/:proposalId',
+							params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
 						},
 						unassign: {
 							method: 'PUT',
-							url: '/api/opportunities/unassign/:opportunityId',
-							params: { opportunityId: '@opportunityId' }
-						},
-						makeRequest: {
-							method: 'GET',
-							url: '/api/request/opportunity/:opportunityId'
-						},
-						getRequests: {
-							method: 'GET',
-							url: '/api/opportunities/requests/:opportunityId',
-							isArray: true
-						},
-						getMembers: {
-							method: 'GET',
-							url: '/api/opportunities/members/:opportunityId',
-							isArray: true
-						},
-						confirmMember: {
-							method: 'GET',
-							url: '/api/opportunities/requests/confirm/:opportunityId/:userId'
-						},
-						denyMember: {
-							method: 'GET',
-							url: '/api/opportunities/requests/deny/:opportunityId/:userId'
+							url: '/api/opportunities/:opportunityId/unassign/:proposalId',
+							params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
 						},
 						addWatch: {
-							method: 'GET',
-							url: '/api/opportunities/watch/add/:opportunityId'
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/watch/add',
+							params: { opportunityId: '@opportunityId' }
 						},
 						removeWatch: {
-							method: 'GET',
-							url: '/api/opportunities/watch/remove/:opportunityId'
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/watch/remove',
+							params: { opportunityId: '@opportunityId' }
 						},
 						getDeadlineStatus: {
 							method: 'GET',
-							url: '/api/opportunities/deadline/status/:opportunityId'
+							url: '/api/opportunities/:opportunityId/deadline/status'
 						},
 						getProposals: {
 							method: 'GET',
@@ -170,31 +142,25 @@
 						if (Authentication.user) return !!~o.watchers.indexOf(Authentication.user._id);
 						else return false;
 					},
-					// -------------------------------------------------------------------------
-					//
-					// add current user to the watchers list - this assumes that ths function could
+
+					// Add current user to the watchers list - this assumes that ths function could
 					// not be run except if the user was not already on the list
-					//
-					// -------------------------------------------------------------------------
 					addWatch: function(o) {
 						o.watchers.push(Authentication.user._id);
 						OpportunitiesService.addWatch({
 							opportunityId: o._id
 						});
-						Notification.success({ message: '<i class="fas fa-eye fa-3x"></i><br/><br/>You are now watching<br/>' + o.name });
+						Notification.success({ message: '<i class="fas fa-eye"></i><br/><br/>You are now watching<br/>' + o.name });
 						return true;
 					},
-					// -------------------------------------------------------------------------
-					//
-					// remove the current user from the list
-					//
-					// -------------------------------------------------------------------------
+
+					// Remove the current user from the list
 					removeWatch: function(o) {
 						o.watchers.splice(o.watchers.indexOf(Authentication.user._id), 1);
 						OpportunitiesService.removeWatch({
 							opportunityId: o._id
 						});
-						Notification.success({ message: '<i class="fas fa-eye-slash fa-3x"></i><br/><br/>You are no longer watching<br/>' + o.name });
+						Notification.success({ message: '<i class="fas fa-eye-slash"></i><br/><br/>You are no longer watching<br/>' + o.name });
 						return false;
 					},
 					// -------------------------------------------------------------------------
@@ -344,7 +310,7 @@
 						if (approvalInfo.twoFASendCount < 5) {
 							var client = new XMLHttpRequest();
 							var endpointURL = '/api/opportunities/' + opportunity.code + '/sendcode';
-							client.open('GET', endpointURL);
+							client.open('PUT', endpointURL);
 							client.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
 							client.send();
 							return true;

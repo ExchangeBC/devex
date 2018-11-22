@@ -14,12 +14,12 @@
 			},
 			my: {
 				method: 'GET',
-				url: '/api/my/orgs',
+				url: '/api/orgs/my',
 				isArray: true
 			},
 			myadmin: {
 				method: 'GET',
-				url: '/api/myadmin/orgs',
+				url: '/api/orgs/myadmin',
 				isArray: true
 			},
 			removeUser: {

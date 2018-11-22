@@ -82,7 +82,7 @@
 				var wsx = this;
 				var uploadurl = '/api/users/picture';
 				if ($scope.org) {
-					uploadurl = '/api/upload/logo/org/'+$scope.org._id
+					uploadurl = '/api/org/' + $scope.org._id + '/upload/logo'
 				}
 				wsx.edit = function () {
 					$uibModal.open ({

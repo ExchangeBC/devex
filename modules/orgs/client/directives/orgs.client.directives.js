@@ -90,7 +90,7 @@
 					function($uibModal, $scope) {
 						var wsx = this;
 						wsx.org = $scope.org;
-						var uploadurl = '/api/upload/logo/org/' + wsx.org._id;
+						var uploadurl = '/api/org/' + wsx.org._id + '/upload/logo';
 
 						wsx.edit = function() {
 							$uibModal.open({

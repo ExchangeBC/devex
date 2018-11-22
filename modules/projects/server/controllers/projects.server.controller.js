@@ -24,7 +24,7 @@ var path 			= require('path'),
 	Project 		= mongoose.model('Project'),
 	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
 	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
-	Opportunities 	= require(path.resolve('./modules/opportunities/server/controllers/opportunities.server.controller')),
+	Opportunities 	= require('../../../opportunities/server/controllers/opportunities.server.controller'),
 	_ 				= require('lodash');
 
 // -------------------------------------------------------------------------

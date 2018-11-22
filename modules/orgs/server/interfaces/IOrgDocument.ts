@@ -1,0 +1,41 @@
+import { Document } from 'mongoose';
+import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import { ICapabilitySkillDocument } from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
+
+export interface IOrgDocument extends Document {
+	name: string;
+	dba: string;
+	address: string;
+	address2: string;
+	city: string;
+	province: string;
+	postalcode: string;
+	businessNumber: string;
+	businessJurisdiction: string;
+	fullAddress: string;
+	contactName: string;
+	contactEmail: string;
+	contactPhone: string;
+	description: string;
+	website: string;
+	orgImageURL: string;
+	skills: [string];
+	badges: [string];
+	capabilities: [ICapabilityDocument];
+	capabilitySkills: [ICapabilitySkillDocument];
+	metRFQ: boolean;
+	isCapable: boolean;
+	isAcceptedTerms: boolean;
+	owner: object;
+	created: Date;
+	createdBy: object;
+	updated: Date;
+	updatedBy: object;
+	members: [object];
+	admins: [object];
+	invited: [string];
+	invitedUsers: [IUserDocument];
+	invitedNonUsers: [IUserDocument];
+	emaillist?: [string];
+}

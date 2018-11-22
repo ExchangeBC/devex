@@ -35,12 +35,13 @@ module.exports = {
 	},
 	server: {
 		gulpConfig: ['gulpfile.js'],
-		allJS: ['config/**/*.js', 'modules/*/server/**/*.js'],
+		allJS: ['config/**/*.js', 'modules/*/server/**/*.js', 'modules/*/server/config/*.js', 'server.js', 'paths.js'],
 		models: 'modules/*/server/models/**/*.js',
 		routes: ['modules/!(core)/server/routes/**/*.js', 'modules/core/server/routes/**/*.js'],
 		sockets: 'modules/*/server/sockets/**/*.js',
 		config: ['modules/*/server/config/*.js'],
-		policies: 'modules/*/server/policies/*.js',
-		views: ['modules/*/server/views/*.html']
+		policies: ['modules/!(opportunities|projects)/server/policies/*.js'],
+		views: ['modules/*/server/views/*.html'],
+		allTS: ['config/**/*.ts', 'modules/*/server/**/*.ts']
 	}
 };

@@ -12,7 +12,9 @@
 		"no-inferrable-types": true,
 		"object-literal-sort-keys": false,
 		"arrow-parens": false,
-		"interface-name": [false, "always-prefix"]
+		"interface-name": [false, "always-prefix"],
+		"semicolon": false,
+		"max-line-length": false
 	},
 	"rulesDirectory": [],
 	"linterOptions": {

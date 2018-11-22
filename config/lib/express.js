@@ -177,7 +177,7 @@ module.exports.initSession = function (app, db) {
  */
 module.exports.initModulesConfiguration = function (app, db) {
   config.files.server.configs.forEach(function (configPath) {
-	require(path.resolve(configPath))(app, db);
+	require(path.join(__dirname + '../../../', configPath))(app, db);
   });
 };
 
@@ -216,19 +216,44 @@ module.exports.initModulesClientRoutes = function (app) {
  * Configure the modules ACL policies
  */
 module.exports.initModulesServerPolicies = function (app) {
+
+	const { OrgsPolicy } = require('../../modules/orgs/server/policies/orgs.server.policy');
+	let orgsPolicy = new OrgsPolicy();
+	orgsPolicy.invokeRolesPolicies();
+
+  const { OpportunitiesPolicy } = require('../../modules/opportunities/server/policies/opportunities.server.policy');
+  let oppPolicy = new OpportunitiesPolicy();
+  oppPolicy.invokeRolesPolicies();
+
+  const { ProjectsPolicy } = require('../../modules/projects/server/policies/projects.server.policy');
+  let projPolicy = new ProjectsPolicy();
+  projPolicy.invokeRolesPolicies();
+
   // Globbing policy files
   config.files.server.policies.forEach(function (policyPath) {
-	require(path.resolve(policyPath)).invokeRolesPolicies();
+	require(path.join(__dirname + '../../../', policyPath)).invokeRolesPolicies();
   });
+
+
 };
 
 /**
  * Configure the modules server routes
  */
 module.exports.initModulesServerRoutes = function (app) {
+
+	const { OrgsRouter } = require('../../modules/orgs/server/routes/orgs.server.routes');
+	new OrgsRouter(app);
+
+	const { OpportunitiesRouter } = require('../../modules/opportunities/server/routes/opportunities.server.routes');
+	new OpportunitiesRouter(app);
+
+	const { ProjectsRouter } = require('../../modules/projects/server/routes/projects.server.routes');
+	new ProjectsRouter(app);
+
   // Globbing routing files
   config.files.server.routes.forEach(function (routePath) {
-	require(path.resolve(routePath))(app);
+	require(path.join(__dirname + '../../../', routePath))(app);
   });
 };
 
