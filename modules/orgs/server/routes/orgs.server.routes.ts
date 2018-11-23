@@ -7,11 +7,7 @@ export class OrgsRouter {
 	private orgsController = new OrgsController();
 	private orgsPolicy = new OrgsPolicy();
 
-	constructor(app) {
-		this.init(app);
-	}
-
-	private init = app => {
+	public setupRoutes = app => {
 		// Get a list of all orgs
 		app.route('/api/orgs')
 			.all(this.orgsPolicy.isAllowed)

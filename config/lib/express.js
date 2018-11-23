@@ -218,16 +218,20 @@ module.exports.initModulesClientRoutes = function (app) {
 module.exports.initModulesServerPolicies = function (app) {
 
 	const { OrgsPolicy } = require('../../modules/orgs/server/policies/orgs.server.policy');
-	let orgsPolicy = new OrgsPolicy();
+	const orgsPolicy = new OrgsPolicy();
 	orgsPolicy.invokeRolesPolicies();
 
-  const { OpportunitiesPolicy } = require('../../modules/opportunities/server/policies/opportunities.server.policy');
-  let oppPolicy = new OpportunitiesPolicy();
-  oppPolicy.invokeRolesPolicies();
+	const { OpportunitiesPolicy } = require('../../modules/opportunities/server/policies/opportunities.server.policy');
+	const oppPolicy = new OpportunitiesPolicy();
+	oppPolicy.invokeRolesPolicies();
 
-  const { ProjectsPolicy } = require('../../modules/projects/server/policies/projects.server.policy');
-  let projPolicy = new ProjectsPolicy();
-  projPolicy.invokeRolesPolicies();
+	const { ProjectsPolicy } = require('../../modules/projects/server/policies/projects.server.policy');
+	const projPolicy = new ProjectsPolicy();
+	projPolicy.invokeRolesPolicies();
+
+	const { CapabilitiesPolicy } = require('../../modules/capabilities/server/policies/capabilities.server.policy');
+	const capPolicy = new CapabilitiesPolicy();
+	capPolicy.invokeRolesPolicies();
 
   // Globbing policy files
   config.files.server.policies.forEach(function (policyPath) {
@@ -245,21 +249,29 @@ module.exports.initModulesServerRoutes = function (app) {
 
 
 	const { OrgsRouter } = require('../../modules/orgs/server/routes/orgs.server.routes');
-	new OrgsRouter(app);
+	const orgsRouter = new OrgsRouter();
+	orgsRouter.setupRoutes(app);
 
 	const { OpportunitiesRouter } = require('../../modules/opportunities/server/routes/opportunities.server.routes');
-	new OpportunitiesRouter(app);
+	const opportunitiesRouter = new OpportunitiesRouter();
+	opportunitiesRouter.setupRoutes(app);
 
 	const { ProjectsRouter } = require('../../modules/projects/server/routes/projects.server.routes');
-	new ProjectsRouter(app);
+	const projectsRouter = new ProjectsRouter();
+	projectsRouter.setupRoutes(app);
 
-  // Globbing routing files
-  config.files.server.routes.forEach(function (routePath) {
-	require(path.join(__dirname + '../../../', routePath))(app);
-  });
+	const { CapabilitiesRouter } = require('../../modules/capabilities/server/routes/capabilities.server.routes');
+	const capabilitiesRouter = new CapabilitiesRouter();
+	capabilitiesRouter.setupRoutes(app);
 
-  const { CoreRouter } = require('../../modules/core/server/routes/core.server.routes');
-  new CoreRouter(app);
+	// Globbing routing files
+	config.files.server.routes.forEach(function (routePath) {
+		require(path.join(__dirname + '../../../', routePath))(app);
+	});
+
+	const { CoreRouter } = require('../../modules/core/server/routes/core.server.routes');
+	const coreRouter = new CoreRouter();
+	coreRouter.setupRoutes(app);
 
 };
 

@@ -6,11 +6,7 @@ import { ProjectsPolicy } from '../policies/projects.server.policy';
 export class ProjectsRouter {
 	private projectsPolicy = new ProjectsPolicy();
 
-	constructor(app) {
-		this.init(app);
-	}
-
-	private init = app => {
+	public setupRoutes = app => {
 		// Projects Routes
 		app.route('/api/projects')
 			.all(this.projectsPolicy.isAllowed)

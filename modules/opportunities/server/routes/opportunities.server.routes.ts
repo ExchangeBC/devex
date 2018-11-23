@@ -7,11 +7,7 @@ export class OpportunitiesRouter {
 	private opportunitiesPolicy: OpportunitiesPolicy = new OpportunitiesPolicy();
 	private opportunitiesController: OpportunitiesController = new OpportunitiesController();
 
-	constructor(app) {
-		this.init(app);
-	}
-
-	private init = app => {
+	public setupRoutes = app => {
 
 		// Routes for opportunity CRUD operations
 		app.route('/api/opportunities')

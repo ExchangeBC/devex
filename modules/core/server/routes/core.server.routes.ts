@@ -8,11 +8,7 @@ export class CoreRouter {
 
 	private core = new CoreController();
 
-	constructor(app) {
-		this.init(app);
-	}
-
-	private init = (app) => {
+	public setupRoutes = (app) => {
 
 		// Define error pages
 		app.route('/server-error').get(this.core.renderServerError);
