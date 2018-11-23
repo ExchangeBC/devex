@@ -12,12 +12,13 @@ var multer        = require ('multer');
 var config        = require (path.resolve ('./config/config'));
 var User          = mongoose.model ('User');
 var validator     = require ('validator');
-var orgController = require ('../../../../orgs/server/controllers/orgs.server.controller');
+var { OrgsController } = require ('../../../../orgs/server/controllers/orgs.server.controller');
 var messagesController = require('../../../../messages/server/controllers/messages.controller');
 var claimMessages = messagesController.claimMessages;
 var sendMessages = messagesController.sendMessages;
 
 const errorHandler = new CoreErrors();
+const orgController = new OrgsController();
 
  // CC:  USERFIELDS
 var whitelistedFields = [
