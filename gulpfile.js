@@ -151,16 +151,16 @@ gulp.task('makeUploadsDir', () => {
 });
 
 // Lint project files and run webpack
-gulp.task('build', gulp.series('env:prod', 'eslint', 'webpack'));
+gulp.task('build', gulp.series('env:prod', 'webpack', 'tsc-server'));
 
 // Run without watch - used when developing containerized solution to keep machines from spinning up
-gulp.task('quiet', gulp.series('env:dev', 'eslint', 'webpack', 'nodemon'));
+gulp.task('quiet', gulp.series('env:dev', 'webpack', 'tsc-server', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
 gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon'));
 
 // Run the project but automatically break on init - used for debugging startup issues
-gulp.task('debug', gulp.series('env:dev', 'eslint', 'webpack-watch', 'nodemon-debug'));
+gulp.task('debug', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon-debug'));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('env:prod', 'eslint', 'webpack', 'nodemon'));
+gulp.task('prod', gulp.series('env:prod', 'webpack', 'tsc-server', 'nodemon'));
