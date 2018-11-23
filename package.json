@@ -21,7 +21,7 @@
     "quiet": "gulp quiet",
     "debug": "gulp debug",
     "prod": "gulp prod",
-    "start": "node server.js"
+    "start": "node server-dist/server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.4.1",
