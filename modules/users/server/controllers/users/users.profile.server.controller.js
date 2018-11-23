@@ -6,15 +6,18 @@
 var _             = require ('lodash');
 var fs            = require ('fs');
 var path          = require ('path');
-var errorHandler  = require (path.resolve ('./modules/core/server/controllers/errors.server.controller'));
+var { CoreErrors }  = require ('../../../../core/server/controllers/errors.server.controller');
 var mongoose      = require ('mongoose');
 var multer        = require ('multer');
 var config        = require (path.resolve ('./config/config'));
 var User          = mongoose.model ('User');
 var validator     = require ('validator');
 var orgController = require ('../../../../orgs/server/controllers/orgs.server.controller');
-var claimMessages = require (path.resolve ('./modules/messages/server/controllers/messages.controller')).claimMessages;
-var sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages;
+var messagesController = require('../../../../messages/server/controllers/messages.controller');
+var claimMessages = messagesController.claimMessages;
+var sendMessages = messagesController.sendMessages;
+
+const errorHandler = new CoreErrors();
 
  // CC:  USERFIELDS
 var whitelistedFields = [

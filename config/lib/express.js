@@ -242,6 +242,8 @@ module.exports.initModulesServerPolicies = function (app) {
  */
 module.exports.initModulesServerRoutes = function (app) {
 
+
+
 	const { OrgsRouter } = require('../../modules/orgs/server/routes/orgs.server.routes');
 	new OrgsRouter(app);
 
@@ -255,6 +257,10 @@ module.exports.initModulesServerRoutes = function (app) {
   config.files.server.routes.forEach(function (routePath) {
 	require(path.join(__dirname + '../../../', routePath))(app);
   });
+
+  const { CoreRouter } = require('../../modules/core/server/routes/core.server.routes');
+  new CoreRouter(app);
+
 };
 
 /**

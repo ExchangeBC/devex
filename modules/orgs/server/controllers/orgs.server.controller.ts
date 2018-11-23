@@ -16,7 +16,6 @@ request : <code>-request
 
 */
 
-import { NextFunction, Request, RequestHandler, Response } from 'express';
 import * as _ from 'lodash';
 import * as mongoose from 'mongoose';
 import * as multer from 'multer';
@@ -24,8 +23,8 @@ import * as config from '../../../../config/config';
 import * as multerConfig from '../../../../config/lib/multer';
 import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
 import { Capability } from '../../../capabilities/server/models/capability.server.model';
-import * as helpers from '../../../core/server/controllers/core.server.helpers';
-import * as errorHandler from '../../../core/server/controllers/errors.server.controller';
+import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
+import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
 import * as Messages from '../../../messages/server/controllers/messages.controller';
 import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';
@@ -37,6 +36,8 @@ import { Org } from '../models/org.server.model';
 export class OrgsController {
 	private sendMessages = Messages.sendMessages;
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
+	private helpers = new CoreHelpers();
+	private errorHandler = new CoreErrors();
 
 	public getOrgById = (id): Promise<IOrgDocument> => {
 		return new Promise((resolve, reject) => {
@@ -83,7 +84,7 @@ export class OrgsController {
 			.then(this.minisave);
 	};
 
-	public removeUserFromMemberList = (req: Request, res: Response): void => {
+	public removeUserFromMemberList = (req, res): void => {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -94,7 +95,7 @@ export class OrgsController {
 		this.removeMember(req.profile, req.org).then(this.saveOrg(req, res));
 	};
 
-	public removeMeFromCompany = (req: Request, res: Response): void => {
+	public removeMeFromCompany = (req, res): void => {
 		if (!req.user) {
 			res.status(422).send({
 				message: 'Valid user not provided'
@@ -111,7 +112,7 @@ export class OrgsController {
 		this.removeMember(req.user, req.org).then(this.saveOrg(req, res));
 	};
 
-	public create = (req: Request, res: Response): void => {
+	public create = (req, res): void => {
 		const org = new Org(req.body);
 
 		// set the owner and also add the owner to the list of admins
@@ -119,7 +120,7 @@ export class OrgsController {
 		this.addAdmin(req.user, org).then(this.saveOrg(req, res));
 	};
 
-	public read = (req: Request, res: Response) => {
+	public read = (req, res) => {
 		// If user is not authenticated, only send the publicly available org info
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			const org = _.pick(req.org, ['_id', 'orgImageURL', 'name', 'website', 'capabilities']);
@@ -129,7 +130,7 @@ export class OrgsController {
 		}
 	};
 
-	public update = (req: Request, res: Response) => {
+	public update = (req, res) => {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -168,7 +169,7 @@ export class OrgsController {
 			.then(this.saveOrg(req, res));
 	};
 
-	public delete = (req: Request, res: Response) => {
+	public delete = (req, res) => {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to delete this organization'
@@ -181,7 +182,7 @@ export class OrgsController {
 		org.remove(err => {
 			if (err) {
 				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			} else {
 				this.getAllAffectedMembers(orgId)
@@ -191,14 +192,14 @@ export class OrgsController {
 					})
 					.catch(innerErr => {
 						res.status(422).send({
-							message: errorHandler.getErrorMessage(innerErr)
+							message: this.errorHandler.getErrorMessage(innerErr)
 						});
 					});
 			}
 		});
 	};
 
-	public list = (req: Request, res: Response) => {
+	public list = (req, res) => {
 		Org.find()
 			.sort('user.lastName')
 			.populate('owner', '_id lastName firstName displayName profileImageURL')
@@ -209,7 +210,7 @@ export class OrgsController {
 			.exec((err, orgs) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					res.json(orgs);
@@ -217,7 +218,7 @@ export class OrgsController {
 			});
 	};
 
-	public myadmin = (req: Request, res: Response) => {
+	public myadmin = (req, res) => {
 		Org.find({
 			admins: { $in: [req.user._id] }
 		})
@@ -229,7 +230,7 @@ export class OrgsController {
 			.exec((err, orgs) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					res.json(orgs);
@@ -237,7 +238,7 @@ export class OrgsController {
 			});
 	};
 
-	public my = (req: Request, res: Response) => {
+	public my = (req, res) => {
 		Org.find({
 			members: { $in: [req.user._id] }
 		})
@@ -249,7 +250,7 @@ export class OrgsController {
 			.exec((err, orgs) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					res.json(orgs);
@@ -298,7 +299,7 @@ export class OrgsController {
 		}
 	};
 
-	public orgByID = (req: Request, res: Response, next: NextFunction, id) => {
+	public orgByID = (req, res, next, id) => {
 		if (!mongoose.Types.ObjectId.isValid(id)) {
 			return res.status(400).send({
 				message: 'Org is invalid'
@@ -318,7 +319,7 @@ export class OrgsController {
 			});
 	};
 
-	public orgByIDSmall = (req: Request, res: Response, next: NextFunction, id) => {
+	public orgByIDSmall = (req, res, next, id) => {
 		if (!mongoose.Types.ObjectId.isValid(id)) {
 			return res.status(400).send({
 				message: 'Org is invalid'
@@ -337,7 +338,7 @@ export class OrgsController {
 			});
 	};
 
-	public logo = (req: Request, res: Response) => {
+	public logo = (req, res) => {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -347,9 +348,9 @@ export class OrgsController {
 
 		const org = req.org;
 		const storage = multer.diskStorage(config.uploads.diskStorage);
-		const upload: RequestHandler = multer({ storage }).single('orgImageURL');
+		const upload = multer({ storage }).single('orgImageURL');
 		// upload.fileFilter = multerConfig.profileUploadFileFilter;
-		const up = helpers.fileUploadFunctions(org, Org, 'orgImageURL', req, res, upload, org.orgImageURL);
+		const up = this.helpers.fileUploadFunctions(org, Org, 'orgImageURL', req, res, upload, org.orgImageURL);
 
 		if (org) {
 			up.uploadImage()
@@ -570,19 +571,19 @@ export class OrgsController {
 			if (additionsList && additionsList.found.length === 0 && additionsList.notFound.length === 0) {
 				additionsList = null;
 			}
-			helpers.applyAudit(organization, req.user);
+			this.helpers.applyAudit(organization, req.user);
 			this.checkCapabilities(organization).then(org => {
 				org.save((err, neworg) => {
 					if (err) {
 						return res.status(422).send({
-							message: errorHandler.getErrorMessage(err)
+							message: this.errorHandler.getErrorMessage(err)
 						});
 					} else {
 						req.user.save((innerErr, user) => {
 							req.login(user, innerInnerErr => {
 								if (innerInnerErr) {
 									res.status(422).send({
-										message: errorHandler.getErrorMessage(innerInnerErr)
+										message: this.errorHandler.getErrorMessage(innerInnerErr)
 									});
 								}
 							});
@@ -607,12 +608,12 @@ export class OrgsController {
 
 	private saveOrgReturnMessage = (req, res) => {
 		return organization => {
-			helpers.applyAudit(organization, req.user);
+			this.helpers.applyAudit(organization, req.user);
 			this.checkCapabilities(organization).then((org: IOrgDocument) => {
 				org.save((err, neworg) => {
 					if (err) {
 						return res.status(422).send({
-							message: errorHandler.getErrorMessage(err)
+							message: this.errorHandler.getErrorMessage(err)
 						});
 					} else {
 						//
@@ -623,7 +624,7 @@ export class OrgsController {
 							req.login(user, innerInnerErr => {
 								if (innerInnerErr) {
 									res.status(422).send({
-										message: errorHandler.getErrorMessage(innerInnerErr)
+										message: this.errorHandler.getErrorMessage(innerInnerErr)
 									});
 								}
 							});

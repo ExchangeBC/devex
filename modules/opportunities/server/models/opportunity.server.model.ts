@@ -1,9 +1,10 @@
 'use strict';
 
 import { Model, model, Schema } from 'mongoose';
-import * as helpers from '../../../core/server/controllers/core.server.helpers';
+import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
 
+const helpers = new CoreHelpers();
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 

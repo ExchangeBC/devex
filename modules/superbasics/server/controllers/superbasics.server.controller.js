@@ -12,9 +12,10 @@ Notes about superbasics
 var path          = require ('path'),
 	mongoose      = require ('mongoose'),
 	Superbasic    = mongoose.model ('Superbasic'),
-	errorHandler  = require (path.resolve ('./modules/core/server/controllers/errors.server.controller')),
+	{ CoreErrors }  = require ('../../../core/server/controllers/errors.server.controller'),
 	_             = require ('lodash');
 
+const errorHandler = new CoreErrors();
 // -------------------------------------------------------------------------
 //
 // create a new superbasic. the user doing the creation will be set as the

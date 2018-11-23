@@ -5,12 +5,14 @@
  */
 var path = require('path'),
   config = require(path.resolve('./config/config')),
-  errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+  { CoreErrors } = require('../../../../core/server/controllers/errors.server.controller'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
   nodemailer = require('nodemailer'),
   async = require('async'),
   crypto = require('crypto');
+
+const errorHandler = new CoreErrors();
 
 var smtpTransport = nodemailer.createTransport(config.mailer.options);
 

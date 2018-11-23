@@ -3,9 +3,9 @@
 import * as _ from 'lodash';
 import * as mongoose from 'mongoose';
 import * as Nexmo from 'nexmo';
-import * as github from '../../../core/server/controllers/core.server.github';
-import * as helpers from '../../../core/server/controllers/core.server.helpers';
-import * as errorHandler from '../../../core/server/controllers/errors.server.controller';
+import { CoreGithubController } from '../../../core/server/controllers/core.server.github';
+import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
+import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
 import * as Messages from '../../../messages/server/controllers/messages.controller';
 import { OpportunitiesUtilities } from '../../../opportunities/server/utilities/opportunities.server.utilities';
 import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
@@ -17,6 +17,9 @@ import { Opportunity } from '../models/opportunity.server.model';
 export class OpportunitiesController {
 	private opportunitiesUtilities = new OpportunitiesUtilities();
 	private sendMessages = Messages.sendMessages;
+	private github = new CoreGithubController();
+	private helpers = new CoreHelpers();
+	private errorHandler = new CoreErrors();
 
 	// Return a list of all opportunity members. this means all members NOT
 	// including users who have requested access and are currently waiting
@@ -56,7 +59,7 @@ export class OpportunitiesController {
 			//
 			// set the audit fields so we know who did what when
 			//
-			helpers.applyAudit(opportunity, req.user);
+			this.helpers.applyAudit(opportunity, req.user);
 			//
 			// update phase information
 			//
@@ -67,7 +70,7 @@ export class OpportunitiesController {
 			opportunity.save(err => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					this.setOpportunityAdmin(opportunity, req.user);
@@ -99,7 +102,7 @@ export class OpportunitiesController {
 		//
 		// set the audit fields so we know who did what when
 		//
-		helpers.applyAudit(opportunity, req.user);
+		this.helpers.applyAudit(opportunity, req.user);
 		//
 		// update phase information
 		//
@@ -119,7 +122,7 @@ export class OpportunitiesController {
 					this.sendMessages('opportunity-update', opportunity.watchers, {
 						opportunity: this.setMessageData(opportunity)
 					});
-					github
+					this.github
 						.createOrUpdateIssue({
 							title: opportunity.name,
 							body: this.getOppBody(opportunity),
@@ -146,7 +149,7 @@ export class OpportunitiesController {
 			})
 			.catch(err => {
 				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			});
 	};
@@ -183,13 +186,13 @@ export class OpportunitiesController {
 					opportunity: this.setMessageData(opportunity)
 				});
 
-				return github
+				return this.github
 					.unlockIssue({
 						repo: opportunity.github,
 						number: opportunity.issueNumber
 					})
 					.then(() => {
-						return github.addCommentToIssue({
+						return this.github.addCommentToIssue({
 							comment: 'This opportunity has been un-assigned',
 							repo: opportunity.github,
 							number: opportunity.issueNumber
@@ -203,7 +206,7 @@ export class OpportunitiesController {
 			})
 			.catch(err => {
 				res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			});
 	};
@@ -237,20 +240,20 @@ export class OpportunitiesController {
 				});
 
 				return (
-					github
+					this.github
 						.unlockIssue({
 							repo: opportunity.github,
 							number: opportunity.issueNumber
 						})
 						.then(() => {
-							return github
+							return this.github
 								.addCommentToIssue({
 									comment: 'This opportunity has been assigned',
 									repo: opportunity.github,
 									number: opportunity.issueNumber
 								})
 								.then(() => {
-									return github.lockIssue({
+									return this.github.lockIssue({
 										repo: opportunity.github,
 										number: opportunity.issueNumber
 									});
@@ -263,7 +266,7 @@ export class OpportunitiesController {
 						})
 						.catch(err => {
 							res.status(422).send({
-								message: errorHandler.getErrorMessage(err)
+								message: this.errorHandler.getErrorMessage(err)
 							});
 						})
 				);
@@ -281,35 +284,29 @@ export class OpportunitiesController {
 				} else {
 					opportunity.status = 'Assigned';
 					opportunity.proposal = proposalId;
-					opportunity.evaluationStage = 4; // TBD: this is terrible, how would we know this anyhow ?
+					opportunity.evaluationStage = 4;
 					this.updateSave(opportunity)
 						.then((opp: IOpportunityDocument) => {
 							opportunity = opp;
-							// var data = setNotificationData (opportunity);
+
 							this.sendMessages('opportunity-update', opportunity.watchers, {
 								opportunity: this.setMessageData(opportunity)
 							});
-							// data.username = proposalUser.displayName;
-							// data.useremail = proposalUser.email;
-							//
-							// in future, if we want to attach we can: data.filename = 'cwuterms.pdf';
-							//
-							// data.assignor = user.displayName;
-							// data.assignoremail = opportunity.proposalEmail;
+
 							opportunity.assignor = user.displayName;
 							opportunity.assignoremail = opportunity.proposalEmail;
 							this.sendMessages('opportunity-assign-swu', [proposalUser], {
 								opportunity: this.setMessageData(opportunity)
 							});
-							// Notifications.notifyUserAdHoc ('assignopp', data);
-							return github
+
+							return this.github
 								.addCommentToIssue({
 									comment: 'This opportunity has been assigned',
 									repo: opportunity.github,
 									number: opportunity.issueNumber
 								})
 								.then(() => {
-									return github.lockIssue({
+									return this.github.lockIssue({
 										repo: opportunity.github,
 										number: opportunity.issueNumber
 									});
@@ -326,7 +323,7 @@ export class OpportunitiesController {
 		this.opportunitiesUtilities.opplist(this.searchTerm(req, { program: req.program._id }), req, (err, opportunities) => {
 			if (err) {
 				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			} else {
 				res.json(opportunities);
@@ -453,7 +450,7 @@ export class OpportunitiesController {
 		this.opportunitiesUtilities.opplist(this.searchTerm(req), req, (err, opportunities) => {
 			if (err) {
 				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			} else {
 				res.json(opportunities);
@@ -535,7 +532,7 @@ export class OpportunitiesController {
 			opportunity.remove(err => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					res.json(opportunity);
@@ -604,7 +601,7 @@ export class OpportunitiesController {
 			.exec((err, proposals) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					res.json(proposals);
@@ -653,7 +650,7 @@ export class OpportunitiesController {
 			})
 			.catch(err => {
 				res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			});
 	};
@@ -689,7 +686,7 @@ export class OpportunitiesController {
 			.exec((err, proposals) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					proposals.forEach(proposal => {
@@ -769,7 +766,7 @@ export class OpportunitiesController {
 			.exec((err, proposal) => {
 				if (err) {
 					return res.status(422).send({
-						message: errorHandler.getErrorMessage(err)
+						message: this.errorHandler.getErrorMessage(err)
 					});
 				} else {
 					let proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
@@ -983,7 +980,7 @@ export class OpportunitiesController {
 
 	private searchTerm = (req, opts?) => {
 		opts = opts || {};
-		const me = helpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = this.helpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.opportunities.admin } }];
 		}
@@ -1000,15 +997,15 @@ export class OpportunitiesController {
 			name: opportunity.name,
 			short: opportunity.short,
 			description: opportunity.description,
-			earn_format_mnoney: helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
-			earn: helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
-			dateDeadline: helpers.formatDate(new Date(opportunity.deadline)),
-			timeDeadline: helpers.formatTime(new Date(opportunity.deadline)),
-			dateAssignment: helpers.formatDate(new Date(opportunity.assignment)),
-			dateStart: helpers.formatDate(new Date(opportunity.start)),
-			datePublished: helpers.formatDate(new Date(opportunity.lastPublished)),
-			deadline_format_date: helpers.formatDate(new Date(opportunity.deadline)),
-			deadline_format_time: helpers.formatTime(new Date(opportunity.deadline)),
+			earn_format_mnoney: this.helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
+			earn: this.helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
+			dateDeadline: this.helpers.formatDate(new Date(opportunity.deadline)),
+			timeDeadline: this.helpers.formatTime(new Date(opportunity.deadline)),
+			dateAssignment: this.helpers.formatDate(new Date(opportunity.assignment)),
+			dateStart: this.helpers.formatDate(new Date(opportunity.start)),
+			datePublished: this.helpers.formatDate(new Date(opportunity.lastPublished)),
+			deadline_format_date: this.helpers.formatDate(new Date(opportunity.deadline)),
+			deadline_format_time: this.helpers.formatTime(new Date(opportunity.deadline)),
 			updatenotification: 'not-update-' + opportunity.code,
 			code: opportunity.code,
 			opptype: opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu',
@@ -1018,22 +1015,22 @@ export class OpportunitiesController {
 
 	private setMessageData = opportunity => {
 		opportunity.path = '/opportunities/' + (opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu') + '/' + opportunity.code;
-		opportunity.earn_format_mnoney = helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2);
+		opportunity.earn_format_mnoney = this.helpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2);
 		opportunity.earn = opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
-		opportunity.dateDeadline = helpers.formatDate(new Date(opportunity.deadline));
-		opportunity.timeDeadline = helpers.formatTime(new Date(opportunity.deadline));
-		opportunity.dateAssignment = helpers.formatDate(new Date(opportunity.assignment));
-		opportunity.dateStart = helpers.formatDate(new Date(opportunity.start));
-		opportunity.datePublished = helpers.formatDate(new Date(opportunity.lastPublished));
-		opportunity.deadline_format_date = helpers.formatDate(new Date(opportunity.deadline));
-		opportunity.deadline_format_time = helpers.formatTime(new Date(opportunity.deadline));
+		opportunity.dateDeadline = this.helpers.formatDate(new Date(opportunity.deadline));
+		opportunity.timeDeadline = this.helpers.formatTime(new Date(opportunity.deadline));
+		opportunity.dateAssignment = this.helpers.formatDate(new Date(opportunity.assignment));
+		opportunity.dateStart = this.helpers.formatDate(new Date(opportunity.start));
+		opportunity.datePublished = this.helpers.formatDate(new Date(opportunity.lastPublished));
+		opportunity.deadline_format_date = this.helpers.formatDate(new Date(opportunity.deadline));
+		opportunity.deadline_format_time = this.helpers.formatTime(new Date(opportunity.deadline));
 
-		opportunity.contract.estimatedValue_formatted = helpers.formatMoney(opportunity.contract.estimatedValue);
-		opportunity.contract.stobExpenditures_formatted = helpers.formatMoney(opportunity.contract.stobExpenditures);
-		opportunity.contract.stobBudget_formatted = helpers.formatMoney(opportunity.contract.stobBudget);
+		opportunity.contract.estimatedValue_formatted = this.helpers.formatMoney(opportunity.contract.estimatedValue);
+		opportunity.contract.stobExpenditures_formatted = this.helpers.formatMoney(opportunity.contract.stobExpenditures);
+		opportunity.contract.stobBudget_formatted = this.helpers.formatMoney(opportunity.contract.stobBudget);
 		opportunity.contract.contractType_formatted = opportunity.contract.contractType.charAt(0).toUpperCase() + opportunity.contract.contractType.slice(1);
 		opportunity.contract.legallyRequired_formatted = opportunity.contract.legallyRequired ? 'Yes' : 'No';
-		opportunity.intermediateApproval.actioned_formatted = helpers.formatDate(new Date(opportunity.intermediateApproval.actioned));
+		opportunity.intermediateApproval.actioned_formatted = this.helpers.formatDate(new Date(opportunity.intermediateApproval.actioned));
 
 		return opportunity;
 	};
@@ -1072,7 +1069,7 @@ export class OpportunitiesController {
 						opportunity: this.setMessageData(opportunity)
 					});
 				}
-				github
+				this.github
 					.createOrUpdateIssue({
 						title: opportunity.name,
 						body: this.getOppBody(opportunity),
@@ -1093,7 +1090,7 @@ export class OpportunitiesController {
 			})
 			.catch(err => {
 				return res.status(422).send({
-					message: errorHandler.getErrorMessage(err)
+					message: this.errorHandler.getErrorMessage(err)
 				});
 			});
 	};
@@ -1149,9 +1146,9 @@ export class OpportunitiesController {
 		//
 		// total up the targets
 		//
-		imp.target = helpers.numericOrZero(imp.target);
-		inp.target = helpers.numericOrZero(inp.target);
-		prp.target = helpers.numericOrZero(prp.target);
+		imp.target = this.helpers.numericOrZero(imp.target);
+		inp.target = this.helpers.numericOrZero(inp.target);
+		prp.target = this.helpers.numericOrZero(prp.target);
 		agg.target = imp.target + inp.target + prp.target;
 		//
 		// if the budget was set it takes priority over the total targets
@@ -1172,19 +1169,10 @@ export class OpportunitiesController {
 		const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 		const deadline = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 		dt = opp.assignment;
-		const assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 		dt = opp.start;
-		const start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-		let earn = helpers.formatMoney(opp.earn, 2);
-		const locs = {
-			offsite: 'In-person work NOT required',
-			onsite: 'In-person work required',
-			mixed: 'Some in-person work required'
-		};
 		let opptype = 'cwu';
 		if (opp.opportunityTypeCd === 'sprint-with-us') {
 			opptype = 'swu';
-			earn = helpers.formatMoney(opp.phases.aggregate.target, 2);
 		}
 		let ret = '';
 

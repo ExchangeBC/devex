@@ -12,15 +12,18 @@ var Message         = mongoose.model ('Message');
 var MessageTemplate = mongoose.model ('MessageTemplate');
 var MessageArchive  = mongoose.model ('MessageArchive');
 var path            = require ('path');
-var errorHandler    = require (path.resolve ('./modules/core/server/controllers/errors.server.controller'));
+var { CoreErrors }  = require ('../../../core/server/controllers/errors.server.controller');
 var handlebars      = require ('handlebars');
 var htmlToText      = require ('html-to-text');
 var config          = require (path.resolve ('./config/config'));
 var nodemailer      = require('nodemailer');
 var smtpTransport   = nodemailer.createTransport (config.mailer.options);
 var chalk           = require('chalk');
-var helpers         = require(path.resolve('./modules/core/server/controllers/core.server.helpers'));
+var { CoreHelpers } = require('../../../core/server/controllers/core.server.helpers');
 var _               = require ('lodash');
+
+const helpers = new CoreHelpers();
+const errorHandler = new CoreErrors();
 
 // =========================================================================
 //

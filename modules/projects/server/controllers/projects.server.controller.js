@@ -22,11 +22,13 @@ request : <code>-request
 var path 			= require('path'),
 	mongoose 		= require('mongoose'),
 	Project 		= mongoose.model('Project'),
-	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	{ CoreErrors } 	= require('../../../core/server/controllers/errors.server.controller'),
+	{ CoreHelpers } = require('../../../core/server/controllers/core.server.helpers'),
 	Opportunities 	= require('../../../opportunities/server/controllers/opportunities.server.controller'),
 	_ 				= require('lodash');
 
+const helpers = new CoreHelpers();
+const errorHandler = new CoreErrors();
 // -------------------------------------------------------------------------
 //
 // set a project role on a user

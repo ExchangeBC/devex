@@ -7,9 +7,10 @@ var path          	= require ('path'),
 	mongoose      	= require ('mongoose'),
 	Capability    	= mongoose.model ('Capability'),
 	CapabilitySkill = mongoose.model ('CapabilitySkill'),
-	errorHandler  	= require (path.resolve ('./modules/core/server/controllers/errors.server.controller')),
+	{ CoreErrors }  = require ('../../../core/server/controllers/errors.server.controller'),
 	_             	= require ('lodash');
 
+const errorHandler = new CoreErrors();
 // -------------------------------------------------------------------------
 //
 // create a new capability.

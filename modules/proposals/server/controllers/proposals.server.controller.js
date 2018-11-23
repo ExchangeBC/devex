@@ -23,13 +23,16 @@ const path 			= require('path'),
 	mongoose 		= require('mongoose'),
 	{ Proposal } 		= require('../models/proposal.server.model'),
 	{ User } 			= require('../../../users/server/models/user.server.model'),
-	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	{ CoreErrors } 	= require('../../../core/server/controllers/errors.server.controller'),
+	{ CoreHelpers } = require('../../../core/server/controllers/core.server.helpers'),
 	{ OpportunitiesController } 	= require('../../../opportunities/server/controllers/opportunities.server.controller'),
 	_ 				= require('lodash'),
 	multer 			= require('multer'),
 	config 			= require(path.resolve('./config/config')),
 	fileStream = require(path.resolve('./config/lib/filestream'));
+
+const helpers = new CoreHelpers();
+const errorHandler = new CoreErrors();
 
 var userfields = '_id displayName firstName lastName email phone address username profileImageURL \
 					businessName businessAddress businessContactName businessContactPhone businessContactEmail \

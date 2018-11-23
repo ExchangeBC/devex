@@ -4,12 +4,15 @@
  * Module dependencies
  */
 var path = require('path'),
-	errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
+	{ CoreErrors } = require('../../../../core/server/controllers/errors.server.controller'),
 	mongoose = require('mongoose'),
 	passport = require('passport'),
-	claimMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).claimMessages,
-	sendMessages = require(path.resolve('./modules/messages/server/controllers/messages.controller')).sendMessages,
+	messagesController = require('../../../../messages/server/controllers/messages.controller'),
+	claimMessages = messagesController.claimMessages,
+	sendMessages = messagesController.sendMessages,
 	User = mongoose.model('User');
+
+const errorHandler = new CoreErrors();
 
 // URLs for which user can't be redirected on signin
 var noReturnUrls = ['/authentication/signin', '/authentication/signup'];

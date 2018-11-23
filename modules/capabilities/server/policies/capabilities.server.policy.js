@@ -4,7 +4,6 @@
  * Module dependencies
  */
 var acl     = require ('acl');
-var helpers = require ((require ('path')).resolve ('./modules/core/server/controllers/core.server.helpers'));
 
 // Using the memory backend
 acl = new acl (new acl.memoryBackend ());

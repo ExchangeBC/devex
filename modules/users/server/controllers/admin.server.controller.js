@@ -7,7 +7,9 @@ var path        = require('path'),
   mongoose      = require('mongoose'),
   _             = require('lodash'),
   User          = mongoose.model('User'),
-  errorHandler  = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
+  { CoreErrors }  = require('../../../core/server/controllers/errors.server.controller');
+
+const errorHandler = new CoreErrors();
 
 /**
  * Show the current user

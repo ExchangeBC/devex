@@ -14,7 +14,8 @@
 		"arrow-parens": false,
 		"interface-name": [false, "always-prefix"],
 		"semicolon": false,
-		"max-line-length": false
+		"max-line-length": false,
+		"object-literal-key-quotes": false
 	},
 	"rulesDirectory": [],
 	"linterOptions": {

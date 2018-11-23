@@ -1,9 +1,11 @@
 'use strict';
 
 import { model, Model, Schema } from 'mongoose';
-import * as helpers from '../../../core/server/controllers/core.server.helpers';
+import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { ICapabilityDocument } from '../interfaces/ICapabilityDocument';
 import { ICapabilitySkillDocument } from '../interfaces/ICapabilitySkillDocument';
+
+const helpers = new CoreHelpers();
 
 export interface ICapabilitySkillModel extends Model<ICapabilitySkillDocument> {
 	findUniqueCode(title: string, suffix: string, callback: any): string;

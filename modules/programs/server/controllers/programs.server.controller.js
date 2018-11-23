@@ -26,12 +26,14 @@ var path 			= require('path'),
 	config 			= require(path.resolve('./config/config')),
 	mongoose 		= require('mongoose'),
 	Program 		= mongoose.model('Program'),
-	errorHandler 	= require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
-	helpers 		= require(path.resolve('./modules/core/server/controllers/core.server.helpers')),
+	{ CoreErrors } 	= require('../../../core/server/controllers/errors.server.controller'),
+	{ CoreHelpers} 	= require('../../../core/server/controllers/core.server.helpers'),
 	Projects 		= require('../../../projects/server/controllers/projects.server.controller'),
 	multer 			= require('multer'),
 	_ 				= require('lodash');
 
+const helpers = new CoreHelpers();
+const errorHandler = new CoreErrors();
 // -------------------------------------------------------------------------
 //
 // set a program role on a user
