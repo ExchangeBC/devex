@@ -35,7 +35,7 @@ module.exports = {
 	},
 	server: {
 		gulpConfig: ['gulpfile.js'],
-		allJS: ['config/**/*.js', 'modules/*/server/**/*.js', 'modules/*/server/config/*.js', 'server.js', 'paths.js'],
+		allJS: ['config/**/*.js', 'modules/*/server/**/*.js', 'modules/*/server/config/*.js', 'paths.js'],
 		models: 'modules/*/server/models/**/*.js',
 		routes: ['modules/*/server/routes/**/*.js'],
 		sockets: 'modules/*/server/sockets/**/*.js',
