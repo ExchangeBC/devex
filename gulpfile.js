@@ -20,6 +20,19 @@ const _ = require('lodash'),
 // Define paths for webpack
 const paths = require('./paths');
 
+const tsProject = ts.createProject({
+	target: 'es2015',
+	module: 'commonjs',
+	moduleResolution: 'node',
+	sourceMap: true,
+	emitDecoratorMetadata: true,
+	experimentalDecorators: true,
+	removeComments: true,
+	noImplicitAny: false,
+	allowJs: true,
+	outDir: "./server-dist"
+});
+
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function() {
 	process.env.NODE_ENV = 'test';
@@ -77,24 +90,19 @@ gulp.task('webpack', callback => {
 
 // TypeScript (server)
 gulp.task('tsc-server', () => {
-	var compile = ts.createProject({
-		target: 'es2015',
-		module: 'commonjs',
-		moduleResolution: 'node',
-		sourceMap: true,
-		emitDecoratorMetadata: true,
-		experimentalDecorators: true,
-		removeComments: true,
-		noImplicitAny: false,
-		allowJs: true,
-		outDir: "./server-dist"
-	});
 
 	return gulp.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })
 		.pipe(sourcemaps.init())
-		.pipe(compile())
+		.pipe(tsProject())
 		.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '' }))
 		.pipe(gulp.dest(path.resolve('./server-dist')));
+});
+
+gulp.task('ts-watch', () => {
+	return new Promise((resolve) => {
+		gulp.watch(defaultAssets.server.allTS, gulp.task('tsc-server'));
+		resolve();
+	});
 });
 
 // Nodemon task
@@ -157,7 +165,7 @@ gulp.task('build', gulp.series('env:prod', 'webpack', 'tsc-server'));
 gulp.task('quiet', gulp.series('env:dev', 'webpack', 'tsc-server', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
-gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon'));
+gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', gulp.parallel('nodemon', 'ts-watch')));
 
 // Run the project but automatically break on init - used for debugging startup issues
 gulp.task('debug', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon-debug'));

@@ -82,7 +82,6 @@ export class ExpressApplication {
 		}
 		app.locals.keywords = config.app.keywords;
 		app.locals.googleAnalyticsTrackingID = config.app.googleAnalyticsTrackingID;
-		app.locals.facebookAppId = config.facebook.clientID;
 		app.locals.jsFiles = config.files.client.js;
 		app.locals.cssFiles = config.files.client.css;
 		app.locals.livereload = config.livereload;
