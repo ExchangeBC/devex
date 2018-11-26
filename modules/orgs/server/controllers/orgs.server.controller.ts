@@ -20,12 +20,11 @@ import * as _ from 'lodash';
 import * as mongoose from 'mongoose';
 import * as multer from 'multer';
 import * as config from '../../../../config/config';
-import * as multerConfig from '../../../../config/lib/multer';
 import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
 import { Capability } from '../../../capabilities/server/models/capability.server.model';
 import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
-import * as Messages from '../../../messages/server/controllers/messages.controller';
+import { MessagesController } from '../../../messages/server/controllers/messages.controller';
 import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';
 import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
@@ -34,7 +33,8 @@ import { IOrgDocument } from '../interfaces/IOrgDocument';
 import { Org } from '../models/org.server.model';
 
 export class OrgsController {
-	private sendMessages = Messages.sendMessages;
+	private messagesController = new MessagesController();
+	private sendMessages = this.messagesController.sendMessages;
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 	private helpers = new CoreHelpers();
 	private errorHandler = new CoreErrors();

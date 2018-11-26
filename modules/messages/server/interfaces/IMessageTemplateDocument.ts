@@ -1,9 +1,12 @@
+import * as handlebars from 'handlebars';
 import { Document } from 'mongoose';
 
-export interface IMessageActionsDocument extends Document {
+export interface IMessageAction {
 	actionCd: string;
-	linkTitleTemplate: string;
+	linkTitleTemplate?: string;
 	isDefault: boolean;
+	linkTitle: string;
+	linkResolver?: handlebars.TemplateDelegate<any>;
 }
 
 export interface IMessageTemplateDocument extends Document {
@@ -18,5 +21,11 @@ export interface IMessageTemplateDocument extends Document {
 	modelsRequired: [string];
 	daysToArchive: number;
 	linkTemplate: string;
-	actions: [IMessageActionsDocument]
+	actions: [IMessageAction],
+	messageBody?: handlebars.TemplateDelegate<any>;
+	messageShort?: handlebars.TemplateDelegate<any>;
+	messageTitle?: handlebars.TemplateDelegate<any>;
+	emailBody?: handlebars.TemplateDelegate<any>;
+	emailSubject?: handlebars.TemplateDelegate<any>;
+	link?: handlebars.TemplateDelegate<any>;
 }

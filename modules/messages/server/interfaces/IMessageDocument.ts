@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
-import { IMessageActionsDocument } from './IMessageTemplateDocument';
+import { IMessageAction } from './IMessageTemplateDocument';
 
 export interface IMessageEmailsDocument extends Document {
 	dateSent: Date;
@@ -19,7 +19,7 @@ export interface IMessageDocument extends Document {
 	emailBody: string;
 	emailSubject: string;
 	link: string;
-	action: [IMessageActionsDocument];
+	actions: [IMessageAction];
 	emails: [IMessageEmailsDocument];
 	emailSent: boolean;
 	emailRetries: number;

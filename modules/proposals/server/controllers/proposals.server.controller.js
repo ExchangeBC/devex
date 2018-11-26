@@ -19,17 +19,17 @@ request : <code>-request
 /**
  * Module dependencies.
  */
-const path 			= require('path'),
-	mongoose 		= require('mongoose'),
-	{ Proposal } 		= require('../models/proposal.server.model'),
-	{ User } 			= require('../../../users/server/models/user.server.model'),
-	{ CoreErrors } 	= require('../../../core/server/controllers/errors.server.controller'),
-	{ CoreHelpers } = require('../../../core/server/controllers/core.server.helpers'),
-	{ OpportunitiesController } 	= require('../../../opportunities/server/controllers/opportunities.server.controller'),
-	_ 				= require('lodash'),
-	multer 			= require('multer'),
-	config 			= require(path.resolve('./config/config')),
-	fileStream = require(path.resolve('./config/lib/filestream'));
+const path 			= require('path');
+const mongoose 		= require('mongoose');
+const { Proposal } 		= require('../models/proposal.server.model');
+const { User } 			= require('../../../users/server/models/user.server.model');
+const { CoreErrors } 	= require('../../../core/server/controllers/errors.server.controller');
+const { CoreHelpers } = require('../../../core/server/controllers/core.server.helpers');
+const { OpportunitiesController } = require('../../../opportunities/server/controllers/opportunities.server.controller');
+const _ = require('lodash');
+const multer = require('multer');
+const config = require(path.resolve('./config/config'));
+const fileStream = require(path.resolve('./config/lib/filestream'));
 
 const helpers = new CoreHelpers();
 const errorHandler = new CoreErrors();
@@ -38,7 +38,7 @@ var userfields = '_id displayName firstName lastName email phone address usernam
 					businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 					roles provider';
 
-const Opportunities = new OpportunitiesController();
+const Opportunities = OpportunitiesController;
 
 var ensureProposalOwner = function(proposal, user) {
 	if (!user) {

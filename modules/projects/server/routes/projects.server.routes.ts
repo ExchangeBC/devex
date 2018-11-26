@@ -1,61 +1,60 @@
 'use strict';
 
-import * as projects from '../controllers/projects.server.controller';
+import { ProjectsController } from '../controllers/projects.server.controller';
 import { ProjectsPolicy } from '../policies/projects.server.policy';
 
 export class ProjectsRouter {
 	private projectsPolicy = new ProjectsPolicy();
+	private projectController = new ProjectsController();
 
 	public setupRoutes = app => {
 		// Projects Routes
 		app.route('/api/projects')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.list)
-			.post(projects.create);
+			.get(this.projectController.list)
+			.post(this.projectController.create);
 
 		app.route('/api/projects/:projectId')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.read)
-			.put(projects.update)
-			.delete(projects.delete);
+			.get(this.projectController.read)
+			.put(this.projectController.update)
+			.delete(this.projectController.delete);
 
 		app.route('/api/my/projects')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.my);
+			.get(this.projectController.my);
 		app.route('/api/myadmin/projects')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.myadmin);
+			.get(this.projectController.myadmin);
 
 		//
 		// projects for program
 		//
-		app.route('/api/projects/for/program/:programId').get(
-			projects.forProgram
-		);
+		app.route('/api/projects/for/program/:programId').get(this.projectController.getProjectForPrograms);
 
 		//
 		// get lists of users
 		//
-		app.route('/api/projects/members/:projectId').get(projects.listMembers);
+		app.route('/api/projects/members/:projectId').get(this.projectController.listMembers);
 		app.route('/api/projects/requests/:projectId')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.listRequests);
+			.get(this.projectController.listRequests);
 
 		//
 		// modify users
 		//
 		app.route('/api/projects/requests/confirm/:projectId/:userId')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.confirmMember);
+			.get(this.projectController.confirmMember);
 		app.route('/api/projects/requests/deny/:projectId/:userId')
 			.all(this.projectsPolicy.isAllowed)
-			.get(projects.denyMember);
+			.get(this.projectController.denyMember);
 
-		app.route('/api/new/project').get(projects.new);
+		app.route('/api/new/project').get(this.projectController.new);
 
-		app.route('/api/request/project/:projectId').get(projects.request);
+		app.route('/api/request/project/:projectId').get(this.projectController.request);
 
 		// Finish by binding the Project middleware
-		app.param('projectId', projects.projectByID);
-	}
+		app.param('projectId', this.projectController.projectByID);
+	};
 }
