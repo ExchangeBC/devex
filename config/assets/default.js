@@ -42,6 +42,6 @@ module.exports = {
 		config: ['modules/*/server/config/*.js'],
 		policies: ['modules/!(opportunities|projects)/server/policies/*.js'],
 		views: ['modules/*/server/views/*.html'],
-		allTS: ['config/**/*.ts', 'modules/*/server/**/*.ts']
+		allTS: ['config/**/*.ts', 'modules/*/server/**/*.ts', 'server.ts']
 	}
 };
