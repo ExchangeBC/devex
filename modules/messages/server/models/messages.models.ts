@@ -7,8 +7,10 @@
 // read/etc and which actions were taken on message results
 //
 // =========================================================================
-// var mongoose = require ('mongoose');
-import * as mongoose from 'mongoose';
+import { Model, model, Schema } from 'mongoose';
+import { IMessageArchiveDocument } from '../interfaces/IMessageArchiveDocument';
+import { IMessageDocument } from '../interfaces/IMessageDocument';
+import { IMessageTemplateDocument } from '../interfaces/IMessageTemplateDocument';
 // -------------------------------------------------------------------------
 //
 // the message template
@@ -23,9 +25,13 @@ import * as mongoose from 'mongoose';
 // a message from the template - user is assumed
 //
 // -------------------------------------------------------------------------
-mongoose.model(
+export interface IMessageTemplateModel extends Model<IMessageTemplateDocument> {}
+export interface IMessageArchiveModel extends Model<IMessageArchiveDocument> {}
+export interface IMessageModel extends Model<IMessageDocument> {}
+
+export const MessageTemplate: IMessageTemplateModel = model<IMessageTemplateDocument, IMessageTemplateModel>(
 	'MessageTemplate',
-	new mongoose.Schema({
+	new Schema({
 		messageCd: { type: String, default: '', unique: true },
 		description: { type: String, default: '' },
 		isSubscriptionType: { type: Boolean, default: false },
@@ -61,9 +67,9 @@ mongoose.model(
 // time. the last error is stored
 //
 // -------------------------------------------------------------------------
-mongoose.model(
+export const Message: IMessageModel = model<IMessageDocument, IMessageModel>(
 	'Message',
-	new mongoose.Schema({
+	new Schema({
 		messageCd: { type: String, default: '' },
 		messageLevel: { type: String, default: 'info', enum: ['info', 'request', 'alert'] },
 		user: { type: 'ObjectId', default: null, ref: 'User' },
@@ -106,9 +112,9 @@ mongoose.model(
 // for purposes of audit etc
 //
 // -------------------------------------------------------------------------
-mongoose.model(
+export const MessageArchive: IMessageArchiveModel = model<IMessageArchiveDocument, IMessageArchiveModel>(
 	'MessageArchive',
-	new mongoose.Schema({
+	new Schema({
 		messageCd: { type: String },
 		user: { type: 'ObjectId', ref: 'User' },
 		userEmail: { type: String },
