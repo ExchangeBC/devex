@@ -1,0 +1,19 @@
+'use strict';
+
+import * as users from '../controllers/users.server.controller';
+
+export class UsersRouter {
+	public setupRoutes = app => {
+		// Setting up the users profile api
+		app.route('/api/users/me').get(users.me);
+		app.route('/api/users').put(users.update);
+		app.route('/api/users/delete').get(users.removeSelf);
+		app.route('/api/users/accounts').delete(users.removeOAuthProvider);
+		app.route('/api/users/password').post(users.changePassword);
+		app.route('/api/users/picture').post(users.changeProfilePicture);
+		app.route('/api/users/count').get(users.count);
+
+		// Finish by binding the user middleware
+		app.param('userId', users.userByID);
+	};
+}
