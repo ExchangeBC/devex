@@ -12,8 +12,6 @@ export class Application {
 	private express = new ExpressApplication();
 
 	public init = (): Promise<Express> => {
-		// tslint:disable:no-console
-		console.log('APP INIT');
 		return new Promise(resolve => {
 			let connection;
 			Promise.resolve()
@@ -30,8 +28,6 @@ export class Application {
 	};
 
 	public start = () => {
-		// tslint:disable
-		console.log('starting app');
 		this.init().then(app => {
 			// Start the app by listening on <port> at <host>
 			app.listen(config.port, config.host, () => {

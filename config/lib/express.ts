@@ -17,6 +17,8 @@ import * as path from 'path';
 import { CapabilitiesPolicy } from '../../modules/capabilities/server/policies/capabilities.server.policy';
 import { CapabilitiesRouter } from '../../modules/capabilities/server/routes/capabilities.server.routes';
 import { CoreRouter } from '../../modules/core/server/routes/core.server.routes';
+import { MessageHandlerRouter } from '../../modules/messages/server/routes/messages.handler.routes';
+import { MessagesRouter } from '../../modules/messages/server/routes/messages.routes';
 import { OpportunitiesPolicy } from '../../modules/opportunities/server/policies/opportunities.server.policy';
 import { OpportunitiesRouter } from '../../modules/opportunities/server/routes/opportunities.server.routes';
 import { OrgsPolicy } from '../../modules/orgs/server/policies/orgs.server.policy';
@@ -38,9 +40,6 @@ export class ExpressApplication {
 	 * Initialize the Express application
 	 */
 	public init = db => {
-
-		// tslint:disable
-		console.log('EXPRESS INIT');
 		// Declare a new token for morgan to use in the log output
 		morgan.token('userid', (req, res) => {
 			return req.user ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
@@ -303,7 +302,11 @@ export class ExpressApplication {
 			require(path.join(__dirname + '../../../', routePath))(app);
 		});
 
-		console.log('HERE');
+		const messagesRouter = new MessagesRouter();
+		messagesRouter.setupRoutes(app);
+
+		const messageHandlerRouter = new MessageHandlerRouter();
+		messageHandlerRouter.setupRoutes(app);
 
 		const orgsRouter = new OrgsRouter();
 		orgsRouter.setupRoutes(app);
