@@ -40,7 +40,7 @@ module.exports = {
 		routes: ['modules/*/server/routes/**/*.js'],
 		sockets: 'modules/*/server/sockets/**/*.js',
 		config: ['modules/*/server/config/*.js'],
-		policies: ['modules/!(opportunities|projects)/server/policies/*.js'],
+		policies: ['modules/*/server/policies/*.js'],
 		views: ['modules/*/server/views/*.html'],
 		allTS: ['config/**/*.ts', 'modules/*/server/**/*.ts', 'server.ts']
 	}
