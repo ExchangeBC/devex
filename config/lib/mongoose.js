@@ -14,6 +14,7 @@ module.exports.loadModels = () => {
 	// Globbing model files
 	config.files.server.models.forEach((modelPath) => {
 		require(path.resolve(modelPath));
+		console.log(modelPath);
 	});
 };
 

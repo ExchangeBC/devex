@@ -14,6 +14,16 @@ import * as lusca from 'lusca';
 import * as methodOverride from 'method-override';
 import * as morgan from 'morgan';
 import * as path from 'path';
+import { CapabilitiesPolicy } from '../../modules/capabilities/server/policies/capabilities.server.policy';
+import { CapabilitiesRouter } from '../../modules/capabilities/server/routes/capabilities.server.routes';
+import { CoreRouter } from '../../modules/core/server/routes/core.server.routes';
+import { OpportunitiesPolicy } from '../../modules/opportunities/server/policies/opportunities.server.policy';
+import { OpportunitiesRouter } from '../../modules/opportunities/server/routes/opportunities.server.routes';
+import { OrgsPolicy } from '../../modules/orgs/server/policies/orgs.server.policy';
+import { OrgsRouter } from '../../modules/orgs/server/routes/orgs.server.routes';
+import { ProjectsPolicy } from '../../modules/projects/server/policies/projects.server.policy';
+import { ProjectsRouter } from '../../modules/projects/server/routes/projects.server.routes';
+import { AdminRouter } from '../../modules/users/server/routes/admin.server.routes';
 import * as config from '../config';
 import { Logger } from './logger';
 
@@ -28,6 +38,9 @@ export class ExpressApplication {
 	 * Initialize the Express application
 	 */
 	public init = db => {
+
+		// tslint:disable
+		console.log('EXPRESS INIT');
 		// Declare a new token for morgan to use in the log output
 		morgan.token('userid', (req, res) => {
 			return req.user ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
@@ -263,19 +276,15 @@ export class ExpressApplication {
 	 * Configure the modules ACL policies
 	 */
 	private initModulesServerPolicies = () => {
-		const { OrgsPolicy } = require('../../modules/orgs/server/policies/orgs.server.policy');
 		const orgsPolicy = new OrgsPolicy();
 		orgsPolicy.invokeRolesPolicies();
 
-		const { OpportunitiesPolicy } = require('../../modules/opportunities/server/policies/opportunities.server.policy');
 		const oppPolicy = new OpportunitiesPolicy();
 		oppPolicy.invokeRolesPolicies();
 
-		const { ProjectsPolicy } = require('../../modules/projects/server/policies/projects.server.policy');
 		const projPolicy = new ProjectsPolicy();
 		projPolicy.invokeRolesPolicies();
 
-		const { CapabilitiesPolicy } = require('../../modules/capabilities/server/policies/capabilities.server.policy');
 		const capPolicy = new CapabilitiesPolicy();
 		capPolicy.invokeRolesPolicies();
 
@@ -289,28 +298,28 @@ export class ExpressApplication {
 	 * Configure the modules server routes
 	 */
 	private initModulesServerRoutes = app => {
-		const { OrgsRouter } = require('../../modules/orgs/server/routes/orgs.server.routes');
-		const orgsRouter = new OrgsRouter();
-		orgsRouter.setupRoutes(app);
-
-		const { OpportunitiesRouter } = require('../../modules/opportunities/server/routes/opportunities.server.routes');
-		const opportunitiesRouter = new OpportunitiesRouter();
-		opportunitiesRouter.setupRoutes(app);
-
-		const { ProjectsRouter } = require('../../modules/projects/server/routes/projects.server.routes');
-		const projectsRouter = new ProjectsRouter();
-		projectsRouter.setupRoutes(app);
-
-		const { CapabilitiesRouter } = require('../../modules/capabilities/server/routes/capabilities.server.routes');
-		const capabilitiesRouter = new CapabilitiesRouter();
-		capabilitiesRouter.setupRoutes(app);
-
 		// Globbing routing files
 		config.files.server.routes.forEach(routePath => {
 			require(path.join(__dirname + '../../../', routePath))(app);
 		});
 
-		const { CoreRouter } = require('../../modules/core/server/routes/core.server.routes');
+		console.log('HERE');
+
+		const orgsRouter = new OrgsRouter();
+		orgsRouter.setupRoutes(app);
+
+		const opportunitiesRouter = new OpportunitiesRouter();
+		opportunitiesRouter.setupRoutes(app);
+
+		const projectsRouter = new ProjectsRouter();
+		projectsRouter.setupRoutes(app);
+
+		const capabilitiesRouter = new CapabilitiesRouter();
+		capabilitiesRouter.setupRoutes(app);
+
+		const adminRouter = new AdminRouter();
+		adminRouter.setupRoutes(app);
+
 		const coreRouter = new CoreRouter();
 		coreRouter.setupRoutes(app);
 	};
