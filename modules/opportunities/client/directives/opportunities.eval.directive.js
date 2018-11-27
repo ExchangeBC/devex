@@ -198,7 +198,9 @@
 								return;
 							}
 
-							return proposal.$update();
+							var s = new ProposalsService(proposal);
+							return s.$update();
+							// return proposal.$update();
 						};
 
 						/**
