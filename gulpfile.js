@@ -94,7 +94,10 @@ gulp.task('tsc-server', () => {
 	return gulp.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })
 		.pipe(sourcemaps.init())
 		.pipe(tsProject())
-		.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '' }))
+		.pipe(sourcemaps.write('.', {
+			mapSources: (path) => path,
+			sourceRoot: (file) => { return path.relative(file.relative, path.join(file.cwd, './server-dist')) }
+		}))
 		.pipe(gulp.dest(path.resolve('./server-dist')));
 });
 
