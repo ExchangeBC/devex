@@ -25,6 +25,7 @@ import { OrgsPolicy } from '../../modules/orgs/server/policies/orgs.server.polic
 import { OrgsRouter } from '../../modules/orgs/server/routes/orgs.server.routes';
 import { ProjectsPolicy } from '../../modules/projects/server/policies/projects.server.policy';
 import { ProjectsRouter } from '../../modules/projects/server/routes/projects.server.routes';
+import { UsersConfig } from '../../modules/users/server/config/users.server.config';
 import { AdminRouter } from '../../modules/users/server/routes/admin.server.routes';
 import * as config from '../config';
 import { Logger } from './logger';
@@ -236,6 +237,9 @@ export class ExpressApplication {
 		config.files.server.configs.forEach(configPath => {
 			require(path.join(__dirname + '../../../', configPath))(app, db);
 		});
+
+		const usersConfig = new UsersConfig();
+		usersConfig.init(app);
 	};
 
 	/**
