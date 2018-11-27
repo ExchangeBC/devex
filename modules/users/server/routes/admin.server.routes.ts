@@ -1,12 +1,13 @@
 'use strict';
 
-import * as admin from '../controllers/admin.server.controller';
+import { AdminController } from '../controllers/admin.server.controller';
 import { AdminPolicy } from '../policies/admin.server.policy';
 import { AuthRouter } from './auth.server.routes';
 import { UsersRouter } from './users.server.routes';
 
 export class AdminRouter {
 	private adminPolicy = new AdminPolicy();
+	private adminController = new AdminController();
 
 	public setupRoutes = app => {
 		// Set up auth and user routes
@@ -17,21 +18,21 @@ export class AdminRouter {
 		usersRouter.setupRoutes(app);
 
 		// Users collection routes
-		app.route('/api/users').get(this.adminPolicy.isAllowed, admin.list);
+		app.route('/api/users').get(this.adminPolicy.isAllowed, this.adminController.list);
 
-		app.route('/api/listopps').get(this.adminPolicy.isAllowed, admin.notifyOpportunities);
-		app.route('/api/listmeets').get(this.adminPolicy.isAllowed, admin.notifyMeetings);
+		app.route('/api/listopps').get(this.adminPolicy.isAllowed, this.adminController.notifyOpportunities);
+		app.route('/api/listmeets').get(this.adminPolicy.isAllowed, this.adminController.notifyMeetings);
 
 		// Gov. Request
-		app.route('/api/approve').post(this.adminPolicy.isAllowed, admin.approve);
+		app.route('/api/approve').post(this.adminPolicy.isAllowed, this.adminController.approve);
 
 		// Single user routes
 		app.route('/api/users/:userId')
-			.get(this.adminPolicy.isAllowed, admin.read)
-			.put(this.adminPolicy.isAllowed, admin.update)
-			.delete(this.adminPolicy.isAllowed, admin.delete);
+			.get(this.adminPolicy.isAllowed, this.adminController.read)
+			.put(this.adminPolicy.isAllowed, this.adminController.update)
+			.delete(this.adminPolicy.isAllowed, this.adminController.delete);
 
 		// Finish by binding the user middleware
-		app.param('userId', admin.userByID);
+		app.param('userId', this.adminController.userByID);
 	};
 }
