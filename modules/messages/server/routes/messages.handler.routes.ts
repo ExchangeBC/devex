@@ -1,10 +1,11 @@
 'use strict';
 
 import { OrgsController } from '../../../orgs/server/controllers/orgs.server.controller';
-import * as users from '../../../users/server/controllers/users/users.authentication.server.controller';
+import { UserAuthenticationController } from '../../../users/server/controllers/users/users.authentication.server.controller';
 
 export class MessageHandlerRouter {
 	private orgsController = new OrgsController();
+	private userAuthenticationController = new UserAuthenticationController();
 	// =========================================================================
 	//
 	// MESSAGE HANDLER ROUTES
@@ -77,7 +78,7 @@ export class MessageHandlerRouter {
 		// -------------------------------------------------------------------------
 		app.route('/api/message/handler/action/:actionCode/user/:userId/gov/add/:requestingUserId')
 			.all(this.isUser)
-			.get(users.grantGovernmentRole);
+			.get(this.userAuthenticationController.grantGovernmentRole);
 	};
 
 	private isUser = (req, res, next) => {

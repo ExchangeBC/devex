@@ -22,7 +22,7 @@ export interface IUserDocument extends Document {
 	notifyBlogs: boolean;
 	userTitle: string;
 	providerData: object;
-	roles: [string];
+	roles: string[];
 	updated: Date;
 	created: Date;
 	resetPasswordToken: string;
