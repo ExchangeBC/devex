@@ -22,6 +22,6 @@ export class UsersRouter {
 		app.route('/api/users/count').get(this.userProfileController.count);
 
 		// Finish by binding the user middleware
-		app.param('userId', this.userAuthorizationController /*  */.userByID);
+		app.param('userId', this.userAuthorizationController.userByID);
 	};
 }
