@@ -65,7 +65,7 @@
 
 		function updateMessageCount() {
 			MessagesService.mycount(response => {
-				vm.messageCount = response.count;
+				vm.messageCount = response.countResult;
 			});
 		}
 
