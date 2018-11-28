@@ -23,7 +23,7 @@ export class AdminPolicy {
 						permissions: '*'
 					},
 					{
-						resources: '/api/listopps',
+						resources: '/api/admin/opportunity/listeners',
 						permissions: '*'
 					},
 					{
