@@ -13,13 +13,5 @@
       title: 'Manage Users',
       state: 'admin.users'
     });
-    menuService.addSubMenuItem('topbar', 'admin', {
-      title: 'Notify of Opportunities',
-      state: 'admin.notifyopps'
-    });
-    menuService.addSubMenuItem('topbar', 'admin', {
-      title: 'Notify of Events',
-      state: 'admin.notifymeets'
-    });
   }
 }());
