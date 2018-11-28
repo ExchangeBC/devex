@@ -108,9 +108,9 @@
           userId:'@userId'
         }
       },
-      listopps: {
+      getOpportunityListeners: {
         method: 'GET',
-        url: '/api/listopps',
+        url: '/api/admin/opportunity/listeners',
         isArray: true
       },
       listmeets: {
