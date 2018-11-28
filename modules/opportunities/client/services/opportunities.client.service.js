@@ -85,11 +85,6 @@
 							method: 'GET',
 							url: '/api/opportunities/:opportunityId/deadline/status'
 						},
-						getProposals: {
-							method: 'GET',
-							url: '/api/opportunities/:opportunityId/proposals',
-							isArray: true
-						},
 						getProposalStats: {
 							method: 'GET',
 							url: '/api/opportunities/:opportunityId/proposalStats'

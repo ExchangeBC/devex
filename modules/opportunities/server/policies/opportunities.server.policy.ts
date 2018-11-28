@@ -100,10 +100,6 @@ export class OpportunitiesPolicy {
 						permissions: ['post']
 					},
 					{
-						resources: '/api/opportunities/:opportunityId/proposals',
-						permissions: ['get']
-					},
-					{
 						resources: '/api/opportunities/:opportunityId/proposalStats',
 						permissions: ['get']
 					},

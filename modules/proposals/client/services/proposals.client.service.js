@@ -34,7 +34,12 @@
       getMyProposal: {
         method: 'GET',
         url: '/api/proposals/my/:opportunityId'
-      },
+	  },
+	  getProposalsForOpp: {
+		  method: 'GET',
+		  url: '/api/proposals/for/:opportunityId',
+		  isArray: true
+	  },
       getPotentialResources: {
         method: 'GET',
         url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',

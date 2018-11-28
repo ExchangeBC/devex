@@ -48,6 +48,21 @@ var ensureProposalOwner = function(proposal, user) {
 	return proposal.user._id === user._id;
 }
 
+const adminRole = opportunity => {
+	return opportunity.code + '-admin';
+};
+
+const ensureAdmin = (opportunity, user, res) => {
+	if (user.roles.indexOf(adminRole(opportunity)) === -1 && user.roles.indexOf('admin') === -1) {
+		res.status(422).send({
+			message: 'User Not Authorized'
+		});
+		return false;
+	} else {
+		return true;
+	}
+};
+
 // -------------------------------------------------------------------------
 //
 // Get a proposal for the given opportunity and user
@@ -437,6 +452,50 @@ exports.getPotentialResources = function (req, res) {
 exports.new = function (req, res) {
 	var p = new Proposal ();
 	res.json(p);
+};
+
+// Get proposals for a given opportunity
+exports.getProposalsForOpp = (req, res) => {
+	if (!req.opportunity) {
+		return res.status(422).send({
+			message: 'Valid opportunity not provided'
+		});
+	}
+
+	if (!ensureAdmin(req.opportunity, req.user, res)) {
+		return res.json({ message: 'User is not authorized' });
+	}
+
+	Proposal.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
+		.sort('created')
+		.populate('createdBy', 'displayName')
+		.populate('updatedBy', 'displayName')
+		.populate('opportunity')
+		.populate('phases.proto.team')
+		.populate('phases.inception.team')
+		.populate('phases.implementation.team')
+		.populate('user')
+		.populate({
+			path: 'phases.proto.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.populate({
+			path: 'phases.inception.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.populate({
+			path: 'phases.implementation.team',
+			populate: { path: 'capabilities capabilitySkills' }
+		})
+		.exec((err, proposals) => {
+			if (err) {
+				return res.status(422).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				res.json(proposals);
+			}
+		});
 };
 
 // -------------------------------------------------------------------------

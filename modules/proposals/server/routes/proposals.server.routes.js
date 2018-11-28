@@ -40,6 +40,11 @@ module.exports = function(app) {
 		.all(proposalsPolicy.isAllowed)
 		.get(proposals.getUserProposalForOpp);
 
+	// Retrieve all proposals submitted for a given opportunity
+	app.route('/api/proposals/for/:opportunityId')
+		.all(proposalsPolicy.isAllowed)
+		.get(proposals.getProposalsForOpp);
+
 	// Upload attachment on proposal
 	app.route('/api/proposals/:proposalId/documents')
 		.all(proposalsPolicy.isAllowed)

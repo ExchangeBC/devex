@@ -39,11 +39,6 @@ export class OpportunitiesRouter {
 			.all(this.opportunitiesPolicy.isAllowed)
 			.put(this.opportunitiesController.unassign);
 
-		// Get proposals for a given opportunity
-		app.route('/api/opportunities/:opportunityId/proposals')
-			.all(this.opportunitiesPolicy.isAllowed)
-			.get(this.opportunitiesController.getProposals);
-
 		// Get proposal statistics for a given opportunity
 		app.route('/api/opportunities/:opportunityId/proposalStats')
 			.all(this.opportunitiesPolicy.isAllowed)
