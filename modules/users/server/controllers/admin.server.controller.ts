@@ -125,32 +125,4 @@ export class AdminController {
 				next();
 			});
 	};
-
-	public approve = (req, res, next) => {
-		User.findOne({
-			_id: req.body.user._id
-		})
-			.populate('capabilities', 'code name')
-			.populate('capabilitySkills', 'code name')
-			.exec((err, user) => {
-				if (err) {
-					return next(err);
-				} else if (!user) {
-					return next(new Error('Failed to load User ' + req.body.user._id));
-				}
-				user.roles = req.body.flag === 1 ? ['gov', 'user'] : ['user'];
-
-				user.save(saveErr => {
-					if (saveErr) {
-						return res.status(422).send({
-							message: this.errorHandler.getErrorMessage(saveErr)
-						});
-					} else {
-						res.status(200).send({
-							message: 'done'
-						});
-					}
-				});
-			});
-	};
 }

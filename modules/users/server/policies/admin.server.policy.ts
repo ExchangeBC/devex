@@ -21,10 +21,6 @@ export class AdminPolicy {
 					{
 						resources: '/api/users/:userId',
 						permissions: '*'
-					},
-					{
-						resources: '/api/approve',
-						permissions: '*'
 					}
 				]
 			}

@@ -3,7 +3,7 @@
 
 	angular.module('capabilities').run(['menuService', function (menuService) {
 		menuService.addSubMenuItem ('topbar', 'admin', {
-			title: 'Capabilities',
+			title: 'Manage Capabilities',
 			state: 'capabilities.list'
 		});
 	}]);
