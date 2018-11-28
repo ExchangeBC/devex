@@ -565,50 +565,6 @@ export class OpportunitiesController {
 		});
 	};
 
-	// Get proposals for a given opportunity
-	public getProposals = (req, res) => {
-		if (!req.opportunity) {
-			return res.status(422).send({
-				message: 'Valid opportunity not provided'
-			});
-		}
-
-		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json({ message: 'User is not authorized' });
-		}
-
-		Proposal.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
-			.sort('created')
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('phases.proto.team')
-			.populate('phases.inception.team')
-			.populate('phases.implementation.team')
-			.populate('user')
-			.populate({
-				path: 'phases.proto.team',
-				populate: { path: 'capabilities capabilitySkills' }
-			})
-			.populate({
-				path: 'phases.inception.team',
-				populate: { path: 'capabilities capabilitySkills' }
-			})
-			.populate({
-				path: 'phases.implementation.team',
-				populate: { path: 'capabilities capabilitySkills' }
-			})
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
-					});
-				} else {
-					res.json(proposals);
-				}
-			});
-	};
-
 	// -------------------------------------------------------------------------
 	//
 	// Get proposal statistics for the given opportunity in the request

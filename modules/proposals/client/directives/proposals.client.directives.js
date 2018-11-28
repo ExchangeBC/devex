@@ -134,7 +134,7 @@
 							vm.title = 'Proposals for ' + $scope.opportunity.title;
 							vm.opportunityId = $scope.opportunity._id;
 							vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
-							vm.proposals = OpportunitiesService.getProposals({
+							vm.proposals = ProposalsService.getProposalsForOpp({
 								opportunityId: $scope.opportunity._id
 							});
 							vm.columnCount = 1;

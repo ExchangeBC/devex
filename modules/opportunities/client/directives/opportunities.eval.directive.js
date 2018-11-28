@@ -90,7 +90,7 @@
 						var buildQuestionPivot = function() {
 							return new Promise(function(resolve, reject) {
 								// Fetch the proposals for this opportunity and build the pivot out of the responses
-								OpportunitiesService.getProposals({ opportunityId: vm.opportunity._id }).$promise.then(
+								ProposalsService.getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(
 									function(proposals) {
 										var responses = [];
 										vm.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
@@ -198,9 +198,7 @@
 								return;
 							}
 
-							var s = new ProposalsService(proposal);
-							return s.$update();
-							// return proposal.$update();
+							return proposal.$update();
 						};
 
 						/**
@@ -825,9 +823,16 @@
 											vm.opportunity.evaluationStage = vm.stages.assigned;
 											vm.opportunity.proposal = proposal;
 											proposal.isAssigned = true;
-											Promise.resolve(proposal)
-												.then(saveProposal)
-												.then(saveOpportunity);
+											saveProposal(proposal)
+											.then(function(savedProposal) {
+												proposal = savedProposal;
+												vm.opportunity.evaluationStage = vm.stages.assigned;
+												vm.opportunity.proposal = proposal;
+												saveOpportunity()
+												.then(function(savedOpportunity) {
+													vm.opportunity = savedOpportunity;
+												});
+											});
 										},
 										function(error) {
 											Notification.error({

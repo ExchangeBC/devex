@@ -37,12 +37,13 @@
 			'opportunity',
 			'Authentication',
 			'OpportunitiesService',
+			'ProposalsService',
 			'Notification',
 			'modalService',
 			'ask',
 			'myproposal',
 			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
+			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -268,7 +269,7 @@
 				//
 				// -------------------------------------------------------------------------
 				if (vm.opportunity.opportunityTypeCd === 'sprint-with-us') {
-					OpportunitiesService.getProposals({ opportunityId: vm.opportunity._id }).$promise.then(function(
+					ProposalsService.getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(function(
 						proposals
 					) {
 						vm.proposals = proposals;
