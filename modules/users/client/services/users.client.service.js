@@ -108,16 +108,6 @@
           userId:'@userId'
         }
       },
-      getOpportunityListeners: {
-        method: 'GET',
-        url: '/api/admin/opportunity/listeners',
-        isArray: true
-      },
-      listmeets: {
-        method: 'GET',
-        url: '/api/listmeets',
-        isArray: true
-      },
       update: {
         method: 'PUT'
       }

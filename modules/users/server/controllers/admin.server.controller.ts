@@ -151,40 +151,6 @@ export class AdminController {
 						});
 					}
 				});
-				//
-				// CC: this is the offending line, since we are handling everything
-				// we do not need to call next;
-				//
-				// next();
-			});
-	};
-
-	// lists of emails and names for notifications
-	public getNewOpportunityListeners = (req, res) => {
-		User.find({ notifyOpportunities: true })
-			.select('firstName lastName email')
-			.exec((err, users) => {
-				if (err) {
-					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
-					});
-				} else {
-					return res.json(users);
-				}
-			});
-	};
-
-	public notifyMeetings = (req, res) => {
-		User.find({ notifyEvents: true })
-			.select('firstName lastName email')
-			.exec((err, users) => {
-				if (err) {
-					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
-					});
-				} else {
-					return res.json(users);
-				}
 			});
 	};
 }
