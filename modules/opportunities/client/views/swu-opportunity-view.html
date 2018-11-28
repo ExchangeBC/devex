@@ -317,13 +317,13 @@
             <h5>Required Capabilities*</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.capabilities" ng-if="vm.inp.iOppCapabilities[capability.code]">
+                <tr ng-repeat="capability in vm.opportunity.phases.inception.capabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="vm.inp.iOppCapabilitiesCore[capability.code]">
+                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
                       full time
                     </label>
                   </td>
@@ -351,13 +351,13 @@
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.capabilities" ng-if="vm.prp.iOppCapabilities[capability.code]">
+                <tr ng-repeat="capability in vm.opportunity.phases.proto.capabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="vm.prp.iOppCapabilitiesCore[capability.code]">
+                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
                       full time
                     </label>
                   </td>
@@ -385,13 +385,13 @@
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.capabilities" ng-if="vm.imp.iOppCapabilities[capability.code]">
+                <tr ng-repeat="capability in vm.opportunity.phases.implementation.capabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="vm.imp.iOppCapabilitiesCore[capability.code]">
+                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
                       full time
                     </label>
                   </td>

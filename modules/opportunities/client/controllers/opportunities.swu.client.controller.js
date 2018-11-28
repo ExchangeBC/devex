@@ -82,35 +82,42 @@ import '../css/opportunities.css';
 				vm.canApply = org && org.metRFQ;
 				vm.opportunity.hasOrg = vm.canApply;
 				vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
-				//
-				// set up the structures for capabilities
-				//
-				vm.oimp = vm.opportunity.phases.implementation;
-				vm.oinp = vm.opportunity.phases.inception;
-				vm.oprp = vm.opportunity.phases.proto;
-				CapabilitiesMethods.init(vm, vm.opportunity, capabilities);
-				vm.imp = {};
-				vm.inp = {};
-				vm.prp = {};
-				vm.all = {};
-				CapabilitiesMethods.init(vm.all, {}, capabilities);
-				CapabilitiesMethods.init(vm.imp, vm.oimp, capabilities);
-				CapabilitiesMethods.init(vm.inp, vm.oinp, capabilities);
-				CapabilitiesMethods.init(vm.prp, vm.oprp, capabilities);
-				CapabilitiesMethods.dump(vm.inp);
-				//
-				// what capabilities are required ?
-				//
-				var allclist = ['c01', 'c02', 'c03', 'c04', 'c05', 'c06', 'c07', 'c08', 'c09', 'c10', 'c11', 'c12', 'c13'];
-				vm.clist = [];
-				allclist.forEach(function(id) {
-					if (vm.opportunity[id + '_minimumYears'] > 0) {
-						vm.clist.push(id);
+
+				// Set up capabilities and capability skills
+				vm.capabilitySkills =
+					_.merge(
+						vm.opportunity.phases.inception.capabilitySkills,
+						vm.opportunity.phases.proto.capabilitySkills,
+						vm.opportunity.phases.implementation.capabilitySkills
+					);
+
+				var coreInceptionCodes = vm.opportunity.phases.inception.capabilitiesCore.map(function(cap) {
+					return cap.code;
+				});
+				vm.opportunity.phases.inception.capabilities.forEach(function(capability) {
+					if (coreInceptionCodes.indexOf(capability.code) !== -1) {
+						capability.fullTime = true;
 					}
 				});
-				//
-				// am I watchng?
-				//
+
+				var corePrototypeCodes = vm.opportunity.phases.proto.capabilitiesCore.map(function(cap) {
+					return cap.code;
+				});
+				vm.opportunity.phases.proto.capabilities.forEach(function(capability) {
+					if (corePrototypeCodes.indexOf(capability.code) !== -1) {
+						capability.fullTime = true;
+					}
+				});
+
+				var coreImplementationCodes = vm.opportunity.phases.implementation.capabilitiesCore.map(function(cap) {
+					return cap.code;
+				});
+				vm.opportunity.phases.implementation.capabilities.forEach(function(capability) {
+					if (coreImplementationCodes.indexOf(capability.code) !== -1) {
+						capability.fullTime = true;
+					}
+				});
+
 				vm.isWatching = OpportunitiesCommon.isWatchng(vm.opportunity);
 				vm.toggleWatch = function() {
 					if (vm.isWatching) {
