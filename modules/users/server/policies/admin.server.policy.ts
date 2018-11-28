@@ -23,14 +23,6 @@ export class AdminPolicy {
 						permissions: '*'
 					},
 					{
-						resources: '/api/admin/opportunity/listeners',
-						permissions: '*'
-					},
-					{
-						resources: '/api/listmeets',
-						permissions: '*'
-					},
-					{
 						resources: '/api/approve',
 						permissions: '*'
 					}
