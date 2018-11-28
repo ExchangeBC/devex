@@ -81,7 +81,7 @@ module.exports = {
 	sessionCollection: 'sessions',
 	// Lusca config
 	csrf: {
-		csrf: false,
+		csrf: { 'angular': true },
 		csp: false,
 		xframe: 'SAMEORIGIN',
 		p3p: 'ABCDEF',
