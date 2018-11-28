@@ -20,9 +20,6 @@ export class AdminRouter {
 		// Users collection routes
 		app.route('/api/users').get(this.adminPolicy.isAllowed, this.adminController.list);
 
-		// Gov. Request
-		app.route('/api/approve').post(this.adminPolicy.isAllowed, this.adminController.approve);
-
 		// Single user routes
 		app.route('/api/users/:userId')
 			.get(this.adminPolicy.isAllowed, this.adminController.read)

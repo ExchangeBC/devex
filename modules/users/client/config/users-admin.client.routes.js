@@ -10,15 +10,6 @@
 
   function routeConfig($stateProvider) {
     $stateProvider
-          .state('admin.govs', {
-        url: '/govs',
-        templateUrl: '/modules/users/client/views/admin/list-govs.client.view.html',
-        controller: 'GovListController',
-        controllerAs: 'vm',
-        data: {
-          pageTitle: 'Government List'
-        }
-      })
        .state('admin.gov', {
         url: '/govs/:userId',
         templateUrl: '/modules/users/client/views/admin/view-govs.client.view.html',

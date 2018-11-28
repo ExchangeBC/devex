@@ -99,15 +99,8 @@
 
     return $resource('/api/users/:userId', {
       userId: '@_id'
-    }, {
-       approve: {
-        method: 'POST',
-        url: '/api/approve',
-        params: {
-          flag: '@flag',
-          userId:'@userId'
-        }
-      },
+	},
+	{
       update: {
         method: 'PUT'
       }
