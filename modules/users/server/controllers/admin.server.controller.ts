@@ -158,12 +158,9 @@ export class AdminController {
 				// next();
 			});
 	};
-	// -------------------------------------------------------------------------
-	//
+
 	// lists of emails and names for notifications
-	//
-	// -------------------------------------------------------------------------
-	public notifyOpportunities = (req, res) => {
+	public getNewOpportunityListeners = (req, res) => {
 		User.find({ notifyOpportunities: true })
 			.select('firstName lastName email')
 			.exec((err, users) => {

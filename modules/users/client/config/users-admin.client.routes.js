@@ -74,7 +74,7 @@
         }],
         resolve: {
           users: ['AdminService', function (AdminService) {
-            return AdminService.listopps().$promise;
+            return AdminService.getOpportunityListeners().$promise;
           }]
         }
       })
