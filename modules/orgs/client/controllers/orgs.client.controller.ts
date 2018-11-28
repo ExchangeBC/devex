@@ -371,11 +371,10 @@ import angular from 'angular';
 			'CapabilitiesMethods',
 			'ask',
 			'$uibModal',
-			function($rootScope, org, Notification, OrgsService, capabilities, CapabilitiesMethods, ask, $uibModal) {
+			function($rootScope, org, Notification, OrgsService, ask, $uibModal) {
 				var vm = this;
 				vm.org = org;
 				vm.emaillist = '';
-				CapabilitiesMethods.init(vm, vm.org, capabilities);
 				// -------------------------------------------------------------------------
 				//
 				// refresh the organization and also the additions email list
@@ -388,7 +387,6 @@ import angular from 'angular';
 					vm.loading = true;
 					OrgsService.get({ orgId: id }).$promise.then(function(org) {
 						vm.org = org;
-						CapabilitiesMethods.init(vm, vm.org, capabilities);
 						vm.loading = false;
 					});
 				};
@@ -444,7 +442,6 @@ import angular from 'angular';
 					vm.orgForm.$setPristine();
 					vm.org.createOrUpdate().then(function() {
 						vm.emaillist = '';
-						CapabilitiesMethods.init(vm, vm.org, capabilities);
 						vm.orgForm.$setPristine();
 						Notification.success({
 							message:

@@ -24,7 +24,6 @@ import '../css/opportunities.css';
 		//
 		// =========================================================================
 		.controller('OpportunityViewSWUController', [
-			'capabilities',
 			'$state',
 			'$stateParams',
 			'$sce',
@@ -35,9 +34,8 @@ import '../css/opportunities.css';
 			'Notification',
 			'ask',
 			'myproposal',
-			'CapabilitiesMethods',
 			'OpportunitiesCommon',
-			function(capabilities, $state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, Notification, ask, myproposal, CapabilitiesMethods, OpportunitiesCommon) {
+			function($state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, Notification, ask, myproposal, OpportunitiesCommon) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
