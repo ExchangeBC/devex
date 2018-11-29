@@ -517,7 +517,7 @@ export class OpportunitiesController {
 		} else {
 			approvalInfo.twoFAAttemptCount++;
 			this.updateSave(opportunity).then(() => {
-				res.status(200).json({
+				res.status(401).json({
 					message: 'Invalid code',
 					succeed: false
 				});

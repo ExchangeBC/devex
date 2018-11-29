@@ -134,7 +134,7 @@
 						.catch(function(err) {
 							Notification.error({
 								title: 'Error',
-								message: 'Invalid code'
+								message: err
 							});
 						});
 				};

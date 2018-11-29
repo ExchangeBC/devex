@@ -88,6 +88,16 @@
 						getProposalStats: {
 							method: 'GET',
 							url: '/api/opportunities/:opportunityId/proposalStats'
+						},
+						requestCode: {
+							method: 'PUT',
+							url: '/api/opportunities/:opportunityId/sendcode',
+							params: { opportunityId: '@opportunityId' }
+						},
+						submitCode: {
+							method: 'POST',
+							url: '/api/opportunities/:opportunityId/action',
+							params: { opportunityId: '@opportunityId' }
 						}
 					}
 				);
@@ -294,20 +304,13 @@
 						// vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 						vm.canPublish = vm.errorFields.length === 0;
 					},
-					// -------------------------------------------------------------------------
-					//
+
 					// Request a 2FA authentication code to be sent to the designated contact in the opportunity approval info
 					// Returns true for success, false for failure
-					//
-					// -------------------------------------------------------------------------
 					requestApprovalCode: function(opportunity) {
 						var approvalInfo = opportunity.intermediateApproval.state === 'sent' ? opportunity.intermediateApproval : opportunity.finalApproval;
 						if (approvalInfo.twoFASendCount < 5) {
-							var client = new XMLHttpRequest();
-							var endpointURL = '/api/opportunities/' + opportunity.code + '/sendcode';
-							client.open('PUT', endpointURL);
-							client.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
-							client.send();
+							OpportunitiesService.requestCode({ opportunityId: opportunity.code });
 							return true;
 						} else {
 							return false;
@@ -325,22 +328,18 @@
 							var approvalInfo = isPreApproval ? opportunity.intermediateApproval : opportunity.finalApproval;
 
 							if (approvalInfo.twoFAAttemptCount < 5) {
-								var client = new XMLHttpRequest();
-								var endpointURL = '/api/opportunities/' + opportunity.code + '/action';
-								var params = 'code=' + submittedCode + '&action=' + action.toLowerCase() + '&preapproval=' + isPreApproval.toString();
-								client.open('POST', endpointURL, true);
-								client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-								client.onreadystatechange = function() {
-									if (client.readyState === 4 && client.status === 200) {
-										var response = JSON.parse(client.response);
-										if (response && response.succeed === true) {
-											resolve(response.message);
-										} else {
-											reject();
-										}
-									}
-								};
-								client.send(params);
+								OpportunitiesService.submitCode({
+									opportunityId: opportunity.code,
+									code: submittedCode,
+									action: action.toLowerCase(),
+									preapproval: isPreApproval.toString()
+									}).$promise
+								.then(function(response) {
+									resolve(response.message);
+								})
+								.catch(function(err) {
+									reject(err);
+								});
 							} else {
 								reject('Maximum attempts reached');
 							}
