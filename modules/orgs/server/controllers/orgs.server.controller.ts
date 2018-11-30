@@ -24,7 +24,7 @@ import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICa
 import { Capability } from '../../../capabilities/server/models/capability.server.model';
 import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
-import { MessagesController } from '../../../messages/server/controllers/messages.controller';
+import { MessagesController } from '../../../messages/server/controllers/messages.server.controller';
 import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';
 import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';

@@ -6,7 +6,7 @@ import * as Nexmo from 'nexmo';
 import { CoreGithubController } from '../../../core/server/controllers/core.server.github';
 import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
-import { MessagesController } from '../../../messages/server/controllers/messages.controller';
+import { MessagesController } from '../../../messages/server/controllers/messages.server.controller';
 import { OpportunitiesUtilities } from '../../../opportunities/server/utilities/opportunities.server.utilities';
 import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';

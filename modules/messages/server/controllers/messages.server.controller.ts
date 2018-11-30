@@ -12,7 +12,7 @@ import { CoreErrors } from '../../../core/server/controllers/errors.server.contr
 import { User } from '../../../users/server/models/user.server.model';
 import { IMessageDocument } from '../interfaces/IMessageDocument';
 import { IMessageTemplateDocument } from '../interfaces/IMessageTemplateDocument';
-import { Message, MessageArchive, MessageTemplate } from '../models/messages.models';
+import { Message, MessageArchive, MessageTemplate } from '../models/messages.server.models';
 
 export class MessagesController {
 	private helpers = new CoreHelpers();

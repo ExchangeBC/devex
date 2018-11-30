@@ -6,7 +6,7 @@ import * as multer from 'multer';
 import * as validator from 'validator';
 import * as config from '../../../../../config/config';
 import { CoreErrors } from '../../../../core/server/controllers/errors.server.controller';
-import { MessagesController } from '../../../../messages/server/controllers/messages.controller';
+import { MessagesController } from '../../../../messages/server/controllers/messages.server.controller';
 import { OrgsController } from '../../../../orgs/server/controllers/orgs.server.controller';
 import { User } from '../../../../users/server/models/user.server.model';
 
