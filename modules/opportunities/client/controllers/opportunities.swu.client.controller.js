@@ -82,12 +82,13 @@ import '../css/opportunities.css';
 				vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
 
 				// Set up capabilities and capability skills
-				vm.capabilitySkills =
-					_.merge(
-						vm.opportunity.phases.inception.capabilitySkills,
-						vm.opportunity.phases.proto.capabilitySkills,
-						vm.opportunity.phases.implementation.capabilitySkills
-					);
+				vm.capabilitySkills = _.unionWith(
+					vm.opportunity.phases.inception.capabilitySkills,
+					vm.opportunity.phases.proto.capabilitySkills,
+					vm.opportunity.phases.implementation.capabilitySkills,
+					function(a, b) {
+						return a.code === b.code;
+					});
 
 				var coreInceptionCodes = vm.opportunity.phases.inception.capabilitiesCore.map(function(cap) {
 					return cap.code;
