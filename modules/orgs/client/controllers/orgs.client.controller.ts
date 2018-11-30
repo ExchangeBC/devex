@@ -367,8 +367,6 @@ import angular from 'angular';
 			'org',
 			'Notification',
 			'OrgsService',
-			'capabilities',
-			'CapabilitiesMethods',
 			'ask',
 			'$uibModal',
 			function($rootScope, org, Notification, OrgsService, ask, $uibModal) {
