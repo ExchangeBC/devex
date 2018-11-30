@@ -64,7 +64,7 @@ export class UserPasswordController {
 					}
 					const baseUrl = req.app.get('domain') || httpTransport + req.headers.host;
 					res.render(
-						'../../templates/reset-password-email',
+						'public/dist/server-views/reset-password-email',
 						{
 							name: user.displayName,
 							appName: config.app.title,
@@ -187,7 +187,7 @@ export class UserPasswordController {
 				},
 				(user, done) => {
 					res.render(
-						'modules/users/server/templates/reset-password-confirm-email',
+						'public/dist/server-views/reset-password-confirm-email',
 						{
 							name: user.displayName,
 							appName: config.app.title

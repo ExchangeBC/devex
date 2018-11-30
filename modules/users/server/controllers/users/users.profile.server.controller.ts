@@ -270,10 +270,21 @@ export class UserProfileController {
 
 	public removeSelf = (req, res) => {
 		if (req.user) {
+
 			const id = req.user._id;
 			req.logout();
-			res.redirect('/');
-			User.remove({ _id: id });
+			// res.redirect('/');
+			User.remove({ _id: id }, (err) => {
+				if (err) {
+					res.status(500).send({
+						message: 'Unable to delete profile!'
+					});
+				} else {
+					res.status(200).send({
+						message: 'User profile deleted'
+					});
+				}
+			});
 		}
 	};
 
