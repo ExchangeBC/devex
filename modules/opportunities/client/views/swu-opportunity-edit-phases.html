@@ -3,12 +3,12 @@
     <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-body">
-          <button class="btn btn-block btn-primary" ng-if="!vm.oimp.isImplementation && !vm.oinp.isInception && !vm.oprp.isPrototype"
+          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oimp.isImplementation && !vm.oinp.isInception && !vm.oprp.isPrototype"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true; vm.oinp.isInception = true; vm.oprp.isPrototype = true">Start
             here</button>
-          <button class="btn btn-block btn-default" ng-if="vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-default" ng-if="vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = false;">Cancel</button>
-          <button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = true; vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add
             this phase</button>
           <hr>
@@ -72,12 +72,12 @@
     <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-body">
-          <button class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true;">Start
             here</button>
-          <button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = false;">Cancel</button>
-          <button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add
             this phase</button>
           <hr>
@@ -144,9 +144,9 @@
     <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-body">
-          <button class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true;">Start here</button>
-          <button class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
+          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
             ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = false;">Cancel</button>
           <hr>
           <h2 style="text-align: center"><i class="fas fa-cogs"></i> Implementation</h2>

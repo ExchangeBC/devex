@@ -12,7 +12,7 @@
 
 <section class="bg-secondary" role=" main">
 
-  <form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form" ng-submit="vm.save(vm.opportunityForm.$valid)"
+  <form id="opportunityForm" warn-on-exit name="vm.opportunityForm" class="form"
     novalidate>
 
 
@@ -95,7 +95,7 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i>
+            <button type="button" ng-click="vm.save(vm.opportunityForm.$valid)" class="btn btn-primary float-right"><i class="fas fa-save"></i>
               Save Changes</button>
             <a href="javascript:void(0);" ng-if="vm.editing && vm.closing == 'OPEN'" class="btn btn-text-only" ng-click="vm.remove()"
               title="Remove"><i class="fas fa-trash"></i> Delete this Opportunity</a>
