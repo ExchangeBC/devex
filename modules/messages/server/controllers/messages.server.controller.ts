@@ -184,20 +184,6 @@ export class MessagesController {
 			.catch(this.resError(res));
 	};
 
-	// A user purposely archives a given message
-	public archiveold = (req, res) => {
-		if (!req.user) {
-			return this.sendError(res, 'No user context supplied');
-		}
-		if (req.user.roles.indexOf('admin') === -1) {
-			return this.sendError(res, 'Only admin can auto archive');
-		}
-		this.query(Message, { date2Archive: { $lte: Date.now() } })
-			.then(this.archiveMessages)
-			.then(this.resResults(res))
-			.catch(this.resError(res));
-	};
-
 	public send = (req, res) => {
 		if (req.user.roles.indexOf('admin') === -1) {
 			return this.sendError(res, 'Only admin can send via REST');
@@ -206,31 +192,6 @@ export class MessagesController {
 		req.body.data = req.body.data || {};
 		exports
 			.sendMessages(req.params.messagecd, req.body.users, req.body.data)
-			.then(this.resResults(res))
-			.catch(this.resError(res));
-	};
-
-	public emailRetry = (req, res) => {
-		if (req.user.roles.indexOf('admin') === -1) {
-			return this.sendError(res, 'Only admin can send via REST');
-		}
-		this.query(
-			{
-				emailSent: false,
-				emailRetries: { $lt: 3 }
-			},
-			''
-		)
-			.then(messages => {
-				return Promise.all(
-					messages.map(message => {
-						return this.sendmail(message).then(this.saveMessage);
-					})
-				);
-			})
-			.then(() => {
-				return { ok: true };
-			})
 			.then(this.resResults(res))
 			.catch(this.resError(res));
 	};

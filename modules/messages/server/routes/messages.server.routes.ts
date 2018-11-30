@@ -16,24 +16,24 @@ export class MessagesRouter {
 
 	public setupRoutes = app => {
 		// Get a list/count of messages for the logged in user, either current or archived
-		app.route('/api/my/messages')
+		app.route('/api/messages')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.list);
 
-		app.route('/api/my/archivedmessages')
+		app.route('/api/messages/archived')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.listarchived);
 
-		app.route('/api/my/messages/count')
+		app.route('/api/messages/count')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.mycount);
 
-		app.route('/api/my/archivedmessages/count')
+		app.route('/api/messages/archived/count')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.myarchivedcount);
 
 		// Get a specific message or archived message for the logged in user
-		app.route('/api/archivedmessages/:amessageId')
+		app.route('/api/messages/:amessageId')
 			.all(this.messagesPolicy.isAllowed)
 			.get((req, res) => {
 				return res.json(req.amessage);
@@ -49,20 +49,11 @@ export class MessagesRouter {
 		// Specific actions taken for a message by the user
 		app.route('/api/messages/:messageId/viewed')
 			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.viewed);
+			.put(this.messagesController.viewed);
 
-		app.route('/api/messages/:messageId/actioned/:action')
+		app.route('/api/messages/:messageId/action')
 			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.actioned);
-
-		// Routes for admins/scheduled tasks to archive old messages, retry failed emails
-		app.route('/api/adminmessages/archiveold')
-			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.archiveold);
-
-		app.route('/api/adminmessages/emailretry')
-			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.emailRetry);
+			.put(this.messagesController.actioned);
 
 		// External call to send messages - this will ONLY be used when the message
 		// module is running as its own standalone service - this is what an ESB
@@ -125,7 +116,7 @@ export class MessagesRouter {
 			}
 		});
 
-		app.param('amessageId', (req, res, next, id) => {
+		app.param('archivedMsgId', (req, res, next, id) => {
 			if (!Types.ObjectId.isValid(id)) {
 				return res.status(400).send({ message: 'Invalid Message Id' });
 			} else {
