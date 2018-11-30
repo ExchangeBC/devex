@@ -15,14 +15,6 @@ export class MessagesPolicy {
 				roles: ['admin'],
 				allows: [
 					{
-						resources: '/api/adminmessages/archiveold',
-						permissions: 'get'
-					},
-					{
-						resources: '/api/adminmessages/emailretry',
-						permissions: 'get'
-					},
-					{
 						resources: '/api/messages/sendmessage/:messagecd',
 						permissions: 'put'
 					},
@@ -40,23 +32,23 @@ export class MessagesPolicy {
 				roles: ['user'],
 				allows: [
 					{
-						resources: '/api/my/messages',
+						resources: '/api/messages',
 						permissions: 'get'
 					},
 					{
-						resources: '/api/my/archivedmessages',
+						resources: '/api/messages/archived',
 						permissions: 'get'
 					},
 					{
-						resources: '/api/my/messages/count',
+						resources: '/api/messages/count',
 						permissions: 'get'
 					},
 					{
-						resources: '/api/my/archivedmessages/count',
+						resources: '/api/messages/archived/count',
 						permissions: 'get'
 					},
 					{
-						resources: '/api/archivedmessages/:amessageId',
+						resources: '/api/messages/:archivedMsgId',
 						permissions: 'get'
 					},
 					{
@@ -65,11 +57,11 @@ export class MessagesPolicy {
 					},
 					{
 						resources: '/api/messages/:messageId/viewed',
-						permissions: 'get'
+						permissions: 'put'
 					},
 					{
-						resources: '/api/messages/:messageId/actioned/:action',
-						permissions: 'get'
+						resources: '/api/messages/:messageId/action',
+						permissions: 'put'
 					}
 				]
 			}
