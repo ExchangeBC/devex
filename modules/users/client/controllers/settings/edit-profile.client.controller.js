@@ -112,9 +112,25 @@
 		}
 
 		vm.delete = function () {
-			if ((confirm('Are you sure that you want to be removed from the BCDevExchange?')) && (confirm('Are you really sure?'))) {
-					window.location = '/api/users/delete';
-			}
+			ask.yesNo('Please confirm you want to be removed from the BC Developer\'s Exchange')
+			.then((answer) => {
+				if (answer) {
+					UsersService.removeSelf().$promise
+					.then((response) => {
+						window.location = '/';
+						Notification.success({
+							title: 'Success',
+							message: response.message
+						});
+					})
+					.catch((response) => {
+						Notification.error({
+							title: 'Error',
+							message: response.message
+						});
+					});
+				}
+			})
 		}
 	}
 }());
