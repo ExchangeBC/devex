@@ -7,7 +7,6 @@
 		'$scope',
 		'$rootScope',
 		'$state',
-		'usercount',
 		'UsersService',
 		'$location',
 		'$window',
@@ -21,7 +20,6 @@
 		$scope,
 		$rootScope,
 		$state,
-		usercount,
 		UsersService,
 		$location,
 		$window,
@@ -30,7 +28,6 @@
 		Notification
 	) {
 		var vm = this;
-		vm.usercount = usercount;
 		vm.authentication = Authentication;
 		vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
 		vm.non_gov = non_gov;
