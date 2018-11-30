@@ -7,7 +7,7 @@
 // configuring the system form outside.
 
 import { model, Types } from 'mongoose';
-import { MessagesController } from '../controllers/messages.controller';
+import { MessagesController } from '../controllers/messages.server.controller';
 import { MessagesPolicy } from '../policies/messages.server.policies';
 
 export class MessagesRouter {
@@ -63,9 +63,8 @@ export class MessagesRouter {
 		app.route('/api/adminmessages/emailretry')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.emailRetry);
-		// -------------------------------------------------------------------------
-		//
-		// external call to send messages - this will ONLY be used when the message
+
+		// External call to send messages - this will ONLY be used when the message
 		// module is running as its own standalone service - this is what an ESB
 		// would call. Since a bus would likely be thinking in terms of events, we
 		// will make the messageCd the main thing on the URL and have the payload
@@ -78,8 +77,6 @@ export class MessagesRouter {
 		//
 		// where users is an array of userids and data is whatever supporting data
 		// is required for the message.
-		//
-		// -------------------------------------------------------------------------
 		app.route('/api/messages/sendmessage/:messagecd')
 			.all(this.messagesPolicy.isAllowed)
 			.put(this.messagesController.send);

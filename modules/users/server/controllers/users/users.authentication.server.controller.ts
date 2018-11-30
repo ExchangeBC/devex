@@ -3,7 +3,7 @@
 import * as mongoose from 'mongoose';
 import * as passport from 'passport';
 import { CoreErrors } from '../../../../core/server/controllers/errors.server.controller';
-import { MessagesController } from '../../../../messages/server/controllers/messages.controller';
+import { MessagesController } from '../../../../messages/server/controllers/messages.server.controller';
 import { User } from '../../models/user.server.model';
 
 export class UserAuthenticationController {
