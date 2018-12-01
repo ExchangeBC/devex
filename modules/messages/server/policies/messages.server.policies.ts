@@ -15,15 +15,11 @@ export class MessagesPolicy {
 				roles: ['admin'],
 				allows: [
 					{
-						resources: '/api/messages/sendmessage/:messagecd',
-						permissions: 'put'
-					},
-					{
-						resources: '/api/messagetemplates',
+						resources: '/api/messagestemplates',
 						permissions: ['get', 'post']
 					},
 					{
-						resources: '/api/messagetemplates/:templateId',
+						resources: '/api/messagestemplates/:templateId',
 						permissions: ['get', 'put', 'delete']
 					}
 				]
@@ -36,19 +32,7 @@ export class MessagesPolicy {
 						permissions: 'get'
 					},
 					{
-						resources: '/api/messages/archived',
-						permissions: 'get'
-					},
-					{
 						resources: '/api/messages/count',
-						permissions: 'get'
-					},
-					{
-						resources: '/api/messages/archived/count',
-						permissions: 'get'
-					},
-					{
-						resources: '/api/messages/:archivedMsgId',
 						permissions: 'get'
 					},
 					{
