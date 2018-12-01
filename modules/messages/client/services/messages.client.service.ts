@@ -24,24 +24,9 @@
 							url: '/api/messages',
 							isArray: true
 						},
-						myarchived: {
-							method: 'GET',
-							url: '/api/messages/archived',
-							isArray: true
-						},
 						mycount: {
 							method: 'GET',
 							url: '/api/messages/count',
-							isArray: false
-						},
-						myarchivedcount: {
-							method: 'GET',
-							url: '/api/messages/archived/count',
-							isArray: false
-						},
-						getarchived: {
-							method: 'GET',
-							url: '/api/messages/:archivedMsgId',
 							isArray: false
 						},
 						viewed: {
@@ -95,11 +80,13 @@
 			'$log',
 			($resource, $log) => {
 				const Payload = $resource(
-					'/api/messagetemplates/:templateId',
+					'/api/messagestemplates/:templateId',
 					{
 						templateId: '@_id'
 					},
-					{ update: { method: 'PUT' } }
+					{
+						update: { method: 'PUT' }
+					}
 				);
 				angular.extend(Payload.prototype, {
 					createOrUpdate() {

@@ -20,25 +20,11 @@ export class MessagesRouter {
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.list);
 
-		app.route('/api/messages/archived')
-			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.listarchived);
-
 		app.route('/api/messages/count')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.mycount);
 
-		app.route('/api/messages/archived/count')
-			.all(this.messagesPolicy.isAllowed)
-			.get(this.messagesController.myarchivedcount);
-
-		// Get a specific message or archived message for the logged in user
-		app.route('/api/messages/:amessageId')
-			.all(this.messagesPolicy.isAllowed)
-			.get((req, res) => {
-				return res.json(req.amessage);
-			});
-
+		// Get a specific message for the logged in user
 		app.route('/api/messages/:messageId')
 			.all(this.messagesPolicy.isAllowed)
 			.get((req, res) => {
@@ -55,29 +41,12 @@ export class MessagesRouter {
 			.all(this.messagesPolicy.isAllowed)
 			.put(this.messagesController.actioned);
 
-		// External call to send messages - this will ONLY be used when the message
-		// module is running as its own standalone service - this is what an ESB
-		// would call. Since a bus would likely be thinking in terms of events, we
-		// will make the messageCd the main thing on the URL and have the payload
-		// be the body. The payload would take the form:
-		//
-		// {
-		// 		users: [userid, userid, ... userid]
-		// 		data: {}
-		// }
-		//
-		// where users is an array of userids and data is whatever supporting data
-		// is required for the message.
-		app.route('/api/messages/sendmessage/:messagecd')
-			.all(this.messagesPolicy.isAllowed)
-			.put(this.messagesController.send);
-
-		app.route('/api/messagetemplates')
+		app.route('/api/messagestemplates')
 			.all(this.messagesPolicy.isAllowed)
 			.get(this.messagesController.listTemplates)
 			.post(this.messagesController.createTemplate);
 
-		app.route('/api/messagetemplates/:templateId')
+		app.route('/api/messagestemplates/:templateId')
 			.all(this.messagesPolicy.isAllowed)
 			.get((req, res) => {
 				return res.json(req.template);
@@ -110,25 +79,6 @@ export class MessagesRouter {
 								});
 						} else {
 							req.message = message;
-							next();
-						}
-					});
-			}
-		});
-
-		app.param('archivedMsgId', (req, res, next, id) => {
-			if (!Types.ObjectId.isValid(id)) {
-				return res.status(400).send({ message: 'Invalid Message Id' });
-			} else {
-				model('MessageArchive')
-					.findById(id)
-					.exec((err, message) => {
-						if (err) {
-							return next(err);
-						} else if (!message) {
-							return res.status(400).send({ message: 'Message not found' });
-						} else {
-							req.amessage = message;
 							next();
 						}
 					});
