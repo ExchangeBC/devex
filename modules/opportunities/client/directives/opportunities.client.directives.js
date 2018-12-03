@@ -98,7 +98,7 @@
 							};
 
 							vm.isWatching = function(opportunity) {
-								return OpportunitiesCommon.isWatchng(opportunity);
+								return OpportunitiesCommon.isWatching(opportunity);
 							};
 
 							vm.toggleWatch = function(opp) {
