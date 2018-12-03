@@ -1,294 +1,14 @@
+'use strict';
+
 // Import certain style elements here so that webpack picks them up
+import angular from 'angular';
 import '../css/opportunities.css';
 
-// =========================================================================
-//
-// `this set of controllers is for SWU opportunities specifically
-//
-// =========================================================================
-(function() {
-	'use strict';
-	var formatDate = function(d) {
-		var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		var day = d.getDate();
-		var monthIndex = d.getMonth();
-		var year = d.getFullYear();
-		return monthNames[monthIndex] + ' ' + day + ', ' + year;
-	};
-
+(() => {
 	angular
 		.module('opportunities')
-		// =========================================================================
-		//
-		// Controller the view of the opportunity page
-		//
-		// =========================================================================
-		.controller('OpportunityViewSWUController', [
-			'$state',
-			'$stateParams',
-			'$sce',
-			'org',
-			'opportunity',
-			'Authentication',
-			'OpportunitiesService',
-			'Notification',
-			'ask',
-			'myproposal',
-			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, Notification, ask, myproposal, OpportunitiesCommon) {
-				if (!opportunity) {
-					console.error('no opportunity provided');
-					$state.go('opportunities.list');
-				}
-				var vm = this;
-				vm.myproposal = myproposal;
-				vm.projectId = $stateParams.projectId;
-				vm.opportunity = opportunity;
-				vm.pageViews = opportunity.views;
-				vm.opportunity.deadline = new Date(vm.opportunity.deadline);
-				vm.opportunity.assignment = new Date(vm.opportunity.assignment);
-				vm.opportunity.start = new Date(vm.opportunity.start);
-				vm.opportunity.endDate = new Date(vm.opportunity.endDate);
-				vm.org = org;
 
-				vm.opportunity.phases.inception.startDate = new Date(vm.opportunity.phases.inception.startDate);
-				vm.opportunity.phases.inception.endDate = new Date(vm.opportunity.phases.inception.endDate);
-				vm.opportunity.phases.proto.startDate = new Date(vm.opportunity.phases.proto.startDate);
-				vm.opportunity.phases.proto.endDate = new Date(vm.opportunity.phases.proto.endDate);
-				vm.opportunity.phases.implementation.startDate = new Date(vm.opportunity.phases.implementation.startDate);
-				vm.opportunity.phases.implementation.endDate = new Date(vm.opportunity.phases.implementation.endDate);
-
-				vm.opportunity.phases.inception.fstartDate = formatDate(vm.opportunity.phases.inception.startDate);
-				vm.opportunity.phases.inception.fendDate = formatDate(vm.opportunity.phases.inception.endDate);
-				vm.opportunity.phases.proto.fstartDate = formatDate(vm.opportunity.phases.proto.startDate);
-				vm.opportunity.phases.proto.fendDate = formatDate(vm.opportunity.phases.proto.endDate);
-				vm.opportunity.phases.implementation.fstartDate = formatDate(vm.opportunity.phases.implementation.startDate);
-				vm.opportunity.phases.implementation.fendDate = formatDate(vm.opportunity.phases.implementation.endDate);
-
-				vm.authentication = Authentication;
-				vm.OpportunitiesService = OpportunitiesService;
-				vm.idString = 'opportunityId';
-				vm.display = {};
-				vm.display.description = $sce.trustAsHtml(vm.opportunity.description);
-				vm.display.evaluation = $sce.trustAsHtml(vm.opportunity.evaluation);
-				vm.display.criteria = $sce.trustAsHtml(vm.opportunity.criteria);
-				vm.display.addenda = vm.opportunity.addenda;
-				vm.display.addenda.forEach(function(addendum) {
-					addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
-				});
-				vm.trust = $sce.trustAsHtml;
-				vm.canApply = org && org.metRFQ;
-				vm.opportunity.hasOrg = vm.canApply;
-				vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
-
-				// Set up capabilities and capability skills
-				vm.capabilitySkills = _.unionWith(
-					vm.opportunity.phases.inception.capabilitySkills,
-					vm.opportunity.phases.proto.capabilitySkills,
-					vm.opportunity.phases.implementation.capabilitySkills,
-					function(a, b) {
-						return a.code === b.code;
-					});
-
-				var coreInceptionCodes = vm.opportunity.phases.inception.capabilitiesCore.map(function(cap) {
-					return cap.code;
-				});
-				vm.opportunity.phases.inception.capabilities.forEach(function(capability) {
-					if (coreInceptionCodes.indexOf(capability.code) !== -1) {
-						capability.fullTime = true;
-					}
-				});
-
-				var corePrototypeCodes = vm.opportunity.phases.proto.capabilitiesCore.map(function(cap) {
-					return cap.code;
-				});
-				vm.opportunity.phases.proto.capabilities.forEach(function(capability) {
-					if (corePrototypeCodes.indexOf(capability.code) !== -1) {
-						capability.fullTime = true;
-					}
-				});
-
-				var coreImplementationCodes = vm.opportunity.phases.implementation.capabilitiesCore.map(function(cap) {
-					return cap.code;
-				});
-				vm.opportunity.phases.implementation.capabilities.forEach(function(capability) {
-					if (coreImplementationCodes.indexOf(capability.code) !== -1) {
-						capability.fullTime = true;
-					}
-				});
-
-				vm.isWatching = OpportunitiesCommon.isWatching(vm.opportunity);
-				vm.toggleWatch = function() {
-					if (vm.isWatching) {
-						vm.removeWatch();
-					} else {
-						vm.addWatch();
-					}
-				};
-				vm.addWatch = function() {
-					vm.isWatching = OpportunitiesCommon.addWatch(vm.opportunity);
-				};
-				vm.removeWatch = function() {
-					vm.isWatching = OpportunitiesCommon.removeWatch(vm.opportunity);
-				};
-				//
-				// what can the user do here?
-				//
-				var isUser = Authentication.user;
-				var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
-				vm.isGov = isGov;
-				vm.hasEmail = isUser && Authentication.user.email !== '';
-				var isMemberOrWaiting = opportunity.userIs.member || opportunity.userIs.request;
-				vm.loggedIn = !!isUser;
-				vm.canRequestMembership = isGov && !isMemberOrWaiting;
-				vm.canEdit = isAdmin || opportunity.userIs.admin;
-				vm.isMember = opportunity.userIs.member;
-				vm.isSprintWithUs = vm.opportunity.opportunityTypeCd === 'sprint-with-us';
-				vm.showProposals = vm.canEdit && vm.opportunity.isPublished;
-				vm.isAdmin = isAdmin;
-				//
-				// dates
-				//
-				var rightNow = new Date();
-				vm.closing = 'CLOSED';
-				var d = vm.opportunity.deadline - rightNow;
-				if (d > 0) {
-					var dd = Math.floor(d / 86400000); // days
-					var dh = Math.floor((d % 86400000) / 3600000); // hours
-					var dm = Math.round(((d % 86400000) % 3600000) / 60000); // minutes
-					vm.closing = dm + ' minutes';
-					if (dd > 0) vm.closing = dd + ' days ' + dh + ' hours ' + dm + ' minutes';
-					else if (dh > 0) vm.closing = dh + ' hours ' + dm + ' minutes';
-					else vm.closing = dm + ' minutes';
-				}
-				var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-				var dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-				var dt = vm.opportunity.deadline;
-				vm.deadline = dt.getHours() + ':00 Pacific Time, ' + dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-				dt = vm.opportunity.assignment;
-				vm.assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-				dt = vm.opportunity.start;
-				vm.start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-				// -------------------------------------------------------------------------
-				//
-				// can this be published?
-				//
-				// -------------------------------------------------------------------------
-				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
-				vm.canPublish = vm.errorFields.length === 0;
-				// -------------------------------------------------------------------------
-				//
-				// issue a request for membership
-				//
-				// -------------------------------------------------------------------------
-				vm.request = function() {
-					OpportunitiesService.makeRequest({
-						opportunityId: opportunity._id
-					}).$promise.then(function() {
-						Notification.success({ message: '<i class="fas fa-check-circle"></i> Successfully Applied!' });
-					});
-				};
-
-				vm.requestADMApproval = function(opportunity) {
-					$state.go('opportunityadmin.approvalrequestswu', {
-						opportunityId: vm.opportunity.code
-					});
-				};
-
-				// -------------------------------------------------------------------------
-				//
-				// publish or un publish the opportunity
-				//
-				// -------------------------------------------------------------------------
-				vm.publish = function(opportunity, isToBePublished) {
-					var publishedState = opportunity.isPublished;
-					var publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
-					var publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
-					var publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-					var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
-					var isToBeSaved = true;
-					var promise = Promise.resolve();
-
-					if (isToBePublished) {
-						promise = ask.yesNo(publishQuestion).then(function(r) {
-							isToBeSaved = r;
-						});
-					}
-
-					promise.then(function() {
-						if (isToBeSaved) {
-							opportunity.isPublished = isToBePublished;
-							publishMethod({ opportunityId: opportunity._id })
-								.$promise.then(function() {
-									//
-									// success, notify
-									//
-									Notification.success({
-										message: '<i class="fas fa-check-circle"></i> ' + publishSuccess
-									});
-								})
-								.catch(function(res) {
-									//
-									// fail, notify and stay put
-									//
-									opportunity.isPublished = publishedState;
-									Notification.error({
-										message: res.data.message,
-										title: "<i class='fas fa-exclamation-triangle'></i> " + publishError
-									});
-								});
-						}
-					});
-				};
-				// -------------------------------------------------------------------------
-				//
-				// sign in and apply
-				//
-				// -------------------------------------------------------------------------
-				vm.signInAndApply = function() {
-					$state.go('authentication.signin').then(function() {
-						$state.previous = {
-							state: 'opportunities.viewswu',
-							params: { opportunityId: opportunity.code },
-							href: $state.href('opportunities.viewswu', { opportunityId: opportunity.code })
-						};
-					});
-				};
-				// -------------------------------------------------------------------------
-				//
-				// unassign an opportunitu
-				//
-				// -------------------------------------------------------------------------
-				vm.unassign = function() {
-					var opportunity = vm.opportunity;
-					var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
-					ask.yesNo(q).then(function(r) {
-						if (r) {
-							OpportunitiesService.unassign({ opportunityId: opportunity._id }).$promise.then(
-								function(response) {
-									vm.opportunity = response;
-									Notification.success({
-										message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
-									});
-								},
-								function(error) {
-									Notification.error({
-										message: error.data.message,
-										title: '<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
-									});
-								}
-							);
-						}
-					});
-				};
-			}
-		])
-		// =========================================================================
-		//
 		// Controller for editing the opportunity page
-		//
-		// =========================================================================
 		.controller('OpportunityEditSWUController', [
 			'$scope',
 			'capabilities',
@@ -327,25 +47,23 @@ import '../css/opportunities.css';
 				OpportunitiesCommon
 			) {
 				uibButtonConfig.activeClass = 'custombuttonbackground';
-				var vm = this;
+				const vm = this;
 				vm.trust = $sce.trustAsHtml;
-				var originalPublishedState = opportunity.isPublished;
-				//
-				// what can the user do here?
-				//
-				var isUser = Authentication.user;
-				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				vm.isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
+				const originalPublishedState = opportunity.isPublished;
+
+				const isUser = Authentication.user;
+				vm.isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
+				vm.isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
 				vm.projects = projects;
 				vm.editing = editing;
 				vm.opportunity = opportunity;
 				vm.opportunity.opportunityTypeCd = 'sprint-with-us';
 
-				var codeChallengeDefaultWeight = 0.35;
-				var skillDefaultWeight = 0.05;
-				var questionDefaultWeight = 0.25;
-				var interviewDefaultWeight = 0.25;
-				var priceDefaultWeight = 0.1;
+				const codeChallengeDefaultWeight = 0.35;
+				const skillDefaultWeight = 0.05;
+				const questionDefaultWeight = 0.25;
+				const interviewDefaultWeight = 0.25;
+				const priceDefaultWeight = 0.1;
 
 				// Initialize phases for new opportunities
 				if (!vm.opportunity.phases) {
@@ -385,14 +103,14 @@ import '../css/opportunities.css';
 				vm.form = {};
 				vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join(', ') : '';
 				vm.closing = 'CLOSED';
-				vm.closing = vm.opportunity.deadline - new Date() > 0 ? 'OPEN' : 'CLOSED';
+				vm.closing = vm.opportunity.deadline - new Date().getTime() > 0 ? 'OPEN' : 'CLOSED';
 
 				// viewmodel items related to team questions
 				if (!vm.opportunity.teamQuestions) {
 					vm.opportunity.teamQuestions = [];
 				}
 				vm.teamQuestions = vm.opportunity.teamQuestions;
-				vm.teamQuestions.forEach(function(teamQuestion) {
+				vm.teamQuestions.forEach(teamQuestion => {
 					teamQuestion.cleanQuestion = $sce.trustAsHtml(teamQuestion.question);
 					teamQuestion.cleanGuideline = $sce.trustAsHtml(teamQuestion.guideline);
 					teamQuestion.newQuestion = false;
@@ -416,7 +134,7 @@ import '../css/opportunities.css';
 				}
 
 				// Save edited scoring weights for evaluation to the opportunity (does not save the opportunity itself)
-				vm.saveWeights = function() {
+				vm.saveWeights = () => {
 					vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
 
 					if (isNaN(vm.totalPercentage)) {
@@ -435,7 +153,7 @@ import '../css/opportunities.css';
 
 				// Adding a new team question
 				// We a new one to the list and enter edit mode
-				vm.addNewTeamQuestion = function() {
+				vm.addNewTeamQuestion = () => {
 					vm.teamQuestions.push({
 						question: '',
 						guideline: '',
@@ -452,7 +170,7 @@ import '../css/opportunities.css';
 					vm.editingTeamQuestion = true;
 				};
 				// Cancel edit team question
-				vm.cancelEditTeamQuestion = function() {
+				vm.cancelEditTeamQuestion = () => {
 					if (vm.editingTeamQuestion) {
 						// if this was a brand new question, remove it
 						if (vm.teamQuestions[vm.teamQuestionEditIndex].newQuestion === true) {
@@ -466,9 +184,9 @@ import '../css/opportunities.css';
 					}
 				};
 				// Enter edit mode for an existing team question
-				vm.editTeamQuestion = function(index) {
+				vm.editTeamQuestion = index => {
 					vm.teamQuestionEditIndex = index;
-					var currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+					const currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
 					vm.currentTeamQuestionText = currentTeamQuestion.question;
 					vm.currentGuidelineText = currentTeamQuestion.guideline;
 					vm.currentQuestionWordLimit = currentTeamQuestion.wordLimit;
@@ -476,8 +194,8 @@ import '../css/opportunities.css';
 					vm.editingTeamQuestion = true;
 				};
 				// Save edit team question
-				vm.saveEditTeamQuestion = function() {
-					var curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
+				vm.saveEditTeamQuestion = () => {
+					const curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
 					if (curTeamQuestion) {
 						curTeamQuestion.question = vm.currentTeamQuestionText;
 						curTeamQuestion.guideline = vm.currentGuidelineText;
@@ -492,10 +210,10 @@ import '../css/opportunities.css';
 				};
 
 				// Delete team question with confirm modal
-				vm.deleteTeamQuestion = function(index) {
+				vm.deleteTeamQuestion = index => {
 					if (index >= 0 && index < vm.teamQuestions.length) {
-						var q = 'Are you sure you wish to delete this team question from the opportunity?';
-						ask.yesNo(q).then(function(r) {
+						const q = 'Are you sure you wish to delete this team question from the opportunity?';
+						ask.yesNo(q).then(r => {
 							if (r) {
 								vm.teamQuestions.splice(index, 1);
 							}
@@ -508,7 +226,7 @@ import '../css/opportunities.css';
 					vm.opportunity.addenda = [];
 				}
 				vm.addenda = vm.opportunity.addenda;
-				vm.addenda.forEach(function(addendum) {
+				vm.addenda.forEach(addendum => {
 					addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
 				});
 				vm.editingAddenda = false;
@@ -517,7 +235,7 @@ import '../css/opportunities.css';
 
 				// Adding a new addendum
 				// We add a new one to the list and enter edit mode
-				vm.addNewAddendum = function() {
+				vm.addNewAddendum = () => {
 					vm.addenda.push({
 						description: '',
 						createdBy: Authentication.user,
@@ -529,15 +247,15 @@ import '../css/opportunities.css';
 					vm.editingAddenda = true;
 				};
 				// Cancel edit addendum
-				vm.cancelEditAddendum = function() {
+				vm.cancelEditAddendum = () => {
 					if (vm.editingAddenda) {
 						vm.addenda.splice(vm.addendaEditIndex, 1);
 						vm.editingAddenda = false;
 					}
 				};
 				// Save the addendum being edited
-				vm.saveEditAddendum = function() {
-					var curAddenda = vm.addenda[vm.addendaEditIndex];
+				vm.saveEditAddendum = () => {
+					const curAddenda = vm.addenda[vm.addendaEditIndex];
 					if (curAddenda) {
 						curAddenda.description = vm.currentAddendaText;
 						curAddenda.createdBy = Authentication.user;
@@ -548,10 +266,10 @@ import '../css/opportunities.css';
 					vm.editingAddenda = false;
 				};
 				// Delete an addendum with confirm modal
-				vm.deleteAddenda = function(index) {
+				vm.deleteAddenda = index => {
 					if (index >= 0 && index < vm.addenda.length) {
-						var q = 'Are you sure you wish to delete this addendum?';
-						ask.yesNo(q).then(function(r) {
+						const q = 'Are you sure you wish to delete this addendum?';
+						ask.yesNo(q).then(r => {
 							if (r) {
 								vm.addenda.splice(index, 1);
 							}
@@ -561,7 +279,9 @@ import '../css/opportunities.css';
 				//
 				// Every time we enter here until the opportunity has been published we will update the questions to the most current
 				//
-				if (!vm.isPublished) vm.opportunity.questions = dataService.questions;
+				if (!vm.isPublished) {
+					vm.opportunity.questions = dataService.questions;
+				}
 				//
 				// set up the structures for capabilities
 				//
@@ -588,19 +308,25 @@ import '../css/opportunities.css';
 				//
 				// set up the dropdown amounts for code with us earnings
 				//
-				var minAmount = 500;
-				var maxAmount = 70000;
-				var step = 500;
+				const minAmount = 500;
+				const maxAmount = 70000;
+				const step = 500;
 				vm.amounts = [];
-				var i;
-				for (i = minAmount; i <= maxAmount; i += step) vm.amounts.push(i);
+				let i;
+				for (i = minAmount; i <= maxAmount; i += step) {
+					vm.amounts.push(i);
+				}
 
-				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') vm.opportunity.opportunityTypeCd = 'code-with-us';
+				if (!vm.opportunity.opportunityTypeCd || vm.opportunity.opportunityTypeCd === '') {
+					vm.opportunity.opportunityTypeCd = 'code-with-us';
+				}
 				// if (!vm.opportunity.capabilities) vm.opportunity.capabilities = [];
 				//
 				// if the user doesn't have the right access then kick them out
 				//
-				if (editing && !vm.isAdmin && !opportunity.userIs.admin) $state.go('forbidden');
+				if (editing && !vm.isAdmin && !opportunity.userIs.admin) {
+					$state.go('forbidden');
+				}
 				//
 				// do we have existing contexts for program and project ?
 				// deal with all that noise right here
@@ -629,9 +355,11 @@ import '../css/opportunities.css';
 					} else if (vm.context === 'program') {
 						vm.projectLink = false;
 						vm.opportunity.program = vm.programId;
-						var lprojects = [];
-						vm.projects.forEach(function(o) {
-							if (o.program._id === vm.programId) lprojects.push(o);
+						const lprojects = [];
+						vm.projects.forEach(o => {
+							if (o.program._id === vm.programId) {
+								lprojects.push(o);
+							}
 						});
 						vm.projects = lprojects;
 					} else if (vm.context === 'project') {
@@ -662,11 +390,7 @@ import '../css/opportunities.css';
 						message: 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
 					});
 					$state.go('opportunities.list');
-				}
-				//
-				// if there is only one available project just force it
-				//
-				else if (vm.projects.length === 1) {
+				} else if (vm.projects.length === 1) {
 					vm.projectLink = true;
 					vm.projectId = vm.projects[0]._id;
 					vm.projectTitle = vm.projects[0].name;
@@ -693,28 +417,28 @@ import '../css/opportunities.css';
 				// basis rather than in aggregate
 				//
 				// -------------------------------------------------------------------------
-				vm.selectSkills = function(e) {
+				vm.selectSkills = e => {
 					//
 					// go through all the possible capabilities and indicate which ones were chosen
 					// in the aggregate
 					//
-					Object.keys(vm.all.iCapabilities).forEach(function(code) {
+					Object.keys(vm.all.iCapabilities).forEach(code => {
 						vm.all.iOppCapabilities[code] = vm.inp.iOppCapabilities[code] || vm.prp.iOppCapabilities[code] || vm.imp.iOppCapabilities[code];
 					});
 					//
 					// same with the most current view of skills
 					//
-					Object.keys(vm.all.iCapabilitySkills).forEach(function(code) {
+					Object.keys(vm.all.iCapabilitySkills).forEach(code => {
 						vm.all.iOppCapabilitySkills[code] = vm.inp.iOppCapabilitySkills[code] || vm.prp.iOppCapabilitySkills[code] || vm.imp.iOppCapabilitySkills[code];
 					});
 				};
-				vm.changeTargets = function() {
+				vm.changeTargets = () => {
 					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
 					vm.opportunity.prototypeTarget = Number(vm.opportunity.prototypeTarget);
 					vm.opportunity.implementationTarget = Number(vm.opportunity.implementationTarget);
 					vm.opportunity.totalTarget = vm.opportunity.inceptionTarget + vm.opportunity.prototypeTarget + vm.opportunity.implementationTarget;
 				};
-				vm.totalTargets = function() {
+				vm.totalTargets = () => {
 					return 1234;
 				};
 				// -------------------------------------------------------------------------
@@ -722,11 +446,15 @@ import '../css/opportunities.css';
 				// these do things to balance the years required and desired when clicked
 				//
 				// -------------------------------------------------------------------------
-				vm.smin = function(mfield, dfield, value) {
-					if (vm.opportunity[dfield] < value) vm.opportunity[dfield] = value;
+				vm.smin = (mfield, dfield, value) => {
+					if (vm.opportunity[dfield] < value) {
+						vm.opportunity[dfield] = value;
+					}
 				};
-				vm.sdes = function(dfield, mfield, value) {
-					if (vm.opportunity[mfield] > value) vm.opportunity[mfield] = value;
+				vm.sdes = (dfield, mfield, value) => {
+					if (vm.opportunity[mfield] > value) {
+						vm.opportunity[mfield] = value;
+					}
 				};
 				// -------------------------------------------------------------------------
 				//
@@ -734,7 +462,7 @@ import '../css/opportunities.css';
 				// select box
 				//
 				// -------------------------------------------------------------------------
-				vm.updateProgramProject = function() {
+				vm.updateProgramProject = () => {
 					vm.projectId = vm.projectobj._id;
 					vm.projectTitle = vm.projectobj.name;
 					vm.programId = vm.projectobj.program._id;
@@ -745,9 +473,9 @@ import '../css/opportunities.css';
 				// remove the opportunity with some confirmation
 				//
 				// -------------------------------------------------------------------------
-				vm.remove = function() {
+				vm.remove = () => {
 					if ($window.confirm('Are you sure you want to delete?')) {
-						vm.opportunity.$remove(function() {
+						vm.opportunity.$remove(() => {
 							$state.go('opportunities.list');
 							Notification.success({
 								message: '<i class="fas fa-check-circle"></i> opportunity deleted successfully!'
@@ -802,10 +530,10 @@ import '../css/opportunities.css';
 				// and also remove all doNotNotify stuff
 				//
 				// -------------------------------------------------------------------------
-				vm.saveme = function() {
+				vm.saveme = () => {
 					this.save(true);
 				};
-				vm.save = function(isValid) {
+				vm.save = isValid => {
 					if (!vm.opportunity.name) {
 						Notification.error({
 							message: 'You must enter a title for your opportunity',
@@ -848,7 +576,9 @@ import '../css/opportunities.css';
 					//
 					// ensure that there is a trailing '/' on the github field
 					//
-					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/') vm.opportunity.github += '/';
+					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/') {
+						vm.opportunity.github += '/';
+					}
 					//
 					// set the time on the 2 dates that care about it
 					//
@@ -856,7 +586,9 @@ import '../css/opportunities.css';
 					vm.opportunity.deadline.setMinutes(0);
 					vm.opportunity.deadline.setSeconds(0);
 					vm.opportunity.assignment.setHours(16);
-					if (!vm.opportunity.endDate) vm.opportunity.endDate = new Date();
+					if (!vm.opportunity.endDate) {
+						vm.opportunity.endDate = new Date();
+					}
 					vm.opportunity.endDate.setHours(16);
 					vm.opportunity.endDate.setMinutes(0);
 					vm.opportunity.endDate.setSeconds(0);
@@ -882,11 +614,11 @@ import '../css/opportunities.css';
 					//
 					// confirm save only if the user is also publishing
 					//
-					var savemeSeymour = true;
-					var promise = Promise.resolve();
+					let savemeSeymour = true;
+					let promise = Promise.resolve();
 					if (!originalPublishedState && vm.opportunity.isPublished) {
-						var question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
-						promise = ask.yesNo(question).then(function(result) {
+						const question = 'You are publishing this opportunity. This will also notify all subscribed users.  Do you wish to continue?';
+						promise = ask.yesNo(question).then(result => {
 							savemeSeymour = result;
 						});
 					}
@@ -898,15 +630,17 @@ import '../css/opportunities.css';
 					// Create a new opportunity, or update the current instance
 					//
 					promise
-						.then(function() {
+						.then(() => {
 							if (savemeSeymour) {
 								return vm.opportunity.createOrUpdate();
-							} else return Promise.reject({ data: { message: 'Publish Cancelled' } });
+							} else {
+								return Promise.reject({ data: { message: 'Publish Cancelled' } });
+							}
 						})
 						//
 						// success, notify and return to list
 						//
-						.then(function() {
+						.then(() => {
 							vm.opportunityForm.$setPristine();
 							Notification.success({
 								message: '<i class="fas fa-check-circle"></i> opportunity saved successfully!'
@@ -917,7 +651,7 @@ import '../css/opportunities.css';
 						//
 						// fail, notify and stay put
 						//
-						.catch(function(res) {
+						.catch(res => {
 							Notification.error({
 								message: res.message,
 								title: "<i class='fas fa-exclamation-triangle'></i> opportunity save error!"
@@ -926,18 +660,20 @@ import '../css/opportunities.css';
 				};
 				vm.popoverCache = {};
 				vm.displayHelp = {};
-				vm.popoverContent = function(field) {
-					if (!field) return;
+				vm.popoverContent = field => {
+					if (!field) {
+						return;
+					}
 					if (!vm.popoverCache[field]) {
-						var help = $('#opportunityForm').find('.input-help[data-field=' + field + ']');
-						var html = help.length ? help.html() : '';
+						const help = $('#opportunityForm').find('.input-help[data-field=' + field + ']');
+						const html = help.length ? help.html() : '';
 						vm.popoverCache[field] = $sce.trustAsHtml(html);
 					}
 					return vm.popoverCache[field];
 				};
-				vm.toggleHelp = function(field) {
+				vm.toggleHelp = field => {
 					vm.displayHelp[field] = !vm.displayHelp[field];
 				};
 			}
 		]);
-}());
+})();
