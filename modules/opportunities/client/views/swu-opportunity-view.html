@@ -317,7 +317,7 @@
             <h5>Required Capabilities*</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.opportunity.phases.inception.capabilities">
+                <tr ng-repeat="capability in vm.inceptionCapabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
@@ -351,7 +351,7 @@
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.opportunity.phases.proto.capabilities">
+                <tr ng-repeat="capability in vm.prototypeCapabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
@@ -385,7 +385,7 @@
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.opportunity.phases.implementation.capabilities">
+                <tr ng-repeat="capability in vm.implementationCapabilities">
                   <td>
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>

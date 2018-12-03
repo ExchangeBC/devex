@@ -1,6 +1,7 @@
 'use strict';
 
 import angular from 'angular';
+import * as _ from 'lodash';
 
 (() => {
 	angular.module('opportunities').factory('OpportunitiesCommon', [
@@ -40,8 +41,7 @@ import angular from 'angular';
 					return false;
 				},
 
-				// publishStatus checks for whether or not fields are missing so we can
-				// publish or not
+				// Checks for whether or not fields are missing and whether we can publish
 				publishStatus: opportunity => {
 					if (!opportunity.phases) {
 						opportunity.phases = {
@@ -124,9 +124,7 @@ import angular from 'angular';
 					vm.display.evaluation = $sce.trustAsHtml(vm.opportunity.evaluation);
 					vm.display.criteria = $sce.trustAsHtml(vm.opportunity.criteria);
 					vm.trust = $sce.trustAsHtml;
-					//
-					// what can the user do here?
-					//
+
 					const isUser = Authentication.user;
 					const isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
 					const isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
@@ -139,9 +137,7 @@ import angular from 'angular';
 					vm.isMember = opportunity.userIs.member;
 					vm.isSprintWithUs = vm.opportunity.opportunityTypeCd === 'sprint-with-us';
 					vm.showProposals = vm.canEdit && vm.opportunity.isPublished;
-					//
-					// dates
-					//
+
 					const rightNow = new Date();
 					vm.closing = 'CLOSED';
 					const diffTime = vm.opportunity.deadline - rightNow.getTime();
@@ -167,12 +163,6 @@ import angular from 'angular';
 					vm.assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 					dt = vm.opportunity.start;
 					vm.start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-					// -------------------------------------------------------------------------
-					//
-					// can this be published?
-					//
-					// -------------------------------------------------------------------------
-					// vm.errorFields = OpportunitiesCommon.publishStatus (vm.opportunity);
 					vm.canPublish = vm.errorFields.length === 0;
 				},
 
@@ -187,12 +177,9 @@ import angular from 'angular';
 						return false;
 					}
 				},
-				// -------------------------------------------------------------------------
-				//
+
 				// Submit the passed approval code
 				// Return a promise that will resolve for success, reject otherwise
-				//
-				// -------------------------------------------------------------------------
 				submitApprovalCode(opportunity, submittedCode, action) {
 					return new Promise((resolve, reject) => {
 						const isPreApproval = opportunity.intermediateApproval.state === 'sent'; // Has intermediate approval been actioned or is still at 'sent state'?
@@ -215,6 +202,37 @@ import angular from 'angular';
 							reject('Maximum attempts reached');
 						}
 					});
+				},
+
+				// Return a list of all technical skills for an opportunity
+				// Merges and removes duplicates across phases
+				getTechnicalSkills: (opportunity) => {
+					return _.unionWith(
+						opportunity.phases.inception.capabilitySkills,
+						opportunity.phases.proto.capabilitySkills,
+						opportunity.phases.implementation.capabilitySkills,
+						(a: any, b: any) => {
+							return a.code === b.code;
+						}
+					);
+				},
+
+				// Return a list of required capabilities for the given phase
+				// Each returned capabilitity in the list is marked with fullTime = true if
+				// it is a core capability
+				getCapabilitiesForPhase: (phase) => {
+
+					const coreCodes = phase.capabilitiesCore.map(cap => {
+						return cap.code;
+					});
+
+					phase.capabilities.forEach(cap => {
+						if (coreCodes.indexOf(cap.code) !== -1) {
+							cap.fullTime = true;
+						}
+					});
+
+					return phase.capabilities;
 				}
 			};
 		}
