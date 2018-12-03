@@ -222,12 +222,12 @@ exports.update = function (req, res) {
 	if (ensureAdmin (req.project, req.user, res)) {
 		var wasPublished = req.project.isPublished;
 		var isPublished = req.body.isPublished;
-		if (!wasPublished && isPublished) {
-			Opportunities.rePublishOpportunities (req.project.program._id, req.project._id);
-		}
-		else if (wasPublished && !isPublished) {
-			Opportunities.unPublishOpportunities (req.project.program._id, req.project._id);
-		}
+		// if (!wasPublished && isPublished) {
+			// Opportunities.rePublishOpportunities (req.project.program._id, req.project._id);
+		// }
+		// else if (wasPublished && !isPublished) {
+		// 	Opportunities.unPublishOpportunities (req.project.program._id, req.project._id);
+		// }
 		//
 		// copy over everything passed in. This will overwrite the
 		// audit fields, but they get updated in the following step

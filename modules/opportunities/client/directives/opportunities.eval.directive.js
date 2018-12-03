@@ -447,7 +447,7 @@
 									templateUrl:
 										'/modules/opportunities/client/views/swu-opportunity-modal-question-vetting.html',
 									windowClass: 'question-review-modal',
-									controller: function($scope, $uibModalInstance) {
+									controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
 										$scope.data = {};
 										$scope.data.questions = [];
 										$scope.data.proposals = vm.proposals;
@@ -478,7 +478,7 @@
 												}
 											});
 										};
-									}
+									}]
 								})
 								.then(function(resp) {
 									if (resp.action === 'save') {
@@ -519,7 +519,7 @@
 										size: 'lg',
 										windowClass: 'question-rank-modal',
 										templateUrl: modalMarkupUrl,
-										controller: function($scope, $uibModalInstance) {
+										controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
 											$scope.data = {};
 											$scope.data.proposals = vm.proposals;
 											$scope.data.nproposals = vm.proposals.length;
@@ -592,7 +592,7 @@
 											};
 
 											$scope.validateScores();
-										}
+										}]
 									},
 									{}
 								)
@@ -646,7 +646,7 @@
 										templateUrl:
 											'/modules/opportunities/client/views/swu-opportunity-modal-code-challenge.html',
 										windowClass: 'code-challenge-modal',
-										controller: function($scope, $uibModalInstance) {
+										controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
 											$scope.data = {};
 											$scope.data.proposalScores = [];
 											$scope.data.maxCodeChallengePoints = vm.maxCodeChallengePoints;
@@ -667,7 +667,7 @@
 													proposalScores: $scope.data.proposalScores
 												});
 											};
-										}
+										}]
 									},
 									{}
 								)
@@ -733,7 +733,7 @@
 										templateUrl:
 											'/modules/opportunities/client/views/swu-opportunity-modal-interview.html',
 										windowClass: 'interview-modal',
-										controller: function($scope, $uibModalInstance) {
+										controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
 											$scope.data = {};
 											$scope.data.maxInterviewPoints = vm.maxInterviewPoints;
 											$scope.data.proposalScores = [];
@@ -754,7 +754,7 @@
 													proposalScores: $scope.data.proposalScores
 												});
 											};
-										}
+										}]
 									},
 									{}
 								)
@@ -854,13 +854,13 @@
 								size: 'md',
 								templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
 								windowClass: 'swu-proposal-view-modal',
-								controller: function($scope, $uibModalInstance) {
+								controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
 									$scope.data = {};
 									$scope.data.proposal = proposal;
 									$scope.close = function() {
 										$uibModalInstance.close({});
 									};
-								}
+								}]
 							});
 						};
 
