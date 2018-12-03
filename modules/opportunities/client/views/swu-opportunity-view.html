@@ -157,10 +157,10 @@
       </div>
       <div class="container col opp-dl-description">
         <dl class="row">
-          <dt class="col-6 text-right">Government Contact:</dt>
-          <dd class="col-6 text-left">
-            <i class="far fa-user-circle"></i>
-            <span ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span>
+          <dt class="col-6 text-right" ng-if="vm.canApply">Government Contact:</dt>
+          <dd class="col-6 text-left" ng-if="vm.canApply">
+            <a ng-if="vm.opportunity.createdBy" id="creator.view" href="mailto:bcdevexchange.empr@gov.bc.ca"><i
+              class="far fa-user-circle"></i> {{vm.opportunity.createdBy.displayName}}</a>
             <span ng-if="!vm.opportunity.createdBy">Deleted User</span>
           </dd>
           <dt class="col-6 text-right">Program:</dt>
