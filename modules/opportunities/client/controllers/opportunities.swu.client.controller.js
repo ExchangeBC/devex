@@ -117,7 +117,7 @@ import '../css/opportunities.css';
 					}
 				});
 
-				vm.isWatching = OpportunitiesCommon.isWatchng(vm.opportunity);
+				vm.isWatching = OpportunitiesCommon.isWatching(vm.opportunity);
 				vm.toggleWatch = function() {
 					if (vm.isWatching) {
 						vm.removeWatch();
@@ -574,6 +574,7 @@ import '../css/opportunities.css';
 				CapabilitiesMethods.init(vm.inp, vm.oinp, capabilities, 'inception');
 				CapabilitiesMethods.init(vm.prp, vm.oprp, capabilities, 'prototype');
 				CapabilitiesMethods.dump(vm.all);
+
 				//
 				// set up capabilities
 				//
