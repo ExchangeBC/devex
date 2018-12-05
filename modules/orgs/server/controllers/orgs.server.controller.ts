@@ -16,16 +16,16 @@ request : <code>-request
 
 */
 
-import * as _ from 'lodash';
+import _ from 'lodash';
 import * as mongoose from 'mongoose';
-import * as multer from 'multer';
+import multer from 'multer';
 import * as config from '../../../../config/config';
 import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
 import { Capability } from '../../../capabilities/server/models/capability.server.model';
 import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
 import { MessagesController } from '../../../messages/server/controllers/messages.server.controller';
-import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
+import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';
 import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
 import { User } from '../../../users/server/models/user.server.model';
@@ -663,9 +663,9 @@ export class OrgsController {
 								// remove the user and save the proposal
 								//
 								if (isSprintWithUs && 0 < deadline.getTime() - rightNow.getTime()) {
-									return Proposals.removeUserFromProposal(proposal, userid);
+									return ProposalsServerController.removeUserFromProposal(proposal, userid);
 								} else {
-									return Promise.resolve();
+									return Promise.resolve({});
 								}
 							})
 						).then(resolve, reject);

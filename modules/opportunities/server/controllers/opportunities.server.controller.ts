@@ -1,26 +1,33 @@
 'use strict';
 
-import * as _ from 'lodash';
-import * as mongoose from 'mongoose';
+import _ from 'lodash';
+import mongoose from 'mongoose';
 import * as Nexmo from 'nexmo';
 import { CoreGithubController } from '../../../core/server/controllers/core.server.github';
 import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
 import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
 import { MessagesController } from '../../../messages/server/controllers/messages.server.controller';
-import { OpportunitiesUtilities } from '../../../opportunities/server/utilities/opportunities.server.utilities';
-import * as Proposals from '../../../proposals/server/controllers/proposals.server.controller';
+import OpportunitiesUtilities from '../../../opportunities/server/utilities/opportunities.server.utilities';
+import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
 import { Proposal } from '../../../proposals/server/models/proposal.server.model';
 import { User } from '../../../users/server/models/user.server.model';
 import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
 import { Opportunity } from '../models/opportunity.server.model';
+class OpportunitiesController {
 
-export class OpportunitiesController {
+	public static getInstance() {
+		return this.instance || (this.instance = new this());
+	}
+
+	private static instance: OpportunitiesController;
+
 	private messagesController = new MessagesController();
-	private opportunitiesUtilities = new OpportunitiesUtilities();
 	private sendMessages = this.messagesController.sendMessages;
 	private github = new CoreGithubController();
 	private helpers = new CoreHelpers();
 	private errorHandler = new CoreErrors();
+
+	private constructor() {};
 
 	// Return a list of all opportunity members. this means all members NOT
 	// including users who have requested access and are currently waiting
@@ -44,7 +51,7 @@ export class OpportunitiesController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		res.json(this.opportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+		res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
 		this.incrementViews(req.opportunity._id);
 	};
 
@@ -87,7 +94,7 @@ export class OpportunitiesController {
 	public update = (req, res) => {
 		// if we dont have permission to do this just return as a no-op
 		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json(this.opportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
 		}
 
 		// copy over everything passed in. This will overwrite the
@@ -135,7 +142,7 @@ export class OpportunitiesController {
 							opportunity.issueNumber = result.number;
 							this.updateSave(opportunity).then(updatedOpportunity => {
 								opportunity = updatedOpportunity;
-								res.json(this.opportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+								res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 							});
 						})
 						.catch(() => {
@@ -145,7 +152,7 @@ export class OpportunitiesController {
 							});
 						});
 				} else {
-					res.json(this.opportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+					res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 				}
 			})
 			.catch(err => {
@@ -170,7 +177,8 @@ export class OpportunitiesController {
 		const user = req.user;
 
 		// unassign the proposal
-		Proposals.unassign(proposal, user)
+		ProposalsServerController
+			.unassign(proposal, user)
 
 			// update the opportunity into pending status with no proposal
 			.then(() => {
@@ -203,7 +211,7 @@ export class OpportunitiesController {
 
 			// return the new opportunity or fail
 			.then(() => {
-				res.json(this.opportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+				res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 			})
 			.catch(err => {
 				res.status(422).send({
@@ -218,7 +226,8 @@ export class OpportunitiesController {
 		const proposal = req.proposal;
 		const user = req.user;
 
-		Proposals.assign(proposal, user)
+		ProposalsServerController
+			.assign(proposal, user)
 
 			.then(() => {
 				opportunity.status = 'Assigned';
@@ -263,7 +272,7 @@ export class OpportunitiesController {
 
 						// return the new opportunity or fail
 						.then(() => {
-							res.json(this.opportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+							res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 						})
 						.catch(err => {
 							res.status(422).send({
@@ -321,7 +330,7 @@ export class OpportunitiesController {
 
 	// Get opportunities under program
 	public forProgram = (req, res) => {
-		this.opportunitiesUtilities.opplist(this.searchTerm(req, { program: req.program._id }), req, (err, opportunities) => {
+		OpportunitiesUtilities.opplist(this.searchTerm(req, { program: req.program._id }), req, (err, opportunities) => {
 			if (err) {
 				return res.status(422).send({
 					message: this.errorHandler.getErrorMessage(err)
@@ -448,7 +457,7 @@ export class OpportunitiesController {
 
 	// Return a list of all opportunities
 	public list = (req, res) => {
-		this.opportunitiesUtilities.opplist(this.searchTerm(req), req, (err, opportunities) => {
+		OpportunitiesUtilities.opplist(this.searchTerm(req), req, (err, opportunities) => {
 			if (err) {
 				return res.status(422).send({
 					message: this.errorHandler.getErrorMessage(err)
@@ -997,7 +1006,7 @@ export class OpportunitiesController {
 		const opportunity = req.opportunity;
 		// if no change or we dont have permission to do this just return as a no-op
 		if (req.opportunity.isPublished === isToBePublished || !this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json(this.opportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
 		}
 
 		// determine first time or not
@@ -1037,7 +1046,7 @@ export class OpportunitiesController {
 						opportunity.issueUrl = result.html_url;
 						opportunity.issueNumber = result.number;
 						opportunity.save();
-						res.json(this.opportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+						res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 					})
 					.catch(() => {
 						res.status(422).send({
@@ -1152,3 +1161,5 @@ export class OpportunitiesController {
 		return ret;
 	};
 }
+
+export default OpportunitiesController.getInstance();

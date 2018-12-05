@@ -1,19 +1,19 @@
 /* tslint:disable:no-console */
 'use strict';
 
-import * as bodyParser from 'body-parser';
-import * as compress from 'compression';
-import * as connectMongo from 'connect-mongo';
-import * as cookieParser from 'cookie-parser';
-import * as express from 'express';
-import * as hbs from 'express-hbs';
-import * as session from 'express-session';
-import * as helmet from 'helmet';
-import * as _ from 'lodash';
-import * as lusca from 'lusca';
-import * as methodOverride from 'method-override';
-import * as morgan from 'morgan';
-import * as path from 'path';
+import bodyParser from 'body-parser';
+import compress from 'compression';
+import connectMongo from 'connect-mongo';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import hbs from 'express-handlebars';
+import session from 'express-session';
+import helmet from 'helmet';
+import _ from 'lodash';
+import lusca from 'lusca';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
+import path from 'path';
 import { CapabilitiesPolicy } from '../../modules/capabilities/server/policies/capabilities.server.policy';
 import { CapabilitiesRouter } from '../../modules/capabilities/server/routes/capabilities.server.routes';
 import { CoreRouter } from '../../modules/core/server/routes/core.server.routes';
@@ -34,6 +34,7 @@ const flash = require('connect-flash'); // tslint:disable-line
 const favicon = require('serve-favicon'); // tslint:disable-line
 
 export class ExpressApplication {
+	// private MongoStore = connectMongo(session);
 	private MongoStore = connectMongo(session);
 	private logger = new Logger();
 
@@ -42,7 +43,7 @@ export class ExpressApplication {
 	 */
 	public init = db => {
 		// Declare a new token for morgan to use in the log output
-		morgan.token('userid', (req, res) => {
+		morgan.token('userid', (req: any, res: any) => {
 			return req.user ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
 		});
 
@@ -121,7 +122,7 @@ export class ExpressApplication {
 		app.use(
 			compress({
 				filter(req, res) {
-					const result = /json|text|javascript|css|font|svg/.test(res.getHeader('Content-Type'));
+					const result = /json|text|javascript|css|font|svg/.test(res.getHeader('Content-Type').toString());
 					return result;
 				},
 				level: 9
@@ -172,12 +173,15 @@ export class ExpressApplication {
 	 * Configure view engine
 	 */
 	private initViewEngine = app => {
-		app.engine(
-			'server.view.html',
-			hbs.express4({
-				extname: '.server.view.html'
-			})
-		);
+		// app.engine(
+		// 	'server.view.html',
+		// 	hbs.express4({
+		// 		extname: '.server.view.html'
+		// 	})
+		// );
+		// app.set('view engine', 'server.view.html');
+		// app.set('views', path.resolve('./'));
+		app.engine('server.view.html', hbs({ defaultLayout: 'main' }));
 		app.set('view engine', 'server.view.html');
 		app.set('views', path.resolve('./'));
 	};

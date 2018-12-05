@@ -1,7 +1,7 @@
 'use strict';
 
-import * as config from '../../../../config/config';
-import * as fileStream from '../../../../config/lib/filestream';
+import config from '../../../../config/config';
+import fileStream from '../../../../config/lib/filestream';
 import { CoreController } from '../controllers/core.server.controller';
 
 export class CoreRouter {

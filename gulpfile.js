@@ -87,7 +87,8 @@ gulp.task('tsc-server', () => {
 		removeComments: true,
 		noImplicitAny: false,
 		allowJs: true,
-		outDir: "./server-dist"
+		outDir: "./server-dist",
+		esModuleInterop: true
 	});
 
 	return gulp.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })

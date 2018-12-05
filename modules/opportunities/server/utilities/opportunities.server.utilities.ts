@@ -1,11 +1,18 @@
-import * as mongoose from 'mongoose';
+import { Opportunity } from '../models/opportunity.server.model';
 
-export class OpportunitiesUtilities {
-	private Opportunity = mongoose.model('Opportunity');
+class OpportunitiesUtilities {
+
+	public static getInstance() {
+		return this.instance || (this.instance = new this());
+	}
+
+	private static instance: OpportunitiesUtilities;
+
+	private constructor() {};
 
 	// Returns a list of all opportunities
 	public opplist = (query, req, callback) => {
-		this.Opportunity.find(query)
+		Opportunity.find(query)
 			.sort([['deadline', -1], ['name', 1]])
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -58,3 +65,5 @@ export class OpportunitiesUtilities {
 		});
 	}
 }
+
+export default OpportunitiesUtilities.getInstance();

@@ -1,4 +1,6 @@
 import { Document } from 'mongoose';
+import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import { ICapabilitySkillDocument } from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
 
 export interface IUserDocument extends Document {
 	firstName: string;
@@ -54,7 +56,7 @@ export interface IUserDocument extends Document {
 	linkedIn: string;
 	isPublicProfile: boolean;
 	isAutoAdd: boolean;
-	capabilities: [Document];
-	capabilitySkills: [Document];
+	capabilities: ICapabilityDocument[];
+	capabilitySkills: ICapabilitySkillDocument[];
 	capabilityDetails: [object];
 }

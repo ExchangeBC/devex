@@ -1,6 +1,6 @@
 'use strict';
 
-import * as acl from 'acl';
+import acl from 'acl';
 
 export class CapabilitiesPolicy {
 	private aclMem = new acl(new acl.memoryBackend());
