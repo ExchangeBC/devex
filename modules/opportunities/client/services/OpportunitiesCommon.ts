@@ -206,22 +206,24 @@ import * as _ from 'lodash';
 
 				// Return a list of all technical skills for an opportunity
 				// Merges and removes duplicates across phases
-				getTechnicalSkills: (opportunity) => {
+				getTechnicalSkills: opportunity => {
 					return _.unionWith(
 						opportunity.phases.inception.capabilitySkills,
 						opportunity.phases.proto.capabilitySkills,
 						opportunity.phases.implementation.capabilitySkills,
-						(a: any, b: any) => {
-							return a.code === b.code;
-						}
+						(a: any, b: any) => a.code === b.code
 					);
+				},
+
+				// Returns technical skills for the given phase
+				getTechnicalSkillsForPhase: phase => {
+					return phase.capabilitySkills;
 				},
 
 				// Return a list of required capabilities for the given phase
 				// Each returned capabilitity in the list is marked with fullTime = true if
 				// it is a core capability
-				getCapabilitiesForPhase: (phase) => {
-
+				getCapabilitiesForPhase: phase => {
 					const coreCodes = phase.capabilitiesCore.map(cap => {
 						return cap.code;
 					});
@@ -233,6 +235,11 @@ import * as _ from 'lodash';
 					});
 
 					return phase.capabilities;
+				},
+
+				// Return the core capabilities required for a phase (full-time)
+				getCoreCapabilitiesForPhase: phase => {
+					return phase.capabilitiesCore;
 				}
 			};
 		}

@@ -2,6 +2,7 @@
 
 // Import certain style elements here so that webpack picks them up
 import angular from 'angular';
+import _ from 'lodash';
 import '../css/opportunities.css';
 
 (() => {
@@ -11,7 +12,6 @@ import '../css/opportunities.css';
 		// Controller for editing the opportunity page
 		.controller('OpportunityEditSWUController', [
 			'$scope',
-			'capabilities',
 			'$state',
 			'$stateParams',
 			'$window',
@@ -24,12 +24,12 @@ import '../css/opportunities.css';
 			'dataService',
 			'ask',
 			'uibButtonConfig',
-			'CapabilitiesMethods',
+			'CapabilitiesService',
 			'TINYMCE_OPTIONS',
 			'OpportunitiesCommon',
+			'OpportunitiesService',
 			function(
 				$scope,
-				capabilities,
 				$state,
 				$stateParams,
 				$window,
@@ -42,9 +42,10 @@ import '../css/opportunities.css';
 				dataService,
 				ask,
 				uibButtonConfig,
-				CapabilitiesMethods,
+				CapabilitiesService,
 				TINYMCE_OPTIONS,
-				OpportunitiesCommon
+				OpportunitiesCommon,
+				OpportunitiesService
 			) {
 				uibButtonConfig.activeClass = 'custombuttonbackground';
 				const vm = this;
@@ -85,20 +86,16 @@ import '../css/opportunities.css';
 					};
 				}
 
-				vm.oimp = vm.opportunity.phases.implementation;
-				vm.oinp = vm.opportunity.phases.inception;
-				vm.oprp = vm.opportunity.phases.proto;
-				vm.oagg = vm.opportunity.phases.aggregate;
 				vm.opportunity.deadline = new Date(vm.opportunity.deadline);
 				vm.opportunity.assignment = new Date(vm.opportunity.assignment);
 				vm.opportunity.start = new Date(vm.opportunity.start);
 				vm.opportunity.endDate = new Date(vm.opportunity.endDate);
-				vm.oimp.endDate = new Date(vm.oimp.endDate);
-				vm.oimp.startDate = new Date(vm.oimp.startDate);
-				vm.oinp.endDate = new Date(vm.oinp.endDate);
-				vm.oinp.startDate = new Date(vm.oinp.startDate);
-				vm.oprp.endDate = new Date(vm.oprp.endDate);
-				vm.oprp.startDate = new Date(vm.oprp.startDate);
+				vm.opportunity.phases.inception.startDate = new Date(vm.opportunity.phases.inception.startDate);
+				vm.opportunity.phases.inception.endDate = new Date(vm.opportunity.phases.inception.endDate);
+				vm.opportunity.phases.proto.startDate = new Date(vm.opportunity.phases.proto.startDate);
+				vm.opportunity.phases.proto.endDate = new Date(vm.opportunity.phases.proto.endDate);
+				vm.opportunity.phases.implementation.startDate = new Date(vm.opportunity.phases.implementation.startDate);
+				vm.opportunity.phases.implementation.endDate = new Date(vm.opportunity.phases.implementation.endDate);
 				vm.authentication = Authentication;
 				vm.form = {};
 				vm.opportunity.skilllist = vm.opportunity.skills ? vm.opportunity.skills.join(', ') : '';
@@ -276,28 +273,139 @@ import '../css/opportunities.css';
 						});
 					}
 				};
-				//
+
 				// Every time we enter here until the opportunity has been published we will update the questions to the most current
-				//
 				if (!vm.isPublished) {
 					vm.opportunity.questions = dataService.questions;
 				}
-				//
-				// set up the structures for capabilities
-				//
-				vm.imp = {};
-				vm.inp = {};
-				vm.prp = {};
-				vm.all = {};
-				CapabilitiesMethods.init(vm.all, {}, capabilities);
-				CapabilitiesMethods.init(vm.imp, vm.oimp, capabilities, 'implementation');
-				CapabilitiesMethods.init(vm.inp, vm.oinp, capabilities, 'inception');
-				CapabilitiesMethods.init(vm.prp, vm.oprp, capabilities, 'prototype');
-				CapabilitiesMethods.dump(vm.all);
 
-				//
-				// set up capabilities
-				//
+				// Returns a boolean indicating whether the given phase is included in the opportunity or not
+				vm.isPhaseIncluded = phase => {
+					if (phase === vm.opportunity.phases.inception) {
+						return phase.isInception;
+					} else if (phase === vm.opportunity.phases.proto) {
+						return phase.isPrototype;
+					} else if (phase === vm.opportunity.phases.implementation) {
+						return phase.isImplementation;
+					}
+				};
+
+				// Changes the given phase to be the start phase, and adjust the status of the other phases accordingly
+				vm.changeToStartPhase = phase => {
+					if (phase === vm.opportunity.phases.inception) {
+						vm.opportunity.phases.inception.isInception = true;
+						vm.opportunity.phases.proto.isPrototype = true;
+						vm.opportunity.phases.implementation.isImplementation = true;
+					} else if (phase === vm.opportunity.phases.proto) {
+						vm.opportunity.phases.inception.isInception = false;
+						vm.inceptionCapabilities.forEach(cap => {
+							vm.toggleSelectedCapability(cap, vm.inceptionCapabilities);
+						});
+						vm.opportunity.phases.proto.isPrototype = true;
+						vm.opportunity.phases.implementation.isImplementation = true;
+					} else if (phase === vm.opportunity.phases.implementation) {
+						vm.opportunity.phases.inception.isInception = false;
+						vm.inceptionCapabilities.forEach(cap => {
+							vm.toggleSelectedCapability(cap, vm.inceptionCapabilities);
+						});
+						vm.opportunity.phases.proto.isPrototype = false;
+						vm.prototypeCapabilities.forEach(cap => {
+							vm.toggleSelectedCapability(cap, vm.prototypeCapabilities);
+						});
+						vm.opportunity.phases.implementation.isImplementation = true;
+					}
+				};
+
+				// Function for gathering capabilities, core capabilities on the opportunity
+				// so that they can be displayed, selected
+				vm.refreshCapabilities = () => {
+					// Retrieve a list of the complete capability set available
+					vm.allCapabilities = CapabilitiesService.list();
+
+					// Retrieve currently selected skills and capabilities from opportunity
+					vm.capabilitySkills = OpportunitiesCommon.getTechnicalSkills(opportunity);
+
+					vm.inceptionCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.inception);
+					vm.inceptionCoreCaps = OpportunitiesCommon.getCoreCapabilitiesForPhase(opportunity.phases.inception);
+					vm.inceptionSkills = OpportunitiesCommon.getTechnicalSkillsForPhase(opportunity.phases.inception);
+
+					vm.prototypeCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.proto);
+					vm.prototypeCoreCaps = OpportunitiesCommon.getCoreCapabilitiesForPhase(opportunity.phases.proto);
+					vm.prototypeSkills = OpportunitiesCommon.getTechnicalSkillsForPhase(opportunity.phases.proto);
+
+					vm.implementationCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.implementation);
+					vm.implementationCoreCaps = OpportunitiesCommon.getCoreCapabilitiesForPhase(opportunity.phases.implementation);
+					vm.implementationSkills = OpportunitiesCommon.getTechnicalSkillsForPhase(opportunity.phases.implementation);
+				};
+
+				// Returns boolean indicating whether the given capability is selected for the given phase (if one is given)
+				// If no phase is provided, return boolean indicating whether capability is selected for any phase
+				vm.isCapabilitySelected = (capability, capList?) => {
+					if (capList) {
+						return capList.map(cap => cap.code).indexOf(capability.code) !== -1;
+					}
+					return (
+						_.union(vm.inceptionCapabilities, vm.prototypeCapabilities, vm.implementationCapabilities)
+							.map((cap: any) => cap.code)
+							.indexOf(capability.code) !== -1
+					);
+				};
+
+				// Toggles the selection for the given capability for the given phase by adding it or removing it from list for that phase
+				vm.toggleSelectedCapability = (capability, capList) => {
+					if (vm.isCapabilitySelected(capability, capList)) {
+						_.remove(capList, (cap: any) => cap.code === capability.code);
+
+						// Deselect any selected skills associated with the removed capability
+						let skillList;
+						if (capList === vm.inceptionCapabilities) {
+							skillList = vm.inceptionSkills;
+						} else if (capList === vm.prototypeCapabilities) {
+							skillList = vm.prototypeSkills;
+						} else if (capList === vm.implementationCapabilities) {
+							skillList = vm.implementationSkills;
+						}
+
+						capability.skills.forEach(skill => {
+							_.remove(skillList, (sk: any) => sk._id === skill._id);
+
+							// Reaggregate the complete skill list
+							vm.capabilitySkills = _.unionWith(vm.inceptionSkills, vm.prototypeSkills, vm.implementationSkills, (a: any, b: any) => a._id === b._id);
+						});
+					} else {
+						capList.push(capability);
+					}
+				};
+
+				// Returns boolean indicating whether the given skill is a selected preferred skill or not
+				vm.isSkillSelected = skill => {
+					return vm.capabilitySkills.map(sk => sk.code).indexOf(skill.code) !== -1;
+				};
+
+				vm.toggleSelectedSkill = (capability, skill) => {
+					// If skill is selected, remove it from master skill list and all phase lists
+					// Otherwise, add it to master, and add it to each of the phase lists that has the parent capability
+					if (vm.isSkillSelected(skill)) {
+						_.remove(vm.capabilitySkills, (sk: any) => sk.code === skill.code);
+						_.remove(vm.inceptionSkills, (sk: any) => sk.code === skill.code);
+						_.remove(vm.prototypeSkills, (sk: any) => sk.code === skill.code);
+						_.remove(vm.implementationSkills, (sk: any) => sk.code === skill.code);
+					} else {
+						vm.capabilitySkills.push(skill);
+						if (vm.isCapabilitySelected(capability, vm.inceptionCapabilities)) {
+							vm.inceptionSkills.push(skill);
+						}
+						if (vm.isCapabilitySelected(capability, vm.prototypeCapabilities)) {
+							vm.prototypeSkills.push(skill);
+						}
+						if (vm.isCapabilitySelected(capability, vm.implementationCapabilities)) {
+							vm.implementationSkills.push(skill);
+						}
+					}
+				};
+
+				vm.refreshCapabilities();
+
 				// -------------------------------------------------------------------------
 				//
 				// can this be published?
@@ -374,12 +482,12 @@ import '../css/opportunities.css';
 					vm.opportunity.assignment = new Date();
 					vm.opportunity.start = new Date();
 					vm.opportunity.endDate = new Date();
-					vm.oimp.endDate = new Date();
-					vm.oimp.startDate = new Date();
-					vm.oinp.endDate = new Date();
-					vm.oinp.startDate = new Date();
-					vm.oprp.endDate = new Date();
-					vm.oprp.startDate = new Date();
+					vm.opportunity.phases.implementation.endDate = new Date();
+					vm.opportunity.phases.implementation.startDate = new Date();
+					vm.opportunity.phases.inception.endDate = new Date();
+					vm.opportunity.phases.inception.startDate = new Date();
+					vm.opportunity.phases.proto.endDate = new Date();
+					vm.opportunity.phases.proto.startDate = new Date();
 				}
 				//
 				// if there are no available projects then post a warning and kick the user back to
@@ -402,50 +510,18 @@ import '../css/opportunities.css';
 
 				vm.tinymceOptions = TINYMCE_OPTIONS;
 
-				// -------------------------------------------------------------------------
-				//
-				// if the skills tab was selected we need to collapse all the capabilities and
-				// currently selected skills into the aggregate
-				//
-				// NOTE HACK IMPORTANT:
-				// The way this is implemented is very simplistic. the aggregate views of
-				// capabilties and skills are generated, and then when a skill is selected
-				// it is set in EACH AND EVERY phase, regadless of whether or not the capability
-				// the skill is under is represented in that phase. This will propogate to the
-				// database, but it does not matter as skills are treated in aggrerate anyhow.
-				// However, it is important to note in case skills become viewed on a per phase
-				// basis rather than in aggregate
-				//
-				// -------------------------------------------------------------------------
-				vm.selectSkills = e => {
-					//
-					// go through all the possible capabilities and indicate which ones were chosen
-					// in the aggregate
-					//
-					Object.keys(vm.all.iCapabilities).forEach(code => {
-						vm.all.iOppCapabilities[code] = vm.inp.iOppCapabilities[code] || vm.prp.iOppCapabilities[code] || vm.imp.iOppCapabilities[code];
-					});
-					//
-					// same with the most current view of skills
-					//
-					Object.keys(vm.all.iCapabilitySkills).forEach(code => {
-						vm.all.iOppCapabilitySkills[code] = vm.inp.iOppCapabilitySkills[code] || vm.prp.iOppCapabilitySkills[code] || vm.imp.iOppCapabilitySkills[code];
-					});
-				};
 				vm.changeTargets = () => {
 					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
 					vm.opportunity.prototypeTarget = Number(vm.opportunity.prototypeTarget);
 					vm.opportunity.implementationTarget = Number(vm.opportunity.implementationTarget);
 					vm.opportunity.totalTarget = vm.opportunity.inceptionTarget + vm.opportunity.prototypeTarget + vm.opportunity.implementationTarget;
 				};
+
 				vm.totalTargets = () => {
 					return 1234;
 				};
-				// -------------------------------------------------------------------------
-				//
+
 				// these do things to balance the years required and desired when clicked
-				//
-				// -------------------------------------------------------------------------
 				vm.smin = (mfield, dfield, value) => {
 					if (vm.opportunity[dfield] < value) {
 						vm.opportunity[dfield] = value;
@@ -456,23 +532,17 @@ import '../css/opportunities.css';
 						vm.opportunity[mfield] = value;
 					}
 				};
-				// -------------------------------------------------------------------------
-				//
+
 				// this is used when we are setting the entire hierarchy from the project
 				// select box
-				//
-				// -------------------------------------------------------------------------
 				vm.updateProgramProject = () => {
 					vm.projectId = vm.projectobj._id;
 					vm.projectTitle = vm.projectobj.name;
 					vm.programId = vm.projectobj.program._id;
 					vm.programTitle = vm.projectobj.program.title;
 				};
-				// -------------------------------------------------------------------------
-				//
+
 				// remove the opportunity with some confirmation
-				//
-				// -------------------------------------------------------------------------
 				vm.remove = () => {
 					if ($window.confirm('Are you sure you want to delete?')) {
 						vm.opportunity.$remove(() => {
@@ -520,16 +590,7 @@ import '../css/opportunities.css';
 					return true;
 				}
 
-				// -------------------------------------------------------------------------
-				//
 				// save the opportunity, could be added or edited (post or put)
-				//
-				// CC: changes to questions about notifications - we decided to simply warn
-				// about publishing and not link it to notifying, but only to saving
-				// so the question is really "do you want to publish"?
-				// and also remove all doNotNotify stuff
-				//
-				// -------------------------------------------------------------------------
 				vm.saveme = () => {
 					this.save(true);
 				};
@@ -541,9 +602,8 @@ import '../css/opportunities.css';
 						});
 						return false;
 					}
-					//
+
 					// validate the budget and phase cost maximums
-					//
 					if (!validateBudget()) {
 						return false;
 					}
@@ -562,12 +622,6 @@ import '../css/opportunities.css';
 					} else {
 						vm.opportunity.skills = [];
 					}
-					//
-					// deal with capabilities
-					//
-					CapabilitiesMethods.reconcile(vm.inp, vm.oinp);
-					CapabilitiesMethods.reconcile(vm.prp, vm.oprp);
-					CapabilitiesMethods.reconcile(vm.imp, vm.oimp);
 
 					if (!vm.editing) {
 						vm.opportunity.project = vm.projectId;
@@ -592,24 +646,24 @@ import '../css/opportunities.css';
 					vm.opportunity.endDate.setHours(16);
 					vm.opportunity.endDate.setMinutes(0);
 					vm.opportunity.endDate.setSeconds(0);
-					vm.oimp.endDate.setHours(16);
-					vm.oimp.endDate.setMinutes(0);
-					vm.oimp.endDate.setSeconds(0);
-					vm.oimp.startDate.setHours(16);
-					vm.oimp.startDate.setMinutes(0);
-					vm.oimp.startDate.setSeconds(0);
-					vm.oinp.endDate.setHours(16);
-					vm.oinp.endDate.setMinutes(0);
-					vm.oinp.endDate.setSeconds(0);
-					vm.oinp.startDate.setHours(16);
-					vm.oinp.startDate.setMinutes(0);
-					vm.oinp.startDate.setSeconds(0);
-					vm.oprp.endDate.setHours(16);
-					vm.oprp.endDate.setMinutes(0);
-					vm.oprp.endDate.setSeconds(0);
-					vm.oprp.startDate.setHours(16);
-					vm.oprp.startDate.setMinutes(0);
-					vm.oprp.startDate.setSeconds(0);
+					vm.opportunity.phases.implementation.endDate.setHours(16);
+					vm.opportunity.phases.implementation.endDate.setMinutes(0);
+					vm.opportunity.phases.implementation.endDate.setSeconds(0);
+					vm.opportunity.phases.implementation.startDate.setHours(16);
+					vm.opportunity.phases.implementation.startDate.setMinutes(0);
+					vm.opportunity.phases.implementation.startDate.setSeconds(0);
+					vm.opportunity.phases.inception.endDate.setHours(16);
+					vm.opportunity.phases.inception.endDate.setMinutes(0);
+					vm.opportunity.phases.inception.endDate.setSeconds(0);
+					vm.opportunity.phases.inception.startDate.setHours(16);
+					vm.opportunity.phases.inception.startDate.setMinutes(0);
+					vm.opportunity.phases.inception.startDate.setSeconds(0);
+					vm.opportunity.phases.proto.endDate.setHours(16);
+					vm.opportunity.phases.proto.endDate.setMinutes(0);
+					vm.opportunity.phases.proto.endDate.setSeconds(0);
+					vm.opportunity.phases.proto.startDate.setHours(16);
+					vm.opportunity.phases.proto.startDate.setMinutes(0);
+					vm.opportunity.phases.proto.startDate.setSeconds(0);
 
 					//
 					// confirm save only if the user is also publishing
@@ -632,7 +686,7 @@ import '../css/opportunities.css';
 					promise
 						.then(() => {
 							if (savemeSeymour) {
-								return vm.opportunity.createOrUpdate();
+								return OpportunitiesService.update(vm.opportunity).$promise;
 							} else {
 								return Promise.reject({ data: { message: 'Publish Cancelled' } });
 							}
