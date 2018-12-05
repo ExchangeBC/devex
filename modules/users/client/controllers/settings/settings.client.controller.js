@@ -68,7 +68,7 @@
 			'Authentication',
 			'UsersService',
 			'capabilities',
-			'CapabilitiesMethods',
+			'CapabilitiesCommon',
 			'TINYMCE_OPTIONS',
 			function(
 				$scope,
@@ -77,7 +77,7 @@
 				Authentication,
 				UsersService,
 				capabilities,
-				CapabilitiesMethods,
+				CapabilitiesCommon,
 				TINYMCE_OPTIONS
 			) {
 				var vm = this;
@@ -87,7 +87,7 @@
 				//
 				// set up the structures for capabilities
 				//
-				CapabilitiesMethods.init(vm, vm.user, capabilities);
+				CapabilitiesCommon.init(vm, vm.user, capabilities);
 				capabilities.forEach(function(cap) {
 					cap.isOpen = false;
 				});
@@ -104,7 +104,7 @@
 					//
 					// reconcile the meta version of the capability data into the model
 					//
-					CapabilitiesMethods.reconcile(vm, vm.user);
+					CapabilitiesCommon.reconcile(vm, vm.user);
 					//
 					// do the update
 					//
@@ -117,7 +117,7 @@
 								delay: 2000,
 								message: '<i class="fas fa-3x fa-check-circle"></i> <h4>Changes saved</h4>'
 							});
-							CapabilitiesMethods.init(vm, vm.user, capabilities);
+							CapabilitiesCommon.init(vm, vm.user, capabilities);
 						},
 						function(response) {
 							Notification.error({

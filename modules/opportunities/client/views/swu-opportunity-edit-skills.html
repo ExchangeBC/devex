@@ -7,13 +7,20 @@
   </div>
   <table>
     <tbody>
-      <tr ng-repeat="c in vm.all.capabilities" ng-if="vm.all.iOppCapabilities[c.code]">
-        <th scope="row"><label class="label label-lg label-cap-default {{c.labelClass}}"><i class="fas fa-circle"></i>
-            {{c.name}}</label></th>
+      <tr ng-repeat="capability in vm.allCapabilities" ng-if="vm.isCapabilitySelected(capability)">
+        <th scope="row" >
+          <label class="label label-lg label-cap-default {{capability.labelClass}}">
+            <i class="fas fa-circle"></i>
+            {{capability.name}}
+          </label>
+        </th>
         <td>
           <label-list>
-            <label ng-repeat="s in c.skills" class="label mx-1" ng-class="{'label-preferred-skill':!vm.all.iOppCapabilitySkills[s.code],'label-preferred-skill-selected':vm.all.iOppCapabilitySkills[s.code]}"
-              ng-click="vm.all.iOppCapabilitySkills[s.code]=!vm.all.iOppCapabilitySkills[s.code];vm.inp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.prp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];vm.imp.iOppCapabilitySkills[s.code]=vm.all.iOppCapabilitySkills[s.code];">{{s.name}}</label>
+            <label ng-repeat="skill in capability.skills" class="label mx-1"
+                   ng-class="{'label-preferred-skill': !vm.isSkillSelected(skill), 'label-preferred-skill-selected': vm.isSkillSelected(skill)}"
+                   ng-click="vm.toggleSelectedSkill(capability, skill)">
+                    {{skill.name}}
+            </label>
           </label-list>
         </td>
       </tr>

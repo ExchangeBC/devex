@@ -1,16 +1,17 @@
 <div class="mx-5 my-4">
   <div class="row">
-    <div class="col-sm-4">
-      <div class="panel panel-default">
+    <div class="col-sm-4 ">
+      <div class="panel panel-default"
+           ng-class="{'text-secondary': !vm.isPhaseIncluded(vm.opportunity.phases.inception)}">
         <div class="panel-body">
-          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oimp.isImplementation && !vm.oinp.isInception && !vm.oprp.isPrototype"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true; vm.oinp.isInception = true; vm.oprp.isPrototype = true">Start
-            here</button>
-          <button type="button" class="btn btn-block btn-default" ng-if="vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = false;">Cancel</button>
-          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oinp.isInception = true; vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add
-            this phase</button>
+
+          <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-primary"
+                    ng-click="vm.changeToStartPhase(vm.opportunity.phases.inception)">
+              Start Here
+            </button>
+          </div>
+
           <hr>
           <h2 style="text-align: center"><i class="fas fa-map"></i> Inception</h2>
           <p>During inception, you take your business goals and Discovery research you've done with your users and
@@ -33,11 +34,11 @@
               <li>A product backlog for the Alpha release</li>
             </ul>
           </div>
-          <div ng-if="vm.oinp.isInception">
+          <div ng-if="vm.opportunity.phases.inception.isInception">
             <hr>
             <label for="start-date" class="text-black-50">I want Inception to <span class="strong">start</span> on or
               before:</label>
-            <form-input ng-model="vm.oinp.startDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.inception.startDate" x-form="vm.opportunityForm" x-options='{
 									"id":"inceptionStartDate",
 									"name":"inceptionStartDate",
 									"type":"date"
@@ -45,9 +46,9 @@
             </form-input>
             <br>
             <label for="phase-deadline" class="text-black-50">I want Inception <span class="strong">complete</span> by:</label>
-            <form-input ng-model="vm.oinp.endDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.inception.endDate" x-form="vm.opportunityForm" x-options='{
 									"id":"inceptionStartDate",
-									"name":"inceptionStartDate",
+                  "name":"inceptionStartDate",
 									"type":"date"
 								}'>
             </form-input>
@@ -56,11 +57,15 @@
             <p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>,
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
             <ul class="list-group">
-              <li class="list-group-item" ng-repeat="capability in vm.inp.capabilities" ng-class="{'list-group-item-selected' : vm.inp.iOppCapabilities[capability.code]}"
-                ng-click="$event.stopPropagation();vm.inp.iOppCapabilities[capability.code] = !vm.inp.iOppCapabilities[capability.code];vm.inp.iOppCapabilitiesCore[capability.code] = vm.inp.iOppCapabilities[capability.code] && vm.inp.iOppCapabilitiesCore[capability.code]">
+              <li class="list-group-item"
+                  ng-repeat="capability in vm.allCapabilities"
+                  ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.inceptionCapabilities)}"
+                  ng-click="vm.toggleSelectedCapability(capability, vm.inceptionCapabilities)">
                 <a href="">{{capability.name}}</a>
-                <label class="label label-fulltime pull-right" ng-class="{'label-fulltime-selected' : vm.inp.iOppCapabilitiesCore[capability.code]}"
-                  ng-click="$event.stopPropagation();vm.inp.iOppCapabilitiesCore[capability.code] = !vm.inp.iOppCapabilitiesCore[capability.code];vm.inp.iOppCapabilities[capability.code] = vm.inp.iOppCapabilities[capability.code]||vm.inp.iOppCapabilitiesCore[capability.code];">
+                <label class="label label-fulltime float-right"
+                      ng-if="vm.isCapabilitySelected(capability, vm.inceptionCapabilities)"
+                      ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.inceptionCoreCaps)}"
+                      ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.inceptionCoreCaps)">
                   F/T
                 </label>
               </li>
@@ -70,16 +75,16 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <div class="panel panel-default">
+      <div class="panel panel-default" ng-class="{'text-secondary': !vm.isPhaseIncluded(vm.opportunity.phases.proto)}">
         <div class="panel-body">
-          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true;">Start
-            here</button>
-          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && vm.oprp.isPrototype && vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = false;">Cancel</button>
-          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oprp.isPrototype = true; vm.oimp.isImplementation = true; ">Add
-            this phase</button>
+
+            <div class="d-flex justify-content-center">
+              <button type="button" class="btn btn-primary"
+                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.proto)">
+                Start Here
+              </button>
+            </div>
+
           <hr>
           <h2 style="text-align: center"><i class="fas fa-rocket"></i> Proof of Concept</h2>
           <p>In this phase, you make your value propositions tangible so they can be validated. Here's where you get
@@ -104,11 +109,11 @@
               <li>Resourcing plan for Implementation</li>
             </ul>
           </div>
-          <div ng-if="vm.oprp.isPrototype">
+          <div ng-if="vm.opportunity.phases.proto.isPrototype">
             <hr>
             <label for="start-date" class="text-black-50">I want the P.O.C. phase to <span class="strong">start</span>
               on or before:</label>
-            <form-input ng-model="vm.oprp.startDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.proto.startDate" x-form="vm.opportunityForm" x-options='{
 									"id":"prototypeStartDate",
 									"name":"prototypeStartDate",
 									"type":"date"
@@ -117,7 +122,7 @@
             <br>
             <label for="phase-deadline" class="text-black-50">I want an <span class="strong">Alpha release</span> on or
               before:</label>
-            <form-input ng-model="vm.oprp.endDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.proto.endDate" x-form="vm.opportunityForm" x-options='{
 									"id":"prototypeStartDate",
 									"name":"prototypeStartDate",
 									"type":"date"
@@ -127,16 +132,20 @@
             <h4>Capabilities</h4>
             <p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>,
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
-            <ul class="list-group">
-              <li class="list-group-item" ng-repeat="capability in vm.prp.capabilities" ng-class="{'list-group-item-selected' : vm.prp.iOppCapabilities[capability.code]}"
-                ng-click="$event.stopPropagation();vm.prp.iOppCapabilities[capability.code] = !vm.prp.iOppCapabilities[capability.code];vm.prp.iOppCapabilitiesCore[capability.code] = vm.prp.iOppCapabilities[capability.code] && vm.prp.iOppCapabilitiesCore[capability.code]">
-                <a href="">{{capability.name}}</a>
-                <label class="label label-fulltime pull-right" ng-class="{'label-fulltime-selected' : vm.prp.iOppCapabilitiesCore[capability.code]}"
-                  ng-click="$event.stopPropagation();vm.prp.iOppCapabilitiesCore[capability.code] = !vm.prp.iOppCapabilitiesCore[capability.code];vm.prp.iOppCapabilities[capability.code] = vm.prp.iOppCapabilities[capability.code]||vm.prp.iOppCapabilitiesCore[capability.code];">
-                  F/T
-                </label>
-              </li>
-            </ul>
+              <ul class="list-group">
+                <li class="list-group-item"
+                    ng-repeat="capability in vm.allCapabilities"
+                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.prototypeCapabilities)}"
+                    ng-click="vm.toggleSelectedCapability(capability, vm.prototypeCapabilities)">
+                  <a href="">{{capability.name}}</a>
+                  <label class="label label-fulltime float-right"
+                        ng-if="vm.isCapabilitySelected(capability, vm.prototypeCapabilities)"
+                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.prototypeCoreCaps)}"
+                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.prototypeCoreCaps)">
+                    F/T
+                  </label>
+                </li>
+              </ul>
           </div>
         </div>
       </div>
@@ -144,10 +153,14 @@
     <div class="col-sm-4">
       <div class="panel panel-default">
         <div class="panel-body">
-          <button type="button" class="btn btn-block btn-primary" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && !vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = true;">Start here</button>
-          <button type="button" class="btn btn-block btn-default" ng-if="!vm.oinp.isInception && !vm.oprp.isPrototype && vm.oimp.isImplementation"
-            ng-click="$event.preventDefault();$event.stopPropagation();vm.oimp.isImplementation = false;">Cancel</button>
+
+            <div class="d-flex justify-content-center">
+              <button type="button" class="btn btn-primary"
+                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.implementation)">
+                Start Here
+              </button>
+            </div>
+
           <hr>
           <h2 style="text-align: center"><i class="fas fa-cogs"></i> Implementation</h2>
           <p>If you’ve reached the implementation stage, your organization is fully invested in the new digital product
@@ -168,11 +181,11 @@
               <li>Delivery of the functional components in the Product Roadmap</li>
             </ul>
           </div>
-          <div ng-if="vm.oimp.isImplementation">
+          <div ng-if="vm.opportunity.phases.implementation.isImplementation">
             <hr>
             <label for="start-date" class="text-black-50">I want this phase to <span class="strong">start</span> on or
               before:</label>
-            <form-input ng-model="vm.oimp.startDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.implementation.startDate" x-form="vm.opportunityForm" x-options='{
 									"id":"prototypeStartDate",
 									"name":"prototypeStartDate",
 									"type":"date"
@@ -180,7 +193,7 @@
             </form-input>
             <br>
             <label for="phase-deadline" class="text-black-50">I want my Implementation team until:</label>
-            <form-input ng-model="vm.oimp.endDate" x-form="vm.opportunityForm" x-options='{
+            <form-input ng-model="vm.opportunity.phases.implementation.endDate" x-form="vm.opportunityForm" x-options='{
 									"id":"prototypeStartDate",
 									"name":"prototypeStartDate",
 									"type":"date"
@@ -190,16 +203,20 @@
             <h4>Capabilities</h4>
             <p>Select the capabilities you need. For any capabilities you expect to be available <span class="strong">full-time</span>,
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
-            <ul class="list-group">
-              <li class="list-group-item" ng-repeat="capability in vm.imp.capabilities" ng-class="{'list-group-item-selected' : vm.imp.iOppCapabilities[capability.code]}"
-                ng-click="$event.stopPropagation();vm.imp.iOppCapabilities[capability.code] = !vm.imp.iOppCapabilities[capability.code];vm.imp.iOppCapabilitiesCore[capability.code] = vm.imp.iOppCapabilities[capability.code] && vm.imp.iOppCapabilitiesCore[capability.code]">
-                <a href="">{{capability.name}}</a>
-                <label class="label label-fulltime pull-right" ng-class="{'label-fulltime-selected' : vm.imp.iOppCapabilitiesCore[capability.code]}"
-                  ng-click="$event.stopPropagation();vm.imp.iOppCapabilitiesCore[capability.code] = !vm.imp.iOppCapabilitiesCore[capability.code];vm.imp.iOppCapabilities[capability.code] = vm.imp.iOppCapabilities[capability.code]||vm.imp.iOppCapabilitiesCore[capability.code];">
-                  F/T
-                </label>
-              </li>
-            </ul>
+              <ul class="list-group">
+                <li class="list-group-item"
+                    ng-repeat="capability in vm.allCapabilities"
+                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.implementationCapabilities)}"
+                    ng-click="vm.toggleSelectedCapability(capability, vm.implementationCapabilities)">
+                  <a href="">{{capability.name}}</a>
+                  <label class="label label-fulltime float-right"
+                        ng-if="vm.isCapabilitySelected(capability, vm.implementationCapabilities)"
+                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.implementationCoreCaps)}"
+                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.implementationCoreCaps)">
+                    F/T
+                  </label>
+                </li>
+              </ul>
           </div>
         </div>
       </div>
