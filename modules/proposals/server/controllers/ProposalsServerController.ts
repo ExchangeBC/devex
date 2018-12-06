@@ -21,13 +21,13 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/config';
 import fileStream from '../../../../config/lib/filestream';
-import { CoreHelpers } from '../../../core/server/controllers/core.server.helpers';
-import { CoreErrors } from '../../../core/server/controllers/errors.server.controller';
-import OpportunitiesController from '../../../opportunities/server/controllers/opportunities.server.controller';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
-import { User } from '../../../users/server/models/user.server.model';
-import { IProposalDocument } from '../interfaces/IProposalDocument';
-import { Proposal } from '../models/proposal.server.model';
+import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
+import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
+import OpportunitiesServerController from '../../../opportunities/server/controllers/OpportunitiesServerController';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import UserModel from '../../../users/server/models/UserModel';
+import IProposalDocument from '../interfaces/IProposalDocument';
+import ProposalModel from '../models/ProposalModel';
 
 class ProposalsServerController {
 
@@ -37,15 +37,12 @@ class ProposalsServerController {
 
 	private static instance: ProposalsServerController;
 
-	private helpers = new CoreHelpers();
-	private errorHandler = new CoreErrors();
-
 	private userfields =
 		'_id displayName firstName lastName email phone address username profileImageURL \
 						businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 						roles provider';
 
-	// private opportunitiesController = OpportunitiesController.getInstance();
+	private constructor() {};
 
 	// Get a proposal for the given opportunity and user
 	public getUserProposalForOpp = (req, res) => {
@@ -53,7 +50,7 @@ class ProposalsServerController {
 			return res.json({});
 		}
 
-		Proposal.findOne({ user: req.user._id, opportunity: req.opportunity._id })
+		ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
 			.populate('opportunity')
@@ -61,7 +58,7 @@ class ProposalsServerController {
 			.exec((err, proposals) => {
 				if (err) {
 					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
+						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
 					res.json(proposals);
@@ -90,7 +87,7 @@ class ProposalsServerController {
 			})
 			.catch(e => {
 				res.status(422).send({
-					message: this.errorHandler.getErrorMessage(e)
+					message: CoreServerErrors.getErrorMessage(e)
 				});
 			});
 	};
@@ -106,13 +103,13 @@ class ProposalsServerController {
 	// Create a new proposal. The user doing the creation will be set as the
 	// administrator
 	public create = (req, res) => {
-		const proposal = new Proposal(req.body);
+		const proposal = new ProposalModel(req.body);
 		proposal.status = 'Draft';
 		proposal.user = req.user;
 		//
 		// set the audit fields so we know who did what when
 		//
-		this.helpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, req.user);
 		//
 		// save and return
 		//
@@ -134,7 +131,7 @@ class ProposalsServerController {
 		});
 
 		// set the audit fields so we know who did what when
-		this.helpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, req.user);
 
 		this.saveProposalRequest(req, res, proposal);
 	};
@@ -153,7 +150,7 @@ class ProposalsServerController {
 		return new Promise((resolve, reject) => {
 			proposal.status = 'Assigned';
 
-			this.helpers.applyAudit(proposal, user);
+			CoreServerHelpers.applyAudit(proposal, user);
 
 			this.saveProposal(proposal).then(p => {
 				proposal = p;
@@ -166,17 +163,17 @@ class ProposalsServerController {
 		const proposal = req.proposal;
 		proposal.status = 'Assigned';
 		proposal.isAssigned = true;
-		this.helpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, req.user);
 		this.saveProposal(proposal)
 			.then(updatedProposal => {
-				OpportunitiesController.assignswu(proposal.opportunity._id, proposal._id, proposal.user, req.user);
+				OpportunitiesServerController.assignswu(proposal.opportunity._id, proposal._id, proposal.user, req.user);
 				return updatedProposal;
 			})
 			.then(updatedProposal => {
 				res.json(updatedProposal);
 			})
 			.catch(e => {
-				res.status(422).send({ message: this.errorHandler.getErrorMessage(e) });
+				res.status(422).send({ message: CoreServerErrors.getErrorMessage(e) });
 			});
 	};
 
@@ -185,7 +182,7 @@ class ProposalsServerController {
 	public unassign = (proposal, user) => {
 		return new Promise((resolve, reject) => {
 			proposal.status = 'Submitted';
-			this.helpers.applyAudit(proposal, user);
+			CoreServerHelpers.applyAudit(proposal, user);
 			this.saveProposal(proposal).then(p => {
 				proposal = p;
 				resolve();
@@ -199,7 +196,7 @@ class ProposalsServerController {
 		proposal.remove(err => {
 			if (err) {
 				return res.status(422).send({
-					message: this.errorHandler.getErrorMessage(err)
+					message: CoreServerErrors.getErrorMessage(err)
 				});
 			} else {
 				res.json(proposal);
@@ -209,7 +206,7 @@ class ProposalsServerController {
 
 	public deleteForOrg = orgid => {
 		return new Promise((resolve, reject) => {
-			Proposal.find({ org: orgid }, (err, proposals) => {
+			ProposalModel.find({ org: orgid }, (err, proposals) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -229,7 +226,7 @@ class ProposalsServerController {
 
 	// Return a list of all proposals
 	public list = (req, res) => {
-		Proposal.find({})
+		ProposalModel.find({})
 			.sort('name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -238,7 +235,7 @@ class ProposalsServerController {
 			.exec((err, proposals) => {
 				if (err) {
 					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
+						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
 					res.json(proposals);
@@ -270,7 +267,7 @@ class ProposalsServerController {
 			proto: [],
 			implementation: []
 		};
-		User.find({
+		UserModel.find({
 			_id: { $in: allMembers }
 		})
 			.select('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
@@ -320,7 +317,7 @@ class ProposalsServerController {
 
 	// New empty proposal
 	public new = (req, res) => {
-		const p = new Proposal();
+		const p = new ProposalModel();
 		res.json(p);
 	};
 
@@ -336,7 +333,7 @@ class ProposalsServerController {
 			return res.json({ message: 'User is not authorized' });
 		}
 
-		Proposal.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
+		ProposalModel.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
 			.sort('created')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -360,7 +357,7 @@ class ProposalsServerController {
 			.exec((err, proposals) => {
 				if (err) {
 					return res.status(422).send({
-						message: this.errorHandler.getErrorMessage(err)
+						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
 					res.json(proposals);
@@ -376,7 +373,7 @@ class ProposalsServerController {
 			});
 		}
 
-		Proposal.findById(id)
+		ProposalModel.findById(id)
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
 			.populate('opportunity')
@@ -486,7 +483,7 @@ class ProposalsServerController {
 					return o;
 				}
 			});
-			User.find({ _id: { $in: userids } })
+			UserModel.find({ _id: { $in: userids } })
 				.populate('capabilities', 'name code')
 				.populate('capabilitySkills', 'name code')
 				.exec((err, members) => {

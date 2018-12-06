@@ -1,15 +1,8 @@
-import * as handlebars from 'handlebars';
+import { TemplateDelegate } from 'handlebars';
 import { Document } from 'mongoose';
+import IMessageActionDocument from './IMessageActionDocument';
 
-export interface IMessageAction {
-	actionCd: string;
-	linkTitleTemplate?: string;
-	isDefault: boolean;
-	linkTitle: string;
-	linkResolver?: handlebars.TemplateDelegate<any>;
-}
-
-export interface IMessageTemplateDocument extends Document {
+export default interface IMessageTemplateDocument extends Document {
 	messageCd: string;
 	description: string;
 	isSubscriptionType: boolean;
@@ -21,11 +14,11 @@ export interface IMessageTemplateDocument extends Document {
 	modelsRequired: [string];
 	daysToArchive: number;
 	linkTemplate: string;
-	actions: [IMessageAction],
-	messageBody?: handlebars.TemplateDelegate<any>;
-	messageShort?: handlebars.TemplateDelegate<any>;
-	messageTitle?: handlebars.TemplateDelegate<any>;
-	emailBody?: handlebars.TemplateDelegate<any>;
-	emailSubject?: handlebars.TemplateDelegate<any>;
-	link?: handlebars.TemplateDelegate<any>;
+	actions: [IMessageActionDocument];
+	messageBody?: TemplateDelegate<any>;
+	messageShort?: TemplateDelegate<any>;
+	messageTitle?: TemplateDelegate<any>;
+	emailBody?: TemplateDelegate<any>;
+	emailSubject?: TemplateDelegate<any>;
+	link?: TemplateDelegate<any>;
 }

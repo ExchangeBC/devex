@@ -1,14 +1,9 @@
 import { Document } from 'mongoose';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
-import { IMessageAction } from './IMessageTemplateDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import IMessageActionDocument from './IMessageActionDocument';
+import IMessageEmailsDocument from './IMessageEmailsDocument';
 
-export interface IMessageEmailsDocument extends Document {
-	dateSent: Date;
-	isOk: boolean;
-	error: any;
-}
-
-export interface IMessageDocument extends Document {
+export default interface IMessageDocument extends Document {
 	messageCd: string;
 	messageLevel: string;
 	user: IUserDocument;
@@ -19,7 +14,7 @@ export interface IMessageDocument extends Document {
 	emailBody: string;
 	emailSubject: string;
 	link: string;
-	actions: [IMessageAction];
+	actions: [IMessageActionDocument];
 	emails: [IMessageEmailsDocument];
 	emailSent: boolean;
 	emailRetries: number;

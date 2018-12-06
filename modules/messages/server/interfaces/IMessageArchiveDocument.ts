@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
-import { IMessageEmailsDocument } from './IMessageDocument';
-import { IMessageAction } from './IMessageTemplateDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import IMessageActionDocument from './IMessageActionDocument';
+import IMessageEmailsDocument from './IMessageDocument';
 
-export interface IMessageArchiveDocument extends Document {
+export default interface IMessageArchiveDocument extends Document {
 	messageCd: string;
 	user: IUserDocument;
 	userEmail: string;
@@ -13,7 +13,7 @@ export interface IMessageArchiveDocument extends Document {
 	emailBody: string;
 	emailSubject: string;
 	link: string;
-	actions: [IMessageAction];
+	actions: [IMessageActionDocument];
 	email: [IMessageEmailsDocument];
 	emailSent: boolean;
 	emailRetries: number;

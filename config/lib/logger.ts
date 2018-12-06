@@ -2,12 +2,12 @@
 'use strict';
 
 import chalk from 'chalk';
-import * as fs from 'fs';
-import * as _ from 'lodash';
-import * as winston from 'winston';
-import * as config from '../config';
+import fs from 'fs';
+import _ from 'lodash';
+import winston from 'winston';
+import config from '../config';
 
-export class Logger {
+export default class Logger {
 	private logger;
 
 	constructor() {

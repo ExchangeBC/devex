@@ -1,7 +1,7 @@
 import { Document } from 'mongoose';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 
-export interface IProjectDocument extends Document {
+export default interface IProjectDocument extends Document {
 	code: string;
 	name: string;
 	short: string;

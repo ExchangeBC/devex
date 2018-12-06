@@ -1,12 +1,12 @@
 import { Document } from 'mongoose';
 import { IOpportunityDocument } from '../../../opportunities/server/interfaces/IOpportunityDocument';
-import { IOrgDocument } from '../../../orgs/server/interfaces/IOrgDocument';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
-import { IAttachmentDocument } from '../interfaces/IAttachmentDocument';
-import { IPhasesDocument } from '../interfaces/IPhasesSchema';
-import { ITeamQuestionResponseDocument } from '../interfaces/ITeamQuestionResponseDocument';
+import IOrgDocument from '../../../orgs/server/interfaces/IOrgDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import IAttachmentDocument from '../interfaces/IAttachmentDocument';
+import ITeamQuestionResponseDocument from '../interfaces/ITeamQuestionResponseDocument';
+import IPhasesDocument from './IPhasesDocument';
 
-export interface IProposalDocument extends Document {
+export default interface IProposalDocument extends Document {
 	summary: string;
 	detail: string;
 	opportunity: IOpportunityDocument;

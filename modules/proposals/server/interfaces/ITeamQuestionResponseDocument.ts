@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface ITeamQuestionResponseDocument extends Document {
+export default interface ITeamQuestionResponseDocument extends Document {
 	question: string;
 	response: string;
 	rank: number;

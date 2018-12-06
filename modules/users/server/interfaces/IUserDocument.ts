@@ -1,8 +1,8 @@
 import { Document } from 'mongoose';
-import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import { ICapabilitySkillDocument } from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
 
-export interface IUserDocument extends Document {
+export default interface IUserDocument extends Document {
 	firstName: string;
 	lastName: string;
 	displayName: string;
