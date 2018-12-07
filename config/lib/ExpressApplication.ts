@@ -29,6 +29,7 @@ import UserConfig from '../../modules/users/server/config/UserConfig';
 import AdminRouter from '../../modules/users/server/routes/AdminRouter';
 import config from '../config';
 import Logger from './Logger';
+import SocketIOController from './SocketIOController';
 
 class ExpressApplication {
 	public static getInstance() {
@@ -333,7 +334,7 @@ class ExpressApplication {
 	 */
 	private configureSocketIO = (app, db) => {
 		// Load the Socket.io configuration
-		const server = require('./socket.io')(app, db);
+		const server = SocketIOController.init(app, db);
 
 		// Return server object
 		return server;
