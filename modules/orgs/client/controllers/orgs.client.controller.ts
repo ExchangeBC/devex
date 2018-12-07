@@ -305,58 +305,6 @@ import angular from 'angular';
 				};
 			}
 		])
-		// -------------------------------------------------------------------------
-		//
-		// controller for skills
-		//
-		// -------------------------------------------------------------------------
-		.controller('OrgSkillsController', [
-			'capabilities',
-			'Notification',
-			'org',
-			function(capabilities, Notification, org) {
-				var vm = this;
-				// vm.features = window.features;
-				vm.org = org;
-				vm.capabilities = capabilities;
-				vm.updateUserProfile = function(isValid) {
-					//
-					// Create a new org, or update the current instance
-					//
-					vm.org
-						.createOrUpdate()
-						//
-						// success, notify and return to list
-						//
-						.then(function() {
-							Notification.success({
-								message: '<i class="fas fa-check-circle"></i> capabilities saved successfully!'
-							});
-						})
-						//
-						// fail, notify and stay put
-						//
-						.catch(function(res) {
-							Notification.error({
-								message: res.data.message,
-								title: '<i class=\'fas fa-exclamation-triangle\'></i> capabilities save error!'
-							});
-						});
-				};
-			}
-		])
-		// =========================================================================
-		//
-		// edit org teams list
-		//
-		// =========================================================================
-		.controller('OrgTeamsController', [
-			'org',
-			function(org) {
-				var vm = this;
-				vm.org = org;
-			}
-		])
 		// =========================================================================
 		//
 		// edit org member list
@@ -369,15 +317,18 @@ import angular from 'angular';
 			'OrgsService',
 			'ask',
 			'$uibModal',
-			function($rootScope, org, Notification, OrgsService, ask, $uibModal) {
+			'allCapabilities',
+			function($rootScope, org, Notification, OrgsService, ask, $uibModal, allCapabilities) {
 				var vm = this;
 				vm.org = org;
 				vm.emaillist = '';
-				// -------------------------------------------------------------------------
-				//
-				// refresh the organization and also the additions email list
-				//
-				// -------------------------------------------------------------------------
+				vm.allCapabilities = allCapabilities;
+
+				vm.orgHasCapability = capability => {
+					return vm.org.capabilities.map(cap => cap.code).indexOf(capability.code) !== -1;
+				}
+
+				// refresh the organization, email list, and the capability/skill summary
 				vm.refresh = function() {
 					vm.orgForm.$setPristine();
 					vm.emaillist = '';
@@ -388,15 +339,8 @@ import angular from 'angular';
 						vm.loading = false;
 					});
 				};
-				// -------------------------------------------------------------------------
-				//
+
 				// add or remove members
-				// CC: swap out the reference here.  this does create a new reference and
-				// orphans the original, but since all we do on this screen is this action
-				// it really makes little difference.  If change was afffected immediately
-				// then this would be an issue
-				//
-				// -------------------------------------------------------------------------
 				vm.addMembers = function() {
 					vm.orgForm.$setPristine();
 					if (vm.emaillist !== '') {
@@ -411,9 +355,7 @@ import angular from 'angular';
 								return savedOrg;
 							})
 							.then(vm.displayResults)
-							//
 							// fail, notify and stay put
-							//
 							.catch(function(res) {
 								Notification.error({
 									message: res.message,
@@ -422,6 +364,7 @@ import angular from 'angular';
 							});
 					}
 				};
+
 				vm.removeMember = function(member) {
 					ask.yesNo(
 						'Are you sure you want to remove this member from your company? If you have added them to a proposal, you may no longer qualify to apply on the opportunity.'
@@ -436,6 +379,7 @@ import angular from 'angular';
 						}
 					});
 				};
+
 				vm.save = function() {
 					vm.orgForm.$setPristine();
 					vm.org.createOrUpdate().then(function() {
@@ -448,6 +392,7 @@ import angular from 'angular';
 						$rootScope.$broadcast('updateOrg', 'done');
 					});
 				};
+
 				vm.displayResults = function(result) {
 					if (!result.emaillist) return Promise.resolve();
 					return new Promise(function(resolve, reject) {
