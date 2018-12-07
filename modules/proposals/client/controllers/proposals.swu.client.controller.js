@@ -820,7 +820,8 @@ import '../css/proposals.css';
 						});
 					} else {
 						Upload.upload({
-							url: '/api/proposal/' + ppp.proposal._id + '/upload/doc',
+							method: 'POST',
+							url: '/api/proposals/' + ppp.proposal._id + '/documents',
 							data: {
 								file: file
 							}
