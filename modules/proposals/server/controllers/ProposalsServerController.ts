@@ -20,7 +20,8 @@ import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/config';
-import fileStream from '../../../../config/lib/filestream';
+import FileStream from '../../../../config/lib/FileStream';
+import MulterController from '../../../../config/lib/MulterController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import OpportunitiesServerController from '../../../opportunities/server/controllers/OpportunitiesServerController';
@@ -41,6 +42,7 @@ class ProposalsServerController {
 		'_id displayName firstName lastName email phone address username profileImageURL \
 						businessName businessAddress businessContactName businessContactPhone businessContactEmail \
 						roles provider';
+	private fileStream: FileStream = new FileStream();
 
 	private constructor() {};
 
@@ -408,8 +410,8 @@ class ProposalsServerController {
 		if (proposal) {
 			const storage = multer.diskStorage(config.uploads.diskStorage);
 			const upload = multer({ storage }).single('file');
-			const fileUploadFileFilter = require('../../../../config/lib/multer').fileUploadFileFilter;
-			// upload.fileFilter = fileUploadFileFilter;
+			const fileUploadFileFilter = MulterController.fileUploadFileFilter;
+			// (upload as any).fileFilter = fileUploadFileFilter;
 			upload(req, res, uploadError => {
 				if (uploadError) {
 					res.status(422).send(uploadError);
@@ -448,7 +450,7 @@ class ProposalsServerController {
 			return res.status(401).send({ message: 'Not permitted' });
 		}
 		const fileobj = req.proposal.attachments.id(req.params.documentId);
-		return fileStream(res, fileobj.path, fileobj.name, fileobj.type);
+		return this.fileStream.stream(res, fileobj.path, fileobj.name, fileobj.type);
 	};
 
 	private ensureProposalOwner = (proposal, user) => {

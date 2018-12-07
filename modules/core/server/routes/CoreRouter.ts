@@ -1,7 +1,7 @@
 'use strict';
 
 import config from '../../../../config/config';
-import fileStream from '../../../../config/lib/filestream';
+import FileStream from '../../../../config/lib/FileStream';
 import CoreServerController from '../controllers/CoreServerController';
 
 class CoreRouter {
@@ -10,6 +10,8 @@ class CoreRouter {
 	}
 
 	private static instance: CoreRouter;
+
+	private fileStream: FileStream = new FileStream();
 
 	private constructor() {}
 
@@ -35,7 +37,7 @@ class CoreRouter {
 			const fileobj = config.terms[version];
 			const home = config.home;
 			if (fileobj) {
-				return fileStream(res, home + '/' + fileobj.path, fileobj.name, fileobj.type);
+				return this.fileStream.stream(res, home + '/' + fileobj.path, fileobj.name, fileobj.type);
 			} else {
 				res.status(401).send({ message: 'No terms file found' });
 			}

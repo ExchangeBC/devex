@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import { Express } from 'express';
 import config from '../config';
 import ExpressApplication from './ExpressApplication';
-import mongoose from './mongoose';
+import MongooseController from './MongooseController';
 import seed from './Seed';
 
 class Application {
@@ -21,11 +21,10 @@ class Application {
 		return new Promise(resolve => {
 			let connection;
 			Promise.resolve()
-				.then(mongoose.connect)
+				.then(MongooseController.connect)
 				.then(conn => {
 					connection = conn;
 				})
-				.then(mongoose.loadModels)
 				.then(this.seedDB)
 				.then(() => {
 					resolve(ExpressApplication.init(connection));
