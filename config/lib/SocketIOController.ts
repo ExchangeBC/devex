@@ -10,7 +10,7 @@ import https from 'https';
 import passport from 'passport';
 import path from 'path';
 import socketio from 'socket.io';
-import config from '../config';
+import config from '../ApplicationConfig';
 
 class SocketIOController {
 	public static getInstance() {

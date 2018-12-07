@@ -4,7 +4,7 @@ import fs from 'fs';
 import _ from 'lodash';
 import multer from 'multer';
 import validator from 'validator';
-import config from '../../../../../config/config';
+import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
 import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';

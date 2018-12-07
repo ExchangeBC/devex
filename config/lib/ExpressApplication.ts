@@ -27,7 +27,7 @@ import ProjectsRouter from '../../modules/projects/server/routes/ProjectsRouter'
 import ProposalsRouter from '../../modules/proposals/server/routes/ProposalsRouter';
 import UserConfig from '../../modules/users/server/config/UserConfig';
 import AdminRouter from '../../modules/users/server/routes/AdminRouter';
-import config from '../config';
+import config from '../ApplicationConfig';
 import Logger from './Logger';
 import SocketIOController from './SocketIOController';
 

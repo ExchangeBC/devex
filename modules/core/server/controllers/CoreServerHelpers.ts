@@ -4,7 +4,7 @@
 import http from 'http';
 import https from 'https';
 import _ from 'lodash';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from './CoreServerErrors';
 
 class CoreServerHelpers {

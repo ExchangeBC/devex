@@ -1,6 +1,6 @@
 'use strict';
 
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
 import CoreServerController from '../controllers/CoreServerController';
 

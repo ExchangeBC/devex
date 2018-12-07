@@ -19,7 +19,7 @@ request : <code>-request
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';

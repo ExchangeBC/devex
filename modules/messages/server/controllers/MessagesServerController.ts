@@ -6,7 +6,7 @@ import htmlToText from 'html-to-text';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import nodemailer from 'nodemailer';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import UserModel from '../../../users/server/models/UserModel';

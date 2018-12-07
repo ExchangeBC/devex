@@ -1,7 +1,7 @@
 'use strict';
 
 import fetch from 'node-fetch';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 
 class CoreGithubController {
 	public static getInstance() {

@@ -1,25 +1,9 @@
 'use strict';
-/*
-
-Notes about orgs
-
-Roles:
-------
-Membership in a org is defined by the user having various roles attached to their
-user record. There are only three possible states: admin, member, or request.
-When a user requests membership they get the request role only, once accepted that
-simply gets changed to the member role. Roles are simply the org code with suffixes.
-
-member  : <code>
-admin   : <code>-admin
-request : <code>-request
-
-*/
 
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
 import CapabilityModel from '../../../capabilities/server/models/CapabilityModel';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';

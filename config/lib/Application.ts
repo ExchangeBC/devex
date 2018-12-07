@@ -3,7 +3,7 @@
 
 import chalk from 'chalk';
 import { Express } from 'express';
-import config from '../config';
+import config from '../ApplicationConfig';
 import ExpressApplication from './ExpressApplication';
 import MongooseController from './MongooseController';
 import seed from './Seed';

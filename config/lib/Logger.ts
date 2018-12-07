@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import _ from 'lodash';
 import winston from 'winston';
-import config from '../config';
+import config from '../ApplicationConfig';
 
 export default class Logger {
 	private logger;

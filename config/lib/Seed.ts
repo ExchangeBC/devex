@@ -6,7 +6,7 @@ import fs from 'fs';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import UserModel from '../../modules/users/server/models/UserModel';
-import config from '../config';
+import config from '../ApplicationConfig';
 
 class Seed {
 	public static getInstance() {

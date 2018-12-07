@@ -4,7 +4,7 @@
 import chalk from 'chalk';
 import _ from 'lodash';
 import mongoose, { Mongoose } from 'mongoose';
-import config from '../config';
+import config from '../ApplicationConfig';
 
 class MongooseController {
 	public static getInstance() {

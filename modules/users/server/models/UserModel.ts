@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { model, Model, Schema } from 'mongoose';
 import owasp from 'owasp-password-strength-test';
 import validator from 'validator';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 import IUserDocument from '../interfaces/IUserDocument';
 
 owasp.config(config.shared.owasp);

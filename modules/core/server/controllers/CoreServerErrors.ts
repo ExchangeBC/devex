@@ -1,6 +1,6 @@
 'use strict';
 
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 
 class CoreServerErrors {
 	public static getInstance() {

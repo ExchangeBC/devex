@@ -1,7 +1,7 @@
 'use strict';
 
 import validator from 'validator';
-import config from '../../../../config/config';
+import config from '../../../../config/ApplicationConfig';
 
 export class CoreServerController {
 	public static getInstance() {

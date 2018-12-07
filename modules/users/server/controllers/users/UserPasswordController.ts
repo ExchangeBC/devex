@@ -3,7 +3,7 @@
 import async from 'async';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
-import config from '../../../../../config/config';
+import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import UserModel from '../../models/UserModel';
 
