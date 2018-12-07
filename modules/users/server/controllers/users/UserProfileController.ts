@@ -129,11 +129,7 @@ class UserProfileController {
 		const user = req.user;
 		const storage = multer.diskStorage(config.uploads.diskStorage);
 		const upload = multer({ storage }).single('newProfilePicture');
-		const profileUploadFileFilter = require('../../../../../config/lib/multer').profileUploadFileFilter;
 		let existingImageUrl;
-
-		// Filtering to upload only images
-		(upload as any).fileFilter = profileUploadFileFilter;
 
 		if (user) {
 			existingImageUrl = user.profileImageURL;

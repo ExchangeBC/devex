@@ -21,7 +21,6 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/config';
 import FileStream from '../../../../config/lib/FileStream';
-import MulterController from '../../../../config/lib/MulterController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import OpportunitiesServerController from '../../../opportunities/server/controllers/OpportunitiesServerController';
@@ -410,8 +409,6 @@ class ProposalsServerController {
 		if (proposal) {
 			const storage = multer.diskStorage(config.uploads.diskStorage);
 			const upload = multer({ storage }).single('file');
-			const fileUploadFileFilter = MulterController.fileUploadFileFilter;
-			// (upload as any).fileFilter = fileUploadFileFilter;
 			upload(req, res, uploadError => {
 				if (uploadError) {
 					res.status(422).send(uploadError);
