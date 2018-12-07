@@ -1,12 +1,8 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 const _ = require('lodash'),
 	fs = require('fs'),
-	defaultAssets = require('./config/assets/default'),
-	testAssets = require('./config/assets/test'),
+	defaultAssets = require('./config/assets/assets'),
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	ts = require('gulp-typescript'),
@@ -122,7 +118,7 @@ gulp.task('nodemon', () => {
 			nodeArgs: ['--inspect=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			delay: 1,
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
 		});
 		resolve();
 	});
@@ -136,27 +132,10 @@ gulp.task('nodemon-debug', function() {
 			nodeArgs: ['--inspect-brk=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			verbose: true,
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
 		});
 		resolve();
 	});
-});
-
-// ESLint JS linting task
-gulp.task('eslint', () => {
-	var assets = _.union(
-		defaultAssets.server.gulpConfig,
-		defaultAssets.server.allJS,
-		// defaultAssets.client.js,
-		testAssets.tests.server,
-		testAssets.tests.client,
-		testAssets.tests.e2e
-	);
-
-	return gulp
-		.src(assets)
-		.pipe(plugins.eslint())
-		.pipe(plugins.eslint.format());
 });
 
 // Make sure upload directory exists

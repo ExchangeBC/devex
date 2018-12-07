@@ -76,9 +76,6 @@ class ExpressApplication {
 		// Initialize Modules configuration
 		this.initModulesConfiguration(app, db);
 
-		// Initialize modules server authorization policies
-		this.initModulesServerPolicies();
-
 		// Initialize modules server routes
 		this.initModulesServerRoutes(app);
 
@@ -240,10 +237,6 @@ class ExpressApplication {
 	 * Invoke modules server configuration
 	 */
 	private initModulesConfiguration = (app, db) => {
-		config.files.server.configs.forEach(configPath => {
-			require(path.join(__dirname + '../../../', configPath))(app, db);
-		});
-
 		UserConfig.init(app);
 	};
 
@@ -281,24 +274,9 @@ class ExpressApplication {
 	};
 
 	/**
-	 * Configure the modules ACL policies
-	 */
-	private initModulesServerPolicies = () => {
-		// Globbing policy files
-		config.files.server.policies.forEach(policyPath => {
-			require(path.join(__dirname + '../../../', policyPath)).invokeRolesPolicies();
-		});
-	};
-
-	/**
 	 * Configure the modules server routes
 	 */
 	private initModulesServerRoutes = app => {
-		// Globbing routing files
-		config.files.server.routes.forEach(routePath => {
-			require(path.join(__dirname + '../../../', routePath))(app);
-		});
-
 		MessagesRouter.setupRoutes(app);
 		MessageHandlerRouter.setupRoutes(app);
 		OrgsRouter.setupRoutes(app);

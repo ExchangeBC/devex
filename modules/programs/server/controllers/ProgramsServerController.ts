@@ -236,7 +236,7 @@ class ProgramsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public listMembers = (req, res) => {
-		exports.members(req.program, (err, users) => {
+		this.members(req.program, (err, users) => {
 			if (err) {
 				return res.status(422).send({
 					message: CoreServerErrors.getErrorMessage(err)
@@ -253,7 +253,7 @@ class ProgramsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public listRequests = (req, res) => {
-		exports.requests(req.program, (err, users) => {
+		this.requests(req.program, (err, users) => {
 			if (err) {
 				return res.status(422).send({
 					message: CoreServerErrors.getErrorMessage(err)

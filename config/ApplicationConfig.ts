@@ -30,13 +30,7 @@ class ApplicationConfig {
 		this.validateEnvironmentVariable();
 
 		// Get the default assets
-		const defaultAssets = require(path.join(process.cwd(), 'config/assets/default'));
-
-		// Get the current assets
-		const environmentAssets = require(path.join(process.cwd(), 'config/assets/', process.env.NODE_ENV)) || {};
-
-		// Merge assets
-		const assets = _.merge(defaultAssets, environmentAssets);
+		const assets = require(path.join(process.cwd(), 'config/assets/assets'));
 
 		// Get the default config
 		const defaultConfig = require(path.join(process.cwd(), 'config/env/default'));
@@ -190,24 +184,8 @@ class ApplicationConfig {
 	private initGlobalConfigFiles = (config, assets) => {
 		// Appending files
 		config.files = {
-			server: {},
 			client: {}
 		};
-
-		// Setting Globbed model files
-		config.files.server.models = this.getGlobbedPaths(assets.server.models);
-
-		// Setting Globbed route files
-		config.files.server.routes = this.getGlobbedPaths(assets.server.routes);
-
-		// Setting Globbed config files
-		config.files.server.configs = this.getGlobbedPaths(assets.server.config);
-
-		// Setting Globbed socket files
-		config.files.server.sockets = this.getGlobbedPaths(assets.server.sockets);
-
-		// Setting Globbed policies files
-		config.files.server.policies = this.getGlobbedPaths(assets.server.policies);
 
 		// Setting Globbed js files
 		config.files.client.js = this.getGlobbedPaths(assets.client.lib.js, 'public/').concat(this.getGlobbedPaths(assets.client.js, ['public/']));
