@@ -73,6 +73,17 @@ import angular from 'angular';
 						value: ppp.proposal.isAcceptedTerms
 					};
 
+					// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
+					// if they do, transition to edit view for that proposal
+					if (!editing) {
+						ProposalsService.getMyProposal({ opportunityId: opportunity.code }).$promise
+						.then(response => {
+							if (response && response._id) {
+								$state.go('proposaladmin.editswu', { proposalId: response._id, opportunityId: opportunity.code });
+							}
+						})
+					}
+
 					//
 					// this is all the people in the org
 					//
@@ -527,7 +538,13 @@ import angular from 'angular';
 						return false;
 					}
 					ppp.proposal.isAcceptedTerms = ppp.checkBoxModel.value;
-					saveproposal();
+					saveproposal()
+					.then(() => {
+						// if this is a newly created proposal, transition to edit view
+						if (!editing) {
+							$state.go('proposaladmin.editcwu', { proposalId: ppp.proposal._id, opportunityId: ppp.opportunity.code });
+						}
+					})
 				};
 
 				// leave without saving any work

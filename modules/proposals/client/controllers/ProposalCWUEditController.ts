@@ -6,11 +6,9 @@
 
 		// Controller the view of the proposal page
 		.controller('ProposalCWUEditController', [
-			'uibButtonConfig',
 			'capabilities',
 			'editing',
 			'$scope',
-			'$sce',
 			'ask',
 			'Upload',
 			'$state',
@@ -25,11 +23,9 @@
 			'org',
 			'TINYMCE_OPTIONS',
 			function(
-				uibButtonConfig,
 				capabilities,
 				editing,
 				$scope,
-				$sce,
 				ask,
 				Upload,
 				$state,
@@ -50,6 +46,18 @@
 				if (!opportunity) {
 					$state.go('home');
 				}
+
+				// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
+				// if they do, transition to edit view for that proposal
+				if (!editing) {
+					ProposalsService.getMyProposal({ opportunityId: opportunity.code }).$promise
+					.then(response => {
+						if (response && response._id) {
+							$state.go('proposaladmin.editcwu', { proposalId: response._id, opportunityId: opportunity.code });
+						}
+					})
+				}
+
 				ppp.opportunity = opportunity;
 				ppp.org = org;
 				if (org) {
@@ -67,27 +75,19 @@
 				ppp.user = angular.copy(Authentication.user);
 				let pristineUser = angular.toJson(Authentication.user);
 
-				//
 				// set up the structures for capabilities
-				//
 				CapabilitiesMethods.init(ppp, ppp.opportunity, capabilities);
 				CapabilitiesMethods.dump(ppp, ppp.opportunity, capabilities);
 
 				ppp.totals = {};
 				ppp.tinymceOptions = TINYMCE_OPTIONS;
 
-				//
 				// ensure status set accordingly
-				//
 				if (!editing) {
 					ppp.proposal.status = 'New';
 				}
 
-				// -------------------------------------------------------------------------
-				//
 				// Save the passed in user
-				//
-				// -------------------------------------------------------------------------
 				const saveUser = userToSave => {
 					return new Promise((resolve, reject) => {
 						if (pristineUser !== angular.toJson(userToSave)) {
@@ -171,6 +171,11 @@
 									title: response.title,
 									message: response.message
 								});
+
+								// if this is a newly created proposal, transition to edit view
+								if (!editing) {
+									$state.go('proposaladmin.editcwu', { proposalId: ppp.proposal._id, opportunityId: ppp.opportunity.code });
+								}
 							})
 							.catch(error => {
 								Notification.error({
