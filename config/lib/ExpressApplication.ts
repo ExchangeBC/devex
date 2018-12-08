@@ -28,7 +28,7 @@ import ProposalsRouter from '../../modules/proposals/server/routes/ProposalsRout
 import UserConfig from '../../modules/users/server/config/UserConfig';
 import AdminRouter from '../../modules/users/server/routes/AdminRouter';
 import config from '../ApplicationConfig';
-import Logger from './Logger';
+import Logger from './LoggerUtil';
 import SocketIOController from './SocketIOController';
 
 class ExpressApplication {
