@@ -59,7 +59,7 @@
 				roles: ['user']
 			},
 			templateUrl: '/modules/proposals/client/views/cwu-proposal-view.html',
-			controller: 'ProposalViewController',
+			controller: 'ProposalCWUViewController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -81,7 +81,7 @@
 				roles: ['user']
 			},
 			templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
-			controller: 'ProposalViewSWUController',
+			controller: 'ProposalSWUViewController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -122,7 +122,7 @@
 				notroles: ['gov']
 			},
 			templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
-			controller: 'ProposalEditController',
+			controller: 'ProposalCWUEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -158,7 +158,7 @@
 				notroles: ['gov']
 			},
 			templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
-			controller: 'ProposalEditController',
+			controller: 'ProposalCWUEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -196,7 +196,7 @@
 				notroles: ['gov']
 			},
 			templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
-			controller: 'ProposalEditSWUController',
+			controller: 'ProposalSWUEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
@@ -217,10 +217,6 @@
 						if (orgs && orgs.length > 0) return orgs[0];
 						else return null;
 					});
-					// var orgs = Authentication.user.orgsAdmin || [null];
-					// var org = orgs[0];
-					// if (org) return OrgsService.get ({orgId:org}).$promise;
-					// else return null;
 				}],
 				resources: ['OrgsService', 'Authentication', 'ProposalsService', '$stateParams', function (OrgsService, Authentication, ProposalsService, $stateParams) {
 					if (!Authentication.user) return null;
@@ -249,7 +245,7 @@
 				notroles: ['gov']
 			},
 			templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
-			controller: 'ProposalEditSWUController',
+			controller: 'ProposalSWUEditController',
 			controllerAs: 'ppp',
 			bindToController: true,
 			resolve: {
