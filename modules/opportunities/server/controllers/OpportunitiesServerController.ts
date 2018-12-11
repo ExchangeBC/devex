@@ -367,7 +367,7 @@ class OpportunitiesServerController {
 				.populate('phases.aggregate.capabilitySkills')
 				.populate('intermediateApproval.requestor', 'displayName email')
 				.populate('finalApproval.requestor', 'displayName email')
-				.populate({
+				.populate([{
 					path: 'proposal',
 					model: 'Proposal',
 					populate: [
@@ -380,7 +380,38 @@ class OpportunitiesServerController {
 							model: 'Org'
 						}
 					]
-				})
+				},
+				{
+					path: 'phases.inception.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				},
+				{
+					path: 'phases.proto.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				},
+				{
+					path: 'phases.implementation.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				}
+				])
 				.populate('addenda.createdBy', 'displayName')
 				.exec((err, opportunity) => {
 					if (err) {

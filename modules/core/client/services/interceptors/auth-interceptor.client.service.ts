@@ -13,7 +13,7 @@
 		return service;
 
 		function responseError(rejection) {
-			if (!rejection.config.ignoreAuthModule) {
+			if (rejection.config && !rejection.config.ignoreAuthModule) {
 				switch (rejection.status) {
 					case 400:
 						$injector

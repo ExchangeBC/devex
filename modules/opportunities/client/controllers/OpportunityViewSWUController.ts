@@ -1,6 +1,7 @@
 'use strict';
 
 import angular from 'angular';
+import _ from 'lodash';
 
 (() => {
 	const formatDate = date => {

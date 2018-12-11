@@ -1351,6 +1351,17 @@ div.selected {
   &.error {
     color: #fff;
     background: $theme-danger;
+    > .title {
+      border: none;
+      text-align: center;
+      padding: 1em;
+      margin: 0;
+    }
+    > .message {
+      text-align: center;
+      padding: 1em;
+      margin: 0;
+    }
   }
   &.success {
     color: #fff;
