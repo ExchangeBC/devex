@@ -51,11 +51,7 @@ class ProposalsRouter {
 		// Retrieve all proposals submitted for a given opportunity
 		app.route('/api/proposals/for/:opportunityId')
 			.all(ProposalsPolicy.isAllowed)
-			.get((req, res) => {
-				// tslint:disable-next-line
-				console.log('here');
-				ProposalsServerController.getProposalsForOpp(req, res);
-			});
+			.get(ProposalsServerController.getProposalsForOpp);
 
 		// Upload attachment on proposal
 		app.route('/api/proposals/:proposalId/documents')

@@ -34,6 +34,9 @@ import angular from 'angular';
 								return data;
 							}
 						},
+						remove: {
+							method: 'DELETE'
+						},
 						save: {
 							method: 'POST',
 							transformResponse(data) {

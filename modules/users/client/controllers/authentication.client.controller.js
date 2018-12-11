@@ -123,7 +123,7 @@
 			$rootScope.$broadcast('userSignedIn', response);
 
 			if ($state.previous && $state.previous.state) {
-				$state.go($state.previous.state.name);
+				$state.go($state.previous.state.name, $state.previous.state.params);
 			} else {
 				$state.go('home', $state.params);
 			}
