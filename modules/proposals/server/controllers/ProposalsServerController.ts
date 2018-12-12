@@ -30,7 +30,6 @@ import IProposalDocument from '../interfaces/IProposalDocument';
 import ProposalModel from '../models/ProposalModel';
 
 class ProposalsServerController {
-
 	public static getInstance() {
 		return this.instance || (this.instance = new this());
 	}
@@ -43,7 +42,7 @@ class ProposalsServerController {
 						roles provider';
 	private fileStream: FileStream = new FileStream();
 
-	private constructor() {};
+	private constructor() {}
 
 	// Get a proposal for the given opportunity and user
 	public getUserProposalForOpp = (req, res) => {
@@ -119,22 +118,34 @@ class ProposalsServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		res.json(req.proposal);
+		if (this.ensureProposalOwner(req.proposal, req.user) || this.ensureAdminOnOpp(req.proposal.opportunity, req.user) || this.ensureAdmin(req.user)) {
+			res.json(req.proposal);
+		} else {
+			res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// Update the document, make sure to apply audit. We don't mess with the
 	// code if they change the name as that would mean reworking all the roles
 	public update = (req, res) => {
-		const proposal = _.mergeWith(req.proposal, req.body, (objValue, srcValue) => {
+		if (!this.ensureProposalOwner(req.proposal, req.user) && !this.ensureAdminOnOpp(req.proposal.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
+
+		const updatedProposal = _.mergeWith(req.proposal, req.body, (objValue, srcValue) => {
 			if (_.isArray(objValue)) {
 				return srcValue;
 			}
 		});
 
 		// set the audit fields so we know who did what when
-		CoreServerHelpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(updatedProposal, req.user);
 
-		this.saveProposalRequest(req, res, proposal);
+		this.saveProposalRequest(req, res, updatedProposal);
 	};
 
 	// Sets the specified proposal to 'Submitted' status
@@ -330,8 +341,8 @@ class ProposalsServerController {
 			});
 		}
 
-		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json({ message: 'User is not authorized' });
+		if (!this.ensureAdminOnOpp(req.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+			return res.status(403).send({ message: 'User is not authorized' });
 		}
 
 		ProposalModel.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
@@ -455,22 +466,20 @@ class ProposalsServerController {
 			return false;
 		}
 
-		return proposal.user._id === user._id;
+		return proposal.user.id === user.id;
 	};
 
 	private adminRole = opportunity => {
 		return opportunity.code + '-admin';
 	};
 
-	private ensureAdmin = (opportunity, user, res) => {
-		if (user.roles.indexOf(this.adminRole(opportunity)) === -1 && user.roles.indexOf('admin') === -1) {
-			res.status(422).send({
-				message: 'User Not Authorized'
-			});
-			return false;
-		} else {
-			return true;
-		}
+	private ensureAdminOnOpp = (opportunity, user) => {
+		return user.roles.indexOf(this.adminRole(opportunity)) !== -1;
+	};
+
+	// Returns boolean indicating whether given user has 'admin' role
+	private ensureAdmin = user => {
+		return user && user.roles.indexOf('admin') !== -1;
 	};
 
 	private getUserCapabilities = (users: IUserDocument[]) => {

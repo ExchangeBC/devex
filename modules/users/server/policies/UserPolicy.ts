@@ -33,6 +33,15 @@ class UserPolicy {
 						permissions: 'post'
 					}
 				]
+			},
+			{
+				roles: ['admin'],
+				allows: [
+					{
+						resources: '/api/users',
+						permissions: ['*']
+					}
+				]
 			}
 		]);
 	};
