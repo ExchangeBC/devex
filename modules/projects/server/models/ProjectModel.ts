@@ -1,6 +1,7 @@
 'use strict';
 
 import { Model, model, Schema } from 'mongoose';
+import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import IProjectDocument from '../interfaces/IProjectDocument';
 
 interface IProjectModel extends Model<IProjectDocument> {
@@ -68,31 +69,8 @@ const ProjectSchema = new Schema(
 	{ usePushEach: true }
 );
 
-ProjectSchema.statics.findUniqueCode = (title, suffix, callback) => {
-	const possible =
-		'prj-' +
-		title
-			.toLowerCase()
-			.replace(/\W/g, '-')
-			.replace(/-+/, '-') +
-		(suffix || '');
-
-	this.findOne(
-		{
-			code: possible
-		},
-		(err, user) => {
-			if (!err) {
-				if (!user) {
-					callback(possible);
-				} else {
-					return this.findUniqueCode(title, (suffix || 0) + 1, callback);
-				}
-			} else {
-				callback(null);
-			}
-		}
-	);
+ProjectSchema.statics.findUniqueCode = function(title, suffix, callback) {
+	return CoreServerHelpers.modelFindUniqueCode(this, 'prj', title, suffix, callback);
 };
 
 const ProjectModel: IProjectModel = model<IProjectDocument, IProjectModel>('Project', ProjectSchema);

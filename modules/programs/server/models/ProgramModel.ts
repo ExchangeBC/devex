@@ -1,6 +1,7 @@
 'use strict';
 
 import { model, Model, Schema } from 'mongoose';
+import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import IProgramDocument from '../interfaces/IProgramDocument';
 
 interface IProgramModel extends Model<IProgramDocument> {
@@ -26,32 +27,9 @@ const ProgramSchema = new Schema(
 	{ usePushEach: true }
 );
 
-ProgramSchema.statics.findUniqueCode = (title, suffix, callback) => {
-	const possible =
-		'pro-' +
-		title
-			.toLowerCase()
-			.replace(/\W/g, '-')
-			.replace(/-+/, '-') +
-		(suffix || '');
-
-	this.findOne(
-		{
-			code: possible
-		},
-		(err, user) => {
-			if (!err) {
-				if (!user) {
-					callback(possible);
-				} else {
-					return this.findUniqueCode(title, (suffix || 0) + 1, callback);
-				}
-			} else {
-				callback(null);
-			}
-		}
-	);
-};
+ProgramSchema.statics.findUniqueCode = function(title, suffix, callback) {
+	return CoreServerHelpers.modelFindUniqueCode(this, 'pro', title, suffix, callback);
+}
 
 const ProgramModel: IProgramModel = model<IProgramDocument, IProgramModel>('Program', ProgramSchema);
 

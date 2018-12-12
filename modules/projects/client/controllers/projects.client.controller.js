@@ -188,6 +188,14 @@ import '../css/projects.css';
 						vm.project.program = vm.programId;
 					}
 				}
+
+				vm.close = function() {
+					if (editing) {
+						$state.go('projects.view', { projectId: vm.project._id });
+					} else {
+						$state.go('projects.list');
+					}
+				}
 				// -------------------------------------------------------------------------
 				//
 				// remove the project with some confirmation

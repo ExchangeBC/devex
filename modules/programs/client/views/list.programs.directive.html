@@ -5,7 +5,7 @@
     </h3>
   </div>
   <div class="col-sm-3 d-none d-sm-block">
-    <button data-automation-id="button-list-a-program" ng-if="vm.userCanAdd" class="btn btn-primary pull-right" ui-sref="programadmin.create()"
+    <button data-automation-id="button-list-a-program" ng-if="vm.userCanAdd" class="btn btn-primary float-right" ui-sref="programadmin.create()"
       title="New">
       <i class="fas fa-plus"></i> List a Program
     </button>
@@ -41,24 +41,4 @@
     </div>
   </div>
 </div>
-<!--
-<div class="card" ng-class="{'card-greyed': !program.isPublished}" ng-repeat="program in vm.programs">
-  <div class="card-header py-0" ng-if="vm.isAdmin || program.userIs.admin">
-    <div class="float-right">
-      <span ng-if="!program.isPublished" class="label label-default" ><i class="fas fa-exclamation-triangle"></i> Unpublished</span>
-      <span ng-if="program.userIs.member && !program.userIs.admin" class="label label-default">Member</span>
-      <span ng-if="program.userIs.request" class="label label-default" title="Your membership request is pending approval">Pending Member</span>
-      <a class="btn btn-text-only" ng-if="(vm.isAdmin || program.userIs.admin) && program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, false)" ng-click="$event.stopPropagation()" title="Unpublish"><i class="fas fa-ban"></i></a>
-      <a class="btn btn-text-only" ng-if="(vm.isAdmin || program.userIs.admin) && !program.isPublished" href="javascript:void(0);" ng-click="vm.publish(program, true)" ng-click="$event.stopPropagation()" title="Publish"><i class="fas fa-bullhorn"></i></a>
-      <a class="btn btn-text-only" ng-if="vm.isGov && !program.userIs.member && !program.userIs.request" href="javascript:void(0);" ng-click="vm.request(program)" ng-click="$event.stopPropagation()" uib-tooltip="Request Membership"><i class="fas fa-user"></i></a>
-      <a class="btn btn-text-only" ng-if="vm.isAdmin || program.userIs.admin" href="javascript:void(0);"  id="programadmin.edit" ui-sref="programadmin.edit({ programId: program.code })" ng-click="$event.stopPropagation()" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-    </div>
-  </div>
-  <div class="card-body" id="programs.view" ui-sref="programs.view({ programId: program.code })">
-    <div class="p-3">
-      <img class="rounded" width="50" height="50" src="/{{program.logo}}" alt="Program Logo">
-    </div>
-    <div class="strong my-auto w-100" ng-bind="program.title"></div>
-  </div>
--->
 </div>

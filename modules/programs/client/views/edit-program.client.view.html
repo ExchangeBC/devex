@@ -11,7 +11,7 @@
         <span ng-if="!vm.editing">
           New Program
         </span>
-        <a class="btn btn-text-only pull-right" href="{{vm.previousState.url}}" title="Close"><i class="fas fa-lg fa-times"></i></a>
+        <a class="btn btn-text-only float-right" href="" ng-click="vm.close()" title="Close"><i class="fas fa-lg fa-times"></i></a>
       </div>
 
       <div class="row m-4">
@@ -100,7 +100,7 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <a data-automation-id="button-program-save" class="btn btn-primary pull-right" ng-click="vm.saveme(vm.form.programForm.$valid)"
+            <a data-automation-id="button-program-save" class="btn btn-primary float-right text-white" ng-click="vm.saveme(vm.form.programForm.$valid)"
               title="Save"><i class="fas fa-save"></i> Save &amp; Close</a>
             <a data-automation-id="button-program-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
               title="Remove"><i class="fas fa-trash"></i> Delete this Program</a>
