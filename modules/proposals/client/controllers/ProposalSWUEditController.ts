@@ -28,7 +28,7 @@ import angular from 'angular';
 			'Authentication',
 			'ProposalsService',
 			'Notification',
-			'CapabilitiesMethods',
+			'CapabilitiesCommon',
 			'org',
 			'TINYMCE_OPTIONS',
 			'resources',
@@ -46,7 +46,7 @@ import angular from 'angular';
 				Authentication,
 				ProposalsService,
 				Notification,
-				CapabilitiesMethods,
+				CapabilitiesCommon,
 				org,
 				TINYMCE_OPTIONS,
 				resources,
@@ -189,9 +189,9 @@ import angular from 'angular';
 					ppp.imp = {};
 					ppp.inp = {};
 					ppp.prp = {};
-					CapabilitiesMethods.init(ppp.imp, ppp.oimp, capabilities, 'implementation');
-					CapabilitiesMethods.init(ppp.inp, ppp.oinp, capabilities, 'inception');
-					CapabilitiesMethods.init(ppp.prp, ppp.oprp, capabilities, 'prototype');
+					CapabilitiesCommon.init(ppp.imp, ppp.oimp, capabilities, 'implementation');
+					CapabilitiesCommon.init(ppp.inp, ppp.oinp, capabilities, 'inception');
+					CapabilitiesCommon.init(ppp.prp, ppp.oprp, capabilities, 'prototype');
 
 					// now we need to make an index on the phase teams so we know who is
 					// in and who is out of each team, key by email as it is unique
