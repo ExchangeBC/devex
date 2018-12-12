@@ -19,7 +19,7 @@
 			'OpportunitiesService',
 			'UsersService',
 			'Notification',
-			'CapabilitiesMethods',
+			'CapabilitiesCommon',
 			'org',
 			'TINYMCE_OPTIONS',
 			function(
@@ -36,7 +36,7 @@
 				OpportunitiesService,
 				UsersService,
 				Notification,
-				CapabilitiesMethods,
+				CapabilitiesCommon,
 				org,
 				TINYMCE_OPTIONS
 			) {
@@ -76,8 +76,8 @@
 				let pristineUser = angular.toJson(Authentication.user);
 
 				// set up the structures for capabilities
-				CapabilitiesMethods.init(ppp, ppp.opportunity, capabilities);
-				CapabilitiesMethods.dump(ppp, ppp.opportunity, capabilities);
+				CapabilitiesCommon.init(ppp, ppp.opportunity, capabilities);
+				CapabilitiesCommon.dump(ppp, ppp.opportunity, capabilities);
 
 				ppp.totals = {};
 				ppp.tinymceOptions = TINYMCE_OPTIONS;
