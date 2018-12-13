@@ -667,7 +667,12 @@ import '../css/opportunities.css';
 						// Proceed with save or cancel
 						.then(saving => {
 							if (saving) {
-								return OpportunitiesService.update({ opportunityId: vm.opportunity.code }, vm.opportunity).$promise;
+								if (editing) {
+									return OpportunitiesService.update({ opportunityId: vm.opportunity.code }, vm.opportunity).$promise;
+								} else {
+									return OpportunitiesService.save({}, vm.opportunity).$promise;
+								}
+
 							} else {
 								throw new Error('Save cancelled');
 							}
