@@ -163,7 +163,7 @@ class MessagesServerController {
 		// this gets over a potential risk by disallowing any calls to outside APIs through this
 		// mechanism
 		const options = this.getHostInfoFromDomain({
-			path: '/api/message/handler/action/' + req.params.action + '/user/' + req.user._id + req.message.link,
+			path: '/api/message/handler/action/' + req.body.action + '/user/' + req.user._id + req.message.link,
 			method: 'GET'
 		});
 		CoreServerHelpers.getJSON(options)

@@ -64,10 +64,14 @@
 					// 	$event.stopPropagation();
 					// 	$event.preventDefault();
 					// }
-					MessagesService.actioned ({
-						messageId: messageId,
+					MessagesService.actioned (
+					{
+						messageId: messageId
+					},
+					{
 						action : action.actionCd
-					}).$promise.then (function (response) {
+					})
+					.$promise.then (function (response) {
 						// if (!action.isDefault) {
 						// 	$location.path (action.link);
 						// }
