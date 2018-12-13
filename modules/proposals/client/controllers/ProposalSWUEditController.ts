@@ -542,7 +542,7 @@ import angular from 'angular';
 					.then(() => {
 						// if this is a newly created proposal, transition to edit view
 						if (!editing) {
-							$state.go('proposaladmin.editcwu', { proposalId: ppp.proposal._id, opportunityId: ppp.opportunity.code });
+							$state.go('proposaladmin.editswu', { proposalId: ppp.proposal._id, opportunityId: ppp.opportunity.code });
 						}
 					})
 				};
