@@ -93,19 +93,19 @@ import '../css/opportunities.css';
 								isImplementation: true,
 								capabilities: [],
 								capabilitiesCore: [],
-								capabilitiesSkills: []
+								capabilitySkills: []
 							},
 							inception: {
 								isInception: true,
 								capabilities: [],
 								capabilitiesCore: [],
-								capabilitiesSkills: []
+								capabilitySkills: []
 							},
 							proto: {
 								isPrototype: true,
 								capabilities: [],
 								capabilitiesCore: [],
-								capabilitiesSkills: []
+								capabilitySkills: []
 							}
 						};
 					}
