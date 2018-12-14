@@ -93,68 +93,60 @@ class OpportunitiesServerController {
 			return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
 		}
 
-		// copy over everything passed in. This will overwrite the
-		// audit fields, but they get updated in the following step
-		let opportunity = _.mergeWith(req.opportunity, req.body, (objValue, srcValue) => {
-			if (_.isArray(objValue)) {
-				return srcValue;
-			}
-		});
+		const newOppInfo = req.body;
 
-		// manually transfer over skills, as the merge won't handle removals properly from the skills array
-		// opportunity.skills = req.body.skills;
-		//
 		// set the audit fields so we know who did what when
-		//
-		CoreServerHelpers.applyAudit(opportunity, req.user);
-		//
+		CoreServerHelpers.applyAudit(newOppInfo, req.user);
+
 		// update phase information
-		//
-		this.setPhases(opportunity);
-		//
-		// save
-		//
-		this.updateSave(opportunity)
-			.then(() => {
+		this.setPhases(newOppInfo);
+
+		// find, update, and return the updated document in the response
+		OpportunityModel.findOneAndUpdate({ code: req.opportunity.code }, newOppInfo, { new: true }, (err, updatedOpp) => {
+			if (err) {
+				res.status(500).send({
+					message: CoreServerErrors.getErrorMessage(err)
+				});
+			} else {
 				// send out approval request messages as needed
-				if (!opportunity.isApproved) {
-					this.sendApprovalMessages(req.user, opportunity);
+				if (!updatedOpp.isApproved) {
+					this.sendApprovalMessages(req.user, updatedOpp);
 				}
 
 				// send out opportunity update notifications on published opportunities that are still open
-				if (opportunity.isPublished && opportunity.deadline.getTime() - new Date().getTime() > 0) {
-					this.sendMessages('opportunity-update', opportunity.watchers, {
-						opportunity: this.setMessageData(opportunity)
+				if (updatedOpp.isPublished && updatedOpp.deadline.getTime() - new Date().getTime() > 0) {
+					this.sendMessages('opportunity-update', updatedOpp.watchers, {
+						opportunity: this.setMessageData(updatedOpp)
 					});
+
 					CoreGithubController.createOrUpdateIssue({
-						title: opportunity.name,
-						body: this.getOppBody(opportunity),
-						repo: opportunity.github,
-						number: opportunity.issueNumber
+						title: updatedOpp.name,
+						body: this.getOppBody(updatedOpp),
+						repo: updatedOpp.github,
+						number: updatedOpp.issueNumber
 					})
 						.then(result => {
-							opportunity.issueUrl = result.html_url;
-							opportunity.issueNumber = result.number;
-							this.updateSave(opportunity).then(updatedOpportunity => {
-								opportunity = updatedOpportunity;
-								res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+							updatedOpp.issueUrl = result.html_url;
+							updatedOpp.issueNumber = result.number;
+							this.updateSave(updatedOpp).then((updatedOpportunity: IOpportunityDocument) => {
+								this.populateOpportunity(updatedOpportunity).then(populatedOpportunity => {
+									res.json(OpportunitiesUtilities.decorate(populatedOpportunity, req.user ? req.user.roles : []));
+								});
 							});
 						})
 						.catch(() => {
 							res.status(422).send({
 								message: 'Opportunity saved, but there was an error updating the github issue. \
-									Please check your repo url and try again.'
+								Please check your repo url and try again.'
 							});
 						});
 				} else {
-					res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+					this.populateOpportunity(updatedOpp).then(populatedOpportunity => {
+						res.json(OpportunitiesUtilities.decorate(populatedOpportunity, req.user ? req.user.roles : []));
+					});
 				}
-			})
-			.catch(err => {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			});
+			}
+		});
 	};
 
 	public publish = (req, res) => {
@@ -367,50 +359,51 @@ class OpportunitiesServerController {
 				.populate('phases.aggregate.capabilitySkills')
 				.populate('intermediateApproval.requestor', 'displayName email')
 				.populate('finalApproval.requestor', 'displayName email')
-				.populate([{
-					path: 'proposal',
-					model: 'Proposal',
-					populate: [
-						{
-							path: 'user',
-							model: 'User'
-						},
-						{
-							path: 'org',
-							model: 'Org'
-						}
-					]
-				},
-				{
-					path: 'phases.inception.capabilities',
-					model: 'Capability',
-					populate: [
-						{
-							path: 'skills',
-							model: 'CapabilitySkill'
-						}
-					]
-				},
-				{
-					path: 'phases.proto.capabilities',
-					model: 'Capability',
-					populate: [
-						{
-							path: 'skills',
-							model: 'CapabilitySkill'
-						}
-					]
-				},
-				{
-					path: 'phases.implementation.capabilities',
-					model: 'Capability',
-					populate: [
-						{
-							path: 'skills',
-							model: 'CapabilitySkill'
-						}
-					]
-				}
+				.populate([
+					{
+						path: 'proposal',
+						model: 'Proposal',
+						populate: [
+							{
+								path: 'user',
+								model: 'User'
+							},
+							{
+								path: 'org',
+								model: 'Org'
+							}
+						]
+					},
+					{
+						path: 'phases.inception.capabilities',
+						model: 'Capability',
+						populate: [
+							{
+								path: 'skills',
+								model: 'CapabilitySkill'
+							}
+						]
+					},
+					{
+						path: 'phases.proto.capabilities',
+						model: 'Capability',
+						populate: [
+							{
+								path: 'skills',
+								model: 'CapabilitySkill'
+							}
+						]
+					},
+					{
+						path: 'phases.implementation.capabilities',
+						model: 'Capability',
+						populate: [
+							{
+								path: 'skills',
+								model: 'CapabilitySkill'
+							}
+						]
+					}
 				])
 				.populate('addenda.createdBy', 'displayName')
 				.exec((err, opportunity) => {
@@ -1175,6 +1168,76 @@ class OpportunitiesServerController {
 			deadline +
 			'</b>.</p>';
 		return ret;
+	};
+
+	private populateOpportunity = (opportunity: IOpportunityDocument): Promise<IOpportunityDocument> => {
+		return opportunity
+			.populate('createdBy', 'displayName email')
+			.populate('updatedBy', 'displayName')
+			.populate('project', 'code name _id isPublished')
+			.populate('program', 'code title _id logo isPublished')
+			.populate('phases.implementation.capabilities')
+			.populate('phases.implementation.capabilitiesCore')
+			.populate('phases.implementation.capabilitySkills')
+			.populate('phases.inception.capabilities')
+			.populate('phases.inception.capabilitiesCore')
+			.populate('phases.inception.capabilitySkills')
+			.populate('phases.proto.capabilities')
+			.populate('phases.proto.capabilitiesCore')
+			.populate('phases.proto.capabilitySkills')
+			.populate('phases.aggregate.capabilities')
+			.populate('phases.aggregate.capabilitiesCore')
+			.populate('phases.aggregate.capabilitySkills')
+			.populate('intermediateApproval.requestor', 'displayName email')
+			.populate('finalApproval.requestor', 'displayName email')
+			.populate([
+				{
+					path: 'proposal',
+					model: 'Proposal',
+					populate: [
+						{
+							path: 'user',
+							model: 'User'
+						},
+						{
+							path: 'org',
+							model: 'Org'
+						}
+					]
+				},
+				{
+					path: 'phases.inception.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				},
+				{
+					path: 'phases.proto.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				},
+				{
+					path: 'phases.implementation.capabilities',
+					model: 'Capability',
+					populate: [
+						{
+							path: 'skills',
+							model: 'CapabilitySkill'
+						}
+					]
+				}
+			])
+			.populate('addenda.createdBy', 'displayName')
+			.execPopulate();
 	};
 }
 

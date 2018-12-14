@@ -3,7 +3,7 @@
 
 import chalk from 'chalk';
 import _ from 'lodash';
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import config from '../ApplicationConfig';
 
 class MongooseController {
@@ -32,6 +32,8 @@ class MongooseController {
 			mongoose.connection.on('reconnected', () => {
 				console.log(chalk.green('Reconnected to ' + config.db.uri));
 			});
+
+			mongoose.set('useFindAndModify', false);
 
 			process.on('SIGINT', () => {
 				mongoose.connection.close(() => {

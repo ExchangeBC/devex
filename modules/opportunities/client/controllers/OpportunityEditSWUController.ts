@@ -681,6 +681,7 @@ import '../css/opportunities.css';
 						.then(savedOpportunity => {
 							vm.opportunityForm.$setPristine();
 							loadOpportunity(savedOpportunity);
+							vm.refreshCapabilities();
 
 							let successMessage;
 							if (vm.opportunity.isPublished) {
