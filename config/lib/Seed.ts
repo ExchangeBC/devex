@@ -387,7 +387,7 @@ class Seed {
 						description: 'notify the user that they have been assigned the opportunity',
 						isSubscriptionType: true,
 						messageBodyTemplate:
-							'<p>🎉 <strong>Congratulations!</strong> 🎉</p><p>The team you put forward to work on <strong><a href="{{ domain }}/{{opportunity.path}}">{{ opportunity.name }}</a></strong> has been selected!</p>',
+							'<p><strong>Congratulations!</strong></p><p>The team you put forward to work on <strong><a href="{{ domain }}/{{opportunity.path}}">{{ opportunity.name }}</a></strong> has been selected!</p>',
 						messageShortTemplate: '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
 						messageTitleTemplate: 'Your Proposal has been selected!',
 						emailBodyTemplate:
