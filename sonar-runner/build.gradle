@@ -3,11 +3,7 @@ plugins {
   id "java"
   id "jacoco"
   id "org.sonarqube" version "2.6.2"
-}
-
-task npmInstall(type: Exec) {
-    workingDir '../'
-    commandLine 'npm', 'install', 'typescript'
+  id "com.moowork.node" version "1.2.0"
 }
 
 sonarqube {
@@ -21,7 +17,6 @@ sonarqube {
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", ["**/node_modules/**/*", "**/public/dist/**/*", "**/webpack.parts.js", "**/webpack.config.js", "**/server-dist/**/*"]
     }
-    dependsOn npmInstall
 }
 
 allprojects {

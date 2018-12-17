@@ -87,6 +87,11 @@ node('jenkins-python3nodejs') {
     checkout scm
     }
 
+    stage('Setup for Analysis') {
+        returnStdout: true,
+        script: "npm install typescript"
+    }
+
     stage('SonarQube Analysis') {
     echo "Performing static SonarQube code analysis ..."
 
