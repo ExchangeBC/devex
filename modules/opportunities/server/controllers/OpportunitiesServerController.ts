@@ -1001,9 +1001,21 @@ class OpportunitiesServerController {
 		opportunity.deadline_format_date = CoreServerHelpers.formatDate(new Date(opportunity.deadline));
 		opportunity.deadline_format_time = CoreServerHelpers.formatTime(new Date(opportunity.deadline));
 
-		opportunity.contract.estimatedValue_formatted = CoreServerHelpers.formatMoney(opportunity.contract.estimatedValue);
-		opportunity.contract.stobExpenditures_formatted = CoreServerHelpers.formatMoney(opportunity.contract.stobExpenditures);
-		opportunity.contract.stobBudget_formatted = CoreServerHelpers.formatMoney(opportunity.contract.stobBudget);
+		opportunity.contract.estimatedValue_formatted = Intl.NumberFormat('en', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(opportunity.contract.estimatedValue);
+
+		opportunity.contract.stobExpenditures_formatted = Intl.NumberFormat('en', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(opportunity.contract.stobExpenditures);
+
+		opportunity.contract.stobBudget_formatted = Intl.NumberFormat('en', {
+			style: 'currency',
+			currency: 'USD'
+		}).format(opportunity.contract.stobBudget);
+
 		opportunity.contract.contractType_formatted = opportunity.contract.contractType.charAt(0).toUpperCase() + opportunity.contract.contractType.slice(1);
 		opportunity.contract.legallyRequired_formatted = opportunity.contract.legallyRequired ? 'Yes' : 'No';
 		opportunity.intermediateApproval.actioned_formatted = CoreServerHelpers.formatDate(new Date(opportunity.intermediateApproval.actioned));
