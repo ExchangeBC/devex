@@ -85,6 +85,9 @@ node('jenkins-python3nodejs') {
     stage('Checkout Source') {
     echo "Checking out source code ..."
     checkout scm
+    sh (
+        script: npm install -g typescript
+    )
     }
 
     stage('SonarQube Analysis') {
