@@ -234,24 +234,27 @@
 							};
 
 							vm.toggleSubscription = function() {
-								if (!Authentication.user) {
+								if (!vm.user) {
 									return;
 								}
 
-								Authentication.user.notifyOpportunities = !Authentication.user.notifyOpportunities;
-								var user = new UsersService(Authentication.user);
-								var message;
-								if (Authentication.user.notifyOpportunities) {
-									message =
-										'<i class="fas fa-bell fa-3x"></i><br/><br/>You will be notified of new Opportunities';
-								} else {
-									message =
-										'<i class="fas fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities';
-								}
+								vm.user.notifyOpportunities = !vm.user.notifyOpportunities;
+								UsersService.update(vm.user).$promise
+								.then((updatedUser) => {
+									vm.user = updatedUser;
+									var message;
+									if (vm.user.notifyOpportunities) {
+										message =
+											'<i class="fas fa-bell fa-3x"></i><br/><br/>You will be notified of new Opportunities';
+									} else {
+										message =
+											'<i class="fas fa-bell-slash fa-3x"></i><br/><br/>You will no longer be notified of new Opportunities';
+									}
 
-								Notification.success({
-									message: message
-								});
+									Notification.success({
+										message: message
+									});
+								})
 							};
 						}
 					]

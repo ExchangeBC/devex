@@ -1073,7 +1073,7 @@ class OpportunitiesServerController {
 	// Get a list of all users who are listening to the add opp event
 	private getSubscribedUsers = () => {
 		return new Promise((resolve, reject) => {
-			UserModel.find({ notifyOpportunities: true }, '_id email firstName lastName displayName').exec((err, users) => {
+			UserModel.find({ notifyOpportunities: true, email: { $ne: null } }, '_id email firstName lastName displayName').exec((err, users) => {
 				if (err) {
 					reject(err);
 				} else {

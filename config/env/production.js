@@ -52,8 +52,8 @@ module.exports = {
       host: process.env.MAILER_HOST || 'apps.smtp.gov.bc.ca',
       port: process.env.MAILER_PORT || 25,
       secure: false,
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
+      connectionTimeout: 30000,
+      greetingTimeout: 30000,
       ignoreTLS: false,
       tls: {
         rejectUnauthorized: false
