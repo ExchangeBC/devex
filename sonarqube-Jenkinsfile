@@ -86,7 +86,7 @@ node('jenkins-python3nodejs') {
     echo "Checking out source code ..."
     checkout scm
     sh (
-        script: "npm install -g typescript"
+        script: "sudo npm install -g typescript"
     )
     }
 
