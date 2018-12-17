@@ -82,9 +82,16 @@ node('maven') {
           openshift.withProject() {
             def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
             sonarqube.watch {
-              echo "Waiting for ${it.names()} to complete..."
+              if (it.count() == 0) return false
 
-              return it.count() > 0
+              def allDone = true
+              echo "Waiting for ${it.names()} to complete..."
+              def buildModel = it.object()
+              if (it.object().status.phase != "Complete") {
+                allDone = false
+              }
+
+              return allDone
             }
           }
         }
