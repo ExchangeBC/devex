@@ -21,6 +21,7 @@ sonarqube {
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
         property "sonar.exclusions", ["**/node_modules/**/*", "**/public/dist/**/*", "**/webpack.parts.js", "**/webpack.config.js", "**/server-dist/**/*"]
     }
+    dependsOn npmInstall
 }
 
 allprojects {
@@ -41,10 +42,6 @@ test {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-}
-
-war {
-  dependsOn npmInstall
 }
 
 repositories {
