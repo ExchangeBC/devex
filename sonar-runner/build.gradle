@@ -3,6 +3,7 @@ plugins {
   id "java"
   id "jacoco"
   id "org.sonarqube" version "2.6.2"
+  id "de.richsource.gradle.plugins.typescript" version "1.8.0"
 }
 
 sonarqube {
