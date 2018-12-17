@@ -3,7 +3,11 @@ plugins {
   id "java"
   id "jacoco"
   id "org.sonarqube" version "2.6.2"
-  id "de.richsource.gradle.plugins.typescript" version "1.8.0"
+}
+
+task npmInstall(type: Exec) {
+    workingDir '../'
+    commandLine 'npm', 'install', 'typescript'
 }
 
 sonarqube {
@@ -37,6 +41,10 @@ test {
 
 dependencies {
     testCompile 'junit:junit:4.12'
+}
+
+war {
+  dependsOn npmInstall
 }
 
 repositories {
