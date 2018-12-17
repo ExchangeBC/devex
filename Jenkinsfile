@@ -81,7 +81,11 @@ node('maven') {
         openshift.withCluster() {
           openshift.withProject() {
             def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
-            sonarqube.startBuild();
+            sonarqube.watch {
+              echo "Waiting for ${it.names()} to complete..."
+
+              return it.count() > 0
+            }
           }
         }
       }
