@@ -75,19 +75,17 @@ node('maven') {
     //                       ])
     //       }
     // }
-    // stage('code quality check') {
 
-    //        SONARQUBE_URL = sh (
-    //            script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
-    //            returnStdout: true
-    //               ).trim()
-    //        echo "SONARQUBE_URL: ${SONARQUBE_URL}"
-    //        dir('sonar-runner') {
-    //         sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} \
-    //         -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.Dev -Dsonar.branch=develop \
-    //         -Dsonar.projectKey=org.sonarqube:bcgov-devex-dev" 
-    //        }
-    // }
+    stage('sonarqube') {
+      script {
+        openshift.withCluster() {
+          openshift.withProject() {
+            def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
+            sonarqube.startBuild();
+          }
+        }
+      }
+    }
 
     stage('build') {
 	    echo "Building..."
