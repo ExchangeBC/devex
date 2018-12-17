@@ -88,8 +88,10 @@ node('jenkins-python3nodejs') {
     }
 
     stage('Setup for Analysis') {
-        returnStdout: true,
-        script: "npm install typescript"
+        sh(
+            returnStdout: true,
+            script: "npm install typescript"
+        )
     }
 
     stage('SonarQube Analysis') {
