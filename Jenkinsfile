@@ -82,7 +82,7 @@ node('maven') {
             def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
             def build = sonarqube.startBuild()
             build.untilEach(1) {
-              return it.object(0).status.phase == "Complete"
+              return it.object().status.phase == "Complete"
             }
           }
         }
