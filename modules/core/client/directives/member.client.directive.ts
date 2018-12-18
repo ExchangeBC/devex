@@ -34,7 +34,6 @@
 							isUser &&
 							Authentication.user.roles.indexOf('admin') !== -1;
 						vm.model = $scope.model;
-						vm.model = $scope.model;
 						vm.title = $scope.title || 'Members';
 						const modelService = $scope.service;
 						let queryObject: any = {};
