@@ -7,9 +7,9 @@
           <uib-alert type="danger" ng-show="vm.error" class="text-center text-danger">
             <span ng-bind="vm.error"></span>
           </uib-alert>
-          <label for="usernameOrEmail">Username or Email</label>
-          <input type="text" id="usernameOrEmail" name="usernameOrEmail" class="form-control" ng-model="vm.credentials.usernameOrEmail" placeholder="Username or Email" required autofocus>
-          <div ng-messages="vm.userForm.usernameOrEmail.$error" role="alert">
+          <label for="username">Username or Email</label>
+          <input type="text" id="username" name="username" class="form-control" ng-model="vm.credentials.username" placeholder="Username or Email" required autofocus>
+          <div ng-messages="vm.userForm.username.$error" role="alert">
             <p class="help-block error-text" ng-message="required">Username or Email is required.</p>
           </div>
         </div>
