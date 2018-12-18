@@ -77,7 +77,6 @@
 
 				// set up the structures for capabilities
 				CapabilitiesCommon.init(ppp, ppp.opportunity, capabilities);
-				CapabilitiesCommon.dump(ppp, ppp.opportunity, capabilities);
 
 				ppp.totals = {};
 				ppp.tinymceOptions = TINYMCE_OPTIONS;

@@ -9,23 +9,11 @@ import angular from 'angular';
 		// Given a set of capabilities and a scope, set up the needed scope items
 		.factory('CapabilitiesCommon', () => {
 			return {
-				// -------------------------------------------------------------------------
-				//
-				// dump out the current state
-				//
-				// -------------------------------------------------------------------------
-				dump(title) {
-					title = (title || 'capabilities') + ':';
-				},
-				// -------------------------------------------------------------------------
-				//
+
 				// set up the arrays and indexes on the scope and in the model
-				//
-				// -------------------------------------------------------------------------
 				init(scope, model, capabilities, phase) {
-					//
+
 					// if phase is supplied then filter by phase flag otherwise just set all the capabilities
-					//
 					if (phase) {
 						const inp = phase === 'inception';
 						const prp = phase === 'prototype';
@@ -39,30 +27,25 @@ import angular from 'angular';
 					} else {
 						scope.capabilities = capabilities;
 					}
-					//
+
 					// a collection of all capability skills within scope.capabilities
-					//
 					scope.capabilitySkills = [];
-					//
+
 					// index all the capabilities and skills by code, these are links to the actual objects
-					//
 					scope.iCapabilities = {};
 					scope.iCapabilitySkills = {};
-					//
+
 					// an object of code:boolean pairs indicating whether or not the capability
 					// is required, is core, and of the skill is required
-					//
 					scope.iOppCapabilities = {};
 					scope.iOppCapabilitiesCore = {};
 					scope.iOppCapabilitySkills = {};
-					//
+
 					// also make a list of required capability codes and skill codes
-					//
 					scope.oppCapabilityCodes = [];
 					scope.oppCapabilitySkillCodes = [];
-					//
+
 					// a pair of objects linking _ids to codes
-					//
 					scope.i2cc = {};
 					scope.i2cs = {};
 					//
