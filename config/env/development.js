@@ -100,7 +100,10 @@ if (process.env.MAILER_SERVICE_PROVIDER) {
 			auth: {
 				user: process.env.MAILER_EMAIL_ID,
 				pass: process.env.MAILER_PASSWORD
-			}
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
 		}
 	}
 }
