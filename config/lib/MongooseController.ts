@@ -53,16 +53,12 @@ class MongooseController {
 				console.error(chalk.red(err));
 
 				setTimeout(() => {
-					return new Promise(this.handleConnect)
-					.then(handleSuccessConnect)
-					.catch(handleFailedConnect);
+					return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
 				}, 3000);
 			};
 
 			_.assign(config.db.options, { useNewUrlParser: true });
-			return new Promise(this.handleConnect)
-			.then(handleSuccessConnect)
-			.catch(handleFailedConnect);
+			return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
 		});
 	};
 
@@ -84,7 +80,7 @@ class MongooseController {
 		} else {
 			reject();
 		}
-	}
+	};
 }
 
 export default MongooseController.getInstance();
