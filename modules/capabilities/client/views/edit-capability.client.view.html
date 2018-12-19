@@ -6,21 +6,28 @@
 
         <div class="bg-light px-4 py-3">
           <div class="row">
+            <div class="col">
+              <a class="btn btn-text-only float-right" title="Close" ng-click="qqq.close()">
+                  <i class="fas fa-lg fa-times"></i>
+              </a>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-lg-8">
               <form-input class="col-sm-12" ng-model="qqq.capability.name" x-form="qqq.capabilityForm" x-options='{
   								"title":"Capability Name",
   								"id":"name",
   								"name":"name",
-  								"placeholder":"name",
-  								"required":"Must supply a capability name"
+  								"placeholder":"e.g. Front-end Development",
+  								"required": true
   							}'>
               </form-input>
               <form-input class="col-sm-4" ng-model="qqq.capability.labelClass" x-form="qqq.capabilityForm" x-options='{
   								"title":"Label Class for Display",
   								"id":"name",
   								"name":"name",
-  								"placeholder":"name",
-  								"required":"Must supply a capability name"
+  								"placeholder":"e.g. label-frontend",
+  								"required": true
   							}'>
               </form-input>
               <form-display class="col-sm-8" x-options='{
@@ -37,14 +44,14 @@
   								"id":"description",
   								"name":"description"
   							}'>
-                <textarea name="description" id="description" class="form-control input-sm" ui-tinymce="qqq.tinymceOptions"
-                  placeholder="A brief description of the capability" ng-model="qqq.capability.description">
+                <textarea name="description" id="description" class="form-control input-sm"
+                  placeholder="A brief description of the capability" ng-model="qqq.capability.description" ui-tinymce="qqq.tinymceOptions">
   							</textarea>
               </form-display>
             </div>
 
-            <div class="col-lg-4">
-              <div class="bg-white border rounded p-3">
+            <div class="col-lg-4 mt-4">
+              <div class="bg-white border rounded p-3" ng-if="qqq.capabilityForm.$valid && qqq.capability._id">
                 <div class="strong mb-2">Preferred Technical Skills</div>
 
                 <!-- Input to add new preferred technical skills -->
@@ -85,8 +92,8 @@
         <div class="bg-light px-4 py-3 form-footer">
           <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-primary" ng-click="qqq.savenow(qqq.capabilityForm.$valid, true)"><i
-                  class="fas fa-save"></i> Save &amp; Close</button>
+              <button type="button" class="btn btn-primary float-right" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i
+                  class="fas fa-save"></i> Save</button>
               <button type="button" class="btn btn-text-only" ng-click="qqq.remove()"><i class="fas fa-trash"></i>
                 Delete</button>
               <button type="button" class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})">

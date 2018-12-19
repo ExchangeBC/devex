@@ -23,7 +23,7 @@ import angular from 'angular';
 					}
 				);
 				angular.extend(CapabilitySkill.prototype, {
-					createOrUpdate: () => {
+					createOrUpdate() {
 						const capabilitySkill = this;
 						if (capabilitySkill._id) {
 							return capabilitySkill.$update(
