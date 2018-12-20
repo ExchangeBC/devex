@@ -66,18 +66,8 @@ class ProposalsServerController {
 			});
 	};
 
-	public saveProposal = proposal => {
-		return new Promise((resolve, reject) => {
-			this.setPhases(proposal).then(() => {
-				proposal.save((err, doc) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(doc);
-					}
-				});
-			});
-		});
+	public saveProposal = async (proposal: IProposalDocument): Promise<IProposalDocument> => {
+		return await proposal.save();
 	};
 
 	public saveProposalRequest = (req, res, proposal) => {
@@ -191,15 +181,10 @@ class ProposalsServerController {
 
 	// Unassign gets called from the opportunity side, so just do the work
 	// and return a promise
-	public unassign = (proposal, user) => {
-		return new Promise((resolve, reject) => {
-			proposal.status = 'Submitted';
-			CoreServerHelpers.applyAudit(proposal, user);
-			this.saveProposal(proposal).then(p => {
-				proposal = p;
-				resolve();
-			});
-		});
+	public unassign = async (proposal: IProposalDocument, user: IUserDocument): Promise<IProposalDocument> => {
+		proposal.status = 'Submitted';
+		CoreServerHelpers.applyAudit(proposal, user);
+		return await this.saveProposal(proposal);
 	};
 
 	// Delete the proposal

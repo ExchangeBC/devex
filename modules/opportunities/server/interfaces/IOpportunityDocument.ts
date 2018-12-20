@@ -1,4 +1,7 @@
 import { Document } from 'mongoose';
+import IPhasesDocument from '../../../proposals/server/interfaces/IPhasesDocument';
+import IProposalDocument from '../../../proposals/server/interfaces/IProposalDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 
 export interface IOpportunityDocument extends Document {
 	code: string;
@@ -18,14 +21,14 @@ export interface IOpportunityDocument extends Document {
 	lastPublished: Date;
 	deadline: Date;
 	created: Date;
-	createdBy: object;
+	createdBy: IUserDocument;
 	updated: Date;
-	updatedBy: object;
+	updatedBy: IUserDocument;
 	issueUrl: string;
 	issueNumber: string;
 	assignment: Date;
-	proposal: object;
-	phases: object;
+	proposal: IProposalDocument;
+	phases: IPhasesDocument;
 	budget: number;
 	isDocConflictOfInterest: boolean;
 	isDocNonDisclosure: boolean;
@@ -34,17 +37,17 @@ export interface IOpportunityDocument extends Document {
 	questions: [string];
 	evaluationStage: number;
 	numberOfInterviews: number;
-	weights: object;
-	watchers: object;
-	addenda: [object];
-	teamQuestions: [object];
-	teamQuestionGradingType: object;
-	intermediateApproval: object;
-	finalApproval: object;
-	contract: object;
+	weights: any;
+	watchers: IUserDocument[];
+	addenda: any[];
+	teamQuestions: any[];
+	teamQuestionGradingType: any;
+	intermediateApproval: any;
+	finalApproval: any;
+	contract: any;
 	approvalRequired: boolean;
 	isApproved: boolean;
-	assignor?: object;
+	assignor?: IUserDocument;
 	assignoremail?: string;
 	proposalEmail?: string;
 }

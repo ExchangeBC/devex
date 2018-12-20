@@ -1,3 +1,5 @@
+import { Request } from 'express';
+import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
 import OpportunityModel from '../models/OpportunityModel';
 
 class OpportunitiesUtilities {
@@ -11,8 +13,8 @@ class OpportunitiesUtilities {
 	private constructor() {};
 
 	// Returns a list of all opportunities
-	public opplist = (query, req, callback) => {
-		OpportunityModel.find(query)
+	public getOpportunityList = async (query: any, req: Request): Promise<IOpportunityDocument[]> => {
+		const oppList = await OpportunityModel.find(query)
 			.sort([['deadline', -1], ['name', 1]])
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -30,19 +32,10 @@ class OpportunitiesUtilities {
 			.populate('phases.aggregate.capabilities', 'code name')
 			.populate('phases.aggregate.capabilitiesCore', 'code name')
 			.populate('phases.aggregate.capabilitySkills', 'code name')
-			.exec((err, opportunities) => {
-				if (err) {
-					callback(err, null);
-				} else {
-					callback(
-						null,
-						this.decorateList(
-							opportunities,
-							req.user ? req.user.roles : []
-						)
-					);
-				}
-			});
+			.exec();
+
+		this.decorateList(oppList, req.user ? req.user.roles : []);
+		return oppList;
 	}
 
 	// This takes a opportunity model, serializes it, and decorates it with what
