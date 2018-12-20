@@ -1,8 +1,10 @@
 'use strict';
 
 import { NextFunction, Request, Response } from 'express';
+import fs from 'fs';
+import JSZip from 'jszip';
 import _ from 'lodash';
-import { Aggregate, model, Types } from 'mongoose';
+import { model, Types } from 'mongoose';
 import Nexmo from 'nexmo';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
@@ -484,7 +486,6 @@ class OpportunitiesServerController {
 
 	// Get proposal statistics for the given opportunity in the request
 	public getProposalStats = async (req: Request, res: Response): Promise<void> => {
-
 		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
 			res.json({
 				message: 'User is not authorized'
@@ -503,7 +504,7 @@ class OpportunitiesServerController {
 			const aggregateCountDoc = await this.getCountAggregate(opportunity._id);
 			await aggregateCountDoc.eachAsync((doc: any) => {
 				result[doc._id.toLowerCase()] = doc.count;
-			})
+			});
 			res.json(result);
 		} catch (error) {
 			res.status(422).send({
@@ -514,17 +515,16 @@ class OpportunitiesServerController {
 	};
 
 	// Create an archive of all proposals for the given opportunity in the request
-	public getProposalArchive = async (req: Request, res: Response) => {
-		const zip = new (require('jszip'))();
-		const fs = require('fs');
-
+	public getProposalArchive = async (req: Request, res: Response): Promise<void> => {
 		// Make sure user has admin access
 		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json([]);
+			res.json([]);
+			return;
 		}
 
 		// Make a zip archive with the opportunity name
 		const opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
+		const zip = new JSZip();
 		let proponentName: string;
 		let email: string;
 		let files: IAttachmentDocument[];
@@ -537,197 +537,198 @@ class OpportunitiesServerController {
 		zip.folder(opportunityName);
 
 		// Get all submitted and assigned proposals
-		ProposalModel.find({ opportunity: req.opportunity._id, status: { $in: ['Submitted', 'Assigned'] } })
-			.sort('status created')
-			.populate('user')
-			.populate('opportunity', 'opportunityTypeCd name code')
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					proposals.forEach(proposal => {
-						proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
-						if (proposal.status === 'Assigned') {
-							proponentName += '-ASSIGNED';
-						}
-						files = proposal.attachments;
-						email = proposal.user.email;
-						proposalHtml = proposal.detail;
+		try {
+			const proposals = await ProposalModel.find({ opportunity: req.opportunity._id, status: { $in: ['Submitted', 'Assigned'] } })
+				.sort('status created')
+				.populate('user')
+				.populate('opportunity', 'opportunityTypeCd name code')
+				.exec();
 
-						// Go through the files and build the internal links (reset links first)
-						// also build the index.html content
-						links = [];
-						files.forEach(file => {
-							links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
-						});
-						header = '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
-						header += email + '<br/>';
-						if (!proposal.isCompany) {
-							header += proposal.user.address + '<br/>';
-							header += proposal.user.phone + '<br/>';
-						} else {
-							header += '<b><i>Company:</i></b>' + '<br/>';
-							header += proposal.user.businessName + '<br/>';
-							header += proposal.user.businessAddress + '<br/>';
-							header += '<b><i>Contact:</i></b>' + '<br/>';
-							header += proposal.user.businessContactName + '<br/>';
-							header += proposal.user.businessContactPhone + '<br/>';
-							header += proposal.user.businessContactEmail + '<br/>';
-						}
-						header += '<h2>Documents</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
-						content = '<html><body>' + header + '<h2>Proposal</h2>' + proposalHtml + '</body></html>';
-
-						// Add the directory, content and documents for this proposal
-						zip.folder(opportunityName).folder(proponentName);
-						zip.folder(opportunityName)
-							.folder(proponentName)
-							.file('index.html', content);
-						files.forEach(file => {
-							zip.folder(opportunityName)
-								.folder(proponentName)
-								.folder('docs')
-								.file(file.name, fs.readFileSync(file.path), { binary: true });
-						});
-					});
-
-					res.setHeader('Content-Type', 'application/zip');
-					res.setHeader('Content-Type', 'application/octet-stream');
-					res.setHeader('Content-Description', 'File Transfer');
-					res.setHeader('Content-Transfer-Encoding', 'binary');
-					res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
-
-					zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			proposals.forEach(proposal => {
+				proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+				if (proposal.status === 'Assigned') {
+					proponentName += '-ASSIGNED';
 				}
+				files = proposal.attachments;
+				email = proposal.user.email;
+				proposalHtml = proposal.detail;
+
+				// Go through the files and build the internal links (reset links first)
+				// also build the index.html content
+				links = [];
+				files.forEach(file => {
+					links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
+				});
+				header = '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+				header += email + '<br/>';
+				if (!proposal.isCompany) {
+					header += proposal.user.address + '<br/>';
+					header += proposal.user.phone + '<br/>';
+				} else {
+					header += '<b><i>Company:</i></b>' + '<br/>';
+					header += proposal.user.businessName + '<br/>';
+					header += proposal.user.businessAddress + '<br/>';
+					header += '<b><i>Contact:</i></b>' + '<br/>';
+					header += proposal.user.businessContactName + '<br/>';
+					header += proposal.user.businessContactPhone + '<br/>';
+					header += proposal.user.businessContactEmail + '<br/>';
+				}
+				header += '<h2>Documents</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+				content = '<html><body>' + header + '<h2>Proposal</h2>' + proposalHtml + '</body></html>';
+
+				// Add the directory, content and documents for this proposal
+				zip.folder(opportunityName).folder(proponentName);
+				zip.folder(opportunityName)
+					.folder(proponentName)
+					.file('index.html', content);
+				files.forEach(file => {
+					zip.folder(opportunityName)
+						.folder(proponentName)
+						.folder('docs')
+						.file(file.name, fs.readFileSync(file.path), { binary: true });
+				});
 			});
+
+			res.setHeader('Content-Type', 'application/zip');
+			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Description', 'File Transfer');
+			res.setHeader('Content-Transfer-Encoding', 'binary');
+			res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+			zip.generateNodeStream({ compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
 	};
 
 	// Create an archive of a single proposal for the given opportunity and belong to the given user
-	public getMyProposalArchive = (req, res) => {
-		const zip = new (require('jszip'))();
-		const fs = require('fs');
-
+	public getMyProposalArchive = async (req: Request, res: Response): Promise<void> => {
 		// Create a zip archive from the opportunity name
 		const opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
+		const zip = new JSZip();
 
 		zip.folder(opportunityName);
 
-		ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('phases.inception.team')
-			.populate('phases.proto.team')
-			.populate('phases.implementation.team')
-			.populate('user')
-			.exec((err, proposal) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					let proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
-					if (proposal.status === 'Assigned') {
-						proponentName += '-ASSIGNED';
-					}
-					const files = proposal.attachments;
-					const email = proposal.user.email;
+		try {
+			const proposal = await ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('opportunity')
+				.populate('phases.inception.team')
+				.populate('phases.proto.team')
+				.populate('phases.implementation.team')
+				.populate('user')
+				.exec();
 
-					// go through the files and build the internal links (reset links first)
-					// also build the index.html content
-					const links = [];
-					files.forEach(file => {
-						links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
-					});
-					let questions = '<ol>';
-					proposal.teamQuestionResponses.forEach(question => {
-						questions += '<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>';
-					});
-					questions += '</ol>';
-					let phases = '<h3>Inception</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.inception.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.inception.cost.toFixed(2);
+			let proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+			if (proposal.status === 'Assigned') {
+				proponentName += '-ASSIGNED';
+			}
+			const files = proposal.attachments;
+			const email = proposal.user.email;
 
-					phases += '<h3>Prototype</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.proto.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.proto.cost.toFixed(2);
-
-					phases += '<h3>Implementation</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.implementation.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.implementation.cost.toFixed(2);
-
-					phases += '<br/><br/><b>Total Cost: ';
-					phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
-					phases += '</b><br/>';
-
-					let header = '<h2>Proposal</h2>';
-					header += 'Status: ';
-					header += proposal.status;
-					header += '<br/>';
-					header += 'Accepted Terms: ';
-					header += proposal.isAcceptedTerms ? 'Yes' : 'No';
-					header += '<br/>';
-					header += 'Created on: ';
-					header += new Date(proposal.created).toDateString();
-					header += '<br/>';
-					header += 'Lasted updated: ';
-					header += new Date(proposal.updated).toDateString();
-					header += '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
-					header += email + '<br/>';
-					header += '<b><i>Company:</i></b>' + '<br/>';
-					header += proposal.businessName + '<br/>';
-					header += proposal.businessAddress + '<br/>';
-					header += '<b><i>Contact:</i></b>' + '<br/>';
-					header += proposal.businessContactName + '<br/>';
-					header += proposal.businessContactPhone + '<br/>';
-					header += proposal.businessContactEmail + '<br/>';
-					if (links.length > 0) {
-						header += '<h2>Attachments/References</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
-					}
-					let content = '<html><body>';
-					content += header;
-					content += '<h2>Phases</h2>' + phases;
-					content += '<h2>Team Questions</h2>' + questions;
-					content += '</body></html>';
-					//
-					// add the directory, content and documents for this proposal
-					//
-					zip.folder(opportunityName).folder(proponentName);
-					zip.folder(opportunityName)
-						.folder(proponentName)
-						.file('proposal-summary.html', content);
-					files.forEach(file => {
-						zip.folder(opportunityName)
-							.folder(proponentName)
-							.folder('docs')
-							.file(file.name, fs.readFileSync(file.path), { binary: true });
-					});
-
-					res.setHeader('Content-Type', 'application/zip');
-					res.setHeader('Content-Type', 'application/octet-stream');
-					res.setHeader('Content-Description', 'File Transfer');
-					res.setHeader('Content-Transfer-Encoding', 'binary');
-					res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
-
-					zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
-				}
+			// go through the files and build the internal links (reset links first)
+			// also build the index.html content
+			const links = [];
+			files.forEach(file => {
+				links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
 			});
+			let questions = '<ol>';
+			proposal.teamQuestionResponses.forEach(question => {
+				questions += '<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>';
+			});
+			questions += '</ol>';
+			let phases = '<h3>Inception</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.inception.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.inception.cost.toFixed(2);
+
+			phases += '<h3>Prototype</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.proto.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.proto.cost.toFixed(2);
+
+			phases += '<h3>Implementation</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.implementation.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.implementation.cost.toFixed(2);
+
+			phases += '<br/><br/><b>Total Cost: ';
+			phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
+			phases += '</b><br/>';
+
+			let header = '<h2>Proposal</h2>';
+			header += 'Status: ';
+			header += proposal.status;
+			header += '<br/>';
+			header += 'Accepted Terms: ';
+			header += proposal.isAcceptedTerms ? 'Yes' : 'No';
+			header += '<br/>';
+			header += 'Created on: ';
+			header += new Date(proposal.created).toDateString();
+			header += '<br/>';
+			header += 'Lasted updated: ';
+			header += new Date(proposal.updated).toDateString();
+			header += '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+			header += email + '<br/>';
+			header += '<b><i>Company:</i></b>' + '<br/>';
+			header += proposal.businessName + '<br/>';
+			header += proposal.businessAddress + '<br/>';
+			header += '<b><i>Contact:</i></b>' + '<br/>';
+			header += proposal.businessContactName + '<br/>';
+			header += proposal.businessContactPhone + '<br/>';
+			header += proposal.businessContactEmail + '<br/>';
+			if (links.length > 0) {
+				header += '<h2>Attachments/References</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+			}
+			let content = '<html><body>';
+			content += header;
+			content += '<h2>Phases</h2>' + phases;
+			content += '<h2>Team Questions</h2>' + questions;
+			content += '</body></html>';
+
+			// add the directory, content and documents for this proposal
+			zip.folder(opportunityName).folder(proponentName);
+			zip.folder(opportunityName)
+				.folder(proponentName)
+				.file('proposal-summary.html', content);
+			files.forEach(file => {
+				zip.folder(opportunityName)
+					.folder(proponentName)
+					.folder('docs')
+					.file(file.name, fs.readFileSync(file.path), { binary: true });
+			});
+
+			res.setHeader('Content-Type', 'application/zip');
+			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Description', 'File Transfer');
+			res.setHeader('Content-Transfer-Encoding', 'binary');
+			res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+			zip.generateNodeStream({ compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
 	};
 
 	// Returns an aggregate cursor that counts proposals on an opportunity and groups by their status
@@ -802,20 +803,8 @@ class OpportunitiesServerController {
 		return opportunity.code + '-request';
 	};
 
-	private setOpportunityMember = (opportunity, user) => {
-		user.addRoles([this.memberRole(opportunity)]);
-	};
-
 	private setOpportunityAdmin = (opportunity, user) => {
 		user.addRoles([this.memberRole(opportunity), this.adminRole(opportunity)]);
-	};
-
-	private unsetOpportunityMember = (opportunity, user) => {
-		user.removeRoles([this.memberRole(opportunity)]);
-	};
-
-	private unsetOpportunityRequest = (opportunity, user) => {
-		user.removeRoles([this.requestRole(opportunity)]);
 	};
 
 	private ensureAdmin = (opportunity, user, res) => {
@@ -1032,13 +1021,11 @@ class OpportunitiesServerController {
 		let ret = '';
 
 		ret +=
-			'<p>This issue has been auto-generated to facilitate questions about \
-			<a href="https://bcdevexchange.org/opportunities/' +
+			'<p>This issue has been auto-generated to facilitate questions about <a href="https://bcdevexchange.org/opportunities/' +
 			opptype +
 			'/' +
 			opp.code +
-			'">a paid opportunity</a> that has just been posted on the \
-			<a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
+			'">a paid opportunity</a> that has just been posted on the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
 		ret +=
 			'<p>To learn more or apply, <a href="https://bcdevexchange.org/opportunities/' +
 			opptype +
