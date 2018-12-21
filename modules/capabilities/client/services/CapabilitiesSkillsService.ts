@@ -17,8 +17,14 @@ import angular from 'angular';
 						capabilityskillId: '@_id'
 					},
 					{
+						create: {
+							method: 'POST'
+						},
 						update: {
 							method: 'PUT'
+						},
+						remove: {
+							method: 'DELETE'
 						}
 					}
 				);

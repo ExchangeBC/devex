@@ -94,10 +94,8 @@
             <div class="col">
               <button type="button" class="btn btn-primary float-right" ng-click="qqq.savenow(qqq.capabilityForm.$valid)"><i
                   class="fas fa-save"></i> Save</button>
-              <button type="button" class="btn btn-text-only" ng-click="qqq.remove()"><i class="fas fa-trash"></i>
+              <button type="button" class="btn btn-text-only" ng-click="qqq.remove()" ng-if="qqq.capability._id"><i class="fas fa-trash"></i>
                 Delete</button>
-              <button type="button" class="btn btn-text-only" ui-sref="capabilities.view({capabilityId:qqq.capability.code})">
-                Cancel</button>
             </div>
           </div>
         </div>

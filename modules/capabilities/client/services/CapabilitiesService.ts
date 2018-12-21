@@ -17,6 +17,9 @@ import angular from 'angular';
 						capabilityId: '@_id'
 					},
 					{
+						create: {
+							method: 'POST'
+						},
 						update: {
 							method: 'PUT'
 						},
@@ -24,6 +27,9 @@ import angular from 'angular';
 							method: 'GET',
 							url: '/api/capabilities',
 							isArray: true
+						},
+						remove: {
+							method: 'DELETE'
 						}
 					}
 				);
