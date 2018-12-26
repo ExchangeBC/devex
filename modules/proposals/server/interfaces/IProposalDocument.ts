@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { IOpportunityDocument } from '../../../opportunities/server/interfaces/IOpportunityDocument';
+import IOpportunityDocument from '../../../opportunities/server/interfaces/IOpportunityDocument';
 import IOrgDocument from '../../../orgs/server/interfaces/IOrgDocument';
 import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 import IAttachmentDocument from '../interfaces/IAttachmentDocument';

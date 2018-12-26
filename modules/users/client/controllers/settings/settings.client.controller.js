@@ -10,10 +10,10 @@
 		//
 		// -------------------------------------------------------------------------
 		.controller('SettingsController', [
-			'Authentication',
-			function(Authentication) {
+			'authenticationService',
+			function(authenticationService) {
 				var vm = this;
-				vm.user = Authentication.user;
+				vm.user = authenticationService.user;
 			}
 		])
 		// -------------------------------------------------------------------------
@@ -23,12 +23,12 @@
 		// -------------------------------------------------------------------------
 		.controller('ProfilePrivacyController', [
 			'$scope',
-			'Authentication',
+			'authenticationService',
 			'UsersService',
 			'Notification',
-			function($scope, Authentication, UsersService, Notification) {
+			function($scope, authenticationService, UsersService, Notification) {
 				var vm = this;
-				vm.user = angular.copy(Authentication.user);
+				vm.user = angular.copy(authenticationService.user);
 				vm.savePrivacy = function(isValid) {
 					if (!isValid) {
 						$scope.$broadcast('show-errors-check-validity', 'vm.userForm');
@@ -43,8 +43,8 @@
 								delay: 2000,
 								message: '<i class="fas fa-3x fa-check-circle"></i> ' + successMessage
 							});
-							Authentication.user = response;
-							vm.user = angular.copy(Authentication.user);
+							authenticationService.user = response;
+							vm.user = angular.copy(authenticationService.user);
 						},
 						function(response) {
 							Notification.error({
@@ -65,7 +65,7 @@
 			'$scope',
 			'$sce',
 			'Notification',
-			'Authentication',
+			'authenticationService',
 			'UsersService',
 			'capabilities',
 			'CapabilitiesCommon',
@@ -74,7 +74,7 @@
 				$scope,
 				$sce,
 				Notification,
-				Authentication,
+				authenticationService,
 				UsersService,
 				capabilities,
 				CapabilitiesCommon,
@@ -82,7 +82,7 @@
 			) {
 				var vm = this;
 				vm.trust = $sce.trustAsHtml;
-				vm.user = angular.copy(Authentication.user);
+				vm.user = angular.copy(authenticationService.user);
 				vm.tinymceOptions = TINYMCE_OPTIONS;
 				//
 				// set up the structures for capabilities
@@ -110,8 +110,8 @@
 					//
 					new UsersService(vm.user).$update(
 						function(response) {
-							Authentication.user = response;
-							vm.user = angular.copy(Authentication.user);
+							authenticationService.user = response;
+							vm.user = angular.copy(authenticationService.user);
 							$scope.$broadcast('show-errors-reset', 'vm.userForm');
 							Notification.success({
 								delay: 2000,
@@ -135,10 +135,10 @@
 		//
 		// -------------------------------------------------------------------------
 		.controller('ProfileMessagesController', [
-			'Authentication',
-			function(Authentication) {
+			'authenticationService',
+			function(authenticationService) {
 				var vm = this;
-				vm.user = Authentication.user;
+				vm.user = authenticationService.user;
 			}
 		])
 		// -------------------------------------------------------------------------
@@ -147,10 +147,10 @@
 		//
 		// -------------------------------------------------------------------------
 		.controller('ProfileAffiliationsController', [
-			'Authentication',
-			function(Authentication) {
+			'authenticationService',
+			function(authenticationService) {
 				var vm = this;
-				vm.user = Authentication.user;
+				vm.user = authenticationService.user;
 			}
 		]);
 }());

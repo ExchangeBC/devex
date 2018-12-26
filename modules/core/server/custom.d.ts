@@ -1,4 +1,4 @@
-import { IOpportunityDocument } from "../../opportunities/server/interfaces/IOpportunityDocument";
+import IOpportunityDocument from "../../opportunities/server/interfaces/IOpportunityDocument";
 import IProposalDocument from "../../proposals/server/interfaces/IProposalDocument";
 import IProgramDocument from "../../programs/server/interfaces/IProgramDocument";
 import IUserDocument from "../../users/server/interfaces/IUserDocument";

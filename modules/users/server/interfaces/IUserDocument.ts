@@ -59,4 +59,9 @@ export default interface IUserDocument extends Document {
 	capabilities: ICapabilityDocument[];
 	capabilitySkills: ICapabilitySkillDocument[];
 	capabilityDetails: [object];
+	loggedIn?: boolean;
+	isLoggedIn?: boolean;
+	isUser?: boolean;
+	isAdmin?: boolean;
+	isGov?: boolean;
 }

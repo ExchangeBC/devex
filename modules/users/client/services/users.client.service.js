@@ -6,9 +6,9 @@
     .module('users.services')
     .factory('UsersService', UsersService);
 
-  UsersService.$inject = ['$resource', '$window', 'Authentication'];
+  UsersService.$inject = ['$resource', '$window', 'authenticationService'];
 
-  function UsersService($resource, $window, Authentication) {
+  function UsersService($resource, $window, authenticationService) {
     var Users = $resource('/api/users', {}, {
       update: {
         method: 'PUT'
@@ -65,7 +65,7 @@
         return this.signin(credentials).$promise;
       },
       resetMe: function () {
-        return this.self ().$promise.then (function (me) {$window.user = me; Authentication.user = me;});
+        return this.self ().$promise.then (function (me) {$window.user = me; authenticationService.user = me;});
       }
     });
 

@@ -25,7 +25,7 @@ import angular from 'angular';
 			'$state',
 			'proposal',
 			'opportunity',
-			'Authentication',
+			'authenticationService',
 			'ProposalsService',
 			'Notification',
 			'CapabilitiesCommon',
@@ -43,7 +43,7 @@ import angular from 'angular';
 				$state,
 				proposal,
 				opportunity,
-				Authentication,
+				authenticationService,
 				ProposalsService,
 				Notification,
 				CapabilitiesCommon,
@@ -61,7 +61,7 @@ import angular from 'angular';
 					ppp.members = resources;
 					ppp.title = editing ? 'Edit' : 'Create';
 					ppp.proposal = proposal;
-					ppp.user = Authentication.user;
+					ppp.user = authenticationService.user;
 					if (org) {
 						ppp.org.fullAddress = ppp.org.address + (ppp.org.address2 ? ', ' + ppp.org.address2 : '') + ', ' + ppp.org.city + ', ' + ppp.org.province + ', ' + ppp.org.postalcode;
 					}

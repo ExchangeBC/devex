@@ -19,7 +19,7 @@
 	// Controller for the master list of messagetemplates
 	//
 	// =========================================================================
-	.controller ('MessageTemplatesListController', ['templates', 'Authentication', function (templates, Authentication) {
+	.controller ('MessageTemplatesListController', ['templates', 'authenticationService', function (templates, authenticationService) {
 		var vm         = this;
 		vm.templates = templates;
 	}])
@@ -28,20 +28,20 @@
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateViewController', ['$sce', '$state', 'template', 'Authentication', 'Notification', function ($sce, $state, template, Authentication, Notification) {
+	.controller ('MessageTemplateViewController', ['$sce', '$state', 'template', 'authenticationService', 'Notification', function ($sce, $state, template, authenticationService, Notification) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.template          = template;
-		vm.auth                = Authentication;
-		vm.canEdit              = Authentication.isAdmin;
+		vm.auth                = authenticationService;
+		vm.canEdit              = authenticationService.isAdmin;
 	}])
-	.controller ('MessageViewController', ['$sce', '$location', '$state', '$rootScope', 'message', 'Authentication', 'Notification', 'MessagesService', function ($sce, $location, $state, $rootScope, message, Authentication, Notification, MessagesService) {
+	.controller ('MessageViewController', ['$sce', '$location', '$state', '$rootScope', 'message', 'authenticationService', 'Notification', 'MessagesService', function ($sce, $location, $state, $rootScope, message, authenticationService, Notification, MessagesService) {
 		var vm        = this;
 		vm.haveresult = false;
 		vm.resultmsg  = '';
 		vm.trust      = $sce.trustAsHtml;
 		vm.message    = message ;
-		vm.auth       = Authentication;
+		vm.auth       = authenticationService;
 		vm.formatDate = formatDate;
 		message.datePosted = formatDate(new Date (message.datePosted));
 		message.date2Archive = formatDate(new Date (message.date2Archive));
@@ -84,10 +84,10 @@
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateEditController', ['$scope', 'TINYMCE_OPTIONS', '$state', 'editing', 'template', 'Authentication', 'Notification', 'MessageTemplatesService', function ($scope, TINYMCE_OPTIONS, $state, editing, template, Authentication, Notification, MessageTemplatesService) {
+	.controller ('MessageTemplateEditController', ['$scope', 'TINYMCE_OPTIONS', '$state', 'editing', 'template', 'authenticationService', 'Notification', 'MessageTemplatesService', function ($scope, TINYMCE_OPTIONS, $state, editing, template, authenticationService, Notification, MessageTemplatesService) {
 		var qqq        = this;
 		qqq.template = template;
-		qqq.auth       = Authentication;
+		qqq.auth       = authenticationService;
 		qqq.tinymceOptions = TINYMCE_OPTIONS;
 		qqq.template.defaultActionCd          = '';
 		qqq.template.defaultLinkTitleTemplate = '';

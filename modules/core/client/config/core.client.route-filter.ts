@@ -3,9 +3,9 @@
 
 	angular.module('core').run(routeFilter);
 
-	routeFilter.$inject = ['$transitions', '$state', 'Authentication'];
+	routeFilter.$inject = ['$transitions', '$state', 'authenticationService'];
 
-	function routeFilter($transitions, $state, Authentication) {
+	function routeFilter($transitions, $state, authenticationService) {
 		// Store previous state
 		function storePreviousState(state, params) {
 			// only store this state if it shouldn't be ignored
@@ -22,12 +22,12 @@
 		$transitions.onStart({ to: 'orgadmin.**' }, trans => {
 			return new Promise(resolve => {
 				// If administrator account, allow
-				if (Authentication.user.roles.indexOf('admin') !== -1) {
+				if (authenticationService.user.roles.indexOf('admin') !== -1) {
 					resolve();
 				}
 
 				// If not signed redirect to sign-in
-				if (!Authentication.user) {
+				if (!authenticationService.user) {
 					storePreviousState(trans.to(), trans.params('to'));
 					resolve($state.target('authentication.signin'));
 				}
@@ -41,7 +41,7 @@
 							!org.admins ||
 							org.admins
 								.map(admin => admin._id)
-								.indexOf(Authentication.user._id) < 0
+								.indexOf(authenticationService.user._id) < 0
 						) {
 							resolve($state.target('forbidden'));
 						} else {
@@ -54,8 +54,8 @@
 		// Main route filter - checks for allowed/denied roles and redirects apppropriately
 		$transitions.onStart({}, trans => {
 			const userRoles =
-				Authentication.user && Authentication.user.roles !== undefined
-					? Authentication.user.roles
+				authenticationService.user && authenticationService.user.roles !== undefined
+					? authenticationService.user.roles
 					: ['guest'];
 			const toState = trans.to();
 
@@ -91,7 +91,7 @@
 			// Redirect to sign-in if they haven't authenticated
 			// Redirect to 'Forbidden' if they aren't authorized
 			if (!userHasAccess) {
-				if (!Authentication.user) {
+				if (!authenticationService.user) {
 					storePreviousState(toState, trans.params('to'));
 					return $state.target('authentication.signin');
 				} else {

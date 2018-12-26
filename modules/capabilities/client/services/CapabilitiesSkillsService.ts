@@ -1,7 +1,5 @@
 'use strict';
 
-import angular from 'angular';
-
 (() => {
 	angular
 		.module('capabilities.services')
@@ -10,7 +8,7 @@ import angular from 'angular';
 		.factory('CapabilitySkillsService', [
 			'$resource',
 			'$log',
-			($resource, $log) => {
+			($resource: ng.resource.IResourceService, $log: ng.ILogService) => {
 				const CapabilitySkill = $resource(
 					'/api/capabilityskill/:capabilityskillId',
 					{

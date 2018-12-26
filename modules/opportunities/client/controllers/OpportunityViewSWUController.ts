@@ -1,10 +1,16 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { ISCEService, uiNotification } from 'angular';
+import { IStateParamsService, IStateService } from 'angular-ui-router';
 import _ from 'lodash';
+import IProposalDocument from '../../../proposals/server/interfaces/IProposalDocument';
+import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
+import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
+import OpportunitiesService from '../services/OpportunitiesService';
 
 (() => {
-	const formatDate = date => {
+	const formatDate = (date: Date): string => {
 		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		const day = date.getDate();
 		const monthIndex = date.getMonth();
@@ -22,13 +28,25 @@ import _ from 'lodash';
 			'$sce',
 			'org',
 			'opportunity',
-			'Authentication',
-			'OpportunitiesService',
+			'authenticationService',
+			'opportunitiesService',
 			'Notification',
 			'ask',
 			'myproposal',
-			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, org, opportunity, Authentication, OpportunitiesService, Notification, ask, myproposal, OpportunitiesCommon) {
+			'opportunitiesCommonService',
+			function(
+				$state: IStateService,
+				$stateParams: IStateParamsService,
+				$sce: ISCEService,
+				org,
+				opportunity: IOpportunityDocument,
+				authenticationService: AuthenticationService,
+				opportunitiesService: OpportunitiesService,
+				Notification: uiNotification.INotificationService,
+				ask,
+				myproposal: IProposalDocument,
+				opportunitiesCommonService: OpportunitiesCommonService
+			) {
 				if (!opportunity) {
 					$state.go('opportunities.list');
 				}
@@ -57,8 +75,6 @@ import _ from 'lodash';
 				vm.opportunity.phases.implementation.fstartDate = formatDate(vm.opportunity.phases.implementation.startDate);
 				vm.opportunity.phases.implementation.fendDate = formatDate(vm.opportunity.phases.implementation.endDate);
 
-				vm.authentication = Authentication;
-				vm.OpportunitiesService = OpportunitiesService;
 				vm.idString = 'opportunityId';
 				vm.display = {};
 				vm.display.description = $sce.trustAsHtml(vm.opportunity.description);
@@ -74,12 +90,12 @@ import _ from 'lodash';
 				vm.numberOfInterviews = vm.opportunity.numberOfInterviews;
 
 				// Set up capabilities and capability skills
-				vm.capabilitySkills = OpportunitiesCommon.getTechnicalSkills(opportunity);
-				vm.inceptionCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.inception);
-				vm.prototypeCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.proto);
-				vm.implementationCapabilities = OpportunitiesCommon.getCapabilitiesForPhase(opportunity.phases.implementation);
+				vm.capabilitySkills = opportunitiesCommonService.getTechnicalSkills(opportunity);
+				vm.inceptionCapabilities = opportunitiesCommonService.getCapabilitiesForPhase(opportunity.phases.inception);
+				vm.prototypeCapabilities = opportunitiesCommonService.getCapabilitiesForPhase(opportunity.phases.proto);
+				vm.implementationCapabilities = opportunitiesCommonService.getCapabilitiesForPhase(opportunity.phases.implementation);
 
-				vm.isWatching = OpportunitiesCommon.isWatching(vm.opportunity);
+				vm.isWatching = opportunitiesCommonService.isWatching(vm.opportunity);
 				vm.toggleWatch = () => {
 					if (vm.isWatching) {
 						vm.removeWatch();
@@ -88,19 +104,18 @@ import _ from 'lodash';
 					}
 				};
 				vm.addWatch = () => {
-					vm.isWatching = OpportunitiesCommon.addWatch(vm.opportunity);
+					vm.isWatching = opportunitiesCommonService.addWatch(vm.opportunity);
 				};
 				vm.removeWatch = () => {
-					vm.isWatching = OpportunitiesCommon.removeWatch(vm.opportunity);
+					vm.isWatching = opportunitiesCommonService.removeWatch(vm.opportunity);
 				};
-				//
+
 				// what can the user do here?
-				//
-				const isUser = Authentication.user;
-				const isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-				const isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
+				const isUser = authenticationService.user;
+				const isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+				const isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
 				vm.isGov = isGov;
-				vm.hasEmail = isUser && Authentication.user.email !== '';
+				vm.hasEmail = isUser && authenticationService.user.email !== '';
 				const isMemberOrWaiting = opportunity.userIs.member || opportunity.userIs.request;
 				vm.loggedIn = !!isUser;
 				vm.canRequestMembership = isGov && !isMemberOrWaiting;
@@ -109,9 +124,8 @@ import _ from 'lodash';
 				vm.isSprintWithUs = vm.opportunity.opportunityTypeCd === 'sprint-with-us';
 				vm.showProposals = vm.canEdit && vm.opportunity.isPublished;
 				vm.isAdmin = isAdmin;
-				//
+
 				// dates
-				//
 				const rightNow = new Date();
 				vm.closing = 'CLOSED';
 				const timeDiff = vm.opportunity.deadline - rightNow.getTime();
@@ -136,25 +150,10 @@ import _ from 'lodash';
 				vm.assignment = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 				dt = vm.opportunity.start;
 				vm.start = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-				// -------------------------------------------------------------------------
-				//
+
 				// can this be published?
-				//
-				// -------------------------------------------------------------------------
-				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
+				vm.errorFields = opportunitiesCommonService.publishStatus(vm.opportunity);
 				vm.canPublish = vm.errorFields.length === 0;
-				// -------------------------------------------------------------------------
-				//
-				// issue a request for membership
-				//
-				// -------------------------------------------------------------------------
-				vm.request = () => {
-					OpportunitiesService.makeRequest({
-						opportunityId: opportunity._id
-					}).$promise.then(() => {
-						Notification.success({ message: '<i class="fas fa-check-circle"></i> Successfully Applied!' });
-					});
-				};
 
 				vm.requestADMApproval = () => {
 					$state.go('opportunityadmin.approvalrequestswu', {
@@ -162,17 +161,13 @@ import _ from 'lodash';
 					});
 				};
 
-				// -------------------------------------------------------------------------
-				//
 				// publish or un publish the opportunity
-				//
-				// -------------------------------------------------------------------------
 				vm.publish = (opp, isToBePublished) => {
 					const publishedState = opp.isPublished;
 					const publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
 					const publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 					const publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-					const publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
+					const publishMethod = isToBePublished ? opportunitiesService.getOpportunityResource().publish : opportunitiesService.getOpportunityResource().unpublish;
 					let isToBeSaved = true;
 					let promise = Promise.resolve();
 
@@ -207,44 +202,30 @@ import _ from 'lodash';
 						}
 					});
 				};
-				// -------------------------------------------------------------------------
-				//
-				// sign in and apply
-				//
-				// -------------------------------------------------------------------------
-				vm.signInAndApply = () => {
-					$state.go('authentication.signin').then(() => {
-						$state.previous = {
-							state: 'opportunities.viewswu',
-							params: { opportunityId: opportunity.code },
-							href: $state.href('opportunities.viewswu', { opportunityId: opportunity.code })
-						};
-					});
-				};
-				// -------------------------------------------------------------------------
-				//
-				// unassign an opportunitu
-				//
-				// -------------------------------------------------------------------------
+
+				// unassign an opportunituy
 				vm.unassign = () => {
 					const opp = vm.opportunity;
 					const q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
 					ask.yesNo(q).then(r => {
 						if (r) {
-							OpportunitiesService.unassign({ opportunityId: opp._id }).$promise.then(
-								response => {
-									vm.opportunity = response;
-									Notification.success({
-										message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
-									});
-								},
-								error => {
-									Notification.error({
-										message: error.data.message,
-										title: '<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
-									});
-								}
-							);
+							opportunitiesService
+								.getOpportunityResource()
+								.unassign({ opportunityId: opp._id })
+								.$promise.then(
+									response => {
+										vm.opportunity = response;
+										Notification.success({
+											message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful!'
+										});
+									},
+									error => {
+										Notification.error({
+											message: error.data.message,
+											title: '<i class="fas fa-exclamation-triangle"></i> Proposal Un-Assignment failed!'
+										});
+									}
+								);
 						}
 					});
 				};

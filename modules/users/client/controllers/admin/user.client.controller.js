@@ -5,11 +5,11 @@ import '../../css/users.css';
 
 	angular.module('users.admin').controller('UserController', UserController);
 
-	UserController.$inject = ['$scope', '$state', '$window', 'Authentication', 'userResolve', 'Notification'];
+	UserController.$inject = ['$scope', '$state', '$window', 'authenticationService', 'userResolve', 'Notification'];
 
-	function UserController($scope, $state, $window, Authentication, user, Notification) {
+	function UserController($scope, $state, $window, authenticationService, user, Notification) {
 		var vm = this;
-		vm.authentication = Authentication;
+		vm.authentication = authenticationService;
 		vm.user = user;
 		vm.remove = remove;
 		vm.update = update;

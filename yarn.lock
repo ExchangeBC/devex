@@ -598,10 +598,39 @@
     "@types/node" "*"
     "@types/redis" "*"
 
-"@types/angular@^1.6.51":
-  version "1.6.51"
-  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.51.tgz#a67515b0ba6a2ff68894a39405c1343cbf9c36d4"
-  integrity sha512-wYU+/zlJWih7ZmonWVjGQ18tG7GboI9asMNjRBM5fpIFJWXSioQttCTw9qGL44cP82ghM8sCV9apEqm1zBDq2w==
+"@types/angular-breadcrumb@^0.4.22":
+  version "0.4.22"
+  resolved "https://registry.yarnpkg.com/@types/angular-breadcrumb/-/angular-breadcrumb-0.4.22.tgz#1fa92b40677da756821caae886080a65d971390d"
+  integrity sha512-OAE8k6qRJ2nBIDnKYN3fJBGKybEsZ5pCUGp9kBb7KmWDUzSDH1VgeEbYLth6t4J0PEKyN4ouf3/4/wUo1b3Vww==
+  dependencies:
+    "@types/angular" "*"
+    "@types/angular-ui-router" "*"
+
+"@types/angular-resource@^1.5.14":
+  version "1.5.14"
+  resolved "https://registry.yarnpkg.com/@types/angular-resource/-/angular-resource-1.5.14.tgz#902f34e8c98f708ae99493c6d416b39b4a22d9fe"
+  integrity sha512-dpP5DHIape+lMlLPzfOrkpkgjiDrT2lYcPY2Wrk2FTUEBlOZkR1sM+I8oR1S/ZuKCDzTxOi0UmLg+0MG7zcFyA==
+  dependencies:
+    "@types/angular" "*"
+
+"@types/angular-ui-notification@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-notification/-/angular-ui-notification-0.0.4.tgz#095bf79654ca2b495cc10c602c1ffae5c17524fa"
+  integrity sha512-iBQsMJbmoTJtWYE7Yl69ErCOdKgjvFShBcBxx0Jyx5VVFCjj4jbon8mupldgraKOjh4wjwHYht+WpwHmUSlEcQ==
+  dependencies:
+    "@types/angular" "*"
+
+"@types/angular-ui-router@*", "@types/angular-ui-router@^1.1.40":
+  version "1.1.40"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-router/-/angular-ui-router-1.1.40.tgz#d8a10fe4af86a069f8c3302946363f1149e5a6b3"
+  integrity sha512-4xMwNeSNrRHj2uaLAbeACVjgTCLCDHqwMQOKE0lq6MIXngVuvc0zucGKg2WYd4i+goxl9R3agH3w4qnEseIbxw==
+  dependencies:
+    "@types/angular" "*"
+
+"@types/angular@*", "@types/angular@^1.6.52":
+  version "1.6.52"
+  resolved "https://registry.yarnpkg.com/@types/angular/-/angular-1.6.52.tgz#7bbb3a46139594b50936234a09e2e33f2f5402f7"
+  integrity sha512-0Z9Sot6/vaEIHHaXpHLKX8g4hCOmC+0LNZw8nEXhYgtw/VNjsaf30hhe+WOXHuk+/+Qze/OBrogPU+lCEURrhQ==
 
 "@types/async@^2.0.50":
   version "2.0.50"
@@ -931,9 +960,17 @@
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.13.6.tgz#128d1685a7c34d31ed17010fc87d6a12c1de6976"
   integrity sha512-5Th3OsZ4gTRdr9Mho83BQ23cex4sRhOR4XTG+m+cJc0FhtUBK9Vn62hBJ+pnQYnSxoPOsKoAPOx6FcphxBC8ng==
 
+"@uirouter/angularjs@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@uirouter/angularjs/-/angularjs-1.0.20.tgz#bd330544cb2f1c35987f610d8fc353071786c04e"
+  integrity sha512-fY6bsesTL/tg8gyFHXaIjD1r5b7Ac+SYupodO9OzT4/gKI0YC+uGzLpQESAiXlT3fsxdEPVBzdtAbzXDwCKdEA==
+  dependencies:
+    "@uirouter/core" "5.0.21"
+
 "@uirouter/core@5.0.21":
   version "5.0.21"
   resolved "https://registry.yarnpkg.com/@uirouter/core/-/core-5.0.21.tgz#b6c4c311e9416a1e8ce76b072e042a60224d1b3a"
+  integrity sha512-QWHc0wT00qtYNkT0BXZaFNLLHZyux0qJjF8c2WklW5/Q0Z866NoJjJErEMWjQb/AR+olkR2NlfEEi8KTQU2OpA==
 
 "@webassemblyjs/ast@1.7.10":
   version "1.7.10"
@@ -1355,9 +1392,10 @@ angular-animate@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.5.tgz#1ffc6c2a9cdee227a2ba79cc6cd8f71ec44db5dc"
 
-angular-breadcrumb@~0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/angular-breadcrumb/-/angular-breadcrumb-0.4.1.tgz#5bff5780c799ccc6088258a84256d347fe9691a5"
+angular-breadcrumb@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/angular-breadcrumb/-/angular-breadcrumb-0.5.0.tgz#058abe6984f1b82ff6ac37888ef9afccbc8f63b2"
+  integrity sha1-BYq+aYTxuC/2rDeIjvmvzLyPY7I=
 
 angular-drag-and-drop-lists@^2.1.0:
   version "2.1.0"
@@ -1386,12 +1424,6 @@ angular-ui-bootstrap@~1.2.1:
 angular-ui-notification@~0.3.6:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/angular-ui-notification/-/angular-ui-notification-0.3.6.tgz#333bcbe82a2651482b39c3595b3cbfa88e30bcf7"
-
-angular-ui-router@^1.0.20:
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/angular-ui-router/-/angular-ui-router-1.0.20.tgz#86dbaaa3368df0c319f3328f4ace616a246cf394"
-  dependencies:
-    "@uirouter/core" "5.0.21"
 
 angular-ui-tinymce@0.0.19:
   version "0.0.19"

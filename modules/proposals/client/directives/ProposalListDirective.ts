@@ -1,6 +1,7 @@
 'use strict';
 
 import angular from 'angular';
+import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
 
 (() => {
 	angular
@@ -21,19 +22,19 @@ import angular from 'angular';
 				controller: [
 					'$scope',
 					'ProposalsService',
-					'OpportunitiesService',
-					'Authentication',
+					'opportunitiesService',
+					'authenticationService',
 					'Notification',
-					function($scope, ProposalsService, OpportunitiesService, Authentication, Notification) {
+					function($scope, ProposalsService, opportunitiesService: OpportunitiesService, authenticationService, Notification) {
 						const vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.context = $scope.context;
 						vm.proposals = [];
 						vm.stats = {};
 						vm.isclosed = $scope.isclosed;
-						const isUser = Authentication.user;
-						vm.isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-						vm.isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
+						const isUser = authenticationService.user;
+						vm.isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+						vm.isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
 						if (vm.context === 'opportunity') {
 							vm.opportunityId = vm.opportunity._id;
 							vm.programTitle = vm.opportunity.title;
@@ -60,7 +61,7 @@ import angular from 'angular';
 							vm.columnCount = 1;
 						}
 						if ($scope.opportunity) {
-							vm.stats = OpportunitiesService.getProposalStats({
+							vm.stats = opportunitiesService.getOpportunityResource().getProposalStats({
 								opportunityId: $scope.opportunity._id
 							});
 						}

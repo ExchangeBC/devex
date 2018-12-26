@@ -14,7 +14,7 @@ import ProposalsServerController from '../../../proposals/server/controllers/Pro
 import IAttachmentDocument from '../../../proposals/server/interfaces/IAttachmentDocument';
 import ProposalModel from '../../../proposals/server/models/ProposalModel';
 import UserModel from '../../../users/server/models/UserModel';
-import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
+import IOpportunityDocument from '../interfaces/IOpportunityDocument';
 import OpportunityModel from '../models/OpportunityModel';
 import OpportunitiesUtilities from '../utilities/OpportunitiesUtilities';
 

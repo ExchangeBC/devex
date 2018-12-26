@@ -1,12 +1,15 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { ui } from 'angular';
+import { IStateParamsService, IStateProvider } from 'angular-ui-router';
+import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
+import AuthenticationService from '../../../users/client/services/AuthenticationService';
 
 // All the client side routes for proposals
 (() => {
 	angular.module('proposals.routes').config([
 		'$stateProvider',
-		$stateProvider => {
+		($stateProvider: IStateProvider) => {
 			$stateProvider
 
 				// this is the top level, abstract route for all proposal routes, it only
@@ -31,7 +34,8 @@ import angular from 'angular';
 					url: '',
 					templateUrl: '/modules/proposals/client/views/list-proposals.client.view.html',
 					data: {
-						pageTitle: 'Proposals List'
+						pageTitle: 'Proposals List',
+						roles: ['admin', 'gov']
 					},
 					ncyBreadcrumb: {
 						label: 'All proposals'
@@ -45,8 +49,7 @@ import angular from 'angular';
 						]
 					},
 					controller: 'ProposalsListController',
-					controllerAs: 'vm',
-					roles: ['admin', 'gov']
+					controllerAs: 'vm'
 				})
 
 				// view a CWU proposal, resolve the proposal data
@@ -58,12 +61,11 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-view.html',
 					controller: 'ProposalCWUViewController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
 							'ProposalsService',
-							($stateParams, ProposalsService) => {
+							($stateParams: IStateParamsService, ProposalsService) => {
 								return ProposalsService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -81,12 +83,11 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
 					controller: 'ProposalSWUViewController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
 							'ProposalsService',
-							($stateParams, ProposalsService) => {
+							($stateParams: IStateParamsService, ProposalsService) => {
 								return ProposalsService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -123,12 +124,11 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
 					controller: 'ProposalCWUEditController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
 							'ProposalsService',
-							($stateParams, ProposalsService) => {
+							($stateParams: IStateParamsService, ProposalsService) => {
 								return ProposalsService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -136,9 +136,9 @@ import angular from 'angular';
 						],
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
-								return OpportunitiesService.get({
+							'opportunitiesService',
+							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
+								return opportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -147,10 +147,10 @@ import angular from 'angular';
 							return true;
 						},
 						org: [
-							'Authentication',
+							'authenticationService',
 							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							(authenticationService: AuthenticationService, OrgsService) => {
+								if (!authenticationService.user) {
 									return {};
 								}
 								return OrgsService.myadmin().$promise.then(orgs => {
@@ -175,7 +175,6 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
 					controller: 'ProposalCWUEditController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'ProposalsService',
@@ -185,18 +184,18 @@ import angular from 'angular';
 						],
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
-								return OpportunitiesService.get({
+							'opportunitiesService',
+							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
+								return opportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'Authentication',
+							'authenticationService',
 							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							(authenticationService: AuthenticationService, OrgsService) => {
+								if (!authenticationService.user) {
 									return {};
 								}
 								return OrgsService.myadmin().$promise.then(orgs => {
@@ -224,12 +223,11 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
 					controller: 'ProposalSWUEditController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
 							'ProposalsService',
-							($stateParams, ProposalsService) => {
+							($stateParams: IStateParamsService, ProposalsService) => {
 								return ProposalsService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -237,9 +235,9 @@ import angular from 'angular';
 						],
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
-								return OpportunitiesService.get({
+							'opportunitiesService',
+							($stateParams, opportunitiesService: OpportunitiesService) => {
+								return opportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -248,10 +246,10 @@ import angular from 'angular';
 							return true;
 						},
 						org: [
-							'Authentication',
+							'authenticationService',
 							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							(authenticationService: AuthenticationService, OrgsService) => {
+								if (!authenticationService.user) {
 									return null;
 								}
 								return OrgsService.myadmin().$promise.then(orgs => {
@@ -265,11 +263,11 @@ import angular from 'angular';
 						],
 						resources: [
 							'OrgsService',
-							'Authentication',
+							'authenticationService',
 							'ProposalsService',
 							'$stateParams',
-							(OrgsService, Authentication, ProposalsService, $stateParams) => {
-								if (!Authentication.user) {
+							(OrgsService, authenticationService: AuthenticationService, ProposalsService, $stateParams: IStateParamsService) => {
+								if (!authenticationService.user) {
 									return null;
 								} else {
 									return OrgsService.myadmin().$promise.then(orgs => {
@@ -299,7 +297,6 @@ import angular from 'angular';
 					templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
 					controller: 'ProposalSWUEditController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'ProposalsService',
@@ -309,18 +306,18 @@ import angular from 'angular';
 						],
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
-								return OpportunitiesService.get({
+							'opportunitiesService',
+							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
+								return opportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'Authentication',
+							'authenticationService',
 							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							(authenticationService: AuthenticationService, OrgsService) => {
+								if (!authenticationService.user) {
 									return null;
 								}
 								return OrgsService.myadmin().$promise.then(orgs => {
@@ -333,12 +330,12 @@ import angular from 'angular';
 							}
 						],
 						resources: [
-							'Authentication',
+							'authenticationService',
 							'ProposalsService',
 							'$stateParams',
 							'OrgsService',
-							(Authentication, ProposalsService, $stateParams, OrgsService) => {
-								if (!Authentication.user) {
+							(authenticationService: AuthenticationService, ProposalsService, $stateParams: IStateParamsService, OrgsService) => {
+								if (!authenticationService.user) {
 									return null;
 								} else {
 									return OrgsService.myadmin().$promise.then(orgs => {

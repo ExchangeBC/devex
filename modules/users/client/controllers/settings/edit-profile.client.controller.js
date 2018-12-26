@@ -5,21 +5,21 @@
 		.module('users')
 		.controller('EditProfileController', EditProfileController);
 
-	EditProfileController.$inject = ['$scope', '$state', 'modalService', 'dataService', 'UsersService', 'Authentication', 'Notification', 'ask'];
+	EditProfileController.$inject = ['$scope', '$state', 'modalService', 'dataService', 'UsersService', 'authenticationService', 'Notification', 'ask'];
 
-	function EditProfileController($scope, $state, modalService, dataService, UsersService, Authentication, Notification, ask) {
+	function EditProfileController($scope, $state, modalService, dataService, UsersService, authenticationService, Notification, ask) {
 		var vm               	= this;
-		var isUser           	= Authentication.user;
-		vm.isGov           		= isUser && !!~Authentication.user.roles.indexOf ('gov');
-		vm.pendingGovRequest   	= isUser && !!~Authentication.user.roles.indexOf ('gov-request');
-		vm.hasCompany 			= isUser && Authentication.user.orgsAdmin.length > 0;
+		var isUser           	= authenticationService.user;
+		vm.isGov           		= isUser && !!~authenticationService.user.roles.indexOf ('gov');
+		vm.pendingGovRequest   	= isUser && !!~authenticationService.user.roles.indexOf ('gov-request');
+		vm.hasCompany 			= isUser && authenticationService.user.orgsAdmin.length > 0;
 		//
 		// deep copy the model, as we don't want to update until saved
 		//
-		vm.user              = angular.copy(Authentication.user);
+		vm.user              = angular.copy(authenticationService.user);
 		vm.updateUserProfile = updateUserProfile;
 
-		var pristineUser = angular.toJson(Authentication.user);
+		var pristineUser = angular.toJson(authenticationService.user);
 		vm.cities           = dataService.cities;
 		vm.tinymceOptions = {
 			resize      : true,
@@ -78,9 +78,9 @@
 				$scope.$broadcast('show-errors-reset', 'vm.userForm');
 
 				Notification.success({ delay:2000, message: '<i class="fas fa-3x fa-check-circle"></i> '+successMessage});
-				Authentication.user = response;
-				vm.user = angular.copy(Authentication.user);
-				pristineUser = angular.toJson(Authentication.user);
+				authenticationService.user = response;
+				vm.user = angular.copy(authenticationService.user);
+				pristineUser = angular.toJson(authenticationService.user);
 			}, function (response) {
 				Notification.error({ message: response.data.message, title: '<i class="fas fa-3x fa-exclamation-triangle"></i> Edit profile failed!' });
 			});
@@ -91,12 +91,12 @@
 			ask.yesNo(question)
 			.then(function(answer) {
 				if (answer) {
-					var user = new UsersService(Authentication.user);
+					var user = new UsersService(authenticationService.user);
 					user.addRequest = true;
 					user.$update(
 						function(response) {
 							vm.pendingGovRequest = true;
-							Authentication.user = response;
+							authenticationService.user = response;
 							Notification.success({
 								message: '<i class="fas fa-3x fa-check-circle"></i> Verification request sent!'
 							});

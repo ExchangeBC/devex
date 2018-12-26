@@ -7,9 +7,9 @@ import io from 'socket.io-client';
 	// Create the Socket.io wrapper service
 	angular.module('core').factory('Socket', Socket);
 
-	Socket.$inject = ['Authentication', '$timeout'];
+	Socket.$inject = ['authenticationService', '$timeout'];
 
-	function Socket(Authentication, $timeout) {
+	function Socket(authenticationService, $timeout) {
 		const service = {
 			connect,
 			emit,
@@ -25,7 +25,7 @@ import io from 'socket.io-client';
 		// Connect to Socket.io server
 		function connect() {
 			// Connect only when authenticated
-			if (Authentication.user) {
+			if (authenticationService.user) {
 				service.socket = io();
 			}
 		}

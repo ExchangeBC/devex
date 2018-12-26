@@ -9,18 +9,18 @@
 		//
 		// =========================================================================
 		.controller('OpportunityLandingController', [
-			'Authentication',
+			'authenticationService',
 			'$stateParams',
-			function(Authentication, $stateParams) {
+			function(authenticationService, $stateParams) {
 				var vm = this;
 				vm.programId = $stateParams.programId;
 				vm.programTitle = $stateParams.programTitle;
 				vm.projectId = $stateParams.projectId;
 				vm.projectTitle = $stateParams.projectTitle;
 				vm.context = $stateParams.context;
-				var isUser = Authentication.user;
-				var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
+				var isUser = authenticationService.user;
+				var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+				var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
 				vm.userCanAdd = isAdmin || isGov;
 			}
 		])
@@ -35,15 +35,15 @@
 			'$sce',
 			'$location',
 			'opportunity',
-			'Authentication',
-			'OpportunitiesService',
+			'authenticationService',
+			'opportunitiesService',
 			'ProposalsService',
 			'Notification',
 			'modalService',
 			'ask',
 			'myproposal',
-			'OpportunitiesCommon',
-			function($state, $stateParams, $sce, $location, opportunity, Authentication, OpportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, OpportunitiesCommon) {
+			'opportunitiesCommonService',
+			function($state, $stateParams, $sce, $location, opportunity, authenticationService, opportunitiesService, ProposalsService, Notification, modalService, ask, myproposal, opportunitiesCommonService) {
 				if (!opportunity) {
 					console.error('no opportunity provided');
 					$state.go('opportunities.list');
@@ -57,8 +57,8 @@
 				vm.opportunity.assignment = new Date(vm.opportunity.assignment);
 				vm.opportunity.start = new Date(vm.opportunity.start);
 				vm.opportunity.endDate = new Date(vm.opportunity.endDate);
-				vm.authentication = Authentication;
-				vm.OpportunitiesService = OpportunitiesService;
+				vm.authentication = authenticationService;
+				vm.OpportunitiesService = opportunitiesService;
 				vm.idString = 'opportunityId';
 				vm.display = {};
 				vm.display.description = $sce.trustAsHtml(vm.opportunity.description);
@@ -92,7 +92,7 @@
 
 				vm.requestApprovalCode = function() {
 					if (OpportunitiesCommon.requestApprovalCode(vm.opportunity)) {
-						OpportunitiesService.get({
+						opportunitiesService.getOpportunityResource().get({
 							opportunityId: vm.opportunity._id
 						}).$promise.then(function(updatedOpportunity) {
 							vm.opportunity = updatedOpportunity;
@@ -120,7 +120,7 @@
 				vm.submitApprovalCode = function() {
 					OpportunitiesCommon.submitApprovalCode(vm.opportunity, vm.twoFAcode, vm.approvalAction)
 						.then(function(responseMessage) {
-							OpportunitiesService.get({
+							opportunitiesService.getOpportunityResource().get({
 								opportunityId: vm.opportunity._id
 							}).$promise.then(function(updatedOpportunity) {
 								vm.opportunity = updatedOpportunity;
@@ -178,7 +178,7 @@
 				//
 				// am I watchng?
 				//
-				vm.isWatching = OpportunitiesCommon.isWatching(vm.opportunity);
+				vm.isWatching = opportunitiesCommonService.isWatching(vm.opportunity);
 				vm.toggleWatch = function() {
 					if (vm.isWatching) {
 						vm.removeWatch();
@@ -187,19 +187,19 @@
 					}
 				};
 				vm.addWatch = function() {
-					vm.isWatching = OpportunitiesCommon.addWatch(vm.opportunity);
+					vm.isWatching = opportunitiesCommonService.addWatch(vm.opportunity);
 				};
 				vm.removeWatch = function() {
-					vm.isWatching = OpportunitiesCommon.removeWatch(vm.opportunity);
+					vm.isWatching = opportunitiesCommonService.removeWatch(vm.opportunity);
 				};
 				//
 				// what can the user do here?
 				//
-				var isUser = Authentication.user;
-				var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
+				var isUser = authenticationService.user;
+				var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+				var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
 				vm.isGov = isGov;
-				vm.hasEmail = isUser && Authentication.user.email !== '';
+				vm.hasEmail = isUser && authenticationService.user.email !== '';
 				var isMemberOrWaiting = opportunity.userIs.member || opportunity.userIs.request;
 				vm.loggedIn = isUser;
 				vm.canRequestMembership = isGov && !isMemberOrWaiting;
@@ -236,7 +236,7 @@
 				// can this be published?
 				//
 				// -------------------------------------------------------------------------
-				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
+				vm.errorFields = opportunitiesCommonService.publishStatus(vm.opportunity);
 
 				vm.canPublish = function() {
 					return vm.errorFields.length === 0 && (!vm.opportunity.approvalRequired || vm.opportunity.isApproved);
@@ -484,7 +484,7 @@
 					var publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
 					var publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 					var publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-					var publishMethod = isToBePublished ? OpportunitiesService.publish : OpportunitiesService.unpublish;
+					var publishMethod = isToBePublished ? OpportunitiesService.getOpportunityResource().publish : OpportunitiesService.getOpportunityResource().unpublish;
 					var isToBeSaved = true;
 					var promise = Promise.resolve();
 					if (isToBePublished)
@@ -540,7 +540,7 @@
 					var q = 'Are you sure you want to un-assign this proponent from this opportunity ?';
 					ask.yesNo(q).then(function(r) {
 						if (r) {
-							OpportunitiesService.unassign({ opportunityId: opportunity._id, proposalId: opportunity.proposal._id }).$promise.then(
+							OpportunitiesService.getOpportunityResource().unassign({ opportunityId: opportunity._id, proposalId: opportunity.proposal._id }).$promise.then(
 								function(response) {
 									vm.opportunity = response;
 									Notification.success({
@@ -571,13 +571,13 @@
 			'opportunity',
 			'editing',
 			'projects',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'dataService',
 			'ask',
 			'TINYMCE_OPTIONS',
-			'OpportunitiesCommon',
-			function($state, $window, $sce, opportunity, editing, projects, Authentication, Notification, dataService, ask, TINYMCE_OPTIONS, OpportunitiesCommon) {
+			'opportunitiesCommonService',
+			function($state, $window, $sce, opportunity, editing, projects, authenticationService, Notification, dataService, ask, TINYMCE_OPTIONS, opportunitiesCommonService) {
 				var vm = this;
 				vm.trust = $sce.trustAsHtml;
 				var originalPublishedState = opportunity.isPublished;
@@ -585,21 +585,21 @@
 				//
 				// what can the user do here?
 				//
-				var isUser = Authentication.user;
-				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				vm.isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
+				var isUser = authenticationService.user;
+				vm.isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+				vm.isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
 				vm.projects = projects;
 				vm.editing = editing;
 
 				// Refresh the view model to use the given opportunity
 				refreshOpportunity(opportunity);
 
-				vm.authentication = Authentication;
+				vm.authentication = authenticationService;
 
 				//
 				// can this be published?
 				//
-				vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
+				vm.errorFields = opportunitiesCommonService.publishStatus(vm.opportunity);
 				vm.canPublish = vm.errorFields > 0;
 
 				//
@@ -741,9 +741,9 @@
 							// Generate a route code that will be used to provide some protection on the route used to approve
 							vm.opportunity.intermediateApproval.routeCode = new Date().valueOf();
 							vm.opportunity.intermediateApproval.state = 'ready-to-send';
-							vm.opportunity.intermediateApproval.requestor = Authentication.user;
+							vm.opportunity.intermediateApproval.requestor = authenticationService.user;
 							vm.opportunity.intermediateApproval.initiated = Date.now();
-							vm.opportunity.finalApproval.requestor = Authentication.user;
+							vm.opportunity.finalApproval.requestor = authenticationService.user;
 							vm.opportunity
 								.createOrUpdate()
 								.then(function(savedOpportunity) {

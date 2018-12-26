@@ -19,13 +19,13 @@
 					'$scope',
 					'$sce',
 					'OrgsService',
-					'Authentication',
-					function($scope, $sce, OrgsService, Authentication) {
+					'authenticationService',
+					function($scope, $sce, OrgsService, authenticationService) {
 						var vm = this;
-						var isUser = Authentication.user;
-						var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-						var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
-						var uid = isUser ? Authentication.user._id : 'none';
+						var isUser = authenticationService.user;
+						var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+						var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
+						var uid = isUser ? authenticationService.user._id : 'none';
 						vm.isAdmin = isAdmin;
 						vm.isGov = isGov;
 
@@ -105,7 +105,7 @@
 								controller: [
 									'$rootScope',
 									'$timeout',
-									'Authentication',
+									'authenticationService',
 									'org',
 									'$uibModalInstance',
 									'Upload',
@@ -113,14 +113,14 @@
 									function(
 										$rootScope,
 										$timeout,
-										Authentication,
+										authenticationService,
 										org,
 										$uibModalInstance,
 										Upload,
 										Notification
 									) {
 										var qqq = this;
-										qqq.user = Authentication.user;
+										qqq.user = authenticationService.user;
 										qqq.fileSelected = false;
 										qqq.org = org;
 										qqq.org.orgImageURL =

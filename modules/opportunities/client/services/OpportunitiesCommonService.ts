@@ -1,0 +1,179 @@
+'use strict';
+
+import angular, { uiNotification } from 'angular';
+import _ from 'lodash';
+import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import IPhaseDocument from '../../../proposals/server/interfaces/IPhaseDocument';
+import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
+import OpportunitiesService from './OpportunitiesService';
+
+export default class OpportunitiesCommonService {
+	public static $inject = ['authenticationService', 'opportunitiesService', 'Notification'];
+
+	constructor(private authenticationService: AuthenticationService, private opportunitiesService: OpportunitiesService, private Notification: uiNotification.INotificationService) {}
+
+	// Check if the current user is currently watching this opportunity
+	public isWatching(opportunity: IOpportunityDocument): boolean {
+		if (this.authenticationService.user) {
+			return opportunity.watchers.indexOf(this.authenticationService.user._id) !== -1;
+		} else {
+			return false;
+		}
+	};
+
+	// Add current user to the watchers list - this assumes that ths function could
+	// not be run except if the user was not already on the list
+	public addWatch(opportunity: IOpportunityDocument): boolean {
+		opportunity.watchers.push(this.authenticationService.user._id);
+		this.opportunitiesService.getOpportunityResource().addWatch({
+			opportunityId: opportunity._id
+		});
+		this.Notification.success({ message: '<i class="fas fa-eye"></i><br/><br/>You are now watching<br/>' + opportunity.name });
+		return true;
+	};
+
+	// Remove the current user from the list
+	public removeWatch(opportunity: IOpportunityDocument): boolean {
+		opportunity.watchers.splice(opportunity.watchers.indexOf(this.authenticationService.user._id), 1);
+		this.opportunitiesService.getOpportunityResource().removeWatch({
+			opportunityId: opportunity._id
+		});
+		this.Notification.success({ message: '<i class="fas fa-eye-slash"></i><br/><br/>You are no longer watching<br/>' + opportunity.name });
+		return false;
+	};
+
+	// Checks for whether or not fields are missing and whether we can publish
+	// TODO - this mess needs to be sorted out
+	public publishStatus(opportunity: IOpportunityDocument): any[] {
+		const fields = {
+			common: [
+				[opportunity.name, 'Title'],
+				[opportunity.description, 'Background / Summary'],
+				[opportunity.github, 'Github Repository'],
+				[opportunity.program, 'Program'],
+				[opportunity.project, 'Project'],
+				[opportunity.deadline, 'Proposal Deadline'],
+				[opportunity.assignment, 'Assignment Date'],
+				[opportunity.location, 'Location']
+			],
+			cwu: [
+				[opportunity.evaluation, 'Proposal Evaluation Criteria'],
+				[opportunity.criteria, 'Acceptance Criteria'],
+				[opportunity.skills, 'Required Skills'],
+				[opportunity.earn, 'Fixed-Price Reward'],
+				[opportunity.start, 'Proposed Start Date']
+			],
+			swu: [
+				[opportunity.budget > 0, 'Total Opportunity Budget'],
+				[opportunity.phases.implementation.isImplementation || opportunity.phases.inception.isInception || opportunity.phases.proto.isPrototype, 'Phase Selection and Information'],
+				[
+					!opportunity.phases.implementation.isImplementation || (opportunity.phases.implementation.isImplementation && opportunity.phases.implementation.endDate),
+					'Implementation Phase End Date'
+				],
+
+				[
+					!opportunity.phases.implementation.isImplementation || (opportunity.phases.implementation.isImplementation && opportunity.phases.implementation.startDate),
+					'Implementation Phase Start Date'
+				],
+				[!opportunity.phases.inception.isInception || (opportunity.phases.inception.isInception && opportunity.phases.inception.endDate), 'Inception Phase End Date'],
+				[!opportunity.phases.inception.isInception || (opportunity.phases.inception.isInception && opportunity.phases.inception.startDate), 'Inception Phase Start Date'],
+				[!opportunity.phases.proto.isPrototype || (opportunity.phases.proto.isPrototype && opportunity.phases.proto.endDate), 'Prototype Phase End Date'],
+				[!opportunity.phases.proto.isPrototype || (opportunity.phases.proto.isPrototype && opportunity.phases.proto.startDate), 'Prototype Phase Start Date']
+			]
+		};
+
+		const errorFields: Array<string|Date|number|string[]|boolean> = fields.common.reduce((accum, elem) => {
+			if (!elem[0]) {
+				accum.push(elem[1]);
+			}
+			return accum;
+		}, []);
+
+		if (opportunity.opportunityTypeCd === 'code-with-us') {
+			fields.cwu.forEach(elem => {
+				if (!elem[0]) {
+					errorFields.push(elem[1]);
+				}
+			});
+		} else {
+			fields.swu.forEach(elem => {
+				if (!elem[0]) {
+					errorFields.push(elem[1]);
+				}
+			});
+		}
+		return errorFields;
+	};
+
+	// Request a 2FA authentication code to be sent to the designated contact in the opportunity approval info
+	// Returns true for success, false for failure
+	public requestApprovalCode(opportunity: IOpportunityDocument): boolean {
+		const approvalInfo = opportunity.intermediateApproval.state === 'sent' ? opportunity.intermediateApproval : opportunity.finalApproval;
+		if (approvalInfo.twoFASendCount < 5) {
+			this.opportunitiesService.getOpportunityResource().requestCode({ opportunityId: opportunity.code });
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	// Submit the passed approval code
+	// Return a promise that will resolve for success, reject otherwise
+	public submitApprovalCode(opportunity: IOpportunityDocument, submittedCode: string, action: string) {
+		return new Promise((resolve, reject) => {
+			const isPreApproval = opportunity.intermediateApproval.state === 'sent'; // Has intermediate approval been actioned or is still at 'sent state'?
+			const approvalInfo = isPreApproval ? opportunity.intermediateApproval : opportunity.finalApproval;
+
+			if (approvalInfo.twoFAAttemptCount < 5) {
+				this.opportunitiesService
+					.getOpportunityResource()
+					.submitCode({
+						opportunityId: opportunity.code,
+						code: submittedCode,
+						action: action.toLowerCase(),
+						preapproval: isPreApproval.toString()
+					})
+					.$promise.then(response => {
+						resolve(response.message);
+					})
+					.catch(err => {
+						reject(err);
+					});
+			} else {
+				reject('Maximum attempts reached');
+			}
+		});
+	};
+
+	// Return a list of all technical skills for an opportunity
+	// Merges and removes duplicates across phases
+	public getTechnicalSkills(opportunity: IOpportunityDocument): ICapabilitySkillDocument[] {
+		return _.unionWith(
+			opportunity.phases.inception.capabilitySkills,
+			opportunity.phases.proto.capabilitySkills,
+			opportunity.phases.implementation.capabilitySkills,
+			(a: any, b: any) => a.code === b.code
+		);
+	};
+
+	// Return a list of required capabilities for the given phase
+	// Each returned capabilitity in the list is marked with fullTime = true if
+	// it is a core capability
+	public getCapabilitiesForPhase(phase: IPhaseDocument): ICapabilityDocument[] {
+		const coreCodes = phase.capabilitiesCore.map(cap => {
+			return cap.code;
+		});
+
+		phase.capabilities.forEach(cap => {
+			if (coreCodes.indexOf(cap.code) !== -1) {
+				cap.fullTime = true;
+			}
+		});
+
+		return phase.capabilities;
+	};
+}
+
+angular.module('opportunities.services').service('opportunitiesCommonService', OpportunitiesCommonService);

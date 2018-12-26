@@ -2,7 +2,7 @@
 
 import { Model, model, Schema } from 'mongoose';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
+import IOpportunityDocument from '../interfaces/IOpportunityDocument';
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

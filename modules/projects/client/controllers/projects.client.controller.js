@@ -25,24 +25,24 @@ import '../css/projects.css';
 			'$sce',
 			'$stateParams',
 			'project',
-			'Authentication',
+			'authenticationService',
 			'ProjectsService',
 			'Notification',
-			function($sce, $stateParams, project, Authentication, ProjectsService, Notification) {
+			function($sce, $stateParams, project, authenticationService, ProjectsService, Notification) {
 				var vm = this;
 				vm.programId = project.program ? project.program._id : $stateParams.programId;
 				vm.project = project;
 				vm.display = {};
 				vm.display.description = $sce.trustAsHtml(vm.project.description);
-				vm.authentication = Authentication;
+				vm.authentication = authenticationService;
 				vm.ProjectsService = ProjectsService;
 				vm.idString = 'projectId';
 				//
 				// what can the user do here?
 				//
-				var isUser = Authentication.user;
-				var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-				var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
+				var isUser = authenticationService.user;
+				var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+				var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
 				var isMemberOrWaiting = project.userIs.member || project.userIs.request;
 				vm.isAdmin = isAdmin;
 				vm.loggedIn = isUser;
@@ -107,7 +107,7 @@ import '../css/projects.css';
 			'project',
 			'editing',
 			'programs',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'previousState',
 			function(
@@ -118,17 +118,17 @@ import '../css/projects.css';
 				project,
 				editing,
 				programs,
-				Authentication,
+				authenticationService,
 				Notification,
 				previousState
 			) {
 				var vm = this;
 				vm.previousState = previousState;
-				vm.isAdmin = Authentication.user && !!~Authentication.user.roles.indexOf('admin');
-				vm.isGov = Authentication.user && !!~Authentication.user.roles.indexOf('gov');
+				vm.isAdmin = authenticationService.user && !!~authenticationService.user.roles.indexOf('admin');
+				vm.isGov = authenticationService.user && !!~authenticationService.user.roles.indexOf('gov');
 				vm.isProjectAdmin = vm.editing ? project.userIs.admin : true;
 				vm.project = project;
-				vm.authentication = Authentication;
+				vm.authentication = authenticationService;
 				//
 				// if the user doesn't have the right access then kick them out
 				//

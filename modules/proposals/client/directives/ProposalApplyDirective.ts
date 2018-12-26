@@ -18,20 +18,20 @@ import angular from 'angular';
 				},
 				controller: [
 					'$scope',
-					'Authentication',
-					function($scope, Authentication) {
+					'authenticationService',
+					function($scope, authenticationService) {
 						const qaz = this;
 						qaz.opportunity = $scope.opportunity;
 						qaz.proposal = $scope.proposal;
 
-						const isUser = Authentication.user;
-						const isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-						const isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
+						const isUser = authenticationService.user;
+						const isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+						const isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
 						const isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
 						const isProposal = qaz.proposal && qaz.proposal._id;
 						const canedit = !(isAdmin || isGov || isMemberOrWaiting);
 						qaz.isSprintWithUs = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
-						let hasCompany = isUser && Authentication.user.orgsAdmin.length > 0;
+						let hasCompany = isUser && authenticationService.user.orgsAdmin.length > 0;
 						hasCompany = qaz.opportunity.hasOrg;
 						qaz.case = 'nothing';
 						if (!isUser) {

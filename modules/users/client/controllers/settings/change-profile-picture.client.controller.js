@@ -5,12 +5,12 @@
 		.module('users')
 		.controller('ChangeProfilePictureController', ChangeProfilePictureController);
 
-	ChangeProfilePictureController.$inject = ['$timeout', 'Authentication', 'Upload', 'Notification'];
+	ChangeProfilePictureController.$inject = ['$timeout', 'authenticationService', 'Upload', 'Notification'];
 
-	function ChangeProfilePictureController($timeout, Authentication, Upload, Notification) {
+	function ChangeProfilePictureController($timeout, authenticationService, Upload, Notification) {
 		var vm = this;
 
-		vm.user = Authentication.user;
+		vm.user = authenticationService.user;
 		vm.fileSelected = false;
 
 		vm.upload = function (dataUrl, name) {
@@ -36,7 +36,7 @@
 			Notification.success({ message: '<i class="fas fa-check-circle"></i> Change profile picture successful!' });
 
 			// Populate user object
-			vm.user = Authentication.user = response;
+			vm.user = authenticationService.user = response;
 
 			// Reset form
 			vm.fileSelected = false;

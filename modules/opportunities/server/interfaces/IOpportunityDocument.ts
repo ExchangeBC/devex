@@ -3,7 +3,7 @@ import IPhasesDocument from '../../../proposals/server/interfaces/IPhasesDocumen
 import IProposalDocument from '../../../proposals/server/interfaces/IProposalDocument';
 import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 
-export interface IOpportunityDocument extends Document {
+export default interface IOpportunityDocument extends Document {
 	code: string;
 	opportunityTypeCd: string;
 	name: string;
@@ -47,7 +47,13 @@ export interface IOpportunityDocument extends Document {
 	contract: any;
 	approvalRequired: boolean;
 	isApproved: boolean;
+	evaluation: string;
+	criteria: string;
+	skills: string[];
+	earn?: number;
+	start: Date;
 	assignor?: IUserDocument;
 	assignoremail?: string;
 	proposalEmail?: string;
+	userIs?: any;
 }

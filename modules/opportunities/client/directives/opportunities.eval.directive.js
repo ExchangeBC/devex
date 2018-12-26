@@ -16,18 +16,18 @@
 				controller: [
 					'$scope',
 					'$state',
-					'Authentication',
+					'authenticationService',
 					'Notification',
 					'ProposalsService',
 					'ask',
 					'modalService',
-					'OpportunitiesService',
-					function($scope, $state, Authentication, Notification, ProposalsService, ask, modalService, OpportunitiesService) {
+					'opportunitiesService',
+					function($scope, $state, authenticationService, Notification, ProposalsService, ask, modalService, OpportunitiesService) {
 						var vm = this;
 						vm.opportunity = $scope.opportunity;
-						vm.authentication = Authentication;
-						vm.isUser = Authentication.user;
-						vm.isAdmin = vm.isUser && ~Authentication.user.roles.indexOf('admin');
+						vm.authentication = authenticationService;
+						vm.isUser = authenticationService.user;
+						vm.isAdmin = vm.isUser && ~authenticationService.user.roles.indexOf('admin');
 						vm.canEdit = vm.isAdmin || $scope.opportunity.userIs.admin;
 						vm.maxPoints = 100;
 						vm.isLoading = true;

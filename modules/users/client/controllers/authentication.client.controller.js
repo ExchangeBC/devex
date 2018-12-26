@@ -10,7 +10,7 @@
 		'UsersService',
 		'$location',
 		'$window',
-		'Authentication',
+		'authenticationService',
 		'PasswordValidator',
 		'Notification',
 		'Idle'
@@ -23,12 +23,12 @@
 		UsersService,
 		$location,
 		$window,
-		Authentication,
+		authenticationService,
 		PasswordValidator,
 		Notification
 	) {
 		var vm = this;
-		vm.authentication = Authentication;
+		vm.authentication = authenticationService;
 		vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
 		vm.non_gov = non_gov;
 		vm.signup = signup;
@@ -93,7 +93,7 @@
 			$window.location.href = url;
 		}
 
-		// Authentication Callbacks
+		// authenticationService Callbacks
 		function onUserSignupSuccess(response) {
 			// If successful we assign the response to the global user model
 			vm.authentication.user = response;

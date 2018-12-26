@@ -14,9 +14,9 @@
 			'$state',
 			'proposal',
 			'opportunity',
-			'Authentication',
+			'authenticationService',
 			'ProposalsService',
-			'OpportunitiesService',
+			'opportunitiesService',
 			'UsersService',
 			'Notification',
 			'CapabilitiesCommon',
@@ -31,7 +31,7 @@
 				$state,
 				proposal,
 				opportunity,
-				Authentication,
+				authenticationService,
 				ProposalsService,
 				OpportunitiesService,
 				UsersService,
@@ -72,8 +72,8 @@
 					proposal.team = [];
 				}
 				ppp.proposal = angular.copy(proposal);
-				ppp.user = angular.copy(Authentication.user);
-				let pristineUser = angular.toJson(Authentication.user);
+				ppp.user = angular.copy(authenticationService.user);
+				let pristineUser = angular.toJson(authenticationService.user);
 
 				// set up the structures for capabilities
 				CapabilitiesCommon.init(ppp, ppp.opportunity, capabilities);
@@ -92,9 +92,9 @@
 						if (pristineUser !== angular.toJson(userToSave)) {
 							UsersService.update(userToSave).$promise.then(
 								updatedUser => {
-									Authentication.user = updatedUser;
-									ppp.user = angular.copy(Authentication.user);
-									pristineUser = angular.toJson(Authentication.user);
+									authenticationService.user = updatedUser;
+									ppp.user = angular.copy(authenticationService.user);
+									pristineUser = angular.toJson(authenticationService.user);
 									resolve();
 								},
 								error => {
@@ -237,7 +237,7 @@
 
 				// Submit the proposal
 				ppp.submit = () => {
-					const userToSave = angular.copy(Authentication.user);
+					const userToSave = angular.copy(authenticationService.user);
 					const proposalToSave = angular.copy(ppp.proposal);
 					saveUser(userToSave).then(() => {
 						OpportunitiesService.getDeadlineStatus({ opportunityId: ppp.opportunity._id }).$promise.then(response => {

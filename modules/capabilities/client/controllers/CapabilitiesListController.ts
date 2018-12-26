@@ -8,11 +8,11 @@ import angular from 'angular';
 		// Controller for the master list of capabilities
 		.controller('CapabilitiesListController', [
 			'capabilities',
-			'Authentication',
-			function(capabilities, Authentication) {
+			'authenticationService',
+			function(capabilities, authenticationService) {
 				const vm = this;
 				vm.capabilities = capabilities;
-				vm.auth = Authentication.permissions();
+				vm.auth = authenticationService.permissions();
 			}
 		]);
 })();

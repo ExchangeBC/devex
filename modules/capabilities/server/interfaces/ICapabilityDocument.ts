@@ -10,4 +10,5 @@ export default interface ICapabilityDocument extends Document {
 	isPrototype: boolean;
 	isImplementation: boolean;
 	labelClass: string;
+	fullTime?: boolean;
 }

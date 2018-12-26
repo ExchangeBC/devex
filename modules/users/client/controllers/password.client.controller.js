@@ -5,14 +5,14 @@
     .module('users')
     .controller('PasswordController', PasswordController);
 
-  PasswordController.$inject = ['$scope', '$stateParams', 'UsersService', '$location', 'Authentication', 'PasswordValidator', 'Notification'];
+  PasswordController.$inject = ['$scope', '$stateParams', 'UsersService', '$location', 'authenticationService', 'PasswordValidator', 'Notification'];
 
-  function PasswordController($scope, $stateParams, UsersService, $location, Authentication, PasswordValidator, Notification) {
+  function PasswordController($scope, $stateParams, UsersService, $location, authenticationService, PasswordValidator, Notification) {
     var vm = this;
 
     vm.resetUserPassword = resetUserPassword;
     vm.askForPasswordReset = askForPasswordReset;
-    vm.authentication = Authentication;
+    vm.authentication = authenticationService;
     vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
 
     // If user is signed in then redirect back home
@@ -67,7 +67,7 @@
       vm.passwordDetails = null;
 
       // Attach user profile
-      Authentication.user = response;
+      authenticationService.user = response;
       Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset successful!' });
       // And redirect to the index page
       $location.path('/password/reset/success');

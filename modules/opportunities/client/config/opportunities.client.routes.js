@@ -58,9 +58,9 @@
 					resolve: {
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
+							'opportunitiesService',
 							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.get({
+								return OpportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -68,9 +68,9 @@
 						myproposal: [
 							'$stateParams',
 							'ProposalsService',
-							'Authentication',
-							function($stateParams, ProposalsService, Authentication) {
-								if (!Authentication.user) return {};
+							'authenticationService',
+							function($stateParams, ProposalsService, authenticationService) {
+								if (!authenticationService.user) return {};
 								return ProposalsService.getMyProposal({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -98,18 +98,18 @@
 					resolve: {
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
+							'opportunitiesService',
 							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.get({
+								return OpportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'Authentication',
+							'authenticationService',
 							'OrgsService',
-							function(Authentication, OrgsService) {
-								if (!Authentication.user) return {};
+							function(authenticationService, OrgsService) {
+								if (!authenticationService.user) return {};
 								return OrgsService.myadmin().$promise.then(function(orgs) {
 									if (orgs && orgs.length > 0) return orgs[0];
 									else return {};
@@ -119,10 +119,10 @@
 						myproposal: [
 							'$stateParams',
 							'ProposalsService',
-							'Authentication',
+							'authenticationService',
 							'org',
-							function($stateParams, ProposalsService, Authentication, org) {
-								if (!Authentication.user) return {};
+							function($stateParams, ProposalsService, authenticationService, org) {
+								if (!authenticationService.user) return {};
 								if (!org || !org._id) return {};
 								return ProposalsService.getMyProposal({
 									opportunityId: $stateParams.opportunityId
@@ -171,9 +171,9 @@
 						},
 						opportunity: [
 							'$stateParams',
-							'OpportunitiesService',
+							'opportunitiesService',
 							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.get({
+								return OpportunitiesService.getOpportunityResource().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -249,7 +249,7 @@
 					controllerAs: 'vm',
 					resolve: {
 						opportunity: [
-							'OpportunitiesService',
+							'opportunitiesService',
 							function(OpportunitiesService) {
 								return new OpportunitiesService();
 							}
@@ -297,7 +297,7 @@
 							}
 						],
 						opportunity: [
-							'OpportunitiesService',
+							'opportunitiesService',
 							function(OpportunitiesService) {
 								return new OpportunitiesService();
 							}

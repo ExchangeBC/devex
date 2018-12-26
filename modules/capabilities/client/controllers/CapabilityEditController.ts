@@ -3,6 +3,7 @@
 import angular from 'angular';
 import ICapabilityDocument from '../../server/interfaces/ICapabilityDocument';
 import ICapabilitySkillDocument from '../../server/interfaces/ICapabilitySkillDocument';
+import { ICapabilitiesService } from '../services/CapabilitiesService';
 
 (() => {
 	angular
@@ -12,16 +13,16 @@ import ICapabilitySkillDocument from '../../server/interfaces/ICapabilitySkillDo
 			'$scope',
 			'$state',
 			'capability',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'TINYMCE_OPTIONS',
 			'CapabilitiesService',
 			'CapabilitySkillsService',
 			'ask',
-			function($scope, $state, capability: ICapabilityDocument, Authentication, Notification, TINYMCE_OPTIONS, CapabilitiesService, CapabilitySkillsService, ask) {
+			function($scope, $state, capability: ICapabilityDocument, authenticationService, Notification, TINYMCE_OPTIONS, CapabilitiesService: ICapabilitiesService, CapabilitySkillsService, ask) {
 				const qqq = this;
 				qqq.capability = capability;
-				qqq.auth = Authentication.permissions();
+				qqq.auth = authenticationService.permissions();
 				qqq.tinymceOptions = TINYMCE_OPTIONS;
 				qqq.newskill = '';
 				qqq.editingskill = false;
@@ -44,7 +45,7 @@ import ICapabilitySkillDocument from '../../server/interfaces/ICapabilitySkillDo
 					}
 
 					try {
-						let newCapability: ICapabilitySkillDocument;
+						let newCapability: ICapabilityDocument;
 						if (qqq.capability._id) {
 							newCapability = await CapabilitiesService.update(qqq.capability).$promise;
 						} else {

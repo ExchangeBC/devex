@@ -14,10 +14,10 @@
 				context   : '@'
 			},
 			templateUrl  : '/modules/messages/client/views/message-list.html',
-			controller   : ['$sce', '$rootScope', '$scope', 'MessagesService', 'Authentication', '$location', function ($sce, $rootScope, $scope, MessagesService, Authentication, $location) {
+			controller   : ['$sce', '$rootScope', '$scope', 'MessagesService', 'authenticationService', '$location', function ($sce, $rootScope, $scope, MessagesService, authenticationService, $location) {
 				var vm        = this;
 				vm.trust      = $sce.trustAsHtml;
-				vm.auth       = Authentication.permissions ();
+				vm.auth       = authenticationService.permissions ();
 				vm.context    = $scope.context;
 				//
 				// filtering the list
@@ -111,9 +111,9 @@
 				message : '='
 			},
 			templateUrl  : '/modules/messages/client/views/view.message.directive.html',
-			controller   : ['$scope', 'Authentication', function ($scope, Authentication) {
+			controller   : ['$scope', 'authenticationService', function ($scope, authenticationService) {
 				var vm        = this;
-				vm.auth       = Authentication;
+				vm.auth       = authenticationService;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;
 				vm.message = $scope.message;

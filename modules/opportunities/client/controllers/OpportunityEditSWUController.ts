@@ -1,10 +1,15 @@
 'use strict';
 
 // Import certain style elements here so that webpack picks them up
-import angular from 'angular';
+import angular, { ui } from 'angular';
 import _ from 'lodash';
 import moment from 'moment';
+import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
 import '../css/opportunities.css';
+import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
+import OpportunitiesService from '../services/OpportunitiesService';
 
 (() => {
 	angular
@@ -15,50 +20,48 @@ import '../css/opportunities.css';
 			'$scope',
 			'$state',
 			'$stateParams',
-			'$window',
 			'$sce',
 			'opportunity',
 			'editing',
 			'projects',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'dataService',
 			'ask',
 			'CapabilitiesService',
 			'TINYMCE_OPTIONS',
-			'OpportunitiesCommon',
-			'OpportunitiesService',
+			'opportunitiesCommonService',
+			'opportunitiesService',
 			function(
-				$scope,
-				$state,
-				$stateParams,
-				$window,
-				$sce,
-				opportunity,
-				editing,
+				$scope: ng.IRootScopeService,
+				$state: ui.IStateService,
+				$stateParams: ui.IStateParamsService,
+				$sce: ng.ISCEService,
+				opportunity: IOpportunityDocument,
+				editing: boolean,
 				projects,
-				Authentication,
+				authenticationService: AuthenticationService,
 				Notification,
 				dataService,
 				ask,
-				CapabilitiesService,
+				CapabilitiesService: ICapabilitiesService,
 				TINYMCE_OPTIONS,
-				OpportunitiesCommon,
-				OpportunitiesService
+				opportunitiesCommonService: OpportunitiesCommonService,
+				opportunitiesService: OpportunitiesService
 			) {
 				const vm = this;
-				const isUser = Authentication.user;
+				const isUser = authenticationService.user;
 				const codeChallengeDefaultWeight = 0.35;
 				const skillDefaultWeight = 0.05;
 				const questionDefaultWeight = 0.25;
 				const interviewDefaultWeight = 0.25;
 				const priceDefaultWeight = 0.1;
 
-				vm.isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-				vm.isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
+				vm.isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+				vm.isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
 				vm.projects = projects;
 				vm.editing = editing;
-				vm.authentication = Authentication;
+				vm.authentication = authenticationService;
 				vm.form = {};
 				vm.closing = 'CLOSED';
 				vm.editingTeamQuestion = false;
@@ -163,7 +166,7 @@ import '../css/opportunities.css';
 					}
 
 					// Can this opportunity be published?
-					vm.errorFields = OpportunitiesCommon.publishStatus(vm.opportunity);
+					vm.errorFields = opportunitiesCommonService.publishStatus(vm.opportunity);
 					vm.canPublish = vm.errorFields > 0;
 
 					// if editing, set from existing
@@ -390,7 +393,7 @@ import '../css/opportunities.css';
 				vm.addNewAddendum = () => {
 					vm.addenda.push({
 						description: '',
-						createdBy: Authentication.user,
+						createdBy: authenticationService.user,
 						createdOn: Date.now()
 					});
 
@@ -410,7 +413,7 @@ import '../css/opportunities.css';
 					const curAddenda = vm.addenda[vm.addendaEditIndex];
 					if (curAddenda) {
 						curAddenda.description = vm.currentAddendaText;
-						curAddenda.createdBy = Authentication.user;
+						curAddenda.createdBy = authenticationService.user;
 						curAddenda.createdOn = Date.now();
 						curAddenda.cleanDesc = $sce.trustAsHtml(vm.currentAddendaText);
 					}
@@ -600,13 +603,16 @@ import '../css/opportunities.css';
 					const question = 'Please confirm you want to delete this opportunity';
 					ask.yesNo(question).then(response => {
 						if (response) {
-							OpportunitiesService.remove({ opportunityId: vm.opportunity.code }).$promise.then(() => {
-								$state.go('opportunities.list');
-								Notification.success({
-									title: 'Success',
-									message: '<i class="fas fa-check-circle"></i> Opportunity deleted'
+							opportunitiesService
+								.getOpportunityResource()
+								.remove({ opportunityId: vm.opportunity.code })
+								.$promise.then(() => {
+									$state.go('opportunities.list');
+									Notification.success({
+										title: 'Success',
+										message: '<i class="fas fa-check-circle"></i> Opportunity deleted'
+									});
 								});
-							});
 						}
 					});
 				};
@@ -668,11 +674,10 @@ import '../css/opportunities.css';
 						.then(saving => {
 							if (saving) {
 								if (editing) {
-									return OpportunitiesService.update({ opportunityId: vm.opportunity.code }, vm.opportunity).$promise;
+									return opportunitiesService.getOpportunityResource().update(vm.opportunity).$promise;
 								} else {
-									return OpportunitiesService.save({}, vm.opportunity).$promise;
+									return opportunitiesService.getOpportunityResource().create(vm.opportunity).$promise;
 								}
-
 							} else {
 								throw new Error('Save cancelled');
 							}

@@ -13,7 +13,7 @@ import angular from 'angular';
 			'$state',
 			'proposal',
 			'ProposalsService',
-			'OpportunitiesService',
+			'opportunitiesService',
 			'Notification',
 			'ask',
 			function(capabilities, $sce, $state, proposal, ProposalsService, OpportunitiesService, Notification, ask) {

@@ -14,10 +14,10 @@ import angular from 'angular';
 		// =========================================================================
 		.controller('OrgsListController', [
 			'orgs',
-			'Authentication',
-			function(orgs, Authentication) {
+			'authenticationService',
+			function(orgs, authenticationService) {
 				var vm = this;
-				vm.isLoggedIn = !!Authentication.user;
+				vm.isLoggedIn = !!authenticationService.user;
 				vm.orgs = orgs;
 			}
 		])
@@ -29,14 +29,14 @@ import angular from 'angular';
 		.controller('OrgViewController', [
 			'$sce',
 			'org',
-			'Authentication',
-			function($sce, org, Authentication) {
+			'authenticationService',
+			function($sce, org, authenticationService) {
 				var vm = this;
 				vm.org = org;
-				vm.user = Authentication.user;
+				vm.user = authenticationService.user;
 				vm.isLoggedIn = !!vm.user;
-				vm.isAdmin = vm.user && !!~Authentication.user.roles.indexOf('admin');
-				vm.isGov = vm.user && !!~Authentication.user.roles.indexOf('gov');
+				vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
+				vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
 				vm.isOrgAdmin =
 					vm.user &&
 					vm.org.admins &&
@@ -66,13 +66,13 @@ import angular from 'angular';
 			'$scope',
 			'$state',
 			'org',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'UsersService',
-			function($scope, $state, org, Authentication, Notification, UsersService) {
+			function($scope, $state, org, authenticationService, Notification, UsersService) {
 				var vm = this;
 				vm.org = org;
-				vm.user = Authentication.user;
+				vm.user = authenticationService.user;
 				var newId;
 				vm.add = function(isValid) {
 					if (!isValid) {
@@ -96,7 +96,7 @@ import angular from 'angular';
 							return new Promise(function(resolve, reject) {
 								user.$update(
 									function(response) {
-										Authentication.user = response;
+										authenticationService.user = response;
 										resolve();
 									},
 									function(err) {
@@ -181,7 +181,7 @@ import angular from 'angular';
 			'$state',
 			'$window',
 			'org',
-			'Authentication',
+			'authenticationService',
 			'Notification',
 			'dataService',
 			'UsersService',
@@ -192,15 +192,15 @@ import angular from 'angular';
 				$state,
 				$window,
 				org,
-				Authentication,
+				authenticationService,
 				Notification,
 				dataService,
 				UsersService
 			) {
 				var vm = this;
-				vm.user = Authentication.user;
-				vm.isAdmin = vm.user && !!~Authentication.user.roles.indexOf('admin');
-				vm.isGov = vm.user && !!~Authentication.user.roles.indexOf('gov');
+				vm.user = authenticationService.user;
+				vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
+				vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
 
 				vm.org = org;
 				if (!vm.org.capabilities) vm.org.capabilities = [];
@@ -259,7 +259,7 @@ import angular from 'angular';
 							});
 							var user = new UsersService(vm.user);
 							user.$update(function(response) {
-								Authentication.user = response;
+								authenticationService.user = response;
 								$state.go('orgs.list');
 							});
 						});

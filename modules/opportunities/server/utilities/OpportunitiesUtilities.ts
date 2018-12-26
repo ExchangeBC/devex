@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
+import IOpportunityDocument from '../interfaces/IOpportunityDocument';
 import OpportunityModel from '../models/OpportunityModel';
 
 class OpportunitiesUtilities {

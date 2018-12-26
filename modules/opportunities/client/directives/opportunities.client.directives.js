@@ -36,15 +36,15 @@
 					},
 					templateUrl: '/modules/opportunities/client/views/opportunity-card-directive.html',
 					controller: [
-						'Authentication',
-						'OpportunitiesCommon',
-						'OpportunitiesService',
+						'authenticationService',
+						'opportunitiesCommonService',
+						'opportunitiesService',
 						'ask',
 						'Notification',
-						function(Authentication, OpportunitiesCommon, OpportunitiesService, ask, Notification) {
+						function(authenticationService, opportunitiesCommonService, opportunitiesService, ask, Notification) {
 							var vm = this;
-							vm.isUser = Authentication.user;
-							vm.isAdmin = vm.isUser && !!~Authentication.user.roles.indexOf('admin');
+							vm.isUser = authenticationService.user;
+							vm.isAdmin = vm.isUser && !!~authenticationService.user.roles.indexOf('admin');
 
 							vm.publish = function(opportunity, state) {
 								var publishedState = opportunity.isPublished;
@@ -63,10 +63,10 @@
 										if (savemeSeymour) {
 											opportunity.isPublished = state;
 											if (state)
-												return OpportunitiesService.publish({ opportunityId: opportunity._id })
+												return opportunitiesService.getOpportunityResource().publish({ opportunityId: opportunity._id })
 													.$promise;
 											else
-												return OpportunitiesService.unpublish({
+												return opportunitiesService.getOpportunityResource().unpublish({
 													opportunityId: opportunity._id
 												}).$promise;
 										} else return Promise.reject({ data: { message: 'Publish Cancelled' } });
@@ -98,14 +98,14 @@
 							};
 
 							vm.isWatching = function(opportunity) {
-								return OpportunitiesCommon.isWatching(opportunity);
+								return opportunitiesCommonService.isWatching(opportunity);
 							};
 
 							vm.toggleWatch = function(opp) {
 								if (vm.isWatching(opp)) {
-									opp.isWatching = OpportunitiesCommon.removeWatch(opp);
+									opp.isWatching = opportunitiesCommonService.removeWatch(opp);
 								} else {
-									opp.isWatching = OpportunitiesCommon.addWatch(opp);
+									opp.isWatching = opportunitiesCommonService.addWatch(opp);
 								}
 							};
 
@@ -171,22 +171,22 @@
 					templateUrl: '/modules/opportunities/client/views/opportunity-list-directive.html',
 					controller: [
 						'$scope',
-						'OpportunitiesService',
-						'Authentication',
+						'opportunitiesService',
+						'authenticationService',
 						'Notification',
 						'UsersService',
-						function($scope, OpportunitiesService, Authentication, Notification, UsersService) {
+						function($scope, OpportunitiesService, authenticationService, Notification, UsersService) {
 							var vm = this;
 
 							vm.rightNow = new Date();
-							vm.isUser = Authentication.user;
+							vm.isUser = authenticationService.user;
 							vm.user = vm.isUser;
-							vm.isAdmin = vm.isUser && !!~Authentication.user.roles.indexOf('admin');
-							vm.isGov = vm.isUser && !!~Authentication.user.roles.indexOf('gov');
+							vm.isAdmin = vm.isUser && !!~authenticationService.user.roles.indexOf('admin');
+							vm.isGov = vm.isUser && !!~authenticationService.user.roles.indexOf('gov');
 							vm.isLoading = true;
 							vm.userCanAdd = vm.isUser && (vm.isGov || vm.isAdmin);
 
-							OpportunitiesService.query().$promise.then(function(opps) {
+							OpportunitiesService.getOpportunityResource().query().$promise.then(function(opps) {
 								vm.opportunities = opps;
 								vm.isLoading = false;
 							});

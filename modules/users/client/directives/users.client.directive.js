@@ -30,11 +30,11 @@
 				context		: '@'
 			},
 			templateUrl		: '/modules/users/client/views/settings/affiliations-directive.html',
-			controller		: ['$scope', 'Notification', 'OrgsService', 'Authentication', 'ask', function($scope, Notification, OrgsService, Authentication, ask) {
+			controller		: ['$scope', 'Notification', 'OrgsService', 'authenticationService', 'ask', function($scope, Notification, OrgsService, authenticationService, ask) {
 				var vm 			= this;
-				vm.auth			= Authentication.permissions();
+				vm.auth			= authenticationService.permissions();
 				vm.context		= $scope.context;
-				vm.user			= Authentication.user;
+				vm.user			= authenticationService.user;
 
 				function loadAffiliations() {
 					vm.affiliations = OrgsService.my();
@@ -90,9 +90,9 @@
 						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',
 						controllerAs: 'qqq',
 						bindToController: true,
-						controller: ['$state', '$timeout', 'Authentication', '$uibModalInstance', 'Upload', 'Notification', function ($state, $timeout, Authentication, $uibModalInstance, Upload, Notification) {
+						controller: ['$state', '$timeout', 'authenticationService', '$uibModalInstance', 'Upload', 'Notification', function ($state, $timeout, authenticationService, $uibModalInstance, Upload, Notification) {
 							var qqq = this;
-							qqq.user = Authentication.user;
+							qqq.user = authenticationService.user;
 
 							// -------------------------------------------------------------------------
 							//
@@ -135,7 +135,7 @@
 								// Show success message
 								Notification.success({ message: '<i class="fas fa-check-circle"></i> Change profile picture successful!' });
 								// Populate user object
-								qqq.user = Authentication.user = response;
+								qqq.user = authenticationService.user = response;
 								// Reset form
 								qqq.fileSelected = false;
 								qqq.progress = 0;

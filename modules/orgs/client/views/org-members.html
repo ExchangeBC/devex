@@ -7,7 +7,7 @@
 
         <h5>Invite team members</h5>
         <div class="input-group">
-          <input class="input w-75" type="text" my-enter="vm.addMembers()" placeholder="name@example.com, name@example.com"
+          <input class="input w-75" type="text" placeholder="name@example.com, name@example.com"
             ng-model="vm.emaillist">
           <span class="input-group-btn">
             <button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
@@ -28,7 +28,7 @@
               <div class="row p-0 m-0">
                 <div class="col p-0 m-0">
                   <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
-                  <button class="btn btn-text-only float-right" ng-click="vm.removeMember(member)" title="Remove member">
+                  <button type="button" class="btn btn-text-only float-right" ng-click="vm.removeMember(member)" title="Remove member">
                     <i class="fas fa-lg fa-times"></i>
                   </button>
                 </div>

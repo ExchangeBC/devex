@@ -7,7 +7,10 @@ export default interface IPhaseDocument extends Document {
 	isInception: boolean;
 	isPrototype: boolean;
 	team: [IUserDocument];
-	capabilities: [ICapabilityDocument];
-	capabilitySkills: [ICapabilitySkillDocument];
+	capabilities: ICapabilityDocument[];
+	capabilitiesCore: ICapabilityDocument[];
+	capabilitySkills: ICapabilitySkillDocument[];
 	cost: number;
+	endDate: Date;
+	startDate: Date;
 }
