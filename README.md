@@ -41,7 +41,23 @@ $ dev.sh
 ```
 
 This will run the application image and link it to your running database container.  It will not start the application, however, but put you in the command line ready to do so.
-By default the application starts in development mode and if this is the first time running you should seed the dtabase users, so start the first time with:
+
+Before proceeding run the following commands. The application is using an older version of node, for this reason nvm has been installed in order to install an use the required version of node (8 in this case). 
+
+```bash
+$ nvm install node@8
+$ nvm install 8
+$ nvm use 8
+$ yarn install
+```
+
+Make sure gulp is installed, and then build the application
+```bash
+$ npm install -g gulp
+$ npm run lint && gulp build
+```
+
+By default the application starts in development mode and if this is the first time running you should seed the database users, so start the first time with:
 ```bash
 $ MONGO_SEED=true npm start
 ```
@@ -111,16 +127,25 @@ Finally, execute prod task `npm run start:prod`
 * enable/disable SSL mode in production environment change the `secure` option in `config/env/production.js`
 
 
+## Getting Started (LINUX)
+
+Update your system
+
+```bash
+$ apt-get update
+```
+
+In addition of Docker, make sure the following packages are installed
+
+```bash
+apt-get install curl
+apt-get install npm
+apt-get install git
+apt-get install yarn
+apt-get install build-essential libssl-dev
+curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+```
+
 ## Copyright and License
 
 Code and documentation copyright 2016-2017 the [BC Developers' Exchange](https://bcdevexchange.org). Code released under the [Apache License, Version 2.0](https://github.com/BCDevExchange/devex/blob/master/LICENSE).
-
-
-
-
-
-
-
-
-
-
