@@ -63,10 +63,10 @@
 										if (savemeSeymour) {
 											opportunity.isPublished = state;
 											if (state)
-												return opportunitiesService.getOpportunityResource().publish({ opportunityId: opportunity._id })
+												return opportunitiesService.getOpportunityResourceClass().publish({ opportunityId: opportunity._id })
 													.$promise;
 											else
-												return opportunitiesService.getOpportunityResource().unpublish({
+												return opportunitiesService.getOpportunityResourceClass().unpublish({
 													opportunityId: opportunity._id
 												}).$promise;
 										} else return Promise.reject({ data: { message: 'Publish Cancelled' } });
@@ -175,7 +175,7 @@
 						'authenticationService',
 						'Notification',
 						'UsersService',
-						function($scope, OpportunitiesService, authenticationService, Notification, UsersService) {
+						function($scope, opportunitiesService, authenticationService, Notification, UsersService) {
 							var vm = this;
 
 							vm.rightNow = new Date();
@@ -186,7 +186,7 @@
 							vm.isLoading = true;
 							vm.userCanAdd = vm.isUser && (vm.isGov || vm.isAdmin);
 
-							OpportunitiesService.getOpportunityResource().query().$promise.then(function(opps) {
+							opportunitiesService.getOpportunityResourceClass().query().$promise.then(function(opps) {
 								vm.opportunities = opps;
 								vm.isLoading = false;
 							});

@@ -2,10 +2,10 @@
   <div class="col m-4">
 
     <uib-accordion>
-      <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
+      <div uib-accordion-group is-open="!ppp.priceAccordianCollapsed" ng-click="ppp.priceAccordianCollapsed=!ppp.priceAccordianCollapsed">
         <uib-accordion-heading>
-          <i class="fas fa-lg fa-info-circle"></i> Things you should know about proposing pricing <i>(<span ng-if="!accordian1">click
-              to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+          <i class="fas fa-lg fa-info-circle"></i> Things you should know about proposing pricing <i>(<span ng-if="!ppp.priceAccordianCollapsed">click
+              to hide details</span><span ng-if="ppp.priceAccordianCollapsed">click to show details</span>)</i>
         </uib-accordion-heading>
         <div class="row">
           <p>In this tab, Proponents are asked to propose a Total Phase Cost for the following indicated Phases.
@@ -27,17 +27,18 @@
         <h5><i class="fas fa-map"></i> Inception Phase</h5>
 
         <!-- If Phase not included -->
-        <div ng-if="!ppp.oinp.isInception" class="small">
+        <div ng-if="!ppp.opportunity.phases.inception.isInception" class="small">
           This phase is not required
         </div>
 
         <!-- If Phase is included -->
-        <div class="small mb-2" ng-if="ppp.oinp.isInception">
+        <div class="small mb-2" ng-if="ppp.opportunity.phases.inception.isInception">
           Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i>
-          {{ppp.oinp.f_startDate}} &#8212; {{ppp.oinp.f_endDate}}
+          {{ppp.formatDate(ppp.opportunity.phases.inception.startDate)}} &#8212;
+          {{ppp.formatDate(ppp.opportunity.phases.inception.endDate)}}
         </div>
 
-        <div ng-if="ppp.oinp.isInception">
+        <div ng-if="ppp.opportunity.phases.inception.isInception">
           <div class="border border-primary rounded">
             <div class="bg-primary text-white rounded-top small">
               Enter Your Total Cost for this Phase:
@@ -49,17 +50,17 @@
                 <div class="d-inline">$</div>
                 <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception"
                   class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)" placeholder=0.00
-                  ng-blur="ppp.validateInceptionAmount()" select-on-click>
+                  select-on-click>
               </div>
-              <div class="alert alert-danger px-2" ng-if="ppp.proposal.phases.inception.invalidAmount">
-                <i class="fas fa-exclamation-triangle"></i> Your price for this phase must not exceed
+              <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.inception.cost, ppp.opportunity.phases.inception.maxCost)">
+                <i class="fas fa-exclamation-triangle"></i> Your price for this phase must be valid and not exceed
                 <strong>
-                  {{ppp.inceptionMax | currency : "$" : 0}}
+                  {{ppp.opportunity.phases.inception.maxCost | currency : "$" : 0}}
                 </strong>
               </div>
             </div>
           </div>
-          <div class="p-2 text-left" ng-repeat="member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
+          <div class="p-2 text-left" ng-repeat="member in ppp.proposal.phases.inception.team">
             <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
           </div>
         </div>
@@ -68,16 +69,17 @@
       <div class="col text-center">
         <h5><i class="fas fa-rocket"></i> Proof of Concept Phase</h5>
         <!-- If Phase not included -->
-        <div class="small" ng-if="!ppp.oprp.isPrototype">This phase is not required
+        <div class="small" ng-if="!ppp.opportunity.phases.proto.isPrototype">This phase is not required
         </div>
         <!-- If Phase is included -->
-        <div ng-if="ppp.oprp.isPrototype" class="small mb-2">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i>
-          {{ppp.oprp.f_startDate}} &#8212; {{ppp.oprp.f_endDate}}</div>
+        <div ng-if="ppp.opportunity.phases.proto.isPrototype" class="small mb-2">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i>
+          {{ppp.formatDate(ppp.opportunity.phases.proto.startDate)}} &#8212;
+          {{ppp.formatDate(ppp.opportunity.phases.proto.endDate)}}</div>
         <!-- If Phase is included -->
-        <div ng-if="ppp.oprp.isPrototype">
+        <div ng-if="ppp.opportunity.phases.proto.isPrototype">
           <div class="border border-primary rounded">
             <div class="bg-primary text-white rounded-top small">
-              Enter Your Total Phase Cost for this Phase:
+              Enter Your Total Cost for this Phase:
             </div>
             <div>
               <p class="small mt-2">Phase Cost for Proof of Concept must not exceed
@@ -85,18 +87,18 @@
               <div class="mb-2">
                 <div class="d-inline">$</div>
                 <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc"
-                  class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)" ng-blur="ppp.validatePrototypeAmount()"
+                  class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)"
                   placeholder=0.00 select-on-click>
               </div>
-              <div class="alert alert-danger px-2" ng-if="ppp.proposal.phases.proto.invalidAmount">
+              <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.proto.cost, ppp.opportunity.phases.proto.maxCost)">
                 <i class="fas fa-exclamation-triangle"></i> Your price for this phase must not exceed
                 <strong>
-                  {{ppp.protoMax | currency : "$" : 0}}
+                  {{ppp.opportunity.phases.proto.maxCost | currency : "$" : 0}}
                 </strong>
               </div>
             </div>
           </div>
-          <div class="p-2 text-left" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
+          <div class="p-2 text-left" ng-repeat="member in ppp.proposal.phases.proto.team">
             <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
           </div>
         </div>
@@ -105,15 +107,16 @@
       <div class="col text-center">
         <h5><i class="fas fa-cogs"></i> Implementation Phase</h5>
         <!-- If Phase not included -->
-        <div class="small" ng-if="!ppp.oimp.isImplementation">This phase is not required</div>
+        <div class="small" ng-if="!ppp.opportunity.phases.implementation.isImplementation">This phase is not required</div>
         <!-- If Phase is included -->
-        <div class="small mb-2" ng-if="ppp.oimp.isImplementation">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i>
-          {{ppp.oimp.f_startDate}} &#8212; {{ppp.oimp.f_endDate}}</div>
+        <div class="small mb-2" ng-if="ppp.opportunity.phases.implementation.isImplementation">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i>
+          {{ppp.formatDate(ppp.opportunity.phases.implementation.startDate)}} &#8212;
+          {{ppp.formatDate(ppp.opportunity.phases.implementation.endDate)}}</div>
         <!-- If Phase is included -->
-        <div ng-if="ppp.oimp.isImplementation">
+        <div ng-if="ppp.opportunity.phases.implementation.isImplementation">
           <div class="border border-primary rounded">
             <div class="bg-primary text-white rounded-top small">
-              Enter Your Total Phase Cost for this Phase:
+              Enter Your Total Cost for this Phase:
             </div>
             <div>
               <p class="small mt-2">Phase Cost for Implementation must not exceed
@@ -122,17 +125,17 @@
                 <span class="d-inline">$</span>
                 <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency" id="budget-imp"
                   class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)" placeholder=0.00
-                  select-on-click ng-blur="ppp.validateImplementationAmount()">
+                  select-on-click>
               </div>
-              <div class="alert alert-danger px-2" ng-if="ppp.proposal.phases.implementation.invalidAmount">
+              <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.implementation.cost, ppp.opportunity.phases.implementation.maxCost)">
                 <i class="fas fa-exclamation-triangle"></i> Your price for this phase must not exceed
                 <strong>
-                  {{ppp.implMax | currency : "$" : 0}}
+                  {{ppp.opportunity.phases.implementation.maxCost | currency : "$" : 0}}
                 </strong>
               </div>
             </div>
           </div>
-          <div class="avatar-user" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
+          <div class="avatar-user" ng-repeat="member in ppp.proposal.phases.implementation.team">
             <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
           </div>
         </div>
@@ -144,7 +147,7 @@
         <h4><span class="text-black-50">Total Proponent Cost:</span> {{ppp.proposal.phases.inception.cost +
           ppp.proposal.phases.proto.cost + ppp.proposal.phases.implementation.cost | currency}}</h4>
         <div>
-          <span class="alert alert-danger" ng-if="ppp.exceededOpportunityAmount"><i class="fas fa-exclamation-triangle"></i>
+          <span class="alert alert-danger" ng-if="!ppp.validateEntireAmount()"><i class="fas fa-exclamation-triangle"></i>
             Your total price must not exceed the total budget of <strong>{{ppp.opportunity.budget | currency :
               "$" : 0}}</strong></span>
         </div>

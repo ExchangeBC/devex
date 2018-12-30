@@ -613,6 +613,13 @@
   dependencies:
     "@types/angular" "*"
 
+"@types/angular-ui-bootstrap@^0.13.47":
+  version "0.13.47"
+  resolved "https://registry.yarnpkg.com/@types/angular-ui-bootstrap/-/angular-ui-bootstrap-0.13.47.tgz#e9fd4baf09dd98ff2b868ed00474310b2a66fa37"
+  integrity sha512-8HMw2MR9lPZt8+A4Kf6BFT2JK+0/ERcpM88k/kewPBOXdXVzkQmcJ08tNPhFIPLF89diKfA6X3HZKTBJr6PMoQ==
+  dependencies:
+    "@types/angular" "*"
+
 "@types/angular-ui-notification@^0.0.4":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@types/angular-ui-notification/-/angular-ui-notification-0.0.4.tgz#095bf79654ca2b495cc10c602c1ffae5c17524fa"
@@ -834,6 +841,13 @@
   integrity sha512-Lx4rNtGajRGtcVwJe1sKPAkAuBBWq8TOuimKJfOfK7ayY1Jc+18Lx00GjagLeIwaH2+OvFJvCv8tz+pvbt3OoA==
   dependencies:
     "@types/express" "*"
+
+"@types/ng-file-upload@^12.2.2":
+  version "12.2.2"
+  resolved "https://registry.yarnpkg.com/@types/ng-file-upload/-/ng-file-upload-12.2.2.tgz#74b49cb4b3d65b1e8e5ff0ce70c1b09b9e63fa5c"
+  integrity sha512-fsQFix+S2iVYp4CiSqt9DNH5EMRm52LfWH7o1SMyz2kmKPLwQLpv6aYLCCX2ItSwGUleUKv/PyiM0TuwLND1sg==
+  dependencies:
+    "@types/angular" "*"
 
 "@types/node-fetch@^2.1.4":
   version "2.1.4"

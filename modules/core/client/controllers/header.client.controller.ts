@@ -99,7 +99,7 @@
 
 		// if signed in, start a session timer
 		if (vm.authentication.user) {
-			Idle.watch();
+			// Idle.watch();
 		}
 
 		$scope.$on('IdleStart', () => {

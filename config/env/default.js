@@ -29,7 +29,7 @@ module.exports = {
 	},
 	sessionTimeout: process.env.SESSION_TIMEOUT || 300,
 	sessionTimeoutWarning: process.env.SESSION_WARNING || 300,
-	home: process.env.PWD || '/opt/mean.js',
+	home: process.env.PWD || process.cwd() || '/opt/mean.js',
 	terms: {
 		cwu1: {
 			path: 'public/code-with-us-terms-2018-11-05.pdf',

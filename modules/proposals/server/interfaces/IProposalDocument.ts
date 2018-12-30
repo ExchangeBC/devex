@@ -1,10 +1,18 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 import IOpportunityDocument from '../../../opportunities/server/interfaces/IOpportunityDocument';
 import IOrgDocument from '../../../orgs/server/interfaces/IOrgDocument';
 import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 import IAttachmentDocument from '../interfaces/IAttachmentDocument';
-import ITeamQuestionResponseDocument from '../interfaces/ITeamQuestionResponseDocument';
 import IPhasesDocument from './IPhasesDocument';
+
+interface ITeamQuestionResponse {
+	question: string;
+	response: string;
+	rank: number;
+	rejected: boolean;
+	score: number;
+	displayInSummary?: boolean
+}
 
 export default interface IProposalDocument extends Document {
 	summary: string;
@@ -27,12 +35,13 @@ export default interface IProposalDocument extends Document {
 	org: IOrgDocument;
 	phases: IPhasesDocument;
 	questions: object;
-	attachments: [IAttachmentDocument];
+	attachments: IAttachmentDocument[];
 	interviewComplete: boolean;
 	scores: object;
 	ranking: number;
 	screenedIn: boolean;
 	passedCodeChallenge: boolean;
 	addendums: object;
-	teamQuestionResponses: [ITeamQuestionResponseDocument];
+	teamQuestionResponses: ITeamQuestionResponse[];
+	team?: IUserDocument[];
 }

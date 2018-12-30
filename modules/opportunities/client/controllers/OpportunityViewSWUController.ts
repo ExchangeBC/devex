@@ -167,7 +167,7 @@ import OpportunitiesService from '../services/OpportunitiesService';
 					const publishError = 'Error ' + (isToBePublished ? 'Publishing' : 'Unpublishing');
 					const publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 					const publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-					const publishMethod = isToBePublished ? opportunitiesService.getOpportunityResource().publish : opportunitiesService.getOpportunityResource().unpublish;
+					const publishMethod = isToBePublished ? opportunitiesService.getOpportunityResourceClass().publish : opportunitiesService.getOpportunityResourceClass().unpublish;
 					let isToBeSaved = true;
 					let promise = Promise.resolve();
 
@@ -210,7 +210,7 @@ import OpportunitiesService from '../services/OpportunitiesService';
 					ask.yesNo(q).then(r => {
 						if (r) {
 							opportunitiesService
-								.getOpportunityResource()
+								.getOpportunityResourceClass()
 								.unassign({ opportunityId: opp._id })
 								.$promise.then(
 									response => {

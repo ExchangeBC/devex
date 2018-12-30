@@ -18,11 +18,11 @@
 					'$state',
 					'authenticationService',
 					'Notification',
-					'ProposalsService',
+					'proposalService',
 					'ask',
 					'modalService',
 					'opportunitiesService',
-					function($scope, $state, authenticationService, Notification, ProposalsService, ask, modalService, OpportunitiesService) {
+					function($scope, $state, authenticationService, Notification, proposalService, ask, modalService, OpportunitiesService) {
 						var vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.authentication = authenticationService;
@@ -90,7 +90,7 @@
 						var buildQuestionPivot = function() {
 							return new Promise(function(resolve, reject) {
 								// Fetch the proposals for this opportunity and build the pivot out of the responses
-								ProposalsService.getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(
+								proposalService.getProposalResourceClass().getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(
 									function(proposals) {
 										var responses = [];
 										vm.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
@@ -811,7 +811,7 @@
 							var message = 'Are you sure you want to assign this opportunity to this proponent?';
 							ask.yesNo(message).then(function(resp) {
 								if (resp) {
-									ProposalsService.assignswu(proposal).$promise.then(
+									proposalService.getProposalResourceClass().assignswu(proposal).$promise.then(
 										function(response) {
 											vm.proposals[vm.proposals.indexOf(proposal)] = response;
 											proposal = response;
@@ -854,14 +854,12 @@
 								size: 'md',
 								templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
 								windowClass: 'swu-proposal-view-modal',
-								controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance) {
-									$scope.data = {};
-									$scope.data.proposal = proposal;
-									$scope.close = function() {
-										$uibModalInstance.close({});
-									};
-								}]
-							});
+								controller: 'ProposalViewSWUController',
+								controllerAs: 'ppp',
+								resolve: {
+									proposal
+								}
+							})
 						};
 
 						/**

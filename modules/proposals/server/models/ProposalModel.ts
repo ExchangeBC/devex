@@ -3,9 +3,8 @@
 import { Model, model, Schema } from 'mongoose';
 import IAttachmentDocument from '../interfaces/IAttachmentDocument';
 import IProposalDocument from '../interfaces/IProposalDocument';
-import ITeamQuestionResponseDocument from '../interfaces/ITeamQuestionResponseDocument';
 
-interface IAttachmentModel extends Model<IAttachmentDocument> {}
+export interface IAttachmentModel extends Model<IAttachmentDocument> {}
 const AttachmentSchema = new Schema({
 	name: { type: String },
 	path: { type: String },
@@ -25,7 +24,6 @@ const AddendumSchema = new Schema({
 	created: { type: Date, default: null }
 });
 
-interface ITeamQuestionResponseModel extends Model<ITeamQuestionResponseDocument> {}
 const TeamQuestionResponseSchema = new Schema({
 	question: { type: String },
 	response: { type: String },
@@ -125,5 +123,6 @@ const ProposalSchema = new Schema(
 );
 
 const ProposalModel: IProposalModel = model<IProposalDocument, IProposalModel>('Proposal', ProposalSchema);
+export const AttachmentModel: IAttachmentModel = model<IAttachmentDocument, IAttachmentModel>('Attachment', AttachmentSchema);
 
 export default ProposalModel;

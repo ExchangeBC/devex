@@ -1,7 +1,7 @@
 'use strict';
 
 // Import certain style elements here so that webpack picks them up
-import angular, { ui } from 'angular';
+import angular, { ui, uiNotification } from 'angular';
 import _ from 'lodash';
 import moment from 'moment';
 import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
@@ -41,7 +41,7 @@ import OpportunitiesService from '../services/OpportunitiesService';
 				editing: boolean,
 				projects,
 				authenticationService: AuthenticationService,
-				Notification,
+				Notification: uiNotification.INotificationService,
 				dataService,
 				ask,
 				CapabilitiesService: ICapabilitiesService,
@@ -604,7 +604,7 @@ import OpportunitiesService from '../services/OpportunitiesService';
 					ask.yesNo(question).then(response => {
 						if (response) {
 							opportunitiesService
-								.getOpportunityResource()
+								.getOpportunityResourceClass()
 								.remove({ opportunityId: vm.opportunity.code })
 								.$promise.then(() => {
 									$state.go('opportunities.list');
@@ -674,9 +674,9 @@ import OpportunitiesService from '../services/OpportunitiesService';
 						.then(saving => {
 							if (saving) {
 								if (editing) {
-									return opportunitiesService.getOpportunityResource().update(vm.opportunity).$promise;
+									return opportunitiesService.getOpportunityResourceClass().update(vm.opportunity).$promise;
 								} else {
-									return opportunitiesService.getOpportunityResource().create(vm.opportunity).$promise;
+									return opportunitiesService.getOpportunityResourceClass().create(vm.opportunity).$promise;
 								}
 							} else {
 								throw new Error('Save cancelled');

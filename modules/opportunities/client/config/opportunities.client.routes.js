@@ -53,25 +53,25 @@
 				.state('opportunities.viewcwu', {
 					url: '/cwu/:opportunityId',
 					templateUrl: '/modules/opportunities/client/views/cwu-opportunity-view.html',
-					controller: 'OpportunityViewController',
+					controller: 'OpportunityViewCWUController',
 					controllerAs: 'vm',
 					resolve: {
 						opportunity: [
 							'$stateParams',
 							'opportunitiesService',
-							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.getOpportunityResource().get({
+							function($stateParams, opportunitiesService) {
+								return opportunitiesService.getOpportunityResourceClass().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						myproposal: [
 							'$stateParams',
-							'ProposalsService',
+							'proposalService',
 							'authenticationService',
-							function($stateParams, ProposalsService, authenticationService) {
+							function($stateParams, proposalService, authenticationService) {
 								if (!authenticationService.user) return {};
-								return ProposalsService.getMyProposal({
+								return proposalService.getProposalResourceClass().getMyProposal({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -100,7 +100,7 @@
 							'$stateParams',
 							'opportunitiesService',
 							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.getOpportunityResource().get({
+								return OpportunitiesService.getOpportunityResourceClass().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -118,13 +118,13 @@
 						],
 						myproposal: [
 							'$stateParams',
-							'ProposalsService',
+							'proposalService',
 							'authenticationService',
 							'org',
-							function($stateParams, ProposalsService, authenticationService, org) {
+							function($stateParams, proposalService, authenticationService, org) {
 								if (!authenticationService.user) return {};
 								if (!org || !org._id) return {};
-								return ProposalsService.getMyProposal({
+								return proposalService.getProposalResourceClass().getMyProposal({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -173,7 +173,7 @@
 							'$stateParams',
 							'opportunitiesService',
 							function($stateParams, OpportunitiesService) {
-								return OpportunitiesService.getOpportunityResource().get({
+								return OpportunitiesService.getOpportunityResourceClass().get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -188,7 +188,7 @@
 				.state('opportunityadmin.editcwu', {
 					url: '/editcwu',
 					templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
-					controller: 'OpportunityEditController',
+					controller: 'OpportunityEditCWUController',
 					controllerAs: 'vm',
 					data: {
 						roles: ['admin', 'gov'],
@@ -245,19 +245,13 @@
 				.state('createcwu', {
 					url: '/createcwu',
 					templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
-					controller: 'OpportunityEditController',
+					controller: 'OpportunityEditCWUController',
 					controllerAs: 'vm',
 					resolve: {
 						opportunity: [
 							'opportunitiesService',
-							function(OpportunitiesService) {
-								return new OpportunitiesService();
-							}
-						],
-						programs: [
-							'ProgramsService',
-							function(ProgramsService) {
-								return ProgramsService.myadmin().$promise;
+							function(opportunitiesService) {
+								return new opportunitiesService.getOpportunityResourceClass();
 							}
 						],
 						projects: [
@@ -294,12 +288,6 @@
 							'CapabilitiesService',
 							function(CapabilitiesService) {
 								return CapabilitiesService.query().$promise;
-							}
-						],
-						opportunity: [
-							'opportunitiesService',
-							function(OpportunitiesService) {
-								return new OpportunitiesService();
 							}
 						],
 						programs: [

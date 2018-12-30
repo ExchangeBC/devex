@@ -2,6 +2,7 @@
 
 import angular from 'angular';
 import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
+import ProposalService from '../services/ProposalService';
 
 (() => {
 	angular
@@ -21,11 +22,11 @@ import OpportunitiesService from '../../../opportunities/client/services/Opportu
 				templateUrl: '/modules/proposals/client/views/list.proposals.directive.html',
 				controller: [
 					'$scope',
-					'ProposalsService',
+					'proposalService',
 					'opportunitiesService',
 					'authenticationService',
 					'Notification',
-					function($scope, ProposalsService, opportunitiesService: OpportunitiesService, authenticationService, Notification) {
+					function($scope, proposalService: ProposalService, opportunitiesService: OpportunitiesService, authenticationService, Notification) {
 						const vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.context = $scope.context;
@@ -49,7 +50,7 @@ import OpportunitiesService from '../../../opportunities/client/services/Opportu
 							vm.title = 'Proposals for ' + $scope.opportunity.title;
 							vm.opportunityId = $scope.opportunity._id;
 							vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
-							vm.proposals = ProposalsService.getProposalsForOpp({
+							vm.proposals = proposalService.getProposalResourceClass().getProposalsForOpp({
 								opportunityId: $scope.opportunity._id
 							});
 							vm.columnCount = 1;
@@ -57,11 +58,11 @@ import OpportunitiesService from '../../../opportunities/client/services/Opportu
 							vm.title = 'All Proposals';
 							vm.opportunityId = null;
 							vm.userCanAdd = vm.isAdmin || vm.isGov;
-							vm.proposals = ProposalsService.query();
+							vm.proposals = proposalService.getProposalResourceClass().query();
 							vm.columnCount = 1;
 						}
 						if ($scope.opportunity) {
-							vm.stats = opportunitiesService.getOpportunityResource().getProposalStats({
+							vm.stats = opportunitiesService.getOpportunityResourceClass().getProposalStats({
 								opportunityId: $scope.opportunity._id
 							});
 						}
@@ -92,7 +93,7 @@ import OpportunitiesService from '../../../opportunities/client/services/Opportu
 								});
 						};
 						vm.request = proposal => {
-							ProposalsService.makeRequest({
+							proposalService.getProposalResourceClass().makeRequest({
 								proposalId: proposal._id
 							})
 								.$promise.then(() => {

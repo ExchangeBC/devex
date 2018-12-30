@@ -1,4 +1,6 @@
 import { Document } from 'mongoose';
+import IProgramDocument from '../../../programs/server/interfaces/IProgramDocument';
+import IProjectDocument from '../../../projects/server/interfaces/IProjectDocument';
 import IPhasesDocument from '../../../proposals/server/interfaces/IPhasesDocument';
 import IProposalDocument from '../../../proposals/server/interfaces/IProposalDocument';
 import IUserDocument from '../../../users/server/interfaces/IUserDocument';
@@ -11,8 +13,8 @@ export default interface IOpportunityDocument extends Document {
 	background: string;
 	github: string;
 	views: number;
-	program: string;
-	project: string;
+	program: IProgramDocument;
+	project: IProjectDocument;
 	status: string;
 	onsite: string;
 	location: string;
@@ -52,8 +54,10 @@ export default interface IOpportunityDocument extends Document {
 	skills: string[];
 	earn?: number;
 	start: Date;
+	endDate: Date;
 	assignor?: IUserDocument;
 	assignoremail?: string;
 	proposalEmail?: string;
 	userIs?: any;
+	skilllist?: string;
 }

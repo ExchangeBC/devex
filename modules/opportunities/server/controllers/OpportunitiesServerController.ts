@@ -429,17 +429,13 @@ class OpportunitiesServerController {
 
 			// notify the requestor if final, or the final if pre-approval
 			this.sendMessages(notification, [whoToNotifyWhenDone], { opportunity: this.setMessageData(updatedOpportunity) });
-			res.status(200).json({
-				message: successMessage,
-				succeed: true
-			});
+			res.json(updatedOpportunity);
 			return;
 		} else {
 			approvalInfo.twoFAAttemptCount++;
 			await this.updateSave(opportunity);
 			res.status(401).json({
-				message: 'Invalid code',
-				succeed: false
+				message: 'Invalid code'
 			});
 		}
 	};
@@ -480,7 +476,7 @@ class OpportunitiesServerController {
 				this.send2FAviaSMS(approvalToAction);
 			}
 
-			res.status(200).send();
+			res.json(opportunity);
 		});
 	};
 
@@ -670,7 +666,7 @@ class OpportunitiesServerController {
 			phases += '$' + proposal.phases.implementation.cost.toFixed(2);
 
 			phases += '<br/><br/><b>Total Cost: ';
-			phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
+			phases += '$' + (proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost).toFixed(2);
 			phases += '</b><br/>';
 
 			let header = '<h2>Proposal</h2>';

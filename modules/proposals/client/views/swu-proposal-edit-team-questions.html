@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col m-4">
     <uib-accordion>
-      <div uib-accordion-group is-open="!accordian1" ng-click="accordian1=!accordian1">
+      <div uib-accordion-group is-open="!ppp.questionsAccordianCollapsed" ng-click="ppp.questionsAccordianCollapsed=!ppp.questionsAccordianCollapsed">
         <uib-accordion-heading>
-          <i class="fas fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!accordian1">click
-              to hide details</span><span ng-if="accordian1">click to show details</span>)</i>
+          <i class="fas fa-lg fa-info-circle"></i> Compose your responses to team-based questions <i>(<span ng-if="!ppp.questionsAccordianCollapsed">click
+              to hide details</span><span ng-if="ppp.questionsAccordianCollapsed">click to show details</span>)</i>
         </uib-accordion-heading>
         <div class="row">
           <p>The Proponent should provide responses to the Team-based questions contained in this tab. The
@@ -29,17 +29,16 @@
       determining what information to provide.
     </h6>
     <br>
-    <div ng-repeat="question in ppp.responses">
+    <div ng-repeat="question in ppp.opportunity.teamQuestions">
       <strong>Question {{$index + 1}} &nbsp;&nbsp;</strong><em>({{question.wordLimit}}
         word limit, worth {{question.questionScore}} points):</em><br>
-      <div class="alert alert-success" ng-bind-html="question.cleanQuestion"></div>
+      <div class="alert alert-success" ng-bind-html="question.question"></div>
 
-      <div ng-show="question.cleanGuideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fas fa-lg fa-info-circle"></i>
+      <div ng-show="question.guideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fas fa-lg fa-info-circle"></i>
         Response Guideline <i>(<span ng-if="question.showGuidance">click
             to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
-      <div class="alert alert-info" ng-show="question.showGuidance && question.cleanGuideline" ng-bind-html="question.cleanGuideline"></div>
-      <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.tinymceOptions" ng-model="question.response">
-						</textarea>
+      <div class="alert alert-info" ng-show="question.showGuidance && question.guideline" ng-bind-html="question.guideline"></div>
+      <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.TINYMCE_OPTIONS" ng-model="ppp.proposal.teamQuestionResponses[$index].response"></textarea>
     </div>
   </div>
 </div>

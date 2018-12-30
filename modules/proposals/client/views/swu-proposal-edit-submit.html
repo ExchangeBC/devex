@@ -3,14 +3,14 @@
     <h4>
       Review and Submit Your Proposal
     </h4>
-    <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ)">
+    <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isTeamCapable() && ppp.org.metRFQ)">
       <i class="fas fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
       You won't be able to submit this Proposal until you:
       <ul>
         <li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
-        <li ng-if="!ppp.isMetAllCapabilities">Select Team members who cover all of the required capabilities in
+        <li ng-if="!ppp.isTeamCapable()">Select Team members who cover all of the required capabilities in
           each phase</li>
-        <li ng-if="!ppp.orgHasMetRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With
+        <li ng-if="!ppp.org.metRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With
           Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
       </ul>
     </div>
@@ -63,60 +63,57 @@
         </div>
       </div>
       <div class="row">
-        <div class="col text-center" ng-if="ppp.oinp.isInception">
+        <div class="col text-center" ng-if="ppp.opportunity.phases.inception.isInception">
           <div>
             <h5><i class="fas fa-map"></i> Inception Phase</h5>
-            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oinp.f_startDate}}
-              &#8212;
-              {{ppp.oinp.f_endDate}}</div>
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.formatDate(ppp.opportunity.phases.inception.startDate)}} &#8212;
+              {{ppp.formatDate(ppp.opportunity.phases.inception.endDate)}}</div>
             <hr>
           </div>
           <div>
-            Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.inception.cost
+            Your Total Cost for this Phase: <span class="strong">{{ppp.proposal.phases.inception.cost
               | currency}}</span>
             <hr>
           </div>
 
-          <div class="p-2 text-left" ng-repeat=" member in ppp.members.inception" ng-if="ppp.inTeam[member.email]">
+          <div class="p-2 text-left" ng-repeat="member in ppp.proposal.phases.inception.team">
             <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
           </div>
         </div>
 
-        <div class="col text-center" ng-if="ppp.oprp.isPrototype">
+        <div class="col text-center" ng-if="ppp.opportunity.phases.proto.isPrototype">
           <div>
 
             <h5><i class="fas fa-rocket"></i> Proof of Concept Phase</h5>
-            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oprp.f_startDate}}
-              &#8212;
-              {{ppp.oprp.f_endDate}}
+            <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.formatDate(ppp.opportunity.phases.proto.startDate)}} &#8212;
+              {{ppp.formatDate(ppp.opportunity.phases.proto.endDate)}}
             </div>
             <hr>
             <div>
-              Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.proto.cost |
+              Your Total Cost for this Phase: <span class="strong">{{ppp.proposal.phases.proto.cost |
                 currency}}</span>
               <hr>
             </div>
-            <div class="p-2 text-left" ng-repeat="member in ppp.members.proto" ng-if="ppp.prTeam[member.email]">
+            <div class="p-2 text-left" ng-repeat="member in ppp.proposal.phases.proto.team">
               <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
             </div>
           </div>
 
         </div>
 
-        <div class="col text-center" ng-if="ppp.oimp.isImplementation">
+        <div class="col text-center" ng-if="ppp.opportunity.phases.implementation.isImplementation">
           <div class="panel panel-default">
             <div>
               <h5 class="strong"><i class="fas fa-cogs"></i> Implementation Phase</h5>
-              <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.oimp.f_startDate}}
-                &#8212;
-                {{ppp.oimp.f_endDate}}</div>
+              <div class="small">Phase Window: &nbsp;&nbsp;<i class="fas fa-calendar"></i> {{ppp.formatDate(ppp.opportunity.phases.implementation.startDate)}} &#8212;
+                {{ppp.formatDate(ppp.opportunity.phases.implementation.endDate)}}</div>
               <hr>
               <div>
-                Your Total Phase Cost for this Phase: <span class="strong">{{ppp.proposal.phases.implementation.cost
+                Your Total Cost for this Phase: <span class="strong">{{ppp.proposal.phases.implementation.cost
                   | currency}}</span>
                 <hr>
               </div>
-              <div class="p-2 text-left" ng-repeat="member in ppp.members.implementation" ng-if="ppp.imTeam[member.email]">
+              <div class="p-2 text-left" ng-repeat="member in ppp.proposal.phases.implementation.team">
                 <avatar-display url="member.profileImageURL" text="member.displayName"></avatar-display>
               </div>
             </div>
@@ -137,14 +134,11 @@
       <div class="row">
         <div class="col">
           <h6>Responses to Team Questions</h6>
-          <div class="m-2 small" ng-repeat="response in ppp.responses">
+          <div class="m-2 small" ng-repeat="response in ppp.proposal.teamQuestionResponses">
             <uib-accordion>
-              <div uib-accordion-group is-open="response.displayInSummary" ng-click="vm.toggleResponseAccordian($index)"
+              <div uib-accordion-group is-open="response.displayInSummary" ng-click="response.displayInSummary = !response.displayInSummary"
                 class="panel-default">
                 <uib-accordion-heading>
-                  <span class="small">
-                    {{$index + 1}}.&nbsp;
-                  </span>
                   <span class="small" ng-bind-html="response.question"></span>
                   <span class="small font-italic" ng-if="!response.displayInSummary">(click to show response)</span>
                   <span class="small font-italic" ng-if="response.displayInSummary">(click to hide response)</span>
@@ -162,7 +156,7 @@
     <br>
     <div class="row">
       <div class="col w-100"></div>
-      <div class="col-5 d-inline pull-right" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms && ppp.isMetAllCapabilities && ppp.orgHasMetRFQ">
+      <div class="col-5 d-inline pull-right" ng-if="ppp.proposal.status === 'Draft'">
         <div class="panel panel-success">
           <div class="panel-body">
             <label class="small">

@@ -64,4 +64,5 @@ export default interface IUserDocument extends Document {
 	isUser?: boolean;
 	isAdmin?: boolean;
 	isGov?: boolean;
+	selected?: boolean;
 }

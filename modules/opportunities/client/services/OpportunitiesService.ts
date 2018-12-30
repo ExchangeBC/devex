@@ -1,6 +1,6 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IPromise } from 'angular';
 import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
 
 interface IServiceParams {
@@ -11,28 +11,31 @@ interface IServiceParams {
 	preapproval?: string;
 }
 
-interface IOpportunity extends ng.resource.IResource<IOpportunityDocument> {
+export interface IOpportunityResource extends ng.resource.IResource<IOpportunityDocument>, IOpportunityDocument {
 	opportunityId: '@_id';
+	$promise: IPromise<IOpportunityResource>;
+	toJSON(options?: any): any; // necessary due to toJSON being defined in both IResource and IOpportunityDocument
 }
 
-interface IOpportunitiesResource extends ng.resource.IResourceClass<IOpportunity>, IOpportunity {
-	create(opportunity: IOpportunity): IOpportunity;
-	update(opportunity: IOpportunity): IOpportunity;
-	publish(params: IServiceParams): IOpportunity;
-	unpublish(params: IServiceParams): IOpportunity;
-	assign(params: IServiceParams): IOpportunity;
-	unassign(params: IServiceParams): IOpportunity;
-	addWatch(params: IServiceParams): IOpportunity;
-	removeWatch(params: IServiceParams): IOpportunity;
-	getDeadlineStatus(params: IServiceParams): string;
+export interface IOpportunitiesResourceClass extends ng.resource.IResourceClass<IOpportunityResource> {
+	create(opportunity: IOpportunityResource): IOpportunityResource;
+	update(opportunity: IOpportunityResource): IOpportunityResource;
+	publish(params: IServiceParams): IOpportunityResource;
+	unpublish(params: IServiceParams): IOpportunityResource;
+	assign(params: IServiceParams): IOpportunityResource;
+	unassign(params: IServiceParams): IOpportunityResource;
+	addWatch(params: IServiceParams): IOpportunityResource;
+	removeWatch(params: IServiceParams): IOpportunityResource;
+	getDeadlineStatus(params: IServiceParams): IPromise<any>;
 	getProposalStats(params: IServiceParams): object;
-	requestCode(params: IServiceParams): void;
-	submitCode(params: IServiceParams): any;
+	requestCode(params: IServiceParams): IOpportunityResource;
+	submitCode(params: IServiceParams): IOpportunityResource;
 }
 
 export default class OpportunitiesService {
 	public static $inject = ['$resource'];
-	private opportunitiesResource: IOpportunitiesResource;
+
+	private opportunitiesResourceClass: IOpportunitiesResourceClass;
 
 	private createAction: ng.resource.IActionDescriptor = {
 		method: 'POST',
@@ -103,7 +106,7 @@ export default class OpportunitiesService {
 	};
 
 	constructor($resource: ng.resource.IResourceService) {
-		this.opportunitiesResource = $resource(
+		this.opportunitiesResourceClass = $resource(
 			'/api/opportunities/:opportunityId',
 			{
 				opportunityId: '@_id'
@@ -122,14 +125,14 @@ export default class OpportunitiesService {
 				requestCode: this.requestCodeAction,
 				submitCode: this.submitCodeAction
 			}
-		) as IOpportunitiesResource;
+		) as IOpportunitiesResourceClass;
+}
+
+	public getOpportunityResourceClass(): IOpportunitiesResourceClass {
+		return this.opportunitiesResourceClass;
 	}
 
-	public getOpportunityResource(): IOpportunitiesResource {
-		return this.opportunitiesResource;
-	}
-
-	private transformResponse(data: any) {
+	private transformResponse(data: any): IOpportunityResource {
 		data = angular.fromJson(data);
 		data.deadline = new Date(data.deadline);
 		data.assignment = new Date(data.assignment);
