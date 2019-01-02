@@ -2,6 +2,7 @@
 
 import angular, { IFormController, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
+import { IProject } from '../../../projects/shared/IProjectDTO';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
 import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
 
@@ -24,7 +25,7 @@ export default class OpportunityEditCWUController {
 		private $state: IStateService,
 		public opportunity: IOpportunityResource,
 		public editing: boolean,
-		public projects,
+		public projects: IProject[],
 		private authenticationService: AuthenticationService,
 		private Notification: uiNotification.INotificationService,
 		private dataService,

@@ -3,11 +3,25 @@
 import crypto from 'crypto';
 import generatePassword from 'generate-password';
 import _ from 'lodash';
-import { model, Model, Schema } from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 import owasp from 'owasp-password-strength-test';
 import validator from 'validator';
 import config from '../../../../config/ApplicationConfig';
-import IUserDocument from '../interfaces/IUserDocument';
+import { ICapabilityModel } from '../../../capabilities/server/models/CapabilityModel';
+import { ICapabilitySkillModel } from '../../../capabilities/server/models/CapabilitySkillModel';
+import { IUser } from '../../shared/IUserDTO';
+
+export interface IUserModel extends IUser, Document {
+	_id: any;
+	capabilities: ICapabilityModel[];
+	capabilitySkills: ICapabilitySkillModel[];
+	findUniqueUsername(username: string, suffix: string, callback: any): string;
+	generateRandomPassphrase(): Promise<string>;
+	hashPassword(password: string): string;
+	authenticate(password: string): boolean;
+	addRoles(roles: [string]): void;
+	removeRoles(roles: [string]): void;
+}
 
 owasp.config(config.shared.owasp);
 
@@ -41,17 +55,12 @@ const validateLocalStrategyEmail = function(email) {
 	);
 };
 
-export interface IUser extends IUserDocument {
-	hashPassword(password: string): string;
-	authenticate(password: string): boolean;
-	addRoles(roles: [string]): void;
-	removeRoles(roles: [string]): void;
-}
-
-export interface IUserModel extends Model<IUser> {
-	findUniqueUsername(username: string, suffix: string, callback: any): string;
-	generateRandomPassphrase(): Promise<string>;
-}
+// export interface IUser extends IUserDocument {
+// 	hashPassword(password: string): string;
+// 	authenticate(password: string): boolean;
+// 	addRoles(roles: [string]): void;
+// 	removeRoles(roles: [string]): void;
+// }
 
 export const UserSchema = new Schema(
 	{
@@ -213,7 +222,7 @@ export const UserSchema = new Schema(
  * Hook a pre save method to hash the password
  */
 UserSchema.pre('save', function(next) {
-	const userSchema = this as IUser;
+	const userSchema = this as IUserModel;
 	if (userSchema.password && userSchema.isModified('password')) {
 		userSchema.salt = crypto.randomBytes(16).toString('base64');
 		userSchema.password = userSchema.hashPassword(userSchema.password);
@@ -226,7 +235,7 @@ UserSchema.pre('save', function(next) {
  * Hook a pre validate method to test the local password
  */
 UserSchema.pre('validate', function(next) {
-	const userSchema = this as IUser;
+	const userSchema = this as IUserModel;
 	const devexProd = config.devexProd === 'true';
 	if (
 		userSchema.provider === 'local' &&
@@ -356,6 +365,4 @@ UserSchema.statics.generateRandomPassphrase = () => {
 	});
 };
 
-const UserModel: IUserModel = model<IUser, IUserModel>('User', UserSchema);
-
-export default UserModel;
+export const UserModel: Model<IUserModel> = model<IUserModel>('User', UserSchema);

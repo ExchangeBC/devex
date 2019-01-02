@@ -2,7 +2,7 @@
 
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 export default class LocalAuthStrategy {
 	public init = () => {

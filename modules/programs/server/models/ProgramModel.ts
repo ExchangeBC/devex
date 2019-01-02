@@ -1,10 +1,10 @@
 'use strict';
 
-import { model, Model, Schema } from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import IProgramDocument from '../interfaces/IProgramDocument';
+import { IProgram } from '../../shared/IProgramDTO';
 
-interface IProgramModel extends Model<IProgramDocument> {
+export interface IProgramModel extends IProgram, Document {
 	findUniqueCode(title: string, suffix: string, callback: any): string;
 }
 
@@ -31,6 +31,4 @@ ProgramSchema.statics.findUniqueCode = function(title, suffix, callback) {
 	return CoreServerHelpers.modelFindUniqueCode(this, 'pro', title, suffix, callback);
 }
 
-const ProgramModel: IProgramModel = model<IProgramDocument, IProgramModel>('Program', ProgramSchema);
-
-export default ProgramModel;
+export const ProgramModel: Model<IProgramModel> = model<IProgramModel>('Program', ProgramSchema);

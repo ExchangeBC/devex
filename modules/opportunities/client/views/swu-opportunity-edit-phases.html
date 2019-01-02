@@ -7,7 +7,8 @@
 
           <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-primary"
-                    ng-click="vm.changeToStartPhase(vm.opportunity.phases.inception)">
+                    ng-click="vm.changeToStartPhase(vm.opportunity.phases.inception)"
+                    ng-disabled="vm.opportunity.phases.inception.isInception">
               Start Here
             </button>
           </div>
@@ -59,13 +60,13 @@
             <ul class="list-group">
               <li class="list-group-item"
                   ng-repeat="capability in vm.allCapabilities"
-                  ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.inceptionCapabilities)}"
-                  ng-click="vm.toggleSelectedCapability(capability, vm.inceptionCapabilities)">
+                  ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.inception.capabilities)}"
+                  ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.inception.capabilities)">
                 <a href="">{{capability.name}}</a>
                 <label class="label label-fulltime float-right"
-                      ng-if="vm.isCapabilitySelected(capability, vm.inceptionCapabilities)"
-                      ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.inceptionCoreCaps)}"
-                      ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.inceptionCoreCaps)">
+                      ng-if="vm.isCapabilitySelected(capability, vm.opportunity.phases.inception.capabilities)"
+                      ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.inception.capabilitiesCore)}"
+                      ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.opportunity.phases.inception.capabilitiesCore)">
                   F/T
                 </label>
               </li>
@@ -80,7 +81,8 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
-                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.proto)">
+                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.proto)"
+                      ng-disabled="!vm.opportunity.phases.inception.isInception && vm.opportunity.phases.proto.isPrototype">
                 Start Here
               </button>
             </div>
@@ -135,13 +137,13 @@
               <ul class="list-group">
                 <li class="list-group-item"
                     ng-repeat="capability in vm.allCapabilities"
-                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.prototypeCapabilities)}"
-                    ng-click="vm.toggleSelectedCapability(capability, vm.prototypeCapabilities)">
+                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.proto.capabilities)}"
+                    ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.proto.capabilities)">
                   <a href="">{{capability.name}}</a>
                   <label class="label label-fulltime float-right"
-                        ng-if="vm.isCapabilitySelected(capability, vm.prototypeCapabilities)"
-                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.prototypeCoreCaps)}"
-                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.prototypeCoreCaps)">
+                        ng-if="vm.isCapabilitySelected(capability, vm.opportunity.phases.proto.capabilities)"
+                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.proto.capabilitiesCore)}"
+                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.opportunity.phases.proto.capabilitiesCore)">
                     F/T
                   </label>
                 </li>
@@ -156,7 +158,8 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
-                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.implementation)">
+                      ng-click="vm.changeToStartPhase(vm.opportunity.phases.implementation)"
+                      ng-disabled="!vm.opportunity.phases.proto.isPrototype">
                 Start Here
               </button>
             </div>
@@ -206,13 +209,13 @@
               <ul class="list-group">
                 <li class="list-group-item"
                     ng-repeat="capability in vm.allCapabilities"
-                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.implementationCapabilities)}"
-                    ng-click="vm.toggleSelectedCapability(capability, vm.implementationCapabilities)">
+                    ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.implementation.capabilities)}"
+                    ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.implementation.capabilities)">
                   <a href="">{{capability.name}}</a>
                   <label class="label label-fulltime float-right"
-                        ng-if="vm.isCapabilitySelected(capability, vm.implementationCapabilities)"
-                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.implementationCoreCaps)}"
-                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.implementationCoreCaps)">
+                        ng-if="vm.isCapabilitySelected(capability, vm.opportunity.phases.implementation.capabilities)"
+                        ng-class="{'label-fulltime-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.implementation.capabilitiesCore)}"
+                        ng-click="$event.stopPropagation(); vm.toggleSelectedCapability(capability, vm.opportunity.phases.implementation.capabilitiesCore)">
                     F/T
                   </label>
                 </li>

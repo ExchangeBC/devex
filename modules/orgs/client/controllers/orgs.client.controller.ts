@@ -12,299 +12,299 @@ import angular from 'angular';
 		// Controller for the master list of orgs
 		//
 		// =========================================================================
-		.controller('OrgsListController', [
-			'orgs',
-			'authenticationService',
-			function(orgs, authenticationService) {
-				var vm = this;
-				vm.isLoggedIn = !!authenticationService.user;
-				vm.orgs = orgs;
-			}
-		])
+		// .controller('OrgsListController', [
+		// 	'orgs',
+		// 	'authenticationService',
+		// 	function(orgs, authenticationService) {
+		// 		var vm = this;
+		// 		vm.isLoggedIn = !!authenticationService.user;
+		// 		vm.orgs = orgs;
+		// 	}
+		// ])
 		// =========================================================================
 		//
 		// Controller the view of the org page
 		//
 		// =========================================================================
-		.controller('OrgViewController', [
-			'$sce',
-			'org',
-			'authenticationService',
-			function($sce, org, authenticationService) {
-				var vm = this;
-				vm.org = org;
-				vm.user = authenticationService.user;
-				vm.isLoggedIn = !!vm.user;
-				vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
-				vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
-				vm.isOrgAdmin =
-					vm.user &&
-					vm.org.admins &&
-					vm.org.admins
-						.map(function(u) {
-							return vm.user._id === u._id;
-						})
-						.reduce(function(accum, curr) {
-							return accum || curr;
-						}, false);
-				vm.isOrgOwner = vm.user && org.owner && vm.user._id === org.owner._id;
-				vm.canEdit = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
-				vm.trust = $sce.trustAsHtml;
+		// .controller('OrgViewController', [
+		// 	'$sce',
+		// 	'org',
+		// 	'authenticationService',
+		// 	function($sce, org, authenticationService) {
+		// 		var vm = this;
+		// 		vm.org = org;
+		// 		vm.user = authenticationService.user;
+		// 		vm.isLoggedIn = !!vm.user;
+		// 		vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
+		// 		vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
+		// 		vm.isOrgAdmin =
+		// 			vm.user &&
+		// 			vm.org.admins &&
+		// 			vm.org.admins
+		// 				.map(function(u) {
+		// 					return vm.user._id === u._id;
+		// 				})
+		// 				.reduce(function(accum, curr) {
+		// 					return accum || curr;
+		// 				}, false);
+		// 		vm.isOrgOwner = vm.user && org.owner && vm.user._id === org.owner._id;
+		// 		vm.canEdit = vm.isAdmin || vm.isOrgOwner || vm.isOrgAdmin;
+		// 		vm.trust = $sce.trustAsHtml;
 
-				vm.description = $sce.trustAsHtml(vm.org.description);
-				//
-				// what can the user do here?
-				//
-			}
-		])
+		// 		vm.description = $sce.trustAsHtml(vm.org.description);
+		// 		//
+		// 		// what can the user do here?
+		// 		//
+		// 	}
+		// ])
 		// =========================================================================
 		//
 		// create a new org
 		//
 		// =========================================================================
-		.controller('OrgCreateController', [
-			'$scope',
-			'$state',
-			'org',
-			'authenticationService',
-			'Notification',
-			'UsersService',
-			function($scope, $state, org, authenticationService, Notification, UsersService) {
-				var vm = this;
-				vm.org = org;
-				vm.user = authenticationService.user;
-				var newId;
-				vm.add = function(isValid) {
-					if (!isValid) {
-						$scope.$broadcast('show-errors-check-validity', 'vm.orgForm');
-						return false;
-					}
-					vm.orgForm.$setPristine();
-					vm.org
-						.createOrUpdate()
-						.then(function(result) {
-							vm.orgForm.$setPristine();
-							newId = result._id;
-							Notification.success({
-								message: '<i class="fas fa-check-circle"></i> Company saved successfully!'
-							});
-						})
-						.then(function() {
-							vm.user.orgsMember.push(newId);
-							vm.user.orgsAdmin.push(newId);
-							var user = new UsersService(vm.user);
-							return new Promise(function(resolve, reject) {
-								user.$update(
-									function(response) {
-										authenticationService.user = response;
-										resolve();
-									},
-									function(err) {
-										reject(err);
-									}
-								);
-							});
-							// UsersService.resetMe ();
-						})
-						.then(function() {
-							$state.go('orgadmin.profile', { orgId: newId });
-						})
-						.catch(function(res) {
-							Notification.error({
-								message: res.data.message,
-								title: '<i class=\'fas fa-exclamation-triangle\'></i> Company save error!'
-							});
-						});
-				};
-				vm.delete = function() {
-					$state.go('orgs.list');
-				};
-			}
-		])
+		// .controller('OrgCreateController', [
+		// 	'$scope',
+		// 	'$state',
+		// 	'org',
+		// 	'authenticationService',
+		// 	'Notification',
+		// 	'UsersService',
+		// 	function($scope, $state, org, authenticationService, Notification, UsersService) {
+		// 		var vm = this;
+		// 		vm.org = org;
+		// 		vm.user = authenticationService.user;
+		// 		var newId;
+		// 		vm.add = function(isValid) {
+		// 			if (!isValid) {
+		// 				$scope.$broadcast('show-errors-check-validity', 'vm.orgForm');
+		// 				return false;
+		// 			}
+		// 			vm.orgForm.$setPristine();
+		// 			vm.org
+		// 				.createOrUpdate()
+		// 				.then(function(result) {
+		// 					vm.orgForm.$setPristine();
+		// 					newId = result._id;
+		// 					Notification.success({
+		// 						message: '<i class="fas fa-check-circle"></i> Company saved successfully!'
+		// 					});
+		// 				})
+		// 				.then(function() {
+		// 					vm.user.orgsMember.push(newId);
+		// 					vm.user.orgsAdmin.push(newId);
+		// 					var user = new UsersService(vm.user);
+		// 					return new Promise(function(resolve, reject) {
+		// 						user.$update(
+		// 							function(response) {
+		// 								authenticationService.user = response;
+		// 								resolve();
+		// 							},
+		// 							function(err) {
+		// 								reject(err);
+		// 							}
+		// 						);
+		// 					});
+		// 					// UsersService.resetMe ();
+		// 				})
+		// 				.then(function() {
+		// 					$state.go('orgadmin.profile', { orgId: newId });
+		// 				})
+		// 				.catch(function(res) {
+		// 					Notification.error({
+		// 						message: res.data.message,
+		// 						title: '<i class=\'fas fa-exclamation-triangle\'></i> Company save error!'
+		// 					});
+		// 				});
+		// 		};
+		// 		vm.delete = function() {
+		// 			$state.go('orgs.list');
+		// 		};
+		// 	}
+		// ])
 		// =========================================================================
 		//
 		// top level of the edit
 		//
 		// =========================================================================
-		.controller('OrgAdminController', [
-			'$rootScope',
-			'$state',
-			'org',
-			'OrgsService',
-			function($rootScope, $state, org, OrgsService) {
-				var vm = this;
-				vm.org = org;
+		// .controller('OrgAdminController', [
+		// 	'$rootScope',
+		// 	'$state',
+		// 	'org',
+		// 	'OrgService',
+		// 	function($rootScope, $state, org, OrgService) {
+		// 		var vm = this;
+		// 		vm.org = org;
 
-				$rootScope.$on('updateOrg', function() {
-					OrgsService.get({ orgId: org._id }).$promise.then(function(result) {
-						vm.org = result;
-					});
-				});
+		// 		$rootScope.$on('updateOrg', function() {
+		// 			OrgService.get({ orgId: org._id }).$promise.then(function(result) {
+		// 				vm.org = result;
+		// 			});
+		// 		});
 
-				$state.go('orgadmin.profile');
+		// 		$state.go('orgadmin.profile');
 
-				vm.tabs = [
-					{
-						url: '/profile',
-						name: 'Business Info',
-						templateUrl: '/modules/orgs/client/views/org-main.html',
-						route: 'orgadmin.profile'
-					},
-					{
-						url: '/members',
-						name: 'Team Members',
-						templateUrl: '/modules/orgs/client/views/org-members.html',
-						route: 'orgadmin.members'
-					},
-					{
-						url: '/terms',
-						name: 'Terms',
-						templateUrl: '/modules/orgs/client/views/org-terms.html',
-						route: 'orgadmin.terms'
-					}
-				];
+		// 		vm.tabs = [
+		// 			{
+		// 				url: '/profile',
+		// 				name: 'Business Info',
+		// 				templateUrl: '/modules/orgs/client/views/org-main.html',
+		// 				route: 'orgadmin.profile'
+		// 			},
+		// 			{
+		// 				url: '/members',
+		// 				name: 'Team Members',
+		// 				templateUrl: '/modules/orgs/client/views/org-members.html',
+		// 				route: 'orgadmin.members'
+		// 			},
+		// 			{
+		// 				url: '/terms',
+		// 				name: 'Terms',
+		// 				templateUrl: '/modules/orgs/client/views/org-terms.html',
+		// 				route: 'orgadmin.terms'
+		// 			}
+		// 		];
 
-				vm.openTab = function(tab) {
-					$state.go(tab.route);
-				};
-			}
-		])
+		// 		vm.openTab = function(tab) {
+		// 			$state.go(tab.route);
+		// 		};
+		// 	}
+		// ])
 		// =========================================================================
 		//
 		// edit the tonbstone info for an org
 		//
 		// =========================================================================
-		.controller('OrgProfileController', [
-			'$rootScope',
-			'capabilities',
-			'$scope',
-			'$state',
-			'$window',
-			'org',
-			'authenticationService',
-			'Notification',
-			'dataService',
-			'UsersService',
-			function(
-				$rootScope,
-				capabilities,
-				$scope,
-				$state,
-				$window,
-				org,
-				authenticationService,
-				Notification,
-				dataService,
-				UsersService
-			) {
-				var vm = this;
-				vm.user = authenticationService.user;
-				vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
-				vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
+		// .controller('OrgProfileController', [
+		// 	'$rootScope',
+		// 	'capabilities',
+		// 	'$scope',
+		// 	'$state',
+		// 	'$window',
+		// 	'org',
+		// 	'authenticationService',
+		// 	'Notification',
+		// 	'dataService',
+		// 	'UsersService',
+		// 	function(
+		// 		$rootScope,
+		// 		capabilities,
+		// 		$scope,
+		// 		$state,
+		// 		$window,
+		// 		org,
+		// 		authenticationService,
+		// 		Notification,
+		// 		dataService,
+		// 		UsersService
+		// 	) {
+		// 		var vm = this;
+		// 		vm.user = authenticationService.user;
+		// 		vm.isAdmin = vm.user && !!~authenticationService.user.roles.indexOf('admin');
+		// 		vm.isGov = vm.user && !!~authenticationService.user.roles.indexOf('gov');
 
-				vm.org = org;
-				if (!vm.org.capabilities) vm.org.capabilities = [];
+		// 		vm.org = org;
+		// 		if (!vm.org.capabilities) vm.org.capabilities = [];
 
-				vm.cities = dataService.cities;
-				vm.capabilities = capabilities;
+		// 		vm.cities = dataService.cities;
+		// 		vm.capabilities = capabilities;
 
-				vm.form = {};
-				vm.tinymceOptions = {
-					resize: true,
-					width: '100%', // I *think* its a number and not '400' string
-					height: 100,
-					menubar: '',
-					elementpath: false,
-					plugins: 'textcolor lists advlist link',
-					toolbar:
-						'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
-				};
-				$rootScope.$on('orgImageUpdated', function(evt, data) {
-					vm.org.orgImageURL = data;
-				});
+		// 		vm.form = {};
+		// 		vm.tinymceOptions = {
+		// 			resize: true,
+		// 			width: '100%', // I *think* its a number and not '400' string
+		// 			height: 100,
+		// 			menubar: '',
+		// 			elementpath: false,
+		// 			plugins: 'textcolor lists advlist link',
+		// 			toolbar:
+		// 				'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
+		// 		};
+		// 		$rootScope.$on('orgImageUpdated', function(evt, data) {
+		// 			vm.org.orgImageURL = data;
+		// 		});
 
-				parseWebsite();
+		// 		parseWebsite();
 
-				function parseWebsite() {
-					var parts = vm.org.website.split('://');
-					if (parts[0] === 'https') {
-						vm.org.websiteProtocol = 'https://';
-					} else {
-						vm.org.websiteProtocol = 'http://';
-					}
+		// 		function parseWebsite() {
+		// 			var parts = vm.org.website.split('://');
+		// 			if (parts[0] === 'https') {
+		// 				vm.org.websiteProtocol = 'https://';
+		// 			} else {
+		// 				vm.org.websiteProtocol = 'http://';
+		// 			}
 
-					if (parts.length > 1) {
-						vm.org.websiteAddress = parts[1];
-					} else {
-						vm.org.websiteAddress = vm.org.website;
-					}
-				}
+		// 			if (parts.length > 1) {
+		// 				vm.org.websiteAddress = parts[1];
+		// 			} else {
+		// 				vm.org.websiteAddress = vm.org.website;
+		// 			}
+		// 		}
 				// -------------------------------------------------------------------------
 				//
 				// remove the org with some confirmation
 				//
 				// -------------------------------------------------------------------------
-				vm.remove = function() {
-					var orgId = vm.org._id.toString();
-					if ($window.confirm('Are you sure you want to delete?')) {
-						vm.org.$remove(function() {
-							Notification.success({
-								message: '<i class="fas fa-check-circle"></i> org deleted successfully!'
-							});
-							vm.user.orgsMember = vm.user.orgsMember.filter(function(el) {
-								return el !== orgId;
-							});
-							vm.user.orgsAdmin = vm.user.orgsAdmin.filter(function(el) {
-								return el !== orgId;
-							});
-							var user = new UsersService(vm.user);
-							user.$update(function(response) {
-								authenticationService.user = response;
-								$state.go('orgs.list');
-							});
-						});
-					}
-				};
-				// -------------------------------------------------------------------------
-				//
-				// save the org, could be added or edited (post or put)
-				//
-				// -------------------------------------------------------------------------
-				vm.save = function(isValid) {
-					vm.orgForm.$setPristine();
-					if (!isValid) {
-						$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
-						return false;
-					}
+		// 		vm.remove = function() {
+		// 			var orgId = vm.org._id.toString();
+		// 			if ($window.confirm('Are you sure you want to delete?')) {
+		// 				vm.org.$remove(function() {
+		// 					Notification.success({
+		// 						message: '<i class="fas fa-check-circle"></i> org deleted successfully!'
+		// 					});
+		// 					vm.user.orgsMember = vm.user.orgsMember.filter(function(el) {
+		// 						return el !== orgId;
+		// 					});
+		// 					vm.user.orgsAdmin = vm.user.orgsAdmin.filter(function(el) {
+		// 						return el !== orgId;
+		// 					});
+		// 					var user = new UsersService(vm.user);
+		// 					user.$update(function(response) {
+		// 						authenticationService.user = response;
+		// 						$state.go('orgs.list');
+		// 					});
+		// 				});
+		// 			}
+		// 		};
+		// 		// -------------------------------------------------------------------------
+		// 		//
+		// 		// save the org, could be added or edited (post or put)
+		// 		//
+		// 		// -------------------------------------------------------------------------
+		// 		vm.save = function(isValid) {
+		// 			vm.orgForm.$setPristine();
+		// 			if (!isValid) {
+		// 				$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
+		// 				return false;
+		// 			}
 
-					vm.org.website = vm.org.websiteProtocol + vm.org.websiteAddress;
-					//
-					// Create a new org, or update the current instance
-					//
-					vm.org
-						.createOrUpdate()
-						//
-						// success, notify and return to list
-						//
-						.then(function() {
-							vm.orgForm.$setPristine();
-							parseWebsite();
-							Notification.success({
-								message: '<i class="fas fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
-							});
-						})
-						//
-						// fail, notify and stay put
-						//
-						.catch(function(res) {
-							Notification.error({
-								message: res.data.message,
-								title: '<i class=\'fas fa-exclamation-triangle\'></i> org save error!'
-							});
-						});
-				};
-			}
-		])
+		// 			vm.org.website = vm.org.websiteProtocol + vm.org.websiteAddress;
+		// 			//
+		// 			// Create a new org, or update the current instance
+		// 			//
+		// 			vm.org
+		// 				.createOrUpdate()
+		// 				//
+		// 				// success, notify and return to list
+		// 				//
+		// 				.then(function() {
+		// 					vm.orgForm.$setPristine();
+		// 					parseWebsite();
+		// 					Notification.success({
+		// 						message: '<i class="fas fa-3x fa-check-circle"></i><br> <h4>Changes saved</h4>'
+		// 					});
+		// 				})
+		// 				//
+		// 				// fail, notify and stay put
+		// 				//
+		// 				.catch(function(res) {
+		// 					Notification.error({
+		// 						message: res.data.message,
+		// 						title: '<i class=\'fas fa-exclamation-triangle\'></i> org save error!'
+		// 					});
+		// 				});
+		// 		};
+		// 	}
+		// ])
 		// =========================================================================
 		//
 		// edit org member list
@@ -314,11 +314,11 @@ import angular from 'angular';
 			'$rootScope',
 			'org',
 			'Notification',
-			'OrgsService',
+			'OrgService',
 			'ask',
 			'$uibModal',
 			'allCapabilities',
-			function($rootScope, org, Notification, OrgsService, ask, $uibModal, allCapabilities) {
+			function($rootScope, org, Notification, OrgService, ask, $uibModal, allCapabilities) {
 				var vm = this;
 				vm.org = org;
 				vm.emaillist = '';
@@ -334,7 +334,7 @@ import angular from 'angular';
 					vm.emaillist = '';
 					var id = vm.org._id;
 					vm.loading = true;
-					OrgsService.get({ orgId: id }).$promise.then(function(org) {
+					OrgService.get({ orgId: id }).$promise.then(function(org) {
 						vm.org = org;
 						vm.loading = false;
 					});
@@ -344,7 +344,7 @@ import angular from 'angular';
 				vm.addMembers = function() {
 					vm.orgForm.$setPristine();
 					if (vm.emaillist !== '') {
-						var saveorg = new OrgsService(vm.org);
+						var saveorg = new OrgService(vm.org);
 						saveorg.additions = vm.emaillist.toLowerCase();
 						saveorg
 							.$update()
@@ -370,7 +370,7 @@ import angular from 'angular';
 						'Are you sure you want to remove this member from your company? If you have added them to a proposal, you may no longer qualify to apply on the opportunity.'
 					).then(function(yes) {
 						if (yes) {
-							OrgsService.removeUser({
+							OrgService.removeUser({
 								orgId: vm.org._id,
 								userId: member._id
 							}).$promise.then(function(org) {

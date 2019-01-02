@@ -1,7 +1,7 @@
 'use strict';
 
-import angular, { IPromise } from 'angular';
-import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
+import angular, { IPromise, resource } from 'angular';
+import { IOpportunity } from '../../shared/IOpportunityDTO';
 
 interface IServiceParams {
 	opportunityId?: string;
@@ -11,13 +11,13 @@ interface IServiceParams {
 	preapproval?: string;
 }
 
-export interface IOpportunityResource extends ng.resource.IResource<IOpportunityDocument>, IOpportunityDocument {
+export interface IOpportunityResource extends resource.IResource<IOpportunity>, IOpportunity {
 	opportunityId: '@_id';
 	$promise: IPromise<IOpportunityResource>;
 	toJSON(options?: any): any; // necessary due to toJSON being defined in both IResource and IOpportunityDocument
 }
 
-export interface IOpportunitiesResourceClass extends ng.resource.IResourceClass<IOpportunityResource> {
+export interface IOpportunitiesResourceClass extends resource.IResourceClass<IOpportunityResource> {
 	create(opportunity: IOpportunityResource): IOpportunityResource;
 	update(opportunity: IOpportunityResource): IOpportunityResource;
 	publish(params: IServiceParams): IOpportunityResource;
@@ -37,75 +37,75 @@ export default class OpportunitiesService {
 
 	private opportunitiesResourceClass: IOpportunitiesResourceClass;
 
-	private createAction: ng.resource.IActionDescriptor = {
+	private createAction: resource.IActionDescriptor = {
 		method: 'POST',
 		transformResponse: this.transformResponse
 	};
 
-	private updateAction: ng.resource.IActionDescriptor = {
+	private updateAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		transformResponse: this.transformResponse
 	};
 
-	private publishAction: ng.resource.IActionDescriptor = {
+	private publishAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/publish',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	private unpublishAction: ng.resource.IActionDescriptor = {
+	private unpublishAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/unpublish',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	private assignAction: ng.resource.IActionDescriptor = {
+	private assignAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/assign/:proposalId',
 		params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
 	};
 
-	private unassignAction: ng.resource.IActionDescriptor = {
+	private unassignAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/unassign/:proposalId',
 		params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
 	};
 
-	private addWatchAction: ng.resource.IActionDescriptor = {
+	private addWatchAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/watch/add',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	private removeWatchAction: ng.resource.IActionDescriptor = {
+	private removeWatchAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/watch/remove',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	private getDeadlineStatusAction: ng.resource.IActionDescriptor = {
+	private getDeadlineStatusAction: resource.IActionDescriptor = {
 		method: 'GET',
 		url: '/api/opportunities/:opportunityId/deadline/status'
 	};
 
-	private getProposalStatsAction: ng.resource.IActionDescriptor = {
+	private getProposalStatsAction: resource.IActionDescriptor = {
 		method: 'GET',
 		url: '/api/opportunities/:opportunityId/proposalStats'
 	};
 
-	private requestCodeAction: ng.resource.IActionDescriptor = {
+	private requestCodeAction: resource.IActionDescriptor = {
 		method: 'PUT',
 		url: '/api/opportunities/:opportunityId/sendcode',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	private submitCodeAction: ng.resource.IActionDescriptor = {
+	private submitCodeAction: resource.IActionDescriptor = {
 		method: 'POST',
 		url: '/api/opportunities/:opportunityId/action',
 		params: { opportunityId: '@opportunityId' }
 	};
 
-	constructor($resource: ng.resource.IResourceService) {
+	constructor($resource: resource.IResourceService) {
 		this.opportunitiesResourceClass = $resource(
 			'/api/opportunities/:opportunityId',
 			{

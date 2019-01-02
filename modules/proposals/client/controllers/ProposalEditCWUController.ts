@@ -4,7 +4,7 @@ import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotif
 import { IStateService } from 'angular-ui-router';
 import OpportunitiesService, { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import { IUser } from '../../../users/shared/IUserDTO';
 import ProposalService, { IProposalResource } from '../services/ProposalService';
 
 export default class ProposalEditCWUController {
@@ -29,7 +29,7 @@ export default class ProposalEditCWUController {
 	public title: string;
 	public proposalForm: IFormController;
 
-	private user: IUserDocument;
+	private user: IUser;
 
 	constructor(
 		public editing: boolean,

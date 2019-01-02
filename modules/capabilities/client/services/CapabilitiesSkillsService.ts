@@ -1,56 +1,48 @@
 'use strict';
 
-(() => {
-	angular
-		.module('capabilities.services')
+import angular, { IPromise, resource } from 'angular';
+import { ICapabilitySkill } from '../../shared/ICapabilitySkillDTO';
 
-		// Service for capability skills
-		.factory('CapabilitySkillsService', [
-			'$resource',
-			'$log',
-			($resource: ng.resource.IResourceService, $log: ng.ILogService) => {
-				const CapabilitySkill = $resource(
-					'/api/capabilityskill/:capabilityskillId',
-					{
-						capabilityskillId: '@_id'
-					},
-					{
-						create: {
-							method: 'POST'
-						},
-						update: {
-							method: 'PUT'
-						},
-						remove: {
-							method: 'DELETE'
-						}
-					}
-				);
-				angular.extend(CapabilitySkill.prototype, {
-					createOrUpdate() {
-						const capabilitySkill = this;
-						if (capabilitySkill._id) {
-							return capabilitySkill.$update(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						} else {
-							return capabilitySkill.$save(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						}
-					}
-				});
-				return CapabilitySkill;
+export interface ICapabilitySkillResource extends resource.IResource<ICapabilitySkill>, ICapabilitySkill {
+	capabilityskillId: '@_id';
+	$promise: IPromise<ICapabilitySkill>;
+	toJSON(options?: any): any;
+}
+
+export interface ICapabilitySkillResourceClass extends resource.IResourceClass<ICapabilitySkillResource> {
+	create(capabilitySkill: ICapabilitySkillResource): ICapabilitySkillResource;
+	update(capabilitySKill: ICapabilitySkillResource): ICapabilitySkillResource;
+}
+
+export default class CapabilitySkillsService {
+	public static $inject = ['$resource'];
+
+	private capabilitySkillsResourceClass: ICapabilitySkillResourceClass;
+
+	private createAction: resource.IActionDescriptor = {
+		method: 'POST'
+	};
+
+	private updateAction: resource.IActionDescriptor = {
+		method: 'PUT'
+	};
+
+	constructor($resource: resource.IResourceService) {
+		this.capabilitySkillsResourceClass = $resource(
+			'/api/capabilityskill/:capabilityskillId',
+			{
+				capabilityskillId: '@_id'
+			},
+			{
+				create: this.createAction,
+				update: this.updateAction
 			}
-		]);
-})();
+		) as ICapabilitySkillResourceClass;
+	}
+
+	public getCapabilitySkillResourceClass(): ICapabilitySkillResourceClass {
+		return this.capabilitySkillsResourceClass;
+	}
+}
+
+angular.module('capabilities.services').service('capabilitySkillsService', CapabilitySkillsService);

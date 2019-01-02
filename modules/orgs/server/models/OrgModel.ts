@@ -1,13 +1,16 @@
 'use strict';
 
-import { Model, model, Schema } from 'mongoose';
-import IOrgDocument from '../interfaces/IOrgDocument';
+import { Document, Model, model, Schema } from 'mongoose';
+import { IOrg } from '../../shared/IOrgDTO';
+
+export interface IOrgModel extends IOrg, Document {
+	_id: any;
+	capabilities: any[];
+}
 
 const InvitedNonUserSchema = new Schema({
 	email: { type: String, default: '' }
 });
-
-interface IOrgModel extends Model<IOrgDocument> {}
 
 const OrgSchema = new Schema(
 	{
@@ -69,7 +72,7 @@ const OrgSchema = new Schema(
 );
 
 OrgSchema.pre('save', function(next) {
-	const orgSchema = this as IOrgDocument;
+	const orgSchema = this as IOrgModel;
 	orgSchema.fullAddress =
 		orgSchema.address +
 		(orgSchema.address ? ', ' + orgSchema.address : '') +
@@ -82,6 +85,4 @@ OrgSchema.pre('save', function(next) {
 	next();
 });
 
-const OrgModel: IOrgModel = model<IOrgDocument, IOrgModel>('Org', OrgSchema);
-
-export default OrgModel;
+export const OrgModel: Model<IOrgModel> = model<IOrgModel>('Org', OrgSchema);

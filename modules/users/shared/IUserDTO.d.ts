@@ -1,16 +1,17 @@
-import { Document } from 'mongoose';
-import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import { ICapability } from "../../capabilities/shared/ICapabilityDTO";
+import { ICapabilitySkill } from "../../capabilities/shared/ICapabilitySkillDTO";
+import { IOrg } from "../../orgs/shared/IOrgDTO";
 
-export default interface IUserDocument extends Document {
+export interface IUser {
+    _id: string;
 	firstName: string;
 	lastName: string;
 	displayName: string;
 	email: string;
 	username: string;
-	orgsAdmin: [object];
-	orgsMember: [object];
-	orgsPending: [object];
+	orgsAdmin: IOrg[];
+	orgsMember: IOrg[];
+	orgsPending: IOrg[];
 	password: string;
 	salt: string;
 	profileImageURL: string;
@@ -56,8 +57,8 @@ export default interface IUserDocument extends Document {
 	linkedIn: string;
 	isPublicProfile: boolean;
 	isAutoAdd: boolean;
-	capabilities: ICapabilityDocument[];
-	capabilitySkills: ICapabilitySkillDocument[];
+	capabilities: ICapability[];
+	capabilitySkills: ICapabilitySkill[];
 	capabilityDetails: [object];
 	loggedIn?: boolean;
 	isLoggedIn?: boolean;

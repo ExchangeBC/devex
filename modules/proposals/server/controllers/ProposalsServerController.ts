@@ -8,11 +8,9 @@ import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import IOpportunityDocument from '../../../opportunities/server/interfaces/IOpportunityDocument';
-import IUserDocument from '../../../users/server/interfaces/IUserDocument';
-import UserModel from '../../../users/server/models/UserModel';
-import IProposalDocument from '../interfaces/IProposalDocument';
-import ProposalModel, { AttachmentModel } from '../models/ProposalModel';
+import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
+import { AttachmentModel, IProposalModel, ProposalModel } from '../models/ProposalModel';
 
 class ProposalsServerController {
 	public static getInstance() {
@@ -72,15 +70,15 @@ class ProposalsServerController {
 		}
 	}
 
-	public async saveProposal(proposal: IProposalDocument): Promise<IProposalDocument> {
+	public async saveProposal(proposal: IProposalModel): Promise<IProposalModel> {
 		return await proposal.save();
 	}
 
 	// Remove a user from a proposal and save it
-	public async removeUserFromProposal(proposal: IProposalDocument, userId: string): Promise<IProposalDocument> {
-		proposal.phases.implementation.team.splice(proposal.phases.implementation.team.map(user => user._id).indexOf(userId), 1);
-		proposal.phases.inception.team.splice(proposal.phases.inception.team.map(user => user._id).indexOf(userId), 1);
-		proposal.phases.proto.team.splice(proposal.phases.proto.team.map(user => user._id).indexOf(userId), 1);
+	public async removeUserFromProposal(proposal: IProposalModel, userEmail: string): Promise<IProposalModel> {
+		proposal.phases.implementation.team.splice(proposal.phases.implementation.team.map(user => user.email).indexOf(userEmail), 1);
+		proposal.phases.inception.team.splice(proposal.phases.inception.team.map(user => user.email).indexOf(userEmail), 1);
+		proposal.phases.proto.team.splice(proposal.phases.proto.team.map(user => user.email).indexOf(userEmail), 1);
 		return this.saveProposal(proposal);
 	}
 
@@ -140,7 +138,7 @@ class ProposalsServerController {
 	}
 
 	// Sets the assigned status of the proposal
-	public async assign(proposal: IProposalDocument, user: IUserDocument): Promise<IProposalDocument> {
+	public async assign(proposal: IProposalModel, user: IUserModel): Promise<IProposalModel> {
 		proposal.status = 'Assigned';
 
 		CoreServerHelpers.applyAudit(proposal, user);
@@ -166,7 +164,7 @@ class ProposalsServerController {
 
 	// Unassign gets called from the opportunity side, so just do the work
 	// and return a promise
-	public async unassign(proposal: IProposalDocument, user: IUserDocument): Promise<IProposalDocument> {
+	public async unassign(proposal: IProposalModel, user: IUserModel): Promise<IProposalModel> {
 		proposal.status = 'Submitted';
 		CoreServerHelpers.applyAudit(proposal, user);
 		return this.saveProposal(proposal);
@@ -329,7 +327,7 @@ class ProposalsServerController {
 	}
 
 	// Populates the proposal on the request
-	public async proposalByID(req: Request, res: Response, next: NextFunction, id: string): Promise<IProposalDocument> {
+	public async proposalByID(req: Request, res: Response, next: NextFunction, id: string): Promise<IProposalModel> {
 		if (!mongoose.Types.ObjectId.isValid(id)) {
 			res.status(400).send({
 				message: 'Proposal is invalid'
@@ -418,7 +416,7 @@ class ProposalsServerController {
 		return;
 	}
 
-	private ensureProposalOwner(proposal: IProposalDocument, user: IUserDocument): boolean {
+	private ensureProposalOwner(proposal: IProposalModel, user: IUserModel): boolean {
 		if (!user) {
 			return false;
 		}
@@ -426,20 +424,20 @@ class ProposalsServerController {
 		return proposal.user.id === user.id;
 	}
 
-	private adminRole(opportunity: IOpportunityDocument): string {
+	private adminRole(opportunity: IOpportunityModel): string {
 		return opportunity.code + '-admin';
 	}
 
-	private ensureAdminOnOpp(opportunity: IOpportunityDocument, user: IUserDocument): boolean {
+	private ensureAdminOnOpp(opportunity: IOpportunityModel, user: IUserModel): boolean {
 		return user.roles.indexOf(this.adminRole(opportunity)) !== -1;
 	}
 
 	// Returns boolean indicating whether given user has 'admin' role
-	private ensureAdmin(user: IUserDocument): boolean {
+	private ensureAdmin(user: IUserModel): boolean {
 		return user && user.roles.indexOf('admin') !== -1;
 	}
 
-	private async addAttachment(req: Request, res: Response, proposal: IProposalDocument, name: string, path: string, type: string): Promise<IProposalDocument> {
+	private async addAttachment(req: Request, res: Response, proposal: IProposalModel, name: string, path: string, type: string): Promise<IProposalModel> {
 		const attachment = await AttachmentModel.create({
 			name,
 			path,
@@ -450,7 +448,7 @@ class ProposalsServerController {
 		return this.saveProposal(proposal);
 	}
 
-	private async populateProposal(proposal: IProposalDocument): Promise<IProposalDocument> {
+	private async populateProposal(proposal: IProposalModel): Promise<IProposalModel> {
 		return proposal
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')

@@ -2,6 +2,7 @@
 
 import angular, { ui } from 'angular';
 import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
+import CapabilitiesService from '../../../capabilities/client/services/CapabilitiesService';
 import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
 import ProposalService from '../services/ProposalService';
@@ -21,9 +22,9 @@ import ProposalService from '../services/ProposalService';
 					template: '<ui-view autoscroll="true"></ui-view>',
 					resolve: {
 						capabilities: [
-							'CapabilitiesService',
-							CapabilitiesService => {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							(capabilitiesService: CapabilitiesService) => {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					}
@@ -83,9 +84,9 @@ import ProposalService from '../services/ProposalService';
 					},
 					resolve: {
 						capabilities: [
-							'CapabilitiesService',
-							CapabilitiesService => {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							(capabilitiesService: CapabilitiesService) => {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					}
@@ -125,12 +126,12 @@ import ProposalService from '../services/ProposalService';
 						},
 						org: [
 							'authenticationService',
-							'OrgsService',
-							(authenticationService: AuthenticationService, OrgsService) => {
+							'OrgService',
+							(authenticationService: AuthenticationService, OrgService) => {
 								if (!authenticationService.user) {
 									return {};
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -171,12 +172,12 @@ import ProposalService from '../services/ProposalService';
 						],
 						org: [
 							'authenticationService',
-							'OrgsService',
-							(authenticationService: AuthenticationService, OrgsService) => {
+							'OrgService',
+							(authenticationService: AuthenticationService, OrgService) => {
 								if (!authenticationService.user) {
 									return {};
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -225,12 +226,12 @@ import ProposalService from '../services/ProposalService';
 						},
 						org: [
 							'authenticationService',
-							'OrgsService',
-							(authenticationService: AuthenticationService, OrgsService) => {
+							'OrgService',
+							(authenticationService: AuthenticationService, OrgService) => {
 								if (!authenticationService.user) {
 									return null;
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -240,15 +241,15 @@ import ProposalService from '../services/ProposalService';
 							}
 						],
 						resources: [
-							'OrgsService',
+							'OrgService',
 							'authenticationService',
 							'proposalService',
 							'$stateParams',
-							(OrgsService, authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService) => {
+							(OrgService, authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService) => {
 								if (!authenticationService.user) {
 									return null;
 								} else {
-									return OrgsService.myadmin().$promise.then(orgs => {
+									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
 											return proposalService.getProposalResourceClass().getPotentialResources({
@@ -294,12 +295,12 @@ import ProposalService from '../services/ProposalService';
 						],
 						org: [
 							'authenticationService',
-							'OrgsService',
-							(authenticationService: AuthenticationService, OrgsService) => {
+							'OrgService',
+							(authenticationService: AuthenticationService, OrgService) => {
 								if (!authenticationService.user) {
 									return null;
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -312,12 +313,12 @@ import ProposalService from '../services/ProposalService';
 							'authenticationService',
 							'proposalService',
 							'$stateParams',
-							'OrgsService',
-							(authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService, OrgsService) => {
+							'OrgService',
+							(authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService, OrgService) => {
 								if (!authenticationService.user) {
 									return null;
 								} else {
-									return OrgsService.myadmin().$promise.then(orgs => {
+									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
 											return proposalService.getProposalResourceClass().getPotentialResources({

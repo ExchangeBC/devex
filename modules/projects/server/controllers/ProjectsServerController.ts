@@ -4,8 +4,7 @@ import _ from 'lodash';
 import mongoose from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import IProjectDocument from '../interfaces/IProjectDocument';
-import ProjectModel from '../models/ProjectModel';
+import { IProjectModel, ProjectModel } from '../models/ProjectModel';
 
 class ProjectsServerController {
 	public static getInstance() {
@@ -93,7 +92,7 @@ class ProjectsServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		ProjectModel.findUniqueCode(project.name, null, newcode => {
+		ProjectModel.schema.statics.findUniqueCode(project.name, null, newcode => {
 			project.code = newcode;
 			//
 			// set the audit fields so we know who did what when
@@ -466,7 +465,7 @@ class ProjectsServerController {
 		}
 	};
 
-	private forProgram = (id): Promise<IProjectDocument[]> => {
+	private forProgram = (id): Promise<IProjectModel[]> => {
 		return new Promise((resolve, reject) => {
 			ProjectModel.find({ program: id })
 				.exec()

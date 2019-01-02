@@ -20,9 +20,9 @@
 				},
 				resolve: {
 					capabilities: [
-						'CapabilitiesService',
-						function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
+						'capabilitiesService',
+						function(capabilitiesService) {
+							return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 						}
 					]
 				}
@@ -37,9 +37,9 @@
 				},
 				resolve: {
 					capabilities: [
-						'CapabilitiesService',
-						function(CapabilitiesService) {
-							return CapabilitiesService.query().$promise;
+						'capabilitiesService',
+						function(capabilitiesService) {
+							return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 						}
 					]
 				}
@@ -184,4 +184,4 @@
 				}
 			});
 	}
-}());
+})();

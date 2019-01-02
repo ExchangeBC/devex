@@ -3,8 +3,8 @@
 import _ from 'lodash';
 import { Document, Types } from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
-import CapabilityModel from '../models/CapabilityModel';
-import CapabilitySkillModel from '../models/CapabilitySkillModel';
+import { CapabilityModel } from '../models/CapabilityModel';
+import { CapabilitySkillModel } from '../models/CapabilitySkillModel';
 
 class CapabilitiesServerController {
 	public static getInstance() {
@@ -21,7 +21,7 @@ class CapabilitiesServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		CapabilityModel.findUniqueCode(capability.name, null, newcode => {
+		CapabilityModel.schema.statics.findUniqueCode(capability.name, null, newcode => {
 			capability.code = newcode;
 
 			// save
@@ -35,7 +35,7 @@ class CapabilitiesServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		CapabilitySkillModel.findUniqueCode(capabilitySkill.name, null, newcode => {
+		CapabilitySkillModel.schema.statics.findUniqueCode(capabilitySkill.name, null, newcode => {
 			capabilitySkill.code = newcode;
 
 			// save
@@ -166,7 +166,7 @@ class CapabilitiesServerController {
 			.catch(err => {
 				res.status(422).send({
 					message: CoreServerErrors.getErrorMessage(err)
-				})
+				});
 			});
 	};
 }

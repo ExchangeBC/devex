@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import _ from 'lodash';
 import mongoose from 'mongoose';
-import UserModel from '../../modules/users/server/models/UserModel';
+import { UserModel } from '../../modules/users/server/models/UserModel';
 import config from '../ApplicationConfig';
 
 class Seed {

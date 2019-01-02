@@ -30,14 +30,14 @@
 				context		: '@'
 			},
 			templateUrl		: '/modules/users/client/views/settings/affiliations-directive.html',
-			controller		: ['$scope', 'Notification', 'OrgsService', 'authenticationService', 'ask', function($scope, Notification, OrgsService, authenticationService, ask) {
+			controller		: ['$scope', 'Notification', 'OrgService', 'authenticationService', 'ask', function($scope, Notification, OrgService, authenticationService, ask) {
 				var vm 			= this;
 				vm.auth			= authenticationService.permissions();
 				vm.context		= $scope.context;
 				vm.user			= authenticationService.user;
 
 				function loadAffiliations() {
-					vm.affiliations = OrgsService.my();
+					vm.affiliations = OrgService.my();
 				}
 
 				vm.removeAffiliation = function(affiliation) {
@@ -45,7 +45,7 @@
 					Are you sure you want to do this?';
 					ask.yesNo(question).then(function (result) {
 						if (result) {
-							OrgsService.removeMeFromOrg ({
+							OrgService.removeMeFromOrg ({
 								orgId: affiliation._id
 							}).$promise
 							.then (function (org) {

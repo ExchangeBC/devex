@@ -8,7 +8,7 @@
             <span class="input-group-text">$</span>
           </div>
           <input type="text" ng-model="vm.opportunity.budget" id="budget" model-format="currency" class="form-control text-right"
-            aria-label="Total Amount (to the nearest dollar)">
+            aria-label="Total Amount (to the nearest dollar)" onclick="this.select()">
         </div>
         <br>
         <label ng-if="vm.opportunity.phases.inception.isInception" for="budget">What's your max budget for the
@@ -18,7 +18,7 @@
             <span class="input-group-text">$</span>
           </div>
           <input type="text" ng-model="vm.opportunity.phases.inception.maxCost" id="incBudget" model-format="currency"
-            class="form-control text-right" aria-label="Inception Amount (to the nearest dollar)">
+            class="form-control text-right" aria-label="Inception Amount (to the nearest dollar)" onclick="this.select()">
         </div>
         <br>
         <label ng-if="vm.opportunity.phases.proto.isPrototype" for="budget">What's your max budget for the Proof of
@@ -28,7 +28,7 @@
             <span class="input-group-text">$</span>
           </div>
           <input type="text" ng-model="vm.opportunity.phases.proto.maxCost" id="incBudget" model-format="currency"
-            class="form-control text-right" aria-label="POC Amount (to the nearest dollar)">
+            class="form-control text-right" aria-label="POC Amount (to the nearest dollar)" onclick="this.select()">
         </div>
         <br>
         <label for="budget">What's your max budget for the Implementation Phase?</label>
@@ -37,7 +37,7 @@
             <span class="input-group-text">$</span>
           </div>
           <input type="text" ng-model="vm.opportunity.phases.implementation.maxCost" id="incBudget" model-format="currency"
-            class="form-control text-right" aria-label="Implementation Amount (to the nearest dollar)">
+            class="form-control text-right" aria-label="Implementation Amount (to the nearest dollar)" onclick="this.select()">
         </div>
       </div>
     </div>

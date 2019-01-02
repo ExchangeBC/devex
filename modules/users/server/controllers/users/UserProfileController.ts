@@ -8,7 +8,7 @@ import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
 import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 class UserProfileController {
 	public static getInstance() {

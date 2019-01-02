@@ -18,9 +18,9 @@
 				controller: [
 					'$scope',
 					'$sce',
-					'OrgsService',
+					'OrgService',
 					'authenticationService',
-					function($scope, $sce, OrgsService, authenticationService) {
+					function($scope, $sce, OrgService, authenticationService) {
 						var vm = this;
 						var isUser = authenticationService.user;
 						var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
@@ -30,7 +30,7 @@
 						vm.isGov = isGov;
 
 						if (isUser) {
-							OrgsService.myadmin().$promise.then(function(orgs) {
+							OrgService.myadmin().$promise.then(function(orgs) {
 								//
 								// the user must be listed as the admin for at least one org.
 								// for now, we only care about the first one, but in future they
@@ -61,7 +61,7 @@
 								vm.orgs = $scope.orgs;
 							});
 						} else {
-							OrgsService.list().$promise.then(function(orgs) {
+							OrgService.list().$promise.then(function(orgs) {
 								vm.userCanAdd = false;
 								vm.trust = $sce.trustAsHtml;
 								vm.orgs = $scope.orgs;

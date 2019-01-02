@@ -65,7 +65,7 @@
 				return false;
 			}
 
-			UsersService.userSignup(vm.credentials)
+			UsersService.signup(vm.credentials).$promise
 				.then(onUserSignupSuccess)
 				.catch(onUserSignupError);
 		}
@@ -77,7 +77,7 @@
 				return false;
 			}
 
-			UsersService.userSignin(vm.credentials)
+			UsersService.signin({ username: vm.credentials.username, password: vm.credentials.password }).$promise
 				.then(onUserSigninSuccess)
 				.catch(onUserSigninError);
 		}

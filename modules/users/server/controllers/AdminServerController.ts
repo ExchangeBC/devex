@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
-import UserModel from '../models/UserModel';
+import { UserModel } from '../models/UserModel';
 
 class AdminServerController {
 	public static getInstance() {

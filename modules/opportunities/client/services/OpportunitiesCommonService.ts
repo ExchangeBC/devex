@@ -4,9 +4,8 @@ import angular, { IPromise, uiNotification } from 'angular';
 import _ from 'lodash';
 import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
 import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
-import IPhaseDocument from '../../../proposals/server/interfaces/IPhaseDocument';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
+import IOpportunityDocument, { IPhase } from '../../server/interfaces/IOpportunityDocument';
 import OpportunitiesService, { IOpportunityResource } from './OpportunitiesService';
 
 export default class OpportunitiesCommonService {
@@ -149,7 +148,7 @@ export default class OpportunitiesCommonService {
 	// Return a list of required capabilities for the given phase
 	// Each returned capabilitity in the list is marked with fullTime = true if
 	// it is a core capability
-	public getCapabilitiesForPhase(phase: IPhaseDocument): ICapabilityDocument[] {
+	public getCapabilitiesForPhase(phase: IPhase): ICapabilityDocument[] {
 		const coreCodes = phase.capabilitiesCore.map(cap => {
 			return cap.code;
 		});

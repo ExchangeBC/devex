@@ -1,16 +1,17 @@
-import IOpportunityDocument from "../../opportunities/server/interfaces/IOpportunityDocument";
-import IProposalDocument from "../../proposals/server/interfaces/IProposalDocument";
-import IProgramDocument from "../../programs/server/interfaces/IProgramDocument";
-import IUserDocument from "../../users/server/interfaces/IUserDocument";
-import IOrgDocument from "../../orgs/server/interfaces/IOrgDocument";
+import { IOpportunityModel } from "../../opportunities/server/models/OpportunityModel";
+import { IProposalModel } from "../../proposals/server/models/ProposalModel";
+import { IOpportunity } from "../../opportunities/shared/IOpportunityDTO";
+import { IProposal } from "../../proposals/shared/IProposalDTO";
+import { IProgramModel } from "../../programs/server/models/ProgramModel";
+import { IOrgModel } from "../../orgs/server/models/OrgModel";
 
 declare global {
     namespace Express {
         export interface Request {
-            opportunity?: IOpportunityDocument;
-            proposal?: IProposalDocument;
-            program?: IProgramDocument;
-            org?: IOrgDocument;
+            opportunity?: IOpportunityModel;
+            proposal?: IProposalModel;
+            program?: IProgramModel;
+            org?: IOrgModel;
         }
     }
 } 

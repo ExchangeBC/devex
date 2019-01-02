@@ -11,11 +11,9 @@ import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors'
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
-import IAttachmentDocument from '../../../proposals/server/interfaces/IAttachmentDocument';
-import ProposalModel from '../../../proposals/server/models/ProposalModel';
-import UserModel from '../../../users/server/models/UserModel';
-import IOpportunityDocument from '../interfaces/IOpportunityDocument';
-import OpportunityModel from '../models/OpportunityModel';
+import { IAttachmentModel, ProposalModel } from '../../../proposals/server/models/ProposalModel';
+import { UserModel } from '../../../users/server/models/UserModel';
+import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 import OpportunitiesUtilities from '../utilities/OpportunitiesUtilities';
 
 class OpportunitiesServerController {
@@ -59,7 +57,7 @@ class OpportunitiesServerController {
 		//
 		// set the code, this is used setting roles and other stuff
 		//
-		OpportunityModel.findUniqueCode(opportunity.name, null, newcode => {
+		OpportunityModel.schema.statics.findUniqueCode(opportunity.name, null, newcode => {
 			opportunity.code = newcode;
 			//
 			// set the audit fields so we know who did what when
@@ -129,7 +127,7 @@ class OpportunitiesServerController {
 						.then(result => {
 							updatedOpp.issueUrl = result.html_url;
 							updatedOpp.issueNumber = result.number;
-							this.updateSave(updatedOpp).then((updatedOpportunity: IOpportunityDocument) => {
+							this.updateSave(updatedOpp).then((updatedOpportunity: IOpportunityModel) => {
 								this.populateOpportunity(updatedOpportunity).then(populatedOpportunity => {
 									res.json(OpportunitiesUtilities.decorate(populatedOpportunity, req.user ? req.user.roles : []));
 								});
@@ -277,7 +275,7 @@ class OpportunitiesServerController {
 					opportunity.proposal = proposalId;
 					opportunity.evaluationStage = 4;
 					this.updateSave(opportunity)
-						.then((opp: IOpportunityDocument) => {
+						.then((opp: IOpportunityModel) => {
 							opportunity = opp;
 
 							this.sendMessages('opportunity-update', opportunity.watchers, {
@@ -341,7 +339,7 @@ class OpportunitiesServerController {
 	};
 
 	// Populates the opportunity on the request
-	public opportunityByID = async (req: Request, res: Response, next: NextFunction, id: string): Promise<IOpportunityDocument> => {
+	public opportunityByID = async (req: Request, res: Response, next: NextFunction, id: string): Promise<IOpportunityModel> => {
 		// determine whether we are querying by code or by mongoose id
 		let query: any;
 		if (id.substr(0, 3) === 'opp') {
@@ -523,7 +521,7 @@ class OpportunitiesServerController {
 		const zip = new JSZip();
 		let proponentName: string;
 		let email: string;
-		let files: IAttachmentDocument[];
+		let files: IAttachmentModel[];
 		let links: string[];
 		let proposalHtml: string;
 		let header: string;
@@ -956,7 +954,7 @@ class OpportunitiesServerController {
 	};
 
 	// Save the given opportunity and returns the updated version
-	private updateSave = async (opportunity: IOpportunityDocument): Promise<IOpportunityDocument> => {
+	private updateSave = async (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
 		return await opportunity.save();
 	};
 
@@ -1033,7 +1031,7 @@ class OpportunitiesServerController {
 		return ret;
 	};
 
-	private populateOpportunity = (opportunity: IOpportunityDocument): Promise<IOpportunityDocument> => {
+	private populateOpportunity = (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
 		return opportunity
 			.populate('createdBy', 'displayName email')
 			.populate('updatedBy', 'displayName')

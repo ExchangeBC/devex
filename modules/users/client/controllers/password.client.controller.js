@@ -29,7 +29,7 @@
         return false;
       }
 
-      UsersService.requestPasswordReset(vm.credentials)
+      UsersService.sendPasswordResetToken(vm.credentials).$promise
         .then(onRequestPasswordResetSuccess)
         .catch(onRequestPasswordResetError);
     }
@@ -43,7 +43,8 @@
         return false;
       }
 
-      UsersService.resetPassword($stateParams.token, vm.passwordDetails)
+      vm.passwordDetails.token = $stateParams.token;
+      UsersService.resetPasswordWithToken(vm.passwordDetails).$promise
         .then(onResetPasswordSuccess)
         .catch(onResetPasswordError);
     }

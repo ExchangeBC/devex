@@ -1,10 +1,11 @@
-import { Document } from 'mongoose';
+import { ICapabilitySkill } from "./ICapabilitySkillDTO";
 
-export default interface ICapabilityDocument extends Document {
+export interface ICapability {
+    _id: string;
 	code: string;
 	name: string;
 	description: string;
-	skills: [object];
+	skills: ICapabilitySkill[];
 	isRequired: boolean;
 	isInception: boolean;
 	isPrototype: boolean;

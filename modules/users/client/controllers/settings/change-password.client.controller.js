@@ -23,7 +23,7 @@
         return false;
       }
 
-      UsersService.changePassword(vm.passwordDetails)
+      UsersService.updatePassword(vm.passwordDetails).$promise
         .then(onChangePasswordSuccess)
         .catch(onChangePasswordError);
     }

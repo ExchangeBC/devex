@@ -1,717 +1,588 @@
 'use strict';
 
 // Import certain style elements here so that webpack picks them up
-import angular, { ui, uiNotification } from 'angular';
+import angular, { IController, IFormController, IRootScopeService, uiNotification } from 'angular';
+import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment';
-import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import CapabilitiesService, { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
+import { IProject } from '../../../projects/shared/IProjectDTO';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import IOpportunityDocument from '../../server/interfaces/IOpportunityDocument';
+import { IPhase, ITeamQuestion } from '../../shared/IOpportunityDTO';
 import '../css/opportunities.css';
-import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
-import OpportunitiesService from '../services/OpportunitiesService';
-
-(() => {
-	angular
-		.module('opportunities')
-
-		// Controller for editing the opportunity page
-		.controller('OpportunityEditSWUController', [
-			'$scope',
-			'$state',
-			'$stateParams',
-			'$sce',
-			'opportunity',
-			'editing',
-			'projects',
-			'authenticationService',
-			'Notification',
-			'dataService',
-			'ask',
-			'CapabilitiesService',
-			'TINYMCE_OPTIONS',
-			'opportunitiesCommonService',
-			'opportunitiesService',
-			function(
-				$scope: ng.IRootScopeService,
-				$state: ui.IStateService,
-				$stateParams: ui.IStateParamsService,
-				$sce: ng.ISCEService,
-				opportunity: IOpportunityDocument,
-				editing: boolean,
-				projects,
-				authenticationService: AuthenticationService,
-				Notification: uiNotification.INotificationService,
-				dataService,
-				ask,
-				CapabilitiesService: ICapabilitiesService,
-				TINYMCE_OPTIONS,
-				opportunitiesCommonService: OpportunitiesCommonService,
-				opportunitiesService: OpportunitiesService
-			) {
-				const vm = this;
-				const isUser = authenticationService.user;
-				const codeChallengeDefaultWeight = 0.35;
-				const skillDefaultWeight = 0.05;
-				const questionDefaultWeight = 0.25;
-				const interviewDefaultWeight = 0.25;
-				const priceDefaultWeight = 0.1;
-
-				vm.isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
-				vm.isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
-				vm.projects = projects;
-				vm.editing = editing;
-				vm.authentication = authenticationService;
-				vm.form = {};
-				vm.closing = 'CLOSED';
-				vm.editingTeamQuestion = false;
-				vm.teamQuestionEditIndex = -1;
-				vm.currentTeamQuestionText = '';
-				vm.currentGuidelineText = '';
-				vm.currentQuestionWordLimit = 300;
-				vm.currentQuestionScore = 5;
-				vm.editingAddenda = false;
-				vm.addendaEditIndex = -1;
-				vm.currentAddendaText = '';
-				vm.tinymceOptions = TINYMCE_OPTIONS;
-				vm.cities = dataService.cities;
-
-				// do we have existing contexts for program and project?
-				vm.projectLink = true;
-				vm.context = $stateParams.context || 'allopportunities';
-				vm.programId = $stateParams.programId || null;
-				vm.programTitle = $stateParams.programTitle || null;
-				vm.projectId = $stateParams.projectId || null;
-				vm.projectTitle = $stateParams.projectTitle || null;
-
-				// Load the current opportunity into the view
-				const loadOpportunity = opp => {
-					vm.opportunity = opp;
-					vm.opportunity.opportunityTypeCd = 'sprint-with-us';
-
-					// Initialize phases for new opportunities
-					if (!vm.opportunity.phases) {
-						vm.opportunity.phases = {
-							implementation: {
-								isImplementation: true,
-								capabilities: [],
-								capabilitiesCore: [],
-								capabilitySkills: []
-							},
-							inception: {
-								isInception: true,
-								capabilities: [],
-								capabilitiesCore: [],
-								capabilitySkills: []
-							},
-							proto: {
-								isPrototype: true,
-								capabilities: [],
-								capabilitiesCore: [],
-								capabilitySkills: []
-							}
-						};
-					}
-
-					// Set default weights for new opportunities
-					if (!vm.opportunity.weights) {
-						vm.opportunity.weights = {
-							codechallenge: codeChallengeDefaultWeight,
-							skill: skillDefaultWeight,
-							question: questionDefaultWeight,
-							interview: interviewDefaultWeight,
-							price: priceDefaultWeight
-						};
-					}
-
-					// Format strings into dates so Angular doesn't complain
-					vm.opportunity.deadline = new Date(vm.opportunity.deadline);
-					vm.opportunity.assignment = new Date(vm.opportunity.assignment);
-					vm.opportunity.start = new Date(vm.opportunity.start);
-					vm.opportunity.endDate = new Date(vm.opportunity.endDate);
-					vm.opportunity.phases.inception.startDate = new Date(vm.opportunity.phases.inception.startDate);
-					vm.opportunity.phases.inception.endDate = new Date(vm.opportunity.phases.inception.endDate);
-					vm.opportunity.phases.proto.startDate = new Date(vm.opportunity.phases.proto.startDate);
-					vm.opportunity.phases.proto.endDate = new Date(vm.opportunity.phases.proto.endDate);
-					vm.opportunity.phases.implementation.startDate = new Date(vm.opportunity.phases.implementation.startDate);
-					vm.opportunity.phases.implementation.endDate = new Date(vm.opportunity.phases.implementation.endDate);
-
-					// Update closing flag
-					vm.closing = vm.opportunity.deadline - new Date().getTime() > 0 ? 'OPEN' : 'CLOSED';
-
-					// Load team questions
-					// viewmodel items related to team questions
-					if (!vm.opportunity.teamQuestions) {
-						vm.opportunity.teamQuestions = [];
-					}
-					vm.teamQuestions = vm.opportunity.teamQuestions;
-					vm.teamQuestions.forEach(teamQuestion => {
-						teamQuestion.cleanQuestion = $sce.trustAsHtml(teamQuestion.question);
-						teamQuestion.cleanGuideline = $sce.trustAsHtml(teamQuestion.guideline);
-						teamQuestion.newQuestion = false;
-					});
-
-					// Load addenda
-					if (!vm.opportunity.addenda) {
-						vm.opportunity.addenda = [];
-					}
-					vm.addenda = vm.opportunity.addenda;
-					vm.addenda.forEach(addendum => {
-						addendum.cleanDesc = $sce.trustAsHtml(addendum.description);
-					});
-
-					// If the user doesn't have the right access then kick them out
-					if (editing && !vm.isAdmin && !opp.userIs.admin) {
-						$state.go('forbidden');
-					}
-
-					// Can this opportunity be published?
-					vm.errorFields = opportunitiesCommonService.publishStatus(vm.opportunity);
-					vm.canPublish = vm.errorFields > 0;
-
-					// if editing, set from existing
-					if (editing) {
-						vm.programId = opp.program._id;
-						vm.programTitle = opp.program.title;
-						vm.projectId = opp.project._id;
-						vm.projectTitle = opp.project.name;
-					} else {
-						if (vm.context === 'allopportunities') {
-							vm.projectLink = false;
-						} else if (vm.context === 'program') {
-							vm.projectLink = false;
-							vm.opportunity.program = vm.programId;
-							const lprojects = [];
-							vm.projects.forEach(o => {
-								if (o.program._id === vm.programId) {
-									lprojects.push(o);
-								}
-							});
-							vm.projects = lprojects;
-						} else if (vm.context === 'project') {
-							vm.projectLink = true;
-							vm.opportunity.project = vm.projectId;
-							vm.opportunity.program = vm.programId;
-						}
-
-						// If not editing, set some conveinient default dates
-						vm.opportunity.deadline = new Date();
-						vm.opportunity.assignment = new Date();
-						vm.opportunity.start = new Date();
-						vm.opportunity.endDate = new Date();
-						vm.opportunity.phases.implementation.endDate = new Date();
-						vm.opportunity.phases.implementation.startDate = new Date();
-						vm.opportunity.phases.inception.endDate = new Date();
-						vm.opportunity.phases.inception.startDate = new Date();
-						vm.opportunity.phases.proto.endDate = new Date();
-						vm.opportunity.phases.proto.startDate = new Date();
-					}
-				};
-				// Immediately load in the passed in opportunity
-				loadOpportunity(opportunity);
-
-				// Set the times on the opportunity dates to a specified time
-				const setTimes = (opp, hour, minute, second) => {
-					opp.deadline = moment(opp.deadline)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.assignment = moment(opp.assignment)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.endDate = !vm.opportunity.endDate ? new Date() : opp.endDate;
-					opp.endDate = moment(opp.endDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.implementation.endDate = moment(opp.phases.implementation.endDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.implementation.startDate = moment(opp.phases.implementation.startDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.inception.endDate = moment(opp.phases.inception.endDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.inception.startDate = moment(opp.phases.inception.startDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.proto.endDate = moment(opp.phases.proto.endDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-
-					opp.phases.proto.startDate = moment(opp.phases.proto.startDate)
-						.set({ hour: parseInt(hour, 10), minute: parseInt(minute, 10), second: parseInt(second, 10) })
-						.toDate();
-				};
-
-				// Load question weights into readable form
-				const loadWeights = () => {
-					vm.skillsPercentage = vm.opportunity.weights.skill * 100;
-					vm.questionPercentage = vm.opportunity.weights.question * 100;
-					vm.codeChallengePercentage = vm.opportunity.weights.codechallenge * 100;
-					vm.teamScenarioPercentage = vm.opportunity.weights.interview * 100;
-					vm.pricePercentage = vm.opportunity.weights.price * 100;
-					vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
-				};
-				loadWeights();
-
-				const validateBudget = () => {
-					if (vm.opportunity.budget > 2000000) {
-						Notification.error({
-							message: 'You cannot enter an overall budget greater than $2,000,000',
-							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
-						});
-						return false;
-					}
-
-					if (vm.opportunity.phases.inception.isInception && vm.opportunity.phases.inception.maxCost > vm.opportunity.budget) {
-						Notification.error({
-							message: 'You cannot enter an Inception budget greater than the total budget.',
-							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
-						});
-						return false;
-					}
-
-					if (vm.opportunity.phases.proto.isPrototype && vm.opportunity.phases.proto.maxCost > vm.opportunity.budget) {
-						Notification.error({
-							message: 'You cannot enter a Proof of Concept budget greater than the total budget.',
-							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
-						});
-						return false;
-					}
-
-					if (vm.opportunity.phases.implementation.maxCost > vm.opportunity.budget) {
-						Notification.error({
-							message: 'You cannot enter an Implementation budget greater than the total budget.',
-							title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
-						});
-						return false;
-					}
-
-					return true;
-				};
-
-				// Save edited scoring weights for evaluation to the opportunity (does not save the opportunity itself)
-				vm.saveWeights = () => {
-					vm.totalPercentage = vm.skillsPercentage + vm.questionPercentage + vm.codeChallengePercentage + vm.teamScenarioPercentage + vm.pricePercentage;
-
-					if (isNaN(vm.totalPercentage)) {
-						vm.totalPercentage = 0;
-						return;
-					}
-
-					if (vm.totalPercentage === 100) {
-						vm.opportunity.weights.skill = vm.skillsPercentage / 100;
-						vm.opportunity.weights.question = vm.questionPercentage / 100;
-						vm.opportunity.weights.codechallenge = vm.codeChallengePercentage / 100;
-						vm.opportunity.weights.interview = vm.teamScenarioPercentage / 100;
-						vm.opportunity.weights.price = vm.pricePercentage / 100;
-					}
-				};
-
-				// Adding a new team question
-				// We a new one to the list and enter edit mode
-				vm.addNewTeamQuestion = () => {
-					vm.teamQuestions.push({
-						question: '',
-						guideline: '',
-						wordLimit: 300,
-						questionScore: 5,
-						newQuestion: true
-					});
-
-					vm.currentTeamQuestionText = '';
-					vm.currentGuidelineText = '';
-					vm.currentQuestionWordLimit = 300;
-					vm.currentQuestionScore = 5;
-					vm.teamQuestionEditIndex = vm.teamQuestions.length - 1;
-					vm.editingTeamQuestion = true;
-				};
-
-				// Cancel edit team question
-				vm.cancelEditTeamQuestion = () => {
-					if (vm.editingTeamQuestion) {
-						// if this was a brand new question, remove it
-						if (vm.teamQuestions[vm.teamQuestionEditIndex].newQuestion === true) {
-							vm.teamQuestions.splice(vm.teamQuestionEditIndex, 1);
-						}
-
-						// discard changes
-						vm.currentTeamQuestionText = '';
-						vm.currentGuidelineText = '';
-						vm.editingTeamQuestion = false;
-					}
-				};
-
-				// Enter edit mode for an existing team question
-				vm.editTeamQuestion = index => {
-					vm.teamQuestionEditIndex = index;
-					const currentTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
-					vm.currentTeamQuestionText = currentTeamQuestion.question;
-					vm.currentGuidelineText = currentTeamQuestion.guideline;
-					vm.currentQuestionWordLimit = currentTeamQuestion.wordLimit;
-					vm.currentQuestionScore = currentTeamQuestion.questionScore;
-					vm.editingTeamQuestion = true;
-				};
-
-				// Save edit team question
-				vm.saveEditTeamQuestion = () => {
-					const curTeamQuestion = vm.teamQuestions[vm.teamQuestionEditIndex];
-					if (curTeamQuestion) {
-						curTeamQuestion.question = vm.currentTeamQuestionText;
-						curTeamQuestion.guideline = vm.currentGuidelineText;
-						curTeamQuestion.wordLimit = vm.currentQuestionWordLimit;
-						curTeamQuestion.questionScore = vm.currentQuestionScore;
-						curTeamQuestion.cleanQuestion = $sce.trustAsHtml(vm.currentTeamQuestionText);
-						curTeamQuestion.cleanGuideline = $sce.trustAsHtml(vm.currentGuidelineText);
-						curTeamQuestion.newQuestion = false;
-					}
-
-					vm.editingTeamQuestion = false;
-				};
-
-				// Delete team question with confirm modal
-				vm.deleteTeamQuestion = index => {
-					if (index >= 0 && index < vm.teamQuestions.length) {
-						const q = 'Are you sure you wish to delete this team question from the opportunity?';
-						ask.yesNo(q).then(r => {
-							if (r) {
-								vm.teamQuestions.splice(index, 1);
-							}
-						});
-					}
-				};
-
-				// Adding a new addendum
-				// We add a new one to the list and enter edit mode
-				vm.addNewAddendum = () => {
-					vm.addenda.push({
-						description: '',
-						createdBy: authenticationService.user,
-						createdOn: Date.now()
-					});
-
-					vm.currentAddendaText = '';
-					vm.addendaEditIndex = vm.addenda.length - 1;
-					vm.editingAddenda = true;
-				};
-				// Cancel edit addendum
-				vm.cancelEditAddendum = () => {
-					if (vm.editingAddenda) {
-						vm.addenda.splice(vm.addendaEditIndex, 1);
-						vm.editingAddenda = false;
-					}
-				};
-				// Save the addendum being edited
-				vm.saveEditAddendum = () => {
-					const curAddenda = vm.addenda[vm.addendaEditIndex];
-					if (curAddenda) {
-						curAddenda.description = vm.currentAddendaText;
-						curAddenda.createdBy = authenticationService.user;
-						curAddenda.createdOn = Date.now();
-						curAddenda.cleanDesc = $sce.trustAsHtml(vm.currentAddendaText);
-					}
-
-					vm.editingAddenda = false;
-				};
-				// Delete an addendum with confirm modal
-				vm.deleteAddenda = index => {
-					if (index >= 0 && index < vm.addenda.length) {
-						const q = 'Are you sure you wish to delete this addendum?';
-						ask.yesNo(q).then(r => {
-							if (r) {
-								vm.addenda.splice(index, 1);
-							}
-						});
-					}
-				};
-
-				// Returns a boolean indicating whether the given phase is included in the opportunity or not
-				vm.isPhaseIncluded = phase => {
-					if (phase === vm.opportunity.phases.inception) {
-						return phase.isInception;
-					} else if (phase === vm.opportunity.phases.proto) {
-						return phase.isPrototype;
-					} else if (phase === vm.opportunity.phases.implementation) {
-						return phase.isImplementation;
-					}
-				};
-
-				// Changes the given phase to be the start phase, and adjust the status of the other phases accordingly
-				vm.changeToStartPhase = phase => {
-					if (phase === vm.opportunity.phases.inception) {
-						vm.opportunity.phases.inception.isInception = true;
-						vm.opportunity.phases.proto.isPrototype = true;
-						vm.opportunity.phases.implementation.isImplementation = true;
-					} else if (phase === vm.opportunity.phases.proto) {
-						vm.opportunity.phases.inception.isInception = false;
-
-						vm.opportunity.phases.inception.capabilities = [];
-						vm.opportunity.phases.inception.capabilitiesCore = [];
-						vm.inceptionSkills.map(vm.toggleSelectedSkill);
-
-						vm.opportunity.phases.proto.isPrototype = true;
-						vm.opportunity.phases.implementation.isImplementation = true;
-					} else if (phase === vm.opportunity.phases.implementation) {
-						vm.opportunity.phases.inception.isInception = false;
-
-						vm.opportunity.phases.inception.capabilities = [];
-						vm.opportunity.phases.inception.capabilitiesCore = [];
-						vm.inceptionSkills.map(vm.toggleSelectedSkill);
-
-						vm.opportunity.phases.proto.isPrototype = false;
-
-						vm.opportunity.phases.proto.capabilities = [];
-						vm.opportunity.phases.proto.capabilitiesCore = [];
-						vm.prototypeSkills.map(vm.toggleSelectedSkill);
-						vm.opportunity.phases.implementation.isImplementation = true;
-					}
-				};
-
-				// Function for gathering capabilities, core capabilities on the opportunity
-				// so that they can be displayed, selected
-				vm.refreshCapabilities = () => {
-					// Retrieve a list of the complete capability set available
-					vm.allCapabilities = CapabilitiesService.list();
-
-					vm.inceptionCapabilities = vm.opportunity.phases.inception.capabilities;
-					vm.inceptionCoreCaps = vm.opportunity.phases.inception.capabilitiesCore;
-					vm.inceptionSkills = vm.opportunity.phases.inception.capabilitySkills;
-
-					vm.prototypeCapabilities = vm.opportunity.phases.proto.capabilities;
-					vm.prototypeCoreCaps = vm.opportunity.phases.proto.capabilitiesCore;
-					vm.prototypeSkills = vm.opportunity.phases.proto.capabilitySkills;
-
-					vm.implementationCapabilities = vm.opportunity.phases.implementation.capabilities;
-					vm.implementationCoreCaps = vm.opportunity.phases.implementation.capabilitiesCore;
-					vm.implementationSkills = vm.opportunity.phases.implementation.capabilitySkills;
-				};
-				vm.refreshCapabilities();
-
-				// Returns boolean indicating whether the given capability is selected for the given phase (if one is given)
-				// If no phase is provided, return boolean indicating whether capability is selected for any phase
-				vm.isCapabilitySelected = (capability, phaseCapList?) => {
-					if (phaseCapList) {
-						return phaseCapList.map(cap => cap.code).indexOf(capability.code) !== -1;
-					} else {
-						return (
-							_.union(vm.inceptionCapabilities, vm.prototypeCapabilities, vm.implementationCapabilities)
-								.map((cap: any) => cap.code)
-								.indexOf(capability.code) !== -1
-						);
-					}
-				};
-
-				// Toggles the selection for the given capability for the given phase by adding it or removing it from list for that phase
-				vm.toggleSelectedCapability = (capability, phaseCapList) => {
-					// If the phase contains the capability, remove it, otherwise, add it in
-					if (vm.isCapabilitySelected(capability, phaseCapList)) {
-						_.remove(phaseCapList, (cap: any) => cap.code === capability.code);
-
-						// if not a core capabilities list,
-						// remove associated skills from ALL skill lists
-						// (since we are using an aggregated approah to skill selection)
-						if ([vm.inceptionCoreCaps, vm.prototypeCoreCaps, vm.implementationCoreCaps].indexOf(phaseCapList) === -1) {
-							capability.skills.forEach(skill => {
-								_.remove(vm.inceptionSkills, (sk: any) => sk.code === skill.code);
-								_.remove(vm.prototypeSkills, (sk: any) => sk.code === skill.code);
-								_.remove(vm.implementationSkills, (sk: any) => sk.code === skill.code);
-							});
-						}
-					} else {
-						phaseCapList.push(capability);
-					}
-				};
-
-				// Returns boolean indicating whether the given skill is a selected preferred skill or not
-				vm.isSkillSelected = skill => {
-					return (
-						_.union(vm.inceptionSkills, vm.prototypeSkills, vm.implementationSkills)
-							.map((sk: any) => sk.code)
-							.indexOf(skill.code) !== -1
-					);
-				};
-
-				vm.toggleSelectedSkill = skill => {
-					// If it's selected, remove it from all lists
-					if (vm.isSkillSelected(skill)) {
-						_.remove(vm.inceptionSkills, (sk: any) => sk.code === skill.code);
-						_.remove(vm.prototypeSkills, (sk: any) => sk.code === skill.code);
-						_.remove(vm.implementationSkills, (sk: any) => sk.code === skill.code);
-					} else {
-						// Find the capability the skill belongs to
-						const parentCap = vm.allCapabilities.find(cap => {
-							return cap.skills.map(sk => sk.code).indexOf(skill.code) !== -1;
-						});
-
-						// Find the phases where the parent capability is selected and add it to the corresponding skill list for that phase
-						if (vm.inceptionCapabilities.map(cap => cap.code).indexOf(parentCap.code !== -1)) {
-							vm.inceptionSkills.push(skill);
-						}
-
-						if (vm.prototypeCapabilities.map(cap => cap.code).indexOf(parentCap.code !== -1)) {
-							vm.prototypeSkills.push(skill);
-						}
-
-						if (vm.implementationCapabilities.map(cap => cap.code).indexOf(parentCap.code !== -1)) {
-							vm.implementationSkills.push(skill);
-						}
-					}
-				};
-
-				// if there are no available projects then post a warning and kick the user back to
-				// where they came from
-				if (vm.projects.length === 0) {
-					Notification.error({
-						message: 'You do not have a project for which you are able to create an opportunity. Please browse to or create a project to put the new opportunity under.'
-					});
-					$state.go('opportunities.list');
-				} else if (vm.projects.length === 1) {
-					vm.projectLink = true;
-					vm.projectId = vm.projects[0]._id;
-					vm.projectTitle = vm.projects[0].name;
-					vm.opportunity.project = vm.projectId;
-					vm.programId = vm.projects[0].program._id;
-					vm.programTitle = vm.projects[0].program.title;
-					vm.opportunity.program = vm.programId;
-				}
-
-				vm.changeTargets = () => {
-					vm.opportunity.inceptionTarget = Number(vm.opportunity.inceptionTarget);
-					vm.opportunity.prototypeTarget = Number(vm.opportunity.prototypeTarget);
-					vm.opportunity.implementationTarget = Number(vm.opportunity.implementationTarget);
-					vm.opportunity.totalTarget = vm.opportunity.inceptionTarget + vm.opportunity.prototypeTarget + vm.opportunity.implementationTarget;
-				};
-
-				// this is used when we are setting the entire hierarchy from the project
-				// select box
-				vm.updateProgramProject = () => {
-					vm.projectId = vm.projectobj._id;
-					vm.projectTitle = vm.projectobj.name;
-					vm.programId = vm.projectobj.program._id;
-					vm.programTitle = vm.projectobj.program.title;
-				};
-
-				// remove the opportunity with some confirmation
-				vm.remove = () => {
-					const question = 'Please confirm you want to delete this opportunity';
-					ask.yesNo(question).then(response => {
-						if (response) {
-							opportunitiesService
-								.getOpportunityResourceClass()
-								.remove({ opportunityId: vm.opportunity.code })
-								.$promise.then(() => {
-									$state.go('opportunities.list');
-									Notification.success({
-										title: 'Success',
-										message: '<i class="fas fa-check-circle"></i> Opportunity deleted'
-									});
-								});
-						}
-					});
-				};
-
-				// save the opportunity, could be added or edited (post or put)
-				vm.save = isValid => {
-					if (!vm.opportunity.name) {
-						Notification.error({
-							title: 'Error',
-							message: "<i class='fas fa-exclamation-triangle'></i> You must enter a title for your opportunity"
-						});
-						return false;
-					}
-
-					// validate the budget and phase cost maximums
-					if (!validateBudget()) {
-						return false;
-					}
-
-					// validate the entire form
-					if (!isValid) {
-						$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
-						Notification.error({
-							title: 'Error',
-							message: "<i class='fas fa-exclamation-triangle'></i> There are errors on the page, please review your work and re-save"
-						});
-						return false;
-					}
-
-					// if new opportunity, link to project and program
-					if (!vm.editing) {
-						vm.opportunity.project = vm.projectId;
-						vm.opportunity.program = vm.programId;
-					}
-
-					// ensure that there is a trailing '/' on the github field
-					if (vm.opportunity.github && vm.opportunity.github.substr(-1, 1) !== '/') {
-						vm.opportunity.github += '/';
-					}
-
-					setTimes(vm.opportunity, 16, 0, 0);
-
-					// update target total
-					vm.opportunity.totalTarget = vm.opportunity.implementationTarget + vm.opportunity.prototypeTarget + vm.opportunity.inceptionTarget;
-
-					// if this is a published opportunity, confirm save as this generates notifications
-					Promise.resolve()
-						.then(() => {
-							return new Promise(resolve => {
-								if (vm.opportunity.isPublished) {
-									const question = 'Saving a published opportunity will notify subscribed users.  Proceed with save?';
-									resolve(ask.yesNo(question));
-								} else {
-									resolve(true);
-								}
-							});
-						})
-						// Proceed with save or cancel
-						.then(saving => {
-							if (saving) {
-								if (editing) {
-									return opportunitiesService.getOpportunityResourceClass().update(vm.opportunity).$promise;
-								} else {
-									return opportunitiesService.getOpportunityResourceClass().create(vm.opportunity).$promise;
-								}
-							} else {
-								throw new Error('Save cancelled');
-							}
-						})
-						// Handle save done
-						.then(savedOpportunity => {
-							vm.opportunityForm.$setPristine();
-							loadOpportunity(savedOpportunity);
-							vm.refreshCapabilities();
-
-							let successMessage;
-							if (vm.opportunity.isPublished) {
-								successMessage = '<i class="fas fa-check-circle"></i> Opportunity saved and subscribers notified';
-							} else {
-								successMessage = '<i class="fas fa-check-circle"></i> Opportunity saved';
-							}
-
-							Notification.success({
-								title: 'Success',
-								message: successMessage
-							});
-
-							if (!editing) {
-								$state.go('opportunityadmin.editswu', { opportunityId: vm.opportunity.code });
-							}
-						})
-						// Handle cancel or error
-						.catch(res => {
-							Notification.error({
-								title: 'Opportunity not saved',
-								message: res.message
-							});
-						});
-				};
+import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+
+export class OpportunityEditSWUController implements IController {
+	public static $inject = [
+		'$scope',
+		'$state',
+		'opportunity',
+		'editing',
+		'projects',
+		'authenticationService',
+		'Notification',
+		'dataService',
+		'ask',
+		'capabilitiesService',
+		'TINYMCE_OPTIONS',
+		'opportunitiesService'
+	];
+
+	public isUser: boolean;
+	public isAdmin: boolean;
+	public isGov: boolean;
+	public closing: string;
+	public cities: string[];
+	public projectLink: boolean;
+	public opportunityForm: IFormController;
+	public allCapabilities: ICapabilityResource[];
+	public activeTab = 0;
+
+	private codeChallengeDefaultWeight = 0.35;
+	private skillDefaultWeight = 0.05;
+	private questionDefaultWeight = 0.25;
+	private interviewDefaultWeight = 0.25;
+	private priceDefaultWeight = 0.1;
+	private editQuestionIndex: number;
+	private editingQuestion: boolean;
+	private questionBackup: ITeamQuestion;
+	private editingAddenda: boolean;
+
+	constructor(
+		private $scope: IRootScopeService,
+		private $state: IStateService,
+		public opportunity: IOpportunityResource,
+		private editing: boolean,
+		public projects: IProject[],
+		private authenticationService: AuthenticationService,
+		private Notification: uiNotification.INotificationService,
+		private dataService,
+		private ask,
+		private capabilitiesService: CapabilitiesService,
+		public TINYMCE_OPTIONS,
+		private opportunitiesService: OpportunitiesService
+	) {
+		this.toggleSelectedSkill = this.toggleSelectedSkill.bind(this);
+
+		this.isUser = !!this.authenticationService.user;
+		this.isAdmin = this.isUser && this.authenticationService.user.roles.indexOf('admin') !== -1;
+		this.isGov = this.isUser && this.authenticationService.user.roles.indexOf('gov') !== -1;
+
+		this.closing = 'CLOSED';
+		this.cities = this.dataService.cities;
+
+		if (!this.editing) {
+			this.populateNewOpportunity();
+		} else {
+			this.refreshOpportunity(this.opportunity);
+		}
+	}
+
+	// save the opportunity, could be added or edited (post or put)
+	public async save(isValid: boolean): Promise<void> {
+		if (!this.opportunity.name) {
+			this.Notification.error({
+				title: 'Error',
+				message: "<i class='fas fa-exclamation-triangle'></i> You must enter a title for your opportunity"
+			});
+			this.activeTab = 0;
+			return;
+		}
+
+		// validate the budget and phase cost maximums
+		if (!this.validateBudget()) {
+			this.activeTab = 5;
+			return;
+		}
+
+		// ensure weights are valid
+		const totalScore = this.addWeights();
+		if (totalScore !== 100) {
+			this.Notification.error({
+				title: 'Error',
+				message: "<i class='fas fa-exclamation-triangle'></i> Please ensure the score weighting totals 100%"
+			});
+			this.activeTab = 9;
+			return;
+		}
+
+		// validate the entire form
+		if (!isValid) {
+			this.$scope.$broadcast('show-errors-check-validity', 'vm.opportunityForm');
+			this.Notification.error({
+				title: 'Error',
+				message: "<i class='fas fa-exclamation-triangle'></i> There are errors on the page, please review your work and re-save"
+			});
+			return;
+		}
+
+		// ensure that there is a trailing '/' on the github field
+		if (this.opportunity.github && this.opportunity.github.substr(-1, 1) !== '/') {
+			this.opportunity.github += '/';
+		}
+
+		// ensure all times are set to 1600
+		this.setTimes(this.opportunity, 16, 0, 0);
+
+		// if this is a published opportunity, confirm save as this generates notifications
+		if (this.opportunity.isPublished) {
+			const question = 'Saving a published opportunity will notify subscribed users.  Proceed with save?';
+			const choice = await this.ask.yesNo(question);
+			if (!choice) {
+				return;
 			}
-		]);
-})();
+		}
+
+		let updatedOpportunity: IOpportunityResource;
+		try {
+			if (this.editing) {
+				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity).$promise;
+			} else {
+				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().create(this.opportunity).$promise;
+			}
+
+			this.refreshOpportunity(updatedOpportunity);
+			this.opportunityForm.$setPristine();
+
+			let successMessage: string;
+			if (this.opportunity.isPublished) {
+				successMessage = '<i class="fas fa-check-circle"></i> Opportunity saved and subscribers notified';
+			} else {
+				successMessage = '<i class="fas fa-check-circle"></i> Opportunity saved';
+			}
+
+			this.Notification.success({
+				title: 'Success',
+				message: successMessage
+			});
+
+			// if this is a new opportunity we just saved, transition to edit view
+			if (!this.editing) {
+				this.$state.go('opportunityadmin.editswu', { opportunityId: this.opportunity.code });
+			}
+		} catch (error) {
+			this.handleError(error);
+		}
+	}
+
+	// remove the opportunity with some confirmation
+	public async remove(): Promise<void> {
+		const question = 'Please confirm you want to delete this opportunity';
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			try {
+				await this.opportunitiesService.getOpportunityResourceClass().remove({ opportunityId: this.opportunity.code }).$promise;
+
+				this.$state.go('opportunities.list');
+				this.Notification.success({
+					title: 'Success',
+					message: '<i class="fas fa-check-circle"></i> Opportunity deleted'
+				});
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	}
+
+	// Returns a boolean indicating whether the given phase is included in the opportunity or not
+	public isPhaseIncluded(phase: IPhase): boolean {
+		if (phase === this.opportunity.phases.inception) {
+			return phase.isInception;
+		} else if (phase === this.opportunity.phases.proto) {
+			return phase.isPrototype;
+		} else if (phase === this.opportunity.phases.implementation) {
+			return phase.isImplementation;
+		}
+	}
+
+	// Changes the given phase to be the start phase, and adjust the status of the other phases accordingly
+	public changeToStartPhase(phase: IPhase): void {
+		if (phase === this.opportunity.phases.inception) {
+			this.opportunity.phases.inception.isInception = true;
+			this.opportunity.phases.proto.isPrototype = true;
+			this.opportunity.phases.implementation.isImplementation = true;
+		} else if (phase === this.opportunity.phases.proto) {
+			this.opportunity.phases.inception.isInception = false;
+
+			this.opportunity.phases.inception.capabilities = [];
+			this.opportunity.phases.inception.capabilitiesCore = [];
+			this.opportunity.phases.inception.capabilitySkills = [];
+
+			this.opportunity.phases.proto.isPrototype = true;
+			this.opportunity.phases.implementation.isImplementation = true;
+		} else if (phase === this.opportunity.phases.implementation) {
+			this.opportunity.phases.inception.isInception = false;
+			this.opportunity.phases.inception.capabilities = [];
+			this.opportunity.phases.inception.capabilitiesCore = [];
+			this.opportunity.phases.inception.capabilitySkills = [];
+
+			this.opportunity.phases.proto.isPrototype = false;
+			this.opportunity.phases.proto.capabilities = [];
+			this.opportunity.phases.proto.capabilitiesCore = [];
+			this.opportunity.phases.proto.capabilitySkills = [];
+
+			this.opportunity.phases.implementation.isImplementation = true;
+		}
+	}
+
+	// Returns boolean indicating whether the given capability is selected for the given phase (if one is given)
+	// If no phase is provided, return boolean indicating whether capability is selected for any phase
+	public isCapabilitySelected(capability: ICapabilityResource, phaseCapList?: ICapabilityResource[]): boolean {
+		if (phaseCapList) {
+			return phaseCapList.map(cap => cap.code).indexOf(capability.code) !== -1;
+		} else {
+			return (
+				_.union(this.opportunity.phases.inception.capabilities, this.opportunity.phases.proto.capabilities, this.opportunity.phases.implementation.capabilities)
+					.map(cap => cap.code)
+					.indexOf(capability.code) !== -1
+			);
+		}
+	}
+
+	// Returns boolean indicating whether the given skill is a selected preferred skill or not
+	public isSkillSelected(skill: ICapabilitySkillResource): boolean {
+		return (
+			_.union(this.opportunity.phases.inception.capabilitySkills, this.opportunity.phases.proto.capabilitySkills, this.opportunity.phases.implementation.capabilitySkills)
+				.map(sk => sk.code)
+				.indexOf(skill.code) !== -1
+		);
+	}
+
+	// Toggles the selection for the given capability for the given phase by adding it or removing it from list for that phase
+	public toggleSelectedCapability(capability: ICapabilityResource, phaseCapList: ICapabilityResource[]): void {
+		// If the phase contains the capability, remove it, otherwise, add it in
+		if (this.isCapabilitySelected(capability, phaseCapList)) {
+			_.remove(phaseCapList, cap => cap.code === capability.code);
+
+			// remove the skills from the corresponding phase skill list
+			if (phaseCapList === this.opportunity.phases.inception.capabilities) {
+				this.opportunity.phases.inception.capabilitySkills = [];
+			} else if (phaseCapList === this.opportunity.phases.proto.capabilities) {
+				this.opportunity.phases.proto.capabilitySkills = [];
+			} else if (phaseCapList === this.opportunity.phases.implementation.capabilities) {
+				this.opportunity.phases.implementation.capabilitySkills = [];
+			}
+		} else {
+			phaseCapList.push(capability);
+		}
+	}
+
+	public toggleSelectedSkill(skill: ICapabilitySkillResource): void {
+		// If it's selected, remove it from all lists
+		if (this.isSkillSelected(skill)) {
+			_.remove(this.opportunity.phases.inception.capabilitySkills, sk => sk.code === skill.code);
+			_.remove(this.opportunity.phases.proto.capabilitySkills, sk => sk.code === skill.code);
+			_.remove(this.opportunity.phases.implementation.capabilitySkills, sk => sk.code === skill.code);
+		} else {
+			// Find the capability the skill belongs to
+			const parentCap = this.allCapabilities.find(cap => {
+				return cap.skills.map(sk => sk.code).indexOf(skill.code) !== -1;
+			});
+
+			// Find the phases where the parent capability is selected and add it to the corresponding skill list for that phase
+			if (this.opportunity.phases.inception.capabilities.map(cap => cap.code).indexOf(parentCap.code) !== -1) {
+				this.opportunity.phases.inception.capabilitySkills.push(skill);
+			}
+
+			if (this.opportunity.phases.proto.capabilities.map(cap => cap.code).indexOf(parentCap.code) !== -1) {
+				this.opportunity.phases.proto.capabilitySkills.push(skill);
+			}
+
+			if (this.opportunity.phases.implementation.capabilities.map(cap => cap.code).indexOf(parentCap.code) !== -1) {
+				this.opportunity.phases.implementation.capabilitySkills.push(skill);
+			}
+		}
+	}
+
+	// Adding a new team question
+	// We add new one to the list and enter edit mode
+	public addNewTeamQuestion(): void {
+		// no existing questin to store since this is a new question
+		this.questionBackup = null;
+
+		this.opportunity.teamQuestions.push({
+			question: '',
+			guideline: '',
+			wordLimit: 300,
+			questionScore: 5
+		});
+
+		// set the current question being edited to the last one just added
+		this.editQuestionIndex = this.opportunity.teamQuestions.length - 1;
+		this.editingQuestion = true;
+	}
+
+	// Cancel edit team question
+	public cancelEditTeamQuestion(): void {
+		if (this.editingQuestion) {
+			// if no backup, then this was new question, so remove
+			if (this.questionBackup === null) {
+				this.opportunity.teamQuestions.pop();
+			} else {
+				this.opportunity.teamQuestions[this.editQuestionIndex] = this.questionBackup;
+				this.questionBackup = null;
+			}
+			this.editingQuestion = false;
+		}
+	}
+
+	// Enter edit mode for an existing team question
+	public editTeamQuestion(index: number): void {
+		// store a copy in the event of a cancel
+		this.questionBackup = angular.copy(this.opportunity.teamQuestions[index]);
+
+		// enter edit mode on the specified questino
+		this.editQuestionIndex = index;
+		this.editingQuestion = true;
+	}
+
+	// Save edit team question
+	public saveEditTeamQuestion(): void {
+		this.editingQuestion = false;
+		this.questionBackup = null;
+	}
+
+	// Delete team question with confirm modal
+	public async deleteTeamQuestion(index: number): Promise<void> {
+		const question = 'Are you sure you wish to delete this team question from the opportunity?';
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			this.opportunity.teamQuestions.splice(index, 1);
+		}
+	}
+
+	// Adding a new addendum
+	// We add a new one to the list and enter edit mode
+	public addNewAddendum(): void {
+		this.opportunity.addenda.push({
+			description: '',
+			createdBy: this.authenticationService.user,
+			createdOn: new Date()
+		});
+
+		this.editingAddenda = true;
+	}
+
+	// Cancel edit addendum
+	public cancelEditAddendum(): void {
+		if (this.editingAddenda) {
+			this.opportunity.addenda.pop();
+			this.editingAddenda = false;
+		}
+	}
+
+	// Save the addendum being edited (just exit edit mode)
+	public saveEditAddendum(): void {
+		this.editingAddenda = false;
+	}
+
+	// Delete an addendum with confirm modal
+	public async deleteAddenda(index: number): Promise<void> {
+		const question = 'Are you sure you wish to delete this addendum?';
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			this.opportunity.addenda.splice(index, 1);
+		}
+	}
+
+	public updateProgramProject(): void {
+		this.opportunity.program = this.opportunity.project.program;
+	}
+
+	// Adds up the input weights and returns as a percentage
+	public addWeights(): number {
+		return Math.ceil(
+			(this.opportunity.weights.skill + this.opportunity.weights.question + this.opportunity.weights.codechallenge + this.opportunity.weights.interview + this.opportunity.weights.price) * 100
+		);
+	}
+
+	private populateNewOpportunity(): void {
+		this.opportunity.opportunityTypeCd = 'sprint-with-us';
+
+		// Initialize phases for new opportunities
+		this.opportunity.phases = {
+			implementation: {
+				isImplementation: true,
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date()
+			},
+			inception: {
+				isInception: true,
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date()
+			},
+			proto: {
+				isPrototype: true,
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date()
+			},
+			aggregate: {
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date()
+			}
+		};
+
+		// Initialize default weights for new opportunities
+		if (!this.opportunity.weights) {
+			this.opportunity.weights = {
+				codechallenge: this.codeChallengeDefaultWeight,
+				skill: this.skillDefaultWeight,
+				question: this.questionDefaultWeight,
+				interview: this.interviewDefaultWeight,
+				price: this.priceDefaultWeight
+			};
+		}
+
+		// Initialize addenda
+		this.opportunity.addenda = [];
+
+		// Initialize team questions
+		this.opportunity.teamQuestions = [];
+
+		// Initialize default dates
+		this.opportunity.deadline = new Date();
+		this.opportunity.assignment = new Date();
+		this.opportunity.start = new Date();
+		this.opportunity.endDate = new Date();
+
+		// We don't have a project to link to yet, so show select input
+		this.projectLink = false;
+
+		// Refresh the capabilities
+		this.refreshCapabilities();
+	}
+
+	// Load the current opportunity into the view
+	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
+		// If the user doesn't have the right access then kick them out
+		if (this.editing && !this.isAdmin && !newOpportunity.userIs.admin) {
+			this.$state.go('forbidden');
+		}
+
+		this.opportunity = newOpportunity;
+
+		// Format strings into dates so Angular doesn't complain
+		this.opportunity.deadline = new Date(this.opportunity.deadline);
+		this.opportunity.assignment = new Date(this.opportunity.assignment);
+		this.opportunity.start = new Date(this.opportunity.start);
+		this.opportunity.endDate = new Date(this.opportunity.endDate);
+		this.opportunity.phases.inception.startDate = new Date(this.opportunity.phases.inception.startDate);
+		this.opportunity.phases.inception.endDate = new Date(this.opportunity.phases.inception.endDate);
+		this.opportunity.phases.proto.startDate = new Date(this.opportunity.phases.proto.startDate);
+		this.opportunity.phases.proto.endDate = new Date(this.opportunity.phases.proto.endDate);
+		this.opportunity.phases.implementation.startDate = new Date(this.opportunity.phases.implementation.startDate);
+		this.opportunity.phases.implementation.endDate = new Date(this.opportunity.phases.implementation.endDate);
+
+		// Update closing flag
+		this.closing = this.opportunity.deadline.getTime() - new Date().getTime() > 0 ? 'OPEN' : 'CLOSED';
+
+		// Link to the opportunities project
+		this.projectLink = true;
+
+		// Refresh the capabilities
+		this.refreshCapabilities();
+	}
+
+	private refreshCapabilities(): void {
+		// Retrieve a list of the complete capability set available
+		this.allCapabilities = this.capabilitiesService.getCapabilitiesResourceClass().list();
+	}
+
+	// Set the times on the opportunity dates to a specified time
+	private setTimes(opportunity: IOpportunityResource, hour: number, minute: number, second: number) {
+		opportunity.deadline = moment(opportunity.deadline)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.assignment = moment(opportunity.assignment)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.endDate = moment(opportunity.endDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.implementation.endDate = moment(opportunity.phases.implementation.endDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.implementation.startDate = moment(opportunity.phases.implementation.startDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.inception.endDate = moment(opportunity.phases.inception.endDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.inception.startDate = moment(opportunity.phases.inception.startDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.proto.endDate = moment(opportunity.phases.proto.endDate)
+			.set({ hour, minute, second })
+			.toDate();
+
+		opportunity.phases.proto.startDate = moment(opportunity.phases.proto.startDate)
+			.set({ hour, minute, second })
+			.toDate();
+	}
+
+	private validateBudget() {
+		if (this.opportunity.budget > 2000000) {
+			this.Notification.error({
+				message: 'You cannot enter an overall budget greater than $2,000,000',
+				title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
+			});
+			return false;
+		}
+
+		if (this.opportunity.phases.inception.isInception && this.opportunity.phases.inception.maxCost > this.opportunity.budget) {
+			this.Notification.error({
+				message: 'You cannot enter an Inception budget greater than the total budget.',
+				title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
+			});
+			return false;
+		}
+
+		if (this.opportunity.phases.proto.isPrototype && this.opportunity.phases.proto.maxCost > this.opportunity.budget) {
+			this.Notification.error({
+				message: 'You cannot enter a Proof of Concept budget greater than the total budget.',
+				title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
+			});
+			return false;
+		}
+
+		if (this.opportunity.phases.implementation.maxCost > this.opportunity.budget) {
+			this.Notification.error({
+				message: 'You cannot enter an Implementation budget greater than the total budget.',
+				title: "<i class='fas fa-exclamation-triangle'></i> Errors on Page"
+			});
+			return false;
+		}
+
+		return true;
+	}
+
+	private handleError(error: any): void {
+		const errorMessage = (error as any).data ? (error as any).data.message : error.message;
+		this.Notification.error({
+			title: 'Error',
+			message: `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`
+		});
+	}
+}
+
+angular.module('opportunities').controller('OpportunityEditSWUController', OpportunityEditSWUController);

@@ -16,7 +16,7 @@
 				capabilities : '='
 			},
 			templateUrl  : '/modules/capabilities/client/views/list.capabilities.directive.html',
-			controller   : ['$sce', '$rootScope', '$scope', 'CapabilitiesService', 'authenticationService', function ($sce, $rootScope, $scope, CapabilitiesService, authenticationService) {
+			controller   : ['$sce', '$rootScope', '$scope', 'capabilitiesService', 'authenticationService', function ($sce, $rootScope, $scope, capabilitiesService, authenticationService) {
 				var vm          = this;
 				vm.trust        = $sce.trustAsHtml;
 				vm.auth         = authenticationService.permissions ();
@@ -25,7 +25,7 @@
 				vm.context      = $scope.context;
 				vm.capabilities = $scope.capabilities;
 				$rootScope.$on ('updateCapabilities', function () {
-					vm.capabilities = CapabilitiesService.query ();
+					vm.capabilities = capabilitiesService.getOpportunityResourceClass().query ();
 				});
 			}]
 		}

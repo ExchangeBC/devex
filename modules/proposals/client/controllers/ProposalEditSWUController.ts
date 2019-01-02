@@ -3,11 +3,11 @@
 import angular, { angularFileUpload, IFormController, IWindowService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
-import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import IUserDocument from '../../../users/server/interfaces/IUserDocument';
+import { IUser } from '../../../users/shared/IUserDTO';
 import ProposalService, { IProposalResource } from '../services/ProposalService';
 
 export default class ProposalEditSWUController {
@@ -28,7 +28,7 @@ export default class ProposalEditSWUController {
 	];
 
 	public title: string;
-	public user: IUserDocument;
+	public user: IUser;
 	public proposalForm: IFormController;
 	public activeTab: number;
 	public termsDownloaded: boolean;
@@ -37,9 +37,9 @@ export default class ProposalEditSWUController {
 	public prototypeSearchBox: string;
 	public implementationSearchBox: string;
 
-	public filteredInceptionMembers: IUserDocument[];
-	public filteredPrototypeMembers: IUserDocument[];
-	public filteredImplementationMembers: IUserDocument[];
+	public filteredInceptionMembers: IUser[];
+	public filteredPrototypeMembers: IUser[];
+	public filteredImplementationMembers: IUser[];
 
 	public teamsAccordianCollapsed = false;
 	public priceAccordianCollapsed = false;
@@ -66,11 +66,16 @@ export default class ProposalEditSWUController {
 		this.filteredInceptionMembers = [];
 		this.filteredPrototypeMembers = [];
 		this.filteredImplementationMembers = [];
-		this.refreshProposal(this.proposal);
+
+		if (!this.editing) {
+			this.populateNewProposal();
+		} else {
+			this.refreshProposal(this.proposal);
+		}
 	}
 
 	public downloadTermsClicked() {
-		this.proposal.isAcceptedTerms = true;
+		this.termsDownloaded = true;
 	}
 
 	public formatDate(date: Date | string): string {
@@ -82,7 +87,7 @@ export default class ProposalEditSWUController {
 		return monthNames[monthIndex] + ' ' + day + ', ' + year;
 	}
 
-	public filterMembers(completeList: IUserDocument[], filteredList: IUserDocument[], selectedTeam: IUserDocument[], filter: string): void {
+	public filterMembers(completeList: IUser[], filteredList: IUser[], selectedTeam: IUser[], filter: string): void {
 		filteredList.splice(0, filteredList.length);
 		completeList.forEach(member => {
 			if (!filter || filter.length === 0 || member.displayName.toLowerCase().includes(filter.toLowerCase()) || selectedTeam.indexOf(member) !== -1) {
@@ -91,7 +96,7 @@ export default class ProposalEditSWUController {
 		});
 	}
 
-	public clickMember(member: IUserDocument, team: IUserDocument[]): void {
+	public clickMember(member: IUser, team: IUser[]): void {
 		if (team.map(mem => mem._id).indexOf(member._id) === -1) {
 			team.push(member);
 		} else {
@@ -103,11 +108,11 @@ export default class ProposalEditSWUController {
 		}
 	}
 
-	public teamHasMember(team: IUserDocument[], member: IUserDocument): boolean {
+	public teamHasMember(team: IUser[], member: IUser): boolean {
 		return team.map(mem => mem._id).indexOf(member._id) !== -1;
 	}
 
-	public teamHasCapability(team: IUserDocument[], capability: ICapabilityDocument) {
+	public teamHasCapability(team: IUser[], capability: ICapabilityResource) {
 		const found = team.find(member => {
 			return member.capabilities.map(cap => cap._id).indexOf(capability._id) !== -1;
 		});
@@ -115,7 +120,7 @@ export default class ProposalEditSWUController {
 		return !!found;
 	}
 
-	public teamHasSkill(team: IUserDocument[], skill: ICapabilitySkillDocument) {
+	public teamHasSkill(team: IUser[], skill: ICapabilitySkillResource) {
 		const found = team.find(member => {
 			return member.capabilitySkills.map(sk => sk._id).indexOf(skill._id) !== -1;
 		});
@@ -123,7 +128,7 @@ export default class ProposalEditSWUController {
 		return !!found;
 	}
 
-	public isFullTime(coreCapabilities: ICapabilityDocument[], capability: ICapabilityDocument) {
+	public isFullTime(coreCapabilities: ICapabilityResource[], capability: ICapabilityResource) {
 		return coreCapabilities.map(cap => cap._id).indexOf(capability._id) !== -1;
 	}
 
@@ -159,10 +164,12 @@ export default class ProposalEditSWUController {
 			let updatedProposal: IProposalResource;
 			if (this.editing) {
 				updatedProposal = await this.proposalService.getProposalResourceClass().update(this.proposal).$promise;
+				this.refreshProposal(updatedProposal);
 			} else {
 				updatedProposal = await this.proposalService.getProposalResourceClass().create(this.proposal).$promise;
+				this.$state.go('proposaladmin.editswu', { proposalId: updatedProposal._id, opportunityId: this.opportunity._id });
 			}
-			this.refreshProposal(updatedProposal);
+
 			this.Notification.success({
 				title: 'Success',
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
@@ -318,16 +325,56 @@ export default class ProposalEditSWUController {
 		return inceptionCapsMissing.length === 0 && protoCapsMissing.length === 0 && implementationCapsMissing.length === 0;
 	}
 
+	private populateNewProposal(): void {
+		this.proposal.phases = {
+			inception: {
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date(),
+				team: []
+			},
+			proto: {
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date(),
+				team: []
+			},
+			implementation: {
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date(),
+				team: []
+			},
+			aggregate: {
+				capabilities: [],
+				capabilitiesCore: [],
+				capabilitySkills: [],
+				startDate: new Date(),
+				endDate: new Date(),
+				team: []
+			}
+		}
+
+		this.proposal.teamQuestionResponses = [];
+		this.title = 'Create';
+		this.proposal.status = 'New';
+		this.proposal.opportunity = this.opportunity;
+		this.proposal.user = this.user;
+	}
+
 	private refreshProposal(newProposal: IProposalResource): void {
 		this.proposal = newProposal;
-		this.title = this.editing ? 'Edit' : 'Create';
+		this.title = 'Edit';
 		this.setupQuestions();
 	}
 
 	private setupQuestions(): void {
-		if (!this.proposal.teamQuestionResponses || this.proposal.teamQuestionResponses.length === 0) {
-			this.proposal.teamQuestionResponses = [];
-		}
 
 		this.opportunity.teamQuestions.forEach((teamQuestion, index) => {
 			teamQuestion.showGuidance = true;

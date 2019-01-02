@@ -1,7 +1,7 @@
 'use strict';
 
 import angular, { ILogService, IPromise, resource } from 'angular';
-import IProposalDocument from '../../server/interfaces/IProposalDocument';
+import { IProposal } from '../../shared/IProposalDTO';
 
 interface IServiceParams {
 	proposalId?: string;
@@ -11,7 +11,7 @@ interface IServiceParams {
 	userId?: string;
 }
 
-export interface IProposalResource extends resource.IResource<IProposalDocument>, IProposalDocument {
+export interface IProposalResource extends resource.IResource<IProposal>, IProposal {
 	proposalId: '@_id';
 	$promise: IPromise<IProposalResource>;
 	toJSON(options?: any): any; // necessary due to toJSON being defined in both IResource and IProposalDocument

@@ -1,6 +1,5 @@
 import { Request } from 'express';
-import IOpportunityDocument from '../interfaces/IOpportunityDocument';
-import OpportunityModel from '../models/OpportunityModel';
+import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 
 class OpportunitiesUtilities {
 
@@ -13,7 +12,7 @@ class OpportunitiesUtilities {
 	private constructor() {};
 
 	// Returns a list of all opportunities
-	public getOpportunityList = async (query: any, req: Request): Promise<IOpportunityDocument[]> => {
+	public getOpportunityList = async (query: any, req: Request): Promise<IOpportunityModel[]> => {
 		const oppList = await OpportunityModel.find(query)
 			.sort([['deadline', -1], ['name', 1]])
 			.populate('createdBy', 'displayName')

@@ -33,9 +33,9 @@
 					controllerAs: 'vm',
 					resolve: {
 						org: [
-							'OrgsService',
-							function(OrgsService) {
-								return new OrgsService();
+							'OrgService',
+							function(OrgService) {
+								return new OrgService();
 							}
 						]
 					}
@@ -57,9 +57,9 @@
 					},
 					resolve: {
 						orgs: [
-							'OrgsService',
-							function(OrgsService) {
-								return OrgsService.query().$promise;
+							'OrgService',
+							function(OrgService) {
+								return OrgService.query().$promise;
 							}
 						]
 					},
@@ -79,17 +79,17 @@
 					resolve: {
 						org: [
 							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
+							'OrgService',
+							function($stateParams, OrgService) {
+								return OrgService.get({
 									orgId: $stateParams.orgId
 								}).$promise;
 							}
 						],
 						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							function(capabilitiesService) {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					}
@@ -108,17 +108,17 @@
 					resolve: {
 						org: [
 							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
+							'OrgService',
+							function($stateParams, OrgService) {
+								return OrgService.get({
 									orgId: $stateParams.orgId
 								}).$promise;
 							}
 						],
 						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							function(capabilitiesService) {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					},
@@ -133,9 +133,9 @@
 					controllerAs: 'vm',
 					resolve: {
 						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							function(capabilitiesService) {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					},
@@ -150,9 +150,9 @@
 					controllerAs: 'vm',
 					resolve: {
 						allCapabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
+							'capabilitiesService',
+							function(capabilitiesService) {
+								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
 							}
 						]
 					},

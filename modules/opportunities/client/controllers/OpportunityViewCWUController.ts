@@ -1,12 +1,12 @@
 'use strict';
 
-import angular, { ILocationService, uiNotification } from 'angular';
+import angular, { IController, ILocationService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import AuthenticationService from '../../../users/client/services/AuthenticationService';
 import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
 import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
 
-export default class OpportunityViewCWUController {
+export default class OpportunityViewCWUController implements IController {
 	public static $inject = ['$state', '$location', 'opportunity', 'authenticationService', 'opportunitiesService', 'Notification', 'ask', 'myproposal', 'opportunitiesCommonService'];
 
 	public showPreApproval: boolean;

@@ -1,56 +1,56 @@
 'use strict';
 
-import angular from 'angular';
-import ICapabilityDocument from '../../server/interfaces/ICapabilityDocument';
+import angular, { IPromise, resource } from 'angular';
+import { ICapability } from '../../shared/ICapabilityDTO';
 
-interface ICapability extends ng.resource.IResource<ICapabilityDocument> {
-	capabilityId: string;
+export interface ICapabilityResource extends resource.IResource<ICapability>, ICapability {
+	capabilityId: '@_id';
+	$promise: IPromise<ICapabilityResource>;
+	toJSON(options?: any): any;
 }
 
-export interface ICapabilitiesService extends ng.resource.IResourceClass<ICapability> {
-	create(capability: ICapability): ICapability,
-	update(capability: ICapability): ICapability,
-	list(): ICapability[],
+export interface ICapabilitiesResourceClass extends resource.IResourceClass<ICapabilityResource> {
+	create(capability: ICapabilityResource): ICapabilityResource;
+	update(capability: ICapabilityResource): ICapabilityResource;
+	list(): ICapabilityResource[];
 }
 
-(() => {
-	angular
-		.module('capabilities.services')
+export default class CapabilitiesService {
+	public static $inject = ['$resource'];
 
-		// Service for capabilities
-		.factory('CapabilitiesService', [
-			'$resource',
-			'$log',
-			($resource: ng.resource.IResourceService): ICapabilitiesService => {
+	private capabilitiesResourceClass: ICapabilitiesResourceClass;
 
-				let createAction: ng.resource.IActionDescriptor;
-				createAction = {
-					method: 'POST'
-				}
+	private createAction: resource.IActionDescriptor = {
+		method: 'POST'
+	};
 
-				let updateAction: ng.resource.IActionDescriptor;
-				updateAction = {
-					method: 'PUT'
-				}
+	private updateAction: resource.IActionDescriptor = {
+		method: 'PUT'
+	};
 
-				let listAction: ng.resource.IActionDescriptor;
-				listAction = {
-					method: 'GET',
-					url: '/api/capabilities',
-					isArray: true
-				}
+	private listAction: resource.IActionDescriptor = {
+		method: 'GET',
+		url: '/api/capabilities',
+		isArray: true
+	};
 
-				const capabilitiesService = $resource('/api/capabilities/:capabilityId',
-				{
-					capabilityId: '@_id'
-				},
-				{
-					create: createAction,
-					update: updateAction,
-					list: listAction
-				}) as ICapabilitiesService;
-
-				return capabilitiesService;
+	constructor($resource: resource.IResourceService) {
+		this.capabilitiesResourceClass = $resource(
+			'/api/capabilities/:capabilityId',
+			{
+				capabilityId: '@_id'
+			},
+			{
+				create: this.createAction,
+				update: this.updateAction,
+				list: this.listAction
 			}
-		]);
-})();
+		) as ICapabilitiesResourceClass;
+	}
+
+	public getCapabilitiesResourceClass(): ICapabilitiesResourceClass {
+		return this.capabilitiesResourceClass;
+	}
+}
+
+angular.module('capabilities.services').service('capabilitiesService', CapabilitiesService);

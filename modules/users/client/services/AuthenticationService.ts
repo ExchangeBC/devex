@@ -1,7 +1,7 @@
 'use strict';
 
 import angular from 'angular';
-import IUserDocument from '../../server/interfaces/IUserDocument';
+import { IUser } from '../../shared/IUserDTO';
 
 interface IGuestPermissions {
 	loggedIn?: boolean;
@@ -12,15 +12,15 @@ interface IGuestPermissions {
 }
 
 export default class AuthenticationService {
-	public user: IUserDocument;
+	public user: IUser;
 
 	constructor(window: ng.IWindowService) {
 		this.user = window.user;
 	}
 
-	public permissions(): IUserDocument | IGuestPermissions {
+	public permissions(): IUser | IGuestPermissions {
 		const isUser = !!this.user;
-		const ret: IUserDocument | IGuestPermissions = isUser ? this.user : {};
+		const ret: IUser | IGuestPermissions = isUser ? this.user : {};
 		const isAdmin = isUser && this.user.roles.indexOf('admin') !== -1;
 		const isGov = isUser && this.user.roles.indexOf('gov') !== -1;
 		ret.loggedIn = isUser;
