@@ -3,7 +3,7 @@
 
 	angular.module('core').run(routeFilter);
 
-	routeFilter.$inject = ['$transitions', '$state', 'authenticationService'];
+	routeFilter.$inject = ['$transitions', '$state', 'AuthenticationService'];
 
 	function routeFilter($transitions, $state, authenticationService) {
 		// Store previous state

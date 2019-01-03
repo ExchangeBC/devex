@@ -43,7 +43,7 @@ angular.module('orgs.services').factory('OrgService', [
 
 		const myAction: resource.IActionDescriptor = {
 			method: 'GET',
-			url: 'api/orgs/my',
+			url: '/api/orgs/my',
 			isArray: true
 		};
 

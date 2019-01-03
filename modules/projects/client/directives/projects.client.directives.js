@@ -16,7 +16,7 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
-			controller   : ['$scope', 'ProjectsService', 'authenticationService', 'Notification', function ($scope, ProjectsService, authenticationService, Notification) {
+			controller   : ['$scope', 'ProjectsService', 'AuthenticationService', 'Notification', function ($scope, ProjectsService, authenticationService, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
 				vm.context = $scope.context;

@@ -10,7 +10,7 @@
 		'UsersService',
 		'$location',
 		'$window',
-		'authenticationService',
+		'AuthenticationService',
 		'PasswordValidator',
 		'Notification',
 		'Idle'

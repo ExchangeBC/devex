@@ -19,7 +19,7 @@ import angular from 'angular';
 				},
 				controller: [
 					'$scope',
-					'authenticationService',
+					'AuthenticationService',
 					function($scope, authenticationService) {
 						const qaz = this;
 						qaz.opportunity = $scope.opportunity;

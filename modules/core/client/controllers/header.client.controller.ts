@@ -12,7 +12,7 @@
 		'$scope',
 		'$state',
 		'$location',
-		'authenticationService',
+		'AuthenticationService',
 		'menuService',
 		'$uibModal',
 		'Idle',

@@ -6,43 +6,33 @@ import { ICapabilitySkill } from '../../shared/ICapabilitySkillDTO';
 export interface ICapabilitySkillResource extends resource.IResource<ICapabilitySkill>, ICapabilitySkill {
 	capabilityskillId: '@_id';
 	$promise: IPromise<ICapabilitySkill>;
-	toJSON(options?: any): any;
 }
 
-export interface ICapabilitySkillResourceClass extends resource.IResourceClass<ICapabilitySkillResource> {
+export interface ICapabilitySkillsService extends resource.IResourceClass<ICapabilitySkillResource> {
 	create(capabilitySkill: ICapabilitySkillResource): ICapabilitySkillResource;
 	update(capabilitySKill: ICapabilitySkillResource): ICapabilitySkillResource;
 }
 
-export default class CapabilitySkillsService {
-	public static $inject = ['$resource'];
+angular.module('capabilities.services').factory('CapabilitySkillsService', [
+	'$resource',
+	($resource: resource.IResourceService): ICapabilitySkillsService => {
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST'
+		};
 
-	private capabilitySkillsResourceClass: ICapabilitySkillResourceClass;
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT'
+		};
 
-	private createAction: resource.IActionDescriptor = {
-		method: 'POST'
-	};
-
-	private updateAction: resource.IActionDescriptor = {
-		method: 'PUT'
-	};
-
-	constructor($resource: resource.IResourceService) {
-		this.capabilitySkillsResourceClass = $resource(
+		return $resource(
 			'/api/capabilityskill/:capabilityskillId',
 			{
 				capabilityskillId: '@_id'
 			},
 			{
-				create: this.createAction,
-				update: this.updateAction
+				create: createAction,
+				update: updateAction
 			}
-		) as ICapabilitySkillResourceClass;
+		) as ICapabilitySkillsService;
 	}
-
-	public getCapabilitySkillResourceClass(): ICapabilitySkillResourceClass {
-		return this.capabilitySkillsResourceClass;
-	}
-}
-
-angular.module('capabilities.services').service('capabilitySkillsService', CapabilitySkillsService);
+]);

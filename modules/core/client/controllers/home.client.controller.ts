@@ -8,7 +8,7 @@ import '../css/core.css';
 (() => {
 	'use strict';
 
-	HomeController.$inject = ['authenticationService', '$state', '$rootScope'];
+	HomeController.$inject = ['AuthenticationService', '$state', '$rootScope'];
 	angular.module('core').controller('HomeController', HomeController);
 
 	function HomeController(authenticationService, $state, $rootScope) {

@@ -1,9 +1,9 @@
 'use strict';
 
-import angular, { ILogService, IPromise, resource } from 'angular';
+import angular, { IPromise, resource } from 'angular';
 import { IProposal } from '../../shared/IProposalDTO';
 
-interface IServiceParams {
+interface IProposalServiceParams {
 	proposalId?: string;
 	documentId?: string;
 	opportunityId?: string;
@@ -17,121 +17,112 @@ export interface IProposalResource extends resource.IResource<IProposal>, IPropo
 	toJSON(options?: any): any; // necessary due to toJSON being defined in both IResource and IProposalDocument
 }
 
-export interface IProposalsResourceClass extends resource.IResourceClass<IProposalResource> {
+export interface IProposalService extends resource.IResourceClass<IProposalResource> {
 	create(proposal: IProposalResource): IProposalResource;
 	update(proposal: IProposalResource): IProposalResource;
-	assign(params: IServiceParams): IProposalResource;
-	assignswu(params: IServiceParams): IProposalResource;
-	removeDoc(params: IServiceParams): IProposalResource;
-	makeRequest(params: IServiceParams): IProposalResource;
-	getMyProposal(params: IServiceParams): IProposalResource;
-	getProposalsForOpp(params: IServiceParams): IProposalResource[];
-	getPotentialResources(params: IServiceParams): any;
-	getRequests(params: IServiceParams): any[];
-	getMembers(params: IServiceParams): any[];
-	confirmMember(params: IServiceParams): any;
-	denyMember(params: IServiceParams): any;
+	assign(params: IProposalServiceParams): IProposalResource;
+	assignswu(params: IProposalServiceParams): IProposalResource;
+	removeDoc(params: IProposalServiceParams): IProposalResource;
+	makeRequest(params: IProposalServiceParams): IProposalResource;
+	getMyProposal(params: IProposalServiceParams): IProposalResource;
+	getProposalsForOpp(params: IProposalServiceParams): IProposalResource[];
+	getPotentialResources(params: IProposalServiceParams): any;
+	getRequests(params: IProposalServiceParams): any[];
+	getMembers(params: IProposalServiceParams): any[];
+	confirmMember(params: IProposalServiceParams): any;
+	denyMember(params: IProposalServiceParams): any;
 }
 
-export default class ProposalService {
-	public static $inject = ['$resource', '$log'];
+angular.module('proposals.services').factory('ProposalService', [
+	'$resource',
+	($resource: resource.IResourceService): IProposalService => {
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST'
+		};
 
-	private proposalsResourceClass: IProposalsResourceClass;
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT'
+		};
 
-	private createAction: resource.IActionDescriptor = {
-		method: 'POST'
-	};
+		const assignAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposalsSWU/:proposalId/assignmentStatus'
+		};
 
-	private updateAction: resource.IActionDescriptor = {
-		method: 'PUT'
-	};
+		const assignSWUAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposalsSWU/:proposalId/assignmentStatus'
+		};
 
-	private assignAction: resource.IActionDescriptor = {
-		method: 'PUT',
-		url: '/api/proposalsSWU/:proposalId/assignmentStatus'
-	}
+		const removeDocAction: resource.IActionDescriptor = {
+			method: 'DELETE',
+			url: '/api/proposals/:proposalId/documents/:documentId'
+		};
 
-	private assignSWUAction: resource.IActionDescriptor = {
-		method: 'PUT',
-		url: '/api/proposalsSWU/:proposalId/assignmentStatus'
-	}
+		const makeRequestAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/request/proposal/:proposalId'
+		};
 
-	private removeDocAction: resource.IActionDescriptor = {
-		method: 'DELETE',
-		url: '/api/proposals/:proposalId/documents/:documentId'
-	}
+		const getMyProposalAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/my/:opportunityId'
+		};
 
-	private makeRequestAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/request/proposal/:proposalId'
-	}
+		const getProposalsForOppAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/for/:opportunityId',
+			isArray: true
+		};
 
-	private getMyProposalAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/my/:opportunityId'
-	}
+		const getPotentialResourcesAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',
+			isArray: false
+		};
 
-	private getProposalsForOppAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/for/:opportunityId',
-		isArray: true
-	}
+		const getRequestsAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/:proposalId',
+			isArray: true
+		};
 
-	private getPotentialResourcesAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',
-		isArray: false
-	}
+		const getMembersAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/members/:proposalId',
+			isArray: true
+		};
 
-	private getRequestsAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/requests/:proposalId',
-		isArray: true
-	}
+		const confirmMemberAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/confirm/:proposalId/:userId'
+		};
 
-	private getMembersAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/members/:proposalId',
-		isArray: true
-	}
+		const denyMemberAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/deny/:proposalId/:userId'
+		};
 
-	private confirmMemberAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/requests/confirm/:proposalId/:userId'
-	}
-
-	private denyMemberAction: resource.IActionDescriptor = {
-		method: 'GET',
-		url: '/api/proposals/requests/deny/:proposalId/:userId'
-	}
-
-	constructor($resource: resource.IResourceService, $log: ILogService) {
-		this.proposalsResourceClass = $resource(
+		return $resource(
 			'/api/proposals/:proposalId',
 			{
 				proposalId: '@_id'
 			},
 			{
-				create: this.createAction,
-				update: this.updateAction,
-				assign: this.assignAction,
-				assignswu: this.assignSWUAction,
-				removeDoc: this.removeDocAction,
-				makeRequest: this.makeRequestAction,
-				getMyProposal: this.getMyProposalAction,
-				getProposalsForOpp: this.getProposalsForOppAction,
-				getPotentialResources: this.getPotentialResourcesAction,
-				getRequests: this.getRequestsAction,
-				getMembers: this.getMembersAction,
-				confirmMember: this.confirmMemberAction,
-				denyMember: this.denyMemberAction
+				create: createAction,
+				update: updateAction,
+				assign: assignAction,
+				assignswu: assignSWUAction,
+				removeDoc: removeDocAction,
+				makeRequest: makeRequestAction,
+				getMyProposal: getMyProposalAction,
+				getProposalsForOpp: getProposalsForOppAction,
+				getPotentialResources: getPotentialResourcesAction,
+				getRequests: getRequestsAction,
+				getMembers: getMembersAction,
+				confirmMember: confirmMemberAction,
+				denyMember: denyMemberAction
 			}
-		) as IProposalsResourceClass;
+		) as IProposalService;
 	}
-
-	public getProposalResourceClass(): IProposalsResourceClass {
-		return this.proposalsResourceClass;
-	}
-}
-
-angular.module('proposals').service('proposalService', ProposalService);
+]);

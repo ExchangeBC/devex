@@ -19,7 +19,7 @@
 	// Controller for the master list of messagetemplates
 	//
 	// =========================================================================
-	.controller ('MessageTemplatesListController', ['templates', 'authenticationService', function (templates, authenticationService) {
+	.controller ('MessageTemplatesListController', ['templates', 'AuthenticationService', function (templates, authenticationService) {
 		var vm         = this;
 		vm.templates = templates;
 	}])
@@ -28,14 +28,14 @@
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateViewController', ['$sce', '$state', 'template', 'authenticationService', 'Notification', function ($sce, $state, template, authenticationService, Notification) {
+	.controller ('MessageTemplateViewController', ['$sce', '$state', 'template', 'AuthenticationService', 'Notification', function ($sce, $state, template, authenticationService, Notification) {
 		var vm                 = this;
 		vm.trust               = $sce.trustAsHtml;
 		vm.template          = template;
 		vm.auth                = authenticationService;
 		vm.canEdit              = authenticationService.isAdmin;
 	}])
-	.controller ('MessageViewController', ['$sce', '$location', '$state', '$rootScope', 'message', 'authenticationService', 'Notification', 'MessagesService', function ($sce, $location, $state, $rootScope, message, authenticationService, Notification, MessagesService) {
+	.controller ('MessageViewController', ['$sce', '$location', '$state', '$rootScope', 'message', 'AuthenticationService', 'Notification', 'MessagesService', function ($sce, $location, $state, $rootScope, message, authenticationService, Notification, MessagesService) {
 		var vm        = this;
 		vm.haveresult = false;
 		vm.resultmsg  = '';
@@ -84,7 +84,7 @@
 	// Controller the view of the template page
 	//
 	// =========================================================================
-	.controller ('MessageTemplateEditController', ['$scope', 'TINYMCE_OPTIONS', '$state', 'editing', 'template', 'authenticationService', 'Notification', 'MessageTemplatesService', function ($scope, TINYMCE_OPTIONS, $state, editing, template, authenticationService, Notification, MessageTemplatesService) {
+	.controller ('MessageTemplateEditController', ['$scope', 'TINYMCE_OPTIONS', '$state', 'editing', 'template', 'AuthenticationService', 'Notification', 'MessageTemplatesService', function ($scope, TINYMCE_OPTIONS, $state, editing, template, authenticationService, Notification, MessageTemplatesService) {
 		var qqq        = this;
 		qqq.template = template;
 		qqq.auth       = authenticationService;

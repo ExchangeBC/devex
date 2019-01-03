@@ -2,9 +2,9 @@
 
 import angular, { IRootScopeService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import CapabilitiesService, { ICapabilityResource } from '../services/CapabilitiesService';
-import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/CapabilitiesSkillsService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { ICapabilityResource, ICapabilitiesService } from '../services/CapabilitiesService';
+import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/CapabilitiesSkillsService';
 
 (() => {
 	angular
@@ -14,26 +14,26 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 			'$scope',
 			'$state',
 			'capability',
-			'authenticationService',
+			'AuthenticationService',
 			'Notification',
 			'TINYMCE_OPTIONS',
-			'capabilitiesService',
-			'capabilitySkillsService',
+			'CapabilitiesService',
+			'CapabilitySkillsService',
 			'ask',
 			function(
 				$scope: IRootScopeService,
 				$state: IStateService,
 				capability: ICapabilityResource,
-				authenticationService: AuthenticationService,
+				AuthenticationService: IAuthenticationService,
 				Notification: uiNotification.INotificationService,
 				TINYMCE_OPTIONS,
-				capabilitiesService: CapabilitiesService,
-				capabilitySkillsService: CapabilitySkillsService,
+				CapabilitiesService: ICapabilitiesService,
+				CapabilitySkillsService: ICapabilitySkillsService,
 				ask
 			) {
 				const qqq = this;
 				qqq.capability = capability;
-				qqq.auth = authenticationService.permissions();
+				qqq.auth = AuthenticationService.permissions();
 				qqq.tinymceOptions = TINYMCE_OPTIONS;
 				qqq.newskill = '';
 				qqq.editingskill = false;
@@ -58,9 +58,9 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 					try {
 						let newCapability: ICapabilityResource;
 						if (qqq.capability._id) {
-							newCapability = await capabilitiesService.getCapabilitiesResourceClass().update(qqq.capability).$promise;
+							newCapability = await CapabilitiesService.update(qqq.capability).$promise;
 						} else {
-							newCapability = await capabilitiesService.getCapabilitiesResourceClass().create(qqq.capability).$promise;
+							newCapability = await CapabilitiesService.create(qqq.capability).$promise;
 						}
 						qqq.capabilityForm.$setPristine();
 						Notification.success({
@@ -106,7 +106,7 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 					};
 
 					try {
-						const newSkill = await capabilitySkillsService.getCapabilitySkillResourceClass().create(capabilitySkill).$promise;
+						const newSkill = await CapabilitySkillsService.create(capabilitySkill).$promise;
 						qqq.capability.skills.push(newSkill);
 						qqq.savenow(true);
 						qqq.newskill = '';
@@ -153,7 +153,7 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 					qqq.editingskill.name = qqq.newskill;
 
 					try {
-						await capabilitySkillsService.getCapabilitySkillResourceClass().update(qqq.editingskill).$promise;
+						await CapabilitySkillsService.update(qqq.editingskill).$promise;
 						Notification.success({
 							title: 'Success',
 							message: '<i class="fas fa-check-circle"></i> Skill updated'
@@ -176,7 +176,7 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 					const response = await ask.yesNo(question);
 					if (response) {
 						try {
-							await capabilitySkillsService.getCapabilitySkillResourceClass().remove({ capabilityskillId: capabilitySkill._id }).$promise;
+							await CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
 							qqq.capability.skills = qqq.capability.skills.reduce((accum, current) => {
 								if (current.code !== capabilitySkill.code) {
 									accum.push(current);
@@ -203,11 +203,11 @@ import CapabilitySkillsService, { ICapabilitySkillResource } from '../services/C
 						try {
 							qqq.capability.skills.forEach(
 								async (capabilitySkill: ICapabilitySkillResource): Promise<void> => {
-									await capabilitySkillsService.getCapabilitySkillResourceClass().remove({ capabilityskillId: capabilitySkill._id }).$promise;
+									await CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
 								}
 							);
 
-							await capabilitiesService.getCapabilitiesResourceClass().remove({ capabilityId: capability._id }).$promise;
+							await CapabilitiesService.remove({ capabilityId: capability._id }).$promise;
 							$state.go('capabilities.list');
 							Notification.success({
 								title: 'Success',

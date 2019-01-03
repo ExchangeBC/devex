@@ -30,14 +30,19 @@
 				context		: '@'
 			},
 			templateUrl		: '/modules/users/client/views/settings/affiliations-directive.html',
-			controller		: ['$scope', 'Notification', 'OrgService', 'authenticationService', 'ask', function($scope, Notification, OrgService, authenticationService, ask) {
+			controller		: ['$scope', 'Notification', 'OrgService', 'AuthenticationService', 'ask', function($scope, Notification, OrgService, AuthenticationService, ask) {
 				var vm 			= this;
-				vm.auth			= authenticationService.permissions();
+				vm.auth			= AuthenticationService.permissions();
 				vm.context		= $scope.context;
-				vm.user			= authenticationService.user;
+				vm.user			= AuthenticationService.user;
 
 				function loadAffiliations() {
-					vm.affiliations = OrgService.my();
+					try {
+						vm.affiliations = OrgService.my();
+					} catch (error) {
+						Notification.error({message: error.message });
+					}
+
 				}
 
 				vm.removeAffiliation = function(affiliation) {
@@ -90,7 +95,7 @@
 						templateUrl: '/modules/users/client/views/settings/change-profile-modal.html',
 						controllerAs: 'qqq',
 						bindToController: true,
-						controller: ['$state', '$timeout', 'authenticationService', '$uibModalInstance', 'Upload', 'Notification', function ($state, $timeout, authenticationService, $uibModalInstance, Upload, Notification) {
+						controller: ['$state', '$timeout', 'AuthenticationService', '$uibModalInstance', 'Upload', 'Notification', function ($state, $timeout, authenticationService, $uibModalInstance, Upload, Notification) {
 							var qqq = this;
 							qqq.user = authenticationService.user;
 
@@ -126,7 +131,7 @@
 								}, function (response) {
 									if (response.status > 0) onErrorItem(response.data);
 								}, function (evt) {
-									qqq.progress = parseInt(100.0 * evt.loaded / evt.total, 10);
+									qqq.progress = 100.0 * evt.loaded / evt.total;
 								});
 							};
 

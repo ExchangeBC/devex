@@ -1,52 +1,53 @@
 'use strict';
 
-import angular, { IController, IFormController, IRootScopeService, uiNotification } from 'angular';
+import angular, { IController, IFormController, IRootScopeService, uiNotification, IScope, ui, IAngularBootstrapConfig } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource, IOrgService } from '../services/OrgService';
+import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { IModalInstanceService } from 'angular-ui-bootstrap';
 
 export class OrgAdminController implements IController {
-	public static $inject = ['$scope', '$state', 'org', 'OrgService', 'UsersService', 'authenticationService', 'Notification', 'ask'];
+	public static $inject = ['$scope', '$state', 'org', 'OrgService', 'UsersService', 'AuthenticationService', 'Notification', 'ask', 'capabilities', 'dataService', 'TINYMCE_OPTIONS', '$uibModal'];
 	public orgForm: IFormController;
-	public tabs: any[];
+	public cities: string[];
+	public emailList = '';
 
 	private user: IUserResource;
 
-	constructor(private $scope: IRootScopeService, private $state: IStateService, public org: IOrgResource, private OrgService: IOrgService, private UsersService: IUserService, private authenticationService: AuthenticationService, private Notification: uiNotification.INotificationService, private ask) {
-		this.$state.go('orgadmin.profile');
 
-		this.user = new this.UsersService(this.authenticationService.user);
-
-		this.tabs = [
-			{
-				name: 'Business Info',
-				route: 'orgadmin.profile'
-			},
-			{
-				name: 'Team Members',
-				route: 'orgadmin.members'
-			},
-			{
-				name: 'Terms',
-				route: 'orgadmin.terms'
-			}
-		];
-	}
-
-	public openTab(tab: any): void {
-		this.$state.go(tab.route);
+	constructor(
+		private $scope: IScope,
+		private $state: IStateService,
+		public org: IOrgResource,
+		private OrgService: IOrgService,
+		private UsersService: IUserService,
+		private AuthenticationService: IAuthenticationService,
+		private Notification: uiNotification.INotificationService,
+		private ask,
+		public capabilities: ICapabilityResource[],
+		private dataService,
+		public TINYMCE_OPTIONS,
+		private $uibModal: ui.bootstrap.IModalService
+	) {
+		this.user = new this.UsersService(this.AuthenticationService.user);
+		this.cities = this.dataService.cities;
+		this.refreshOrg(this.org);
 	}
 
 	public async save(isValid: true): Promise<void> {
-
 		if (!isValid) {
 			this.$scope.$broadcast('show-errors-check-validity', 'vm.form.orgForm');
 			return;
 		}
 
 		// put together the full website from the protocol and address
-		this.org.website = this.org.websiteProtocol + this.org.websiteAddress;
+		if (this.org.websiteAddress) {
+			this.org.website = this.org.websiteProtocol + this.org.websiteAddress;
+		} else {
+			this.org.website= '';
+		}
 
 		// save the org
 		try {
@@ -57,14 +58,12 @@ export class OrgAdminController implements IController {
 				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Company saved'
 			});
-
 		} catch (error) {
 			this.handleError(error);
 		}
-	};
+	}
 
 	public async remove(): Promise<void> {
-
 		const question = 'Please confirm you want to delete your company.  This will invalidate any submitted proposals and team members will no longer be associated.';
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
@@ -73,7 +72,7 @@ export class OrgAdminController implements IController {
 				this.user.orgsMember = this.user.orgsMember.filter(org => org._id !== this.org._id);
 				this.user.orgsAdmin = this.user.orgsAdmin.filter(org => org._id !== this.org._id);
 				const updatedUser = await this.UsersService.update(this.user).$promise;
-				this.authenticationService.user = updatedUser;
+				this.AuthenticationService.user = updatedUser;
 
 				// delete the org
 				await this.org.$remove();
@@ -85,12 +84,57 @@ export class OrgAdminController implements IController {
 				});
 
 				this.$state.go('orgs.list');
-
 			} catch (error) {
 				this.handleError(error);
 			}
-
 		}
+	}
+
+	public orgHasCapability(capability: ICapabilityResource): boolean {
+		return this.org.capabilities.map(cap => cap.code).includes(capability.code);
+	}
+
+	// add or remove members
+	public async addMembers(): Promise<void> {
+
+		if (this.emailList !== '') {
+
+			this.org.additions = this.emailList.toLowerCase();
+			try {
+				const updatedOrg = await this.OrgService.update(this.org).$promise;
+				this.emailList = '';
+				this.orgForm.$setPristine();
+				this.refreshOrg(updatedOrg);
+				this.displayInvitationCompleteDialog();
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	};
+
+	private async displayInvitationCompleteDialog(): Promise<void> {
+		if (!this.org.emaillist) {
+			return;
+		}
+
+		await this.$uibModal.open({
+				size: 'sm',
+				templateUrl: '/modules/orgs/client/views/org-members-results.html',
+				controller: [
+					'$scope',
+					'$uibModalInstance',
+					($scope: any, $uibModalInstance: ui.bootstrap.IModalServiceInstance): void => {
+						$scope.data = {
+							found: this.org.emaillist.found,
+							notfound: this.org.emaillist.notFound
+						};
+
+						$scope.close = function() {
+							$uibModalInstance.close();
+						};
+					}
+				]
+		});
 	};
 
 	private refreshOrg(newOrg: IOrgResource): void {
@@ -99,17 +143,21 @@ export class OrgAdminController implements IController {
 	}
 
 	private parseWebsite() {
-		const parts = this.org.website.split('://');
-		if (parts[0] === 'https') {
+		if (!this.org.website) {
 			this.org.websiteProtocol = 'https://';
 		} else {
-			this.org.websiteProtocol = 'http://';
-		}
+			const parts = this.org.website.split('://');
+			if (parts[0] === 'https') {
+				this.org.websiteProtocol = 'https://';
+			} else {
+				this.org.websiteProtocol = 'http://';
+			}
 
-		if (parts.length > 1) {
-			this.org.websiteAddress = parts[1];
-		} else {
-			this.org.websiteAddress = this.org.website;
+			if (parts.length > 1) {
+				this.org.websiteAddress = parts[1];
+			} else {
+				this.org.websiteAddress = this.org.website;
+			}
 		}
 	}
 

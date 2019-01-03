@@ -5,13 +5,13 @@ import angular, { IController, IFormController, IRootScopeService, uiNotificatio
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment';
-import CapabilitiesService, { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilityResource, ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IProject } from '../../../projects/shared/IProjectDTO';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IPhase, ITeamQuestion } from '../../shared/IOpportunityDTO';
 import '../css/opportunities.css';
-import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
 
 export class OpportunityEditSWUController implements IController {
 	public static $inject = [
@@ -20,13 +20,13 @@ export class OpportunityEditSWUController implements IController {
 		'opportunity',
 		'editing',
 		'projects',
-		'authenticationService',
+		'AuthenticationService',
 		'Notification',
 		'dataService',
 		'ask',
-		'capabilitiesService',
+		'CapabilitiesService',
 		'TINYMCE_OPTIONS',
-		'opportunitiesService'
+		'OpportunitiesService'
 	];
 
 	public isUser: boolean;
@@ -55,19 +55,19 @@ export class OpportunityEditSWUController implements IController {
 		public opportunity: IOpportunityResource,
 		private editing: boolean,
 		public projects: IProject[],
-		private authenticationService: AuthenticationService,
+		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
 		private dataService,
 		private ask,
-		private capabilitiesService: CapabilitiesService,
+		private CapabilitiesService: ICapabilitiesService,
 		public TINYMCE_OPTIONS,
-		private opportunitiesService: OpportunitiesService
+		private OpportunitiesService: IOpportunitiesService
 	) {
 		this.toggleSelectedSkill = this.toggleSelectedSkill.bind(this);
 
-		this.isUser = !!this.authenticationService.user;
-		this.isAdmin = this.isUser && this.authenticationService.user.roles.indexOf('admin') !== -1;
-		this.isGov = this.isUser && this.authenticationService.user.roles.indexOf('gov') !== -1;
+		this.isUser = !!this.AuthenticationService.user;
+		this.isAdmin = this.isUser && this.AuthenticationService.user.roles.indexOf('admin') !== -1;
+		this.isGov = this.isUser && this.AuthenticationService.user.roles.indexOf('gov') !== -1;
 
 		this.closing = 'CLOSED';
 		this.cities = this.dataService.cities;
@@ -137,9 +137,9 @@ export class OpportunityEditSWUController implements IController {
 		let updatedOpportunity: IOpportunityResource;
 		try {
 			if (this.editing) {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity).$promise;
+				updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			} else {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().create(this.opportunity).$promise;
+				updatedOpportunity = await this.OpportunitiesService.create(this.opportunity).$promise;
 			}
 
 			this.refreshOpportunity(updatedOpportunity);
@@ -172,7 +172,7 @@ export class OpportunityEditSWUController implements IController {
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
 			try {
-				await this.opportunitiesService.getOpportunityResourceClass().remove({ opportunityId: this.opportunity.code }).$promise;
+				await this.OpportunitiesService.remove({ opportunityId: this.opportunity.code }).$promise;
 
 				this.$state.go('opportunities.list');
 				this.Notification.success({
@@ -357,7 +357,7 @@ export class OpportunityEditSWUController implements IController {
 	public addNewAddendum(): void {
 		this.opportunity.addenda.push({
 			description: '',
-			createdBy: this.authenticationService.user,
+			createdBy: this.AuthenticationService.user,
 			createdOn: new Date()
 		});
 
@@ -498,7 +498,7 @@ export class OpportunityEditSWUController implements IController {
 
 	private refreshCapabilities(): void {
 		// Retrieve a list of the complete capability set available
-		this.allCapabilities = this.capabilitiesService.getCapabilitiesResourceClass().list();
+		this.allCapabilities = this.CapabilitiesService.list();
 	}
 
 	// Set the times on the opportunity dates to a specified time

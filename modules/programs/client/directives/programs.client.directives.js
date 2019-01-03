@@ -12,7 +12,7 @@
 			controllerAs : 'vm',
 			scope        : {},
 			templateUrl  : '/modules/programs/client/views/list.programs.directive.html',
-			controller   : ['$scope', 'ProgramsService', 'authenticationService', 'Notification', function ($scope, ProgramsService, authenticationService, Notification) {
+			controller   : ['$scope', 'ProgramsService', 'AuthenticationService', 'Notification', function ($scope, ProgramsService, authenticationService, Notification) {
 				var vm = this;
 				var isAdmin  = authenticationService.user && !!~authenticationService.user.roles.indexOf ('admin');
 				var isGov    = authenticationService.user && !!~authenticationService.user.roles.indexOf ('gov');

@@ -5,7 +5,7 @@
 		.module('users')
 		.controller('ChangeProfilePictureController', ChangeProfilePictureController);
 
-	ChangeProfilePictureController.$inject = ['$timeout', 'authenticationService', 'Upload', 'Notification'];
+	ChangeProfilePictureController.$inject = ['$timeout', 'AuthenticationService', 'Upload', 'Notification'];
 
 	function ChangeProfilePictureController($timeout, authenticationService, Upload, Notification) {
 		var vm = this;

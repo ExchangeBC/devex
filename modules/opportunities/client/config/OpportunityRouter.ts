@@ -2,13 +2,14 @@
 
 import angular, { resource } from 'angular';
 import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
-import CapabilitiesService, { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilityResource, ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
 import { IProgram } from '../../../programs/shared/IProgramDTO';
 import { IProject } from '../../../projects/shared/IProjectDTO';
-import ProposalService, { IProposalResource } from '../../../proposals/client/services/ProposalService';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+import { IProposalResource, IProposalService } from '../../../proposals/client/services/ProposalService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
+import { IOrgService } from '../../../orgs/client/services/OrgService';
 
 export default class OpportunityRouter {
 	public static $inject = ['$stateProvider'];
@@ -38,9 +39,9 @@ export default class OpportunityRouter {
 			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: [
-					'capabilitiesService',
-					(capabilitiesService: CapabilitiesService) => {
-						return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+					'CapabilitiesService',
+					(CapabilitiesService: ICapabilitiesService) => {
+						return CapabilitiesService.query().$promise;
 					}
 				]
 			}
@@ -69,23 +70,23 @@ export default class OpportunityRouter {
 			resolve: {
 				opportunity: [
 					'$stateParams',
-					'opportunitiesService',
-					async ($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService): Promise<IOpportunityResource> => {
-						return await opportunitiesService.getOpportunityResourceClass().get({
+					'OpportunitiesService',
+					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
 					}
 				],
 				myproposal: [
 					'$stateParams',
-					'proposalService',
-					'authenticationService',
-					async ($stateParams: IStateParamsService, proposalService: ProposalService, authenticationService: AuthenticationService): Promise<IProposalResource> => {
-						if (!authenticationService.user) {
+					'ProposalService',
+					'AuthenticationService',
+					async ($stateParams: IStateParamsService, ProposalService: IProposalService, AuthenticationService: IAuthenticationService): Promise<IProposalResource> => {
+						if (!AuthenticationService.user) {
 							return null;
 						}
 
-						return await proposalService.getProposalResourceClass().getMyProposal({
+						return await ProposalService.getMyProposal({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
 					}
@@ -110,18 +111,18 @@ export default class OpportunityRouter {
 			resolve: {
 				opportunity: [
 					'$stateParams',
-					'opportunitiesService',
-					async ($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService): Promise<IOpportunityResource> => {
-						return await opportunitiesService.getOpportunityResourceClass().get({
+					'OpportunitiesService',
+					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
 					}
 				],
 				org: [
-					'authenticationService',
+					'AuthenticationService',
 					'OrgService',
-					async (authenticationService: AuthenticationService, OrgService): Promise<IOrg> => {
-						if (!authenticationService.user) {
+					async (AuthenticationService: IAuthenticationService, OrgService: IOrgService): Promise<IOrg> => {
+						if (!AuthenticationService.user) {
 							return null;
 						}
 
@@ -135,11 +136,11 @@ export default class OpportunityRouter {
 				],
 				myproposal: [
 					'$stateParams',
-					'proposalService',
-					'authenticationService',
+					'ProposalService',
+					'AuthenticationService',
 					'org',
-					async ($stateParams: IStateParamsService, proposalService: ProposalService, authenticationService: AuthenticationService, org: IOrg): Promise<IProposalResource> => {
-						if (!authenticationService.user) {
+					async ($stateParams: IStateParamsService, ProposalService: IProposalService, AuthenticationService: IAuthenticationService, org: IOrg): Promise<IProposalResource> => {
+						if (!AuthenticationService.user) {
 							return null;
 						}
 
@@ -147,7 +148,7 @@ export default class OpportunityRouter {
 							return null;
 						}
 
-						return await proposalService.getProposalResourceClass().getMyProposal({
+						return await ProposalService.getMyProposal({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
 					}
@@ -170,9 +171,9 @@ export default class OpportunityRouter {
 			template: '<ui-view autoscroll="true"></ui-view>',
 			resolve: {
 				capabilities: [
-					'capabilitiesService',
-					async (capabilitiesService: CapabilitiesService): Promise<resource.IResourceArray<ICapabilityResource>> => {
-						return await capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+					'CapabilitiesService',
+					async (CapabilitiesService: ICapabilitiesService): Promise<resource.IResourceArray<ICapabilityResource>> => {
+						return await CapabilitiesService.query().$promise;
 					}
 				],
 				programs: [
@@ -192,9 +193,9 @@ export default class OpportunityRouter {
 				},
 				opportunity: [
 					'$stateParams',
-					'opportunitiesService',
-					async ($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService): Promise<IOpportunityResource> => {
-						return await opportunitiesService.getOpportunityResourceClass().get({
+					'OpportunitiesService',
+					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
 					}
@@ -245,10 +246,9 @@ export default class OpportunityRouter {
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: [
-					'opportunitiesService',
-					(opportunitiesService: OpportunitiesService): IOpportunityResource => {
-						const resourceClass = opportunitiesService.getOpportunityResourceClass();
-						return new resourceClass();
+					'OpportunitiesService',
+					(OpportunitiesService: IOpportunitiesService): IOpportunityResource => {
+						return new OpportunitiesService();
 					}
 				],
 				projects: [
@@ -280,16 +280,15 @@ export default class OpportunityRouter {
 			controllerAs: 'vm',
 			resolve: {
 				opportunity: [
-					'opportunitiesService',
-					(opportunitiesService: OpportunitiesService): IOpportunityResource => {
-						const resourceClass = opportunitiesService.getOpportunityResourceClass();
-						return new resourceClass();
+					'OpportunitiesService',
+					(OpportunitiesService: IOpportunitiesService): IOpportunityResource => {
+						return new OpportunitiesService();
 					}
 				],
 				capabilities: [
-					'capabilitiesService',
-					async (capabilitiesService: CapabilitiesService): Promise<resource.IResourceArray<ICapabilityResource>> => {
-						return await capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+					'CapabilitiesService',
+					async (CapabilitiesService: ICapabilitiesService): Promise<resource.IResourceArray<ICapabilityResource>> => {
+						return await CapabilitiesService.query().$promise;
 					}
 				],
 				programs: [

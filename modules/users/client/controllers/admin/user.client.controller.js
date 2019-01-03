@@ -5,7 +5,7 @@ import '../../css/users.css';
 
 	angular.module('users.admin').controller('UserController', UserController);
 
-	UserController.$inject = ['$scope', '$state', '$window', 'authenticationService', 'userResolve', 'Notification'];
+	UserController.$inject = ['$scope', '$state', '$window', 'AuthenticationService', 'userResolve', 'Notification'];
 
 	function UserController($scope, $state, $window, authenticationService, user, Notification) {
 		var vm = this;

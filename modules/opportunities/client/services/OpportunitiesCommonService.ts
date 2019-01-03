@@ -2,21 +2,30 @@
 
 import angular, { IPromise, uiNotification } from 'angular';
 import _ from 'lodash';
-import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import IOpportunityDocument, { IPhase } from '../../server/interfaces/IOpportunityDocument';
-import OpportunitiesService, { IOpportunityResource } from './OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from './OpportunitiesService';
+import { IPhase } from '../../shared/IOpportunityDTO';
+import { ICapability } from '../../../capabilities/shared/ICapabilityDTO';
+import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 
-export default class OpportunitiesCommonService {
-	public static $inject = ['authenticationService', 'opportunitiesService', 'Notification'];
+export interface IOpportunitiesCommonService {
+	isWatching(opportunity: IOpportunityResource): boolean;
+	addWatch(opportunity: IOpportunityResource): boolean;
+	removeWatch(opportunity: IOpportunityResource): boolean;
+	publishStatus(opportunity: IOpportunityResource): any[];
+	requestApprovalCode(opportunity: IOpportunityResource): Promise<IOpportunityResource>;
+	submitApprovalCode(opportunity: IOpportunityResource, submittedCode: string, action: string): IPromise<IOpportunityResource>;
+	getTechnicalSkills(opportunity: IOpportunityResource): ICapabilitySkill[];
+	getCapabilitiesForPhase(phase: IPhase): ICapability[];
+}
 
-	constructor(private authenticationService: AuthenticationService, private opportunitiesService: OpportunitiesService, private Notification: uiNotification.INotificationService) {}
+class OpportunitiesCommonService implements IOpportunitiesCommonService {
+	constructor(private AuthenticationService: IAuthenticationService, private OpportunitiesService: IOpportunitiesService, private Notification: uiNotification.INotificationService) {}
 
 	// Check if the current user is currently watching this opportunity
-	public isWatching(opportunity: IOpportunityDocument): boolean {
-		if (this.authenticationService.user) {
-			return opportunity.watchers.indexOf(this.authenticationService.user._id) !== -1;
+	public isWatching(opportunity: IOpportunityResource): boolean {
+		if (this.AuthenticationService.user) {
+			return opportunity.watchers.indexOf(this.AuthenticationService.user) !== -1;
 		} else {
 			return false;
 		}
@@ -24,9 +33,9 @@ export default class OpportunitiesCommonService {
 
 	// Add current user to the watchers list - this assumes that ths function could
 	// not be run except if the user was not already on the list
-	public addWatch(opportunity: IOpportunityDocument): boolean {
-		opportunity.watchers.push(this.authenticationService.user._id);
-		this.opportunitiesService.getOpportunityResourceClass().addWatch({
+	public addWatch(opportunity: IOpportunityResource): boolean {
+		opportunity.watchers.push(this.AuthenticationService.user);
+		this.OpportunitiesService.addWatch({
 			opportunityId: opportunity._id
 		});
 		this.Notification.success({ message: '<i class="fas fa-eye"></i><br/><br/>You are now watching<br/>' + opportunity.name });
@@ -34,9 +43,9 @@ export default class OpportunitiesCommonService {
 	}
 
 	// Remove the current user from the list
-	public removeWatch(opportunity: IOpportunityDocument): boolean {
-		opportunity.watchers.splice(opportunity.watchers.indexOf(this.authenticationService.user._id), 1);
-		this.opportunitiesService.getOpportunityResourceClass().removeWatch({
+	public removeWatch(opportunity: IOpportunityResource): boolean {
+		opportunity.watchers.splice(opportunity.watchers.indexOf(this.AuthenticationService.user), 1);
+		this.OpportunitiesService.removeWatch({
 			opportunityId: opportunity._id
 		});
 		this.Notification.success({ message: '<i class="fas fa-eye-slash"></i><br/><br/>You are no longer watching<br/>' + opportunity.name });
@@ -110,7 +119,7 @@ export default class OpportunitiesCommonService {
 	public async requestApprovalCode(opportunity: IOpportunityResource): Promise<IOpportunityResource> {
 		const approvalInfo = opportunity.intermediateApproval.state === 'sent' ? opportunity.intermediateApproval : opportunity.finalApproval;
 		if (approvalInfo.twoFASendCount < 5) {
-			return await this.opportunitiesService.getOpportunityResourceClass().requestCode({ opportunityId: opportunity.code });
+			return await this.OpportunitiesService.requestCode({ opportunityId: opportunity.code });
 		} else {
 			throw new Error('Number of sent codes exceeded');
 		}
@@ -123,7 +132,7 @@ export default class OpportunitiesCommonService {
 		const approvalInfo = isPreApproval ? opportunity.intermediateApproval : opportunity.finalApproval;
 
 		if (approvalInfo.twoFAAttemptCount < 5) {
-			return this.opportunitiesService.getOpportunityResourceClass().submitCode({
+			return this.OpportunitiesService.submitCode({
 				opportunityId: opportunity.code,
 				code: submittedCode,
 				action: action.toLowerCase(),
@@ -136,7 +145,7 @@ export default class OpportunitiesCommonService {
 
 	// Return a list of all technical skills for an opportunity
 	// Merges and removes duplicates across phases
-	public getTechnicalSkills(opportunity: IOpportunityDocument): ICapabilitySkillDocument[] {
+	public getTechnicalSkills(opportunity: IOpportunityResource): ICapabilitySkill[] {
 		return _.unionWith(
 			opportunity.phases.inception.capabilitySkills,
 			opportunity.phases.proto.capabilitySkills,
@@ -148,7 +157,7 @@ export default class OpportunitiesCommonService {
 	// Return a list of required capabilities for the given phase
 	// Each returned capabilitity in the list is marked with fullTime = true if
 	// it is a core capability
-	public getCapabilitiesForPhase(phase: IPhase): ICapabilityDocument[] {
+	public getCapabilitiesForPhase(phase: IPhase): ICapability[] {
 		const coreCodes = phase.capabilitiesCore.map(cap => {
 			return cap.code;
 		});
@@ -163,4 +172,11 @@ export default class OpportunitiesCommonService {
 	}
 }
 
-angular.module('opportunities.services').service('opportunitiesCommonService', OpportunitiesCommonService);
+angular.module('opportunities.services').factory('OpportunitiesCommonService', [
+	'AuthenticationService',
+	'OpportunitiesService',
+	'Notification',
+	(AuthenticationService: IAuthenticationService, OpportunitiesService: IOpportunitiesService, Notification: uiNotification.INotificationService): IOpportunitiesCommonService => {
+		return new OpportunitiesCommonService(AuthenticationService, OpportunitiesService, Notification);
+	}
+]);

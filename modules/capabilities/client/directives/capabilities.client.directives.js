@@ -16,7 +16,7 @@
 				capabilities : '='
 			},
 			templateUrl  : '/modules/capabilities/client/views/list.capabilities.directive.html',
-			controller   : ['$sce', '$rootScope', '$scope', 'capabilitiesService', 'authenticationService', function ($sce, $rootScope, $scope, capabilitiesService, authenticationService) {
+			controller   : ['$sce', '$rootScope', '$scope', 'CapabilitiesService', 'AuthenticationService', function ($sce, $rootScope, $scope, CapabilitiesService, authenticationService) {
 				var vm          = this;
 				vm.trust        = $sce.trustAsHtml;
 				vm.auth         = authenticationService.permissions ();
@@ -25,7 +25,7 @@
 				vm.context      = $scope.context;
 				vm.capabilities = $scope.capabilities;
 				$rootScope.$on ('updateCapabilities', function () {
-					vm.capabilities = capabilitiesService.getOpportunityResourceClass().query ();
+					vm.capabilities = CapabilitiesService.query ();
 				});
 			}]
 		}
@@ -45,9 +45,9 @@
 				capability : '='
 			},
 			templateUrl  : '/modules/capabilities/client/views/view.capability.directive.html',
-			controller   : ['$scope', 'authenticationService', function ($scope, authenticationService) {
+			controller   : ['$scope', 'AuthenticationService', function ($scope, AuthenticationService) {
 				var vm        = this;
-				vm.auth       = authenticationService;
+				vm.auth       = AuthenticationService;
 				vm.mode       = $scope.mode || 'page';
 				vm.canEdit    = vm.auth.isAdmin;
 				vm.capability = $scope.capability;

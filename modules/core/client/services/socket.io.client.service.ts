@@ -7,7 +7,7 @@ import io from 'socket.io-client';
 	// Create the Socket.io wrapper service
 	angular.module('core').factory('Socket', Socket);
 
-	Socket.$inject = ['authenticationService', '$timeout'];
+	Socket.$inject = ['AuthenticationService', '$timeout'];
 
 	function Socket(authenticationService, $timeout) {
 		const service = {

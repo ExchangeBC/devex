@@ -1,18 +1,18 @@
 'use strict';
 
 import angular, { IController, ISCEService } from 'angular';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IOrgResource } from '../services/OrgService';
 
 export class OrgViewController implements IController {
-	public static $inject = ['org', 'authenticationService'];
+	public static $inject = ['org', 'AuthenticationService'];
 
 	public user: IUser;
 	public canEdit: boolean;
 
-	constructor(public org: IOrgResource, private authenticationService: AuthenticationService) {
-		this.user = this.authenticationService.user;
+	constructor(public org: IOrgResource, private AuthenticationService: IAuthenticationService) {
+		this.user = this.AuthenticationService.user;
 		this.canEdit = this.isAdmin() || this.isOrgAdmin() || this.isOrgOwner();
 	}
 

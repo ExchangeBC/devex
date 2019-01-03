@@ -19,7 +19,7 @@
 					'$scope',
 					'$sce',
 					'OrgService',
-					'authenticationService',
+					'AuthenticationService',
 					function($scope, $sce, OrgService, authenticationService) {
 						var vm = this;
 						var isUser = authenticationService.user;
@@ -105,7 +105,7 @@
 								controller: [
 									'$rootScope',
 									'$timeout',
-									'authenticationService',
+									'AuthenticationService',
 									'org',
 									'$uibModalInstance',
 									'Upload',

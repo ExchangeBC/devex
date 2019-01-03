@@ -23,7 +23,7 @@ import angular, { IDirective, IScope } from 'angular';
 					controller: [
 						'$scope',
 						'$rootScope',
-						'authenticationService',
+						'AuthenticationService',
 						function($scope, $rootScope, authenticationService) {
 							const vm = this;
 							const isUser = authenticationService.user;

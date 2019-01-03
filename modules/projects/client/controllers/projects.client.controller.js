@@ -25,7 +25,7 @@ import '../css/projects.css';
 			'$sce',
 			'$stateParams',
 			'project',
-			'authenticationService',
+			'AuthenticationService',
 			'ProjectsService',
 			'Notification',
 			function($sce, $stateParams, project, authenticationService, ProjectsService, Notification) {
@@ -107,7 +107,7 @@ import '../css/projects.css';
 			'project',
 			'editing',
 			'programs',
-			'authenticationService',
+			'AuthenticationService',
 			'Notification',
 			'previousState',
 			function(

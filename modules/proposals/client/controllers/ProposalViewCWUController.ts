@@ -2,16 +2,16 @@
 
 import angular, { uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
 import { IProposalResource } from '../services/ProposalService';
+import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
 
 export default class ProposalViewCWUController {
-	public static $inject = ['$state', 'proposal', 'opportunitiesService', 'Notification', 'ask'];
+	public static $inject = ['$state', 'proposal', 'OpportunitiesService', 'Notification', 'ask'];
 
 	constructor(
 		private $state: IStateService,
 		public proposal: IProposalResource,
-		private opportunitiesService: OpportunitiesService,
+		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,
 		private ask
 	) {}
@@ -43,7 +43,7 @@ export default class ProposalViewCWUController {
 		const choice = await this.ask.yesNo(confirm);
 		if (choice) {
 			try {
-				await this.opportunitiesService.getOpportunityResourceClass().assign({
+				await this.OpportunitiesService.assign({
 					opportunityId: this.proposal.opportunity.code,
 					proposalId: this.proposal._id
 				}).$promise;

@@ -17,7 +17,7 @@ export interface IUserResource extends resource.IResource<IUserResource>, IUser 
 }
 
 export interface IUserService extends resource.IResourceClass<IUserResource> {
-	update(user: IUserResource): IUserResource;
+	update(user: IUserResource | IUser): IUserResource;
 	removeSelf(): IUserResource;
 	updatePassword(params: IUserServiceParams): void;
 	self(): IUserResource;

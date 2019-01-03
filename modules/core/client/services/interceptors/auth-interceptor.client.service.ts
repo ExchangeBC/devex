@@ -3,7 +3,7 @@
 
 	angular.module('core').factory('authInterceptor', authInterceptor);
 
-	authInterceptor.$inject = ['$q', '$injector', 'authenticationService'];
+	authInterceptor.$inject = ['$q', '$injector', 'AuthenticationService'];
 
 	function authInterceptor($q, $injector, authenticationService) {
 		const service = {

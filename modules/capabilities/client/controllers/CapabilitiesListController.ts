@@ -8,7 +8,7 @@ import angular from 'angular';
 		// Controller for the master list of capabilities
 		.controller('CapabilitiesListController', [
 			'capabilities',
-			'authenticationService',
+			'AuthenticationService',
 			function(capabilities, authenticationService) {
 				const vm = this;
 				vm.capabilities = capabilities;

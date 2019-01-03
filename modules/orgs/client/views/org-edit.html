@@ -35,11 +35,26 @@
       </div>
 
       <uib-tabset>
-        <uib-tab index="$index" ng-repeat="tab in vm.tabs" ng-click="vm.openTab(tab)">
-          <uib-tab-heading>{{tab.name}}</uib-tab-heading>
-          <div ui-view></div>
+        <uib-tab index="0">
+          <uib-tab-heading>
+            Business Info
+          </uib-tab-heading>
+          <div ng-include="'/modules/orgs/client/views/org-main.html'"></div>
         </uib-tab>
 
+        <uib-tab index="1">
+          <uib-tab-heading>
+            Team Members
+          </uib-tab-heading>
+          <div ng-include="'/modules/orgs/client/views/org-members.html'"></div>
+        </uib-tab>
+
+        <uib-tab index="2">
+          <uib-tab-heading>
+            Terms
+          </uib-tab-heading>
+          <div ng-include="'/modules/orgs/client/views/org-terms.html'"></div>
+        </uib-tab>
       </uib-tabset>
 
       <div class="bg-light rounded px-3 py-2">

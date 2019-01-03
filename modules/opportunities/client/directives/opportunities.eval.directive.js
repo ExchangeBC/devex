@@ -16,13 +16,13 @@
 				controller: [
 					'$scope',
 					'$state',
-					'authenticationService',
+					'AuthenticationService',
 					'Notification',
-					'proposalService',
+					'ProposalService',
 					'ask',
 					'modalService',
-					'opportunitiesService',
-					function($scope, $state, authenticationService, Notification, proposalService, ask, modalService, OpportunitiesService) {
+					'OpportunitiesService',
+					function($scope, $state, authenticationService, Notification, ProposalService, ask, modalService, OpportunitiesService) {
 						var vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.authentication = authenticationService;
@@ -90,7 +90,7 @@
 						var buildQuestionPivot = function() {
 							return new Promise(function(resolve, reject) {
 								// Fetch the proposals for this opportunity and build the pivot out of the responses
-								proposalService.getProposalResourceClass().getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(
+								ProposalService.getProposalsForOpp({ opportunityId: vm.opportunity._id }).$promise.then(
 									function(proposals) {
 										var responses = [];
 										vm.opportunity.teamQuestions.forEach(function(teamQuestion, index) {
@@ -811,7 +811,7 @@
 							var message = 'Are you sure you want to assign this opportunity to this proponent?';
 							ask.yesNo(message).then(function(resp) {
 								if (resp) {
-									proposalService.getProposalResourceClass().assignswu(proposal).$promise.then(
+									ProposalService.getProposalResourceClass().assignswu(proposal).$promise.then(
 										function(response) {
 											vm.proposals[vm.proposals.indexOf(proposal)] = response;
 											proposal = response;

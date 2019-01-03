@@ -2,12 +2,12 @@
 
 import angular, { IController, ILocationService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
-import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
+import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
 
 export default class OpportunityViewCWUController implements IController {
-	public static $inject = ['$state', '$location', 'opportunity', 'authenticationService', 'opportunitiesService', 'Notification', 'ask', 'myproposal', 'opportunitiesCommonService'];
+	public static $inject = ['$state', '$location', 'opportunity', 'AuthenticationService', 'OpportunitiesService', 'Notification', 'ask', 'myproposal', 'OpportunitiesCommonService'];
 
 	public showPreApproval: boolean;
 	public showFinalApproval: boolean;
@@ -33,25 +33,25 @@ export default class OpportunityViewCWUController implements IController {
 		private $state: IStateService,
 		private $location: ILocationService,
 		public opportunity: IOpportunityResource,
-		private authenticationService: AuthenticationService,
-		private opportunitiesService: OpportunitiesService,
+		private AuthenticationService: IAuthenticationService,
+		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,
 		private ask,
 		public myproposal,
-		private opportunitiesCommonService: OpportunitiesCommonService
+		private OpportunitiesCommonService: IOpportunitiesCommonService
 	) {
 		// set up roles/permissions
-		this.isUser = !!this.authenticationService.user;
-		this.isAdmin = this.isUser && this.authenticationService.user.roles.indexOf('admin') !== -1;
-		this.isGov = this.isUser && this.authenticationService.user.roles.indexOf('gov') !== -1;
-		this.hasEmail = this.isUser && this.authenticationService.user.email !== '';
+		this.isUser = !!this.AuthenticationService.user;
+		this.isAdmin = this.isUser && this.AuthenticationService.user.roles.indexOf('admin') !== -1;
+		this.isGov = this.isUser && this.AuthenticationService.user.roles.indexOf('gov') !== -1;
+		this.hasEmail = this.isUser && this.AuthenticationService.user.email !== '';
 
 		this.refreshOpportunity(this.opportunity);
 	}
 
 	public async requestApprovalCode(): Promise<void> {
 		try {
-			const updatedOpportunity = await this.opportunitiesCommonService.requestApprovalCode(this.opportunity);
+			const updatedOpportunity = await this.OpportunitiesCommonService.requestApprovalCode(this.opportunity);
 			this.refreshOpportunity(updatedOpportunity);
 
 			this.Notification.success({
@@ -65,7 +65,7 @@ export default class OpportunityViewCWUController implements IController {
 
 	public async submitApprovalCode(): Promise<void> {
 		try {
-			const updatedOpportunity = await this.opportunitiesCommonService.submitApprovalCode(this.opportunity, this.twoFACode, this.approvalAction);
+			const updatedOpportunity = await this.OpportunitiesCommonService.submitApprovalCode(this.opportunity, this.twoFACode, this.approvalAction);
 			this.refreshOpportunity(updatedOpportunity);
 
 			let responseMessage: string;
@@ -93,7 +93,7 @@ export default class OpportunityViewCWUController implements IController {
 
 		try {
 			this.opportunity.approvalRequired = false;
-			const updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity).$promise;
+			const updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			this.refreshOpportunity(updatedOpportunity);
 			this.Notification.success({
 				title: 'Success',
@@ -112,7 +112,7 @@ export default class OpportunityViewCWUController implements IController {
 
 		try {
 			this.opportunity.approvalRequired = true;
-			const updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity).$promise;
+			const updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			this.refreshOpportunity(updatedOpportunity);
 			this.Notification.success({
 				title: 'Success',
@@ -132,7 +132,7 @@ export default class OpportunityViewCWUController implements IController {
 		const publishedState = this.opportunity.isPublished;
 		const publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 		const publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-		const publishMethod = isToBePublished ? this.opportunitiesService.getOpportunityResourceClass().publish : this.opportunitiesService.getOpportunityResourceClass().unpublish;
+		const publishMethod = isToBePublished ? this.OpportunitiesService.publish : this.OpportunitiesService.unpublish;
 		let isToBeSaved = true;
 
 		if (isToBePublished) {
@@ -161,7 +161,7 @@ export default class OpportunityViewCWUController implements IController {
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
 			try {
-				const updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().unassign({
+				const updatedOpportunity = await this.OpportunitiesService.unassign({
 					opportunityId: this.opportunity._id,
 					proposalId: this.opportunity.proposal._id
 				}).$promise;
@@ -186,11 +186,11 @@ export default class OpportunityViewCWUController implements IController {
 	}
 
 	private addWatch() {
-		this.isWatching = this.opportunitiesCommonService.addWatch(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.addWatch(this.opportunity);
 	}
 
 	private removeWatch() {
-		this.isWatching = this.opportunitiesCommonService.removeWatch(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.removeWatch(this.opportunity);
 	}
 
 	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
@@ -198,8 +198,8 @@ export default class OpportunityViewCWUController implements IController {
 		this.opportunity.deadline = new Date(this.opportunity.deadline);
 		this.opportunity.assignment = new Date(this.opportunity.assignment);
 		this.opportunity.start = new Date(this.opportunity.start);
-		this.errorFields = this.opportunitiesCommonService.publishStatus(this.opportunity);
-		this.isWatching = this.opportunitiesCommonService.isWatching(this.opportunity);
+		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.isWatching(this.opportunity);
 		this.canEdit = this.isAdmin || this.opportunity.userIs.admin;
 		this.showProposals = this.canEdit && this.opportunity.isPublished;
 		this.processApprovalState();

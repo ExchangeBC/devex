@@ -6,9 +6,10 @@ import _ from 'lodash';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
-import ProposalService, { IProposalResource } from '../services/ProposalService';
+import { IProposalResource, IProposalService } from '../services/ProposalService';
+import { IOrgResource } from '../../../orgs/client/services/OrgService';
 
 export default class ProposalEditSWUController {
 	public static $inject = [
@@ -18,8 +19,8 @@ export default class ProposalEditSWUController {
 		'$state',
 		'proposal',
 		'opportunity',
-		'authenticationService',
-		'proposalService',
+		'AuthenticationService',
+		'ProposalService',
 		'Notification',
 		'org',
 		'TINYMCE_OPTIONS',
@@ -53,15 +54,15 @@ export default class ProposalEditSWUController {
 		private $state: IStateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
-		private authenticationService: AuthenticationService,
-		private proposalService: ProposalService,
+		private AuthenticationService: IAuthenticationService,
+		private ProposalService: IProposalService,
 		private Notification: uiNotification.INotificationService,
-		public org,
+		public org: IOrgResource,
 		public TINYMCE_OPTIONS,
 		public resources: any,
 		private $window: IWindowService
 	) {
-		this.user = this.authenticationService.user;
+		this.user = this.AuthenticationService.user;
 		this.activeTab = 1;
 		this.filteredInceptionMembers = [];
 		this.filteredPrototypeMembers = [];
@@ -163,10 +164,10 @@ export default class ProposalEditSWUController {
 		try {
 			let updatedProposal: IProposalResource;
 			if (this.editing) {
-				updatedProposal = await this.proposalService.getProposalResourceClass().update(this.proposal).$promise;
+				updatedProposal = await this.ProposalService.update(this.proposal).$promise;
 				this.refreshProposal(updatedProposal);
 			} else {
-				updatedProposal = await this.proposalService.getProposalResourceClass().create(this.proposal).$promise;
+				updatedProposal = await this.ProposalService.create(this.proposal).$promise;
 				this.$state.go('proposaladmin.editswu', { proposalId: updatedProposal._id, opportunityId: this.opportunity._id });
 			}
 
@@ -282,7 +283,7 @@ export default class ProposalEditSWUController {
 	}
 
 	public async deletefile(fileId: string): Promise<void> {
-		const updatedProposal = await this.proposalService.getProposalResourceClass().removeDoc({
+		const updatedProposal = await this.ProposalService.removeDoc({
 			proposalId: this.proposal._id,
 			documentId: fileId
 		}).$promise;

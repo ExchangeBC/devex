@@ -15,7 +15,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', ['$window', '$sce', 'program', 'authenticationService', 'ProgramsService', 'Notification', function ($window, $sce, program, authenticationService, ProgramsService, Notification) {
+	.controller('ProgramViewController', ['$window', '$sce', 'program', 'AuthenticationService', 'ProgramsService', 'Notification', function ($window, $sce, program, authenticationService, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
@@ -81,7 +81,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'authenticationService', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, authenticationService, Notification, previousState) {
+	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'AuthenticationService', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, authenticationService, Notification, previousState) {
 		var vm            = this;
 		vm.user = authenticationService.user;
 		vm.fileSelected = false;

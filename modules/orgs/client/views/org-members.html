@@ -8,7 +8,7 @@
         <h5>Invite team members</h5>
         <div class="input-group">
           <input class="input w-75" type="text" placeholder="name@example.com, name@example.com"
-            ng-model="vm.emaillist">
+            ng-model="vm.emailList">
           <span class="input-group-btn">
             <button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
           </span>
@@ -59,7 +59,7 @@
         </div>
         <table class="table capabilities-list">
           <tbody>
-            <tr ng-cloak ng-repeat="capability in vm.allCapabilities">
+            <tr ng-cloak ng-repeat="capability in vm.capabilities">
               <th scope="row" ng-if="vm.orgHasCapability(capability)"><i class="fas fa-check-circle fa-2x text-success"></i></th>
               <th scope="row" ng-if="!vm.orgHasCapability(capability)"><i class="far fa-circle fa-2x text-dark"></i></th>
               <td><label class="label label-lg label-cap-default {{capability.labelClass}}">{{capability.name}}</label></td>

@@ -2,10 +2,10 @@
 
 import angular, { ui } from 'angular';
 import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
-import CapabilitiesService from '../../../capabilities/client/services/CapabilitiesService';
-import OpportunitiesService from '../../../opportunities/client/services/OpportunitiesService';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import ProposalService from '../services/ProposalService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IProposalService } from '../services/ProposalService';
+import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
 
 // All the client side routes for proposals
 (() => {
@@ -22,9 +22,9 @@ import ProposalService from '../services/ProposalService';
 					template: '<ui-view autoscroll="true"></ui-view>',
 					resolve: {
 						capabilities: [
-							'capabilitiesService',
-							(capabilitiesService: CapabilitiesService) => {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+							'CapabilitiesService',
+							(CapabilitiesService: ICapabilitiesService) => {
+								return CapabilitiesService.query().$promise;
 							}
 						]
 					}
@@ -42,9 +42,9 @@ import ProposalService from '../services/ProposalService';
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'proposalService',
-							($stateParams: IStateParamsService, proposalService: ProposalService) => {
-								return proposalService.getProposalResourceClass().get({
+							'ProposalService',
+							($stateParams: IStateParamsService, proposalService: IProposalService) => {
+								return proposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -64,9 +64,9 @@ import ProposalService from '../services/ProposalService';
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'proposalService',
-							($stateParams: IStateParamsService, proposalService: ProposalService) => {
-								return proposalService.getProposalResourceClass().get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -84,9 +84,9 @@ import ProposalService from '../services/ProposalService';
 					},
 					resolve: {
 						capabilities: [
-							'capabilitiesService',
-							(capabilitiesService: CapabilitiesService) => {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+							'CapabilitiesService',
+							(CapabilitiesService: ICapabilitiesService) => {
+								return CapabilitiesService.query().$promise;
 							}
 						]
 					}
@@ -105,18 +105,18 @@ import ProposalService from '../services/ProposalService';
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'proposalService',
-							($stateParams: IStateParamsService, proposalService: ProposalService) => {
-								return proposalService.getProposalResourceClass().get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
 						],
 						opportunity: [
 							'$stateParams',
-							'opportunitiesService',
-							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
-								return opportunitiesService.getOpportunityResourceClass().get({
+							'OpportunitiesService',
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -125,10 +125,10 @@ import ProposalService from '../services/ProposalService';
 							return true;
 						},
 						org: [
-							'authenticationService',
+							'AuthenticationService',
 							'OrgService',
-							(authenticationService: AuthenticationService, OrgService) => {
-								if (!authenticationService.user) {
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return {};
 								}
 								return OrgService.myadmin().$promise.then(orgs => {
@@ -155,26 +155,25 @@ import ProposalService from '../services/ProposalService';
 					controllerAs: 'ppp',
 					resolve: {
 						proposal: [
-							'proposalService',
-							(proposalService: ProposalService) => {
-								const resourceClass = proposalService.getProposalResourceClass();
-								return new resourceClass();
+							'ProposalService',
+							(ProposalService: IProposalService) => {
+								return new ProposalService();
 							}
 						],
 						opportunity: [
 							'$stateParams',
-							'opportunitiesService',
-							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
-								return opportunitiesService.getOpportunityResourceClass().get({
+							'OpportunitiesService',
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'authenticationService',
+							'AuthenticationService',
 							'OrgService',
-							(authenticationService: AuthenticationService, OrgService) => {
-								if (!authenticationService.user) {
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return {};
 								}
 								return OrgService.myadmin().$promise.then(orgs => {
@@ -205,18 +204,18 @@ import ProposalService from '../services/ProposalService';
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'proposalService',
-							($stateParams: IStateParamsService, proposalService: ProposalService) => {
-								return proposalService.getProposalResourceClass().get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
 						],
 						opportunity: [
 							'$stateParams',
-							'opportunitiesService',
-							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
-								return opportunitiesService.getOpportunityResourceClass().get({
+							'OpportunitiesService',
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
@@ -225,10 +224,10 @@ import ProposalService from '../services/ProposalService';
 							return true;
 						},
 						org: [
-							'authenticationService',
+							'AuthenticationService',
 							'OrgService',
-							(authenticationService: AuthenticationService, OrgService) => {
-								if (!authenticationService.user) {
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								}
 								return OrgService.myadmin().$promise.then(orgs => {
@@ -242,17 +241,17 @@ import ProposalService from '../services/ProposalService';
 						],
 						resources: [
 							'OrgService',
-							'authenticationService',
-							'proposalService',
+							'AuthenticationService',
+							'ProposalService',
 							'$stateParams',
-							(OrgService, authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService) => {
-								if (!authenticationService.user) {
+							(OrgService, AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								} else {
 									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
-											return proposalService.getProposalResourceClass().getPotentialResources({
+											return ProposalService.getPotentialResources({
 												opportunityId: $stateParams.opportunityId,
 												orgId: org._id
 											}).$promise;
@@ -278,26 +277,25 @@ import ProposalService from '../services/ProposalService';
 					controllerAs: 'ppp',
 					resolve: {
 						proposal: [
-							'proposalService',
-							(proposalService: ProposalService) => {
-								const resourceClass = proposalService.getProposalResourceClass();
-								return new resourceClass();
+							'ProposalService',
+							(ProposalService: IProposalService) => {
+								return new ProposalService();
 							}
 						],
 						opportunity: [
 							'$stateParams',
-							'opportunitiesService',
-							($stateParams: IStateParamsService, opportunitiesService: OpportunitiesService) => {
-								return opportunitiesService.getOpportunityResourceClass().get({
+							'OpportunitiesService',
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'authenticationService',
+							'AuthenticationService',
 							'OrgService',
-							(authenticationService: AuthenticationService, OrgService) => {
-								if (!authenticationService.user) {
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								}
 								return OrgService.myadmin().$promise.then(orgs => {
@@ -310,18 +308,18 @@ import ProposalService from '../services/ProposalService';
 							}
 						],
 						resources: [
-							'authenticationService',
-							'proposalService',
+							'AuthenticationService',
+							'ProposalService',
 							'$stateParams',
 							'OrgService',
-							(authenticationService: AuthenticationService, proposalService: ProposalService, $stateParams: IStateParamsService, OrgService) => {
-								if (!authenticationService.user) {
+							(AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								} else {
 									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
-											return proposalService.getProposalResourceClass().getPotentialResources({
+											return ProposalService.getPotentialResources({
 												opportunityId: $stateParams.opportunityId,
 												orgId: org._id
 											}).$promise;

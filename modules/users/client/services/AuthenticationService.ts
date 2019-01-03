@@ -11,7 +11,12 @@ interface IGuestPermissions {
 	isGov?: boolean;
 }
 
-export default class AuthenticationService {
+export interface IAuthenticationService {
+	user: IUser;
+	permissions(): IUser | IGuestPermissions;
+}
+
+class AuthenticationService implements IAuthenticationService {
 	public user: IUser;
 
 	constructor(window: ng.IWindowService) {
@@ -33,9 +38,9 @@ export default class AuthenticationService {
 }
 
 (() => {
-	angular.module('users.services').factory('authenticationService', [
+	angular.module('users.services').factory('AuthenticationService', [
 		'$window',
-		($window: ng.IWindowService) => {
+		($window: ng.IWindowService): IAuthenticationService => {
 			return new AuthenticationService($window);
 		}
 	]);

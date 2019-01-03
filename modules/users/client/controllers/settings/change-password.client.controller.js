@@ -5,7 +5,7 @@
     .module('users')
     .controller('ChangePasswordController', ChangePasswordController);
 
-  ChangePasswordController.$inject = ['$scope', '$http', 'authenticationService', 'UsersService', 'PasswordValidator', 'Notification'];
+  ChangePasswordController.$inject = ['$scope', '$http', 'AuthenticationService', 'UsersService', 'PasswordValidator', 'Notification'];
 
   function ChangePasswordController($scope, authenticationService, UsersService, PasswordValidator, Notification) {
     var vm = this;

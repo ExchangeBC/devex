@@ -30,8 +30,8 @@
 			controller   : 'CapabilitiesListController',
 			controllerAs : 'vm',
 			resolve: {
-				capabilities: ['capabilitiesService', function (capabilitiesService) {
-					return capabilitiesService.getCapabilitiesResourceClass().query ().$promise;
+				capabilities: ['CapabilitiesService', function (CapabilitiesService) {
+					return CapabilitiesService.query ().$promise;
 				}]
 			},
 			data: {
@@ -49,8 +49,8 @@
 			controller   : 'CapabilityViewController',
 			controllerAs : 'vm',
 			resolve: {
-				capability: ['$stateParams', 'capabilitiesService', function ($stateParams, capabilitiesService) {
-					return capabilitiesService.getCapabilitiesResourceClass().get ({
+				capability: ['$stateParams', 'CapabilitiesService', function ($stateParams, CapabilitiesService) {
+					return CapabilitiesService.get ({
 						capabilityId: $stateParams.capabilityId
 					}).$promise;
 				}]
@@ -81,8 +81,8 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return true; },
-				capability: ['$stateParams', 'capabilitiesService', function ($stateParams, capabilitiesService) {
-					return capabilitiesService.getCapabilitiesResourceClass().get ({
+				capability: ['$stateParams', 'CapabilitiesService', function ($stateParams, CapabilitiesService) {
+					return CapabilitiesService.get ({
 						capabilityId: $stateParams.capabilityId
 					}).$promise;
 				}]
@@ -104,9 +104,8 @@
 			controllerAs : 'qqq',
 			resolve: {
 				editing: function () { return false; },
-				capability: ['capabilitiesService', function (capabilitiesService) {
-					const resourceClass = capabilitiesService.getCapabilitiesResourceClass();
-					return new resourceClass();
+				capability: ['CapabilitiesService', function (CapabilitiesService) {
+					return new CapabilitiesService();
 				}]
 			},
 			data: {

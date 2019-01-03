@@ -2,12 +2,12 @@
 
 import angular, { IController, IFormController, IScope, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource } from '../services/OrgService';
 
 export class OrgCreateController implements IController {
-	public static $inject = ['$scope', '$state', 'org', 'authenticationService', 'Notification', 'UsersService'];
+	public static $inject = ['$scope', '$state', 'org', 'AuthenticationService', 'Notification', 'UsersService'];
 
 	public orgForm: IFormController;
 	public hasAgreed: boolean;
@@ -17,11 +17,11 @@ export class OrgCreateController implements IController {
 		private $scope: IScope,
 		private $state: IStateService,
 		public org: IOrgResource,
-		private authenticationService: AuthenticationService,
+		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
 		private UsersService: IUserService
 	) {
-		this.user = new this.UsersService(this.authenticationService.user);
+		this.user = new this.UsersService(this.AuthenticationService.user);
 	}
 
 	public async add(isValid: boolean): Promise<void> {
@@ -39,14 +39,14 @@ export class OrgCreateController implements IController {
 			this.user.orgsMember.push(newOrg);
 			this.user.orgsAdmin.push(newOrg);
 			const updatedUser = await this.UsersService.update(this.user).$promise;
-			this.authenticationService.user = updatedUser;
+			this.AuthenticationService.user = updatedUser;
 
 			this.Notification.success({
 				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Company saved successfully'
 			});
 
-			this.$state.go('orgadmin.profile', { orgId: newOrg._id });
+			this.$state.go('orgadmin', { orgId: newOrg._id });
 		} catch (error) {
 			this.handleError(error);
 			return;

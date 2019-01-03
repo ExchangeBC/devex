@@ -9,7 +9,7 @@ import angular from 'angular';
 		.controller('CapabilityViewController', [
 			'$sce',
 			'capability',
-			'authenticationService',
+			'AuthenticationService',
 			function($sce, capability, authenticationService) {
 				const vm = this;
 				vm.trust = $sce.trustAsHtml;

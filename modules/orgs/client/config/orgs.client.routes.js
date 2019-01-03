@@ -87,9 +87,9 @@
 							}
 						],
 						capabilities: [
-							'capabilitiesService',
-							function(capabilitiesService) {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
 							}
 						]
 					}
@@ -100,7 +100,6 @@
 				//
 				// -------------------------------------------------------------------------
 				.state('orgadmin', {
-					abstract: true,
 					url: '/orgadmin/:orgId',
 					templateUrl: '/modules/orgs/client/views/org-edit.html',
 					controller: 'OrgAdminController',
@@ -116,9 +115,9 @@
 							}
 						],
 						capabilities: [
-							'capabilitiesService',
-							function(capabilitiesService) {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
 							}
 						]
 					},
@@ -126,49 +125,6 @@
 						roles: ['user', 'admin']
 					}
 				})
-				.state('orgadmin.profile', {
-					url: '/main',
-					templateUrl: '/modules/orgs/client/views/org-main.html',
-					controller: 'OrgProfileController',
-					controllerAs: 'vm',
-					resolve: {
-						capabilities: [
-							'capabilitiesService',
-							function(capabilitiesService) {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
-							}
-						]
-					},
-					data: {
-						pageTitle: 'Company Settings'
-					}
-				})
-				.state('orgadmin.members', {
-					url: '/members',
-					templateUrl: '/modules/orgs/client/views/org-members.html',
-					controller: 'OrgMembersController',
-					controllerAs: 'vm',
-					resolve: {
-						allCapabilities: [
-							'capabilitiesService',
-							function(capabilitiesService) {
-								return capabilitiesService.getCapabilitiesResourceClass().query().$promise;
-							}
-						]
-					},
-					data: {
-						pageTitle: 'Company Members'
-					}
-				})
-				.state('orgadmin.terms', {
-					url: '/terms',
-					templateUrl: '/modules/orgs/client/views/org-terms.html',
-					controller: 'OrgTermsController',
-					controllerAs: 'vm',
-					data: {
-						pageTitle: 'Company Terms'
-					}
-				});
 		}
 	]);
 }());

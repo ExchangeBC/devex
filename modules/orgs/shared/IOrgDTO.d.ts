@@ -40,5 +40,9 @@ export interface IOrg {
 	invited: string[];
 	invitedUsers: IUser[];
 	invitedNonUsers: string[];
-	emaillist?: [string];
+	emaillist?: {
+		found: string[];
+		notFound: string[];
+	};
+	additions?: string;
 }

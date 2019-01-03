@@ -2,10 +2,11 @@
 
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import OpportunitiesService, { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
-import ProposalService, { IProposalResource } from '../services/ProposalService';
+import { IProposalResource, IProposalService } from '../services/ProposalService';
+import { IOrgResource } from '../../../orgs/client/services/OrgService';
 
 export default class ProposalEditCWUController {
 	public static $inject = [
@@ -16,9 +17,9 @@ export default class ProposalEditCWUController {
 		'$state',
 		'proposal',
 		'opportunity',
-		'authenticationService',
-		'proposalService',
-		'opportunitiesService',
+		'AuthenticationService',
+		'ProposalService',
+		'OpportunitiesService',
 		'UsersService',
 		'Notification',
 		'org',
@@ -39,12 +40,12 @@ export default class ProposalEditCWUController {
 		private $state: IStateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
-		private authenticationService: AuthenticationService,
-		private proposalService: ProposalService,
-		private opportunitiesService: OpportunitiesService,
+		private AuthenticationService: IAuthenticationService,
+		private ProposalService: IProposalService,
+		private OopportunitiesService: IOpportunitiesService,
 		private UsersService,
 		private Notification: uiNotification.INotificationService,
-		public org,
+		public org: IOrgResource,
 		public TINYMCE_OPTIONS
 	) {
 		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
@@ -55,7 +56,7 @@ export default class ProposalEditCWUController {
 		this.refreshProposal(this.proposal);
 
 		// set the user
-		this.user = this.authenticationService.user;
+		this.user = this.AuthenticationService.user;
 	}
 
 	// Save the proposal
@@ -71,7 +72,7 @@ export default class ProposalEditCWUController {
 
 		try {
 			// First, check with server to ensure deadline hasn't passed
-			const response = await this.opportunitiesService.getOpportunityResourceClass().getDeadlineStatus({ opportunityId: this.opportunity._id });
+			const response = await this.OopportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id });
 			if (response.deadlineStatus === 'CLOSED') {
 				this.Notification.error({
 					title: 'Error',
@@ -82,15 +83,15 @@ export default class ProposalEditCWUController {
 
 			// Save the current user (proposal contact info tied to user - TODO: unlink this)
 			const updatedUser = await this.UsersService.update(this.user).$promise;
-			this.user = this.authenticationService.user = updatedUser;
+			this.user = this.AuthenticationService.user = updatedUser;
 
 			// Save the proposal
 			this.copyUserInfo();
 			let updatedProposal: IProposalResource;
 			if (this.editing) {
-				updatedProposal = await this.proposalService.getProposalResourceClass().update(this.proposal).$promise;
+				updatedProposal = await this.ProposalService.update(this.proposal).$promise;
 			} else {
-				updatedProposal = await this.proposalService.getProposalResourceClass().create(this.proposal).$promise;
+				updatedProposal = await this.ProposalService.create(this.proposal).$promise;
 			}
 
 			this.refreshProposal(updatedProposal);
@@ -182,7 +183,7 @@ export default class ProposalEditCWUController {
 	// Delete an attachment from a proposal
 	public async deleteAttachment(fileId: string): Promise<void> {
 		try {
-			const updatedProposal = await this.proposalService.getProposalResourceClass().removeDoc({
+			const updatedProposal = await this.ProposalService.removeDoc({
 				proposalId: this.proposal._id,
 				documentId: fileId
 			}).$promise;
@@ -217,7 +218,7 @@ export default class ProposalEditCWUController {
 
 	private async checkForExisting(): Promise<void> {
 		if (!this.editing) {
-			const myProposal = await this.proposalService.getProposalResourceClass().getMyProposal({ opportunityId: this.opportunity.code }).$promise;
+			const myProposal = await this.ProposalService.getMyProposal({ opportunityId: this.opportunity.code }).$promise;
 
 			if (myProposal && myProposal._id) {
 				this.$state.go('proposaladmin.editcwu', { proposalId: myProposal._id, opportunityId: this.opportunity.code });

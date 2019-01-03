@@ -14,7 +14,7 @@
 				context   : '@'
 			},
 			templateUrl  : '/modules/messages/client/views/message-list.html',
-			controller   : ['$sce', '$rootScope', '$scope', 'MessagesService', 'authenticationService', '$location', function ($sce, $rootScope, $scope, MessagesService, authenticationService, $location) {
+			controller   : ['$sce', '$rootScope', '$scope', 'MessagesService', 'AuthenticationService', '$location', function ($sce, $rootScope, $scope, MessagesService, authenticationService, $location) {
 				var vm        = this;
 				vm.trust      = $sce.trustAsHtml;
 				vm.auth       = authenticationService.permissions ();
@@ -111,7 +111,7 @@
 				message : '='
 			},
 			templateUrl  : '/modules/messages/client/views/view.message.directive.html',
-			controller   : ['$scope', 'authenticationService', function ($scope, authenticationService) {
+			controller   : ['$scope', 'AuthenticationService', function ($scope, authenticationService) {
 				var vm        = this;
 				vm.auth       = authenticationService;
 				vm.mode       = $scope.mode || 'page';

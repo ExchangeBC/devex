@@ -6,12 +6,12 @@ import { ICapabilityResource } from '../../../capabilities/client/services/Capab
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
 import { IProposalResource } from '../../../proposals/client/services/ProposalService';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import OpportunitiesCommonService from '../services/OpportunitiesCommonService';
-import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
+import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
 
 export default class OpportunityViewSWUController implements IController {
-	public static $inject = ['org', 'opportunity', 'authenticationService', 'opportunitiesService', 'Notification', 'ask', 'myproposal', 'opportunitiesCommonService'];
+	public static $inject = ['org', 'opportunity', 'AuthenticationService', 'OpportunitiesService', 'Notification', 'ask', 'myproposal', 'OpportunitiesCommonService'];
 
 	public canEdit: boolean;
 	public canPublish: boolean;
@@ -31,16 +31,16 @@ export default class OpportunityViewSWUController implements IController {
 	constructor(
 		public org: IOrg,
 		public opportunity: IOpportunityResource,
-		private authenticationService: AuthenticationService,
-		private opportunitiesService: OpportunitiesService,
+		private AuthenticationService: IAuthenticationService,
+		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,
 		private ask,
 		public myproposal: IProposalResource,
-		private opportunitiesCommonService: OpportunitiesCommonService
+		private OpportunitiesCommonService: IOpportunitiesCommonService
 	) {
-		this.isUser = !!this.authenticationService.user;
-		this.isAdmin = this.isUser && this.authenticationService.user.roles.indexOf('admin') !== -1;
-		this.hasEmail = this.isUser && this.authenticationService.user.email !== '';
+		this.isUser = !!this.AuthenticationService.user;
+		this.isAdmin = this.isUser && this.AuthenticationService.user.roles.indexOf('admin') !== -1;
+		this.hasEmail = this.isUser && this.AuthenticationService.user.email !== '';
 
 		this.refreshOpportunity(this.opportunity);
 	}
@@ -50,7 +50,7 @@ export default class OpportunityViewSWUController implements IController {
 		const publishedState = this.opportunity.isPublished;
 		const publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 		const publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
-		const publishMethod = isToBePublished ? this.opportunitiesService.getOpportunityResourceClass().publish : this.opportunitiesService.getOpportunityResourceClass().unpublish;
+		const publishMethod = isToBePublished ? this.OpportunitiesService.publish : this.OpportunitiesService.unpublish;
 		let isToBeSaved = true;
 
 		if (isToBePublished) {
@@ -80,7 +80,7 @@ export default class OpportunityViewSWUController implements IController {
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
 			try {
-				const updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().unassign({ opportunityId: opp._id }).$promise;
+				const updatedOpportunity = await this.OpportunitiesService.unassign({ opportunityId: opp._id }).$promise;
 
 				this.refreshOpportunity(updatedOpportunity);
 
@@ -117,11 +117,11 @@ export default class OpportunityViewSWUController implements IController {
 	}
 
 	private addWatch() {
-		this.isWatching = this.opportunitiesCommonService.addWatch(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.addWatch(this.opportunity);
 	}
 
 	private removeWatch() {
-		this.isWatching = this.opportunitiesCommonService.removeWatch(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.removeWatch(this.opportunity);
 	}
 
 	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
@@ -129,8 +129,8 @@ export default class OpportunityViewSWUController implements IController {
 		this.opportunity.deadline = new Date(this.opportunity.deadline);
 		this.opportunity.assignment = new Date(this.opportunity.assignment);
 		this.opportunity.start = new Date(this.opportunity.start);
-		this.errorFields = this.opportunitiesCommonService.publishStatus(this.opportunity);
-		this.isWatching = this.opportunitiesCommonService.isWatching(this.opportunity);
+		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
+		this.isWatching = this.OpportunitiesCommonService.isWatching(this.opportunity);
 		this.canEdit = this.isAdmin || this.opportunity.userIs.admin;
 		this.showProposals = this.canEdit && this.opportunity.isPublished;
 		this.capabilitySkills = _.uniqWith(
@@ -139,7 +139,7 @@ export default class OpportunityViewSWUController implements IController {
 		);
 
 		// can this be published?
-		this.errorFields = this.opportunitiesCommonService.publishStatus(this.opportunity);
+		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
 		this.canPublish = this.errorFields.length === 0;
 
 		this.calculateTimeLeft();

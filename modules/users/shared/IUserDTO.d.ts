@@ -66,4 +66,5 @@ export interface IUser {
 	isAdmin?: boolean;
 	isGov?: boolean;
 	selected?: boolean;
+	addRequest?: boolean;
 }

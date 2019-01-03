@@ -3,11 +3,11 @@
 import angular, { IFormController, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { IProject } from '../../../projects/shared/IProjectDTO';
-import AuthenticationService from '../../../users/client/services/AuthenticationService';
-import OpportunitiesService, { IOpportunityResource } from '../services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
 
 export default class OpportunityEditCWUController {
-	public static $inject = ['$state', 'opportunity', 'editing', 'projects', 'authenticationService', 'Notification', 'dataService', 'ask', 'TINYMCE_OPTIONS', 'opportunitiesService'];
+	public static $inject = ['$state', 'opportunity', 'editing', 'projects', 'AuthenticationService', 'Notification', 'dataService', 'ask', 'TINYMCE_OPTIONS', 'OpportunitiesService'];
 
 	public isAdmin: boolean;
 	public isGov: boolean;
@@ -26,17 +26,17 @@ export default class OpportunityEditCWUController {
 		public opportunity: IOpportunityResource,
 		public editing: boolean,
 		public projects: IProject[],
-		private authenticationService: AuthenticationService,
+		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
 		private dataService,
 		private ask,
 		public TINYMCE_OPTIONS,
-		private opportunitiesService: OpportunitiesService
+		private OpportunitiesService: IOpportunitiesService
 	) {
 		// set up roles/permissions
-		this.isUser = !!authenticationService.user;
-		this.isAdmin = this.isUser && authenticationService.user.roles.indexOf('admin') !== -1;
-		this.isGov = this.isUser && authenticationService.user.roles.indexOf('gov') !== -1;
+		this.isUser = !!AuthenticationService.user;
+		this.isAdmin = this.isUser && AuthenticationService.user.roles.indexOf('admin') !== -1;
+		this.isGov = this.isUser && AuthenticationService.user.roles.indexOf('gov') !== -1;
 
 		// set up the dropdown amounts for CWU earnings
 		this.initDropDownAmounts();
@@ -122,9 +122,9 @@ export default class OpportunityEditCWUController {
 
 			let updatedOpportunity: IOpportunityResource;
 			if (this.editing) {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity).$promise;
+				updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			} else {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().create(this.opportunity).$promise;
+				updatedOpportunity = await this.OpportunitiesService.create(this.opportunity).$promise;
 			}
 
 			this.refreshOpportunity(updatedOpportunity);
@@ -165,16 +165,16 @@ export default class OpportunityEditCWUController {
 			// Generate a route code that will be used to provide some protection on the route used to approve
 			this.opportunity.intermediateApproval.routeCode = new Date().valueOf();
 			this.opportunity.intermediateApproval.state = 'ready-to-send';
-			this.opportunity.intermediateApproval.requestor = this.authenticationService.user;
+			this.opportunity.intermediateApproval.requestor = this.AuthenticationService.user;
 			this.opportunity.intermediateApproval.initiated = Date.now();
-			this.opportunity.finalApproval.requestor = this.authenticationService.user;
+			this.opportunity.finalApproval.requestor = this.AuthenticationService.user;
 
 			try {
 				let updatedOpportunity: IOpportunityResource;
 				if (this.editing) {
-					updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity);
+					updatedOpportunity = await this.OpportunitiesService.update(this.opportunity);
 				} else {
-					updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().create(this.opportunity);
+					updatedOpportunity = await this.OpportunitiesService.create(this.opportunity);
 				}
 
 				this.refreshOpportunity(updatedOpportunity);
@@ -213,9 +213,9 @@ export default class OpportunityEditCWUController {
 		try {
 			let updatedOpportunity: IOpportunityResource;
 			if (this.editing) {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().update(this.opportunity);
+				updatedOpportunity = await this.OpportunitiesService.update(this.opportunity);
 			} else {
-				updatedOpportunity = await this.opportunitiesService.getOpportunityResourceClass().create(this.opportunity);
+				updatedOpportunity = await this.OpportunitiesService.create(this.opportunity);
 			}
 
 			this.refreshOpportunity(updatedOpportunity);
