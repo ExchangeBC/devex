@@ -32,7 +32,7 @@ declare var ApplicationConfiguration: any;
 		$locationProvider
 			.html5Mode({
 				enabled: true,
-				requireBase: false
+				requireBase: true
 			})
 			.hashPrefix('!');
 
