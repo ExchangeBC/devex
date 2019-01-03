@@ -274,7 +274,7 @@ class UserProfileController {
 			const id = req.user._id;
 			req.logout();
 			// res.redirect('/');
-			UserModel.remove({ _id: id }, err => {
+			UserModel.deleteOne({ _id: id }, err => {
 				if (err) {
 					res.status(500).send({
 						message: 'Unable to delete profile!'
