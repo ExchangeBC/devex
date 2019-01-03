@@ -10,30 +10,6 @@
 
   function routeConfig($stateProvider) {
     $stateProvider
-       .state('admin.gov', {
-        url: '/govs/:userId',
-        templateUrl: '/modules/users/client/views/admin/view-govs.client.view.html',
-        controller: 'GovController',
-        controllerAs: 'vm',
-        resolve: {
-          userResolve: getUser
-        },
-        data: {
-          pageTitle: 'Edit {{ userResolve.displayName }}'
-        }
-      })
-      .state('admin.gov-edit', {
-        url: '/govs/:userId/edit',
-        templateUrl: '/modules/users/client/views/admin/edit-govs.client.view.html',
-        controller: 'GovController',
-        controllerAs: 'vm',
-        resolve: {
-          userResolve: getUser
-        },
-        data: {
-          pageTitle: 'Edit Government {{ userResolve.displayName }}'
-        }
-      })
       .state('admin.users', {
         url: '/users',
         templateUrl: '/modules/users/client/views/admin/list-users.client.view.html',
