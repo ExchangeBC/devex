@@ -13,7 +13,7 @@
 
     <!-- Notify of new opportunities toggle -->
     <div class="row pt-3">
-      <div class="col" ng-if="vm.isUser">
+      <div class="col" ng-if="vm.user">
         <a class="btn btn-textonly float-right" ng-click="vm.toggleSubscription()" uib-tooltip="Click to get notified when new opportunities are posted">
           <!-- <i class="fas fa-bell fa-lg text-muted" ng-class="{'text-muted': !vm.user.notifyOpportunities, 'text-primary': vm.user.notifyOpportunities}"></i> -->
           <span ng-if="!vm.user.notifyOpportunities" class="text-muted">
