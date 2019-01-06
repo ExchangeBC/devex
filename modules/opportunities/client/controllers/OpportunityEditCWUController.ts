@@ -4,7 +4,7 @@ import angular, { IFormController, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { IProject } from '../../../projects/shared/IProjectDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
+import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityEditCWUController {
 	public static $inject = ['$state', 'opportunity', 'editing', 'projects', 'AuthenticationService', 'Notification', 'dataService', 'ask', 'TINYMCE_OPTIONS', 'OpportunitiesService'];

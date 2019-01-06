@@ -1,12 +1,11 @@
 'use strict';
 
-import angular, { IController, IFormController, IRootScopeService, uiNotification, IScope, ui, IAngularBootstrapConfig } from 'angular';
+import angular, { IController, IFormController, IScope, ui, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
+import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource, IOrgService } from '../services/OrgService';
-import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
-import { IModalInstanceService } from 'angular-ui-bootstrap';
 
 export class OrgAdminController implements IController {
 	public static $inject = ['$scope', '$state', 'org', 'OrgService', 'UsersService', 'AuthenticationService', 'Notification', 'ask', 'capabilities', 'dataService', 'TINYMCE_OPTIONS', '$uibModal'];
@@ -15,7 +14,6 @@ export class OrgAdminController implements IController {
 	public emailList = '';
 
 	private user: IUserResource;
-
 
 	constructor(
 		private $scope: IScope,
@@ -46,7 +44,7 @@ export class OrgAdminController implements IController {
 		if (this.org.websiteAddress) {
 			this.org.website = this.org.websiteProtocol + this.org.websiteAddress;
 		} else {
-			this.org.website= '';
+			this.org.website = '';
 		}
 
 		// save the org
@@ -96,9 +94,7 @@ export class OrgAdminController implements IController {
 
 	// add or remove members
 	public async addMembers(): Promise<void> {
-
 		if (this.emailList !== '') {
-
 			this.org.additions = this.emailList.toLowerCase();
 			try {
 				const updatedOrg = await this.OrgService.update(this.org).$promise;
@@ -110,7 +106,7 @@ export class OrgAdminController implements IController {
 				this.handleError(error);
 			}
 		}
-	};
+	}
 
 	private async displayInvitationCompleteDialog(): Promise<void> {
 		if (!this.org.emaillist) {
@@ -118,24 +114,24 @@ export class OrgAdminController implements IController {
 		}
 
 		await this.$uibModal.open({
-				size: 'sm',
-				templateUrl: '/modules/orgs/client/views/org-members-results.html',
-				controller: [
-					'$scope',
-					'$uibModalInstance',
-					($scope: any, $uibModalInstance: ui.bootstrap.IModalServiceInstance): void => {
-						$scope.data = {
-							found: this.org.emaillist.found,
-							notfound: this.org.emaillist.notFound
-						};
+			size: 'sm',
+			templateUrl: '/modules/orgs/client/views/org-members-results.html',
+			controller: [
+				'$scope',
+				'$uibModalInstance',
+				($scope: any, $uibModalInstance: ui.bootstrap.IModalServiceInstance): void => {
+					$scope.data = {
+						found: this.org.emaillist.found,
+						notfound: this.org.emaillist.notFound
+					};
 
-						$scope.close = function() {
-							$uibModalInstance.close();
-						};
-					}
-				]
+					$scope.close = (): void => {
+						$uibModalInstance.close();
+					};
+				}
+			]
 		});
-	};
+	}
 
 	private refreshOrg(newOrg: IOrgResource): void {
 		this.org = newOrg;

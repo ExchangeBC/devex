@@ -210,7 +210,7 @@ const OpportunitySchema: Schema = new Schema(
 		intermediateApproval: { type: ApprovalSchema, default: () => ({}) },
 		finalApproval: { type: ApprovalSchema, default: () => ({}) },
 		contract: { type: ContractSchema, default: () => ({}) },
-		approvalRequired: { type: Boolean, default: true },
+		approvalRequired: { type: Boolean, default: false },
 		isApproved: { type: Boolean, default: false }
 	},
 	{ usePushEach: true }
@@ -288,8 +288,8 @@ OpportunitySchema.virtual('implementationEndDateDisplay').get(function() {
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
 
-OpportunitySchema.statics.findUniqueCode = function(title, suffix, callback) {
-	return CoreServerHelpers.modelFindUniqueCode(this, 'opp', title, suffix, callback);
-};
-
 export const OpportunityModel: Model<IOpportunityModel> = model<IOpportunityModel>('Opportunity', OpportunitySchema);
+
+OpportunitySchema.statics.findUniqueCode = (title, suffix, callback) => {
+	return CoreServerHelpers.modelFindUniqueCode(OpportunityModel, 'opp', title, suffix, callback);
+};

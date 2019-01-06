@@ -8,7 +8,16 @@ interface ITeamQuestionResponse {
 	rank: number;
 	rejected: boolean;
 	score: number;
-	displayInSummary?: boolean
+	displayInSummary?: boolean;
+}
+
+interface IProposalScore {
+	skill: number;
+	question: number;
+	codechallenge: number;
+	interview: number;
+	price: number;
+	total: number;
 }
 
 export interface IAttachment {
@@ -41,11 +50,12 @@ export interface IProposal {
 	questions: object;
 	attachments: IAttachment[];
 	interviewComplete: boolean;
-	scores: object;
+	scores: IProposalScore;
 	ranking: number;
 	screenedIn: boolean;
 	passedCodeChallenge: boolean;
 	addendums: object;
 	teamQuestionResponses: ITeamQuestionResponse[];
 	team?: IUser[];
+	totalCost?: number;
 }

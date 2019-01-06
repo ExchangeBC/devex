@@ -78,12 +78,14 @@
 								"id":"website",
 								"name":"website"
               }'
-            x-form="vm.orgForm">
-            <select class="form-control protocol-input" ng-model="vm.org.websiteProtocol">
-              <option>http://</option>
-              <option>https://</option>
-            </select>
-            <input class="form-control website-input" type="text" placeholder="www.mycompany.org" ng-model="vm.org.websiteAddress" />
+						x-form="vm.orgForm">
+						<div class="row mx-auto">
+							<select class="form-control protocol-input col-4" ng-model="vm.org.websiteProtocol">
+								<option>http://</option>
+								<option>https://</option>
+							</select>
+							<input class="form-control website-input col-8" type="text" placeholder="www.mycompany.org" ng-model="vm.org.websiteAddress" />
+						</div>
           </form-display>
 
         </fieldset>

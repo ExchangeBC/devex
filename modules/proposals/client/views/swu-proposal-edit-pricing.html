@@ -50,7 +50,7 @@
                 <div class="d-inline">$</div>
                 <input type="text" ng-model="ppp.proposal.phases.inception.cost" model-format="currency" id="budget-inception"
                   class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)" placeholder=0.00
-                  select-on-click>
+                  onclick="this.select()">
               </div>
               <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.inception.cost, ppp.opportunity.phases.inception.maxCost)">
                 <i class="fas fa-exclamation-triangle"></i> Your price for this phase must be valid and not exceed
@@ -88,7 +88,7 @@
                 <div class="d-inline">$</div>
                 <input type="text" ng-model="ppp.proposal.phases.proto.cost" model-format="currency" id="budget-poc"
                   class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)"
-                  placeholder=0.00 select-on-click>
+                  placeholder=0.00 onclick="this.select()">
               </div>
               <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.proto.cost, ppp.opportunity.phases.proto.maxCost)">
                 <i class="fas fa-exclamation-triangle"></i> Your price for this phase must not exceed
@@ -125,7 +125,7 @@
                 <span class="d-inline">$</span>
                 <input type="text" ng-model="ppp.proposal.phases.implementation.cost" model-format="currency" id="budget-imp"
                   class="form-control d-inline w-75 text-right" aria-label="Amount (to the nearest dollar)" placeholder=0.00
-                  select-on-click>
+                  onclick="this.select()">
               </div>
               <div class="alert alert-danger px-2" ng-if="!ppp.validatePhaseAmount(ppp.proposal.phases.implementation.cost, ppp.opportunity.phases.implementation.maxCost)">
                 <i class="fas fa-exclamation-triangle"></i> Your price for this phase must not exceed

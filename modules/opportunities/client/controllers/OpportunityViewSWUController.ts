@@ -7,8 +7,8 @@ import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillD
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
 import { IProposalResource } from '../../../proposals/client/services/ProposalService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
 import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
+import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityViewSWUController implements IController {
 	public static $inject = ['org', 'opportunity', 'AuthenticationService', 'OpportunitiesService', 'Notification', 'ask', 'myproposal', 'OpportunitiesCommonService'];

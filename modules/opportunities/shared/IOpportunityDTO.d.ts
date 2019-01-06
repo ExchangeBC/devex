@@ -62,6 +62,7 @@ export interface IOpportunity {
 	proposalEmail?: string;
 	userIs?: any;
 	skilllist?: string;
+	isWatching?: boolean;
 }
 
 export interface IPhase {
@@ -91,6 +92,7 @@ export interface ITeamQuestion {
 	wordLimit: number;
 	questionScore: number;
 	showGuidance?: boolean;
+	weight?: number;
 }
 
 export interface IAddendum {

@@ -5,13 +5,13 @@ import angular, { IController, IFormController, IRootScopeService, uiNotificatio
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment';
-import { ICapabilityResource, ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilitiesService, ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IProject } from '../../../projects/shared/IProjectDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IPhase, ITeamQuestion } from '../../shared/IOpportunityDTO';
 import '../css/opportunities.css';
-import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
+import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export class OpportunityEditSWUController implements IController {
 	public static $inject = [

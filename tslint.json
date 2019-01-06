@@ -12,7 +12,7 @@
 		"no-inferrable-types": true,
 		"object-literal-sort-keys": false,
 		"arrow-parens": false,
-		"interface-name": [false, "always-prefix"],s
+		"interface-name": [false, "always-prefix"],
 		"semicolon": false,
 		"max-line-length": false,
 		"object-literal-key-quotes": false,

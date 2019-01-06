@@ -75,7 +75,7 @@ OrgSchema.pre('save', function(next) {
 	const orgSchema = this as IOrgModel;
 	orgSchema.fullAddress =
 		orgSchema.address +
-		(orgSchema.address ? ', ' + orgSchema.address : '') +
+		(orgSchema.address2 ? ', ' + orgSchema.address2 : '') +
 		', ' +
 		orgSchema.city +
 		', ' +

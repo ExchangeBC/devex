@@ -303,6 +303,9 @@ class ProposalsServerController {
 				.populate('phases.inception.team')
 				.populate('phases.implementation.team')
 				.populate('user')
+				.populate('phases.proto.capabilitySkills')
+				.populate('phases.inception.capabilitySkills')
+				.populate('phases.implementation.capabilitySkills')
 				.populate({
 					path: 'phases.proto.team',
 					populate: { path: 'capabilities capabilitySkills' }

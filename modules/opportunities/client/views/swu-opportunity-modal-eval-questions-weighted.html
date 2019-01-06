@@ -24,8 +24,8 @@
             <div class="col-4 p-0">
               <ul class="question-input-list">
                 <li class="question-input">
-                  Score: <input select-on-click class="scoreBox" name="input" type="text" pattern="[0-5]" required min="0"
-                    max="5" ng-model="response.score" ng-change="validateScores()" />
+                  Score: <input class="scoreBox" name="input" type="text" pattern="[0-5]" required min="0"
+                    max="5" ng-model="response.score" ng-change="validateScores()" onclick="this.select()" />
                 </li>
               </ul>
             </div>

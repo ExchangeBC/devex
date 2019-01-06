@@ -6,10 +6,10 @@ import _ from 'lodash';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IProposalResource, IProposalService } from '../services/ProposalService';
-import { IOrgResource } from '../../../orgs/client/services/OrgService';
 
 export default class ProposalEditSWUController {
 	public static $inject = [
@@ -160,6 +160,9 @@ export default class ProposalEditSWUController {
 		if (!successMessage) {
 			successMessage = 'Changes saved';
 		}
+
+		this.syncBusinessInformation();
+		this.syncCapabilitiesAndSkills();
 
 		try {
 			let updatedProposal: IProposalResource;
@@ -360,7 +363,7 @@ export default class ProposalEditSWUController {
 				endDate: new Date(),
 				team: []
 			}
-		}
+		};
 
 		this.proposal.teamQuestionResponses = [];
 		this.title = 'Create';
@@ -376,7 +379,6 @@ export default class ProposalEditSWUController {
 	}
 
 	private setupQuestions(): void {
-
 		this.opportunity.teamQuestions.forEach((teamQuestion, index) => {
 			teamQuestion.showGuidance = true;
 
@@ -391,6 +393,28 @@ export default class ProposalEditSWUController {
 				};
 			}
 		});
+	}
+
+	private syncBusinessInformation(): void {
+		this.proposal.businessName = this.org.name;
+		this.proposal.businessAddress = this.org.fullAddress;
+		this.proposal.businessContactName = this.org.contactName;
+		this.proposal.businessContactEmail = this.org.contactEmail;
+		this.proposal.businessContactPhone = this.org.contactPhone;
+	}
+
+	// Copy over the aggregated capabilities and skills on the proposal from the componsed team members for each phase
+	private syncCapabilitiesAndSkills(): void {
+		this.proposal.phases.inception.capabilities = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
+		this.proposal.phases.proto.capabilities = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
+		this.proposal.phases.implementation.capabilities = _.unionWith(_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
+
+		this.proposal.phases.inception.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
+		this.proposal.phases.proto.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
+		this.proposal.phases.implementation.capabilitySkills = _.unionWith(
+			_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilitySkills)),
+			(sk1, sk2) => sk1.code === sk2.code
+		);
 	}
 
 	private handleError(error: any): void {

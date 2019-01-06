@@ -3,8 +3,8 @@
 import angular, { IController, ILocationService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
 import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
+import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityViewCWUController implements IController {
 	public static $inject = ['$state', '$location', 'opportunity', 'AuthenticationService', 'OpportunitiesService', 'Notification', 'ask', 'myproposal', 'OpportunitiesCommonService'];
