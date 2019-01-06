@@ -396,6 +396,7 @@ export default class ProposalEditSWUController {
 	}
 
 	private syncBusinessInformation(): void {
+		this.proposal.org = this.org;
 		this.proposal.businessName = this.org.name;
 		this.proposal.businessAddress = this.org.fullAddress;
 		this.proposal.businessContactName = this.org.contactName;

@@ -4,10 +4,10 @@
     <div class="text-center">Enter interview scores for each company listed below.</div>
 
     <form name="scoreForm">
-      <div class="row my-2 mx-auto" ng-repeat="proposal in data.proposalScores">
+      <div class="row my-2 mx-auto" ng-repeat="proposal in proposals" ng-if="proposal.passedCodeChallenge">
         <div class="col"></div>
         <div class="col-2 pr-0">
-          <input class="scoreBox" name="input" type="number" min="0" max="{{data.maxInterviewPoints}}" ng-model="proposal.score" />
+          <input class="scoreBox" name="input" type="number" min="0" max="{{ maxInterviewPoints }}" ng-model="proposal.scores.interview" onclick="this.select()" />
         </div>
         <div class="col pl-0 text-left">
           {{proposal.businessName | limitTo: 20 }}{{ proposal.businessName.length > 20 ? '...' : '' }}
@@ -17,10 +17,10 @@
     </form>
 
     <div class="my-3">
-      <span>Scores must be a number between 0 and {{data.maxInterviewPoints}}</span>
-      <button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
-      <button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary" data-ng-click="save()"><i
+      <div>Scores must be a number between 0 and {{ maxInterviewPoints }}</div>
+      <button ng-disabled="!scoreForm.$valid || scoreForm.$error.number" class="btn btn-primary float-right" data-ng-click="save()"><i
           class="fas fa-lock"></i> Lock in Scores</button>
+      <button class="btn btn-default float-right" data-ng-click="cancel()">Cancel</button>
     </div>
   </div>
 </div>

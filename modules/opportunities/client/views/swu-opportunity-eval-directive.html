@@ -46,11 +46,11 @@
       <!-- Stage 1a: Questions: Questions are pending review by someone with the 'vetter' role -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.REVIEW">
         <div class="py-3" ng-if="vm.proposals.length > 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+          &nbsp;You received proposals from {{vm.proposals.length}} companies.</div>
         <div class="py-3" ng-if="vm.proposals.length === 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Well, you got one response!</div>
+          &nbsp;You received one proposal.</div>
         <div class="py-3" ng-if="vm.proposals.length === 0"><i class="far fa-lg fa-frown"></i>
-          &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+          &nbsp;Sorry, no companies submitted proposals on this opportunity.</div>
         <div class="swu-evaluation-cta">
           <p><i class="far fa-lg fa-hourglass"></i> &nbsp; Review in progress .... Check back soon!</p>
           <p>A procurement specialist is reviewing the responses to the Team Questions to make sure they don't contain
@@ -61,11 +61,11 @@
       <!-- Stage 1b: Questions: Choose question grading type as linear or weighted -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.GRADE_TYPE">
         <div class="py-3" ng-if="vm.proposals.length > 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+          &nbsp;You received proposals from {{vm.proposals.length}} companies.</div>
         <div class="py-3" ng-if="vm.proposals.length === 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Well, you got one response!</div>
+          &nbsp;You received one proposal</div>
         <div class="py-3" ng-if="vm.proposals.length === 0"><i class="far fa-lg fa-frown"></i>
-          &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+          &nbsp;Sorry, no companies submitted proposals on this opportunity.</div>
         <div class="swu-evaluation-cta">
           <p>Your first step is to choose how you would like to grade the responses that were submitted to the Team
             Questions. </p>
@@ -82,11 +82,11 @@
       <!-- Stage 1c: Questions: Questionnaire response ranking (modal) has not been saved yet -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.QUESTIONS_INIT">
         <div class="py-3" ng-if="vm.proposals.length > 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Sweet! You got responses from {{vm.proposals.length}} companies.</div>
+          &nbsp;You received proposals from {{vm.proposals.length}} companies.</div>
         <div class="py-3" ng-if="vm.proposals.length === 1"><i class="far fa-lg fa-smile"></i>
-          &nbsp;Well, you got one response!</div>
+          &nbsp;You received one proposal</div>
         <div class="py-3" ng-if="vm.proposals.length === 0"><i class="far fa-lg fa-frown"></i>
-          &nbsp;Sorry, no companies submitted proposals on your opportunity!</div>
+          &nbsp;Sorry, no companies submitted proposals on this opportunity.</div>
         <div class="swu-evaluation-cta">
           <p>Your first step is to comparatively rank the responses that teams submitted to the Team Questions.</p>
           <button class="btn btn-lg btn-primary" ng-if="vm.proposals.length >= 1" ng-click="vm.openQuestionRankingModal()">Rank
@@ -107,7 +107,7 @@
 
       <!-- Stage 2: Enter Code Challenge Scores -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.CODE_SCORES">
-        <div class="py-3">Great! Next step: the Code Challenge.</div>
+        <div class="py-3">Next step: the Code Challenge.</div>
         <div class="swu-evaluation-cta">
           <p>In the table below, you should see which companies screen in for the Code Challenge.</p>
           <p>Right now, you need to: <strong>(1) Notify all the companies who did not screen in</strong> and <strong>(2)
@@ -121,14 +121,13 @@
 
       <!-- Stage 3: Enter Interview Scores -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.INTERVIEW_SCORES">
-        <div class="py-3">Alright, we're getting there! Next up: the Team Scenario.</div>
+        <div class="py-3">Next step: the Team Scenario.</div>
         <div class="swu-evaluation-cta">
-          <p>Now you should see how teams are stacking up in the evaluation so far.</p>
           <p>If any teams did not pass the Code Challenge, inform them right away.</p>
           <p>For teams that passed the Code Challenge, now you need to send them information about the Team Scenario
             and get those scheduled.</p>
           <p>Once all of the Team Scenarios have taken place and your evaluation panel has come to consensus on the
-            overall scores for each company, come back here to enter the total scores.</p>
+            overall scores for each company, come back to enter the total scores.</p>
           <button class="btn btn-lg btn-primary" ng-click="vm.openInterviewModal()">Enter Team Scenario scores &nbsp;<i
               class="fas fa-lg fa-chevron-circle-right"></i></button>
         </div>
@@ -149,8 +148,8 @@
       <!-- Edge case: All proponents failed the code challenge -->
       <div class="text-center" ng-if="vm.opportunity.evaluationStage === vm.stages.FAIL">
         <div class="alert alert-danger">
-          <i class="fas fa-lg fa-exclamation-triangle"></i> <strong>Uh oh!</strong> This evaluation can't continue
-          because no proponents passed the Code Challenge!
+          <i class="fas fa-lg fa-exclamation-triangle"></i> This evaluation can't continue
+          because no proponents passed the Code Challenge.
         </div>
       </div>
 
@@ -170,10 +169,10 @@
                   <span uib-tooltip="Company">Company</span>
                 </th>
                 <th class="text-center">
-                  <span uib-tooltip="Skills (out of {{vm.weights.skill * vm.maxPoints}})">Skills</span>
+                  <span uib-tooltip="Skills (out of {{vm.opportunity.weights.skill * vm.maximumScore}})">Skills</span>
                 </th>
                 <th class="text-center">
-                  <span uib-tooltip="Team Questions (out of {{vm.weights.question * vm.maxPoints}})">Team Questions</span>
+                  <span uib-tooltip="Team Questions (out of {{vm.opportunity.weights.question * vm.maximumScore}})">Team Questions</span>
                 </th>
                 <th class="text-center">
                   <span uib-tooltip="Mid Score">Mid Score</span>
@@ -182,17 +181,17 @@
                   <span uib-tooltip="Screen Rank">Screen Rank</span>
                 </th>
                 <th class="text-center">
-                  <span uib-tooltip="Code Challenge (out of {{vm.weights.codechallenge * vm.maxPoints}})">Code
+                  <span uib-tooltip="Code Challenge (out of {{vm.opportunity.weights.codechallenge * vm.maximumScore}})">Code
                     Challenge</span>
                 </th>
                 <th class="text-center">
-                  <span uib-tooltip="Interview (out of {{vm.weights.interview * vm.maxPoints}})">Team Scenario</span>
+                  <span uib-tooltip="Interview (out of {{vm.opportunity.weights.interview * vm.maximumScore}})">Team Scenario</span>
                 </th>
                 <th class="text-center">
-                  <span uib-tooltip="Price (out of {{vm.weights.price * vm.maxPoints}})">Price</span>
+                  <span uib-tooltip="Price (out of {{vm.opportunity.weights.price * vm.maximumScore}})">Price</span>
                 </th>
                 <th class="text-right">
-                  <span uib-tooltip="Total (out of {{vm.maxPoints}})">Total Score</span>
+                  <span uib-tooltip="Total (out of {{vm.maximumScore}})">Total Score</span>
                 </th>
               </tr>
             </thead>
@@ -223,11 +222,11 @@
               </tr>
               <tr>
                 <td class="text-right" colspan="9">
-                  <b><span ng-if="vm.opportunity.evaluationStage === vm.stages.PRICE">{{ vm.topProposal.businessName |
-                      limitTo: 20 }}{{ vm.topProposal.businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.opportunity.evaluationStage === vm.stages.PRICE">
+                  <b><span ng-if="vm.opportunity.evaluationStage === vm.stages.PRICE">{{ vm.proposals[0].businessName |
+                      limitTo: 20 }}{{ vm.proposals[0].businessName.length > 20 ? '...' : '' }}</span></b><span ng-if="vm.opportunity.evaluationStage === vm.stages.PRICE">
                     has the highest score for this evaluation: </span>
                   <button ng-if="vm.opportunity.evaluationStage === vm.stages.PRICE" class="btn btn-sm btn-primary"
-                    type="button" ng-click="vm.assignOpportunity(vm.topProposal)">Assign</button>
+                    type="button" ng-click="vm.assignOpportunity(vm.proposals[0])">Assign</button>
                 </td>
               </tr>
             </tbody>

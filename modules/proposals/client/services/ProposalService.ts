@@ -46,12 +46,18 @@ angular.module('proposals.services').factory('ProposalService', [
 
 		const assignAction: resource.IActionDescriptor = {
 			method: 'PUT',
-			url: '/api/proposalsSWU/:proposalId/assignmentStatus'
+			url: '/api/proposals/:proposalId/assigncwu',
+			params: {
+				proposalId: '@proposalId'
+			}
 		};
 
 		const assignSWUAction: resource.IActionDescriptor = {
 			method: 'PUT',
-			url: '/api/proposalsSWU/:proposalId/assignmentStatus'
+			url: '/api/proposals/:proposalId/assignswu',
+			params: {
+				proposalId: '@proposalId'
+			}
 		};
 
 		const removeDocAction: resource.IActionDescriptor = {
