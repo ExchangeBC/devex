@@ -126,14 +126,21 @@ export class OpportunityCardDirectiveController implements IController {
 	}
 
 	public getOpportunitySkills(opportunity: IOpportunityResource): ICapabilitySkill[] {
-		return _.flatten(
-			_.unionWith(
-				opportunity.phases.inception.capabilitySkills,
-				opportunity.phases.proto.capabilitySkills,
-				opportunity.phases.implementation.capabilitySkills,
-				(sk1, sk2) => sk1.code === sk2.code
-			)
-		);
+
+		if (opportunity.opportunityTypeCd === 'code-with-us') {
+			return opportunity.skills.map(sk => {
+				return { name: sk, _id: '', code: '' }
+			});
+		} else {
+			return _.flatten(
+				_.unionWith(
+					opportunity.phases.inception.capabilitySkills,
+					opportunity.phases.proto.capabilitySkills,
+					opportunity.phases.implementation.capabilitySkills,
+					(sk1, sk2) => sk1.code === sk2.code
+				)
+			);
+		}
 	}
 }
 
