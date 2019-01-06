@@ -3,7 +3,7 @@
 import angular, { IRootScopeService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { ICapabilityResource, ICapabilitiesService } from '../services/CapabilitiesService';
+import { ICapabilitiesService, ICapabilityResource } from '../services/CapabilitiesService';
 import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/CapabilitiesSkillsService';
 
 (() => {

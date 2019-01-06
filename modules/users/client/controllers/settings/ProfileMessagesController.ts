@@ -1,8 +1,8 @@
 'use strict';
 
 import angular, { IController } from 'angular';
-import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUser } from '../../../shared/IUserDTO';
+import { IAuthenticationService } from '../../services/AuthenticationService';
 
 export class ProfileMessagesController implements IController {
 	public static $inject = ['AuthenticationService'];

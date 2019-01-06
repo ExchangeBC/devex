@@ -19,10 +19,10 @@ export interface IUserResource extends resource.IResource<IUserResource>, IUser 
 export interface IUserService extends resource.IResourceClass<IUserResource> {
 	update(user: IUserResource | IUser): IUserResource;
 	removeSelf(): IUserResource;
-	updatePassword(params: IUserServiceParams): void;
+	updatePassword(params: IUserServiceParams): IUserResource;
 	self(): IUserResource;
-	sendPasswordResetToken(params: IUserServiceParams): string;
-	resetPasswordWithToken(params: IUserServiceParams): void;
+	sendPasswordResetToken(params: IUserServiceParams): void;
+	resetPasswordWithToken(params: IUserServiceParams): IUserResource;
 	signup(params: IUserServiceParams): IUserResource;
 	signin(params: IUserServiceParams): IUserResource;
 	signout(): void;

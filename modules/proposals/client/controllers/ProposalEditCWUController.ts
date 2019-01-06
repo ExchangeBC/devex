@@ -2,11 +2,11 @@
 
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import { IOpportunityResource, IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IProposalResource, IProposalService } from '../services/ProposalService';
-import { IOrgResource } from '../../../orgs/client/services/OrgService';
 
 export default class ProposalEditCWUController {
 	public static $inject = [

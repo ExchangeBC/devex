@@ -1,11 +1,11 @@
 'use strict';
 
 import angular, { IController, IScope, uiNotification } from 'angular';
-import '../../css/users.css';
 import { IStateService } from 'angular-ui-router';
+import '../../css/users.css';
+import { IAdminService } from '../../services/AdminService';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserResource } from '../../services/UsersService';
-import { IAdminService } from '../../services/AdminService';
 
 export class UserController implements IController {
 	public static $inject = ['$scope', '$state', 'AuthenticationService', 'userResolve', 'Notification', 'ask', 'AdminService'];

@@ -1,9 +1,9 @@
 'use strict';
 
-import angular, { IController, IScope, IRootScopeService, IWindowService, uiNotification } from 'angular';
-import { IStateService, IState } from 'angular-ui-router';
-import { IUserService } from '../../services/UsersService';
+import angular, { IController, IRootScopeService, IScope, IWindowService, uiNotification } from 'angular';
+import { IState, IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../services/AuthenticationService';
+import { IUserService } from '../../services/UsersService';
 
 interface ICredentials {
 	username: string;

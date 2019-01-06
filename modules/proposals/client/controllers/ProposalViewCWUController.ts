@@ -2,8 +2,8 @@
 
 import angular, { uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
-import { IProposalResource } from '../services/ProposalService';
 import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IProposalResource } from '../services/ProposalService';
 
 export default class ProposalViewCWUController {
 	public static $inject = ['$state', 'proposal', 'OpportunitiesService', 'Notification', 'ask'];

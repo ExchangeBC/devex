@@ -1,81 +1,106 @@
-(function () {
-  'use strict';
+'use strict';
 
-  angular
-    .module('users')
-    .controller('PasswordController', PasswordController);
+import angular, { IController, ILocationService, IScope, uiNotification } from 'angular';
+import { IStateParamsService } from 'angular-ui-router';
+import { IUser } from '../../../shared/IUserDTO';
+import { IAuthenticationService } from '../../services/AuthenticationService';
+import { IUserResource, IUserService } from '../../services/UsersService';
 
-  PasswordController.$inject = ['$scope', '$stateParams', 'UsersService', '$location', 'AuthenticationService', 'PasswordValidator', 'Notification'];
+interface ICredentials {
+	username: string;
+	password: string;
+}
 
-  function PasswordController($scope, $stateParams, UsersService, $location, authenticationService, PasswordValidator, Notification) {
-    var vm = this;
+interface IPasswordDetails {
+	token?: string;
+	newPassword?: string;
+	verifyPassword?: string;
+}
 
-    vm.resetUserPassword = resetUserPassword;
-    vm.askForPasswordReset = askForPasswordReset;
-    vm.authentication = authenticationService;
-    vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
+export class PasswordController implements IController {
+	public static $inject = ['$scope', '$stateParams', 'UsersService', '$location', 'AuthenticationService', 'Notification'];
 
-    // If user is signed in then redirect back home
-    if (vm.authentication.user) {
-      $location.path('/');
-    }
+	public user: IUser;
+	public credentials: ICredentials;
+	public passwordDetails: IPasswordDetails;
 
-    // Submit forgotten password account id
-    function askForPasswordReset(isValid) {
+	constructor(
+		private $scope: IScope,
+		private $stateParams: IStateParamsService,
+		private UsersService: IUserService,
+		private $location: ILocationService,
+		private AuthenticationService: IAuthenticationService,
+		private Notification: uiNotification.INotificationService
+	) {
+		this.user = this.AuthenticationService.user;
+		this.credentials = {
+			username: '',
+			password: ''
+		};
+		this.passwordDetails = {};
+	}
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.forgotPasswordForm');
+	// Submit forgotten password account id
+	public async askForPasswordReset(isValid: boolean): Promise<void> {
+		if (!isValid) {
+			this.$scope.$broadcast('show-errors-check-validity', 'vm.forgotPasswordForm');
+			return;
+		}
 
-        return false;
-      }
+		try {
+			await this.UsersService.sendPasswordResetToken(this.credentials);
+			this.onRequestPasswordResetSuccess();
+		} catch (error) {
+			this.onRequestPasswordResetError();
+		}
+	}
 
-      UsersService.sendPasswordResetToken(vm.credentials).$promise
-        .then(onRequestPasswordResetSuccess)
-        .catch(onRequestPasswordResetError);
-    }
+	public async resetUserPassword(isValid: boolean): Promise<void> {
+		if (!isValid) {
+			this.$scope.$broadcast('show-errors-check-validity', 'vm.resetPasswordForm');
+			return;
+		}
 
-    // Change user password
-    function resetUserPassword(isValid) {
+		this.passwordDetails.token = this.$stateParams.token;
+		try {
+			const response = await this.UsersService.resetPasswordWithToken(this.passwordDetails);
+			this.onResetPasswordSuccess(response);
+		} catch (error) {
+			this.onResetPasswordError();
+		}
+	}
 
-      if (!isValid) {
-        $scope.$broadcast('show-errors-check-validity', 'vm.resetPasswordForm');
+	private onRequestPasswordResetSuccess() {
+		// Show user success message and clear form
+		this.credentials = {
+			username: '',
+			password: ''
+		};
+		this.Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset email sent successfully!', title: 'Success' });
+	}
 
-        return false;
-      }
+	private onRequestPasswordResetError() {
+		// Show user error message and clear form
+		this.credentials = {
+			username: '',
+			password: ''
+		};
 
-      vm.passwordDetails.token = $stateParams.token;
-      UsersService.resetPasswordWithToken(vm.passwordDetails).$promise
-        .then(onResetPasswordSuccess)
-        .catch(onResetPasswordError);
-    }
+		this.Notification.error({ message: '<i class="fas fa-exclamation-triangle"></i> Failed to send password reset email!', title: 'Error', delay: 4000 });
+	}
 
-    // Password Reset Callbacks
+	private onResetPasswordSuccess(response: IUserResource) {
+		// If successful show success message and clear form
+		this.passwordDetails = {};
 
-    function onRequestPasswordResetSuccess(response) {
-      // Show user success message and clear form
-      vm.credentials = null;
-      Notification.success({ message: response.message, title: '<i class="fas fa-check-circle"></i> Password reset email sent successfully!' });
-    }
+		// Attach user profile
+		this.AuthenticationService.user = response;
+		this.Notification.success({ title: 'Success', message: '<i class="fas fa-check-circle"></i> Password reset successful!' });
+		// And redirect to the index page
+		this.$location.path('/password/reset/success');
+	}
 
-    function onRequestPasswordResetError(response) {
-      // Show user error message and clear form
-      vm.credentials = null;
-      Notification.error({ message: response.data.message, title: '<i class="fas fa-exclamation-triangle"></i> Failed to send password reset email!', delay: 4000 });
-    }
-
-    function onResetPasswordSuccess(response) {
-      // If successful show success message and clear form
-      vm.passwordDetails = null;
-
-      // Attach user profile
-      authenticationService.user = response;
-      Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset successful!' });
-      // And redirect to the index page
-      $location.path('/password/reset/success');
-    }
-
-    function onResetPasswordError(response) {
-      Notification.error({ message: response.data.message, title: '<i class="fas fa-exclamation-triangle"></i> Password reset failed!', delay: 4000 });
-    }
-  }
-}());
+	private onResetPasswordError(): void {
+		this.Notification.error({ message: '<i class="fas fa-exclamation-triangle"></i> Password reset failed!', title: 'Error', delay: 4000 });
+	}
+}

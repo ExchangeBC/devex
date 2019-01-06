@@ -67,7 +67,8 @@ export default class OpportunityViewSWUController implements IController {
 					message: '<i class="fas fa-check-circle"></i> ' + publishSuccess
 				});
 			} catch (error) {
-				this.opportunity.isPublished = publishedState;
+				// if an error occurred during publication, retrieve the opportunity as it may have still be published but the github issue may have failed
+				this.opportunity = await this.OpportunitiesService.get({ opportunityId: this.opportunity._id }).$promise;
 				this.handleError(error);
 			}
 		}

@@ -1,6 +1,6 @@
 'use strict';
 
-import angular, { IController, uiNotification } from 'angular';
+import angular, { IController, IScope, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
@@ -9,13 +9,20 @@ import { IUser } from '../../../users/shared/IUserDTO';
 import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
 import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
+interface IOpportunityCardScope extends IScope {
+	opportunity: IOpportunityResource;
+}
+
 export class OpportunityCardDirectiveController implements IController {
-	public static $inject = ['$state', 'AuthenticationService', 'OpportunitiesCommonService', 'OpportunitiesService', 'ask', 'Notification'];
+	public static $inject = ['$scope', '$state', 'AuthenticationService', 'OpportunitiesCommonService', 'OpportunitiesService', 'ask', 'Notification'];
 
 	public user: IUser;
 	public isAdmin: boolean;
+	public opportunity: IOpportunityResource;
+	public oppSkills: ICapabilitySkill[];
 
 	constructor(
+		private $scope: IOpportunityCardScope,
 		private $state: IStateService,
 		private AuthenticationService: IAuthenticationService,
 		private OpportunitiesCommonService: IOpportunitiesCommonService,
@@ -25,18 +32,20 @@ export class OpportunityCardDirectiveController implements IController {
 	) {
 		this.user = this.AuthenticationService.user;
 		this.isAdmin = this.user && this.AuthenticationService.user.roles.includes('admin');
+		this.opportunity = $scope.opportunity;
+		this.getOpportunitySkills();
 	}
 
-	public async publish(opportunity: IOpportunityResource, isPublishing: boolean): Promise<void> {
-		const originalPublishedState = opportunity.isPublished;
+	public async publish(isPublishing: boolean): Promise<void> {
+		const originalPublishedState = this.opportunity.isPublished;
 
 		if (isPublishing) {
 			const question = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 			const choice = await this.ask.yesNo(question);
 			if (choice) {
 				try {
-					opportunity.isPublished = true;
-					await this.OpportunitiesService.publish({ opportunityId: opportunity._id }).$promise;
+					this.opportunity.isPublished = true;
+					await this.OpportunitiesService.publish({ opportunityId: this.opportunity._id }).$promise;
 					this.Notification.success({
 						title: 'Success',
 						message: '<i class="fas fa-check-circle"></i> Your opportunity has been published and we\'ve notified subscribers'
@@ -46,13 +55,13 @@ export class OpportunityCardDirectiveController implements IController {
 						title: 'Error',
 						message: "<i class='fas fa-exclamation-triangle'></i> Error publishing opportunity"
 					});
-					opportunity.isPublished = originalPublishedState;
+					this.opportunity.isPublished = originalPublishedState;
 				}
 			}
 		} else {
 			try {
-				opportunity.isPublished = false;
-				await this.OpportunitiesService.unpublish({ opportunityId: opportunity._id }).$promise;
+				this.opportunity.isPublished = false;
+				await this.OpportunitiesService.unpublish({ opportunityId: this.opportunity._id }).$promise;
 				this.Notification.success({
 					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Your opportunity has been unpublished'
@@ -62,54 +71,54 @@ export class OpportunityCardDirectiveController implements IController {
 					title: 'Error',
 					message: "<i class='fas fa-exclamation-triangle'></i> Error unpublishing opportunity"
 				});
-				opportunity.isPublished = originalPublishedState;
+				this.opportunity.isPublished = originalPublishedState;
 			}
 		}
 	}
 
-	public isUserAdmin(opportunity: IOpportunityResource): boolean {
-		return this.isAdmin || (this.user && this.user.roles.includes(`${opportunity.code}-admin`));
+	public isUserAdmin(): boolean {
+		return this.isAdmin || (this.user && this.user.roles.includes(`${this.opportunity.code}-admin`));
 	}
 
-	public isWatching(opportunity: IOpportunityResource): boolean {
-		return this.OpportunitiesCommonService.isWatching(opportunity);
+	public isWatching(): boolean {
+		return this.OpportunitiesCommonService.isWatching(this.opportunity);
 	}
 
-	public toggleWatch(opportunity: IOpportunityResource): void {
-		if (this.isWatching(opportunity)) {
-			opportunity.isWatching = this.OpportunitiesCommonService.removeWatch(opportunity);
+	public toggleWatch(): void {
+		if (this.isWatching()) {
+			this.opportunity.isWatching = this.OpportunitiesCommonService.removeWatch(this.opportunity);
 		} else {
-			opportunity.isWatching = this.OpportunitiesCommonService.addWatch(opportunity);
+			this.opportunity.isWatching = this.OpportunitiesCommonService.addWatch(this.opportunity);
 		}
 	}
 
-	public goToView(opportunity: IOpportunityResource): void {
-		if (opportunity.opportunityTypeCd === 'code-with-us') {
+	public goToView(): void {
+		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
 			this.$state.go('opportunities.viewcwu', {
-				opportunityId: opportunity.code
+				opportunityId: this.opportunity.code
 			});
 		} else {
 			this.$state.go('opportunities.viewswu', {
-				opportunityId: opportunity.code
+				opportunityId: this.opportunity.code
 			});
 		}
 	}
 
-	public goToEditView(opportunity: IOpportunityResource): void {
-		if (opportunity.opportunityTypeCd === 'code-with-us') {
+	public goToEditView(): void {
+		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
 			this.$state.go('opportunityadmin.editcwu', {
-				opportunityId: opportunity.code
+				opportunityId: this.opportunity.code
 			});
 		} else {
 			this.$state.go('opportunityadmin.editswu', {
-				opportunityId: opportunity.code
+				opportunityId: this.opportunity.code
 			});
 		}
 	}
 
-	public getDeadline(opportunity: IOpportunityResource): string {
+	public getDeadline(): string {
 		let ret = 'CLOSED';
-		const dateDiff = new Date(opportunity.deadline).getTime() - new Date().getTime();
+		const dateDiff = new Date(this.opportunity.deadline).getTime() - new Date().getTime();
 		if (dateDiff > 0) {
 			const dd = Math.floor(dateDiff / 86400000); // days
 			const dh = Math.floor((dateDiff % 86400000) / 3600000); // hours
@@ -125,18 +134,18 @@ export class OpportunityCardDirectiveController implements IController {
 		return ret;
 	}
 
-	public getOpportunitySkills(opportunity: IOpportunityResource): ICapabilitySkill[] {
+	public getOpportunitySkills(): void {
 
-		if (opportunity.opportunityTypeCd === 'code-with-us') {
-			return opportunity.skills.map(sk => {
+		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
+			this.oppSkills = this.opportunity.skills.map(sk => {
 				return { name: sk, _id: '', code: '' }
 			});
 		} else {
-			return _.flatten(
+			this.oppSkills = _.flatten(
 				_.unionWith(
-					opportunity.phases.inception.capabilitySkills,
-					opportunity.phases.proto.capabilitySkills,
-					opportunity.phases.implementation.capabilitySkills,
+					this.opportunity.phases.inception.capabilitySkills,
+					this.opportunity.phases.proto.capabilitySkills,
+					this.opportunity.phases.implementation.capabilitySkills,
 					(sk1, sk2) => sk1.code === sk2.code
 				)
 			);

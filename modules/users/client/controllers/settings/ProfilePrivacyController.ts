@@ -1,9 +1,9 @@
 'use strict';
 
 import angular, { IController, IScope, uiNotification } from 'angular';
+import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
-import { IUser } from '../../../shared/IUserDTO';
 
 export class ProfilePrivacyController implements IController {
 	public static $inject = ['$scope', 'AuthenticationService', 'UsersService', 'Notification'];

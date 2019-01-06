@@ -1,11 +1,11 @@
 'use strict';
 
 import angular, { IController, IScope, uiNotification } from 'angular';
+import { ICapability } from '../../../../capabilities/shared/ICapabilityDTO';
+import { ICapabilitySkill } from '../../../../capabilities/shared/ICapabilitySkillDTO';
+import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
-import { ICapability } from '../../../../capabilities/shared/ICapabilityDTO';
-import { IUser } from '../../../shared/IUserDTO';
-import { ICapabilitySkill } from '../../../../capabilities/shared/ICapabilitySkillDTO';
 
 export class ProfileSkillsController implements IController {
 	public static $inject = ['$scope', 'Notification', 'AuthenticationService', 'UsersService', 'capabilities', 'TINYMCE_OPTIONS'];

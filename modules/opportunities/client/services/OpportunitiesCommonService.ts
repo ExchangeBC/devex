@@ -2,11 +2,11 @@
 
 import angular, { IPromise, uiNotification } from 'angular';
 import _ from 'lodash';
-import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunityResource, IOpportunitiesService } from './OpportunitiesService';
-import { IPhase } from '../../shared/IOpportunityDTO';
 import { ICapability } from '../../../capabilities/shared/ICapabilityDTO';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IPhase } from '../../shared/IOpportunityDTO';
+import { IOpportunitiesService, IOpportunityResource } from './OpportunitiesService';
 
 export interface IOpportunitiesCommonService {
 	isWatching(opportunity: IOpportunityResource): boolean;

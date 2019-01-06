@@ -1,10 +1,10 @@
 'use strict';
 
 import angular, { IController, IFormController, IScope, uiNotification } from 'angular';
-import { IUser } from '../../../shared/IUserDTO';
 import { IStateService } from 'angular-ui-router';
-import { IUserService } from '../../services/UsersService';
+import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
+import { IUserService } from '../../services/UsersService';
 
 export class EditProfileController implements IController {
 	public static $inject = ['$scope', '$state', 'UsersService', 'AuthenticationService', 'Notification', 'ask'];
