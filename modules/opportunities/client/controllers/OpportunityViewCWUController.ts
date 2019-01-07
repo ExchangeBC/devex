@@ -295,7 +295,7 @@ export default class OpportunityViewCWUController implements IController {
 		this.opportunity.start = new Date(this.opportunity.start);
 		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
 		this.isWatching = this.OpportunitiesCommonService.isWatching(this.opportunity);
-		this.canEdit = this.isAdmin || this.opportunity.userIs.admin;
+		this.canEdit = this.isAdmin || (this.opportunity.userIs && this.opportunity.userIs.admin);
 		this.showProposals = this.canEdit && this.opportunity.isPublished;
 		this.processApprovalState();
 		this.calculateTimeLeft();
