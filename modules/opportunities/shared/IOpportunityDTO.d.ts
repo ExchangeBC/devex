@@ -6,6 +6,58 @@ import { IProposal } from "../../proposals/shared/IProposalDTO";
 import { IUser } from "../../users/shared/IUserDTO";
 import { Types } from "mongoose";
 
+export interface IPhase {
+	isImplementation?: boolean;
+	isInception?: boolean;
+	isPrototype?: boolean;
+	team?: IUser[];
+	capabilities: ICapability[];
+	capabilitiesCore?: ICapability[];
+	capabilitySkills: ICapabilitySkill[];
+	cost?: number;
+	maxCost?: number;
+	endDate: Date;
+	startDate: Date;
+}
+
+export interface IPhases {
+	aggregate: IPhase;
+	implementation: IPhase;
+	inception: IPhase;
+	proto: IPhase;
+}
+
+export interface ITeamQuestion {
+	question: string;
+	guideline: string;
+	wordLimit: number;
+	questionScore: number;
+	showGuidance?: boolean;
+	weight?: number;
+}
+
+export interface IAddendum {
+	description: string;
+	createdBy: IUser;
+	createdOn: Date;
+}
+
+export interface IApproval {
+	requestor: IUser;
+	name: string;
+	email: string;
+	twoFAMethod: string;
+	mobileNumber: string;
+	initiated: Date;
+	actioned: Date;
+	state: string;
+	action: string;
+	routeCode: string;
+	twoFACode: number;
+	twoFASendCount: number;
+	twoFAAttemptCount: number;
+}
+
 export interface IOpportunity {
     _id: string;
 	code: string;
@@ -46,8 +98,8 @@ export interface IOpportunity {
 	addenda: IAddendum[];
 	teamQuestions: ITeamQuestion[];
 	teamQuestionGradingType: any;
-	intermediateApproval: any;
-	finalApproval: any;
+	intermediateApproval: IApproval;
+	finalApproval: IApproval;
 	contract: any;
 	approvalRequired: boolean;
 	isApproved: boolean;
@@ -63,40 +115,4 @@ export interface IOpportunity {
 	userIs?: any;
 	skilllist?: string;
 	isWatching?: boolean;
-}
-
-export interface IPhase {
-	isImplementation?: boolean;
-	isInception?: boolean;
-	isPrototype?: boolean;
-	team?: IUser[];
-	capabilities: ICapability[];
-	capabilitiesCore?: ICapability[];
-	capabilitySkills: ICapabilitySkill[];
-	cost?: number;
-	maxCost?: number;
-	endDate: Date;
-	startDate: Date;
-}
-
-export interface IPhases {
-	aggregate: IPhase;
-	implementation: IPhase;
-	inception: IPhase;
-	proto: IPhase;
-}
-
-export interface ITeamQuestion {
-	question: string;
-	guideline: string;
-	wordLimit: number;
-	questionScore: number;
-	showGuidance?: boolean;
-	weight?: number;
-}
-
-export interface IAddendum {
-	description: string,
-	createdBy: IUser,
-	createdOn: Date
 }

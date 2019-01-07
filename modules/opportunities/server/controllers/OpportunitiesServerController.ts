@@ -407,9 +407,9 @@ class OpportunitiesServerController {
 				whoToNotifyWhenDone = isPreApproval ? { email: opportunity.finalApproval.email } : opportunity.finalApproval.requestor;
 				if (!isPreApproval) {
 					opportunity.isApproved = true;
-					opportunity.finalApproval.routeCode = new Date().valueOf();
+					opportunity.finalApproval.routeCode = new Date().valueOf().toString();
 					opportunity.finalApproval.state = 'sent';
-					opportunity.finalApproval.initiated = Date.now();
+					opportunity.finalApproval.initiated = new Date();
 				}
 			} else {
 				approvalInfo.action = 'denied';
@@ -420,7 +420,7 @@ class OpportunitiesServerController {
 
 			// record actioned timestamp
 			approvalInfo.state = 'actioned';
-			approvalInfo.actioned = Date.now();
+			approvalInfo.actioned = new Date();
 
 			// save the opportunity
 			const updatedOpportunity = await this.updateSave(opportunity);
@@ -746,8 +746,12 @@ class OpportunitiesServerController {
 
 	// Initiate the opportunity approval workflow by sending the initial
 	// pre-approval email and configuring the opportunity as required
-	private sendApprovalMessages = (requestingUser, opportunity) => {
+	private sendApprovalMessages = async (requestingUser, opportunity) => {
 		if (opportunity.intermediateApproval.state === 'ready-to-send') {
+
+			// ensure opportunity is populated
+			opportunity = await this.populateOpportunity(opportunity);
+
 			// send intermediate approval request
 			this.sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { opportunity: this.setMessageData(opportunity) });
 			opportunity.intermediateApproval.state = 'sent';

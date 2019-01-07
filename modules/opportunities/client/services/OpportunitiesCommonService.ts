@@ -119,7 +119,7 @@ class OpportunitiesCommonService implements IOpportunitiesCommonService {
 	public async requestApprovalCode(opportunity: IOpportunityResource): Promise<IOpportunityResource> {
 		const approvalInfo = opportunity.intermediateApproval.state === 'sent' ? opportunity.intermediateApproval : opportunity.finalApproval;
 		if (approvalInfo.twoFASendCount < 5) {
-			return await this.OpportunitiesService.requestCode({ opportunityId: opportunity.code });
+			return await this.OpportunitiesService.requestCode({ opportunityId: opportunity.code }).$promise;
 		} else {
 			throw new Error('Number of sent codes exceeded');
 		}

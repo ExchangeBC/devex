@@ -195,6 +195,7 @@ export default class OpportunityViewCWUController implements IController {
 
 	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
 		this.opportunity = newOpportunity;
+		this.opportunity.opportunityTypeCd = 'code-with-us';
 		this.opportunity.deadline = new Date(this.opportunity.deadline);
 		this.opportunity.assignment = new Date(this.opportunity.assignment);
 		this.opportunity.start = new Date(this.opportunity.start);

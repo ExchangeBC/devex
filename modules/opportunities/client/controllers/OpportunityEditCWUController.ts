@@ -163,18 +163,18 @@ export default class OpportunityEditCWUController {
 		const choice = await this.ask.yesNo(confirmMessage);
 		if (choice) {
 			// Generate a route code that will be used to provide some protection on the route used to approve
-			this.opportunity.intermediateApproval.routeCode = new Date().valueOf();
+			this.opportunity.intermediateApproval.routeCode = new Date().valueOf().toString();
 			this.opportunity.intermediateApproval.state = 'ready-to-send';
 			this.opportunity.intermediateApproval.requestor = this.AuthenticationService.user;
-			this.opportunity.intermediateApproval.initiated = Date.now();
+			this.opportunity.intermediateApproval.initiated = new Date();
 			this.opportunity.finalApproval.requestor = this.AuthenticationService.user;
 
 			try {
 				let updatedOpportunity: IOpportunityResource;
 				if (this.editing) {
-					updatedOpportunity = await this.OpportunitiesService.update(this.opportunity);
+					updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 				} else {
-					updatedOpportunity = await this.OpportunitiesService.create(this.opportunity);
+					updatedOpportunity = await this.OpportunitiesService.create(this.opportunity).$promise;
 				}
 
 				this.refreshOpportunity(updatedOpportunity);

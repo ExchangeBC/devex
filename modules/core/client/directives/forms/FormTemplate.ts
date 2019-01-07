@@ -151,6 +151,14 @@ export default class FormTemplate {
 		if (this.options.hasOwnProperty('ng-currency')) {
 			this.tmpl += ' ng-currency';
 		}
+
+		if (this.options.hasOwnProperty('select-on-click')) {
+			this.tmpl += ' onclick="this.select()"';
+		}
+
+		if (this.options.hasOwnProperty('select-on-focus')) {
+			this.tmpl += ' onfocus="this.select()"';
+		}
 		this.tmpl += '/>';
 		return this;
 	}
