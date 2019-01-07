@@ -2,6 +2,9 @@
 
 import angular, { IController, ILocationService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
+(pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
 import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
@@ -183,6 +186,96 @@ export default class OpportunityViewCWUController implements IController {
 		} else {
 			this.addWatch();
 		}
+	}
+
+	public exportApprovalRecord() {
+
+		const imgToExport = document.getElementById('imgToExport') as HTMLImageElement;
+		const canvas = document.createElement('canvas');
+		canvas.width = imgToExport.width;
+		canvas.height = imgToExport.height;
+		canvas.getContext('2d').drawImage(imgToExport, 0, 0);
+		const imgData = canvas.toDataURL('image/png')
+
+		const docDefinition = {
+			content: [
+				{
+					image: imgData,
+					width: 200
+				},
+				{
+					text: 'Opportunity Approval Record\n\n',
+					style: 'header'
+				},
+				`Opportunity: ${this.opportunity.name}`,
+				`Opportunity Type: Code With Us`,
+				`Opportunity Amount: $${this.opportunity.earn}`,
+				`Created on ${new Date(this.opportunity.created).toLocaleString()} PST`
+			],
+			styles: {
+				header: {
+					fontSize: 18,
+					bold: true
+				},
+				subheader: {
+					fontSize: 15,
+					bold: true
+				},
+				quote: {
+					italics: true
+				},
+				small: {
+					fontSize: 8
+				}
+			}
+		};
+
+		if (this.opportunity.isApproved) {
+			docDefinition.content.push(`Approved on ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
+		}
+
+		const approvalInfo: any = [
+			'\n\n',
+			{
+				text: 'Approval History\n\n',
+				style: 'header'
+			},
+			{
+				text: 'Requestor',
+				style: 'subheader'
+			},
+			`${this.opportunity.intermediateApproval.requestor.displayName} (${this.opportunity.intermediateApproval.requestor.email})`,
+			`Initiated: ${new Date(this.opportunity.intermediateApproval.initiated).toLocaleString()} PST\n\n`,
+			{
+				text: 'Intermediate Approval',
+				style: 'subheader'
+			},
+			`${this.opportunity.intermediateApproval.name} (${this.opportunity.intermediateApproval.email})`,
+			`Actioned: ${new Date(this.opportunity.intermediateApproval.actioned).toLocaleString()} PST`,
+			`Action taken: ${this.opportunity.intermediateApproval.action.toUpperCase()}\n\n`,
+			{
+				text: 'Final Approval',
+				style: 'subheader'
+			},
+			`${this.opportunity.finalApproval.name} (${this.opportunity.finalApproval.email})`
+		];
+
+		if (this.opportunity.finalApproval.actioned) {
+			approvalInfo.push(`Actioned: ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`),
+			approvalInfo.push(`Action taken: ${this.opportunity.finalApproval.action.toUpperCase()}\n\n`)
+		}
+
+		approvalInfo.push({
+			text: `This record was generated on ${new Date().toLocaleString()} PST`,
+			style: ['quote', 'small']
+		})
+
+		approvalInfo.forEach((item: any) => {
+			docDefinition.content.push(item);
+		});
+
+		const pdf = pdfMake.createPdf(docDefinition);
+		pdf.download(`${this.opportunity.name}-approval-record`);
 	}
 
 	private addWatch() {

@@ -114,7 +114,9 @@
 
     <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved && vm.canEdit && !vm.opportunity.isPublished && vm.closing !== 'CLOSED'">
       <div class="col alert alert-success">
-        <i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!
+        <span><i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!</span>
+        <span class="float-right"><a href="" ng-click="vm.exportApprovalRecord()">Export Approval Record</a></span>
+        <img id='imgToExport' src="/modules/core/client/img/logo/new-logo.png" style='display:none'/> 
       </div>
     </div>
 
