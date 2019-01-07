@@ -213,9 +213,9 @@ export default class OpportunityEditCWUController {
 		try {
 			let updatedOpportunity: IOpportunityResource;
 			if (this.editing) {
-				updatedOpportunity = await this.OpportunitiesService.update(this.opportunity);
+				updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			} else {
-				updatedOpportunity = await this.OpportunitiesService.create(this.opportunity);
+				updatedOpportunity = await this.OpportunitiesService.create(this.opportunity).$promise;
 			}
 
 			this.refreshOpportunity(updatedOpportunity);

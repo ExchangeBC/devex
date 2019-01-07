@@ -21,7 +21,7 @@ export interface IUserService extends resource.IResourceClass<IUserResource> {
 	removeSelf(): IUserResource;
 	updatePassword(params: IUserServiceParams): IUserResource;
 	self(): IUserResource;
-	sendPasswordResetToken(params: IUserServiceParams): void;
+	sendPasswordResetToken(params: IUserServiceParams): Promise<void>;
 	resetPasswordWithToken(params: IUserServiceParams): IUserResource;
 	signup(params: IUserServiceParams): IUserResource;
 	signin(params: IUserServiceParams): IUserResource;

@@ -473,7 +473,7 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		if (choice) {
 			this.opportunity.teamQuestionGradingType = type;
 			this.opportunity.evaluationStage = this.stages.QUESTIONS_INIT;
-			this.opportunity = await this.OpportunitiesService.update(this.opportunity);
+			this.opportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 		}
 	}
 

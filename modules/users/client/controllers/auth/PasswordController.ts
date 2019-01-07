@@ -63,7 +63,7 @@ export class PasswordController implements IController {
 
 		this.passwordDetails.token = this.$stateParams.token;
 		try {
-			const response = await this.UsersService.resetPasswordWithToken(this.passwordDetails);
+			const response = await this.UsersService.resetPasswordWithToken(this.passwordDetails).$promise;
 			this.onResetPasswordSuccess(response);
 		} catch (error) {
 			this.onResetPasswordError();
