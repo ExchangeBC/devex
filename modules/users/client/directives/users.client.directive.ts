@@ -1,3 +1,4 @@
+/* tslint:disable */
 (function () {
 	'use strict';
 	angular.module ('users')

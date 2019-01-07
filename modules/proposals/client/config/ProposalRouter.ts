@@ -1,11 +1,11 @@
 'use strict';
 
-import angular, { ui } from 'angular';
-import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
-import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
-import { IProposalService } from '../services/ProposalService';
+import angular from 'angular';
+import { IStateParamsService, IStateProvider } from 'angular-ui-router';
 import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IProposalService } from '../services/ProposalService';
 
 // All the client side routes for proposals
 (() => {

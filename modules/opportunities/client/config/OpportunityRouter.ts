@@ -2,14 +2,14 @@
 
 import angular, { resource } from 'angular';
 import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
-import { ICapabilityResource, ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapabilitiesService, ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { IOrgService } from '../../../orgs/client/services/OrgService';
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
 import { IProgram } from '../../../programs/shared/IProgramDTO';
 import { IProject } from '../../../projects/shared/IProjectDTO';
 import { IProposalResource, IProposalService } from '../../../proposals/client/services/ProposalService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOpportunityResource, IOpportunitiesService } from '../services/OpportunitiesService';
-import { IOrgService } from '../../../orgs/client/services/OrgService';
+import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityRouter {
 	public static $inject = ['$stateProvider'];
