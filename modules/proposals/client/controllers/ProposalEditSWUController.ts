@@ -3,6 +3,7 @@
 import angular, { angularFileUpload, IFormController, IWindowService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
@@ -79,13 +80,11 @@ export default class ProposalEditSWUController {
 		this.termsDownloaded = true;
 	}
 
-	public formatDate(date: Date | string): string {
-		const dateObj = date instanceof Date ? date : new Date(date);
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const day = dateObj.getDate();
-		const monthIndex = dateObj.getMonth();
-		const year = dateObj.getFullYear();
-		return monthNames[monthIndex] + ' ' + day + ', ' + year;
+	// Format dates to always be in PST (America/Vancouver timezone)
+	public formatDate(date: string, includeTime: boolean): string {
+		const momentDate = moment(date);
+		const dateFormat = includeTime ? 'MMMM Do YYYY, HH:mm z' : 'MMMM Do YYYY';
+		return momentDate.tz('America/Vancouver').format(dateFormat);
 	}
 
 	public filterMembers(completeList: IUser[], filteredList: IUser[], selectedTeam: IUser[], filter: string): void {
