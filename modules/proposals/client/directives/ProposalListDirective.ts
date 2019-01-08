@@ -1,6 +1,8 @@
 'use strict';
 
 import angular from 'angular';
+import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IProposalService } from '../services/ProposalService';
 
 (() => {
 	angular
@@ -20,20 +22,20 @@ import angular from 'angular';
 				templateUrl: '/modules/proposals/client/views/list.proposals.directive.html',
 				controller: [
 					'$scope',
-					'ProposalsService',
+					'ProposalService',
 					'OpportunitiesService',
-					'Authentication',
+					'AuthenticationService',
 					'Notification',
-					function($scope, ProposalsService, OpportunitiesService, Authentication, Notification) {
+					function($scope, ProposalService: IProposalService, OpportunitiesService: IOpportunitiesService, authenticationService, Notification) {
 						const vm = this;
 						vm.opportunity = $scope.opportunity;
 						vm.context = $scope.context;
 						vm.proposals = [];
 						vm.stats = {};
 						vm.isclosed = $scope.isclosed;
-						const isUser = Authentication.user;
-						vm.isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-						vm.isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
+						const isUser = authenticationService.user;
+						vm.isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+						vm.isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
 						if (vm.context === 'opportunity') {
 							vm.opportunityId = vm.opportunity._id;
 							vm.programTitle = vm.opportunity.title;
@@ -48,7 +50,7 @@ import angular from 'angular';
 							vm.title = 'Proposals for ' + $scope.opportunity.title;
 							vm.opportunityId = $scope.opportunity._id;
 							vm.userCanAdd = $scope.opportunity.userIs.admin || vm.isAdmin;
-							vm.proposals = ProposalsService.getProposalsForOpp({
+							vm.proposals = ProposalService.getProposalsForOpp({
 								opportunityId: $scope.opportunity._id
 							});
 							vm.columnCount = 1;
@@ -56,7 +58,7 @@ import angular from 'angular';
 							vm.title = 'All Proposals';
 							vm.opportunityId = null;
 							vm.userCanAdd = vm.isAdmin || vm.isGov;
-							vm.proposals = ProposalsService.query();
+							vm.proposals = ProposalService.query();
 							vm.columnCount = 1;
 						}
 						if ($scope.opportunity) {
@@ -91,7 +93,7 @@ import angular from 'angular';
 								});
 						};
 						vm.request = proposal => {
-							ProposalsService.makeRequest({
+							ProposalService.makeRequest({
 								proposalId: proposal._id
 							})
 								.$promise.then(() => {

@@ -4,17 +4,14 @@ import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
-import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import CapabilityModel from '../../../capabilities/server/models/CapabilityModel';
+import { CapabilityModel, ICapabilityModel } from '../../../capabilities/server/models/CapabilityModel';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
-import ProposalModel from '../../../proposals/server/models/ProposalModel';
-import IUserDocument from '../../../users/server/interfaces/IUserDocument';
-import UserModel from '../../../users/server/models/UserModel';
-import IOrgDocument from '../interfaces/IOrgDocument';
-import OrgModel from '../models/OrgModel';
+import { ProposalModel } from '../../../proposals/server/models/ProposalModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
+import { IOrgModel, OrgModel } from '../models/OrgModel';
 
 class OrgsServerController {
 	public static getInstance() {
@@ -26,9 +23,9 @@ class OrgsServerController {
 	private sendMessages = MessagesServerController.sendMessages;
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 
-	private constructor() {};
+	private constructor() {}
 
-	public getOrgById = (id): Promise<IOrgDocument> => {
+	public getOrgById = (id): Promise<IOrgModel> => {
 		return new Promise((resolve, reject) => {
 			OrgModel.findById(id)
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
@@ -67,7 +64,7 @@ class OrgsServerController {
 		});
 	};
 
-	public updateOrgCapabilities = (orgId): Promise<IOrgDocument> => {
+	public updateOrgCapabilities = (orgId): Promise<IOrgModel> => {
 		return this.getOrgById(orgId)
 			.then(this.checkCapabilities)
 			.then(this.minisave);
@@ -148,7 +145,7 @@ class OrgsServerController {
 
 		this.inviteMembers(list, org)
 			.then(
-				(newlist: any): IOrgDocument => {
+				(newlist: any): IOrgModel => {
 					additionsList.found = newlist.found;
 					additionsList.notFound = newlist.notFound;
 					org.additionsList = additionsList;
@@ -261,13 +258,13 @@ class OrgsServerController {
 			if (
 				(org.invitedUsers &&
 					org.invitedUsers
-						.map((invitedUser: IUserDocument) => {
+						.map((invitedUser: IUserModel) => {
 							return invitedUser.id;
 						})
 						.indexOf(user.id) !== -1) ||
 				(org.invitedNonUsers &&
 					org.invitedNonUsers
-						.map((invitedNonUser: IUserDocument) => {
+						.map((invitedNonUser: IUserModel) => {
 							return invitedNonUser.email;
 						})
 						.indexOf(user.email) !== -1)
@@ -316,7 +313,7 @@ class OrgsServerController {
 		}
 		OrgModel.findById(id)
 			.populate('owner', '_id lastName firstName displayName profileImageURL')
-			.exec((err, org: IOrgDocument) => {
+			.exec((err, org: IOrgModel) => {
 				if (err) {
 					return next(err);
 				} else if (!org) {
@@ -399,7 +396,7 @@ class OrgsServerController {
 	};
 
 	// Gets a list of user using the supplied list of terms
-	private getUsers = (terms: any): Promise<IUserDocument[]> => {
+	private getUsers = (terms: any): Promise<IUserModel[]> => {
 		return new Promise((resolve, reject) => {
 			UserModel.find(terms, '_id email displayName firstName username profileImageURL orgsAdmin orgsMember orgsPending').exec((err, user) => {
 				if (err) {
@@ -445,13 +442,13 @@ class OrgsServerController {
 		};
 	};
 
-	private getRequiredCapabilities = (): Promise<ICapabilityDocument[]> => {
+	private getRequiredCapabilities = (): Promise<ICapabilityModel[]> => {
 		return new Promise((resolve, reject) => {
 			CapabilityModel.find(
 				{
 					isRequired: true
 				},
-				(err, capabilities: ICapabilityDocument[]) => {
+				(err, capabilities: ICapabilityModel[]) => {
 					if (err) {
 						reject(err);
 					} else {
@@ -507,7 +504,7 @@ class OrgsServerController {
 		});
 	};
 
-	private checkCapabilities = (org: IOrgDocument): Promise<IOrgDocument> => {
+	private checkCapabilities = (org: IOrgModel): Promise<IOrgModel> => {
 		// make sure an org was found
 		if (!org) {
 			return;
@@ -532,7 +529,7 @@ class OrgsServerController {
 			});
 	};
 
-	private minisave = (org: IOrgDocument): Promise<IOrgDocument> => {
+	private minisave = (org: IOrgModel): Promise<IOrgModel> => {
 		// make sure an org was found
 		if (!org) {
 			return;
@@ -598,7 +595,7 @@ class OrgsServerController {
 	private saveOrgReturnMessage = (req, res) => {
 		return organization => {
 			CoreServerHelpers.applyAudit(organization, req.user);
-			this.checkCapabilities(organization).then((org: IOrgDocument) => {
+			this.checkCapabilities(organization).then((org: IOrgModel) => {
 				org.save((err, neworg) => {
 					if (err) {
 						return res.status(422).send({
@@ -638,7 +635,7 @@ class OrgsServerController {
 	private removeUserFromProposals = user => {
 		return org => {
 			const rightNow = new Date();
-			const userid = user.id;
+			const userEmail = user.email;
 			return new Promise((resolve, reject) => {
 				ProposalModel.find({ org: org._id })
 					.populate('opportunity', 'opportunityTypeCd deadline')
@@ -652,7 +649,7 @@ class OrgsServerController {
 								// remove the user and save the proposal
 								//
 								if (isSprintWithUs && 0 < deadline.getTime() - rightNow.getTime()) {
-									return ProposalsServerController.removeUserFromProposal(proposal, userid);
+									return ProposalsServerController.removeUserFromProposal(proposal, userEmail);
 								} else {
 									return Promise.resolve({});
 								}
@@ -663,7 +660,7 @@ class OrgsServerController {
 		};
 	};
 
-	private addAdmin = (user: IUserDocument, org: IOrgDocument): Promise<IOrgDocument> => {
+	private addAdmin = (user: IUserModel, org: IOrgModel): Promise<IOrgModel> => {
 		return Promise.resolve(user)
 			.then(this.addUserTo(org, 'members'))
 			.then(this.addUserTo(org, 'admins'))
@@ -671,14 +668,14 @@ class OrgsServerController {
 			.then(this.resolveOrg(org));
 	};
 
-	private removeMember = (user: IUserDocument, org: IOrgDocument): Promise<IOrgDocument> => {
+	private removeMember = (user: IUserModel, org: IOrgModel): Promise<IOrgModel> => {
 		return Promise.resolve(user)
 			.then(this.removeUserFrom(org, 'members'))
 			.then(this.removeUserFromProposals(user))
 			.then(this.resolveOrg(org));
 	};
 
-	private inviteMembersWithMessages = (emaillist: [string], org: IOrgDocument): Promise<any> => {
+	private inviteMembersWithMessages = (emaillist: [string], org: IOrgModel): Promise<any> => {
 		const list: any = {
 			found: [],
 			notFound: []
@@ -689,7 +686,7 @@ class OrgsServerController {
 		}
 
 		return this.getUsers({ email: { $in: emaillist } })
-			.then((users: IUserDocument[]) => {
+			.then((users: IUserModel[]) => {
 				if (users) {
 					list.found = users;
 
@@ -709,7 +706,7 @@ class OrgsServerController {
 				}
 				return users;
 			})
-			.then((users: IUserDocument[]) => {
+			.then((users: IUserModel[]) => {
 				this.sendMessages('add-user-to-company-request', list.found, { org });
 				this.sendMessages('invitation-from-company', list.notFound, { org });
 
@@ -735,11 +732,11 @@ class OrgsServerController {
 			});
 	};
 
-	private inviteMembers = (emaillist: [string], org: IOrgDocument): Promise<any> => {
+	private inviteMembers = (emaillist: [string], org: IOrgModel): Promise<any> => {
 		return this.inviteMembersWithMessages(emaillist, org);
 	};
 
-	private getAllAffectedMembers = (orgId: string): Promise<IUserDocument[]> => {
+	private getAllAffectedMembers = (orgId: string): Promise<IUserModel[]> => {
 		return new Promise((resolve, reject) => {
 			UserModel.find(
 				{

@@ -1,10 +1,10 @@
 'use strict';
 
-import { Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema } from 'mongoose';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import IProjectDocument from '../interfaces/IProjectDocument';
+import { IProject } from '../../shared/IProjectDTO';
 
-interface IProjectModel extends Model<IProjectDocument> {
+export interface IProjectModel extends IProject, Document {
 	findUniqueCode(title: string, suffix: string, callback: any): string;
 }
 
@@ -73,6 +73,4 @@ ProjectSchema.statics.findUniqueCode = function(title, suffix, callback) {
 	return CoreServerHelpers.modelFindUniqueCode(this, 'prj', title, suffix, callback);
 };
 
-const ProjectModel: IProjectModel = model<IProjectDocument, IProjectModel>('Project', ProjectSchema);
-
-export default ProjectModel;
+export const ProjectModel: Model<IProjectModel> = model<IProjectModel>('Project', ProjectSchema);

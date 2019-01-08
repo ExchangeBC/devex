@@ -76,8 +76,6 @@ mg.connect(function (db) {
     function reportAndExit(processedCount, errorCount) {
       var successCount = processedCount - errorCount;
 
-      console.log();
-
       if (processedCount === 0) {
         console.log(chalk.yellow('No users were found.'));
       } else {
@@ -89,8 +87,6 @@ mg.connect(function (db) {
         } else {
           alert = chalk.yellow;
         }
-
-        console.log(alert('Sent ' + successCount + ' of ' + processedCount + ' emails successfully.'));
       }
 
       process.exit(0);

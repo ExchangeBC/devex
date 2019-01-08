@@ -1,52 +1,38 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IPromise, resource } from 'angular';
+import { ICapabilitySkill } from '../../shared/ICapabilitySkillDTO';
 
-(() => {
-	angular
-		.module('capabilities.services')
+export interface ICapabilitySkillResource extends resource.IResource<ICapabilitySkill>, ICapabilitySkill {
+	capabilityskillId: '@_id';
+	$promise: IPromise<ICapabilitySkill>;
+}
 
-		// Service for capability skills
-		.factory('CapabilitySkillsService', [
-			'$resource',
-			'$log',
-			($resource, $log) => {
-				const CapabilitySkill = $resource(
-					'/api/capabilityskill/:capabilityskillId',
-					{
-						capabilityskillId: '@_id'
-					},
-					{
-						update: {
-							method: 'PUT'
-						}
-					}
-				);
-				angular.extend(CapabilitySkill.prototype, {
-					createOrUpdate() {
-						const capabilitySkill = this;
-						if (capabilitySkill._id) {
-							return capabilitySkill.$update(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						} else {
-							return capabilitySkill.$save(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						}
-					}
-				});
-				return CapabilitySkill;
+export interface ICapabilitySkillsService extends resource.IResourceClass<ICapabilitySkillResource> {
+	create(capabilitySkill: ICapabilitySkillResource): ICapabilitySkillResource;
+	update(capabilitySKill: ICapabilitySkillResource): ICapabilitySkillResource;
+}
+
+angular.module('capabilities.services').factory('CapabilitySkillsService', [
+	'$resource',
+	($resource: resource.IResourceService): ICapabilitySkillsService => {
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST'
+		};
+
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT'
+		};
+
+		return $resource(
+			'/api/capabilityskill/:capabilityskillId',
+			{
+				capabilityskillId: '@_id'
+			},
+			{
+				create: createAction,
+				update: updateAction
 			}
-		]);
-})();
+		) as ICapabilitySkillsService;
+	}
+]);

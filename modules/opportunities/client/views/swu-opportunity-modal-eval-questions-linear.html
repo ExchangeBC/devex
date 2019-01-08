@@ -7,33 +7,33 @@
       <div class="col text-center">
         <p>For each question we have randomized the responses that teams submitted.</p>
         <h4>Drag the individual responses to rank the responses from best (top) to worst (bottom) for all
-          {{data.model.questions.length}} questions.</h4>
-        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage"
+          {{data.questions.length}} questions.</h4>
+        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.questions.length" ng-model="data.currentPage"
           ng-change="pageChanged()"></ul>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <div ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
+        <div ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
           <div class="bg-primary text-white text-center">
             <strong>
-              Question: <span ng-bind-html="question[0].question"></span>
+              Question: <span ng-bind-html="question.question"></span>
             </strong>
           </div>
           <div class="row">
             <div class="col-3 pr-0">
               <ul dnd-list="question">
-                <li ng-repeat="response in question" class="question-ranking-item text-nowrap">
+                <li ng-repeat="response in data.responses.get(question)" class="question-ranking-item text-nowrap" ng-if="!response.rejected">
                   Rank {{$index + 1}}
                 </li>
               </ul>
             </div>
             <div class="col pl-0">
               <div>
-                <ul dnd-list="question" dnd-inserted="inserted(item, index)">
-                  <li class="question-ranking-item" ng-repeat="response in question" dnd-draggable="response" dnd-moved="question.splice($index, 1)"
-                    dnd-effect-allowed="move" dnd-selected="data.model.selected = response" ng-class="{'selected': data.model.selected === response}"
-                    ng-bind-html="response.response">
+                <ul dnd-list="data.responses.get(question)" dnd-inserted="inserted(item, index)">
+                  <li class="question-ranking-item" ng-repeat="response in data.responses.get(question) | orderBy: 'rank'" dnd-draggable="response" dnd-moved="moved(question, $index)"
+                    dnd-effect-allowed="move" dnd-selected="data.selected = response" ng-class="{'selected': data.selected === response}"
+                    ng-bind-html="response.response" ng-if="!response.rejected">
                   </li>
                 </ul>
               </div>
@@ -44,7 +44,7 @@
       </div>
       <div class="col-4">
         <div class="question-viewer border p-2 h-100">
-          <div ng-bind-html="data.model.selected.response"></div>
+          <div ng-bind-html="data.selected.response"></div>
         </div>
       </div>
     </div>

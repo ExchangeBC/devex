@@ -7,7 +7,7 @@ import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import ProjectsServerController from '../../../projects/server/controllers/ProjectsServerController';
-import ProgramModel from '../models/ProgramModel';
+import { ProgramModel } from '../models/ProgramModel';
 
 class ProgramsServerController {
 	public static getInstance() {
@@ -94,7 +94,7 @@ class ProgramsServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		ProgramModel.findUniqueCode(program.title, null, newcode => {
+		ProgramModel.schema.statics.findUniqueCode(program.title, null, newcode => {
 			program.code = newcode;
 			//
 			// set the audit fields so we know who did what when

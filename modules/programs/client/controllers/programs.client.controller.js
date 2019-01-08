@@ -15,20 +15,20 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramViewController', ['$window', '$sce', 'program', 'Authentication', 'ProgramsService', 'Notification', function ($window, $sce, program, Authentication, ProgramsService, Notification) {
+	.controller('ProgramViewController', ['$window', '$sce', 'program', 'AuthenticationService', 'ProgramsService', 'Notification', function ($window, $sce, program, authenticationService, ProgramsService, Notification) {
 		var vm                 = this;
 		vm.program             = program;
 		vm.display             = {};
 		vm.display.description = $sce.trustAsHtml(vm.program.description);
-		vm.authentication      = Authentication;
+		vm.authentication      = authenticationService;
 		vm.ProgramsService     = ProgramsService;
 		vm.idString            = 'programId';
 		//
 		// what can the user do here?
 		//
-		var isUser                 = Authentication.user;
-		var isAdmin                = isUser && !!~Authentication.user.roles.indexOf ('admin');
-		var isGov                  = isUser && !!~Authentication.user.roles.indexOf ('gov');
+		var isUser                 = authenticationService.user;
+		var isAdmin                = isUser && !!~authenticationService.user.roles.indexOf ('admin');
+		var isGov                  = isUser && !!~authenticationService.user.roles.indexOf ('gov');
 		var isMemberOrWaiting      = program.userIs.member || program.userIs.request;
 		vm.loggedIn                = isUser;
 		vm.canRequestMembership    = isGov && !isMemberOrWaiting;
@@ -81,20 +81,20 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'Authentication', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, Authentication, Notification, previousState) {
+	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'AuthenticationService', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, authenticationService, Notification, previousState) {
 		var vm            = this;
-		vm.user = Authentication.user;
+		vm.user = authenticationService.user;
 		vm.fileSelected = false;
 		vm.progress = 0;
 		vm.croppedDataUrl = '';
 		vm.picFile = null;
 
 		vm.previousState = previousState;
-		vm.isAdmin                 = Authentication.user && !!~Authentication.user.roles.indexOf ('admin');
-		vm.isGov                   = Authentication.user && !!~Authentication.user.roles.indexOf ('gov');
+		vm.isAdmin                 = authenticationService.user && !!~authenticationService.user.roles.indexOf ('admin');
+		vm.isGov                   = authenticationService.user && !!~authenticationService.user.roles.indexOf ('gov');
 		vm.editing        = editing;
 		vm.program        = program;
-		vm.authentication = Authentication;
+		vm.authentication = authenticationService;
 		//
 		// if the user doesn't have the right access then kick them out
 		//

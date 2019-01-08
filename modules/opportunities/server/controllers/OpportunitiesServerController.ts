@@ -1,17 +1,19 @@
 'use strict';
 
+import { NextFunction, Request, Response } from 'express';
+import fs from 'fs';
+import JSZip from 'jszip';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { model, Types } from 'mongoose';
 import Nexmo from 'nexmo';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
-import ProposalModel from '../../../proposals/server/models/ProposalModel';
-import UserModel from '../../../users/server/models/UserModel';
-import { IOpportunityDocument } from '../interfaces/IOpportunityDocument';
-import OpportunityModel from '../models/OpportunityModel';
+import { IAttachmentModel, ProposalModel } from '../../../proposals/server/models/ProposalModel';
+import { UserModel } from '../../../users/server/models/UserModel';
+import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 import OpportunitiesUtilities from '../utilities/OpportunitiesUtilities';
 
 class OpportunitiesServerController {
@@ -29,19 +31,16 @@ class OpportunitiesServerController {
 	// including users who have requested access and are currently waiting
 	public members = (opportunity, cb) => {
 		UserModel.find({ roles: this.memberRole(opportunity) })
-			.select('isDisplayEmail username displayName updated created roles \
-				government profileImageURL email lastName firstName userTitle')
+			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 			.exec(cb);
 	};
 
 	// Return a list of all users who are currently waiting to be added to the
 	// opportunity member list
 	public requests = (opportunity, cb) => {
-		mongoose
-			.model('User')
+		model('User')
 			.find({ roles: this.requestRole(opportunity) })
-			.select('isDisplayEmail username displayName updated created roles \
-				government profileImageURL email lastName firstName userTitle')
+			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 			.exec(cb);
 	};
 
@@ -58,7 +57,7 @@ class OpportunitiesServerController {
 		//
 		// set the code, this is used setting roles and other stuff
 		//
-		OpportunityModel.findUniqueCode(opportunity.name, null, newcode => {
+		OpportunityModel.schema.statics.findUniqueCode(opportunity.name, null, newcode => {
 			opportunity.code = newcode;
 			//
 			// set the audit fields so we know who did what when
@@ -128,7 +127,7 @@ class OpportunitiesServerController {
 						.then(result => {
 							updatedOpp.issueUrl = result.html_url;
 							updatedOpp.issueNumber = result.number;
-							this.updateSave(updatedOpp).then((updatedOpportunity: IOpportunityDocument) => {
+							this.updateSave(updatedOpp).then((updatedOpportunity: IOpportunityModel) => {
 								this.populateOpportunity(updatedOpportunity).then(populatedOpportunity => {
 									res.json(OpportunitiesUtilities.decorate(populatedOpportunity, req.user ? req.user.roles : []));
 								});
@@ -136,8 +135,7 @@ class OpportunitiesServerController {
 						})
 						.catch(() => {
 							res.status(422).send({
-								message: 'Opportunity saved, but there was an error updating the github issue. \
-								Please check your repo url and try again.'
+								message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 							});
 						});
 				} else {
@@ -158,109 +156,110 @@ class OpportunitiesServerController {
 	};
 
 	// Unassign the given proposal from the given opportunity
-	public unassign = (req, res) => {
-		let opportunity = req.opportunity;
+	public unassign = async (req: Request, res: Response): Promise<void> => {
+		const opportunity = req.opportunity;
 		const proposal = req.proposal;
 		const user = req.user;
 
-		// unassign the proposal
-		ProposalsServerController.unassign(proposal, user)
+		try {
+			// unassign the proposal
+			await ProposalsServerController.unassign(proposal, user);
 
-			// update the opportunity into pending status with no proposal
-			.then(() => {
-				opportunity.status = 'Pending';
-				opportunity.proposal = null;
-				return this.updateSave(opportunity);
-			})
+			// update the opportunity
+			opportunity.status = 'Pending';
+			opportunity.proposal = null;
+			const savedOpportunity = await this.updateSave(opportunity);
 
-			// notify of changes
-			// update the issue on github
-			.then(savedOpportunity => {
-				opportunity = savedOpportunity;
-				this.sendMessages('opportunity-update', opportunity.watchers, {
-					opportunity: this.setMessageData(opportunity)
-				});
-
-				return CoreGithubController.unlockIssue({
-					repo: opportunity.github,
-					number: opportunity.issueNumber
-				}).then(() => {
-					return CoreGithubController.addCommentToIssue({
-						comment: 'This opportunity has been un-assigned',
-						repo: opportunity.github,
-						number: opportunity.issueNumber
-					});
-				});
-			})
-
-			// return the new opportunity or fail
-			.then(() => {
-				res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
-			})
-			.catch(err => {
-				res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
+			// update any subscribers
+			this.sendMessages('opportunity-update', savedOpportunity.watchers, {
+				opportunity: this.setMessageData(savedOpportunity)
 			});
+
+			// unlock github issue
+			await CoreGithubController.unlockIssue({
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// add comment to github issue
+			await CoreGithubController.addCommentToIssue({
+				comment: 'This opportunity has been un-assigned',
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// decorate the opportunity with the current user roles
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+
+			// respond with the decorated opportunity
+			res.json(decoratedOpportunity);
+
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
 	// Assign the passed in proposal
-	public assign = (req, res) => {
-		let opportunity = req.opportunity;
+	public assign = async (req: Request, res: Response): Promise<void> => {
+		const opportunity = req.opportunity;
 		const proposal = req.proposal;
 		const user = req.user;
 
-		ProposalsServerController.assign(proposal, user)
+		try {
+			// assign the proposal
+			await ProposalsServerController.assign(proposal, user);
 
-			.then(() => {
-				opportunity.status = 'Assigned';
-				opportunity.proposal = proposal;
-				return this.updateSave(opportunity);
-			})
+			// update the opportunity
+			opportunity.status = 'Assigned';
+			opportunity.proposal = proposal;
+			const savedOpportunity = await this.updateSave(opportunity);
 
-			// notify of changes
-			// update the issue on github
-			.then(savedOpportunity => {
-				opportunity = savedOpportunity;
-				this.sendMessages('opportunity-update', opportunity.watchers, {
-					opportunity: this.setMessageData(opportunity)
-				});
-
-				opportunity.assignor = user.displayName;
-				opportunity.assignoremail = opportunity.proposalEmail;
-				this.sendMessages('opportunity-assign-cwu', [proposal.user], {
-					opportunity: this.setMessageData(opportunity)
-				});
-
-				return (
-					CoreGithubController.unlockIssue({
-						repo: opportunity.github,
-						number: opportunity.issueNumber
-					})
-						.then(() => {
-							return CoreGithubController.addCommentToIssue({
-								comment: 'This opportunity has been assigned',
-								repo: opportunity.github,
-								number: opportunity.issueNumber
-							}).then(() => {
-								return CoreGithubController.lockIssue({
-									repo: opportunity.github,
-									number: opportunity.issueNumber
-								});
-							});
-						})
-
-						// return the new opportunity or fail
-						.then(() => {
-							res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
-						})
-						.catch(err => {
-							res.status(422).send({
-								message: CoreServerErrors.getErrorMessage(err)
-							});
-						})
-				);
+			// update any subscribers
+			this.sendMessages('opportunity-update', savedOpportunity.watchers, {
+				opportunity: this.setMessageData(savedOpportunity)
 			});
+
+			// send message to assigned user
+			savedOpportunity.assignor = user.displayName;
+			savedOpportunity.assignoremail = savedOpportunity.proposalEmail;
+			this.sendMessages('opportunity-assign-cwu', [proposal.user], {
+				opportunity: this.setMessageData(savedOpportunity)
+			});
+
+			// unlock github issue
+			await CoreGithubController.unlockIssue({
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// add comment to github issue
+			await CoreGithubController.addCommentToIssue({
+				comment: 'This opportunity has been assigned',
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// lock the github issue
+			await CoreGithubController.lockIssue({
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// decorate the opportunity with the current user roles
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+
+			// respond with the decorated opportunity
+			res.json(decoratedOpportunity);
+
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
 	// Assign the passed in swu proposal
@@ -276,7 +275,7 @@ class OpportunitiesServerController {
 					opportunity.proposal = proposalId;
 					opportunity.evaluationStage = 4;
 					this.updateSave(opportunity)
-						.then((opp: IOpportunityDocument) => {
+						.then((opp: IOpportunityModel) => {
 							opportunity = opp;
 
 							this.sendMessages('opportunity-update', opportunity.watchers, {
@@ -306,17 +305,19 @@ class OpportunitiesServerController {
 		});
 	};
 
-	// Get opportunities under program
-	public forProgram = (req, res) => {
-		OpportunitiesUtilities.opplist(this.searchTerm(req, { program: req.program._id }), req, (err, opportunities) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(opportunities);
-			}
-		});
+	// REST operation for getting opportunities associated with a program
+	public forProgram = async (req: Request, res: Response): Promise<void> => {
+		const query = this.searchTerm(req, { program: req.program._id });
+		try {
+			const oppList = await OpportunitiesUtilities.getOpportunityList(query, req.user);
+			res.json(oppList);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
 	};
 
 	// Add ro remove watches for the current user
@@ -338,209 +339,101 @@ class OpportunitiesServerController {
 	};
 
 	// Populates the opportunity on the request
-	public opportunityByID = (req, res, next, id) => {
+	public opportunityByID = async (req: Request, res: Response, next: NextFunction, id: string): Promise<IOpportunityModel> => {
+		// determine whether we are querying by code or by mongoose id
+		let query: any;
 		if (id.substr(0, 3) === 'opp') {
-			OpportunityModel.findOne({ code: id })
-				.populate('createdBy', 'displayName email')
-				.populate('updatedBy', 'displayName')
-				.populate('project', 'code name _id isPublished')
-				.populate('program', 'code title _id logo isPublished')
-				.populate('phases.implementation.capabilities')
-				.populate('phases.implementation.capabilitiesCore')
-				.populate('phases.implementation.capabilitySkills')
-				.populate('phases.inception.capabilities')
-				.populate('phases.inception.capabilitiesCore')
-				.populate('phases.inception.capabilitySkills')
-				.populate('phases.proto.capabilities')
-				.populate('phases.proto.capabilitiesCore')
-				.populate('phases.proto.capabilitySkills')
-				.populate('phases.aggregate.capabilities')
-				.populate('phases.aggregate.capabilitiesCore')
-				.populate('phases.aggregate.capabilitySkills')
-				.populate('intermediateApproval.requestor', 'displayName email')
-				.populate('finalApproval.requestor', 'displayName email')
-				.populate([
-					{
-						path: 'proposal',
-						model: 'Proposal',
-						populate: [
-							{
-								path: 'user',
-								model: 'User'
-							},
-							{
-								path: 'org',
-								model: 'Org'
-							}
-						]
-					},
-					{
-						path: 'phases.inception.capabilities',
-						model: 'Capability',
-						populate: [
-							{
-								path: 'skills',
-								model: 'CapabilitySkill'
-							}
-						]
-					},
-					{
-						path: 'phases.proto.capabilities',
-						model: 'Capability',
-						populate: [
-							{
-								path: 'skills',
-								model: 'CapabilitySkill'
-							}
-						]
-					},
-					{
-						path: 'phases.implementation.capabilities',
-						model: 'Capability',
-						populate: [
-							{
-								path: 'skills',
-								model: 'CapabilitySkill'
-							}
-						]
-					}
-				])
-				.populate('addenda.createdBy', 'displayName')
-				.exec((err, opportunity) => {
-					if (err) {
-						return next(err);
-					} else if (!opportunity) {
-						return res.status(404).send({
-							message: 'No opportunity with that identifier has been found'
-						});
-					}
-					req.opportunity = opportunity;
-					next();
-				});
+			query = { code: id };
 		} else {
-			if (!mongoose.Types.ObjectId.isValid(id)) {
-				return res.status(400).send({
+			if (!Types.ObjectId.isValid(id)) {
+				res.status(400).send({
 					message: 'Opportunity is invalid'
 				});
+				return;
+			} else {
+				query = { _id: id };
 			}
+		}
 
-			OpportunityModel.findById(id)
-				.populate('createdBy', 'displayName')
-				.populate('updatedBy', 'displayName')
-				.populate('project', 'code name _id isPublished')
-				.populate('program', 'code title _id logo isPublished')
-				.populate('phases.implementation.capabilities', 'code name')
-				.populate('phases.implementation.capabilitiesCore', 'code name')
-				.populate('phases.implementation.capabilitySkills', 'code name')
-				.populate('phases.inception.capabilities', 'code name')
-				.populate('phases.inception.capabilitiesCore', 'code name')
-				.populate('phases.inception.capabilitySkills', 'code name')
-				.populate('phases.proto.capabilities', 'code name')
-				.populate('phases.proto.capabilitiesCore', 'code name')
-				.populate('phases.proto.capabilitySkills', 'code name')
-				.populate('phases.aggregate.capabilities', 'code name')
-				.populate('phases.aggregate.capabilitiesCore', 'code name')
-				.populate('phases.aggregate.capabilitySkills', 'code name')
-				.populate('intermediateApproval.requestor', 'displayName email')
-				.populate('finalApproval.requestor', 'displayName email')
-				.populate({
-					path: 'proposal',
-					model: 'Proposal',
-					populate: {
-						path: 'user',
-						model: 'User'
-					}
-				})
-				.exec((err, opportunity) => {
-					if (err) {
-						return next(err);
-					} else if (!opportunity) {
-						return res.status(404).send({
-							message: 'No opportunity with that identifier has been found'
-						});
-					}
-					req.opportunity = opportunity;
-					next();
-				});
+		// perform the query and go to next middleware
+		try {
+			const opportunity = await OpportunityModel.findOne(query);
+			const populatedOpportunity = await this.populateOpportunity(opportunity);
+			req.opportunity = populatedOpportunity;
+			next();
+		} catch (error) {
+			res.status(404).send({
+				message: 'No opportunity with that identifier has been found'
+			});
+			return;
 		}
 	};
 
-	// Return a list of all opportunities
-	public list = (req, res) => {
-		OpportunitiesUtilities.opplist(this.searchTerm(req), req, (err, opportunities) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(opportunities);
-			}
-		});
+	// REST operation for returning a list of all opportunities
+	public list = async (req: Request, res: Response): Promise<void> => {
+		const query = this.searchTerm(req);
+		try {
+			const oppList = await OpportunitiesUtilities.getOpportunityList(query, req);
+			res.json(oppList);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
 	};
 
 	// Action an opportunity approval request (pre-approval or final approval)
 	// Upon actioning, the appropriate follow up notifications are dispatched
-	public action = (req, res) => {
+	public action = async (req: Request, res: Response): Promise<void> => {
 		const code = Number(req.body.code);
 		const action = req.body.action;
 		const isPreApproval = req.body.preapproval === 'true';
-		let opportunity = req.opportunity;
-
+		const opportunity = req.opportunity;
 		const approvalInfo = isPreApproval ? opportunity.intermediateApproval : opportunity.finalApproval;
 
 		// if code matches, action and then return 200
 		if (approvalInfo.twoFACode === code) {
-			// mark as approved
-			if (action === 'approve') {
-				approvalInfo.state = 'actioned';
-				approvalInfo.action = 'approved';
-				approvalInfo.actioned = Date.now();
+			let notification: string;
+			let successMessage: string;
+			let whoToNotifyWhenDone: any;
 
-				if (isPreApproval === false) {
+			// set up depending on action type (approve or deny) and state (pre-approval or final approval)
+			if (action === 'approve') {
+				approvalInfo.action = 'approved';
+				notification = isPreApproval ? 'opportunity-approval-request' : 'opportunity-approved-notification';
+				successMessage = isPreApproval ? 'Opportunity pre-approved!' : 'Opportunity Approved!';
+				whoToNotifyWhenDone = isPreApproval ? { email: opportunity.finalApproval.email } : opportunity.finalApproval.requestor;
+				if (!isPreApproval) {
 					opportunity.isApproved = true;
-					this.updateSave(opportunity).then(() => {
-						// send a notification message to original requestor notifying of approval
-						this.sendMessages('opportunity-approved-notification', [opportunity.finalApproval.requestor], { opportunity: this.setMessageData(opportunity) });
-						res.status(200).json({
-							message: 'Opportunity approved!',
-							succeed: true
-						});
-					});
-				} else {
-					// now that pre-approval is done, initiate the final approval process
-					opportunity.finalApproval.routeCode = new Date().valueOf();
+					opportunity.finalApproval.routeCode = new Date().valueOf().toString();
 					opportunity.finalApproval.state = 'sent';
-					opportunity.finalApproval.initiated = Date.now();
-					this.updateSave(opportunity).then(savedOpportunity => {
-						opportunity = savedOpportunity;
-						this.sendMessages('opportunity-approval-request', [{ email: opportunity.finalApproval.email }], { opportunity: this.setMessageData(opportunity) });
-						res.status(200).json({
-							message: 'Opportunity pre-approved!',
-							succeed: true
-						});
-					});
+					opportunity.finalApproval.initiated = new Date();
 				}
 			} else {
-				approvalInfo.state = 'actioned';
 				approvalInfo.action = 'denied';
-				approvalInfo.actioned = Date.now();
-
-				this.updateSave(opportunity).then(() => {
-					// send a notification message to original requestor notifying of rejection
-					this.sendMessages('opportunity-denied-notification', [opportunity.finalApproval.requestor], { opportunity: this.setMessageData(opportunity) });
-					res.status(200).json({
-						message: 'Opportunity rejected',
-						succeed: true
-					});
-				});
+				notification = 'opportunity-denied-notification';
+				successMessage = 'Opportunity Denied!';
+				whoToNotifyWhenDone = opportunity.finalApproval.requestor;
 			}
+
+			// record actioned timestamp
+			approvalInfo.state = 'actioned';
+			approvalInfo.actioned = new Date();
+
+			// save the opportunity
+			const updatedOpportunity = await this.updateSave(opportunity);
+
+			// notify the requestor if final, or the final if pre-approval
+			this.sendMessages(notification, [whoToNotifyWhenDone], { opportunity: this.setMessageData(updatedOpportunity) });
+			res.json(updatedOpportunity);
+			return;
 		} else {
 			approvalInfo.twoFAAttemptCount++;
-			this.updateSave(opportunity).then(() => {
-				res.status(401).json({
-					message: 'Invalid code',
-					succeed: false
-				});
+			await this.updateSave(opportunity);
+			res.status(401).json({
+				message: 'Invalid code'
 			});
 		}
 	};
@@ -581,303 +474,284 @@ class OpportunitiesServerController {
 				this.send2FAviaSMS(approvalToAction);
 			}
 
-			res.status(200).send();
+			res.json(opportunity);
 		});
 	};
 
-	// -------------------------------------------------------------------------
-	//
 	// Get proposal statistics for the given opportunity in the request
-	//
-	// -------------------------------------------------------------------------
-	public getProposalStats = (req, res) => {
-		if (!req.opportunity) {
-			return res.status(422).send({
-				message: 'Valid opportunity not provided'
-			});
-		}
-
+	public getProposalStats = async (req: Request, res: Response): Promise<void> => {
 		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json({ message: 'User is not authorized' });
+			res.json({
+				message: 'User is not authorized'
+			});
+			return;
 		}
 
-		const op = req.opportunity;
-		const ret: any = {
-			following: 0
+		const opportunity = req.opportunity;
+		const result: any = {
+			following: opportunity.watchers ? opportunity.watchers.length : 0,
+			submitted: 0,
+			draft: 0
 		};
 
-		Promise.resolve()
-			.then(() => {
-				if (op.watchers) {
-					ret.following = op.watchers.length;
-				}
-				ret.submitted = 0;
-				ret.draft = 0;
-				return this.countStatus(op._id);
-			})
-			.then(result => {
-				result
-					.eachAsync(doc => {
-						ret[doc._id.toLowerCase()] = doc.count;
-					})
-					.then(() => {
-						res.json(ret);
-					});
-			})
-			.catch(err => {
-				res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
+		try {
+			const aggregateCountDoc = await this.getCountAggregate(opportunity._id);
+			await aggregateCountDoc.eachAsync((doc: any) => {
+				result[doc._id.toLowerCase()] = doc.count;
 			});
+			res.json(result);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+		return;
 	};
 
 	// Create an archive of all proposals for the given opportunity in the request
-	public getProposalArchive = (req, res) => {
-		const zip = new (require('jszip'))();
-		const fs = require('fs');
-
+	public getProposalArchive = async (req: Request, res: Response): Promise<void> => {
 		// Make sure user has admin access
 		if (!this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json([]);
+			res.json([]);
+			return;
 		}
 
 		// Make a zip archive with the opportunity name
 		const opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
-		let proponentName;
-		let email;
-		let files;
-		let links;
-		let proposalHtml;
-		let header;
-		let content;
+		const zip = new JSZip();
+		let proponentName: string;
+		let email: string;
+		let files: IAttachmentModel[];
+		let links: string[];
+		let proposalHtml: string;
+		let header: string;
+		let content: string;
 
 		// Create the zip file;
 		zip.folder(opportunityName);
 
 		// Get all submitted and assigned proposals
-		ProposalModel.find({ opportunity: req.opportunity._id, status: { $in: ['Submitted', 'Assigned'] } })
-			.sort('status created')
-			.populate('user')
-			.populate('opportunity', 'opportunityTypeCd name code')
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					proposals.forEach(proposal => {
-						proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
-						if (proposal.status === 'Assigned') {
-							proponentName += '-ASSIGNED';
-						}
-						files = proposal.attachments;
-						email = proposal.user.email;
-						proposalHtml = proposal.detail;
+		try {
+			const proposals = await ProposalModel.find({ opportunity: req.opportunity._id, status: { $in: ['Submitted', 'Assigned'] } })
+				.sort('status created')
+				.populate('user')
+				.populate('opportunity', 'opportunityTypeCd name code')
+				.exec();
 
-						// Go through the files and build the internal links (reset links first)
-						// also build the index.html content
-						links = [];
-						files.forEach(file => {
-							links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
-						});
-						header = '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
-						header += email + '<br/>';
-						if (!proposal.isCompany) {
-							header += proposal.user.address + '<br/>';
-							header += proposal.user.phone + '<br/>';
-						} else {
-							header += '<b><i>Company:</i></b>' + '<br/>';
-							header += proposal.user.businessName + '<br/>';
-							header += proposal.user.businessAddress + '<br/>';
-							header += '<b><i>Contact:</i></b>' + '<br/>';
-							header += proposal.user.businessContactName + '<br/>';
-							header += proposal.user.businessContactPhone + '<br/>';
-							header += proposal.user.businessContactEmail + '<br/>';
-						}
-						header += '<h2>Documents</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
-						content = '<html><body>' + header + '<h2>Proposal</h2>' + proposalHtml + '</body></html>';
-
-						// Add the directory, content and documents for this proposal
-						zip.folder(opportunityName).folder(proponentName);
-						zip.folder(opportunityName)
-							.folder(proponentName)
-							.file('index.html', content);
-						files.forEach(file => {
-							zip.folder(opportunityName)
-								.folder(proponentName)
-								.folder('docs')
-								.file(file.name, fs.readFileSync(file.path), { binary: true });
-						});
-					});
-
-					res.setHeader('Content-Type', 'application/zip');
-					res.setHeader('Content-Type', 'application/octet-stream');
-					res.setHeader('Content-Description', 'File Transfer');
-					res.setHeader('Content-Transfer-Encoding', 'binary');
-					res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
-
-					zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			proposals.forEach(proposal => {
+				proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+				if (proposal.status === 'Assigned') {
+					proponentName += '-ASSIGNED';
 				}
+				files = proposal.attachments;
+				email = proposal.user.email;
+				proposalHtml = proposal.detail;
+
+				// Go through the files and build the internal links (reset links first)
+				// also build the index.html content
+				links = [];
+				files.forEach(file => {
+					links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
+				});
+				header = '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+				header += email + '<br/>';
+				if (!proposal.isCompany) {
+					header += proposal.user.address + '<br/>';
+					header += proposal.user.phone + '<br/>';
+				} else {
+					header += '<b><i>Company:</i></b>' + '<br/>';
+					header += proposal.user.businessName + '<br/>';
+					header += proposal.user.businessAddress + '<br/>';
+					header += '<b><i>Contact:</i></b>' + '<br/>';
+					header += proposal.user.businessContactName + '<br/>';
+					header += proposal.user.businessContactPhone + '<br/>';
+					header += proposal.user.businessContactEmail + '<br/>';
+				}
+				header += '<h2>Documents</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+				content = '<html><body>' + header + '<h2>Proposal</h2>' + proposalHtml + '</body></html>';
+
+				// Add the directory, content and documents for this proposal
+				zip.folder(opportunityName).folder(proponentName);
+				zip.folder(opportunityName)
+					.folder(proponentName)
+					.file('index.html', content);
+				files.forEach(file => {
+					zip.folder(opportunityName)
+						.folder(proponentName)
+						.folder('docs')
+						.file(file.name, fs.readFileSync(file.path), { binary: true });
+				});
 			});
+
+			res.setHeader('Content-Type', 'application/zip');
+			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Description', 'File Transfer');
+			res.setHeader('Content-Transfer-Encoding', 'binary');
+			res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+			zip.generateNodeStream({ compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
 	};
 
 	// Create an archive of a single proposal for the given opportunity and belong to the given user
-	public getMyProposalArchive = (req, res) => {
-		const zip = new (require('jszip'))();
-		const fs = require('fs');
-
+	public getMyProposalArchive = async (req: Request, res: Response): Promise<void> => {
 		// Create a zip archive from the opportunity name
 		const opportunityName = req.opportunity.name.replace(/\W/g, '-').replace(/-+/, '-');
+		const zip = new JSZip();
 
 		zip.folder(opportunityName);
 
-		ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('phases.inception.team')
-			.populate('phases.proto.team')
-			.populate('phases.implementation.team')
-			.populate('user')
-			.exec((err, proposal) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					let proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
-					if (proposal.status === 'Assigned') {
-						proponentName += '-ASSIGNED';
-					}
-					const files = proposal.attachments;
-					const email = proposal.user.email;
-
-					// go through the files and build the internal links (reset links first)
-					// also build the index.html content
-					const links = [];
-					files.forEach(file => {
-						links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
-					});
-					let questions = '<ol>';
-					proposal.teamQuestionResponses.forEach(question => {
-						questions += '<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>';
-					});
-					questions += '</ol>';
-					let phases = '<h3>Inception</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.inception.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.inception.cost.toFixed(2);
-
-					phases += '<h3>Prototype</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.proto.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.proto.cost.toFixed(2);
-
-					phases += '<h3>Implementation</h3>';
-					phases += 'Team:<ol>';
-					proposal.phases.implementation.team.forEach(teamMember => {
-						phases += '<li>' + teamMember.displayName + '</li>';
-					});
-					phases += '</ol>';
-					phases += 'Cost: ';
-					phases += '$' + proposal.phases.implementation.cost.toFixed(2);
-
-					phases += '<br/><br/><b>Total Cost: ';
-					phases += '$' + proposal.phases.aggregate.cost.toFixed(2);
-					phases += '</b><br/>';
-
-					let header = '<h2>Proposal</h2>';
-					header += 'Status: ';
-					header += proposal.status;
-					header += '<br/>';
-					header += 'Accepted Terms: ';
-					header += proposal.isAcceptedTerms ? 'Yes' : 'No';
-					header += '<br/>';
-					header += 'Created on: ';
-					header += new Date(proposal.created).toDateString();
-					header += '<br/>';
-					header += 'Lasted updated: ';
-					header += new Date(proposal.updated).toDateString();
-					header += '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
-					header += email + '<br/>';
-					header += '<b><i>Company:</i></b>' + '<br/>';
-					header += proposal.businessName + '<br/>';
-					header += proposal.businessAddress + '<br/>';
-					header += '<b><i>Contact:</i></b>' + '<br/>';
-					header += proposal.businessContactName + '<br/>';
-					header += proposal.businessContactPhone + '<br/>';
-					header += proposal.businessContactEmail + '<br/>';
-					if (links.length > 0) {
-						header += '<h2>Attachments/References</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
-					}
-					let content = '<html><body>';
-					content += header;
-					content += '<h2>Phases</h2>' + phases;
-					content += '<h2>Team Questions</h2>' + questions;
-					content += '</body></html>';
-					//
-					// add the directory, content and documents for this proposal
-					//
-					zip.folder(opportunityName).folder(proponentName);
-					zip.folder(opportunityName)
-						.folder(proponentName)
-						.file('proposal-summary.html', content);
-					files.forEach(file => {
-						zip.folder(opportunityName)
-							.folder(proponentName)
-							.folder('docs')
-							.file(file.name, fs.readFileSync(file.path), { binary: true });
-					});
-
-					res.setHeader('Content-Type', 'application/zip');
-					res.setHeader('Content-Type', 'application/octet-stream');
-					res.setHeader('Content-Description', 'File Transfer');
-					res.setHeader('Content-Transfer-Encoding', 'binary');
-					res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
-
-					zip.generateNodeStream({ base64: false, compression: 'DEFLATE', streamFiles: true }).pipe(res);
-				}
-			});
-	};
-
-	// ---------------  //
-	// Private methods //
-	// ---------------  //
-
-	private countStatus = (id): Promise<any> => {
-		return new Promise(resolve => {
-			const cursor = ProposalModel.aggregate([
-				{
-					$match: {
-						opportunity: id
-					}
-				},
-				{
-					$group: {
-						_id: '$status',
-						count: { $sum: 1 }
-					}
-				}
-			])
-				.cursor({})
+		try {
+			const proposal = await ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('opportunity')
+				.populate('phases.inception.team')
+				.populate('phases.proto.team')
+				.populate('phases.implementation.team')
+				.populate('user')
 				.exec();
 
-			resolve(cursor);
-		});
+			let proponentName = proposal.user.displayName.replace(/\W/g, '-').replace(/-+/, '-');
+			if (proposal.status === 'Assigned') {
+				proponentName += '-ASSIGNED';
+			}
+			const files = proposal.attachments;
+			const email = proposal.user.email;
+
+			// go through the files and build the internal links (reset links first)
+			// also build the index.html content
+			const links = [];
+			files.forEach(file => {
+				links.push('<a href="docs/' + encodeURIComponent(file.name) + '" target="_blank">' + file.name + '</a>');
+			});
+			let questions = '<ol>';
+			proposal.teamQuestionResponses.forEach(question => {
+				questions += '<li style="margin: 10px 0;"><i>Question: ' + question.question + '</i><br/>Response: ' + question.response + '<br/>';
+			});
+			questions += '</ol>';
+			let phases = '<h3>Inception</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.inception.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.inception.cost.toFixed(2);
+
+			phases += '<h3>Prototype</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.proto.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.proto.cost.toFixed(2);
+
+			phases += '<h3>Implementation</h3>';
+			phases += 'Team:<ol>';
+			proposal.phases.implementation.team.forEach(teamMember => {
+				phases += '<li>' + teamMember.displayName + '</li>';
+			});
+			phases += '</ol>';
+			phases += 'Cost: ';
+			phases += '$' + proposal.phases.implementation.cost.toFixed(2);
+
+			phases += '<br/><br/><b>Total Cost: ';
+			phases += '$' + (proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost).toFixed(2);
+			phases += '</b><br/>';
+
+			let header = '<h2>Proposal</h2>';
+			header += 'Status: ';
+			header += proposal.status;
+			header += '<br/>';
+			header += 'Accepted Terms: ';
+			header += proposal.isAcceptedTerms ? 'Yes' : 'No';
+			header += '<br/>';
+			header += 'Created on: ';
+			header += new Date(proposal.created).toDateString();
+			header += '<br/>';
+			header += 'Lasted updated: ';
+			header += new Date(proposal.updated).toDateString();
+			header += '<h2>Proponent</h2>' + proposal.user.displayName + '<br/>';
+			header += email + '<br/>';
+			header += '<b><i>Company:</i></b>' + '<br/>';
+			header += proposal.businessName + '<br/>';
+			header += proposal.businessAddress + '<br/>';
+			header += '<b><i>Contact:</i></b>' + '<br/>';
+			header += proposal.businessContactName + '<br/>';
+			header += proposal.businessContactPhone + '<br/>';
+			header += proposal.businessContactEmail + '<br/>';
+			if (links.length > 0) {
+				header += '<h2>Attachments/References</h2><ul><li>' + links.join('</li><li>') + '</li></ul>';
+			}
+			let content = '<html><body>';
+			content += header;
+			content += '<h2>Phases</h2>' + phases;
+			content += '<h2>Team Questions</h2>' + questions;
+			content += '</body></html>';
+
+			// add the directory, content and documents for this proposal
+			zip.folder(opportunityName).folder(proponentName);
+			zip.folder(opportunityName)
+				.folder(proponentName)
+				.file('proposal-summary.html', content);
+			files.forEach(file => {
+				zip.folder(opportunityName)
+					.folder(proponentName)
+					.folder('docs')
+					.file(file.name, fs.readFileSync(file.path), { binary: true });
+			});
+
+			res.setHeader('Content-Type', 'application/zip');
+			res.setHeader('Content-Type', 'application/octet-stream');
+			res.setHeader('Content-Description', 'File Transfer');
+			res.setHeader('Content-Transfer-Encoding', 'binary');
+			res.setHeader('Content-Disposition', 'attachment; inline=false; filename="' + opportunityName + '.zip' + '"');
+
+			zip.generateNodeStream({ compression: 'DEFLATE', streamFiles: true }).pipe(res);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
+	};
+
+	// Returns an aggregate cursor that counts proposals on an opportunity and groups by their status
+	private getCountAggregate = async (id: any): Promise<any> => {
+		return ProposalModel.aggregate([
+			{
+				$match: {
+					opportunity: id
+				}
+			},
+			{
+				$group: {
+					_id: '$status',
+					count: { $sum: 1 }
+				}
+			}
+		])
+			.cursor({})
+			.exec();
 	};
 
 	// Initiate the opportunity approval workflow by sending the initial
 	// pre-approval email and configuring the opportunity as required
-	private sendApprovalMessages = (requestingUser, opportunity) => {
+	private sendApprovalMessages = async (requestingUser, opportunity) => {
 		if (opportunity.intermediateApproval.state === 'ready-to-send') {
+
+			// ensure opportunity is populated
+			opportunity = await this.populateOpportunity(opportunity);
+
 			// send intermediate approval request
 			this.sendMessages('opportunity-pre-approval-request', [{ email: opportunity.intermediateApproval.email }], { opportunity: this.setMessageData(opportunity) });
 			opportunity.intermediateApproval.state = 'sent';
@@ -927,20 +801,8 @@ class OpportunitiesServerController {
 		return opportunity.code + '-request';
 	};
 
-	private setOpportunityMember = (opportunity, user) => {
-		user.addRoles([this.memberRole(opportunity)]);
-	};
-
 	private setOpportunityAdmin = (opportunity, user) => {
 		user.addRoles([this.memberRole(opportunity), this.adminRole(opportunity)]);
-	};
-
-	private unsetOpportunityMember = (opportunity, user) => {
-		user.removeRoles([this.memberRole(opportunity)]);
-	};
-
-	private unsetOpportunityRequest = (opportunity, user) => {
-		user.removeRoles([this.requestRole(opportunity)]);
 	};
 
 	private ensureAdmin = (opportunity, user, res) => {
@@ -954,7 +816,7 @@ class OpportunitiesServerController {
 		}
 	};
 
-	private searchTerm = (req, opts?) => {
+	private searchTerm = (req: Request, opts?: any): any => {
 		opts = opts || {};
 		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
@@ -1095,16 +957,9 @@ class OpportunitiesServerController {
 		});
 	};
 
-	private updateSave = opportunity => {
-		return new Promise((resolve, reject) => {
-			opportunity.save((err, updatedOpportunity) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(updatedOpportunity);
-				}
-			});
-		});
+	// Save the given opportunity and returns the updated version
+	private updateSave = async (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
+		return await opportunity.save();
 	};
 
 	// Set up internal aggregate states for phase information
@@ -1164,13 +1019,11 @@ class OpportunitiesServerController {
 		let ret = '';
 
 		ret +=
-			'<p>This issue has been auto-generated to facilitate questions about \
-			<a href="https://bcdevexchange.org/opportunities/' +
+			'<p>This issue has been auto-generated to facilitate questions about <a href="https://bcdevexchange.org/opportunities/' +
 			opptype +
 			'/' +
 			opp.code +
-			'">a paid opportunity</a> that has just been posted on the \
-			<a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
+			'">a paid opportunity</a> that has just been posted on the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
 		ret +=
 			'<p>To learn more or apply, <a href="https://bcdevexchange.org/opportunities/' +
 			opptype +
@@ -1182,7 +1035,7 @@ class OpportunitiesServerController {
 		return ret;
 	};
 
-	private populateOpportunity = (opportunity: IOpportunityDocument): Promise<IOpportunityDocument> => {
+	private populateOpportunity = (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
 		return opportunity
 			.populate('createdBy', 'displayName email')
 			.populate('updatedBy', 'displayName')

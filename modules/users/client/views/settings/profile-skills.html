@@ -10,8 +10,8 @@
         <div uib-accordion-group ng-repeat="capability in vm.capabilities">
           <uib-accordion-heading>
             <div class="w-100 h-100 py-0 my-0">
-              <span ng-if="vm.iOppCapabilities[capability.code]"><i class="fas fa-check-circle text-success"></i></span>
-              <span ng-if="!vm.iOppCapabilities[capability.code]"><i class="far fa-circle text-dark"></i></span>
+              <span ng-if="vm.userHasCapability(capability)"><i class="fas fa-check-circle text-success"></i></span>
+              <span ng-if="!vm.userHasCapability(capability)"><i class="far fa-circle text-dark"></i></span>
               {{capability.name}}
             </div>
           </uib-accordion-heading>
@@ -19,7 +19,7 @@
 
             <div class="col py-3">
               <div>Definition:</div>
-              <p ng-bind-html="vm.trust(capability.description)"></p>
+              <p ng-bind-html="capability.description"></p>
             </div>
 
             <div class="hidden-xs col-sm-1 py-3"></div>
@@ -29,7 +29,7 @@
               <div class="checkbox">
 
                 <label>
-                  <input type="checkbox" ng-model="vm.iOppCapabilities[capability.code]" />
+                  <input type="checkbox" ng-init="bool = vm.userHasCapability(capability)" ng-change="vm.toggleCapability(bool, capability)" ng-model="bool" />
                   <strong>Claim this capability</strong>
                 </label>
               </div>
@@ -37,8 +37,8 @@
               <div ng-if="capability.skills.length > 0">
                 <p>Select all the <strong>preferred technical skills</strong> you possess:</p>
                 <div class="label-list">
-                  <label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected':vm.iOppCapabilitySkills[skill.code]}"
-                    ng-click="vm.iOppCapabilitySkills[skill.code]=!vm.iOppCapabilitySkills[skill.code]">
+                  <label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected': vm.userHasSkill(skill)}"
+                    ng-click="vm.toggleSkill(skill)">
                     <span ng-bind="skill.name"></span>
                   </label>
                 </div>

@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 class UserPasswordController {
 	public static getInstance() {

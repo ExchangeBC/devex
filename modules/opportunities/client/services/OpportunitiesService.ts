@@ -1,134 +1,140 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IPromise, resource } from 'angular';
+import { IOpportunity } from '../../shared/IOpportunityDTO';
 
-// Opportunities service used to communicate with Opportunities REST endpoints
-(() => {
-	angular
-		.module('opportunities')
+interface IOpportunityServiceParams {
+	opportunityId?: string;
+	proposalId?: string;
+	code?: string;
+	action?: string;
+	preapproval?: string;
+}
 
-		// service for database interaction - the $resource for opportunities
-		.factory('OpportunitiesService', [
-			'$resource',
-			'$log',
-			($resource, $log) => {
-				const Opportunity = $resource(
-					'/api/opportunities/:opportunityId',
-					{
-						opportunityId: '@_id'
-					},
-					{
-						update: {
-							method: 'PUT',
-							transformResponse(data) {
-								data = angular.fromJson(data);
-								data.deadline = new Date(data.deadline);
-								data.assignment = new Date(data.assignment);
-								data.start = new Date(data.start);
-								data.inceptionStartDate = new Date(data.inceptionStartDate);
-								data.inceptionEndDate = new Date(data.inceptionEndDate);
-								data.prototypeStartDate = new Date(data.prototypeStartDate);
-								data.prototypeEndDate = new Date(data.prototypeEndDate);
-								data.implementationStartDate = new Date(data.implementationStartDate);
-								data.implementationEndDate = new Date(data.implementationEndDate);
-								return data;
-							}
-						},
-						remove: {
-							method: 'DELETE'
-						},
-						save: {
-							method: 'POST',
-							transformResponse(data) {
-								data = angular.fromJson(data);
-								data.deadline = new Date(data.deadline);
-								data.assignment = new Date(data.assignment);
-								data.start = new Date(data.start);
-								data.inceptionStartDate = new Date(data.inceptionStartDate);
-								data.inceptionEndDate = new Date(data.inceptionEndDate);
-								data.prototypeStartDate = new Date(data.prototypeStartDate);
-								data.prototypeEndDate = new Date(data.prototypeEndDate);
-								data.implementationStartDate = new Date(data.implementationStartDate);
-								data.implementationEndDate = new Date(data.implementationEndDate);
-								return data;
-							}
-						},
-						publish: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/publish',
-							params: { opportunityId: '@opportunityId' }
-						},
-						unpublish: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/unpublish',
-							params: { opportunityId: '@opportunityId' }
-						},
-						assign: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/assign/:proposalId',
-							params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
-						},
-						unassign: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/unassign/:proposalId',
-							params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
-						},
-						addWatch: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/watch/add',
-							params: { opportunityId: '@opportunityId' }
-						},
-						removeWatch: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/watch/remove',
-							params: { opportunityId: '@opportunityId' }
-						},
-						getDeadlineStatus: {
-							method: 'GET',
-							url: '/api/opportunities/:opportunityId/deadline/status'
-						},
-						getProposalStats: {
-							method: 'GET',
-							url: '/api/opportunities/:opportunityId/proposalStats'
-						},
-						requestCode: {
-							method: 'PUT',
-							url: '/api/opportunities/:opportunityId/sendcode',
-							params: { opportunityId: '@opportunityId' }
-						},
-						submitCode: {
-							method: 'POST',
-							url: '/api/opportunities/:opportunityId/action',
-							params: { opportunityId: '@opportunityId' }
-						}
-					}
-				);
+export interface IOpportunityResource extends resource.IResource<IOpportunity>, IOpportunity {
+	opportunityId: '@_id';
+	$promise: IPromise<IOpportunityResource>;
+}
 
-				angular.extend(Opportunity.prototype, {
-					createOrUpdate() {
-						const opportunity = this;
-						if (opportunity._id) {
-							return opportunity.$update(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						} else {
-							return opportunity.$save(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						}
-					}
-				});
-				return Opportunity;
+export interface IOpportunitiesService extends resource.IResourceClass<IOpportunityResource> {
+	create(opportunity: IOpportunityResource): IOpportunityResource;
+	update(opportunity: IOpportunityResource): IOpportunityResource;
+	publish(params: IOpportunityServiceParams): IOpportunityResource;
+	unpublish(params: IOpportunityServiceParams): IOpportunityResource;
+	assign(params: IOpportunityServiceParams): IOpportunityResource;
+	unassign(params: IOpportunityServiceParams): IOpportunityResource;
+	addWatch(params: IOpportunityServiceParams): IOpportunityResource;
+	removeWatch(params: IOpportunityServiceParams): IOpportunityResource;
+	getDeadlineStatus(params: IOpportunityServiceParams): IPromise<any>;
+	getProposalStats(params: IOpportunityServiceParams): object;
+	requestCode(params: IOpportunityServiceParams): IOpportunityResource;
+	submitCode(params: IOpportunityServiceParams): IOpportunityResource;
+}
+
+angular.module('opportunities.services').factory('OpportunitiesService', [
+	'$resource',
+	($resource: resource.IResourceService): IOpportunitiesService => {
+		function transformResponse(data: any): IOpportunityResource {
+			data = angular.fromJson(data);
+			data.deadline = new Date(data.deadline);
+			data.assignment = new Date(data.assignment);
+			data.start = new Date(data.start);
+			data.inceptionStartDate = new Date(data.inceptionStartDate);
+			data.inceptionEndDate = new Date(data.inceptionEndDate);
+			data.prototypeStartDate = new Date(data.prototypeStartDate);
+			data.prototypeEndDate = new Date(data.prototypeEndDate);
+			data.implementationStartDate = new Date(data.implementationStartDate);
+			data.implementationEndDate = new Date(data.implementationEndDate);
+			return data;
+		}
+
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST',
+			transformResponse
+		};
+
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			transformResponse
+		};
+
+		const publishAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/publish',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		const unpublishAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/unpublish',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		const assignAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/assign/:proposalId',
+			params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
+		};
+
+		const unassignAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/unassign/:proposalId',
+			params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
+		};
+
+		const addWatchAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/watch/add',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		const removeWatchAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/watch/remove',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		const getDeadlineStatusAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/opportunities/:opportunityId/deadline/status'
+		};
+
+		const getProposalStatsAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/opportunities/:opportunityId/proposalStats'
+		};
+
+		const requestCodeAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/sendcode',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		const submitCodeAction: resource.IActionDescriptor = {
+			method: 'POST',
+			url: '/api/opportunities/:opportunityId/action',
+			params: { opportunityId: '@opportunityId' }
+		};
+
+		return $resource(
+			'/api/opportunities/:opportunityId',
+			{
+				opportunityId: '@_id'
+			},
+			{
+				create: createAction,
+				update: updateAction,
+				publish: publishAction,
+				unpublish: unpublishAction,
+				assign: assignAction,
+				unassign: unassignAction,
+				addWatch: addWatchAction,
+				removeWatch: removeWatchAction,
+				getDeadlineStatus: getDeadlineStatusAction,
+				getProposalStats: getProposalStatsAction,
+				requestCode: requestCodeAction,
+				submitCode: submitCodeAction
 			}
-		]);
-})();
+		) as IOpportunitiesService;
+	}
+]);

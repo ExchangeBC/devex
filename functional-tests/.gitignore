@@ -9,3 +9,5 @@ out
 .idea
 images
 examples
+.classpath
+bin

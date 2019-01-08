@@ -9,12 +9,10 @@ import nodemailer from 'nodemailer';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import UserModel from '../../../users/server/models/UserModel';
-import IMessageDocument from '../interfaces/IMessageDocument';
-import IMessageTemplateDocument from '../interfaces/IMessageTemplateDocument';
-import MessageArchiveModel from '../models/MessageArchiveModel';
-import MessageModel from '../models/MessageModel';
-import MessageTemplateModel from '../models/MessageTemplateModel';
+import { UserModel } from '../../../users/server/models/UserModel';
+import { MessageArchiveModel } from '../models/MessageArchiveModel';
+import { IMessageModel, MessageModel } from '../models/MessageModel';
+import { IMessageTemplateModel, MessageTemplateModel } from '../models/MessageTemplateModel';
 
 class MessagesServerController {
 	public static getInstance() {
@@ -277,7 +275,7 @@ class MessagesServerController {
 	};
 
 	// Perform a query on the messages table
-	private query = (table, q): Promise<[IMessageDocument]> => {
+	private query = (table, q): Promise<IMessageModel[]> => {
 		return new Promise((resolve, reject) => {
 			table
 				.find(q)
@@ -427,7 +425,7 @@ class MessagesServerController {
 	};
 
 	// Prepare a single message
-	private prepareMessage = (template: IMessageTemplateDocument, data) => {
+	private prepareMessage = (template: IMessageTemplateModel, data) => {
 		//
 		// deal with archive and current dates
 		//

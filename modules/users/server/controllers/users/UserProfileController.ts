@@ -8,7 +8,7 @@ import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
 import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 class UserProfileController {
 	public static getInstance() {
@@ -274,7 +274,7 @@ class UserProfileController {
 			const id = req.user._id;
 			req.logout();
 			// res.redirect('/');
-			UserModel.remove({ _id: id }, err => {
+			UserModel.deleteOne({ _id: id }, err => {
 				if (err) {
 					res.status(500).send({
 						message: 'Unable to delete profile!'

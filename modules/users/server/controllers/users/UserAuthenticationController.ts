@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import passport from 'passport';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 class UserAuthenticationController {
 	public static getInstance() {
@@ -166,7 +166,7 @@ class UserAuthenticationController {
 					if (!user) {
 						const possibleUsername = providerUserProfile.username || (providerUserProfile.email ? providerUserProfile.email.split('@')[0] : '');
 
-						UserModel.findUniqueUsername(possibleUsername, null, availableUsername => {
+						UserModel.schema.statics.findUniqueUsername(possibleUsername, null, availableUsername => {
 							user = new UserModel({
 								firstName: providerUserProfile.firstName,
 								lastName: providerUserProfile.lastName,

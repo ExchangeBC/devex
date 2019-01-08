@@ -1,10 +1,11 @@
 'use strict';
 
-import { model, Model, Schema } from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import ICapabilityDocument from '../interfaces/ICapabilityDocument';
+import { ICapability } from '../../shared/ICapabilityDTO';
 
-interface ICapabilityModel extends Model<ICapabilityDocument> {
+export interface ICapabilityModel extends ICapability, Document {
+	_id: any;
 	findUniqueCode(title: string, suffix: string, callback: any): string;
 }
 
@@ -30,6 +31,4 @@ CapabilitySchema.statics.findUniqueCode = function(title, suffix, callback) {
 	return CoreServerHelpers.modelFindUniqueCode(this, 'capability', title, suffix, callback);
 };
 
-const CapabilityModel: ICapabilityModel = model<ICapabilityDocument, ICapabilityModel>('Capability', CapabilitySchema);
-
-export default CapabilityModel;
+export const CapabilityModel: Model<ICapabilityModel> = model<ICapabilityModel>('Capability', CapabilitySchema);

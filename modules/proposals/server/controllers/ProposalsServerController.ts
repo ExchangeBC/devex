@@ -1,21 +1,6 @@
 'use strict';
-/*
 
-Notes about proposals
-
-Roles:
-------
-Membership in a proposal is defined by the user having various roles attached to their
-user record. There are only three possible states: admin, member, or request.
-When a user requests membership they get the request role only, once accepted that
-simply gets changed to the member role. Roles are simply the proposal code with suffixes.
-
-member  : <code>
-admin   : <code>-admin
-request : <code>-request
-
-*/
-
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -23,11 +8,9 @@ import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import OpportunitiesServerController from '../../../opportunities/server/controllers/OpportunitiesServerController';
-import IUserDocument from '../../../users/server/interfaces/IUserDocument';
-import UserModel from '../../../users/server/models/UserModel';
-import IProposalDocument from '../interfaces/IProposalDocument';
-import ProposalModel from '../models/ProposalModel';
+import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
+import { AttachmentModel, IProposalModel, ProposalModel } from '../models/ProposalModel';
 
 class ProposalsServerController {
 	public static getInstance() {
@@ -42,225 +25,188 @@ class ProposalsServerController {
 						roles provider';
 	private fileStream: FileStream = new FileStream();
 
-	private constructor() {}
+	private constructor() {
+		this.read = this.read.bind(this);
+		this.create = this.create.bind(this);
+		this.update = this.update.bind(this);
+		this.assign = this.assign.bind(this);
+		this.assignswu = this.assignswu.bind(this);
+		this.unassign = this.unassign.bind(this);
+		this.delete = this.delete.bind(this);
+		this.list = this.list.bind(this);
+		this.getPotentialResources = this.getPotentialResources.bind(this);
+		this.getProposalsForOpp = this.getProposalsForOpp.bind(this);
+		this.uploaddoc = this.uploaddoc.bind(this);
+		this.removedoc = this.removedoc.bind(this);
+		this.downloaddoc = this.downloaddoc.bind(this);
+		this.proposalByID = this.proposalByID.bind(this);
+		this.getUserProposalForOpp = this.getUserProposalForOpp.bind(this);
+		this.saveProposal = this.saveProposal.bind(this);
+		this.addAttachment = this.addAttachment.bind(this);
+	}
 
 	// Get a proposal for the given opportunity and user
-	public getUserProposalForOpp = (req, res) => {
+	public async getUserProposalForOpp(req: Request, res: Response): Promise<void> {
 		if (!req.user) {
-			return res.json({});
+			res.json({});
+			return;
 		}
 
-		ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('user')
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(proposals);
-				}
-			});
-	};
+		try {
+			const proposal = await ProposalModel.findOne({ user: req.user.id, opportunity: req.opportunity.id });
+			if (proposal) {
+				const populatedProposal = await this.populateProposal(proposal);
+				res.json(populatedProposal);
+			} else {
+				res.json({});
+			}
 
-	public saveProposal = proposal => {
-		return new Promise((resolve, reject) => {
-			this.setPhases(proposal).then(() => {
-				proposal.save((err, doc) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(doc);
-					}
-				});
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-		});
-	};
+			return;
+		}
+	}
 
-	public saveProposalRequest = (req, res, proposal) => {
-		return this.saveProposal(proposal)
-			.then(() => {
-				res.json(proposal);
-			})
-			.catch(e => {
-				res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(e)
-				});
-			});
-	};
+	public async saveProposal(proposal: IProposalModel): Promise<IProposalModel> {
+		return await proposal.save();
+	}
 
 	// Remove a user from a proposal and save it
-	public removeUserFromProposal = (proposal, userid) => {
-		proposal.phases.implementation.team.pull(userid);
-		proposal.phases.inception.team.pull(userid);
-		proposal.phases.proto.team.pull(userid);
+	public async removeUserFromProposal(proposal: IProposalModel, userEmail: string): Promise<IProposalModel> {
+		proposal.phases.implementation.team.splice(proposal.phases.implementation.team.map(user => user.email).indexOf(userEmail), 1);
+		proposal.phases.inception.team.splice(proposal.phases.inception.team.map(user => user.email).indexOf(userEmail), 1);
+		proposal.phases.proto.team.splice(proposal.phases.proto.team.map(user => user.email).indexOf(userEmail), 1);
 		return this.saveProposal(proposal);
-	};
+	}
 
 	// Create a new proposal. The user doing the creation will be set as the
 	// administrator
-	public create = (req, res) => {
+	public async create(req: Request, res: Response): Promise<void> {
 		const proposal = new ProposalModel(req.body);
 		proposal.status = 'Draft';
 		proposal.user = req.user;
-		//
+
 		// set the audit fields so we know who did what when
-		//
 		CoreServerHelpers.applyAudit(proposal, req.user);
-		//
+
 		// save and return
-		//
-		this.saveProposalRequest(req, res, proposal);
-	};
+		try {
+			const updatedProposal = await this.saveProposal(proposal);
+			const populatedProposal = await this.populateProposal(updatedProposal);
+			res.json(populatedProposal);
+		} catch (error) {
+			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
+		}
+	}
 
 	// Takes the already queried object and pass it back
-	public read = (req, res) => {
+	public async read(req: Request, res: Response): Promise<void> {
 		if (this.ensureProposalOwner(req.proposal, req.user) || this.ensureAdminOnOpp(req.proposal.opportunity, req.user) || this.ensureAdmin(req.user)) {
-			res.json(req.proposal);
+			const populatedOpportunity = await this.populateProposal(req.proposal);
+			res.json(populatedOpportunity);
 		} else {
 			res.status(403).send({
 				message: 'User is not authorized'
 			});
 		}
-	};
+	}
 
-	// Update the document, make sure to apply audit. We don't mess with the
-	// code if they change the name as that would mean reworking all the roles
-	public update = (req, res) => {
+	// Update the document, make sure to apply audit.
+	public async update(req: Request, res: Response): Promise<void> {
 		if (!this.ensureProposalOwner(req.proposal, req.user) && !this.ensureAdminOnOpp(req.proposal.opportunity, req.user) && !this.ensureAdmin(req.user)) {
-			return res.status(403).send({
+			res.status(403).send({
 				message: 'User is not authorized'
 			});
+			return;
 		}
 
-		const updatedProposal = _.mergeWith(req.proposal, req.body, (objValue, srcValue) => {
-			if (_.isArray(objValue)) {
-				return srcValue;
-			}
-		});
+		const newProposalInfo = req.body;
 
 		// set the audit fields so we know who did what when
-		CoreServerHelpers.applyAudit(updatedProposal, req.user);
+		CoreServerHelpers.applyAudit(newProposalInfo, req.user);
 
-		this.saveProposalRequest(req, res, updatedProposal);
-	};
-
-	// Sets the specified proposal to 'Submitted' status
-	public submit = (req, res) => {
-		if (!this.ensureProposalOwner(req.proposal, req.user)) {
-			return res.json({ message: 'User is not authorized' });
+		try {
+			const updatedProposal = await ProposalModel.findOneAndUpdate({ _id: req.proposal._id }, newProposalInfo, { new: true });
+			const populatedProposal = await this.populateProposal(updatedProposal);
+			res.json(populatedProposal);
+		} catch (error) {
+			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
 		}
-		req.body.status = 'Submitted';
-		return exports.update(req, res);
-	};
+	}
 
-	// Assigns the proposal to the given opportunity
-	public assign = (proposal, user) => {
-		return new Promise((resolve, reject) => {
-			proposal.status = 'Assigned';
+	// Sets the assigned status of the proposal
+	public async assign(proposal: IProposalModel, user: IUserModel): Promise<IProposalModel> {
+		proposal.status = 'Assigned';
 
-			CoreServerHelpers.applyAudit(proposal, user);
+		CoreServerHelpers.applyAudit(proposal, user);
 
-			this.saveProposal(proposal).then(p => {
-				proposal = p;
-				resolve();
-			});
-		});
-	};
+		const updatedProposal = await this.saveProposal(proposal);
+		return this.populateProposal(updatedProposal);
+	}
 
-	public assignswu = (req, res) => {
+	public async assignswu(req: Request, res: Response): Promise<void> {
 		const proposal = req.proposal;
 		proposal.status = 'Assigned';
 		proposal.isAssigned = true;
 		CoreServerHelpers.applyAudit(proposal, req.user);
-		this.saveProposal(proposal)
-			.then(updatedProposal => {
-				OpportunitiesServerController.assignswu(proposal.opportunity._id, proposal._id, proposal.user, req.user);
-				return updatedProposal;
-			})
-			.then(updatedProposal => {
-				res.json(updatedProposal);
-			})
-			.catch(e => {
-				res.status(422).send({ message: CoreServerErrors.getErrorMessage(e) });
-			});
-	};
+
+		try {
+			const updatedProposal = await this.saveProposal(proposal);
+			const populatedProposal = await this.populateProposal(updatedProposal);
+			res.json(populatedProposal);
+		} catch (error) {
+			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
+		}
+	}
 
 	// Unassign gets called from the opportunity side, so just do the work
 	// and return a promise
-	public unassign = (proposal, user) => {
-		return new Promise((resolve, reject) => {
-			proposal.status = 'Submitted';
-			CoreServerHelpers.applyAudit(proposal, user);
-			this.saveProposal(proposal).then(p => {
-				proposal = p;
-				resolve();
-			});
-		});
-	};
+	public async unassign(proposal: IProposalModel, user: IUserModel): Promise<IProposalModel> {
+		proposal.status = 'Submitted';
+		CoreServerHelpers.applyAudit(proposal, user);
+		return this.saveProposal(proposal);
+	}
 
 	// Delete the proposal
-	public delete = (req, res) => {
+	public async delete(req: Request, res: Response): Promise<void> {
 		const proposal = req.proposal;
-		proposal.remove(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(proposal);
-			}
-		});
-	};
 
-	public deleteForOrg = orgid => {
-		return new Promise((resolve, reject) => {
-			ProposalModel.find({ org: orgid }, (err, proposals) => {
-				if (err) {
-					reject(err);
-				} else {
-					if (proposals) {
-						Promise.all(
-							proposals.map(proposal => {
-								return Promise.resolve();
-							})
-						).then(resolve, reject);
-					} else {
-						resolve();
-					}
-				}
-			});
-		});
-	};
+		try {
+			const updatedProposal = await proposal.remove();
+			res.json(updatedProposal);
+			return;
+		} catch (error) {
+			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
+			return;
+		}
+	}
 
 	// Return a list of all proposals
-	public list = (req, res) => {
-		ProposalModel.find({})
-			.sort('name')
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('user', this.userfields)
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(proposals);
-				}
+	public async list(req: Request, res: Response): Promise<void> {
+		try {
+			const proposals = await ProposalModel.find({})
+				.sort('name')
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('opportunity')
+				.populate('user', this.userfields)
+				.exec();
+			res.json(proposals);
+			return;
+		} catch (error) {
+			res.status(500).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+			return;
+		}
+	}
 
 	// Given an opportunity and an organization, return all members that are
 	// qualified to be assigned to each phase in the proposal
-	public getPotentialResources = (req, res) => {
-		//
-		// gather up all the bits and peices
-		//
+	public async getPotentialResources(req: Request, res: Response): Promise<void> {
 		const user = req.user;
 		const org = req.org;
 		const opportunity = req.opportunity;
@@ -268,7 +214,7 @@ class ProposalsServerController {
 
 		// if the user is not an admin of the org then bail out
 		if (user._id.toString() !== org.owner._id.toString() && org.admins.indexOf(user._id) === -1) {
-			return res.status(422).send({
+			res.status(422).send({
 				message: 'User is not authorized'
 			});
 		}
@@ -279,81 +225,242 @@ class ProposalsServerController {
 			proto: [],
 			implementation: []
 		};
-		UserModel.find({
-			_id: { $in: allMembers }
-		})
-			.select('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
-			.populate('capabilities', 'code name labelClass')
-			.populate('capabilitySkills', 'code name labelClass')
-			.exec((err, users) => {
-				let i;
-				let j;
-				let c;
-				for (i = 0; i < users.length; i++) {
-					const curUser = users[i].toObject();
-					curUser.iCapabilities = {};
-					curUser.iCapabilitySkills = {};
-					curUser.capabilities.forEach(cap => {
-						curUser.iCapabilities[cap.code] = true;
-					});
-					curUser.capabilitySkills.forEach(skill => {
-						curUser.iCapabilitySkills[skill.code] = true;
-					});
-					users[i] = curUser;
-					for (j = 0; j < opportunity.phases.inception.capabilities.length; j++) {
-						c = opportunity.phases.inception.capabilities[j].code;
-						if (curUser.iCapabilities[c]) {
-							ret.inception.push(curUser);
-							break;
-						}
-					}
-					for (j = 0; j < opportunity.phases.proto.capabilities.length; j++) {
-						c = opportunity.phases.proto.capabilities[j].code;
-						if (curUser.iCapabilities[c]) {
-							ret.proto.push(curUser);
-							break;
-						}
-					}
-					for (j = 0; j < opportunity.phases.implementation.capabilities.length; j++) {
-						c = opportunity.phases.implementation.capabilities[j].code;
-						if (curUser.iCapabilities[c]) {
-							ret.implementation.push(curUser);
-							break;
-						}
+
+		try {
+			const users = await UserModel.find({ _id: { $in: allMembers } })
+				.select('capabilities capabilitySkills _id displayName firstName lastName email username profileImageURL')
+				.populate('capabilities', 'code name labelClass')
+				.populate('capabilitySkills', 'code name labelClass')
+				.exec();
+
+			for (let i = 0; i < users.length; i++) {
+				const curUser = users[i].toObject();
+				curUser.iCapabilities = {};
+				curUser.iCapabilitySkills = {};
+				curUser.capabilities.forEach(cap => {
+					curUser.iCapabilities[cap.code] = true;
+				});
+				curUser.capabilitySkills.forEach(skill => {
+					curUser.iCapabilitySkills[skill.code] = true;
+				});
+				users[i] = curUser;
+
+				let j: number;
+				let c: string;
+				for (j = 0; j < opportunity.phases.inception.capabilities.length; j++) {
+					c = opportunity.phases.inception.capabilities[j].code;
+					if (curUser.iCapabilities[c]) {
+						ret.inception.push(curUser);
+						break;
 					}
 				}
-				ret.all = users;
-				res.json(ret);
+				for (j = 0; j < opportunity.phases.proto.capabilities.length; j++) {
+					c = opportunity.phases.proto.capabilities[j].code;
+					if (curUser.iCapabilities[c]) {
+						ret.proto.push(curUser);
+						break;
+					}
+				}
+				for (j = 0; j < opportunity.phases.implementation.capabilities.length; j++) {
+					c = opportunity.phases.implementation.capabilities[j].code;
+					if (curUser.iCapabilities[c]) {
+						ret.implementation.push(curUser);
+						break;
+					}
+				}
+			}
+
+			ret.all = users;
+			res.json(ret);
+		} catch (error) {
+			res.status(500).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+		}
+	}
 
-	// New empty proposal
-	public new = (req, res) => {
-		const p = new ProposalModel();
-		res.json(p);
-	};
-
-	// Get proposals for a given opportunity
-	public getProposalsForOpp = (req, res) => {
+	// Get submitted/assigned proposals for a given opportunity
+	public async getProposalsForOpp(req: Request, res: Response): Promise<void> {
 		if (!req.opportunity) {
-			return res.status(422).send({
+			res.status(422).send({
 				message: 'Valid opportunity not provided'
 			});
+			return;
 		}
 
 		if (!this.ensureAdminOnOpp(req.opportunity, req.user) && !this.ensureAdmin(req.user)) {
-			return res.status(403).send({ message: 'User is not authorized' });
+			res.status(403).send({ message: 'User is not authorized' });
+			return;
 		}
 
-		ProposalModel.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
-			.sort('created')
+		try {
+			const proposals = await ProposalModel.find({ opportunity: req.opportunity._id, $or: [{ status: 'Submitted' }, { status: 'Assigned' }] })
+				.sort('created')
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('opportunity')
+				.populate('phases.proto.team')
+				.populate('phases.inception.team')
+				.populate('phases.implementation.team')
+				.populate('user')
+				.populate('phases.proto.capabilitySkills')
+				.populate('phases.inception.capabilitySkills')
+				.populate('phases.implementation.capabilitySkills')
+				.populate({
+					path: 'phases.proto.team',
+					populate: { path: 'capabilities capabilitySkills' }
+				})
+				.populate({
+					path: 'phases.inception.team',
+					populate: { path: 'capabilities capabilitySkills' }
+				})
+				.populate({
+					path: 'phases.implementation.team',
+					populate: { path: 'capabilities capabilitySkills' }
+				})
+				.exec();
+			res.json(proposals);
+			return;
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
+	}
+
+	// Populates the proposal on the request
+	public async proposalByID(req: Request, res: Response, next: NextFunction, id: string): Promise<IProposalModel> {
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			res.status(400).send({
+				message: 'Proposal is invalid'
+			});
+			return;
+		}
+
+		try {
+			const proposal = await ProposalModel.findOne({ _id: id });
+			const populatedProposal = await this.populateProposal(proposal);
+			req.proposal = populatedProposal;
+			next();
+		} catch (error) {
+			res.status(404).send({
+				message: 'No proposal with that identifier has been found'
+			});
+			return;
+		}
+	}
+
+	// Upload an attachment to a proposal
+	public uploaddoc(req: Request, res: Response): void {
+		const proposal = req.proposal;
+		const user = req.user;
+		const isAdmin = user && user.roles.indexOf('admin') !== -1;
+		const isOwner = user && proposal.user._id.toString() === user._id.toString();
+
+		if (!(isOwner || isAdmin)) {
+			res.status(403).send({ message: 'Not permitted' });
+			return;
+		}
+
+		if (proposal) {
+			const storage = multer.diskStorage(config.uploads.diskStorage);
+			const upload = multer({ storage }).single('file');
+			upload(req, res, async uploadError => {
+				if (uploadError) {
+					res.status(422).send(uploadError);
+				} else {
+					const storedname = req.file.path;
+					const originalname = req.file.originalname;
+					const updatedProposal = await this.addAttachment(req, res, proposal, originalname, storedname, req.file.mimetype);
+					res.json(updatedProposal);
+				}
+			});
+		} else {
+			res.status(422).send({
+				message: 'No proposal provided'
+			});
+		}
+	}
+
+	// Remove an attachment from a proposal
+	public async removedoc(req: Request, res: Response): Promise<void> {
+		const proposal = req.proposal;
+		const user = req.user;
+		const isAdmin = user && user.roles.indexOf('admin') !== -1;
+		const isOwner = user && proposal.user.id.toString() === user.id.toString();
+
+		if (!(isOwner || isAdmin)) {
+			res.status(401).send({ message: 'Not permitted' });
+			return;
+		}
+
+		const doc = proposal.attachments.find(document => document.id === req.params.documentId);
+		await doc.remove();
+		const updatedProposal = await this.saveProposal(proposal);
+		res.json(updatedProposal);
+		return;
+	}
+
+	public downloaddoc(req: Request, res: Response): void {
+		const proposal = req.proposal;
+		const user = req.user;
+		const isAdmin = user && user.roles.indexOf('admin') !== -1;
+		const isGov = user && user.roles.indexOf('gov') !== -1;
+		const isOwner = user && proposal.user._id.toString() === user._id.toString();
+
+		if (!(user && (isAdmin || isGov || isOwner))) {
+			res.status(401).send({ message: 'Not permitted' });
+			return;
+		}
+
+		const doc = proposal.attachments.find(document => document._id === req.params.documentId);
+		this.fileStream.stream(res, doc.path, doc.name, doc.type);
+		return;
+	}
+
+	private ensureProposalOwner(proposal: IProposalModel, user: IUserModel): boolean {
+		if (!user) {
+			return false;
+		}
+
+		return proposal.user.id === user.id;
+	}
+
+	private adminRole(opportunity: IOpportunityModel): string {
+		return opportunity.code + '-admin';
+	}
+
+	private ensureAdminOnOpp(opportunity: IOpportunityModel, user: IUserModel): boolean {
+		return user.roles.indexOf(this.adminRole(opportunity)) !== -1;
+	}
+
+	// Returns boolean indicating whether given user has 'admin' role
+	private ensureAdmin(user: IUserModel): boolean {
+		return user && user.roles.indexOf('admin') !== -1;
+	}
+
+	private async addAttachment(req: Request, res: Response, proposal: IProposalModel, name: string, path: string, type: string): Promise<IProposalModel> {
+		const attachment = await AttachmentModel.create({
+			name,
+			path,
+			type
+		});
+
+		proposal.attachments.push(attachment);
+		return this.saveProposal(proposal);
+	}
+
+	private async populateProposal(proposal: IProposalModel): Promise<IProposalModel> {
+		return proposal
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
 			.populate('opportunity')
-			.populate('phases.proto.team')
-			.populate('phases.inception.team')
-			.populate('phases.implementation.team')
-			.populate('user')
+			.populate('user', this.userfields)
+			.populate('phases.implementation.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
+			.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
+			.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
+			.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate({
 				path: 'phases.proto.team',
 				populate: { path: 'capabilities capabilitySkills' }
@@ -366,204 +473,8 @@ class ProposalsServerController {
 				path: 'phases.implementation.team',
 				populate: { path: 'capabilities capabilitySkills' }
 			})
-			.exec((err, proposals) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(proposals);
-				}
-			});
-	};
-
-	// Populates the proposal on the request
-	public proposalByID = (req, res, next, id) => {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).send({
-				message: 'Proposal is invalid'
-			});
-		}
-
-		ProposalModel.findById(id)
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('opportunity')
-			.populate('user', this.userfields)
-			.populate('phases.implementation.team', '_id displayName firstName lastName email username profileImageURL')
-			.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL')
-			.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL')
-			.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL')
-			.exec((err, proposal) => {
-				if (err) {
-					return next(err);
-				} else if (!proposal) {
-					return res.status(404).send({
-						message: 'No proposal with that identifier has been found'
-					});
-				}
-				req.proposal = proposal;
-				next();
-			});
-	};
-
-	// Upload an attachment to a proposal
-	public uploaddoc = (req, res) => {
-		const proposal = req.proposal;
-		const user = req.user;
-		const isAdmin = user && user.roles.indexOf('admin') !== -1;
-		const isOwner = user && proposal.user._id.toString() === user._id.toString();
-		if (!(isOwner || isAdmin)) {
-			return res.status(401).send({ message: 'Not permitted' });
-		}
-
-		if (proposal) {
-			const storage = multer.diskStorage(config.uploads.diskStorage);
-			const upload = multer({ storage }).single('file');
-			upload(req, res, uploadError => {
-				if (uploadError) {
-					res.status(422).send(uploadError);
-				} else {
-					const storedname = req.file.path;
-					const originalname = req.file.originalname;
-					this.addAttachment(req, res, proposal, originalname, storedname, req.file.mimetype);
-				}
-			});
-		} else {
-			res.status(401).send({
-				message: 'No proposal provided'
-			});
-		}
-	};
-
-	public removedoc = (req, res) => {
-		const proposal = req.proposal;
-		const user = req.user;
-		const isAdmin = user && user.roles.indexOf('admin') !== -1;
-		const isOwner = user && proposal.user._id.toString() === user._id.toString();
-		if (!(isOwner || isAdmin)) {
-			return res.status(401).send({ message: 'Not permitted' });
-		}
-		req.proposal.attachments.id(req.params.documentId).remove();
-		this.saveProposalRequest(req, res, req.proposal);
-	};
-
-	public downloaddoc = (req, res) => {
-		const proposal = req.proposal;
-		const user = req.user;
-		const isAdmin = user && user.roles.indexOf('admin') !== -1;
-		const isGov = user && user.roles.indexOf('gov') !== -1;
-		const isOwner = user && proposal.user._id.toString() === user._id.toString();
-		if (!(user && (isAdmin || isGov || isOwner))) {
-			return res.status(401).send({ message: 'Not permitted' });
-		}
-		const fileobj = req.proposal.attachments.id(req.params.documentId);
-		return this.fileStream.stream(res, fileobj.path, fileobj.name, fileobj.type);
-	};
-
-	private ensureProposalOwner = (proposal, user) => {
-		if (!user) {
-			return false;
-		}
-
-		return proposal.user.id === user.id;
-	};
-
-	private adminRole = opportunity => {
-		return opportunity.code + '-admin';
-	};
-
-	private ensureAdminOnOpp = (opportunity, user) => {
-		return user.roles.indexOf(this.adminRole(opportunity)) !== -1;
-	};
-
-	// Returns boolean indicating whether given user has 'admin' role
-	private ensureAdmin = user => {
-		return user && user.roles.indexOf('admin') !== -1;
-	};
-
-	private getUserCapabilities = (users: IUserDocument[]) => {
-		return new Promise((resolve, reject) => {
-			const userids = users.map(o => {
-				if (o._id) {
-					return o._id;
-				} else {
-					return o;
-				}
-			});
-			UserModel.find({ _id: { $in: userids } })
-				.populate('capabilities', 'name code')
-				.populate('capabilitySkills', 'name code')
-				.exec((err, members) => {
-					const ret = { capabilities: {}, capabilitySkills: {} };
-					if (err) {
-						reject({ message: 'Error getting members' });
-					}
-					members.forEach(member => {
-						if (member.capabilities) {
-							member.capabilities.forEach(capability => {
-								ret.capabilities[capability.code] = capability;
-							});
-						}
-						if (member.capabilitySkills) {
-							member.capabilitySkills.forEach(capabilitySkill => {
-								ret.capabilitySkills[capabilitySkill.code] = capabilitySkill;
-							});
-						}
-					});
-					resolve(ret);
-				});
-		});
-	};
-
-	private getPhaseCapabilities = (proposal: IProposalDocument) => {
-		return Promise.all([
-			this.getUserCapabilities(proposal.phases.inception.team),
-			this.getUserCapabilities(proposal.phases.proto.team),
-			this.getUserCapabilities(proposal.phases.implementation.team)
-		]).then(results => {
-			return results.reduce((accum: any, curr: any) => {
-				Object.keys(curr.capabilities).forEach(key => {
-					accum.capabilities[key] = curr.capabilities[key];
-				});
-				Object.keys(curr.capabilitySkills).forEach(key => {
-					accum.capabilitySkills[key] = curr.capabilitySkills[key];
-				});
-				return accum;
-			});
-		});
-	};
-
-	// Set up internal aggregate states for phase information
-	private setPhases = proposal => {
-		//
-		// only for sprint with us
-		//
-		if (proposal.opportunity.opportunityTypeCd !== 'sprint-with-us') {
-			return Promise.resolve();
-		} else {
-			return this.getPhaseCapabilities(proposal).then((curr: any) => {
-				proposal.phases.aggregate.capabilities = [];
-				proposal.phases.aggregate.capabilitySkills = [];
-				Object.keys(curr.capabilities).forEach(key => {
-					proposal.phases.aggregate.capabilities.push(curr.capabilities[key]);
-				});
-				Object.keys(curr.capabilitySkills).forEach(key => {
-					proposal.phases.aggregate.capabilitySkills.push(curr.capabilitySkills[key]);
-				});
-				proposal.phases.aggregate.cost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
-			});
-		}
-	};
-
-	private addAttachment = (req, res, proposal, name, path, type) => {
-		proposal.attachments.push({
-			name,
-			path,
-			type
-		});
-		return this.saveProposalRequest(req, res, proposal);
-	};
+			.execPopulate();
+	}
 }
 
 export default ProposalsServerController.getInstance();

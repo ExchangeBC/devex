@@ -38,9 +38,9 @@
     </div>
 
     <!-- // Proposal Application Directive // -->
-    <div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+    <div class="row" ng-if="vm.closing !== 'CLOSED'">
       <div class="col px-0">
-        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal" org="vm.org"></proposal-apply>
       </div>
 
     </div>
@@ -70,12 +70,11 @@
           This RFP is a Competition Notice under RFQ No. ON‌-003166 and is restricted to Proponents that have become
           Qualified Suppliers pursuant to that RFQ.
         </div>
-        <!-- // Opportunity Admin control buttons // -->
-        <!-- // Admin Controls / if opportunity is in DRAFT and COMPLETE // -->
+
         <!-- PUBLISH -->
         <div class="col-sm-4">
           <a ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary text-white float-right"
-            ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity">
+            ng-click="vm.publish(true)" title="Publish this Opportunity">
             <i class="fa fa-bullhorn text-white"></i>
             Publish
 
@@ -94,7 +93,7 @@
           </a>
 
           <!-- UNPUBLISH -->
-          <a ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only float-right" ng-click="vm.publish(vm.opportunity, false)"
+          <a ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only float-right" ng-click="vm.publish(false)"
             uib-tooltip="Unpublish this Opportunity">
             <i class="fas fa-ban"></i>
           </a>
@@ -309,21 +308,21 @@
             Schedule:
             <div>
               <i class="fas fa-calendar"></i> &nbsp;
-              <span class="small">{{vm.opportunity.phases.inception.fstartDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.inception.startDate)}}</span>
               to
-              <span class="small">{{vm.opportunity.phases.inception.fendDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.inception.endDate)}}</span>
             </div>
             <hr>
             <h5>Required Capabilities*</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.inceptionCapabilities">
-                  <td>
+                <tr ng-repeat="capability in vm.opportunity.phases.inception.capabilities">
+                  <td class="text-nowrap">
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
+                    <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.inception.capabilitiesCore)">
                       full time
                     </label>
                   </td>
@@ -343,21 +342,21 @@
             Schedule:
             <div>
               <i class="fas fa-calendar"></i> &nbsp;
-              <span class="small">{{vm.opportunity.phases.proto.fstartDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.proto.startDate)}}</span>
               to
-              <span class="small">{{vm.opportunity.phases.proto.fendDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.proto.endDate)}}</span>
             </div>
             <hr>
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.prototypeCapabilities">
-                  <td>
+                <tr ng-repeat="capability in vm.opportunity.phases.proto.capabilities">
+                  <td class="text-nowrap">
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
+                    <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.proto.capabilitiesCore)">
                       full time
                     </label>
                   </td>
@@ -377,21 +376,21 @@
             Schedule:
             <div>
               <i class="fas fa-calendar"></i> &nbsp;
-              <span class="small">{{vm.opportunity.phases.implementation.fstartDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.implementation.startDate)}}</span>
               to
-              <span class="small">{{vm.opportunity.phases.implementation.fendDate}}</span>
+              <span class="small">{{vm.formatDate(vm.opportunity.phases.implementation.endDate)}}</span>
             </div>
             <hr>
             <h5>Required Capabilities&#42;</h5>
             <table class="table capabilities-list">
               <tbody>
-                <tr ng-repeat="capability in vm.implementationCapabilities">
-                  <td>
+                <tr ng-repeat="capability in vm.opportunity.phases.implementation.capabilities">
+                  <td class="text-nowrap">
                     <label class="label label-lg label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
-                    <label class="label label-fulltime-selected" ng-if="capability.fullTime">
+                    <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.implementation.capabilitiesCore)">
                       full time
                     </label>
                   </td>

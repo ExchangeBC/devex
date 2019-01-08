@@ -2,7 +2,7 @@
 
 import passport from 'passport';
 import config from '../../../../config/ApplicationConfig';
-import UserModel from '../models/UserModel';
+import { UserModel } from '../models/UserModel';
 import GitHubAuthStrategy from './strategies/GitHubStrategy';
 import LocalAuthStrategy from './strategies/LocalStrategy';
 

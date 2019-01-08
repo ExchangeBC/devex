@@ -26,11 +26,11 @@ class ProposalsPolicy {
 						permissions: '*'
 					},
 					{
-						resources: '/api/proposals/:proposalId/assignmentStatus',
+						resources: '/api/proposals/:proposalId/assigncwu',
 						permissions: ['put']
 					},
 					{
-						resources: '/api/proposalsSWU/:proposalId/assignmentStatus',
+						resources: '/api/proposals/:proposalId/assignswu',
 						permissions: ['put']
 					},
 					{

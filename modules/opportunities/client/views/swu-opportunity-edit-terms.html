@@ -6,20 +6,11 @@
 				"name":"terms",
 				"help":"Terms and Conditions for the proponents"
 			}'>
-      <textarea name="terms" id="terms" class="form-control input-sm" ui-tinymce="vm.tinymceOptions" placeholder="Additional terms and conditions of the opportunity"
+      <textarea name="terms" id="terms" class="form-control input-sm" ui-tinymce="vm.TINYMCE_OPTIONS" placeholder="Additional terms and conditions of the opportunity"
         ng-model="vm.opportunity.terms">
 			</textarea>
     </form-display>
 
-    <!--
-		<form-display
-			class="col-sm-12"
-			x-options='{
-				"name":"asdasd"
-			}'>
-			<a href="https://github.com/BCDevExchange/code-with-us/wiki/2.-For-Public-Sector-Employees:-How-to-Manage-a-Code-With-Us-Opportunity" target="_blank">review the Service requirements and core service deliverables</a>
-		</form-display>
- -->
     <form-display class="col-sm-8" x-options='{
 				"title":"Additional Documents",
 				"name":"onsite",

@@ -1,105 +1,134 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IPromise, resource } from 'angular';
+import { IProposal } from '../../shared/IProposalDTO';
 
-// Proposals service used to communicate Proposals REST endpoints
-(() => {
-	angular.module('proposals').factory('ProposalsService', ProposalsService);
+interface IProposalServiceParams {
+	proposalId?: string;
+	documentId?: string;
+	opportunityId?: string;
+	orgId?: string;
+	userId?: string;
+}
 
-	ProposalsService.$inject = ['$resource', '$log'];
+export interface IProposalResource extends resource.IResource<IProposal>, IProposal {
+	proposalId: '@_id';
+	$promise: IPromise<IProposalResource>;
+	toJSON(options?: any): any; // necessary due to toJSON being defined in both IResource and IProposalDocument
+}
 
-	function ProposalsService($resource, $log) {
-		const Proposal = $resource(
+export interface IProposalService extends resource.IResourceClass<IProposalResource> {
+	create(proposal: IProposalResource): IProposalResource;
+	update(proposal: IProposalResource): IProposalResource;
+	assign(params: IProposalServiceParams): IProposalResource;
+	assignswu(params: IProposalServiceParams): IProposalResource;
+	removeDoc(params: IProposalServiceParams): IProposalResource;
+	makeRequest(params: IProposalServiceParams): IProposalResource;
+	getMyProposal(params: IProposalServiceParams): IProposalResource;
+	getProposalsForOpp(params: IProposalServiceParams): IProposalResource[];
+	getPotentialResources(params: IProposalServiceParams): any;
+	getRequests(params: IProposalServiceParams): any[];
+	getMembers(params: IProposalServiceParams): any[];
+	confirmMember(params: IProposalServiceParams): any;
+	denyMember(params: IProposalServiceParams): any;
+}
+
+angular.module('proposals.services').factory('ProposalService', [
+	'$resource',
+	($resource: resource.IResourceService): IProposalService => {
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST'
+		};
+
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT'
+		};
+
+		const assignAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposals/:proposalId/assigncwu',
+			params: {
+				proposalId: '@proposalId'
+			}
+		};
+
+		const assignSWUAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposals/:proposalId/assignswu',
+			params: {
+				proposalId: '@proposalId'
+			}
+		};
+
+		const removeDocAction: resource.IActionDescriptor = {
+			method: 'DELETE',
+			url: '/api/proposals/:proposalId/documents/:documentId'
+		};
+
+		const makeRequestAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/request/proposal/:proposalId'
+		};
+
+		const getMyProposalAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/my/:opportunityId'
+		};
+
+		const getProposalsForOppAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/for/:opportunityId',
+			isArray: true
+		};
+
+		const getPotentialResourcesAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',
+			isArray: false
+		};
+
+		const getRequestsAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/:proposalId',
+			isArray: true
+		};
+
+		const getMembersAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/members/:proposalId',
+			isArray: true
+		};
+
+		const confirmMemberAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/confirm/:proposalId/:userId'
+		};
+
+		const denyMemberAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/proposals/requests/deny/:proposalId/:userId'
+		};
+
+		return $resource(
 			'/api/proposals/:proposalId',
 			{
 				proposalId: '@_id'
 			},
 			{
-				update: {
-					method: 'PUT'
-				},
-				assign: {
-					method: 'PUT',
-					url: '/api/proposals/:proposalId/assignmentStatus'
-				},
-				assignswu: {
-					method: 'PUT',
-					url: '/api/proposalsSWU/:proposalId/assignmentStatus'
-				},
-				removeDoc: {
-					method: 'DELETE',
-					url: '/api/proposals/:proposalId/documents/:documentId'
-				},
-				makeRequest: {
-					method: 'GET',
-					url: '/api/request/proposal/:proposalId'
-				},
-				getMyProposal: {
-					method: 'GET',
-					url: '/api/proposals/my/:opportunityId'
-				},
-				getProposalsForOpp: {
-					method: 'GET',
-					url: '/api/proposals/for/:opportunityId',
-					isArray: true
-				},
-				getPotentialResources: {
-					method: 'GET',
-					url: '/api/proposals/resources/opportunity/:opportunityId/org/:orgId',
-					isArray: false
-				},
-				getRequests: {
-					method: 'GET',
-					url: '/api/proposals/requests/:proposalId',
-					isArray: true
-				},
-				getMembers: {
-					method: 'GET',
-					url: '/api/proposals/members/:proposalId',
-					isArray: true
-				},
-				confirmMember: {
-					method: 'GET',
-					url: '/api/proposals/requests/confirm/:proposalId/:userId'
-				},
-				denyMember: {
-					method: 'GET',
-					url: '/api/proposals/requests/deny/:proposalId/:userId'
-				}
+				create: createAction,
+				update: updateAction,
+				assign: assignAction,
+				assignswu: assignSWUAction,
+				removeDoc: removeDocAction,
+				makeRequest: makeRequestAction,
+				getMyProposal: getMyProposalAction,
+				getProposalsForOpp: getProposalsForOppAction,
+				getPotentialResources: getPotentialResourcesAction,
+				getRequests: getRequestsAction,
+				getMembers: getMembersAction,
+				confirmMember: confirmMemberAction,
+				denyMember: denyMemberAction
 			}
-		);
-
-		angular.extend(Proposal.prototype, {
-			createOrUpdate() {
-				const proposal = this;
-				return createOrUpdate(proposal);
-			}
-		});
-		return Proposal;
-
-		function createOrUpdate(proposal) {
-			if (proposal._id) {
-				return proposal.$update(onSuccess, onError);
-			} else {
-				return proposal.$save(onSuccess, onError);
-			}
-
-			// Handle successful response
-			function onSuccess() {
-				// Any required internal processing from inside the service, goes here.
-			}
-
-			// Handle error response
-			function onError(errorResponse) {
-				const error = errorResponse.data;
-				// Handle error internally
-				handleError(error);
-			}
-
-			function handleError(error) {
-				// Log error
-				$log.error(error);
-			}
-		}
+		) as IProposalService;
 	}
-})();
+]);

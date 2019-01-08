@@ -186,7 +186,8 @@
                         "id":"estimatedValue",
                         "name":"estimatedValue",
                         "ng-currency": true,
-                        "required": true
+                        "required": true,
+                        "select-on-click": true
                       }'>
                 </form-input>
             </div>
@@ -217,7 +218,8 @@
                       "id":"estimatedTerm",
                       "name":"estimatedTerm",
                       "type": "number",
-                      "required": true
+                      "required": true,
+                      "select-on-click": true
                     }'>
               </form-input>
             </div>
@@ -264,7 +266,8 @@
                         "id":"stobBudget",
                         "name":"stobBudget",
                         "ng-currency": true,
-                        "required": true
+                        "required": true,
+                        "select-on-click": true
                       }'>
                 </form-input>
                 <form-input class="w-50" ng-model="vm.opportunity.contract.stobExpenditures" x-form="vm.approvalForm"
@@ -273,7 +276,8 @@
                         "id":"stobExpenditures",
                         "name":"stobExpenditures",
                         "ng-currency": true,
-                        "required": true
+                        "required": true,
+                        "select-on-click": true
                       }'>
                 </form-input>
               </div>
@@ -286,7 +290,7 @@
                       "title" :"Summary of Services",
                       "name"  :"summary"
                     }'>
-                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.tinymceOptions"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.TINYMCE_OPTIONS"
                   ng-model="vm.opportunity.contract.summary">
                     </textarea>
               </form-display>
@@ -318,7 +322,7 @@
                       "name"  :"impact",
                       "required": true
                     }'>
-                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.tinymceOptions"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.TINYMCE_OPTIONS"
                   ng-model="vm.opportunity.contract.impactNotApproved">
                     </textarea>
               </form-display>

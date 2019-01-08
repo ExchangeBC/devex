@@ -2,27 +2,22 @@
 
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 export default class LocalAuthStrategy {
-
 	public init = () => {
 		// Use local strategy
 		passport.use(
 			'local',
-			new passportLocal.Strategy (
-				{
-					usernameField: 'usernameOrEmail',
-					passwordField: 'password'
-				},
-				(usernameOrEmail, password, done) => {
+			new passportLocal.Strategy(
+				(username, password, done) => {
 					UserModel.findOne({
 						$or: [
 							{
-								username: usernameOrEmail.toLowerCase()
+								username: username.toLowerCase()
 							},
 							{
-								email: usernameOrEmail.toLowerCase()
+								email: username.toLowerCase()
 							}
 						]
 					})

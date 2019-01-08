@@ -10,14 +10,25 @@ import 'tinymce/plugins/wordcount';
 import 'tinymce/themes/modern/theme';
 import 'tinymce/tinymce';
 
-require.context(
-	'file-loader?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins',
-	true,
-	/.*/
-);
+require.context('file-loader?name=[path][name].[ext]&context=node_modules/tinymce!tinymce/skins', true, /.*/);
 
 (() => {
 	'use strict';
+
+	const keyDownHandler = (args: any): void => {
+		const event = args.$event;
+
+		if (!(global.keyHelper.smallKeyBoard(event) || global.keyHelper.numberKeyBpoard(event) || global.keyHelper.functionKeyBoard(event))) {
+			event.stopPropagation();
+			event.preventDefault();
+		}
+	};
+
+	const formatHandler = (args: any): void => {
+		const modelValue = args.$modelValue;
+		const filter = args.$filter;
+		return filter('number')(modelValue);
+	}
 
 	const global: any = {};
 	global.keyHelper = {
@@ -31,27 +42,15 @@ require.context(
 		},
 		functionKeyBoard(event) {
 			const which = event.which;
-			return (
-				which <= 40 ||
-				(navigator.platform.indexOf('Mac') > -1 && event.metaKey) ||
-				(navigator.platform.indexOf('Win') > -1 && event.ctrlKey)
-			);
+			return which <= 40 || (navigator.platform.indexOf('Mac') > -1 && event.metaKey) || (navigator.platform.indexOf('Win') > -1 && event.ctrlKey);
 		},
 		currencyKeyBoard(event, viewValue) {
 			const which = event.which;
-			return (
-				viewValue.toString().indexOf('$') === -1 &&
-				which === 52 &&
-				event.shiftKey
-			);
+			return viewValue.toString().indexOf('$') === -1 && which === 52 && event.shiftKey;
 		},
 		floatKeyBoard(event, viewValue) {
 			const which = event.which;
-			return (
-				[188].indexOf(which) !== -1 ||
-				((which === 190 || which === 110) &&
-					viewValue.toString().indexOf('.') === -1)
-			);
+			return [188].indexOf(which) !== -1 || ((which === 190 || which === 110) && viewValue.toString().indexOf('.') === -1);
 		}
 	};
 
@@ -65,10 +64,7 @@ require.context(
 			plugins: 'textcolor lists advlist link wordcount',
 			resize: true,
 			statusbar: true,
-			toolbar:
-				'undo redo | styleselect | bold italic underline strikethrough \
-				| alignleft aligncenter alignright alignjustify | bullist numlist outdent indent \
-				| link | forecolor backcolor',
+			toolbar: 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor',
 			width: '100%' // I *think* its a number and not '400' string
 		})
 		.constant('modelFormatConfig', {
@@ -79,21 +75,13 @@ require.context(
 					const attrs = args.$attrs;
 					const $eval = args.$eval;
 					const val = filter('currency')(modelValue);
-					return attrs.prefixed && $eval(attrs.prefixed)
-						? val
-						: val
-						? val.substr(1)
-						: '';
+					return attrs.prefixed && $eval(attrs.prefixed) ? val : val ? val.substr(1) : '';
 				},
 				parser(args) {
 					const viewValue = args.$viewValue;
-					const num = viewValue
-						? viewValue.replace(/[^0-9.]/g, '')
-						: ''; // replace not a function - viewvalue undefined
+					const num = viewValue ? viewValue.replace(/[^0-9.]/g, '') : ''; // replace not a function - viewvalue undefined
 					const result = parseFloat(num);
-					return isNaN(result)
-						? undefined
-						: parseFloat(result.toFixed(2));
+					return isNaN(result) ? undefined : parseFloat(result.toFixed(2));
 				},
 				isEmpty(value) {
 					return !value.$modelValue;
@@ -107,10 +95,7 @@ require.context(
 							global.keyHelper.smallKeyBoard(event) ||
 							global.keyHelper.numberKeyBpoard(event) ||
 							global.keyHelper.functionKeyBoard(event) ||
-							global.keyHelper.currencyKeyBoard(
-								event,
-								viewValue
-							) ||
+							global.keyHelper.currencyKeyBoard(event, viewValue) ||
 							global.keyHelper.floatKeyBoard(event, viewValue)
 						)
 					) {
@@ -124,74 +109,31 @@ require.context(
 					return args.$modelValue;
 				},
 				parser(args) {
-					return args.$viewValue
-						? args.$viewValue.replace(/[^0-9]/g, '')
-						: undefined;
+					return args.$viewValue ? args.$viewValue.replace(/[^0-9]/g, '') : undefined;
 				},
 				isEmpty(value) {
 					return !value.$modelValue;
 				},
-				keyDown(args) {
-					const event = args.$event;
-
-					if (
-						!(
-							global.keyHelper.smallKeyBoard(event) ||
-							global.keyHelper.numberKeyBpoard(event) ||
-							global.keyHelper.functionKeyBoard(event)
-						)
-					) {
-						event.stopPropagation();
-						event.preventDefault();
-					}
-				}
+				keyDown: keyDownHandler
 			},
 			int: {
-				formatter(args) {
-					const modelValue = args.$modelValue;
-					const filter = args.$filter;
-					return filter('number')(modelValue);
-				},
+				formatter: formatHandler,
 				parser(args) {
-					const val = parseInt(
-						args.$viewValue.replace(/[^0-9]/g, ''),
-						10
-					);
+					const val = parseInt(args.$viewValue.replace(/[^0-9]/g, ''), 10);
 					return isNaN(val) ? undefined : val;
 				},
 				isEmpty(value) {
 					return !value.$modelValue;
 				},
-				keyDown(args) {
-					const event = args.$event;
-
-					if (
-						!(
-							global.keyHelper.smallKeyBoard(event) ||
-							global.keyHelper.numberKeyBpoard(event) ||
-							global.keyHelper.functionKeyBoard(event)
-						)
-					) {
-						event.stopPropagation();
-						event.preventDefault();
-					}
-				}
+				keyDown: keyDownHandler
 			},
 			float: {
-				formatter(args) {
-					const modelValue = args.$modelValue;
-					const filter = args.$filter;
-					return filter('number')(modelValue);
-				},
+				formatter: formatHandler,
 				parser(args) {
-					const val = parseFloat(
-						args.$viewValue.replace(/[^0-9.]/g, '')
-					);
+					const val = parseFloat(args.$viewValue.replace(/[^0-9.]/g, ''));
 					const ENOB = 3;
 					const tempNum = Math.pow(10, ENOB);
-					return isNaN(val)
-						? undefined
-						: Math.round(val * tempNum) / tempNum;
+					return isNaN(val) ? undefined : Math.round(val * tempNum) / tempNum;
 				},
 				isEmpty(value) {
 					return !value.$modelValue;
@@ -239,8 +181,7 @@ require.context(
 				return {
 					require: 'ngModel',
 					link(scope, element, attrs, ctrl: INgModelController) {
-						const config =
-							modelFormatConfig[attrs.modelFormat] || {};
+						const config = modelFormatConfig[attrs.modelFormat] || {};
 
 						const parseFuction = funKey => {
 							if (attrs[funKey]) {
@@ -320,20 +261,12 @@ require.context(
 					link(scope, element, attrs, ctrl: INgModelController) {
 						const value = scope.$eval(attrs.checkBoxToArray);
 						ctrl.$parsers.push(viewValue => {
-							const modelValue = ctrl.$modelValue
-								? angular.copy(ctrl.$modelValue)
-								: [];
-							if (
-								viewValue === true &&
-								modelValue.indexOf(value) === -1
-							) {
+							const modelValue = ctrl.$modelValue ? angular.copy(ctrl.$modelValue) : [];
+							if (viewValue === true && modelValue.indexOf(value) === -1) {
 								modelValue.push(value);
 							}
 
-							if (
-								viewValue !== true &&
-								modelValue.indexOf(value) !== -1
-							) {
+							if (viewValue !== true && modelValue.indexOf(value) !== -1) {
 								modelValue.splice(modelValue.indexOf(value), 1);
 							}
 
@@ -341,9 +274,7 @@ require.context(
 						});
 
 						ctrl.$formatters.push(modelValue => {
-							return (
-								modelValue && modelValue.indexOf(value) !== -1
-							);
+							return modelValue && modelValue.indexOf(value) !== -1;
 						});
 
 						ctrl.$isEmpty = $modelValue => {

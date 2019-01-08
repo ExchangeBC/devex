@@ -9,12 +9,12 @@ import angular from 'angular';
 		.controller('CapabilityViewController', [
 			'$sce',
 			'capability',
-			'Authentication',
-			function($sce, capability, Authentication) {
+			'AuthenticationService',
+			function($sce, capability, authenticationService) {
 				const vm = this;
 				vm.trust = $sce.trustAsHtml;
 				vm.capability = capability;
-				vm.auth = Authentication.permissions();
+				vm.auth = authenticationService.permissions();
 				vm.canEdit = vm.auth.isAdmin;
 			}
 		]);

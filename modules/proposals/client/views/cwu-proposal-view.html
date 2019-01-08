@@ -14,10 +14,10 @@
         <div class="row px-3">
           <div class="col">
             <h4>Applicant</h4>
-            <span class="strong">{{ppp.user.firstName}} {{ppp.user.lastName}}</span><br>
-            <span>{{ppp.user.email}}</span>
-            <span ng-if="!ppp.proposal.isCompany"><br>{{ppp.user.address}}<br></span>
-            <span><br>{{ppp.user.phone}}</span>
+            <span class="strong">{{ppp.proposal.user.firstName}} {{ppp.proposal.user.lastName}}</span><br>
+            <span>{{ppp.proposal.user.email}}</span>
+            <span ng-if="!ppp.proposal.isCompany"><br>{{ppp.proposal.user.address}}<br></span>
+            <span><br>{{ppp.proposal.user.phone}}</span>
           </div>
           <div class="col-xs-12 col-sm-6">
             <div ng-if="ppp.proposal.isCompany">
@@ -34,7 +34,7 @@
         <div class="row px-3">
           <div class="col">
             <h4>Proposal</h4>
-            <p ng-bind-html="ppp.detail"></p>
+            <p ng-bind-html="ppp.proposal.detail"></p>
           </div>
         </div>
         <hr>
@@ -60,9 +60,8 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-success float-right" data-ng-click="ppp.assign()"><i class="fas fa-trophy"></i>
+            <button type="button" class="btn btn-success float-right ml-3" data-ng-click="ppp.assign()"><i class="fas fa-trophy"></i>
               Assign this Applicant</button>
-            <button class="btn btn-default float-right" data-ng-click="ppp.close()" title="Close" aria-label="Close">Close</button>
           </div>
         </div>
       </div>

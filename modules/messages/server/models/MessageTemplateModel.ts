@@ -1,9 +1,9 @@
 'use strict';
 
-import { model, Model, Schema } from 'mongoose';
-import IMessageTemplateDocument from '../interfaces/IMessageTemplateDocument';
+import { Document, model, Model, Schema } from 'mongoose';
+import { IMessageTemplate } from '../../shared/IMessageDTO';
 
-interface IMessageTemplateModel extends Model<IMessageTemplateDocument> {}
+export interface IMessageTemplateModel extends IMessageTemplate, Document {}
 
 const MessageTemplateSchema = new Schema({
 	messageCd: { type: String, default: '', unique: true },
@@ -26,6 +26,4 @@ const MessageTemplateSchema = new Schema({
 	]
 });
 
-const MessageTemplateModel: IMessageTemplateModel = model<IMessageTemplateDocument, IMessageTemplateModel>('MessageTemplate', MessageTemplateSchema);
-
-export default MessageTemplateModel;
+export const MessageTemplateModel: Model<IMessageTemplateModel> = model<IMessageTemplateModel>('MessageTemplate', MessageTemplateSchema);

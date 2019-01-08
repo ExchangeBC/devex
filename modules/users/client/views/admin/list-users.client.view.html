@@ -1,18 +1,13 @@
 <section class="bg-light main-section">
   <div class="container">
 
-    <div class="row" ng-if="0">
-      <button ng-click="vm.listOpps()">Users to notify of Opportunities</button>
-      <button ng-click="vm.listMeets()">Users to notify of Events</button>
-    </div>
-
     <div class="row">
       <div class="col">
 
         <h3>Users</h3>
 
         <div class="py-5">
-          <input class="form-control" type="text" ng-model="vm.search" placeholder="Search by user's name or GitHub handle..."
+          <input class="form-control" type="text" ng-model="vm.searchTerm" placeholder="Search by user's name or GitHub handle..."
             ng-change="vm.figureOutItemsToDisplay()" />
         </div>
         <div class="font-weight-light">Showing first {{vm.pagedItems.length}} results</div>
@@ -32,8 +27,8 @@
           </a>
         </div>
 
-        <uib-pagination boundary-links="true" max-size="10" items-per-page="vm.itemsPerPage" total-items="vm.filterLength"
-          ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        <uib-pagination boundary-links="true" max-size="10" items-per-page="vm.itemsPerPage" total-items="vm.filteredItems.length"
+          ng-model="vm.currentPage" ng-change="vm.figureOutItemsToDisplay()"></uib-pagination>
 
       </div>
     </div>

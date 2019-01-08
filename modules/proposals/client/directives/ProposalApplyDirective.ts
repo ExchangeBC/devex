@@ -14,25 +14,26 @@ import angular from 'angular';
 				templateUrl: '/modules/proposals/client/views/proposal-apply.directive.html',
 				scope: {
 					opportunity: '=',
-					proposal: '='
+					proposal: '=',
+					org: '='
 				},
 				controller: [
 					'$scope',
-					'Authentication',
-					function($scope, Authentication) {
+					'AuthenticationService',
+					function($scope, authenticationService) {
 						const qaz = this;
 						qaz.opportunity = $scope.opportunity;
 						qaz.proposal = $scope.proposal;
+						qaz.org = $scope.org;
 
-						const isUser = Authentication.user;
-						const isAdmin = isUser && Authentication.user.roles.indexOf('admin') !== -1;
-						const isGov = isUser && Authentication.user.roles.indexOf('gov') !== -1;
-						const isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
+						const isUser = authenticationService.user;
+						const isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
+						const isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
+						// const isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
 						const isProposal = qaz.proposal && qaz.proposal._id;
-						const canedit = !(isAdmin || isGov || isMemberOrWaiting);
+						const canedit = !(isAdmin || isGov);
 						qaz.isSprintWithUs = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
-						let hasCompany = isUser && Authentication.user.orgsAdmin.length > 0;
-						hasCompany = qaz.opportunity.hasOrg;
+						const canApply = qaz.org && qaz.org.metRFQ;
 						qaz.case = 'nothing';
 						if (!isUser) {
 							qaz.case = 'guest';
@@ -41,7 +42,7 @@ import angular from 'angular';
 								qaz.case = 'canedit';
 							} else if (!qaz.isSprintWithUs) {
 								qaz.case = 'canadd';
-							} else if (hasCompany) {
+							} else if (canApply) {
 								qaz.case = 'canadd';
 							} else {
 								qaz.case = 'needscompany';

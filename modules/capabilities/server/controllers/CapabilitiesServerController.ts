@@ -1,10 +1,10 @@
 'use strict';
 
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Document, Types } from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
-import CapabilityModel from '../models/CapabilityModel';
-import CapabilitySkillModel from '../models/CapabilitySkillModel';
+import { CapabilityModel } from '../models/CapabilityModel';
+import { CapabilitySkillModel } from '../models/CapabilitySkillModel';
 
 class CapabilitiesServerController {
 	public static getInstance() {
@@ -21,20 +21,11 @@ class CapabilitiesServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		CapabilityModel.findUniqueCode(capability.name, null, newcode => {
+		CapabilityModel.schema.statics.findUniqueCode(capability.name, null, newcode => {
 			capability.code = newcode;
-			//
-			// save and return
-			//
-			capability.save(err => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(capability);
-				}
-			});
+
+			// save
+			this.saveDocument(capability, res);
 		});
 	};
 
@@ -44,20 +35,11 @@ class CapabilitiesServerController {
 		//
 		// set the code, this is used for setting roles and other stuff
 		//
-		CapabilitySkillModel.findUniqueCode(capabilitySkill.name, null, newcode => {
+		CapabilitySkillModel.schema.statics.findUniqueCode(capabilitySkill.name, null, newcode => {
 			capabilitySkill.code = newcode;
-			//
-			// save and return
-			//
-			capabilitySkill.save(err => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(capabilitySkill);
-				}
-			});
+
+			// save
+			this.saveDocument(capabilitySkill, res);
 		});
 	};
 
@@ -73,15 +55,8 @@ class CapabilitiesServerController {
 		const capability = _.assign(req.capability, req.body);
 		capability.markModified('skills');
 
-		capability.save(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(capability);
-			}
-		});
+		// save
+		this.saveDocument(capability, res);
 	};
 
 	// Update a skill
@@ -91,46 +66,21 @@ class CapabilitiesServerController {
 		// audit fields, but they get updated in the following step
 		//
 		const capabilitySkill = _.assign(req.capabilitySkill, req.body);
-		//
+
 		// save
-		//
-		capabilitySkill.save(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(capabilitySkill);
-			}
-		});
+		this.saveDocument(capabilitySkill, res);
 	};
 
 	// Delete a capability
 	public delete = (req, res) => {
 		const capability = req.capability;
-		capability.remove(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(capability);
-			}
-		});
+		this.deleteDocument(capability, res);
 	};
 
 	// Delete a skill
 	public skillDelete = (req, res) => {
 		const capabilitySkill = req.capabilitySkill;
-		capabilitySkill.remove(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(capabilitySkill);
-			}
-		});
+		this.deleteDocument(capabilitySkill, res);
 	};
 
 	// Return a list of all capabilities
@@ -162,7 +112,7 @@ class CapabilitiesServerController {
 				return next();
 			}
 		};
-		if (mongoose.Types.ObjectId.isValid(id)) {
+		if (Types.ObjectId.isValid(id)) {
 			CapabilityModel.findById(id)
 				.populate('skills')
 				.exec(callback);
@@ -187,11 +137,37 @@ class CapabilitiesServerController {
 				return next();
 			}
 		};
-		if (mongoose.Types.ObjectId.isValid(id)) {
+		if (Types.ObjectId.isValid(id)) {
 			CapabilitySkillModel.findById(id).exec(callback);
 		} else {
 			CapabilitySkillModel.findOne({ code: id }).exec(callback);
 		}
+	};
+
+	private saveDocument = (document: Document, res: any) => {
+		document
+			.save()
+			.then((updatedDocument: Document) => {
+				res.json(updatedDocument);
+			})
+			.catch(err => {
+				res.status(422).send({
+					message: CoreServerErrors.getErrorMessage(err)
+				});
+			});
+	};
+
+	private deleteDocument = (document: Document, res: any) => {
+		document
+			.remove()
+			.then((removedDocument: Document) => {
+				res.json(removedDocument);
+			})
+			.catch(err => {
+				res.status(422).send({
+					message: CoreServerErrors.getErrorMessage(err)
+				});
+			});
 	};
 }
 

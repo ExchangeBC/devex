@@ -10,7 +10,7 @@
     </div>
     <div class="row">
       <div class="col">
-        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage"
+        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.questions.length" ng-model="data.currentPage"
           ng-change="pageChanged()"></ul>
       </div>
     </div>
@@ -18,13 +18,12 @@
       <div class="col">
         <div class="" ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
           <div class="bg-primary text-white rounded text-center">
-            {{qindex=$index;""}}
             <strong>
               Question: <span ng-bind-html="question.question"></span>
             </strong>
           </div>
           <ul class="list-group">
-            <li class="list-group-item" ng-repeat="response in data.responses[qindex] | orderBy:'rank'">
+            <li class="list-group-item" ng-repeat="response in data.responses.get(question)">
               <div class="row">
                 <div class="col">
                   <div class="float-right">

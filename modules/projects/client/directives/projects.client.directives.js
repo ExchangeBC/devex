@@ -16,13 +16,13 @@
 				context: '@'
 			},
 			templateUrl  : '/modules/projects/client/views/list.projects.directive.html',
-			controller   : ['$scope', 'ProjectsService', 'Authentication', 'Notification', function ($scope, ProjectsService, Authentication, Notification) {
+			controller   : ['$scope', 'ProjectsService', 'AuthenticationService', 'Notification', function ($scope, ProjectsService, authenticationService, Notification) {
 				var vm     = this;
 				vm.program = $scope.program;
 				vm.context = $scope.context;
-				var isUser = Authentication.user;
-				vm.isAdmin = isUser && !!~Authentication.user.roles.indexOf ('admin');
-				vm.isGov   = isUser && !!~Authentication.user.roles.indexOf ('gov');
+				var isUser = authenticationService.user;
+				vm.isAdmin = isUser && !!~authenticationService.user.roles.indexOf ('admin');
+				vm.isGov   = isUser && !!~authenticationService.user.roles.indexOf ('gov');
 				if (vm.context === 'program') {
 					vm.programId = vm.program._id;
 					vm.programTitle = vm.program.title;

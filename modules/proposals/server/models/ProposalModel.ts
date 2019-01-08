@@ -1,11 +1,18 @@
 'use strict';
 
-import { Model, model, Schema } from 'mongoose';
-import IAttachmentDocument from '../interfaces/IAttachmentDocument';
-import IProposalDocument from '../interfaces/IProposalDocument';
-import ITeamQuestionResponseDocument from '../interfaces/ITeamQuestionResponseDocument';
+import { Document, Model, model, Schema } from 'mongoose';
+import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
+import { IUserModel } from '../../../users/server/models/UserModel';
+import { IAttachment, IProposal } from '../../shared/IProposalDTO';
 
-interface IAttachmentModel extends Model<IAttachmentDocument> {}
+export interface IAttachmentModel extends IAttachment, Document {}
+export interface IProposalModel extends IProposal, Document {
+	_id: any;
+	attachments: IAttachmentModel[];
+	opportunity: IOpportunityModel;
+	user: IUserModel;
+}
+
 const AttachmentSchema = new Schema({
 	name: { type: String },
 	path: { type: String },
@@ -25,7 +32,6 @@ const AddendumSchema = new Schema({
 	created: { type: Date, default: null }
 });
 
-interface ITeamQuestionResponseModel extends Model<ITeamQuestionResponseDocument> {}
 const TeamQuestionResponseSchema = new Schema({
 	question: { type: String },
 	response: { type: String },
@@ -35,22 +41,22 @@ const TeamQuestionResponseSchema = new Schema({
 });
 
 const PhaseSchema = new Schema({
-		isImplementation: { type: Boolean, default: false },
-		isInception: { type: Boolean, default: false },
-		isPrototype: { type: Boolean, default: false },
-		team: {
-			type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-			default: []
-		},
-		capabilities: {
-			type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
-			default: []
-		},
-		capabilitySkills: {
-			type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
-			default: []
-		},
-		cost: { type: Number, default: 0 }
+	isImplementation: { type: Boolean, default: false },
+	isInception: { type: Boolean, default: false },
+	isPrototype: { type: Boolean, default: false },
+	team: {
+		type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+		default: []
+	},
+	capabilities: {
+		type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
+		default: []
+	},
+	capabilitySkills: {
+		type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
+		default: []
+	},
+	cost: { type: Number, default: 0 }
 });
 
 const PhasesSchema = new Schema({
@@ -60,7 +66,6 @@ const PhasesSchema = new Schema({
 	proto: { type: PhaseSchema, default: {} }
 });
 
-interface IProposalModel extends Model<IProposalDocument> {}
 const ProposalSchema = new Schema(
 	{
 		summary: { type: String },
@@ -68,7 +73,7 @@ const ProposalSchema = new Schema(
 		opportunity: {
 			type: Schema.Types.ObjectId,
 			ref: 'Opportunity',
-			required: 'Please select a program',
+			required: 'Opportunity is missing',
 			index: true
 		},
 		status: {
@@ -124,6 +129,5 @@ const ProposalSchema = new Schema(
 	{ usePushEach: true }
 );
 
-const ProposalModel: IProposalModel = model<IProposalDocument, IProposalModel>('Proposal', ProposalSchema);
-
-export default ProposalModel;
+export const ProposalModel: Model<IProposalModel> = model<IProposalModel>('Proposal', ProposalSchema);
+export const AttachmentModel: Model<IAttachmentModel> = model<IAttachmentModel>('Attachment', AttachmentSchema);

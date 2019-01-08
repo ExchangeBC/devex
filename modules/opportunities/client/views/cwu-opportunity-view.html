@@ -11,7 +11,7 @@
 <section>
 
   <!-- // If user is not signed in // -->
-  <div class="container" ng-if="!vm.loggedIn && vm.closing != 'CLOSED' && !vm.preapprovalParam && !vm.approvalParam">
+  <div class="container" ng-if="!vm.isUser && vm.closing != 'CLOSED' && !vm.preapprovalParam && !vm.approvalParam">
     <div class="alert alert-warning">
       <i class="fas fa-lg fa-exclamation-triangle"></i> &nbsp;To apply on this opportunity you need to
       <a ui-sref="authentication.signin">
@@ -34,7 +34,7 @@
       <div class="col-md-6 text-center margin-auto">
         To {{ vm.approvalAction }} this opportunity, enter the 6 digit code you have been sent separately (<a href=""
           ng-click="vm.requestApprovalCode()">Resend</a>)<br>
-        <input class="form-control mx-auto text-center my-2" type="number" input-max-length="6" ng-model="vm.twoFAcode"
+        <input class="form-control mx-auto text-center my-2" type="number" input-max-length="6" ng-model="vm.twoFACode"
           ng-change="vm.validateApprovalCode()">
         <button class="btn text-white my-2" ng-class="{'btn-success': vm.approvalAction === 'Approve', 'btn-danger': vm.approvalAction === 'Reject'}"
           type="button" ng-click="vm.submitApprovalCode()" ng-disabled="vm.validApprovalCode">{{ vm.approvalAction }}</button>
@@ -46,9 +46,9 @@
   <!-- // Admin View for Proposal Evaluation // -->
   <div class="container" ng-if="vm.opportunity.isPublished && vm.canEdit">
 
-    <div class="row">
+    <div class="row" ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished">
       <div class="col border p-4">
-        <proposal-list ng-if="vm.opportunity.status === 'Pending' && vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'"
+        <proposal-list isclosed="vm.closing === 'CLOSED'"
           context="opportunity" opportunity="vm.opportunity"></proposal-list>
       </div>
     </div>
@@ -114,7 +114,9 @@
 
     <div class="row" ng-if="vm.opportunity.approvalRequired && vm.opportunity.isApproved && vm.canEdit && !vm.opportunity.isPublished && vm.closing !== 'CLOSED'">
       <div class="col alert alert-success">
-        <i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!
+        <span><i class="fas fa-check-circle"></i> You have been approved to publish this opportunity!</span>
+        <span class="float-right"><a href="" ng-click="vm.exportApprovalRecord()">Export Approval Record</a></span>
+        <img id='imgToExport' src="/modules/core/client/img/logo/new-logo.png" style='display:none'/> 
       </div>
     </div>
 
@@ -149,7 +151,7 @@
 
       <!-- PUBLISH (if opportunity is in DRAFT and COMPLETE) -->
       <button data-automation-id="button-opportunity-publish" ng-if="vm.canPublish() && vm.canEdit && !vm.opportunity.isPublished"
-        class="btn btn-primary float-right" ng-click="vm.publish(vm.opportunity, true)" title="Publish this Opportunity"><i
+        class="btn btn-primary float-right" ng-click="vm.publish(true)" title="Publish this Opportunity"><i
           class="fas fa-bullhorn"></i> Publish</button>
 
       <!-- EDIT -->
@@ -166,7 +168,7 @@
 
       <!-- UNPUBLISH (if opportunity is PUBLISHED) -->
       <a data-automation-id="button-opportunity-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished"
-        class="btn btn-text-only float-right" ng-click="vm.publish(vm.opportunity, false)" uib-tooltip="Unpublish Opportunity">
+        class="btn btn-text-only float-right" ng-click="vm.publish(false)" uib-tooltip="Unpublish Opportunity">
         <i class="fas fa-ban"></i>
       </a>
 

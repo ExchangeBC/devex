@@ -18,19 +18,19 @@
 				controller: [
 					'$scope',
 					'$sce',
-					'OrgsService',
-					'Authentication',
-					function($scope, $sce, OrgsService, Authentication) {
+					'OrgService',
+					'AuthenticationService',
+					function($scope, $sce, OrgService, authenticationService) {
 						var vm = this;
-						var isUser = Authentication.user;
-						var isAdmin = isUser && !!~Authentication.user.roles.indexOf('admin');
-						var isGov = isUser && !!~Authentication.user.roles.indexOf('gov');
-						var uid = isUser ? Authentication.user._id : 'none';
+						var isUser = authenticationService.user;
+						var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
+						var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
+						var uid = isUser ? authenticationService.user._id : 'none';
 						vm.isAdmin = isAdmin;
 						vm.isGov = isGov;
 
 						if (isUser) {
-							OrgsService.myadmin().$promise.then(function(orgs) {
+							OrgService.myadmin().$promise.then(function(orgs) {
 								//
 								// the user must be listed as the admin for at least one org.
 								// for now, we only care about the first one, but in future they
@@ -61,7 +61,7 @@
 								vm.orgs = $scope.orgs;
 							});
 						} else {
-							OrgsService.list().$promise.then(function(orgs) {
+							OrgService.list().$promise.then(function(orgs) {
 								vm.userCanAdd = false;
 								vm.trust = $sce.trustAsHtml;
 								vm.orgs = $scope.orgs;
@@ -105,7 +105,7 @@
 								controller: [
 									'$rootScope',
 									'$timeout',
-									'Authentication',
+									'AuthenticationService',
 									'org',
 									'$uibModalInstance',
 									'Upload',
@@ -113,14 +113,14 @@
 									function(
 										$rootScope,
 										$timeout,
-										Authentication,
+										authenticationService,
 										org,
 										$uibModalInstance,
 										Upload,
 										Notification
 									) {
 										var qqq = this;
-										qqq.user = Authentication.user;
+										qqq.user = authenticationService.user;
 										qqq.fileSelected = false;
 										qqq.org = org;
 										qqq.org.orgImageURL =

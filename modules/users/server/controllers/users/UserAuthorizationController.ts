@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 import mongoose from 'mongoose';
-import UserModel from '../../models/UserModel';
+import { UserModel } from '../../models/UserModel';
 
 class UserAuthorizationController {
 	public static getInstance() {

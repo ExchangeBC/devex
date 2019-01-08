@@ -12,7 +12,7 @@
 		'$scope',
 		'$state',
 		'$location',
-		'Authentication',
+		'AuthenticationService',
 		'menuService',
 		'$uibModal',
 		'Idle',
@@ -26,7 +26,7 @@
 		$scope,
 		$state,
 		$location,
-		Authentication,
+		authenticationService,
 		menuService,
 		$uibModal,
 		Idle,
@@ -34,11 +34,11 @@
 	) {
 		const vm = this;
 		vm.accountMenu = menuService.getMenu('account').items[0];
-		vm.authentication = Authentication;
+		vm.authentication = authenticationService;
 		vm.isCollapsed = false;
 		vm.menu = menuService.getMenu('topbar');
 
-		if (Authentication.user) {
+		if (authenticationService.user) {
 			updateMessageCount();
 			setAvatarImage(vm.authentication.user);
 		}
@@ -99,7 +99,7 @@
 
 		// if signed in, start a session timer
 		if (vm.authentication.user) {
-			Idle.watch();
+			// Idle.watch();
 		}
 
 		$scope.$on('IdleStart', () => {

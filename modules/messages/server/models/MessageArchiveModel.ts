@@ -1,9 +1,9 @@
 'use strict';
 
-import { model, Model, Schema } from 'mongoose';
-import IMessageArchiveDocument from '../interfaces/IMessageArchiveDocument';
+import { Document, model, Model, Schema } from 'mongoose';
+import { IMessageArchive } from '../../shared/IMessageDTO';
 
-interface IMessageArchiveModel extends Model<IMessageArchiveDocument> {}
+export interface IMessageArchiveModel extends IMessageArchive, Document {}
 const MessageArchiveSchema = new Schema({
 	messageCd: { type: String },
 	user: { type: 'ObjectId', ref: 'User' },
@@ -39,6 +39,4 @@ const MessageArchiveSchema = new Schema({
 	isArchived: { type: Boolean, default: true }
 });
 
-const MessageArchiveModel: IMessageArchiveModel = model<IMessageArchiveDocument, IMessageArchiveModel>('MessageArchive', MessageArchiveSchema);
-
-export default MessageArchiveModel;
+export const MessageArchiveModel: Model<IMessageArchiveModel> = model<IMessageArchiveModel>('MessageArchive', MessageArchiveSchema);

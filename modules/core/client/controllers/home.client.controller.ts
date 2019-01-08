@@ -8,12 +8,12 @@ import '../css/core.css';
 (() => {
 	'use strict';
 
-	HomeController.$inject = ['Authentication', '$state', '$rootScope'];
+	HomeController.$inject = ['AuthenticationService', '$state', '$rootScope'];
 	angular.module('core').controller('HomeController', HomeController);
 
-	function HomeController(Authentication, $state, $rootScope) {
+	function HomeController(authenticationService, $state, $rootScope) {
 		const vm = this;
-		vm.isUser = Authentication.user;
+		vm.isUser = authenticationService.user;
 		if (sessionStorage.prevState) {
 			const prevState = sessionStorage.prevState;
 			const prevParams = JSON.parse(sessionStorage.prevParams);

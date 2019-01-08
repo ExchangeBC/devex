@@ -105,7 +105,7 @@
 			resolve: {
 				editing: function () { return false; },
 				capability: ['CapabilitiesService', function (CapabilitiesService) {
-					return new CapabilitiesService ();
+					return new CapabilitiesService();
 				}]
 			},
 			data: {

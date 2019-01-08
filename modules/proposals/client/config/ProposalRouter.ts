@@ -1,12 +1,17 @@
 'use strict';
 
 import angular from 'angular';
+import { IStateParamsService, IStateProvider } from 'angular-ui-router';
+import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
+import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IProposalService } from '../services/ProposalService';
 
 // All the client side routes for proposals
 (() => {
 	angular.module('proposals.routes').config([
 		'$stateProvider',
-		$stateProvider => {
+		($stateProvider: IStateProvider) => {
 			$stateProvider
 
 				// this is the top level, abstract route for all proposal routes, it only
@@ -18,35 +23,11 @@ import angular from 'angular';
 					resolve: {
 						capabilities: [
 							'CapabilitiesService',
-							CapabilitiesService => {
+							(CapabilitiesService: ICapabilitiesService) => {
 								return CapabilitiesService.query().$promise;
 							}
 						]
 					}
-				})
-
-				// proposal listing. Resolve to all proposals in the system and place that in
-				// the scope. listing itself is done through a directive
-				.state('proposals.list', {
-					url: '',
-					templateUrl: '/modules/proposals/client/views/list-proposals.client.view.html',
-					data: {
-						pageTitle: 'Proposals List'
-					},
-					ncyBreadcrumb: {
-						label: 'All proposals'
-					},
-					resolve: {
-						proposals: [
-							'ProposalsService',
-							ProposalsService => {
-								return ProposalsService.query().$promise;
-							}
-						]
-					},
-					controller: 'ProposalsListController',
-					controllerAs: 'vm',
-					roles: ['admin', 'gov']
 				})
 
 				// view a CWU proposal, resolve the proposal data
@@ -56,15 +37,14 @@ import angular from 'angular';
 						roles: ['user']
 					},
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-view.html',
-					controller: 'ProposalCWUViewController',
+					controller: 'ProposalViewCWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'ProposalsService',
-							($stateParams, ProposalsService) => {
-								return ProposalsService.get({
+							'ProposalService',
+							($stateParams: IStateParamsService, proposalService: IProposalService) => {
+								return proposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -79,15 +59,14 @@ import angular from 'angular';
 						roles: ['user']
 					},
 					templateUrl: '/modules/proposals/client/views/swu-proposal-view.html',
-					controller: 'ProposalSWUViewController',
+					controller: 'ProposalViewSWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'ProposalsService',
-							($stateParams, ProposalsService) => {
-								return ProposalsService.get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -106,7 +85,7 @@ import angular from 'angular';
 					resolve: {
 						capabilities: [
 							'CapabilitiesService',
-							CapabilitiesService => {
+							(CapabilitiesService: ICapabilitiesService) => {
 								return CapabilitiesService.query().$promise;
 							}
 						]
@@ -121,15 +100,14 @@ import angular from 'angular';
 						notroles: ['gov']
 					},
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
-					controller: 'ProposalCWUEditController',
+					controller: 'ProposalEditCWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'ProposalsService',
-							($stateParams, ProposalsService) => {
-								return ProposalsService.get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -137,7 +115,7 @@ import angular from 'angular';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -147,13 +125,13 @@ import angular from 'angular';
 							return true;
 						},
 						org: [
-							'Authentication',
-							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							'AuthenticationService',
+							'OrgService',
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return {};
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -173,33 +151,32 @@ import angular from 'angular';
 						notroles: ['gov']
 					},
 					templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
-					controller: 'ProposalCWUEditController',
+					controller: 'ProposalEditCWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
-							'ProposalsService',
-							ProposalsService => {
-								return new ProposalsService();
+							'ProposalService',
+							(ProposalService: IProposalService) => {
+								return new ProposalService();
 							}
 						],
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'Authentication',
-							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							'AuthenticationService',
+							'OrgService',
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return {};
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -222,15 +199,14 @@ import angular from 'angular';
 						notroles: ['gov']
 					},
 					templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
-					controller: 'ProposalSWUEditController',
+					controller: 'ProposalEditSWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
 							'$stateParams',
-							'ProposalsService',
-							($stateParams, ProposalsService) => {
-								return ProposalsService.get({
+							'ProposalService',
+							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
 							}
@@ -238,7 +214,7 @@ import angular from 'angular';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -248,13 +224,13 @@ import angular from 'angular';
 							return true;
 						},
 						org: [
-							'Authentication',
-							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							'AuthenticationService',
+							'OrgService',
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -264,18 +240,18 @@ import angular from 'angular';
 							}
 						],
 						resources: [
-							'OrgsService',
-							'Authentication',
-							'ProposalsService',
+							'OrgService',
+							'AuthenticationService',
+							'ProposalService',
 							'$stateParams',
-							(OrgsService, Authentication, ProposalsService, $stateParams) => {
-								if (!Authentication.user) {
+							(OrgService, AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								} else {
-									return OrgsService.myadmin().$promise.then(orgs => {
+									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
-											return ProposalsService.getPotentialResources({
+											return ProposalService.getPotentialResources({
 												opportunityId: $stateParams.opportunityId,
 												orgId: org._id
 											}).$promise;
@@ -297,33 +273,32 @@ import angular from 'angular';
 						notroles: ['gov']
 					},
 					templateUrl: '/modules/proposals/client/views/swu-proposal-edit.html',
-					controller: 'ProposalSWUEditController',
+					controller: 'ProposalEditSWUController',
 					controllerAs: 'ppp',
-					bindToController: true,
 					resolve: {
 						proposal: [
-							'ProposalsService',
-							ProposalsService => {
-								return new ProposalsService();
+							'ProposalService',
+							(ProposalService: IProposalService) => {
+								return new ProposalService();
 							}
 						],
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams, OpportunitiesService) => {
+							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
 							}
 						],
 						org: [
-							'Authentication',
-							'OrgsService',
-							(Authentication, OrgsService) => {
-								if (!Authentication.user) {
+							'AuthenticationService',
+							'OrgService',
+							(AuthenticationService: IAuthenticationService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								}
-								return OrgsService.myadmin().$promise.then(orgs => {
+								return OrgService.myadmin().$promise.then(orgs => {
 									if (orgs && orgs.length > 0) {
 										return orgs[0];
 									} else {
@@ -333,18 +308,18 @@ import angular from 'angular';
 							}
 						],
 						resources: [
-							'Authentication',
-							'ProposalsService',
+							'AuthenticationService',
+							'ProposalService',
 							'$stateParams',
-							'OrgsService',
-							(Authentication, ProposalsService, $stateParams, OrgsService) => {
-								if (!Authentication.user) {
+							'OrgService',
+							(AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService, OrgService) => {
+								if (!AuthenticationService.user) {
 									return null;
 								} else {
-									return OrgsService.myadmin().$promise.then(orgs => {
+									return OrgService.myadmin().$promise.then(orgs => {
 										if (orgs && orgs.length > 0) {
 											const org = orgs[0];
-											return ProposalsService.getPotentialResources({
+											return ProposalService.getPotentialResources({
 												opportunityId: $stateParams.opportunityId,
 												orgId: org._id
 											}).$promise;

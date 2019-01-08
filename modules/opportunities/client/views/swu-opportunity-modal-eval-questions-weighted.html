@@ -8,24 +8,24 @@
         <p>For each question we have randomized the responses that teams submitted.</p>
         <h4>Grade the individual responses with a score between 1 (worst) and 5 (best) for all
           {{data.model.questions.length}} questions.</h4>
-        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.totalQuestions" ng-model="data.currentPage"
+        <ul class="w-50 mx-auto p-0" uib-pagination items-per-page="1" total-items="data.questions.length" ng-model="data.currentPage"
           ng-change="pageChanged()"></ul>
       </div>
     </div>
     <div class="row">
       <div class="col">
-        <div ng-repeat="question in data.model.questions" ng-if="data.currentPage===($index+1)">
+        <div ng-repeat="question in data.questions" ng-if="data.currentPage===($index+1)">
           <div class="bg-primary text-white text-center">
             <strong>
-              Question: <span ng-bind-html="question[0].question"></span>
+              Question: <span ng-bind-html="question.question"></span>
             </strong>
           </div>
-          <div class="row" ng-repeat="response in question">
+          <div class="row" ng-repeat="response in data.responses.get(question)">
             <div class="col-4 p-0">
               <ul class="question-input-list">
                 <li class="question-input">
-                  Score: <input select-on-click class="scoreBox" name="input" type="text" pattern="[0-5]" required min="0"
-                    max="5" ng-model="response.score" ng-change="validateScores()" />
+                  Score: <input class="scoreBox" name="input" type="text" pattern="[0-5]" required min="0"
+                    max="5" ng-model="response.score" ng-change="validateScores()" onclick="this.select()" />
                 </li>
               </ul>
             </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="my-3 text-right">
       <button class="btn btn-default" data-ng-click="close()">Cancel</button>
-      <button class="btn btn-success" data-ng-click="commit()"><i class="fas fa-lock"></i> Lock in all rankings</button>
+      <button class="btn btn-success" ng-disabled="!data.scoresValid" data-ng-click="commit()"><i class="fas fa-lock"></i> Lock in all rankings</button>
       <button class="btn btn-primary" data-ng-click="save()">Save my work & Close</button>
     </div>
 

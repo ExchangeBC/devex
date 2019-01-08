@@ -53,38 +53,12 @@ class MongooseController {
 				console.error(chalk.red(err));
 
 				setTimeout(() => {
-					return new Promise((innerResolve, reject) => {
-						if (
-							mongoose.connect(
-								config.db.uri,
-								config.db.options
-							)
-						) {
-							innerResolve();
-						} else {
-							reject();
-						}
-					})
-						.then(handleSuccessConnect)
-						.catch(handleFailedConnect);
+					return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
 				}, 3000);
 			};
 
 			_.assign(config.db.options, { useNewUrlParser: true });
-			return new Promise((innerResolve, reject) => {
-				if (
-					mongoose.connect(
-						config.db.uri,
-						config.db.options
-					)
-				) {
-					innerResolve();
-				} else {
-					reject();
-				}
-			})
-				.then(handleSuccessConnect)
-				.catch(handleFailedConnect);
+			return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
 		});
 	};
 
@@ -93,6 +67,19 @@ class MongooseController {
 			console.info(chalk.yellow('Disconnected from MongoDB.'));
 			callback(err);
 		});
+	};
+
+	private handleConnect = (resolve, reject) => {
+		if (
+			mongoose.connect(
+				config.db.uri,
+				config.db.options
+			)
+		) {
+			resolve();
+		} else {
+			reject();
+		}
 	};
 }
 

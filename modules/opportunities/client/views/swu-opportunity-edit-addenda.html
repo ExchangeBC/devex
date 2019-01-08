@@ -2,11 +2,11 @@
 
   <!-- List of addendum -->
   <ol>
-    <li ng-repeat="addendum in vm.addenda" class="addendum-list-item">
+    <li ng-repeat="addendum in vm.opportunity.addenda" class="addendum-list-item">
 
       <!-- non-editing view -->
-      <div ng-if="!vm.editingAddenda || !(vm.addendaEditIndex === $index)" class="addendum-item">
-        <span ng-bind-html="addendum.cleanDesc"></span>
+      <div ng-if="!vm.editingAddenda || !(vm.editAddendumIndex === $index)" class="addendum-item">
+        <span ng-bind-html="addendum.description"></span>
         <div class="addendum-created">
           Created by {{addendum.createdBy.displayName}} on {{addendum.createdOn | date : "medium"}}
         </div>
@@ -16,7 +16,7 @@
       </div>
 
       <!-- editing view -->
-      <div ng-if="vm.editingAddenda && vm.addendaEditIndex === $index" class="addendum-item-editing">
+      <div ng-if="vm.editingAddenda && vm.editAddendumIndex === $index" class="addendum-item-editing">
         <div>&nbsp;</div>
         <fieldset>
 
@@ -25,8 +25,8 @@
                   "name":"addenda",
                   "help":"List any addenda to the opportunity in the textbox below"
                 }'>
-            <textarea name="addenda" id="addenda" class="form-control input-sm" ui-tinymce="vm.tinymceOptions"
-              placeholder="Addendum to the opportunity" ng-model="vm.currentAddendaText">
+            <textarea name="addenda" id="addenda" class="form-control input-sm" ui-tinymce="vm.TINYMCE_OPTIONS"
+              placeholder="Addendum to the opportunity" ng-model="vm.opportunity.addenda[$index].description">
                 </textarea>
           </form-display>
 

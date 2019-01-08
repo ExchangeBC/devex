@@ -1,11 +1,11 @@
 'use strict';
 
-import { Model, model, Schema } from 'mongoose';
-import IMessageDocument from '../interfaces/IMessageDocument';
+import { Document, Model, model, Schema } from 'mongoose';
+import { IMessage } from '../../shared/IMessageDTO';
 
-interface IMessageModel extends Model<IMessageDocument> {}
+export interface IMessageModel extends IMessage, Document {}
 
-const MessageModel: IMessageModel = model<IMessageDocument, IMessageModel>(
+export const MessageModel: Model<IMessageModel> = model<IMessageModel>(
 	'Message',
 	new Schema({
 		messageCd: { type: String, default: '' },
@@ -43,5 +43,3 @@ const MessageModel: IMessageModel = model<IMessageDocument, IMessageModel>(
 		isOpen: { type: Boolean, default: true }
 	})
 );
-
-export default MessageModel;

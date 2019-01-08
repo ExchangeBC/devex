@@ -80,61 +80,15 @@
 					pageTitle: 'Settings'
 				}
 			})
-			.state('settings.payment', {
-				url: '/payment',
-				templateUrl: '/modules/users/client/views/settings/payment-settings.client.view.html',
-				controller: 'EditProfileController',
-				controllerAs: 'vm',
-				data: {
-					pageTitle: 'Payment Details'
-				}
-			})
-			.state('settings.password', {
-				url: '/password',
-				templateUrl: '/modules/users/client/views/settings/change-password.client.view.html',
-				controller: 'ChangePasswordController',
-				controllerAs: 'vm',
-				data: {
-					pageTitle: 'Settings password'
-				}
-			})
 			.state('authentication', {
-				abstract: true,
 				url: '/authentication',
 				templateUrl: '/modules/users/client/views/authentication/authentication.client.view.html',
 				controller: 'AuthenticationController',
 				controllerAs: 'vm'
 			})
-			.state('authentication.gov', {
-				url: '/government',
-				templateUrl: '/modules/users/client/views/authentication/gov.client.view.html',
-				controller: 'AuthenticationController',
-				controllerAs: 'vm',
-				data: {
-					pageTitle: 'Government'
-				}
-			})
 			.state('authentication.signinadmin', {
 				url: '/signinadmin?err',
 				templateUrl: '/modules/users/client/views/authentication/signin.admin.client.view.html',
-				controller: 'AuthenticationController',
-				controllerAs: 'vm',
-				data: {
-					pageTitle: 'Signin'
-				}
-			})
-			.state('signup', {
-				url: '/signup',
-				templateUrl: '/modules/users/client/views/authentication/signup.client.view.html',
-				controller: 'AuthenticationController',
-				controllerAs: 'vm',
-				data: {
-					pageTitle: 'Signup'
-				}
-			})
-			.state('authentication.signin', {
-				url: '/signin?err',
-				templateUrl: '/modules/users/client/views/authentication/signin.client.view.html',
 				controller: 'AuthenticationController',
 				controllerAs: 'vm',
 				data: {

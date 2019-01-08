@@ -1,57 +1,46 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IPromise, resource } from 'angular';
+import { ICapability } from '../../shared/ICapabilityDTO';
 
-(() => {
-	angular
-		.module('capabilities.services')
+export interface ICapabilityResource extends resource.IResource<ICapability>, ICapability {
+	capabilityId: '@_id';
+	$promise: IPromise<ICapabilityResource>;
+}
 
-		// Service for capabilities
-		.factory('CapabilitiesService', [
-			'$resource',
-			'$log',
-			($resource, $log) => {
-				const Capability = $resource(
-					'/api/capabilities/:capabilityId',
-					{
-						capabilityId: '@_id'
-					},
-					{
-						update: {
-							method: 'PUT'
-						},
-						list: {
-							method: 'GET',
-							url: '/api/capabilities',
-							isArray: true
-						}
-					}
-				);
-				angular.extend(Capability.prototype, {
-					createOrUpdate() {
-						const capability = this;
-						if (capability._id) {
-							return capability.$update(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						} else {
-							return capability.$save(
-								() => {
-									return;
-								},
-								e => {
-									$log.error(e.data);
-								}
-							);
-						}
-					}
-				});
-				return Capability;
+export interface ICapabilitiesService extends resource.IResourceClass<ICapabilityResource> {
+	create(capability: ICapabilityResource): ICapabilityResource;
+	update(capability: ICapabilityResource): ICapabilityResource;
+	list(): ICapabilityResource[];
+}
+
+angular.module('capabilities.services').factory('CapabilitiesService', [
+	'$resource',
+	($resource: resource.IResourceService): ICapabilitiesService => {
+		const createAction: resource.IActionDescriptor = {
+			method: 'POST'
+		};
+
+		const updateAction: resource.IActionDescriptor = {
+			method: 'PUT'
+		};
+
+		const listAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/capabilities',
+			isArray: true
+		};
+
+		return $resource(
+			'/api/capabilities/:capabilityId',
+			{
+				capabilityId: '@_id'
+			},
+			{
+				create: createAction,
+				update: updateAction,
+				list: listAction
 			}
-		]);
-})();
+		) as ICapabilitiesService;
+	}
+]);

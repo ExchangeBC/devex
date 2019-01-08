@@ -33,9 +33,9 @@
 					controllerAs: 'vm',
 					resolve: {
 						org: [
-							'OrgsService',
-							function(OrgsService) {
-								return new OrgsService();
+							'OrgService',
+							function(OrgService) {
+								return new OrgService();
 							}
 						]
 					}
@@ -57,9 +57,9 @@
 					},
 					resolve: {
 						orgs: [
-							'OrgsService',
-							function(OrgsService) {
-								return OrgsService.query().$promise;
+							'OrgService',
+							function(OrgService) {
+								return OrgService.query().$promise;
 							}
 						]
 					},
@@ -79,9 +79,9 @@
 					resolve: {
 						org: [
 							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
+							'OrgService',
+							function($stateParams, OrgService) {
+								return OrgService.get({
 									orgId: $stateParams.orgId
 								}).$promise;
 							}
@@ -100,7 +100,6 @@
 				//
 				// -------------------------------------------------------------------------
 				.state('orgadmin', {
-					abstract: true,
 					url: '/orgadmin/:orgId',
 					templateUrl: '/modules/orgs/client/views/org-edit.html',
 					controller: 'OrgAdminController',
@@ -108,9 +107,9 @@
 					resolve: {
 						org: [
 							'$stateParams',
-							'OrgsService',
-							function($stateParams, OrgsService) {
-								return OrgsService.get({
+							'OrgService',
+							function($stateParams, OrgService) {
+								return OrgService.get({
 									orgId: $stateParams.orgId
 								}).$promise;
 							}
@@ -126,49 +125,6 @@
 						roles: ['user', 'admin']
 					}
 				})
-				.state('orgadmin.profile', {
-					url: '/main',
-					templateUrl: '/modules/orgs/client/views/org-main.html',
-					controller: 'OrgProfileController',
-					controllerAs: 'vm',
-					resolve: {
-						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
-							}
-						]
-					},
-					data: {
-						pageTitle: 'Company Settings'
-					}
-				})
-				.state('orgadmin.members', {
-					url: '/members',
-					templateUrl: '/modules/orgs/client/views/org-members.html',
-					controller: 'OrgMembersController',
-					controllerAs: 'vm',
-					resolve: {
-						allCapabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
-							}
-						]
-					},
-					data: {
-						pageTitle: 'Company Members'
-					}
-				})
-				.state('orgadmin.terms', {
-					url: '/terms',
-					templateUrl: '/modules/orgs/client/views/org-terms.html',
-					controller: 'OrgTermsController',
-					controllerAs: 'vm',
-					data: {
-						pageTitle: 'Company Terms'
-					}
-				});
 		}
 	]);
 }());

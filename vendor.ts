@@ -1,3 +1,4 @@
+import '@uirouter/angularjs'
 import 'angular';
 import 'angular-animate';
 import 'angular-breadcrumb';
@@ -7,7 +8,6 @@ import 'angular-mocks';
 import 'angular-resource';
 import 'angular-sanitize';
 import 'angular-ui-notification';
-import 'angular-ui-router';
 import 'angular-ui-tinymce';
 import 'bootstrap';
 import 'jquery';
