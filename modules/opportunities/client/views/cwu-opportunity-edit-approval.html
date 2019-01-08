@@ -318,6 +318,20 @@
           <div class="row">
             <div class="col">
               <form-display x-options='{
+                      "title" :"Why could existing staff resources not fill the need?",
+                      "name"  :"staffResource",
+                      "required": true
+                    }'>
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="staffResource" id="staffResource" data-automation-id="text-cwu-staffResource" ui-tinymce="vm.TINYMCE_OPTIONS"
+                  ng-model="vm.opportunity.contract.staffResourceExplanation">
+                    </textarea>
+              </form-display>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <form-display x-options='{
                       "title" :"What will be the impact if this contract is not approved?",
                       "name"  :"impact",
                       "required": true

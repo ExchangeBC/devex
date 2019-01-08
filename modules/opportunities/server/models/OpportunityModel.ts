@@ -72,6 +72,7 @@ const ContractSchema = new Schema({
 	stobExpenditures: { type: Number, default: 0 },
 	summary: { type: String, default: '' },
 	legallyRequired: { type: Boolean, default: false },
+	staffResourceExplanation: { type: String, default: '' },
 	impactNotApproved: { type: String, default: '' }
 });
 

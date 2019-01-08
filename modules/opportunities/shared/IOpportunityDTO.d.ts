@@ -58,6 +58,22 @@ export interface IApproval {
 	twoFAAttemptCount: number;
 }
 
+export interface IContract {
+	managerName: string;
+	managerEmail: string;
+	businessArea: string;
+	estimatedValue: number;
+	estimatedTerm: number;
+	contractType: string;
+	stobType: string;
+	stobBudget: number;
+	stobExpenditures: number;
+	summary: string;
+	legallyRequired: boolean;
+	staffResourceExplanation: string;
+	impactNotApproved: string;
+}
+
 export interface IOpportunity {
     _id: string;
 	code: string;
@@ -100,7 +116,7 @@ export interface IOpportunity {
 	teamQuestionGradingType: any;
 	intermediateApproval: IApproval;
 	finalApproval: IApproval;
-	contract: any;
+	contract: IContract;
 	approvalRequired: boolean;
 	isApproved: boolean;
 	evaluation: string;

@@ -209,7 +209,7 @@ export default class OpportunityViewCWUController implements IController {
 					width: 200
 				},
 				{
-					text: 'Opportunity Approval Record\n\n',
+					text: 'Opportunity Pre-Approval Record\n\n',
 					style: 'header'
 				},
 				`Opportunity: ${this.opportunity.name}`,
@@ -237,13 +237,13 @@ export default class OpportunityViewCWUController implements IController {
 		};
 
 		if (this.opportunity.isApproved) {
-			docDefinition.content.push(`Approved on ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
+			docDefinition.content.push(`Pre-approved on ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
 		}
 
 		const approvalInfo: any = [
 			'\n\n',
 			{
-				text: 'Approval History\n\n',
+				text: 'Pre-approval History\n\n',
 				style: 'header'
 			},
 			{
