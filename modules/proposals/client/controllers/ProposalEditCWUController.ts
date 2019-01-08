@@ -99,6 +99,7 @@ export default class ProposalEditCWUController {
 				title: 'Success',
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
 			});
+			this.proposalForm.$setPristine();
 
 			// if this is a newly created proposal, transition to edit view
 			if (!this.editing) {

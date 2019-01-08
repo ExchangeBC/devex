@@ -68,7 +68,7 @@ export class EditProfileController implements IController {
 
 	public async delete(): Promise<void> {
 		const question = "Please confirm you want to be removed from the BC Developer's Exchange";
-		const choice = this.ask.yesNo(question);
+		const choice = await this.ask.yesNo(question);
 		if (choice) {
 			try {
 				await this.UsersService.removeSelf().$promise;

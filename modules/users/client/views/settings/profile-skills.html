@@ -34,7 +34,7 @@
                 </label>
               </div>
 
-              <div ng-if="capability.skills.length > 0">
+              <div ng-if="capability.skills.length > 0 && vm.userHasCapability(capability)">
                 <p>Select all the <strong>preferred technical skills</strong> you possess:</p>
                 <div class="label-list">
                   <label class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected': vm.userHasSkill(skill)}"
