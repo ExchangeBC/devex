@@ -8,10 +8,10 @@ import '../css/core.css';
 (() => {
 	'use strict';
 
-	HomeController.$inject = ['Authentication', '$state'];
+	HomeController.$inject = ['Authentication', '$state', '$rootScope'];
 	angular.module('core').controller('HomeController', HomeController);
 
-	function HomeController(Authentication, $state) {
+	function HomeController(Authentication, $state, $rootScope) {
 		const vm = this;
 		vm.isUser = Authentication.user;
 		if (sessionStorage.prevState) {
@@ -20,6 +20,10 @@ import '../css/core.css';
 			delete sessionStorage.prevState;
 			delete sessionStorage.prevParams;
 			$state.go(prevState, prevParams);
+		}
+
+		if (vm.isUser) {
+			$rootScope.$broadcast('updateMessageCount', 'done');
 		}
 	}
 })();

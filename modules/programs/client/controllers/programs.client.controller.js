@@ -111,6 +111,14 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+		vm.close = function() {
+			if (editing) {
+				$state.go('programs.view', { programId: vm.program._id });
+			} else {
+				$state.go('programs.list');
+			}
+
+		}
 		// -------------------------------------------------------------------------
 		//
 		// remove the program with some confirmation

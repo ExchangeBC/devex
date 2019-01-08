@@ -56,7 +56,7 @@ const commonConfig = merge([
 						'./modules/core/client/app/init.ts'
 					]
 				}),
-				glob.sync('./modules/*/client/views/*.html'),
+				glob.sync('./modules/*/client/**/*.html'),
 			),
 		},
 		resolve: {

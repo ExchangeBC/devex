@@ -7,7 +7,6 @@
 		'$scope',
 		'$rootScope',
 		'$state',
-		'usercount',
 		'UsersService',
 		'$location',
 		'$window',
@@ -21,7 +20,6 @@
 		$scope,
 		$rootScope,
 		$state,
-		usercount,
 		UsersService,
 		$location,
 		$window,
@@ -30,7 +28,6 @@
 		Notification
 	) {
 		var vm = this;
-		vm.usercount = usercount;
 		vm.authentication = Authentication;
 		vm.getPopoverMsg = PasswordValidator.getPopoverMsg;
 		vm.non_gov = non_gov;
@@ -126,7 +123,7 @@
 			$rootScope.$broadcast('userSignedIn', response);
 
 			if ($state.previous && $state.previous.state) {
-				$state.go($state.previous.state.name);
+				$state.go($state.previous.state.name, $state.previous.state.params);
 			} else {
 				$state.go('home', $state.params);
 			}

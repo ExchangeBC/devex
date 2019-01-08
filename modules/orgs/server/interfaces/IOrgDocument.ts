@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
-import { ICapabilityDocument } from '../../../capabilities/server/interfaces/ICapabilityDocument';
-import { ICapabilitySkillDocument } from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
-import { IUserDocument } from '../../../users/server/interfaces/IUserDocument';
+import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
+import IUserDocument from '../../../users/server/interfaces/IUserDocument';
 
-export interface IOrgDocument extends Document {
+export default interface IOrgDocument extends Document {
 	name: string;
 	dba: string;
 	address: string;

@@ -14,7 +14,7 @@
         <span ng-if="!vm.editing">
           New Project
         </span>
-        <a href="{{vm.previousState.url}}" title="Close" class="btn btn-text-only pull-right"><i class="fas fa-lg fa-times"></i></a>
+        <a href="" ng-click="vm.close()" title="Close" class="btn btn-text-only float-right"><i class="fas fa-lg fa-times"></i></a>
       </div>
 
       <div class="px-3">
@@ -103,8 +103,8 @@
 
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
-          <div class="col-xs-12">
-            <button data-automation-id="button-project-save" type="submit" class="btn btn-primary pull-right" title="Save">
+          <div class="col">
+            <button data-automation-id="button-project-save" type="submit" class="btn btn-primary float-right" title="Save">
               <i class="fas fa-save"></i> Save &amp; Close</button>
             <a data-automation-id="button-project-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
               title="Delete"><i class="fas fa-trash"></i> Delete this Project</a>

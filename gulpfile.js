@@ -1,12 +1,8 @@
 'use strict';
 
-/**
- * Module dependencies.
- */
 const _ = require('lodash'),
 	fs = require('fs'),
-	defaultAssets = require('./config/assets/default'),
-	testAssets = require('./config/assets/test'),
+	defaultAssets = require('./config/assets/assets'),
 	gulp = require('gulp'),
 	gulpLoadPlugins = require('gulp-load-plugins'),
 	ts = require('gulp-typescript'),
@@ -19,6 +15,20 @@ const _ = require('lodash'),
 
 // Define paths for webpack
 const paths = require('./paths');
+
+const tsProject = ts.createProject({
+	target: 'es2015',
+	module: 'commonjs',
+	moduleResolution: 'node',
+	sourceMap: true,
+	emitDecoratorMetadata: true,
+	experimentalDecorators: true,
+	removeComments: true,
+	noImplicitAny: false,
+	allowJs: true,
+	outDir: './server-dist',
+	esModuleInterop: true
+});
 
 // Set NODE_ENV to 'test'
 gulp.task('env:test', function() {
@@ -77,24 +87,27 @@ gulp.task('webpack', callback => {
 
 // TypeScript (server)
 gulp.task('tsc-server', () => {
-	var compile = ts.createProject({
-		target: 'es2015',
-		module: 'commonjs',
-		moduleResolution: 'node',
-		sourceMap: true,
-		emitDecoratorMetadata: true,
-		experimentalDecorators: true,
-		removeComments: true,
-		noImplicitAny: false,
-		allowJs: true,
-		outDir: "./server-dist"
-	});
 
-	return gulp.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })
+	return gulp
+		.src(_.union(defaultAssets.server.allTS, defaultAssets.server.allJS), { base: './' })
 		.pipe(sourcemaps.init())
-		.pipe(compile())
-		.pipe(sourcemaps.write('.', { includeContent: false, sourceRoot: '' }))
+		.pipe(tsProject())
+		.pipe(
+			sourcemaps.write('.', {
+				mapSources: path => path,
+				sourceRoot: file => {
+					return path.relative(file.relative, path.join(file.cwd, './server-dist'));
+				}
+			})
+		)
 		.pipe(gulp.dest(path.resolve('./server-dist')));
+});
+
+gulp.task('tsc-watch', () => {
+	return new Promise(resolve => {
+		gulp.watch(defaultAssets.server.allTS, gulp.series('tsc-server'));
+		resolve();
+	});
 });
 
 // Nodemon task
@@ -104,7 +117,8 @@ gulp.task('nodemon', () => {
 			script: 'server-dist/server.js',
 			nodeArgs: ['--inspect=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
+			delay: 1,
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
 		});
 		resolve();
 	});
@@ -118,27 +132,10 @@ gulp.task('nodemon-debug', function() {
 			nodeArgs: ['--inspect-brk=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			verbose: true,
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.config)
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
 		});
 		resolve();
 	});
-});
-
-// ESLint JS linting task
-gulp.task('eslint', () => {
-	var assets = _.union(
-		defaultAssets.server.gulpConfig,
-		defaultAssets.server.allJS,
-		// defaultAssets.client.js,
-		testAssets.tests.server,
-		testAssets.tests.client,
-		testAssets.tests.e2e
-	);
-
-	return gulp
-		.src(assets)
-		.pipe(plugins.eslint())
-		.pipe(plugins.eslint.format());
 });
 
 // Make sure upload directory exists
@@ -157,7 +154,7 @@ gulp.task('build', gulp.series('env:prod', 'webpack', 'tsc-server'));
 gulp.task('quiet', gulp.series('env:dev', 'webpack', 'tsc-server', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
-gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon'));
+gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', gulp.parallel('tsc-watch', 'nodemon')));
 
 // Run the project but automatically break on init - used for debugging startup issues
 gulp.task('debug', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon-debug'));

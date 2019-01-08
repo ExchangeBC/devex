@@ -16,10 +16,9 @@
 		"esModuleInterop": true,
 		"allowSyntheticDefaultImports": true
 	},
-	"include": [
-		"./modules/*/client/**/*"
-	],
 	"exclude": [
-		"node_modules"
+		"node_modules",
+		"server-dist",
+		"public/dist"
 	]
 }

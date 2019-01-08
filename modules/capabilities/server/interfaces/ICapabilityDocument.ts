@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
 
-export interface ICapabilityDocument extends Document {
+export default interface ICapabilityDocument extends Document {
 	code: string;
 	name: string;
 	description: string;

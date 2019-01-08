@@ -10,15 +10,6 @@
 
   function routeConfig($stateProvider) {
     $stateProvider
-          .state('admin.govs', {
-        url: '/govs',
-        templateUrl: '/modules/users/client/views/admin/list-govs.client.view.html',
-        controller: 'GovListController',
-        controllerAs: 'vm',
-        data: {
-          pageTitle: 'Government List'
-        }
-      })
        .state('admin.gov', {
         url: '/govs/:userId',
         templateUrl: '/modules/users/client/views/admin/view-govs.client.view.html',
@@ -62,34 +53,6 @@
         },
         data: {
           pageTitle: 'Edit {{ userResolve.displayName }}'
-        }
-      })
-      .state('admin.notifyopps', {
-        url: '/notifyopps',
-        templateUrl: '/modules/users/client/views/admin/listopps.client.view.html',
-        controllerAs: 'vm',
-        controller: ['users', function (users) {
-          var vm = this;
-          vm.users = users;
-        }],
-        resolve: {
-          users: ['AdminService', function (AdminService) {
-            return AdminService.listopps().$promise;
-          }]
-        }
-      })
-      .state('admin.notifymeets', {
-        url: '/notifymeets',
-        templateUrl: '/modules/users/client/views/admin/listmeets.client.view.html',
-        controllerAs: 'vm',
-        controller: ['users', function (users) {
-          var vm = this;
-          vm.users = users;
-        }],
-        resolve: {
-          users: ['AdminService', function (AdminService) {
-            return AdminService.listmeets().$promise;
-          }]
         }
       })
       .state('admin.user-edit', {

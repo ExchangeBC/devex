@@ -62,6 +62,14 @@ exports.loadServerViews = () => ({
 			template: 'modules/core/server/views/404.server.view.html',
 			filename: 'server-views/404.server.view.html'
 		}),
+		new HtmlWebpackPlugin({
+			template: 'modules/users/server/templates/reset-password-confirm-email.server.view.html',
+			filename: 'server-views/reset-password-confirm-email.server.view.html'
+		}),
+		new HtmlWebpackPlugin({
+			template: 'modules/users/server/templates/reset-password-email.server.view.html',
+			filename: 'server-views/reset-password-email.server.view.html'
+		}),
 	],
 });
 

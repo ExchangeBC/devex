@@ -9,7 +9,6 @@ def TST_TAG_NAME = 'test'
 def TST_BCK_TAG_NAME = 'test-previous'
 def TST_NS = 'devex-platform-test'
 
-
 import groovy.json.JsonOutput
 def notifySlack(text, channel, url, attachments) {
     def slackURL = url
@@ -60,32 +59,34 @@ node('maven') {
        echo "Build: ${BUILD_ID}"
        checkout scm
     }
-    stage('dependency check') {
-          dir('owasp') {
-            // sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
-            sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan ../package.json --enableExperimental --enableRetired'
-            sh 'rm -rf ./dependency-check/data/'
-            publishHTML (target: [
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: true,
-                                reportDir: './',
-                                reportFiles: 'dependency-check-report.html',
-                                reportName: "OWASP Dependency Check Report"
-                          ])
+    // stage('dependency check') {
+    //       dir('owasp') {
+    //         // sh 'wget http://dl.bintray.com/jeremy-long/owasp/dependency-check-3.1.2-release.zip'
+    //         sh './dependency-check/bin/dependency-check.sh --project "Developers Exchange" --scan ../package.json --enableExperimental --enableRetired'
+    //         sh 'rm -rf ./dependency-check/data/'
+    //         publishHTML (target: [
+    //                             allowMissing: false,
+    //                             alwaysLinkToLastBuild: false,
+    //                             keepAll: true,
+    //                             reportDir: './',
+    //                             reportFiles: 'dependency-check-report.html',
+    //                             reportName: "OWASP Dependency Check Report"
+    //                       ])
+    //       }
+    // }
+
+    stage('sonarqube') {
+      script {
+        openshift.withCluster() {
+          openshift.withProject() {
+            def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
+            def build = sonarqube.startBuild()
+            build.untilEach(1) {
+              return it.object().status.phase == "Complete"
+            }
           }
-    }
-    stage('code quality check') {
-           SONARQUBE_URL = sh (
-               script: 'oc get routes -o wide --no-headers | awk \'/sonarqube/{ print match($0,/edge/) ?  "https://"$2 : "http://"$2 }\'',
-               returnStdout: true
-                  ).trim()
-           echo "SONARQUBE_URL: ${SONARQUBE_URL}"
-           dir('sonar-runner') {
-            sh returnStdout: true, script: "./gradlew sonarqube -Dsonar.host.url=${SONARQUBE_URL} \
-            -Dsonar.verbose=true --stacktrace --info -Dsonar.projectName=Devex.Dev -Dsonar.branch=develop \
-            -Dsonar.projectKey=org.sonarqube:bcgov-devex-dev -Dsonar.sources=.."
-           }
+        }
+      }
     }
 
     stage('build') {

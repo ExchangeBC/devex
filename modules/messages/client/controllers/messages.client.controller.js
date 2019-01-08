@@ -56,8 +56,11 @@
 		// take some sort of action
 		//
 		vm.takeAction = function (action) {
-			MessagesService.actioned ({
-				messageId : message._id,
+			MessagesService.actioned (
+			{
+				messageId: message._id
+			},
+			{
 				action    : action.actionCd
 			}).$promise
 			.then (function (response) {

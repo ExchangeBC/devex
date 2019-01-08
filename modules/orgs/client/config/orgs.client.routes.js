@@ -131,6 +131,14 @@
 					templateUrl: '/modules/orgs/client/views/org-main.html',
 					controller: 'OrgProfileController',
 					controllerAs: 'vm',
+					resolve: {
+						capabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
+					},
 					data: {
 						pageTitle: 'Company Settings'
 					}
@@ -140,6 +148,14 @@
 					templateUrl: '/modules/orgs/client/views/org-members.html',
 					controller: 'OrgMembersController',
 					controllerAs: 'vm',
+					resolve: {
+						allCapabilities: [
+							'CapabilitiesService',
+							function(CapabilitiesService) {
+								return CapabilitiesService.query().$promise;
+							}
+						]
+					},
 					data: {
 						pageTitle: 'Company Members'
 					}

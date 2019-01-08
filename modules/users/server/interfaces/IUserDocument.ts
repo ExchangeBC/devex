@@ -1,6 +1,8 @@
 import { Document } from 'mongoose';
+import ICapabilityDocument from '../../../capabilities/server/interfaces/ICapabilityDocument';
+import ICapabilitySkillDocument from '../../../capabilities/server/interfaces/ICapabilitySkillDocument';
 
-export interface IUserDocument extends Document {
+export default interface IUserDocument extends Document {
 	firstName: string;
 	lastName: string;
 	displayName: string;
@@ -22,7 +24,7 @@ export interface IUserDocument extends Document {
 	notifyBlogs: boolean;
 	userTitle: string;
 	providerData: object;
-	roles: [string];
+	roles: string[];
 	updated: Date;
 	created: Date;
 	resetPasswordToken: string;
@@ -54,7 +56,7 @@ export interface IUserDocument extends Document {
 	linkedIn: string;
 	isPublicProfile: boolean;
 	isAutoAdd: boolean;
-	capabilities: [Document];
-	capabilitySkills: [Document];
+	capabilities: ICapabilityDocument[];
+	capabilitySkills: ICapabilitySkillDocument[];
 	capabilityDetails: [object];
 }

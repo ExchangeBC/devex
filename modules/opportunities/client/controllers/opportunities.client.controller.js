@@ -178,7 +178,7 @@
 				//
 				// am I watchng?
 				//
-				vm.isWatching = OpportunitiesCommon.isWatchng(vm.opportunity);
+				vm.isWatching = OpportunitiesCommon.isWatching(vm.opportunity);
 				vm.toggleWatch = function() {
 					if (vm.isWatching) {
 						vm.removeWatch();
