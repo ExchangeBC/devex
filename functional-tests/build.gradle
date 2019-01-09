@@ -3,7 +3,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 plugins {
     id "idea"
     id "groovy"
-    id "com.energizedwork.webdriver-binaries" version "1.0"
+    id "com.energizedwork.webdriver-binaries" version "1.4"
     id "com.energizedwork.idea-base" version "1.2"
 }
 
@@ -12,10 +12,10 @@ ext {
     drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
 
     ext {
-        groovyVersion = '2.4.12'
-        gebVersion = '2.1'
-        seleniumVersion = '3.6.0'
-        chromeDriverVersion = '2.36'
+        groovyVersion = '2.5.4'
+        gebVersion = '2.3'
+        seleniumVersion = '3.141.59'
+        chromeDriverVersion = '2.45'
         geckoDriverVersion = '0.18.0'
         ieDriverVersion = '3.6'
         edgeDriverVersion = seleniumVersion

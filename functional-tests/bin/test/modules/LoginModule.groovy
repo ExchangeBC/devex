@@ -15,7 +15,7 @@ class LoginModule extends Module {
     static content = {
       adminLogin(wait: true) { $("#authentication.signinadmin") }
       signIn { $("#authentication.signin") }
-      adminLoginInput { $("#usernameOrEmail") }
+      adminLoginInput { $("#username") }
       passwordInput { $("#password") }
       commitButton { $("button", type:"submit") }
 
