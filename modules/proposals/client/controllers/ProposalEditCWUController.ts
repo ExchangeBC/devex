@@ -2,6 +2,7 @@
 
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
+import moment from 'moment-timezone';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
@@ -57,6 +58,13 @@ export default class ProposalEditCWUController {
 
 		// set the user
 		this.user = this.AuthenticationService.user;
+	}
+
+	// Format dates to always be in PST (America/Vancouver timezone)
+	public formatDate(date: string, includeTime: boolean): string {
+		const momentDate = moment(date);
+		const dateFormat = includeTime ? 'MMMM Do YYYY, HH:mm z' : 'MMMM Do YYYY';
+		return momentDate.tz('America/Vancouver').format(dateFormat);
 	}
 
 	// Save the proposal
