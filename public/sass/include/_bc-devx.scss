@@ -165,9 +165,9 @@ li.question-ranking-item {
 }
 
 div.question-viewer {
-  max-height: 200px;
-  white-space: nowrap;
+  max-height: 400px;
   overflow-y: scroll;
+  overflow-x: auto;
 }
 
 .swu-evaluation {

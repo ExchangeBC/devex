@@ -110,6 +110,7 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 						qqq.capability.skills.push(newSkill);
 						qqq.savenow(true);
 						qqq.newskill = '';
+						qqq.capabilityForm.$setPristine();
 						return;
 					} catch (error) {
 						Notification.error({
@@ -160,6 +161,7 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 						});
 						qqq.newskill = '';
 						qqq.editingskill = null;
+						qqq.capabilityForm.$setPristine();
 						return;
 					} catch (error) {
 						Notification.error({

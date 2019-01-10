@@ -108,6 +108,23 @@ export class OrgAdminController implements IController {
 		}
 	}
 
+	public async removeMember(member: IUserResource): Promise<void> {
+		const message = 'Are you sure you want to remove this member from your company? If you have added them to a proposal, you may no longer qualify to apply on the opportunity.';
+		const choice = await this.ask.yesNo(message);
+		if (choice) {
+			try {
+				const updatedOrg = await this.OrgService.removeUser({ orgId: this.org._id, userId: member._id }).$promise;
+				this.Notification.success({
+					title: 'Success',
+					message: '<i class="fas fa-check-circle"></i> Member removed'
+				});
+				this.refreshOrg(updatedOrg);
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	};
+
 	private async displayInvitationCompleteDialog(): Promise<void> {
 		if (!this.org.emaillist) {
 			return;

@@ -1,10 +1,11 @@
 'use strict';
 
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import { Document, Types } from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
-import { CapabilityModel } from '../models/CapabilityModel';
-import { CapabilitySkillModel } from '../models/CapabilitySkillModel';
+import { CapabilityModel, ICapabilityModel } from '../models/CapabilityModel';
+import { CapabilitySkillModel, ICapabilitySkillModel } from '../models/CapabilitySkillModel';
 
 class CapabilitiesServerController {
 	public static getInstance() {
@@ -13,15 +14,19 @@ class CapabilitiesServerController {
 
 	private static instance: CapabilitiesServerController;
 
-	private constructor() {}
+	private constructor() {
+		this.create = this.create.bind(this);
+		this.delete = this.delete.bind(this);
+		this.skillCreate = this.skillCreate.bind(this);
+		this.skillDelete = this.skillDelete.bind(this);
+	}
 
 	// Create a new capability.
-	public create = (req, res) => {
+	public create(req: Request, res: Response): void {
 		const capability = new CapabilityModel(req.body);
-		//
+
 		// set the code, this is used for setting roles and other stuff
-		//
-		CapabilityModel.schema.statics.findUniqueCode(capability.name, null, newcode => {
+		CapabilityModel.schema.statics.findUniqueCode(capability.name, null, (newcode: string) => {
 			capability.code = newcode;
 
 			// save
@@ -30,12 +35,11 @@ class CapabilitiesServerController {
 	};
 
 	// Create a new capability skill.
-	public skillCreate = (req, res) => {
+	public skillCreate(req: Request, res: Response): void {
 		const capabilitySkill = new CapabilitySkillModel(req.body);
-		//
+
 		// set the code, this is used for setting roles and other stuff
-		//
-		CapabilitySkillModel.schema.statics.findUniqueCode(capabilitySkill.name, null, newcode => {
+		CapabilitySkillModel.schema.statics.findUniqueCode(capabilitySkill.name, null, (newcode: string) => {
 			capabilitySkill.code = newcode;
 
 			// save
@@ -44,131 +48,134 @@ class CapabilitiesServerController {
 	};
 
 	// This just takes the already queried object and pass it back
-	public read = (req, res) => {
+	public read(req: Request, res: Response) {
 		res.json(req.capability);
 	};
 
 	// Update a capability
-	public update = (req, res) => {
-		// copy over everything passed in. This will overwrite the
-		// audit fields, but they get updated in the following step
-		const capability = _.assign(req.capability, req.body);
-		capability.markModified('skills');
-
-		// save
-		this.saveDocument(capability, res);
+	public async update(req: Request, res: Response): Promise<void> {
+		try {
+			const capInfo = req.body;
+			let updatedCapability = await CapabilityModel.findOneAndUpdate({ code: capInfo.code }, capInfo, { new: true });
+			updatedCapability = await updatedCapability.populate('skills').execPopulate();
+			res.json(updatedCapability);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
 	// Update a skill
-	public skillUpdate = (req, res) => {
-		//
-		// copy over everything passed in. This will overwrite the
-		// audit fields, but they get updated in the following step
-		//
-		const capabilitySkill = _.assign(req.capabilitySkill, req.body);
-
-		// save
-		this.saveDocument(capabilitySkill, res);
+	public async skillUpdate(req: Request, res: Response): Promise<void> {
+		try {
+			const skillInfo = req.body;
+			const updatedSkill = await CapabilitySkillModel.findOneAndUpdate({ code: skillInfo.code }, skillInfo, { new: true });
+			res.json(updatedSkill);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
 	// Delete a capability
-	public delete = (req, res) => {
+	public async delete(req: Request, res: Response): Promise<void> {
 		const capability = req.capability;
 		this.deleteDocument(capability, res);
 	};
 
 	// Delete a skill
-	public skillDelete = (req, res) => {
+	public async skillDelete(req: Request, res: Response): Promise<void> {
 		const capabilitySkill = req.capabilitySkill;
 		this.deleteDocument(capabilitySkill, res);
 	};
 
 	// Return a list of all capabilities
-	public list = (req, res) => {
-		CapabilityModel.find({})
-			.populate('skills')
-			.exec((err, capabilities) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(capabilities);
-				}
+	public async list(req: Request, res: Response): Promise<void> {
+		try {
+			const capabilities = await CapabilityModel.find({})
+				.populate('skills')
+				.exec();
+			res.json(capabilities);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+		}
+	}
 
 	// Return a capability by id
-	public capabilityByID = (req, res, next, id) => {
-		const callback = (err, capability) => {
-			if (err) {
-				return next(err);
-			} else if (!capability) {
-				return res.status(404).send({
+	public async capabilityByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		try {
+			let capability: ICapabilityModel;
+			if (Types.ObjectId.isValid(id)) {
+				capability = await CapabilityModel.findById(id)
+					.populate('skills')
+					.exec();
+			} else {
+				capability = await CapabilityModel.findOne({ code: id })
+					.populate('skills')
+					.exec();
+			}
+
+			if (!capability) {
+				res.status(404).send({
 					message: 'No capability with that identifier has been found'
 				});
 			} else {
 				req.capability = capability;
-				return next();
+				next();
 			}
-		};
-		if (Types.ObjectId.isValid(id)) {
-			CapabilityModel.findById(id)
-				.populate('skills')
-				.exec(callback);
-		} else {
-			CapabilityModel.findOne({ code: id })
-				.populate('skills')
-				.exec(callback);
+		} catch (error) {
+			next(error);
 		}
-	};
+	}
 
 	// Get a skill by id
-	public capabilitySkillByID = (req, res, next, id) => {
-		const callback = (err, capabilitySkill) => {
-			if (err) {
-				return next(err);
-			} else if (!capabilitySkill) {
-				return res.status(404).send({
+	public async capabilitySkillByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		try {
+			let capabilitySkill: ICapabilitySkillModel;
+			if (Types.ObjectId.isValid(id)) {
+				capabilitySkill = await CapabilitySkillModel.findById(id).exec();
+			} else {
+				capabilitySkill = await CapabilitySkillModel.findOne({ code: id }).exec();
+			}
+
+			if (!capabilitySkill) {
+				res.status(404).send({
 					message: 'No capabilitySkill with that identifier has been found'
 				});
 			} else {
 				req.capabilitySkill = capabilitySkill;
-				return next();
+				next();
 			}
-		};
-		if (Types.ObjectId.isValid(id)) {
-			CapabilitySkillModel.findById(id).exec(callback);
-		} else {
-			CapabilitySkillModel.findOne({ code: id }).exec(callback);
+		} catch (error) {
+			next(error);
 		}
-	};
+	}
 
-	private saveDocument = (document: Document, res: any) => {
-		document
-			.save()
-			.then((updatedDocument: Document) => {
-				res.json(updatedDocument);
-			})
-			.catch(err => {
-				res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
+	private async saveDocument(document: Document, res: Response): Promise<void> {
+		try {
+			const savedDocument = await document.save();
+			res.json(savedDocument);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+		}
+	}
 
-	private deleteDocument = (document: Document, res: any) => {
-		document
-			.remove()
-			.then((removedDocument: Document) => {
-				res.json(removedDocument);
-			})
-			.catch(err => {
-				res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
+	private async deleteDocument(document: Document, res: Response): Promise<void> {
+		try {
+			const removedDocument = await document.remove();
+			res.json(removedDocument);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+		}
+	}
 }
 
 export default CapabilitiesServerController.getInstance();

@@ -134,21 +134,11 @@ class UserAuthenticationController {
 		if (!req.user) {
 			// Define a search query fields
 			const searchMainProviderIdentifierField = 'providerData.' + providerUserProfile.providerIdentifierField;
-			const searchAdditionalProviderIdentifierField = 'additionalProvidersData.' + providerUserProfile.provider + '.' + providerUserProfile.providerIdentifierField;
 
 			// Define main provider search query
 			const mainProviderSearchQuery: any = {};
 			mainProviderSearchQuery.provider = providerUserProfile.provider;
 			mainProviderSearchQuery[searchMainProviderIdentifierField] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
-
-			// Define additional provider search query
-			const additionalProviderSearchQuery: any = {};
-			additionalProviderSearchQuery[searchAdditionalProviderIdentifierField] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
-
-			// Define a search query to find existing user with current provider profile
-			const searchQuery = {
-				$or: [mainProviderSearchQuery, additionalProviderSearchQuery]
-			};
 
 			// Setup info object
 			const info: any = {};
@@ -159,7 +149,7 @@ class UserAuthenticationController {
 				info.redirect_to = req.query.redirect_to;
 			}
 
-			UserModel.findOne(searchQuery, (err, user) => {
+			UserModel.findOne(mainProviderSearchQuery, (err, user) => {
 				if (err) {
 					return done(err);
 				} else {
@@ -194,28 +184,7 @@ class UserAuthenticationController {
 				}
 			});
 		} else {
-			// User is already logged in, join the provider data to the existing user
-			const user = req.user;
-
-			// Check if user exists, is not signed in using this provider, and doesn't have that provider data already configured
-			if (user.provider !== providerUserProfile.provider && (!user.additionalProvidersData || !user.additionalProvidersData[providerUserProfile.provider])) {
-				// Add the provider data to the additional provider data field
-				if (!user.additionalProvidersData) {
-					user.additionalProvidersData = {};
-				}
-
-				user.additionalProvidersData[providerUserProfile.provider] = providerUserProfile.providerData;
-
-				// Then tell mongoose that we've updated the additionalProvidersData field
-				user.markModified('additionalProvidersData');
-
-				// And save the user
-				user.save(err => {
-					return done(err, user, '/settings/accounts');
-				});
-			} else {
-				return done(new Error('User is already connected using this provider'), user);
-			}
+			return done(new Error('You are already signed in'));
 		}
 	};
 

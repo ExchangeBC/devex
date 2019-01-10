@@ -27,8 +27,8 @@ const CapabilitySchema = new Schema(
 	{ usePushEach: true }
 );
 
-CapabilitySchema.statics.findUniqueCode = function(title, suffix, callback) {
-	return CoreServerHelpers.modelFindUniqueCode(this, 'capability', title, suffix, callback);
+CapabilitySchema.statics.findUniqueCode = (title, suffix, callback) => {
+	return CoreServerHelpers.modelFindUniqueCode(CapabilityModel, 'capability', title, suffix, callback);
 };
 
 export const CapabilityModel: Model<ICapabilityModel> = model<ICapabilityModel>('Capability', CapabilitySchema);

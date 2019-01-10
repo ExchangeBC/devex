@@ -25,7 +25,7 @@ class OpportunitiesCommonService implements IOpportunitiesCommonService {
 	// Check if the current user is currently watching this opportunity
 	public isWatching(opportunity: IOpportunityResource): boolean {
 		if (this.AuthenticationService.user) {
-			return opportunity.watchers.indexOf(this.AuthenticationService.user) !== -1;
+			return opportunity.watchers.map(user => user._id).indexOf(this.AuthenticationService.user._id) !== -1;
 		} else {
 			return false;
 		}

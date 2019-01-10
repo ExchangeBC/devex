@@ -2,6 +2,7 @@
 
 import angular, { IController, uiNotification } from 'angular';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
@@ -16,7 +17,6 @@ export default class OpportunityViewSWUController implements IController {
 	public canEdit: boolean;
 	public canPublish: boolean;
 	public hasEmail: boolean;
-	public closing = 'CLOSED';
 	public errorFields: any[];
 	public isWatching: boolean;
 	public showProposals: boolean;
@@ -34,7 +34,7 @@ export default class OpportunityViewSWUController implements IController {
 		private AuthenticationService: IAuthenticationService,
 		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,
-		private ask,
+		private ask: any,
 		public myproposal: IProposalResource,
 		private OpportunitiesCommonService: IOpportunitiesCommonService
 	) {
@@ -47,7 +47,6 @@ export default class OpportunityViewSWUController implements IController {
 
 	// publish the opportunity
 	public async publish(isToBePublished: boolean): Promise<void> {
-		const publishedState = this.opportunity.isPublished;
 		const publishQuestion = "When you publish this opportunity, we'll notify all our subscribed users. Are you sure you've got it just the way you want it?";
 		const publishSuccess = isToBePublished ? "Your opportunity has been published and we've notified subscribers!" : 'Your opportunity has been unpublished!';
 		const publishMethod = isToBePublished ? this.OpportunitiesService.publish : this.OpportunitiesService.unpublish;
@@ -95,17 +94,19 @@ export default class OpportunityViewSWUController implements IController {
 		}
 	}
 
-	public formatDate(date: Date | string): string {
-		const dateObj = date instanceof Date ? date : new Date(date);
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const day = dateObj.getDate();
-		const monthIndex = dateObj.getMonth();
-		const year = dateObj.getFullYear();
-		return monthNames[monthIndex] + ' ' + day + ', ' + year;
+	// Format dates to always be in PST (America/Vancouver timezone)
+	public formatDate(date: string, includeTime: boolean): string {
+		const momentDate = moment(date);
+		const dateFormat = includeTime ? 'MMMM Do YYYY, HH:mm z' : 'MMMM Do YYYY';
+		return momentDate.tz('America/Vancouver').format(dateFormat);
 	}
 
 	public isFullTime(capability: ICapabilityResource, coreCapabilities: ICapabilityResource[]): boolean {
 		return coreCapabilities.map(cap => cap.code).includes(capability.code);
+	}
+
+	public isClosed(): boolean {
+		return new Date(this.opportunity.deadline).getTime() - new Date().getTime() < 0;
 	}
 
 	// toggles watch status on the opportunity for the current user
@@ -127,7 +128,7 @@ export default class OpportunityViewSWUController implements IController {
 
 	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
 		this.opportunity = newOpportunity;
-		this.opportunity.deadline = new Date(this.opportunity.deadline);
+		// this.opportunity.deadline = new Date(this.opportunity.deadline);
 		this.opportunity.assignment = new Date(this.opportunity.assignment);
 		this.opportunity.start = new Date(this.opportunity.start);
 		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
@@ -142,62 +143,6 @@ export default class OpportunityViewSWUController implements IController {
 		// can this be published?
 		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
 		this.canPublish = this.errorFields.length === 0;
-
-		this.calculateTimeLeft();
-	}
-
-	private calculateTimeLeft(): void {
-		const msPerDay = 86400000;
-		const msPerHour = 3600000;
-		const msPerMinute = 60000;
-		const rightNow = new Date();
-		const timeLeft = this.opportunity.deadline.getTime() - rightNow.getTime();
-		if (timeLeft > 0) {
-			const daysLeft = Math.floor(timeLeft / msPerDay);
-			const hoursLeft = Math.floor((timeLeft % msPerDay) / msPerHour);
-			const minutesLeft = Math.floor(((timeLeft % msPerDay) % msPerHour) / msPerMinute);
-			if (daysLeft > 0) {
-				this.closing = daysLeft + ' days ' + hoursLeft + ' hours ' + minutesLeft + ' minutes';
-			} else if (hoursLeft > 0) {
-				this.closing = hoursLeft + ' hours ' + minutesLeft + ' minutes';
-			} else {
-				this.closing = minutesLeft + ' minutes';
-			}
-		} else {
-			this.closing = 'CLOSED';
-		}
-
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-		this.deadline =
-			this.opportunity.deadline.getHours() +
-			':00 Pacific Time, ' +
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
-
-		this.assignment =
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
-
-		this.start =
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
 	}
 
 	private handleError(error: any): void {

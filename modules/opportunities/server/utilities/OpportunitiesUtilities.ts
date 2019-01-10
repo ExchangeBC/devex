@@ -31,6 +31,7 @@ class OpportunitiesUtilities {
 			.populate('phases.aggregate.capabilities', 'code name')
 			.populate('phases.aggregate.capabilitiesCore', 'code name')
 			.populate('phases.aggregate.capabilitySkills', 'code name')
+			.populate('watchers')
 			.exec();
 
 		this.decorateList(oppList, req.user ? req.user.roles : []);

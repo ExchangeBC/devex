@@ -4,8 +4,8 @@
     <div class="row">
       <div class="col">
         <span class="strong"><i class="fas fa-check-circle"></i> This proposal has been submitted!</span> &nbsp;&nbsp;
-        You can make updates or withdraw your proposal until <strong>16:00 Pacific Time</strong> on <span class="strong"
-          ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span>.
+        You can make updates or withdraw your proposal until <span class="strong"
+          ng-bind="ppp.formatDate(ppp.opportunity.deadline, true)"></span>.
       </div>
     </div>
   </div>
@@ -17,7 +17,7 @@
     <div class="row">
       <div class="col">
         <span class="strong"><i class="fas fa-file"></i> Your Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
-        <span class="strong">16:00 Pacific Time on <span ng-bind="ppp.opportunity.deadline | date:'mediumDate'"></span></span>
+        <span class="strong"><span ng-bind="ppp.formatDate(ppp.opportunity.deadline, true)"></span></span>
         to be considered for this opportunity!
         <span ng-if="!ppp.proposal.isAcceptedTerms"><br>Before you can submit your Proposal, you must agree to the
           Terms.</span>

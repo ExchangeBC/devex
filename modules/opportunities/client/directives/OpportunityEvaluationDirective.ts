@@ -60,7 +60,7 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		this.isLoading = true;
 		this.user = this.AuthenticationService.user;
 		this.isAdmin = this.user && this.user.roles.includes('admin');
-		this.canEdit = this.user && this.user.roles.includes(`${this.opportunity.code}-admin`);
+		this.canEdit = this.user && (this.user.roles.includes(`${this.opportunity.code}-admin`) || this.isAdmin);
 
 		this.initializeEvaluation();
 	}

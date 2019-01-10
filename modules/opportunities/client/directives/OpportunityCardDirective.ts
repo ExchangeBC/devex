@@ -32,7 +32,7 @@ export class OpportunityCardDirectiveController implements IController {
 	) {
 		this.user = this.AuthenticationService.user;
 		this.isAdmin = this.user && this.AuthenticationService.user.roles.includes('admin');
-		this.opportunity = $scope.opportunity;
+		this.opportunity = this.$scope.opportunity;
 		this.getOpportunitySkills();
 	}
 
@@ -116,22 +116,8 @@ export class OpportunityCardDirectiveController implements IController {
 		}
 	}
 
-	public getDeadline(): string {
-		let ret = 'CLOSED';
-		const dateDiff = new Date(this.opportunity.deadline).getTime() - new Date().getTime();
-		if (dateDiff > 0) {
-			const dd = Math.floor(dateDiff / 86400000); // days
-			const dh = Math.floor((dateDiff % 86400000) / 3600000); // hours
-			const dm = Math.round(((dateDiff % 86400000) % 3600000) / 60000); // minutes
-			if (dd > 0) {
-				ret = dd + ' days ' + dh + ' hours ' + dm + ' minutes';
-			} else if (dh > 0) {
-				ret = dh + ' hours ' + dm + ' minutes';
-			} else {
-				ret = dm + ' minutes';
-			}
-		}
-		return ret;
+	public isClosed(): boolean {
+		return new Date(this.opportunity.deadline).getTime() - new Date().getTime() <= 0;
 	}
 
 	public getOpportunitySkills(): void {

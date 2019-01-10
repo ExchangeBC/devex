@@ -12,15 +12,15 @@
 
   <div class="container">
 <!-- If opportunity is still open, show proposal stats -->
-    <div class="row" ng-if="vm.opportunity.isPublished && vm.canEdit && vm.closing !== 'CLOSED'">
+    <div class="row" ng-if="vm.opportunity.isPublished && vm.canEdit && !vm.isClosed()">
       <div class="col border p-4">
-        <proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.closing === 'CLOSED'" context="opportunity"
+        <proposal-list ng-if="vm.canEdit && vm.opportunity.isPublished" isclosed="vm.isClosed()" context="opportunity"
           opportunity="vm.opportunity"></proposal-list>
       </div>
     </div>
 
     <!-- SWU Proposal section for Admins to view and enter evaluation -->
-    <opportunity-evaluation ng-if="vm.canEdit && vm.closing === 'CLOSED'" opportunity="vm.opportunity"></opportunity-evaluation>
+    <opportunity-evaluation ng-if="vm.canEdit && vm.isClosed()" opportunity="vm.opportunity"></opportunity-evaluation>
   </div>
 
 
@@ -38,7 +38,7 @@
     </div>
 
     <!-- // Proposal Application Directive // -->
-    <div class="row" ng-if="vm.closing !== 'CLOSED'">
+    <div class="row" ng-if="!vm.isClosed()">
       <div class="col px-0">
         <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal" org="vm.org"></proposal-apply>
       </div>
@@ -58,15 +58,15 @@
   </div>
 
   <div class="container border p-4">
-
     <div class="opp-detail-header">
-      Published on <span class="strong" ng-bind="vm.opportunity.lastPublished | date:'mediumDate'"></span> by <span
-        ng-if="vm.opportunity.createdBy" ng-bind="vm.opportunity.createdBy.displayName"></span><span ng-if="!vm.opportunity.createdBy">Deleted
-        User</span>&nbsp; &nbsp;Last updated on <span class="strong" ng-bind="vm.opportunity.updated | date:'mediumDate'"></span>
-      by <span ng-if="vm.opportunity.updatedBy" ng-bind=" vm.opportunity.updatedBy.displayName"></span><span ng-if="!vm.opportunity.updatedBy">Deleted
-        User</span><br>
       <div class="row">
         <div class="col-sm-8">
+          Published on <span class="strong" ng-bind="vm.formatDate(vm.opportunity.lastPublished)"></span>
+          <br>
+          Last updated on <span class="strong" ng-bind="vm.formatDate(vm.opportunity.updated)"></span>
+          by <span ng-if="vm.opportunity.updatedBy" ng-bind=" vm.opportunity.updatedBy.displayName"></span>
+          <span ng-if="!vm.opportunity.updatedBy">Deleted User</span>
+          <br>
           This RFP is a Competition Notice under RFQ No. ON‌-003166 and is restricted to Proponents that have become
           Qualified Suppliers pursuant to that RFQ.
         </div>
@@ -87,7 +87,7 @@
           </a>
 
           <!-- WATCH -->
-          <a class="btn btn-text-only float-right" ng-if="vm.hasEmail" ng-class="{'text-primary': vm.isWatching, 'text-secondary': !vm.isWatching }"
+          <a class="btn btn-text-only float-right" ng-if="vm.hasEmail && !vm.isClosed()" ng-class="{'text-primary': vm.isWatching, 'text-secondary': !vm.isWatching }"
             uib-tooltip="Youll get an email if this opportunity changes" ng-click="vm.toggleWatch()">
             <i class="fas fa-eye"></i>
           </a>
@@ -95,7 +95,7 @@
           <!-- UNPUBLISH -->
           <a ng-if="vm.canEdit && vm.opportunity.isPublished" class="btn btn-text-only float-right" ng-click="vm.publish(false)"
             uib-tooltip="Unpublish this Opportunity">
-            <i class="fas fa-ban"></i>
+            <i class="fas fa-ban"></i> 
           </a>
         </div>
       </div>
@@ -104,12 +104,12 @@
 
     <div class="row" ng-if="vm.opportunity.isPublished">
       <div class="col text-center">
-        <div ng-if="vm.closing !== 'CLOSED'">
+        <div ng-if="!vm.isClosed()">
           <p><label class="label label-lg label-success">OPEN</label> &nbsp; <i class="far fa-lg fa-clock"></i>
-            &nbsp;Proposals must be received through this website before <strong>{{vm.deadline}}</strong>.</p>
+            &nbsp;Proposals must be received through this website before <strong>{{ vm.formatDate(vm.opportunity.deadline, true) }}</strong>.</p>
         </div>
-        <div ng-if="vm.closing === 'CLOSED'">
-          <p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{vm.deadline}}</strong>.</p>
+        <div ng-if="vm.isClosed()">
+          <p><label class="label label-lg label-danger">CLOSED</label> &nbsp; This opportunity closed on <strong>{{ vm.formatDate(vm.opportunity.deadline, true) }}</strong>.</p>
         </div>
 
         <!-- Opportunity has been assigned. -->
@@ -206,7 +206,7 @@
     <div class="row">
       <div class="col">
         <h3 class="opp-detail">Background</h3>
-        <p ng-bind-html="vm.display.description"></p>
+        <p ng-bind-html="vm.opportunity.description"></p>
       </div>
     </div>
     <hr>
@@ -412,10 +412,10 @@
     <hr>
 
     <!-- // How to Apply // -->
-    <div class="row" ng-if="true && vm.closing !== 'CLOSED'">
+    <div class="row" ng-if="!vm.isClosed()">
       <div class="col">
         <h3 class="opp-detail">Request for Proposals</h3>
-        <p>Submit your proposal before <span class="strong">{{vm.deadline}}</span>.</p>
+        <p>Submit your proposal before <span class="strong">{{vm.formatDate(vm.opportunity.deadline, true)}}</span>.</p>
         <p>We will let you know after the Closing Time whether or not your Team has been shortlisted.</p>
         <p>Thanks for your interest!</p>
         <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>

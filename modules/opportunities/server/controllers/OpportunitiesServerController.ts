@@ -1055,6 +1055,7 @@ class OpportunitiesServerController {
 			.populate('phases.aggregate.capabilitySkills')
 			.populate('intermediateApproval.requestor', 'displayName email')
 			.populate('finalApproval.requestor', 'displayName email')
+			.populate('watchers')
 			.populate([
 				{
 					path: 'proposal',

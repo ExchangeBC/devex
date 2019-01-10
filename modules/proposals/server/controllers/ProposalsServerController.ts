@@ -414,7 +414,7 @@ class ProposalsServerController {
 			return;
 		}
 
-		const doc = proposal.attachments.find(document => document._id === req.params.documentId);
+		const doc = proposal.attachments.find(document => document.id === req.params.documentId);
 		this.fileStream.stream(res, doc.path, doc.name, doc.type);
 		return;
 	}

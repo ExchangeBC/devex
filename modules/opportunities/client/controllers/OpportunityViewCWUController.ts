@@ -5,6 +5,8 @@ import { IStateService } from 'angular-ui-router';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import moment from 'moment-timezone';
+import { IProposalResource } from '../../../proposals/client/services/ProposalService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IOpportunitiesCommonService } from '../services/OpportunitiesCommonService';
 import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
@@ -23,7 +25,6 @@ export default class OpportunityViewCWUController implements IController {
 	public isWatching: boolean;
 	public hasEmail: boolean;
 	public canEdit: boolean;
-	public closing: string;
 	public deadline: string;
 	public assignment: string;
 	public start: string;
@@ -39,8 +40,8 @@ export default class OpportunityViewCWUController implements IController {
 		private AuthenticationService: IAuthenticationService,
 		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,
-		private ask,
-		public myproposal,
+		private ask: any,
+		public myproposal: IProposalResource,
 		private OpportunitiesCommonService: IOpportunitiesCommonService
 	) {
 		// set up roles/permissions
@@ -188,6 +189,10 @@ export default class OpportunityViewCWUController implements IController {
 		}
 	}
 
+	public isClosed(): boolean {
+		return new Date(this.opportunity.deadline).getTime() - new Date().getTime() < 0;
+	}
+
 	public exportApprovalRecord() {
 
 		const imgToExport = document.getElementById('imgToExport') as HTMLImageElement;
@@ -204,7 +209,7 @@ export default class OpportunityViewCWUController implements IController {
 					width: 200
 				},
 				{
-					text: 'Opportunity Approval Record\n\n',
+					text: 'Opportunity Pre-Approval Record\n\n',
 					style: 'header'
 				},
 				`Opportunity: ${this.opportunity.name}`,
@@ -232,13 +237,13 @@ export default class OpportunityViewCWUController implements IController {
 		};
 
 		if (this.opportunity.isApproved) {
-			docDefinition.content.push(`Approved on ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
+			docDefinition.content.push(`Pre-approved on ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
 		}
 
 		const approvalInfo: any = [
 			'\n\n',
 			{
-				text: 'Approval History\n\n',
+				text: 'Pre-approval History\n\n',
 				style: 'header'
 			},
 			{
@@ -279,6 +284,13 @@ export default class OpportunityViewCWUController implements IController {
 		pdf.download(`${this.opportunity.name}-approval-record`);
 	}
 
+	// Format dates to always be in PST (America/Vancouver timezone)
+	public formatDate(date: string, includeTime: boolean): string {
+		const momentDate = moment(date);
+		const dateFormat = includeTime ? 'MMMM Do YYYY, HH:mm z' : 'MMMM Do YYYY';
+		return momentDate.tz('America/Vancouver').format(dateFormat);
+	}
+
 	private addWatch() {
 		this.isWatching = this.OpportunitiesCommonService.addWatch(this.opportunity);
 	}
@@ -290,69 +302,11 @@ export default class OpportunityViewCWUController implements IController {
 	private refreshOpportunity(newOpportunity: IOpportunityResource): void {
 		this.opportunity = newOpportunity;
 		this.opportunity.opportunityTypeCd = 'code-with-us';
-		this.opportunity.deadline = new Date(this.opportunity.deadline);
-		this.opportunity.assignment = new Date(this.opportunity.assignment);
-		this.opportunity.start = new Date(this.opportunity.start);
 		this.errorFields = this.OpportunitiesCommonService.publishStatus(this.opportunity);
 		this.isWatching = this.OpportunitiesCommonService.isWatching(this.opportunity);
 		this.canEdit = this.isAdmin || (this.opportunity.userIs && this.opportunity.userIs.admin);
 		this.showProposals = this.canEdit && this.opportunity.isPublished;
 		this.processApprovalState();
-		this.calculateTimeLeft();
-	}
-
-	private calculateTimeLeft(): void {
-		const msPerDay = 86400000;
-		const msPerHour = 3600000;
-		const msPerMinute = 60000;
-		const rightNow = new Date();
-		const timeLeft = this.opportunity.deadline.getTime() - rightNow.getTime();
-		if (timeLeft > 0) {
-			const daysLeft = Math.floor(timeLeft / msPerDay);
-			const hoursLeft = Math.floor((timeLeft % msPerDay) / msPerHour);
-			const minutesLeft = Math.floor(((timeLeft % msPerDay) % msPerHour) / msPerMinute);
-			if (daysLeft > 0) {
-				this.closing = daysLeft + ' days ' + hoursLeft + ' hours ' + minutesLeft + ' minutes';
-			} else if (hoursLeft > 0) {
-				this.closing = hoursLeft + ' hours ' + minutesLeft + ' minutes';
-			} else {
-				this.closing = minutesLeft + ' minutes';
-			}
-		} else {
-			this.closing = 'CLOSED';
-		}
-
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
-		this.deadline =
-			this.opportunity.deadline.getHours() +
-			':00 Pacific Time, ' +
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
-
-		this.assignment =
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
-
-		this.start =
-			dayNames[this.opportunity.deadline.getDay()] +
-			', ' +
-			monthNames[this.opportunity.deadline.getMonth()] +
-			' ' +
-			this.opportunity.deadline.getDate() +
-			', ' +
-			this.opportunity.deadline.getFullYear();
 	}
 
 	private processApprovalState(): void {
