@@ -1,55 +1,77 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IController, IScope } from 'angular';
+import moment from 'moment-timezone';
+import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgResource } from '../../../orgs/client/services/OrgService';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IProposalResource } from '../services/ProposalService';
 
-(() => {
-	angular
-		.module('proposals')
+interface IProposalApplyScope extends IScope {
+	opportunity: IOpportunityResource;
+	proposal?: IProposalResource;
+	org: IOrgResource;
+}
 
-		// directive for the button to apply, edit, or review proposal
-		.directive('proposalApply', () => {
-			return {
-				restrict: 'E',
-				controllerAs: 'qaz',
-				templateUrl: '/modules/proposals/client/views/proposal-apply.directive.html',
-				scope: {
-					opportunity: '=',
-					proposal: '=',
-					org: '='
-				},
-				controller: [
-					'$scope',
-					'AuthenticationService',
-					function($scope, authenticationService) {
-						const qaz = this;
-						qaz.opportunity = $scope.opportunity;
-						qaz.proposal = $scope.proposal;
-						qaz.org = $scope.org;
+enum UserStates {
+	CAN_EDIT = 0,
+	CAN_ADD,
+	GUEST,
+	NEEDS_COMPANY,
+	NOTHING
+}
 
-						const isUser = authenticationService.user;
-						const isAdmin = isUser && authenticationService.user.roles.indexOf('admin') !== -1;
-						const isGov = isUser && authenticationService.user.roles.indexOf('gov') !== -1;
-						// const isMemberOrWaiting = isUser && (qaz.opportunity.userIs.member || qaz.opportunity.userIs.request);
-						const isProposal = qaz.proposal && qaz.proposal._id;
-						const canedit = !(isAdmin || isGov);
-						qaz.isSprintWithUs = qaz.opportunity.opportunityTypeCd === 'sprint-with-us';
-						const canApply = qaz.org && qaz.org.metRFQ;
-						qaz.case = 'nothing';
-						if (!isUser) {
-							qaz.case = 'guest';
-						} else if (canedit) {
-							if (isProposal) {
-								qaz.case = 'canedit';
-							} else if (!qaz.isSprintWithUs) {
-								qaz.case = 'canadd';
-							} else if (canApply) {
-								qaz.case = 'canadd';
-							} else {
-								qaz.case = 'needscompany';
-							}
-						}
-					}
-				]
-			};
-		});
-})();
+export class ProposalApplyDirectiveController implements IController {
+	public static $inject = ['$scope', 'AuthenticationService'];
+	public opportunity: IOpportunityResource;
+	public proposal: IProposalResource;
+	public org: IOrgResource;
+	public userState: UserStates;
+	public userStates = UserStates;
+
+	constructor($scope: IProposalApplyScope, AuthenticationService: IAuthenticationService) {
+		this.opportunity = $scope.opportunity;
+		this.proposal = $scope.proposal;
+		this.org = $scope.org;
+		this.userState = this.userStates.NOTHING;
+
+		const isUser = !!AuthenticationService.user;
+		const isAdmin = isUser && AuthenticationService.user.roles.includes('admin');
+		const isGov = isUser && AuthenticationService.user.roles.includes('gov');
+		const isProposal = this.proposal && this.proposal._id;
+		const canEdit = !isAdmin && !isGov;
+
+		if (!isUser) {
+			this.userState = this.userStates.GUEST;
+		} else if (canEdit) {
+			if (isProposal) {
+				this.userState = this.userStates.CAN_EDIT;
+			} else if (this.opportunity.opportunityTypeCd !== 'sprint-with-us' || (this.org && this.org.metRFQ)) {
+				this.userState = this.userStates.CAN_ADD;
+			} else {
+				this.userState = this.userStates.NEEDS_COMPANY;
+			}
+		}
+	}
+
+	// Format dates to always be in PST (America/Vancouver timezone)
+	public formatDate(date: string, includeTime: boolean): string {
+		const momentDate = moment(date);
+		const dateFormat = includeTime ? 'MMMM Do YYYY, HH:mm z' : 'MMMM Do YYYY';
+		return momentDate.tz('America/Vancouver').format(dateFormat);
+	}
+}
+
+angular.module('proposals').directive('proposalApply', () => {
+	return {
+		restrict: 'E',
+		controllerAs: '$ctrl',
+		templateUrl: '/modules/proposals/client/views/proposal-apply.directive.html',
+		scope: {
+			opportunity: '=',
+			proposal: '=',
+			org: '='
+		},
+		controller: ProposalApplyDirectiveController
+	};
+});
