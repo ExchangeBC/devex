@@ -27,8 +27,8 @@ const ProgramSchema = new Schema(
 	{ usePushEach: true }
 );
 
-ProgramSchema.statics.findUniqueCode = function(title, suffix, callback) {
-	return CoreServerHelpers.modelFindUniqueCode(this, 'pro', title, suffix, callback);
+ProgramSchema.statics.findUniqueCode = (title, suffix, callback) => {
+	return CoreServerHelpers.modelFindUniqueCode(ProgramModel, 'pro', title, suffix, callback);
 }
 
 export const ProgramModel: Model<IProgramModel> = model<IProgramModel>('Program', ProgramSchema);

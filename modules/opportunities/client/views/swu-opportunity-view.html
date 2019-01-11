@@ -317,13 +317,13 @@
             <table class="table capabilities-list">
               <tbody>
                 <tr ng-repeat="capability in vm.opportunity.phases.inception.capabilities">
-                  <td class="text-nowrap">
-                    <label class="label label-lg label-cap-default {{capability.labelClass}}">
+                  <td>
+                    <label class="label label-sm label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
                     <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.inception.capabilitiesCore)">
-                      full time
+                      F/T
                     </label>
                   </td>
                 </tr>
@@ -351,13 +351,13 @@
             <table class="table capabilities-list">
               <tbody>
                 <tr ng-repeat="capability in vm.opportunity.phases.proto.capabilities">
-                  <td class="text-nowrap">
-                    <label class="label label-lg label-cap-default {{capability.labelClass}}">
+                  <td>
+                    <label class="label label-sm label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
                     <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.proto.capabilitiesCore)">
-                      full time
+                      F/T
                     </label>
                   </td>
                 </tr>
@@ -385,13 +385,13 @@
             <table class="table capabilities-list">
               <tbody>
                 <tr ng-repeat="capability in vm.opportunity.phases.implementation.capabilities">
-                  <td class="text-nowrap">
-                    <label class="label label-lg label-cap-default {{capability.labelClass}}">
+                  <td>
+                    <label class="label label-sm label-cap-default {{capability.labelClass}}">
                       <i class="fas fa-circle"></i>
                       {{capability.name}}
                     </label>
                     <label class="label label-fulltime-selected" ng-if="vm.isFullTime(capability, vm.opportunity.phases.implementation.capabilitiesCore)">
-                      full time
+                      F/T
                     </label>
                   </td>
                 </tr>

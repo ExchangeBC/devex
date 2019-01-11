@@ -15,72 +15,46 @@ class MongooseController {
 
 	private constructor() {}
 
-	// Initialize Mongoose
-	public connect = () => {
-		return new Promise(resolve => {
-			mongoose.Promise = Promise;
+	public connect(): Promise<mongoose.Connection> {
 
-			// set up mongodb event handlers
-			mongoose.connection.on('disconnected', () => {
-				console.log(chalk.yellow('Disconnected from ' + config.db.uri));
+		return new Promise(resolve => {
+
+			mongoose.connection.on('error', (err) => {
+				console.log(chalk.red(`An error occurred while communicating with ${config.db.uri}: ${err}`));
 			});
 
 			mongoose.connection.on('connecting', () => {
-				console.log(chalk.yellow('Attempting to connect to ' + config.db.uri + '...'));
-			});
+				console.log(chalk.yellow(`Attempting to connect to ${config.db.uri}...`));
+			})
 
-			mongoose.connection.on('reconnected', () => {
-				console.log(chalk.green('Reconnected to ' + config.db.uri));
-			});
+			mongoose.connection.on('connected', () => {
+				console.log(chalk.green(`Connected successfully to ${config.db.uri}`));
 
-			mongoose.set('useFindAndModify', false);
-
-			process.on('SIGINT', () => {
-				mongoose.connection.close(() => {
-					console.log(chalk.red('Closing connection to ' + config.db.uri));
-					process.exit(0);
-				});
-			});
-
-			const handleSuccessConnect = () => {
-				mongoose.set('debug', config.db.debug);
-				console.log(chalk.green('Connected successfully to ' + config.db.uri));
+				// resolve the promise with the new connection
 				resolve(mongoose.connection);
-			};
+			});
 
-			const handleFailedConnect = err => {
-				console.error(chalk.red('Could not connect to ' + config.db.uri + ' - is the database running?'));
-				console.error(chalk.red(err));
+			mongoose.connection.on('disconnected', () => {
+				console.log(chalk.yellow(`Disconnected from ${config.db.uri}`));
 
+				// attempt to reconnect to database every 5 seconds
 				setTimeout(() => {
-					return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
-				}, 3000);
-			};
+					mongoose.connect(config.db.uri, config.db.options);
+				}, 5000);
+			})
 
 			_.assign(config.db.options, { useNewUrlParser: true });
-			return new Promise(this.handleConnect).then(handleSuccessConnect).catch(handleFailedConnect);
-		});
-	};
 
-	public disconnect = callback => {
-		mongoose.disconnect(err => {
-			console.info(chalk.yellow('Disconnected from MongoDB.'));
-			callback(err);
-		});
-	};
+			try {
+				setTimeout(() => {
+					mongoose.connect(config.db.uri, config.db.options);
+				}, 5000);
 
-	private handleConnect = (resolve, reject) => {
-		if (
-			mongoose.connect(
-				config.db.uri,
-				config.db.options
-			)
-		) {
-			resolve();
-		} else {
-			reject();
-		}
-	};
+			} catch (error) {
+				console.log(chalk.red(`Unable to establish connection to ${config.db.ui}`));
+			}
+		})
+	}
 }
 
 export default MongooseController.getInstance();

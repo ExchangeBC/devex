@@ -9,6 +9,7 @@ import validator from 'validator';
 import config from '../../../../config/ApplicationConfig';
 import { ICapabilityModel } from '../../../capabilities/server/models/CapabilityModel';
 import { ICapabilitySkillModel } from '../../../capabilities/server/models/CapabilitySkillModel';
+import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import { IUser } from '../../shared/IUserDTO';
 
 export interface IUserModel extends IUser, Document {
@@ -300,10 +301,10 @@ UserSchema.methods.removeRoles = function(roles) {
 /**
  * Find possible not used username
  */
-UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
+UserSchema.statics.findUniqueUsername = (username, suffix, callback) => {
 	const possibleUsername = username.toLowerCase() + (suffix || '');
 
-	this.findOne(
+	UserModel.findOne(
 		{
 			username: possibleUsername
 		},
@@ -312,7 +313,7 @@ UserSchema.statics.findUniqueUsername = function(username, suffix, callback) {
 				if (!user) {
 					callback(possibleUsername);
 				} else {
-					return this.findUniqueUsername(
+					return UserModel.schema.statics.findUniqueUsername(
 						username,
 						(suffix || 0) + 1,
 						callback

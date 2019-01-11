@@ -69,8 +69,8 @@ const ProjectSchema = new Schema(
 	{ usePushEach: true }
 );
 
-ProjectSchema.statics.findUniqueCode = function(title, suffix, callback) {
-	return CoreServerHelpers.modelFindUniqueCode(this, 'prj', title, suffix, callback);
+ProjectSchema.statics.findUniqueCode = (title, suffix, callback) => {
+	return CoreServerHelpers.modelFindUniqueCode(ProjectModel, 'prj', title, suffix, callback);
 };
 
 export const ProjectModel: Model<IProjectModel> = model<IProjectModel>('Project', ProjectSchema);
