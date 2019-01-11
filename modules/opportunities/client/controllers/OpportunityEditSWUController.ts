@@ -38,16 +38,17 @@ export class OpportunityEditSWUController implements IController {
 	public opportunityForm: IFormController;
 	public allCapabilities: ICapabilityResource[];
 	public activeTab = 0;
+	public editAddendumIndex: number;
+	public editingAddenda: boolean;
+	public editingQuestion: boolean;
+	public editQuestionIndex: number;
 
 	private codeChallengeDefaultWeight = 0.35;
 	private skillDefaultWeight = 0.05;
 	private questionDefaultWeight = 0.25;
 	private interviewDefaultWeight = 0.25;
 	private priceDefaultWeight = 0.1;
-	private editQuestionIndex: number;
-	private editingQuestion: boolean;
 	private questionBackup: ITeamQuestion;
-	private editingAddenda: boolean;
 
 	constructor(
 		private $scope: IRootScopeService,
@@ -362,6 +363,7 @@ export class OpportunityEditSWUController implements IController {
 		});
 
 		this.editingAddenda = true;
+		this.editAddendumIndex = this.opportunity.addenda.length - 1;
 	}
 
 	// Cancel edit addendum
