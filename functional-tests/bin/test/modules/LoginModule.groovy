@@ -1,9 +1,10 @@
 package modules
 
+import geb.spock.GebReportingSpec
 import geb.Module
 import geb.Browser
 import pages.app.HomePage
-import geb.spock.GebReportingSpec
+
 import spock.lang.Unroll
 
 /**
@@ -26,27 +27,30 @@ class LoginModule extends Module {
     }
    
     //@todo deprecate
-    Boolean "Login as an adminstrator"(String userName, String passWord, String fullUserName){
+    Boolean "Login As An Administrator"(java.lang.String userName, java.lang.String passWord, java.lang.String fullUserName){
         // Since the targeted link is not yet visible, Chrome will fail, so we forcefully do stuff
         js.exec('window.scrollTo(0, document.body.scrollHeight);')
         js.exec('window.scrollTo(document.body.scrollHeight, 0);')
         js.exec('document.getElementById("authentication.signinadmin").scrollIntoView(true);')
-        js.exec('document.getElementById("authentication.signinadmin").click();')
-        //adminLogin.click()
+        js.exec('document.getElementById("authentication.signinadmin").click();') //adminLogin.click()
+
         waitFor { adminLoginInput }
         adminLoginInput.value( userName ) //admin
         passwordInput.value( passWord ) //adminadmin
         js.exec('window.scrollTo(0, document.body.scrollHeight);')
         commitButton.click()
-        waitFor { userDisplayPicture.displayed }
-        if ( userDisplayPicture.displayed ) //"ADMIN LOCAL"*/
+
+        //I do not worry if the picture is present or not
+     /*   waitFor { userDisplayPicture.displayed }
+        if ( userDisplayPicture.displayed ) //"ADMIN LOCAL"
             return true
         else
             return false
+     */       
     }
 
     Boolean "Login"(String username, String password, String fullName) {
-       "Login as an adminstrator"(username, password, fullName) 
+       LoginAsAnAdministrator(username, password, fullName) 
     }
 
     Boolean adminLogout(){
