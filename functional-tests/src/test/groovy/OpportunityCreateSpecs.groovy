@@ -17,7 +17,7 @@ import pages.app.SignedIn
 import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-import extensions.AngularJSAware
+//import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -36,7 +36,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
         withNoAlert{to HomePage}
 
         // Need to login as an admin
-        def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
+        def loginOK = login."Login as an administrator"("admin","adminadmin","Admin Local")
         assert loginOK
       }
 
@@ -52,18 +52,18 @@ class OpportunityCreateSpecs extends GebReportingSpec {
               at ProgramCreatePage
 
               when: "I enter the details for the new program"
-              ProgramTitle.value(ProgramTitleValue)
-              ShortDescription.value(ShortDescriptionValue)
-              "Set Description" DescriptionValue
-              Website.value(WebsiteValue)
+                ProgramTitle.value(ProgramTitleValue)
+                ShortDescription.value(ShortDescriptionValue)
+                "Set Description" DescriptionValue
+                Website.value(WebsiteValue)
 
               and: "I click the 'save changes' button for the program: '#ProgramTitleValue'"
-              SaveButton.click()
+                SaveButton.click()
 
 
               then:
-              waitFor { at ProgramViewPage }
-              assert PublishButton
+                waitFor { at ProgramViewPage }
+                assert PublishButton
 
               when: "I click the publish button"
               PublishButton.click()
@@ -75,7 +75,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
 
          where:
           ProgramTitleValue | ShortDescriptionValue | DescriptionValue | WebsiteValue
-          "Automation Test Program" | "Short Descriptive Text" | "Longer descriptive text" | "https://www.google.com"
+          "Program: Automation Test 1" | "Short Descriptive Program: Automation Test 1" | "Long description Program: Automation Test 1" | "https://www.google.com"
       }
 
   @Unroll
@@ -86,35 +86,35 @@ class OpportunityCreateSpecs extends GebReportingSpec {
           waitFor { to ProjectsPage }
 
           when: "I choose to create a new project"
-          ListProjectButton.click()
+                ListProjectButton.click()
 
           then:
-          at ProjectCreatePage
+            at ProjectCreatePage
 
           when: "I enter the details for the new project"
-          Program = ProgramValue
-          ProjectName.value(ProjectNameValue)
-          ShortDescription.value(ShortDescriptionValue)
-          "Set Description" DescriptionValue
-          Github.value(GithubValue)
-          Tags.value(TagsValue)
-          ActivityLevel.value(ActivityLevelValue)
+            Program = ProgramValue
+            ProjectName.value(ProjectNameValue)
+            ShortDescription.value(ShortDescriptionValue)
+            "Set Description" DescriptionValue
+            Github.value(GithubValue)
+            Tags.value(TagsValue)
+            ActivityLevel.value(ActivityLevelValue)
 
           and: "I click the 'save changes' button for the project: '#ProjectNameValue'"
-          SaveButton.click()
+            SaveButton.click()
 
 
           then:
-          waitFor {at ProjectViewPage}
-          assert PublishButton
+            waitFor {at ProjectViewPage}
+            assert PublishButton
 
           when: "I click the publish button"
-          PublishButton.click()
+            PublishButton.click()
 
           then:
-          at ProjectViewPage
-          assert UnpublishButton
-          assert UnpublishButton.isDisplayed()
+            at ProjectViewPage
+            assert UnpublishButton
+            assert UnpublishButton.isDisplayed()
 
      where:
       ProjectNameValue | ShortDescriptionValue | DescriptionValue | GithubValue | TagsValue | ActivityLevelValue | ProgramValue
@@ -189,6 +189,6 @@ class OpportunityCreateSpecs extends GebReportingSpec {
         //   assert { published }
      where:
       Project | TitleData | Teaser | Description | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
-      "Automation Test Project" | "Opportunity Creation/Publish/Deletion Test" | "Short Description" | "Some Description" | "https://github.com/rstens/devex.git" | "Victoria" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria" | "\$20,000.00" | "Proposal Evaluation Criteria" | "roland.stens@gmail.com"
+      "Project: Automation Test 1" | "Opportunity Creation/Publish/Deletion Test 1" | "Short Description Project Test 1" | "Long Description Project Test 1" | "https://github.com/crochcunill/devex.git" | "Victoria" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Project Test 1" | "\$20,000.00" | "Proposal Evaluation Criteria Project Test 1" | "crochcunill@gmail.com"
   }
 }
