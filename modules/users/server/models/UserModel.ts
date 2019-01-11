@@ -302,7 +302,28 @@ UserSchema.methods.removeRoles = function(roles) {
  * Find possible not used username
  */
 UserSchema.statics.findUniqueUsername = (username, suffix, callback) => {
-	return CoreServerHelpers.modelFindUniqueCode(UserModel, 'opp', username, suffix, callback);
+	const possibleUsername = username.toLowerCase() + (suffix || '');
+
+	UserModel.findOne(
+		{
+			username: possibleUsername
+		},
+		(err, user) => {
+			if (!err) {
+				if (!user) {
+					callback(possibleUsername);
+				} else {
+					return UserModel.schema.statics.findUniqueUsername(
+						username,
+						(suffix || 0) + 1,
+						callback
+					);
+				}
+			} else {
+				callback(null);
+			}
+		}
+	);
 };
 
 /**
