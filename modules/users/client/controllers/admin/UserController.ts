@@ -27,7 +27,6 @@ export class UserController implements IController {
 			try {
 				await this.user.$remove();
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> User deleted'
 				});
 				this.$state.go('admin.users');
@@ -47,7 +46,6 @@ export class UserController implements IController {
 			const updatedUser = await this.AdminService.update(this.user).$promise;
 			this.user = updatedUser;
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Changes saved'
 			});
 			this.$state.go('admin.user', { userId: this.user._id });

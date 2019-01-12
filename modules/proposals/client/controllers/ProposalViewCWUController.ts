@@ -49,7 +49,6 @@ export default class ProposalViewCWUController {
 				}).$promise;
 
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Proposal has been assigned'
 				});
 

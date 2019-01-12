@@ -76,7 +76,7 @@ export class PasswordController implements IController {
 			username: '',
 			password: ''
 		};
-		this.Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset email sent successfully!', title: 'Success' });
+		this.Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset email sent successfully!' });
 	}
 
 	private onRequestPasswordResetError() {
@@ -95,7 +95,7 @@ export class PasswordController implements IController {
 
 		// Attach user profile
 		this.AuthenticationService.user = response;
-		this.Notification.success({ title: 'Success', message: '<i class="fas fa-check-circle"></i> Password reset successful!' });
+		this.Notification.success({ message: '<i class="fas fa-check-circle"></i> Password reset successful!' });
 		// And redirect to the index page
 		this.$location.path('/password/reset/success');
 	}

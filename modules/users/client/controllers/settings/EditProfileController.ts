@@ -37,7 +37,6 @@ export class EditProfileController implements IController {
 			const updatedUser = await this.UsersService.update(this.user).$promise;
 			this.$scope.$broadcast('show-errors-reset', 'vm.userForm');
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Changes saved'
 			});
 			this.AuthenticationService.user = updatedUser;
@@ -57,7 +56,6 @@ export class EditProfileController implements IController {
 				this.pendingGovRequest = true;
 				this.refreshUser(updatedUser);
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Verification request sent'
 				});
 			} catch (error) {
@@ -74,7 +72,6 @@ export class EditProfileController implements IController {
 				await this.UsersService.removeSelf().$promise;
 				this.$state.go('home');
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Profile deleted'
 				});
 			} catch (error) {

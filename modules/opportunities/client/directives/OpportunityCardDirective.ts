@@ -47,7 +47,6 @@ export class OpportunityCardDirectiveController implements IController {
 					this.opportunity.isPublished = true;
 					await this.OpportunitiesService.publish({ opportunityId: this.opportunity._id }).$promise;
 					this.Notification.success({
-						title: 'Success',
 						message: '<i class="fas fa-check-circle"></i> Your opportunity has been published and we\'ve notified subscribers'
 					});
 				} catch (error) {
@@ -63,7 +62,6 @@ export class OpportunityCardDirectiveController implements IController {
 				this.opportunity.isPublished = false;
 				await this.OpportunitiesService.unpublish({ opportunityId: this.opportunity._id }).$promise;
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Your opportunity has been unpublished'
 				});
 			} catch (error) {

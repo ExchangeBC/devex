@@ -42,7 +42,6 @@ export class OrgCreateController implements IController {
 			this.AuthenticationService.user = updatedUser;
 
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Company saved successfully'
 			});
 

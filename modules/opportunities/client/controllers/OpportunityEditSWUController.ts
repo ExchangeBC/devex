@@ -154,7 +154,6 @@ export class OpportunityEditSWUController implements IController {
 			}
 
 			this.Notification.success({
-				title: 'Success',
 				message: successMessage
 			});
 
@@ -177,7 +176,6 @@ export class OpportunityEditSWUController implements IController {
 
 				this.$state.go('opportunities.list');
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Opportunity deleted'
 				});
 			} catch (error) {

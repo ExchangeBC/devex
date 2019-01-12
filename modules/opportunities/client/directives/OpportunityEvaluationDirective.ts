@@ -538,7 +538,6 @@ export class OpportunityEvaluationDirectiveController implements IController {
 				this.opportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 				this.$scope.opportunity = this.opportunity;
 				this.Notification.success({
-					title: 'Success',
 					message: `<i class="fas fa-check-circle"></i> Opportunity assigned to ${proposal.businessName}`
 				});
 			} catch (error) {

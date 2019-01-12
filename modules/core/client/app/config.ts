@@ -45,12 +45,14 @@ import angular from 'angular';
 		NotificationProvider => {
 			NotificationProvider.setOptions({
 				delay: 2000,
-				horizontalSpacing: 20,
+				horizontalSpacing: 10,
 				positionX: 'right',
-				positionY: 'bottom',
+				positionY: 'top',
 				startRight: 10,
-				startTop: 20,
-				verticalSpacing: 20
+				startTop: 10,
+				verticalSpacing: 10,
+				replaceMessage: false,
+				templateUrl: 'angular-ui-notification.html'
 			});
 		}
 	]);

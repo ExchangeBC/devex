@@ -174,7 +174,6 @@ export default class ProposalEditSWUController {
 			}
 
 			this.Notification.success({
-				title: 'Success',
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
 			});
 		} catch (error) {

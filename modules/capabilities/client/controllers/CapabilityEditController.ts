@@ -64,14 +64,12 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 						}
 						qqq.capabilityForm.$setPristine();
 						Notification.success({
-							title: 'Success',
 							message: '<i class="fas fa-check-circle"></i> Capability saved'
 						});
 						qqq.capability = newCapability;
 						return;
 					} catch (error) {
 						Notification.error({
-							title: 'Error',
 							message: "<i class='fas fa-exclamation-triangle'></i> Save failed: " + error
 						});
 						return;
@@ -143,7 +141,6 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 					if (!qqq.editingskill) {
 						if (qqq.isDuplicateSkill(qqq.newskill, qqq.capability.skills)) {
 							Notification.error({
-								message: 'Duplicate Skill',
 								title: "<i class='fas fa-exclamation-triangle'></i> Duplicate Skill"
 							});
 							qqq.newskill = '';
@@ -156,7 +153,6 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 					try {
 						await CapabilitySkillsService.update(qqq.editingskill).$promise;
 						Notification.success({
-							title: 'Success',
 							message: '<i class="fas fa-check-circle"></i> Skill updated'
 						});
 						qqq.newskill = '';
@@ -212,7 +208,6 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 							await CapabilitiesService.remove({ capabilityId: capability._id }).$promise;
 							$state.go('capabilities.list');
 							Notification.success({
-								title: 'Success',
 								message: '<i class="fas fa-check-circle"></i> Capability deleted'
 							});
 							return;

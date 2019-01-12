@@ -59,7 +59,6 @@ export default class OpportunityViewCWUController implements IController {
 			this.refreshOpportunity(updatedOpportunity);
 
 			this.Notification.success({
-				title: 'Success',
 				message: 'Approval code sent for 2FA!'
 			});
 		} catch (error) {
@@ -80,7 +79,6 @@ export default class OpportunityViewCWUController implements IController {
 			}
 
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-thumbs-up"></i> ' + responseMessage
 			});
 			this.$state.go('home');
@@ -100,7 +98,6 @@ export default class OpportunityViewCWUController implements IController {
 			const updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			this.refreshOpportunity(updatedOpportunity);
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Approval Requirement Bypassed'
 			});
 		} catch (error) {
@@ -119,7 +116,6 @@ export default class OpportunityViewCWUController implements IController {
 			const updatedOpportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
 			this.refreshOpportunity(updatedOpportunity);
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Approval Requirement Reinstated'
 			});
 		} catch (error) {
@@ -149,7 +145,6 @@ export default class OpportunityViewCWUController implements IController {
 				const updatedOpportunity = await publishMethod({ opportunityId: this.opportunity._id }).$promise;
 				this.refreshOpportunity(updatedOpportunity);
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> ' + publishSuccess
 				});
 			} catch (error) {
@@ -171,7 +166,6 @@ export default class OpportunityViewCWUController implements IController {
 				}).$promise;
 				this.refreshOpportunity(updatedOpportunity);
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Proposal Unassigned'
 				})
 			} catch (error) {

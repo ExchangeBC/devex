@@ -35,7 +35,6 @@ export class ProfileSkillsController implements IController {
 			this.AuthenticationService.user = updatedUser;
 			this.$scope.$broadcast('show-errors-reset', 'vm.userForm');
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Changes saved'
 			});
 		} catch (error) {

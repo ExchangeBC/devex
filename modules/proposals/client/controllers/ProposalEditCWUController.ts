@@ -104,7 +104,6 @@ export default class ProposalEditCWUController {
 
 			this.refreshProposal(updatedProposal);
 			this.Notification.success({
-				title: 'Success',
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
 			});
 			this.proposalForm.$setPristine();
@@ -133,7 +132,6 @@ export default class ProposalEditCWUController {
 				this.proposalForm.$setPristine();
 				this.$state.go('opportunities.viewcwu', { opportunityId: this.opportunity.code });
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Proposal Deleted'
 				});
 			} catch (error) {
@@ -177,7 +175,6 @@ export default class ProposalEditCWUController {
 				});
 
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Attachment Uploaded'
 				});
 
@@ -198,7 +195,6 @@ export default class ProposalEditCWUController {
 			}).$promise;
 
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Attachment Removed'
 			});
 

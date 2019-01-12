@@ -130,7 +130,6 @@ export default class OpportunityEditCWUController {
 			this.refreshOpportunity(updatedOpportunity);
 			this.opportunityForm.$setPristine();
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Opportunity saved'
 			});
 
@@ -179,8 +178,7 @@ export default class OpportunityEditCWUController {
 
 				this.refreshOpportunity(updatedOpportunity);
 				this.Notification.success({
-					message: '<i class="fas fa-check-circle"></i> Approval request sent!',
-					title: 'Success'
+					message: '<i class="fas fa-check-circle"></i> Approval request sent!'
 				});
 			} catch (error) {
 				const e = error as any;
@@ -220,8 +218,7 @@ export default class OpportunityEditCWUController {
 
 			this.refreshOpportunity(updatedOpportunity);
 			this.Notification.success({
-				message: '<i class="fas fa-check-circle"></i> Approval request reset',
-				title: 'Success'
+				message: '<i class="fas fa-check-circle"></i> Approval request reset'
 			});
 		} catch (error) {
 			const e = error as any;

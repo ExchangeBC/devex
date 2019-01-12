@@ -62,7 +62,6 @@ export default class OpportunityViewSWUController implements IController {
 				const updatedOpportunity = await publishMethod({ opportunityId: this.opportunity._id }).$promise;
 				this.refreshOpportunity(updatedOpportunity);
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> ' + publishSuccess
 				});
 			} catch (error) {
@@ -85,7 +84,6 @@ export default class OpportunityViewSWUController implements IController {
 				this.refreshOpportunity(updatedOpportunity);
 
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Proposal Un-Assignment successful'
 				});
 			} catch (error) {

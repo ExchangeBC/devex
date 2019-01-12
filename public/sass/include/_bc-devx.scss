@@ -1297,89 +1297,165 @@ div.selected {
 
 // UI Notification
 
-.ui-notification {
-  position: fixed;
-  top: 40%;
-  left: 5%;
-  right: 5%;
-  margin: 0 auto;
-  z-index: 9999;
-  max-width: 400px;
-  max-height: 150px;
-  border-radius: 3px;
-  color: #fff;
-  background: $gray-darker;
-  @include transition(all ease 0.5s);
-  > message {
-    text-align: center;
-    padding: 1em;
-    margin: 0;
-  }
-  > title {
-    text-align: center;
-    padding: 1em;
-    margin: 0;
-    text-decoration: none;
-  }
+// .ui-notification {
+//   position: fixed;
+//   top: 40%;
+//   left: 5%;
+//   right: 5%;
+//   margin: 0 auto;
+//   z-index: 9999;
+//   max-width: 400px;
+//   max-height: 150px;
+//   border-radius: 3px;
+//   color: #fff;
+//   background: $gray-darker;
+//   @include transition(all ease 0.5s);
+//   > message {
+//     text-align: center;
+//     padding: 1em;
+//     margin: 0;
+//   }
+//   > title {
+//     text-align: center;
+//     padding: 1em;
+//     margin: 0;
+//     text-decoration: none;
+//   }
 
-  &.clickable {
+//   &.clickable {
+//     cursor: pointer;
+//   }
+//   &.killed {
+//     opacity: 0;
+//     @include transition(opacity ease 1s);
+//   }
+//   & > h3 {
+//     display: block;
+//     margin: 10px 10px 0 10px;
+//     padding: 0 0 5px 0;
+//     text-align: left;
+//     font-size: $font-size-base;
+//     font-weight: bold;
+//     border-bottom: 1px solid fadeout($primary, 70%);
+//   }
+//   & a {
+//     color: $primary;
+//     &:hover {
+//       text-decoration: underline;
+//     }
+//   }
+//   &.warning {
+//     color: #fff;
+//     background: $theme-warning;
+//   }
+//   &.error {
+//     color: #fff;
+//     background: $theme-danger;
+//     > .title {
+//       border: none;
+//       text-align: center;
+//       padding: 1em;
+//       margin: 0;
+//     }
+//     > .message {
+//       text-align: center;
+//       padding: 1em;
+//       margin: 0;
+//     }
+//   }
+//   &.success {
+//     color: #fff;
+//     background: $gray-darker;
+//     > .title {
+//       border: none;
+//       text-align: center;
+//       padding: 1em;
+//       margin: 0;
+//     }
+//     > .message {
+//       text-align: center;
+//       padding: 1em;
+//       margin: 0;
+//     }
+//   }
+//   &.info {
+//     color: #fff;
+//     background: $gray-darker;
+//   }
+// }
+
+.ui-notification
+{
+    position: fixed;
+    z-index: 9999;
+
+    width: 300px;
+
     cursor: pointer;
-  }
-  &.killed {
+    -webkit-transition: all ease .5s;
+         -o-transition: all ease .5s;
+            transition: all ease .5s;
+
+    color: #fff;
+    border-radius: 0;
+    background: #337ab7;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, .3);
+}
+.ui-notification.killed
+{
+    -webkit-transition: opacity ease 1s;
+         -o-transition: opacity ease 1s;
+            transition: opacity ease 1s;
+
     opacity: 0;
-    @include transition(opacity ease 1s);
-  }
-  & > h3 {
+}
+.ui-notification > h3
+{
+    font-size: 14px;
+    font-weight: bold;
+
     display: block;
+
     margin: 10px 10px 0 10px;
     padding: 0 0 5px 0;
+
     text-align: left;
-    font-size: $font-size-base;
-    font-weight: bold;
-    border-bottom: 1px solid fadeout($primary, 70%);
-  }
-  & a {
-    color: $primary;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  &.warning {
+
+    border-bottom: 1px solid rgba(255, 255, 255, .3);
+}
+.ui-notification a
+{
     color: #fff;
-    background: $theme-warning;
-  }
-  &.error {
+}
+.ui-notification a:hover
+{
+    text-decoration: underline;
+}
+.ui-notification > .message
+{
+    margin: 10px 10px 10px 10px;
+}
+.ui-notification.warning
+{
     color: #fff;
-    background: $theme-danger;
-    > .title {
-      border: none;
-      text-align: center;
-      padding: 1em;
-      margin: 0;
-    }
-    > .message {
-      text-align: center;
-      padding: 1em;
-      margin: 0;
-    }
-  }
-  &.success {
+    background: #f0ad4e;
+}
+.ui-notification.error
+{
     color: #fff;
-    background: $gray-darker;
-    > .title {
-      border: none;
-      text-align: center;
-      padding: 1em;
-      margin: 0;
-    }
-    > .message {
-      text-align: center;
-      padding: 1em;
-      margin: 0;
-    }
-  }
-  &.info {
+    background: #d9534f;
+}
+.ui-notification.success
+{
     color: #fff;
-    background: $gray-darker;
-  }
+    background: #000000;
+}
+.ui-notification.info
+{
+    color: #fff;
+    background: #5bc0de;
+}
+.ui-notification:hover
+{
+    opacity: .7;
 }

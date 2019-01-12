@@ -53,7 +53,6 @@ export class OrgAdminController implements IController {
 			this.orgForm.$setPristine();
 			this.refreshOrg(updatedOrg);
 			this.Notification.success({
-				title: 'Success',
 				message: '<i class="fas fa-check-circle"></i> Company saved'
 			});
 		} catch (error) {
@@ -77,7 +76,6 @@ export class OrgAdminController implements IController {
 
 				// notify and exit
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Company deleted'
 				});
 
@@ -115,7 +113,6 @@ export class OrgAdminController implements IController {
 			try {
 				const updatedOrg = await this.OrgService.removeUser({ orgId: this.org._id, userId: member._id }).$promise;
 				this.Notification.success({
-					title: 'Success',
 					message: '<i class="fas fa-check-circle"></i> Member removed'
 				});
 				this.refreshOrg(updatedOrg);
