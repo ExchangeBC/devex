@@ -262,7 +262,7 @@ UserSchema.methods.hashPassword = function(password) {
 		return crypto
 			.pbkdf2Sync(
 				password,
-				new Buffer(this.salt, 'base64'),
+				Buffer.from(this.salt, 'base64'),
 				10000,
 				64,
 				'SHA1'
