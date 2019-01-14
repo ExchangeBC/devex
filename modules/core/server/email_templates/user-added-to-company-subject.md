@@ -1,1 +1,0 @@
-You've been added to a company profile
