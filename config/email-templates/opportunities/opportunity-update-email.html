@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <img src="https://bcdevexchange.org/modules/core/client/img/logo/new-logo-220px.png">
+    <br>
+    <p> Hi {{user.displayName}},</p>
+    <p>An opportunity you followed has been updated:</p>
+    <h4>{{ opportunity.name }}</h4> 
+    <h4><a href="{{ domain }}/{{ opportunity.path }}">See the details</a></h4> --- <i>To stop receiving notifications about this opportunity, <a href="{{ domain }}/{{ opportunity.path }}">browse to the opportunity</a> and un-watch it</i>
+</body>
+</html>
