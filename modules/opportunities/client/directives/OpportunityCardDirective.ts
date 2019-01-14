@@ -90,28 +90,15 @@ export class OpportunityCardDirectiveController implements IController {
 		}
 	}
 
-	public goToView(): void {
-		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
-			this.$state.go('opportunities.viewcwu', {
-				opportunityId: this.opportunity.code
-			});
+	public goToView(editView?: boolean): void {
+		let routeName: string;
+		if (editView) {
+			routeName = (this.opportunity.opportunityTypeCd === 'code-with-us') ? 'opportunityadmin.editcwu' : 'opportunityadmin.editswu';
 		} else {
-			this.$state.go('opportunities.viewswu', {
-				opportunityId: this.opportunity.code
-			});
+			routeName = (this.opportunity.opportunityTypeCd === 'code-with-us') ? 'opportunities.viewcwu' : 'opportunities.viewswu';
 		}
-	}
 
-	public goToEditView(): void {
-		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
-			this.$state.go('opportunityadmin.editcwu', {
-				opportunityId: this.opportunity.code
-			});
-		} else {
-			this.$state.go('opportunityadmin.editswu', {
-				opportunityId: this.opportunity.code
-			});
-		}
+		this.$state.go(routeName, { opportunityId: this.opportunity.code });
 	}
 
 	public isClosed(): boolean {

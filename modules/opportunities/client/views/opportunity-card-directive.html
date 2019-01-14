@@ -35,7 +35,7 @@
       <span ng-if="vm.isWatching()"><i class="fas fa-eye fa-lg text-primary"></i></span>
       <span ng-if="!vm.isWatching()"><i class="fas fa-eye fa-lg text-secondary"></i></span>
     </a>
-    <a class="btn btn-text-only" ng-if="vm.isUserAdmin()" ng-click="vm.goToEditView()"
+    <a class="btn btn-text-only" ng-if="vm.isUserAdmin()" ng-click="vm.goToView(true)"
       href="" id="opportunityadmin.edit" title="Edit">
       <i class="fas fa-cog"></i>
     </a>

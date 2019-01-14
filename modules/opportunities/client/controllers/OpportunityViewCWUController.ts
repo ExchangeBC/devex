@@ -261,8 +261,8 @@ export default class OpportunityViewCWUController implements IController {
 		];
 
 		if (this.opportunity.finalApproval.actioned) {
-			approvalInfo.push(`Actioned: ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`),
-			approvalInfo.push(`Action taken: ${this.opportunity.finalApproval.action.toUpperCase()}\n\n`)
+			approvalInfo.push(`Actioned: ${new Date(this.opportunity.finalApproval.actioned).toLocaleString()} PST`);
+			approvalInfo.push(`Action taken: ${this.opportunity.finalApproval.action.toUpperCase()}\n\n`);
 		}
 
 		approvalInfo.push({
