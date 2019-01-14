@@ -306,6 +306,7 @@ class ProposalsServerController {
 				.populate('phases.proto.capabilitySkills')
 				.populate('phases.inception.capabilitySkills')
 				.populate('phases.implementation.capabilitySkills')
+				.populate('org')
 				.populate({
 					path: 'phases.proto.team',
 					populate: { path: 'capabilities capabilitySkills' }
@@ -461,6 +462,7 @@ class ProposalsServerController {
 			.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
+			.populate('org')
 			.populate({
 				path: 'phases.proto.team',
 				populate: { path: 'capabilities capabilitySkills' }
