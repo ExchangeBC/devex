@@ -1,6 +1,7 @@
 'use strict';
 
 import chalk from 'chalk';
+import { Request, Response } from 'express';
 import handlebars from 'handlebars';
 import htmlToText from 'html-to-text';
 import _ from 'lodash';
@@ -23,7 +24,9 @@ class MessagesServerController {
 
 	private smtpTransport = nodemailer.createTransport(config.mailer.options);
 
-	private constructor() {}
+	private constructor() {
+		this.mycount = this.mycount.bind(this);
+	}
 
 	// Sends messages to an array of users
 	// First pre-compile templates, then loop and send
@@ -114,16 +117,18 @@ class MessagesServerController {
 	};
 
 	// Count the number of messages for the current user
-	public mycount = (req, res) => {
+	public async mycount(req: Request, res: Response): Promise<void> {
 		if (!req.user) {
-			return this.sendError(res, 'No user context supplied');
+			this.sendError(res, 'No user context supplied');
 		}
-		this.count(MessageModel, { user: req.user._id })
-			.then(countResult => {
-				res.status(200).json({ countResult });
-			})
-			.catch(this.resError(res));
-	};
+
+		try {
+			const countResult = await this.count(MessageModel, { user: req.user._id });
+			res.status(200).json({ count: countResult });
+		} catch (error) {
+			this.resError(res)(error);
+		}
+	}
 
 	public myarchivedcount = (req, res) => {
 		if (!req.user) {

@@ -7,13 +7,13 @@
       <div class="message-list-item-body">
         <p ng-bind-html="message.messageBody"></p>
         <div class="message-actions">
-            <button class="btn" ng-repeat="action in message.actions | orderBy : 'isDefault' : false" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{vm.trust(action.linkTitle)}}</button>
+            <button class="btn mx-1" ng-repeat="action in message.actions | orderBy : 'isDefault' : false" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{ action.linkTitle }}</button>
         </div>
       </div>
     </div>
 
     <div class="message-confirmation" ng-if="message.actionTaken">
-        <div class="message-result" ng-bind-html="vm.resultmsg"></div>
+        <div class="message-result" ng-bind-html="vm.resultMsg"></div>
     </div>
 
   </div>

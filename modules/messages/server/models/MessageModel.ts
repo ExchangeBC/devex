@@ -3,7 +3,9 @@
 import { Document, Model, model, Schema } from 'mongoose';
 import { IMessage } from '../../shared/IMessageDTO';
 
-export interface IMessageModel extends IMessage, Document {}
+export interface IMessageModel extends IMessage, Document {
+	_id: string;
+}
 
 export const MessageModel: Model<IMessageModel> = model<IMessageModel>(
 	'Message',

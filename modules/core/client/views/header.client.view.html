@@ -14,14 +14,14 @@
       <ul class="nav navbar-nav mr-auto">
 
         <!-- Navbar items with subitems -->
-        <li class="nav-item" ng-repeat="item in vm.menu.items | orderBy: position" ng-if="item.shouldRender(vm.authentication.user)"
+        <li class="nav-item" ng-repeat="item in vm.menu.items | orderBy: position" ng-if="item.shouldRender(vm.user)"
           ng-switch="item.type" uib-dropdown="item.type === 'dropdown'">
           <a ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
             <i class="nav-icon" ng-class="item.icon || 'fas fa-puzzle-piece'" aria-hidden="true"></i>
             {{item.title}}
           </a>
           <ul ng-switch-when="dropdown" class="dropdown-menu" uib-dropdown-menu>
-            <li ng-repeat="subItem in item.items | orderBy: position" ng-if="subItem.shouldRender(vm.authentication.user)"
+            <li ng-repeat="subItem in item.items | orderBy: position" ng-if="subItem.shouldRender(vm.user)"
               class="dropdown-item">
               <a id="{{subItem.state}}" ui-sref="{{subItem.state}}({{subItem.params}})" ng-bind="subItem.title"></a>
             </li>
@@ -35,7 +35,7 @@
       </ul>
 
       <!-- Sign-in -->
-      <ul class="nav navbar-nav ml-auto" ng-hide="vm.authentication.user">
+      <ul class="nav navbar-nav ml-auto" ng-hide="vm.user">
         <li ui-sref-active="active" class="nav-item">
           <a id="authentication.signin" ui-sref="authentication" class="nav-link">
             <i class="fab fa-lg fa-github" aria-hidden="true"></i> Sign In</a>
@@ -43,7 +43,7 @@
       </ul>
 
       <!-- Messaging & User widget -->
-      <ul class="nav navbar-nav ml-auto" ng-show="vm.authentication.user">
+      <ul class="nav navbar-nav ml-auto" ng-show="vm.user">
         <li class="nav-item">
           <a href="/settings/messages" class="nav-link">
             <i class="far fa-2x fa-envelope"></i>
@@ -53,10 +53,10 @@
 
         <li uib-dropdown class="nav-item">
           <button id="single-button" type="button" class="btn btn-link profile-button caret-off" uib-dropdown-toggle>
-            <img ng-src="{{vm.avatarImageURL}}" class="navbar-header-user-image">
+            <img ng-src="{{vm.avatarImageUrl}}" class="navbar-header-user-image">
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="single-button" uib-dropdown-menu>
-            <li class="dropdown-item"><a href="">{{vm.authentication.user.displayName}}</a></li>
+            <li class="dropdown-item"><a href="">{{vm.user.displayName}}</a></li>
             <li class="dropdown-divider"></li>
             <li class="dropdown-item"><a ng-repeat="item in vm.accountMenu.items" ui-sref="{{item.state}}" ng-bind="item.title"></a></li>
             <li class="dropdown-item"><a href="/api/auth/signout" target="_self">Sign Out</a></li>

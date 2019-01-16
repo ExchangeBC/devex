@@ -13,6 +13,7 @@ import helmet from 'helmet';
 import _ from 'lodash';
 import lusca from 'lusca';
 import methodOverride from 'method-override';
+import { Connection } from 'mongoose';
 import morgan from 'morgan';
 import path from 'path';
 import favicon from 'serve-favicon';
@@ -41,19 +42,21 @@ class ExpressApplication {
 	private MongoStore = connectMongo(session);
 	private logger = new Logger();
 
-	private constructor() {}
+	private constructor() {
+		this.init = this.init.bind(this);
+	}
 
 	/**
 	 * Initialize the Express application
 	 */
-	public init = db => {
+	public init(db: Connection): express.Application {
 		// Declare a new token for morgan to use in the log output
 		morgan.token('userid', (req: any, res: any) => {
 			return req.user ? req.user.displayName + ' <' + req.user.email + '>' : 'anonymous';
 		});
 
 		// Initialize express app
-		let app = express();
+		let app: express.Application = express();
 
 		// Initialize local variables
 		this.initLocalVariables(app);
@@ -86,7 +89,7 @@ class ExpressApplication {
 		app = this.configureSocketIO(app, db);
 
 		return app;
-	};
+	}
 
 	// Initialize local variables
 	private initLocalVariables = app => {
@@ -276,7 +279,7 @@ class ExpressApplication {
 	/**
 	 * Configure the modules server routes
 	 */
-	private initModulesServerRoutes = app => {
+	private initModulesServerRoutes(app: express.Application): void {
 		MessagesRouter.setupRoutes(app);
 		MessageHandlerRouter.setupRoutes(app);
 		OrgsRouter.setupRoutes(app);

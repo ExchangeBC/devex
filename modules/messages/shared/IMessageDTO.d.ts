@@ -2,6 +2,7 @@ import { IUser } from "../../users/shared/IUserDTO";
 import { TemplateDelegate } from "handlebars";
 
 export interface IMessage {
+	_id: string;
 	messageCd: string;
 	messageLevel: string;
 	user: IUser;
@@ -62,7 +63,7 @@ export interface IMessageEmails {
 	error: any;
 }
 
-export interface IMessageTemplate extends Document {
+export interface IMessageTemplate {
 	messageCd: string;
 	description: string;
 	isSubscriptionType: boolean;
@@ -81,4 +82,8 @@ export interface IMessageTemplate extends Document {
 	emailBody?: TemplateDelegate<any>;
 	emailSubject?: TemplateDelegate<any>;
 	link?: TemplateDelegate<any>;
+}
+
+export interface IMessageCountResponse {
+	count: number;
 }

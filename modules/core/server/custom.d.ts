@@ -7,6 +7,8 @@ import { IOrgModel } from "../../orgs/server/models/OrgModel";
 import { ICapabilityModel } from "../../capabilities/server/models/CapabilityModel";
 import { ICapabilitySkill } from "../../capabilities/shared/ICapabilitySkillDTO";
 import { ICapabilitySkillModel } from "../../capabilities/server/models/CapabilitySkillModel";
+import { IMessageModel } from "../../messages/server/models/MessageModel";
+import { IMessageTemplateModel } from "../../messages/server/models/MessageTemplateModel";
 
 declare global {
     namespace Express {
@@ -17,6 +19,8 @@ declare global {
             org?: IOrgModel;
             capability?: ICapabilityModel;
             capabilitySkill?: ICapabilitySkillModel;
+            message?: IMessageModel;
+            template?: IMessageTemplateModel;
         }
     }
 } 

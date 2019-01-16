@@ -107,6 +107,7 @@
     "@types/acl": "^0.4.35",
     "@types/angular": "^1.6.52",
     "@types/angular-breadcrumb": "^0.4.22",
+    "@types/angular-idle": "^1.1.31",
     "@types/angular-resource": "^1.5.14",
     "@types/angular-ui-bootstrap": "^0.13.47",
     "@types/angular-ui-notification": "^0.0.4",

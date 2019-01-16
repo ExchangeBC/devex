@@ -2,7 +2,7 @@
 'use strict';
 
 import chalk from 'chalk';
-import { Express } from 'express';
+import express from 'express';
 import config from '../ApplicationConfig';
 import ExpressApplication from './ExpressApplication';
 import MongooseController from './MongooseController';
@@ -15,53 +15,44 @@ class Application {
 
 	private static instance: Application;
 
-	private constructor() {}
+	private constructor() {
+		this.init = this.init.bind(this);
+		this.start = this.start.bind(this);
+	}
 
-	public init = (): Promise<Express> => {
-		return new Promise(resolve => {
-			let connection;
-			Promise.resolve()
-				.then(MongooseController.connect)
-				.then(conn => {
-					connection = conn;
-				})
-				.then(this.seedDB)
-				.then(() => {
-					resolve(ExpressApplication.init(connection));
-				});
-		});
-	};
+	public async start(): Promise<void> {
+		// Initialize the application
+		const app = await this.init();
 
-	public start = () => {
-		this.init().then(app => {
-			// Start the app by listening on <port> at <host>
-			app.listen(config.port, config.host, () => {
-				// Create server URL
-				const server = (config.secure && config.secure.ssl ? 'https://' : 'http://') + config.host + ':' + config.port;
-				// Logging initialization
-				console.log('--');
-				console.log(chalk.green(config.app.title));
-				console.log();
-				console.log(chalk.green('Environment:     ' + process.env.NODE_ENV));
-				console.log(chalk.green('Server:          ' + server));
-				console.log(chalk.green('Database:        ' + config.db.uri));
-				console.log(chalk.green('App version:     ' + config.meanjs.version));
-				console.log('--');
-			});
-		});
-	};
+		// Start the app by listening on <port> at <host>
+		app.listen(config.port, config.host, () => {
+			// Create server URL
+			const server = (config.secure && config.secure.ssl ? 'https://' : 'http://') + config.host + ':' + config.port;
 
-	private seedDB() {
-		return new Promise(resolve => {
-			if (config.seedDB && config.seedDB.seed) {
-				console.info(chalk.yellow('Warning:  Database seeding is turned on'));
-				seed.start().then(() => {
-					resolve();
-				});
-			} else {
-				resolve();
-			}
+			// Logging initialization
+			console.log('--');
+			console.log(chalk.green(config.app.title));
+			console.log();
+			console.log(chalk.green(`Environment:     ${process.env.NODE_ENV}`));
+			console.log(chalk.green(`Server:          ${server}`));
+			console.log(chalk.green(`Database:        ${config.db.uri}`));
+			console.log(chalk.green(`App version:     ${config.meanjs.version}`));
+			console.log('--');
 		});
+	}
+
+	private async init(): Promise<express.Application> {
+		const connection = await MongooseController.connect();
+		await this.seedDB();
+		return await ExpressApplication.init(connection);
+	}
+
+	private async seedDB(): Promise<void> {
+		if (config.seedDB && config.seedDB.seed) {
+			console.info(chalk.yellow('Warning: Database seeding is turned on '));
+			await seed.start();
+		}
+		return;
 	}
 }
 

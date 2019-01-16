@@ -606,6 +606,13 @@
     "@types/angular" "*"
     "@types/angular-ui-router" "*"
 
+"@types/angular-idle@^1.1.31":
+  version "1.1.31"
+  resolved "https://registry.yarnpkg.com/@types/angular-idle/-/angular-idle-1.1.31.tgz#ed064d7afd0558b5ac43d0951b382f948c3f4103"
+  integrity sha512-zWQBeBDB+PIPRJCmPjhM0BVJcrf2ww1RZxalx8uXTFGBI988TftEEjoRM3jIVOWXZeWcfxh+4RaMjpyj9GpD+g==
+  dependencies:
+    "@types/angular" "*"
+
 "@types/angular-resource@^1.5.14":
   version "1.5.14"
   resolved "https://registry.yarnpkg.com/@types/angular-resource/-/angular-resource-1.5.14.tgz#902f34e8c98f708ae99493c6d416b39b4a22d9fe"

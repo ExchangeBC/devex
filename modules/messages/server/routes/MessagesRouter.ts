@@ -6,8 +6,11 @@
 // this means that the routes are pretty sparse and mostly deal with
 // configuring the system form outside.
 
+import express from 'express';
 import { model, Types } from 'mongoose';
 import MessagesServerController from '../controllers/MessagesServerController';
+import { IMessageModel } from '../models/MessageModel';
+import { IMessageTemplateModel } from '../models/MessageTemplateModel';
 import MessagesPolicy from '../policies/MessagesPolicy';
 
 class MessagesRouter {
@@ -21,7 +24,7 @@ class MessagesRouter {
 		MessagesPolicy.invokeRolesPolicies();
 	}
 
-	public setupRoutes = app => {
+	public setupRoutes(app: express.Application): void {
 		// Get a list/count of messages for the logged in user, either current or archived
 		app.route('/api/messages')
 			.all(MessagesPolicy.isAllowed)
@@ -80,12 +83,12 @@ class MessagesRouter {
 									} else if (!findMsg) {
 										return res.status(400).send({ message: 'Message not found' });
 									} else {
-										req.message = findMsg;
+										req.message = findMsg as IMessageModel;
 										next();
 									}
 								});
 						} else {
-							req.message = message;
+							req.message = message as IMessageModel;
 							next();
 						}
 					});
@@ -104,13 +107,13 @@ class MessagesRouter {
 						} else if (!template) {
 							return res.status(400).send({ message: 'Message not found' });
 						} else {
-							req.template = template;
+							req.template = template as IMessageTemplateModel;
 							next();
 						}
 					});
 			}
 		});
-	};
+	}
 }
 
 export default MessagesRouter.getInstance();
