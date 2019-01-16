@@ -10,7 +10,12 @@ class OpportunitiesPage extends Page {
 	static url = "opportunities"
 
 	static content = {
-				postAnOpportunity(wait: true) { $("button", title:"New").click() }
+				//PostAnOpportunity(wait: true) { $("button", title:"New") }
+				PostAnOpportunity(wait: true) { $("button",("class"):"btn btn-primary float-right ng-scope btn-default") }
+
+
+
+
 		}
 
     void sleepForNSeconds(int n) {
