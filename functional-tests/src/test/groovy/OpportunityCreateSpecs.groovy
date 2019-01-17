@@ -69,7 +69,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
             def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
             assert loginOK
         }
-
+/*
         @Unroll
         def "Create Program: '#ProgramTitleValue'" () {
             given: "After login as Administrator, I go to the Programs Page"
@@ -156,7 +156,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
                 "Project: Automation Test Project 1" | "Short Descriptive for Automation Test Project 1" | "Longer descriptive for Automation Test Project 1" | "https://github.com/BCDevExchange" | "javascript,html,mongo" | "" | "Program: Automation Test 1"
         }
 
-
+*/
 
         @Unroll
             def "Publish Opportunity: '#TitleData'" () {
@@ -219,7 +219,7 @@ class OpportunityCreateSpecs extends GebReportingSpec {
             reportInfo("Description is (2nd time):" + Description  )
 
     //next line need to be executed, but I amn having problems right now
-    //         "Add Description" Description
+             "Add Description" Description
             
 
             //Now we move to the Details tab   
