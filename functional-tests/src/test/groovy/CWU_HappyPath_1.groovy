@@ -7,9 +7,11 @@ import pages.app.CodewithusPage
 import pages.app.OpportunitiesPage
 
 import pages.app.GitHubPage_ReadGuide
+
+import modules.Utils
 //import pages.app.SignedIn
 
-//import modules.LoginModule
+import modules.LoginModule
 
 //import geb.module.RadioButtons
 import org.openqa.selenium.By
@@ -24,17 +26,49 @@ import spock.lang.Title
 
 @Title("Code with Us Happy Path 1")
 class CodeWithUSHappyPath1 extends GebReportingSpec {
- 
- /*
-      //We make sure we are not logged as admin
-      def setup() {
-            to HomePage
-                  // Need to login as an admin
-            def  loggedOutAsAdmin= login."adminLogout"()
-            assert loggedOutAsAdmin
+
+      def CompareFileContents() {
+           //if(f1.length()!=f2.length())return false
+           
+            //reportInfo("User directory is:" + System.getProperty('user.home') )
+            File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+            File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/code-with-us-terms.pdf")
+
+            FileInputStream fis1 = new FileInputStream(FilePath1)
+            FileInputStream fis2 = new FileInputStream(FilePath2)
+            try {
+                int byte1
+                while((byte1 = fis1.read())!=-1) {
+                    int byte2 = fis2.read()
+                    if(byte1!=byte2)return false
+                }
+            } finally {
+                fis1.close()
+                fis2.close()
+                //Delete the just downloaded file. Useful when running lots of test one after the other
+                //The FileInputStream class does not have a delete method, so I need to use another class
+                def ftd=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+                ftd.delete()
+            }
+            
+            return true
       }
 
 
+
+ 
+      //We make sure we are not logged as admin
+      def setup() {
+            to HomePage
+            //I get the base URL to build (in the LoginModule) the URL to the admin icon
+            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
+
+            // Login off as an admin
+            def  logoffOK=login."Logout as administrator"(baseURL)
+            assert logoffOK
+      }
+
+/*
   @Unroll
 
   def "From the Home Page to the CWU" () {
@@ -72,12 +106,12 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             //reportInfo("URL0 is ${driver.currentUrl}"  )       
       when: "I click in the Browse Opportunities Button "
             BrowseOpportunitiesLink
-            sleep(10000)
+            sleep(1000)
         reportInfo("URL 1 is ${driver.currentUrl}"  )    
       then: "I should be at the Opportunities Page- So the page exists"
             assert OpportunitiesPage
             at OpportunitiesPage
-            sleep(10000)
+            sleep(1000)
             //reportInfo("URL2 is ${driver.currentUrl}"  )
       and: "I click on the first opportunity listed on the page"
             def OppTitle =PublishedOpportunity.text()  //Opportunity title
@@ -90,9 +124,26 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             sleep(100)
             
             def NewURL=getCurrentUrl() //This is the specific opportunity URL
-sleep(10000)
+
       then: "We have arrived to the selected opportunity URL"      
             assert NewURL==OppURL
+            sleep(1000)
+      and: "Click on terms, to download the document that sets the terms and the legalese"
+            DownloadTerms.click()
+            sleep(2000)
+      then: "I check the downloaded document matches the one stored in this system"
+            
+            
+
+  
+            def  ComparisonOK = CompareFileContents()
+
+
+            assert ComparisonOK
+
+
+//Download link
+//#page-top > main > ui-view > section > div.container.border.p-4 > div:nth-child(8) > div > p:nth-child(5) > a:nth-child(2)
 
   //           AuthenticationIcon { $('a[id = "authentication.signin"]')}
 /*
@@ -101,18 +152,9 @@ sleep(10000)
             data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg=""><path fill="currentColor" 
 */
    //         AuthenticationIcon.click()
-sleep(1000)
+
   }
 
 
-
-
-
-
-
-
-
 }
-
-
 

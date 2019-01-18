@@ -12,7 +12,8 @@ import modules.CheckboxModule
 
 class OpportunitiesAdminCreatePage extends Page {  
 	static at = {title.startsWith("BCDevExchange - The BC Developer") } 
-	static url = "opportunityadmin/createcwu"
+	//static url = "opportunityadmin/createcwu"
+    static url = "createcwu"
 
 	static content = {
             HeaderTabClick { $('[data-automation-id ~= "tab-cwu-header"]').click() }
@@ -22,11 +23,18 @@ class OpportunitiesAdminCreatePage extends Page {
            
             descriptionOppFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-description"]//@id,"_ifr")]'), 0) }
             //descriptionOppFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-description"]//@id,"ui-tinymce-4_ifr")]'), 0) }
+/*[@id="ui-tinymce-4"]
 //*[@id="ui-tinymce-4"]
-//*[@id="ui-tinymce-4"]
+//descriptionTextBox { $("textarea",id="ui-tinymce-7")}
+//descriptionTextBox { $('#ui-tinymce-7')
 
 
 
+<textarea name="description" id="ui-tinymce-7" data-automation-id="text-cwu-description" 
+class="form-control ng-pristine ng-untouched ng-valid ng-scope ng-empty __WebInspectorHideElement__" 
+ui-tinymce="vm.TINYMCE_OPTIONS" placeholder="A full description of the opportunity" 
+ng-model="vm.opportunity.description" aria-hidden="true" style="display: none;">			</textarea>
+*/
 
             evaluationFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-cwu-evaluation"]//@id,"_ifr")]'), 0) }
 
@@ -36,11 +44,14 @@ class OpportunitiesAdminCreatePage extends Page {
             SaveButton { $('button[data-automation-id ~= "button-cwu-save"]') }
             DeleteButton { $('a[data-automation-id ~= "button-cwu-delete"]') }
             
+         selectProject { $('[id=project]') }
+
+
             oppTitle { $("input",id:"title") }
 
             
             oppTeaser { $("#short") }
-            selectProject { $("#opportunityForm") }
+           
 
 
             //oppEmail { $("input", id:"proposalEmail") }
@@ -68,7 +79,7 @@ class OpportunitiesAdminCreatePage extends Page {
 
             //proposalDeadLine(wait: true) {$("input", type:"date", name:"deadline")}
 
-            proposalDeadLine(wait: true) { $("input",id:"deadline") }
+            proposalDeadLine(wait: true) {$("input",id:"deadline") }
             proposalAssignment{$("input", type:"date", name:"assignment")}
             proposalStartDate{$('input[name="start"]')}
             //proposalStartDate{$("input", type:"date", name:"start")}

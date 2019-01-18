@@ -7,11 +7,16 @@ import pages.app.HomePage
 
 import spock.lang.Unroll
 
+import java.io.File
+import java.io.IOException
+
 /**
  * Example of a Module in Groovy.
  */
 
 class LoginModule extends Module {
+
+  
 
     static content = {
       adminLogin(wait: true) { $("#authentication.signinadmin") }
@@ -24,6 +29,10 @@ class LoginModule extends Module {
       loginInput { $("input", id:"login_field") }
       userDisplayPicture { $("img", class:"header-profile-image") }
       gitHubLink { $("a", "ng-click":"vm.callOauthProvider('/api/auth/github')")[0] }
+
+     
+    
+   
     }
    
     //@todo deprecate
@@ -49,12 +58,26 @@ class LoginModule extends Module {
      */       
     }
 
-    Boolean "Login"(String username, String password, String fullName) {
-       LoginAsAnAdministrator(username, password, fullName) 
+
+    Boolean "Logout as administrator"(java.lang.String baseURL){
+        
+        def  AdminIconLocation = baseURL + "img/default.png"
+
+        if (!$("img",src:"${AdminIconLocation}"))  {
+            println("Not logged as admin")
+            return true
+        }
+        else {
+            $("img",src:"${AdminIconLocation}").click()
+            sleep(1000)
+            //This line click in the Log Out option of the previous drop down list
+            $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()
+            println("Just logged off as admin")
+            return true
+        }
     }
 
-    Boolean adminLogout(){
-        $('li.dropdown.open > ul.dropdown-menu > li:nth-of-type(4) > a').click()
-        return true
-    }
+
+
+  
 }

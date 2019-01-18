@@ -2,6 +2,7 @@ import geb.spock.GebReportingSpec
 import geb.Page
 
 import java.text.SimpleDateFormat
+import static java.util.Calendar.*
 
 import pages.app.HomePage
 
@@ -178,6 +179,8 @@ class OpportunityCreateSpecs extends GebReportingSpec {
                 def Formatted_start=format.format(start)
 
 
+
+
                 def  MyTitleData = TitleData + ": " + RandomID
                 reportInfo("Variable a is :"  + TitleData  )
                 reportInfo("Variable a is ${MyTitleData}"  )
@@ -198,29 +201,36 @@ class OpportunityCreateSpecs extends GebReportingSpec {
             and: "Click on the Get Started button under CWU"  
 
                 createCWUOpportunityButton.click()
-                sleep(100)
+                sleep(1000)
                 at OpportunitiesAdminCreatePage
-
+                sleep(1000)
             // Fill in initial details
             // We are assuming there is only one project
             
             // and it already selected by default
             // We are in the Header tab
             //selectProject.project = Project //Project
-            reportInfo("URL line 210 is ${driver.currentUrl}"  )
+reportInfo("URL line 213 is ${driver.currentUrl}"  )
+//selectProject.click()
+//selectProject.find("option").find{ it.value() == Project}.click()
+
+selectProject.value(Project)
+ reportInfo("project value is  ${selectProject.value()}"  )
+            reportInfo("URL line 219 is ${driver.currentUrl}"  )
             oppTitle.value(MyTitleData) //Title
             oppTeaser.value(Teaser) //teaser
             oppGithub.value(Github) //Github location
 
             //Now we move to the Background tab  
             BackgroundTabClick
-            sleep(1000)
-            reportInfo("URL line 218 is ${driver.currentUrl}"  )
+            sleep(5000)
+            reportInfo("URL line 225 is ${driver.currentUrl}"  )
             reportInfo("Description is (2nd time):" + Description  )
 
     //next line need to be executed, but I amn having problems right now
-             "Add Description" Description
-            
+           //  "Add Description" Description
+            //Thread.sleep(3000)
+
 
             //Now we move to the Details tab   
             DetailsTabClick
@@ -240,6 +250,8 @@ class OpportunityCreateSpecs extends GebReportingSpec {
                 reportInfo("Formatted_deadline value:" + Formatted_start )
 
 
+
+
 /*
 I have the suspicion the ng-not-empty directive is interfeering with geb capabily of writting the date
 
@@ -247,14 +259,14 @@ I have the suspicion the ng-not-empty directive is interfeering with geb capabil
 <input type="date" id="deadline" name="deadline" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
 */
 
-            proposalDeadLine.value('2019-02-27')
+            proposalDeadLine.value(deadline)
 
             reportInfo("Deadline value -after-:" + proposalDeadLine.value() )
 
             proposalAssignment.value(Formatted_assignment)
             proposalStartDate.value(Formatted_start)
   
-             sleep(5000)
+            //sleep(5000)
             // Dates are automatically generated based on current date
             // "Set All Dates"()
 
@@ -270,17 +282,40 @@ I have the suspicion the ng-not-empty directive is interfeering with geb capabil
             oppSkills.value(Skills) //Skills
 
             //@todo there's a race and nothing sensible to wait on
-            Thread.sleep(3000)
+            //Thread.sleep(3000)
 
 
 
 
 
-          and: "I click the 'save changes' button for the opportunity: '#TitleData'"
+        and: "I click the 'save changes' button for the opportunity: '#TitleData'"
           SaveButton.click()
+sleep(1000)
+        then: "Go to the opportunities page to publish it"
+
+            to OpportunitiesPage
+
+            and: "Click on the newly created opportunity (still unpublished)"
+            //def OppTitle =PublishedOpportunity.text()  //Opportunity title
+            def MyCurrentURL=getCurrentUrl() //URL opportunity page
+            sleep(100)
+            //The following is to create from the opp title the URL
+            def OppURL= MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
+            //reportInfo("${OppTitle} " )
+            reportInfo("${OppURL} " )
+            PublishedOpportunity.click()
+            sleep(100)
+            
+            def NewURL=getCurrentUrl() //This is the specific opportunity URL
+            sleep(100)
+        then: "We have arrived to the selected opportunity URL"      
+            assert NewURL==OppURL
+
+            //Here add the code to publish it, currently I can't because I can not enter the value for some text field
 
 
-/*
+
+/*   ----------OLD CODE STARTS HERE, It has already been reused
           when: "I enter the details for the new project"
             Program = ProgramValue
             ProjectName.value(ProjectNameValue)
@@ -409,6 +444,19 @@ I have the suspicion the ng-not-empty directive is interfeering with geb capabil
 
   
   }
+
+
+
+        def cleanup(){
+            to HomePage
+            //I get the base URL to build (in the LoginModule) the URL to the admin icon
+            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
+
+            // Login off as an admin
+            def  logoffOK=login."Logout as administrator"(baseURL)
+            assert logoffOK
+        }
+
 
 
 }

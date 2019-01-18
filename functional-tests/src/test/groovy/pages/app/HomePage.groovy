@@ -35,6 +35,9 @@ class HomePage extends Page {
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
 		LearnMoreCWU { $('a[data-automation-id ~="button-codewithus"]',0).click()   }
 		AdminIcon { $('img[class ~="navbar-header-user-image"]')}
+		AdminIcon2 { $('#single-button > img')}
+
+		
 
     }
 

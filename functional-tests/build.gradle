@@ -9,8 +9,8 @@ plugins {
 
 ext {
     // The drivers we want to use
-    drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
-
+    //drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
+    drivers = ["chrome"]
     ext {
         groovyVersion = '2.5.4'
         gebVersion = '2.3'
@@ -76,7 +76,7 @@ drivers.each { driver ->
         systemProperty "geb.env", driver
     }
 }
-
+/*
 ieTest {
     dependsOn unzipIeDriver
 
@@ -90,7 +90,7 @@ edgeTest {
     def edgedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "MicrosoftWebDriver.exe" : "MicrosoftWebDriver.exe"
     systemProperty "webdriver.edge.driver", new File(unzipEdgeDriver.outputs.files.singleFile,edgedriverFilename).absolutePath
 }
-
+*/
 test {
     dependsOn drivers.collect { tasks["${it}Test"] }
     enabled = false

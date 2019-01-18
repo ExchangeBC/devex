@@ -28,7 +28,7 @@ environments {
 	chrome {
 		driver = { new ChromeDriver() }
 	}
-
+/*
 	// run via “./gradlew chromeHeadlessTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chromeHeadless {
@@ -44,6 +44,8 @@ environments {
 	
 	// run via “./gradlew firefoxTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/FirefoxDriver
+
+
 	firefox {
 		driver = { new FirefoxDriver() }
 	}
@@ -79,6 +81,7 @@ environments {
 	safari {
 		driver = { new SafariDriver() }
 	}
+*/	
 }
 
 // To run the tests with all browsers just run “./gradlew test”
