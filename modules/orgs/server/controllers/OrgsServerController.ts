@@ -1,5 +1,6 @@
 'use strict';
 
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -23,7 +24,9 @@ class OrgsServerController {
 	private sendMessages = MessagesServerController.sendMessages;
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 
-	private constructor() {}
+	private constructor() {
+		this.logo = this.logo.bind(this);
+	}
 
 	public getOrgById = (id): Promise<IOrgModel> => {
 		return new Promise((resolve, reject) => {
@@ -324,7 +327,7 @@ class OrgsServerController {
 			});
 	};
 
-	public logo = (req, res) => {
+	public async logo(req: Request, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -335,25 +338,25 @@ class OrgsServerController {
 		const org = req.org;
 		const storage = multer.diskStorage(config.uploads.diskStorage);
 		const upload = multer({ storage }).single('orgImageURL');
-		// upload.fileFilter = multerConfig.profileUploadFileFilter;
-		const up = CoreServerHelpers.fileUploadFunctions(org, OrgModel, 'orgImageURL', req, res, upload, org.orgImageURL);
+		const up = CoreServerHelpers.fileUploadFunctions(org, 'orgImageURL', req, res, upload, org.orgImageURL);
 
 		if (org) {
-			up.uploadImage()
-				.then(up.updateDocument)
-				.then(up.deleteOldImage)
-				.then(() => {
-					res.json(org);
-				})
-				.catch(err => {
-					res.status(422).send(err);
+			try {
+				await up.uploadImage();
+				await up.updateDocument();
+				await up.deleteOldImage();
+				res.json(org);
+			} catch (error) {
+				res.status(422).send({
+					message: CoreServerErrors.getErrorMessage(error)
 				});
+			}
 		} else {
 			res.status(401).send({
 				message: 'invalid org or org not supplied'
 			});
 		}
-	};
+	}
 
 	//
 	// Private functions

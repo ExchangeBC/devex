@@ -373,7 +373,7 @@ class ProgramsServerController {
 		const program = req.program;
 		const storage = multer.diskStorage(config.uploads.diskStorage);
 		const upload = multer({ storage }).single('logo');
-		const up = CoreServerHelpers.fileUploadFunctions(program, ProgramModel, 'logo', req, res, upload, program.logo);
+		const up = CoreServerHelpers.fileUploadFunctions(program, 'logo', req, res, upload, program.logo);
 
 		if (program) {
 			up.uploadImage()

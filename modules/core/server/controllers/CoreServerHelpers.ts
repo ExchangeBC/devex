@@ -1,9 +1,12 @@
 /* tslint:disable:no-console */
 'use strict';
 
+import { Request, RequestHandler, Response } from 'express';
+import fs from 'fs';
 import http from 'http';
 import https from 'https';
 import _ from 'lodash';
+import { Document, Model } from 'mongoose';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from './CoreServerErrors';
 
@@ -102,10 +105,9 @@ class CoreServerHelpers {
 		return r;
 	};
 
-	public fileUploadFunctions = (doc, Model, field, req, res, upload, existingImageUrl) => {
-		const fs = require('fs');
+	public fileUploadFunctions(doc: Document, field: string, req: Request, res: Response, upload: RequestHandler, existingImageUrl: string) {
 		return {
-			uploadImage() {
+			uploadImage: () => {
 				return new Promise((resolve, reject) => {
 					upload(req, res, uploadError => {
 						if (uploadError) {
@@ -116,22 +118,14 @@ class CoreServerHelpers {
 					});
 				});
 			},
-			updateDocument() {
-				return new Promise((resolve, reject) => {
-					doc[field] = config.uploads.fileUpload.display + req.file.filename;
-					doc.save((err, result) => {
-						if (err) {
-							reject(err);
-						} else {
-							resolve(result);
-						}
-					});
-				});
+			updateDocument: async (): Promise<void> => {
+				doc[field] = config.uploads.fileUpload.display + req.file.filename;
+				await doc.save();
 			},
-			deleteOldImage() {
+			deleteOldImage: () => {
 				return new Promise((resolve, reject) => {
-					if (existingImageUrl !== Model.schema.path(field).defaultValue) {
-						fs.unlink(existingImageUrl, () => {
+					if (existingImageUrl !== doc[field]) {
+						fs.unlink('./public/' + existingImageUrl, () => {
 							resolve();
 						});
 					} else {
@@ -140,7 +134,7 @@ class CoreServerHelpers {
 				});
 			}
 		};
-	};
+	}
 
 	public formatMoney = (amount, decPlaces?, centSep?, thouSep?) => {
 		const precision = isNaN((decPlaces = Math.abs(decPlaces))) ? 2 : decPlaces;

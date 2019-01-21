@@ -16,14 +16,14 @@ import angular from 'angular';
 			'ui.bootstrap',
 			'ui.tinymce',
 			'ngFileUpload',
-			'ngImgCrop',
 			'ui-notification',
 			'ncy-angular-breadcrumb',
 			'dndLists',
 			'ngIdle',
 			'ngSanitize',
 			'ui.bootstrap',
-			'ng-currency'
+			'ng-currency',
+			'uiCropper'
 		],
 		registerModule
 	};

@@ -14,5 +14,5 @@ import 'jquery';
 import 'ng-currency';
 import 'ng-file-upload';
 import 'ng-idle';
-import 'ng-img-crop';
 import 'ui-bootstrap4';
+import 'ui-cropper';

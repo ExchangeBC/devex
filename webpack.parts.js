@@ -107,6 +107,9 @@ exports.loadTS = ({ include, exclude } = {}) => ({
 				include,
 				exclude,
 				loader: 'babel-loader',
+				options: {
+					sourceMaps: "both"
+				}
 			},
 		],
 	},
