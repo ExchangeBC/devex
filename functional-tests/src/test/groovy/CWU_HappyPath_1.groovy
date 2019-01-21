@@ -6,6 +6,8 @@ import pages.app.CodewithusPage
 //import pages.app.CompaniesPage
 import pages.app.OpportunitiesPage
 
+import pages.app.AuthenticationSigninPage
+
 import pages.app.GitHubPage_ReadGuide
 
 import modules.Utils
@@ -107,12 +109,12 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
       when: "I click in the Browse Opportunities Button "
             BrowseOpportunitiesLink
             sleep(1000)
-        reportInfo("URL 1 is ${driver.currentUrl}"  )    
+            reportInfo("URL 1 line 112 is ${driver.currentUrl}"  )    
       then: "I should be at the Opportunities Page- So the page exists"
             assert OpportunitiesPage
             at OpportunitiesPage
             sleep(1000)
-            //reportInfo("URL2 is ${driver.currentUrl}"  )
+            reportInfo("URL2 is ${driver.currentUrl}"  )
       and: "I click on the first opportunity listed on the page"
             def OppTitle =PublishedOpportunity.text()  //Opportunity title
             def MyCurrentURL=getCurrentUrl() //URL opportunity page
@@ -129,30 +131,44 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             assert NewURL==OppURL
             sleep(1000)
       and: "Click on terms, to download the document that sets the terms and the legalese"
+            //$('#page-top > main > ui-view > section > div.container.border.p-4 > div:nth-child(8) > div > p:nth-child(5) > a:nth-child(2)').click()
+
             DownloadTerms.click()
             sleep(2000)
       then: "I check the downloaded document matches the one stored in this system"
-            
-            
-
-  
             def  ComparisonOK = CompareFileContents()
-
-
             assert ComparisonOK
+      then: "Click on the Authenticate button"
+            //AuthenticationIcon { $('a[id = "authentication.signin"]')}
+            reportInfo("URL line 141 is ${driver.currentUrl}"  )
+            $('a[id = "authentication.signin"]').click()
+            assert(1000)
+            assert AuthenticationSigninPage
+            sleep(1000)
+            at AuthenticationSigninPage
+       
+            reportInfo("URL line 145 is ${driver.currentUrl}"  )
+            SingInButton.click()
+            sleep(1000)
+      and: "I arrive to the GitHub page, where I will be able to log"      
+            reportInfo("URL line 151 is ${driver.currentUrl}"  )
+            sleep(1000)
+            //Verifies the sign in button exists
+
+            assert $("input", name:"commit" )
 
 
-//Download link
-//#page-top > main > ui-view > section > div.container.border.p-4 > div:nth-child(8) > div > p:nth-child(5) > a:nth-child(2)
 
-  //           AuthenticationIcon { $('a[id = "authentication.signin"]')}
-/*
-<a id="authentication.signin" ui-sref="authentication" class="nav-link" href="/authentication">
-            <svg class="svg-inline--fa fa-github fa-w-16 fa-lg" aria-hidden="true" data-prefix="fab" 
-            data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512" data-fa-i2svg=""><path fill="currentColor" 
-*/
-   //         AuthenticationIcon.click()
 
+		$(id:"login_field").value('hugochibougamau')
+		$(id:"password").value('Devex_Test1')
+            $("input", name:"commit" ).click()
+
+            sleep(10000)
+
+           //s assert $("head > title" ).value()=="Sign in to GitHub · GitHub"
+
+//#opportunities\.view > div.label-title.ng-binding
   }
 
 

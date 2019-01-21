@@ -35,7 +35,7 @@ class LoginModule extends Module {
    
     }
    
-    //@todo deprecate
+
     Boolean "Login As An Administrator"(java.lang.String userName, java.lang.String passWord, java.lang.String fullUserName){
         // Since the targeted link is not yet visible, Chrome will fail, so we forcefully do stuff
         js.exec('window.scrollTo(0, document.body.scrollHeight);')

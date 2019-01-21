@@ -14,8 +14,10 @@ class OpportunitiesPage extends Page {
 				PostAnOpportunity(wait: true) { $("button",("class"):"btn btn-primary float-right ng-scope btn-default") }
 				PublishedOpportunity{$("div",class:"label-title ng-binding",0)}
 				DownloadTerms{$('a[href="/terms/cwu1"]')}
-				
+
+
 		}
+
 
     void sleepForNSeconds(int n) {
     	def originalMilliseconds = System.currentTimeMillis()
