@@ -3,7 +3,8 @@ import { ICapabilitySkill } from "../../capabilities/shared/ICapabilitySkillDTO"
 import { IOrg } from "../../orgs/shared/IOrgDTO";
 
 export interface IUser {
-    _id: string;
+	_id: string;
+	id: string;
 	firstName: string;
 	lastName: string;
 	displayName: string;

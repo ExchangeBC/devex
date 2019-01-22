@@ -259,3 +259,13 @@
 .label-admin {
   background: $gray-light;
 }
+
+.label-request {
+  background: $theme-dark-blue;
+  color: white;
+  cursor: pointer;
+}
+
+.label-pending {
+  background: $theme-yellow;
+}

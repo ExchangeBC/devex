@@ -25,6 +25,7 @@ class OrgsServerController {
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 
 	private constructor() {
+		this.list = this.list.bind(this);
 		this.logo = this.logo.bind(this);
 	}
 
@@ -55,6 +56,7 @@ class OrgsServerController {
 				})
 				.populate('invitedUsers')
 				.populate('invitedNonUsers')
+				.populate('joinRequests')
 				.exec((err, org) => {
 					if (err) {
 						reject(err);
@@ -188,23 +190,24 @@ class OrgsServerController {
 		});
 	};
 
-	public list = (req, res) => {
-		OrgModel.find()
-			.sort('user.lastName')
-			.populate('owner', '_id lastName firstName displayName profileImageURL')
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('members', this.popfields)
-			.populate('admins', this.popfields)
-			.exec((err, orgs) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(orgs);
-				}
+	public async list(req: Request, res: Response): Promise<void> {
+
+		try {
+			const orgs = await OrgModel.find()
+				.sort('user.lastName')
+				.populate('owner', '_id lastName firstName displayName profileImageURL')
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('members', this.popfields)
+				.populate('admins', this.popfields)
+				.populate('joinRequests', '_id')
+				.exec();
+			res.json(orgs);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
+		}
 	};
 
 	public myadmin = (req, res) => {
@@ -355,6 +358,45 @@ class OrgsServerController {
 			res.status(401).send({
 				message: 'invalid org or org not supplied'
 			});
+		}
+	}
+
+	public async joinRequest(req: Request, res: Response): Promise<void> {
+		if (!req.user) {
+			res.status(403).send({
+				message: 'You are not authorized to join this organization'
+			});
+			return;
+		}
+
+		const org = req.org;
+		const user = req.user;
+
+		if (!org || !user) {
+			res.status(422).send({
+				message: 'Invalid join request'
+			});
+			return;
+		}
+
+		// check that user does not already having a request on that org and that they aren't already a member
+		if (org.joinRequests.map(user => user.id).indexOf(user.id) !== -1 || org.members.map(user => user.id).indexOf(user.id) !== -1 || org.admins.map(user => user.id).indexOf(user.id) !== -1) {
+			res.status(422).send({
+				message: 'You already have a pending request or are already a member of this organization'
+			});
+			return;
+		}
+
+		// add the request and save the org, return in response
+		org.joinRequests.push(user);
+		try {
+			const updatedOrg = await org.save();
+			res.json(updatedOrg);
+		} catch (error) {
+			res.status(500).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
 		}
 	}
 

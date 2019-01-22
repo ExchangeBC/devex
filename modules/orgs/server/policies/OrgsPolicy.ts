@@ -78,6 +78,10 @@ class OrgsPolicy {
 					{
 						resources: '/api/orgs/:orgId',
 						permissions: ['*']
+					},
+					{
+						resources: '/api/orgs/:orgId/joinRequest',
+						permissions: ['put']
 					}
 				]
 			},

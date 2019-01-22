@@ -1,4 +1,52 @@
-<div class="bg-white rounded p-4">
+<div class="bg-white round p-4">
+  <form name="vm.orgForm" id="vm.orgForm">
+    <div class="row">
+
+      <!-- Pending Requests -->
+      <div class="col-3 text-center p-4 mr-5 border">
+        <h5>Pending Requests</h5>
+          <ul dnd-list="vm.org.joinRequests">
+            <li ng-repeat="requestor in vm.org.joinRequests" dnd-draggable="requestor" dnd-effect-allowed="move" class="font-weight-bold p-2 border">
+                <avatar-display size="25" url="requestor.profileImageURL"></avatar-display>
+                <name>{{ requestor.displayName }}</name>
+            </li>
+          </ul>
+      </div>
+
+      <!-- Current Team -->
+      <div class="col-3 text-center p-4 ml-5 border">
+        <h5>Current Team Members</h5>
+        <div ng-repeat="member in vm.org.members" class="font-weight-bold p-2 border">
+          <avatar-display size="25" url="member.profileImageURL"></avatar-display>
+          <name>{{ member.displayName }}</name>
+        </div>
+      </div>
+
+      <!-- Team Capabilities -->
+      <div class="col-3 text-right">
+        <h5>Team Capabilities</h5>
+      </div>
+    </div>
+
+
+    <div class="row">
+      
+      <!-- Selected member detail view -->
+      <div class="col-6">
+
+      </div>
+
+      <!-- Preferred Skill Summary for Team -->
+      <div class="col-3">
+
+      </div>
+
+
+    </div>
+  </form>
+</div>
+
+<!-- <div class="bg-white rounded p-4">
   <form name="vm.orgForm" warn-on-exit id="vm.orgForm" novalidate autocomplete="off">
     <div class="row">
       <div class="col">
@@ -18,7 +66,7 @@
         <div class="pl-0 col-10">
           <h6 class="pt-4">My Members:</h6>
           <div ng-if="!vm.loading">
-            <!-- // Update logic about when this alert appears if necessary .... should appear until there are 2 members in the list, then disappear // -->
+
             <div class="alert alert-warning" ng-if="vm.org.members.length<2">
               <i class="fas fa-lg fa-exclamation-circle"></i> &nbsp;You need at least 2 team members
             </div>
@@ -53,7 +101,7 @@
       <div class="hidden-xs col-sm-1"></div>
       <div class="col-xs-12 col-sm-4">
         <h4>Team Capabilities</h4>
-        <!-- // Update logic about when this alert appears if necessary .... should appear until all capabilities are covered, then disappear when they're covered // -->
+      
         <div class="alert alert-warning" ng-if="!vm.org.isCapable">
           <i class="fas fa-lg fa-exclamation-circle"></i> &nbsp;Your team members must cover all these capabilities:
         </div>
@@ -69,4 +117,4 @@
       </div>
     </div>
   </form>
-</div>
+</div> -->

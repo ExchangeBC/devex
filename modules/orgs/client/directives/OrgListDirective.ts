@@ -1,6 +1,6 @@
 'use strict';
 
-import angular, { IController, ISCEService, IScope } from 'angular';
+import angular, { IController, ISCEService, IScope, uiNotification } from 'angular';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IOrg } from '../../shared/IOrgDTO';
 import { IOrgService } from '../services/OrgService';
@@ -10,14 +10,14 @@ interface IOrgListDirectiveScope extends IScope {
 }
 
 class OrgListDirectiveController implements IController {
-	public static $inject = ['$scope', '$sce', 'OrgService', 'AuthenticationService'];
+	public static $inject = ['$scope', 'OrgService', 'AuthenticationService'];
 	public isUser: boolean;
 	public isAdmin: boolean;
 	public isGov: boolean;
 	public userCanAdd: boolean;
 	public orgs: IOrg[];
 
-	constructor(private $scope: IOrgListDirectiveScope, private $sce: ISCEService, private OrgService: IOrgService, private AuthenticationService: IAuthenticationService) {
+	constructor(private $scope: IOrgListDirectiveScope, private OrgService: IOrgService, private AuthenticationService: IAuthenticationService) {
 		this.isUser = !!this.AuthenticationService.user;
 		this.isAdmin = this.isUser && this.AuthenticationService.user.roles.includes('admin');
 		this.isGov = this.isUser && this.AuthenticationService.user.roles.includes('gov');
@@ -40,12 +40,21 @@ class OrgListDirectiveController implements IController {
 
 	// Is the current user a member of the current org
 	public isUserMember(org: IOrg): boolean {
-		if (!this.isUser || this.isGov) {
+		if (!this.isUser || this.isGov || this.isAdmin) {
 			return false;
 		}
 
 		const userId = this.AuthenticationService.user._id;
 		return org.members.map(member => member._id).includes(userId);
+	}
+
+	public hasPendingRequest(org: IOrg): boolean {
+		if (!this.isUser || this.isGov || this.isAdmin) {
+			return false;
+		}
+
+		const userId = this.AuthenticationService.user._id;
+		return org.joinRequests.map(member => member._id).includes(userId);
 	}
 
 	private async init(): Promise<void> {

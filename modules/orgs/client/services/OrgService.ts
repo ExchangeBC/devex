@@ -22,6 +22,7 @@ export interface IOrgService extends resource.IResourceClass<IOrgResource> {
 	removeUser(params: IOrgServiceParams): IOrgResource;
 	addMeToOrg(params: IOrgServiceParams): IOrgResource;
 	removeMeFromOrg(params: IOrgServiceParams): IOrgResource;
+	joinRequest(params: IOrgServiceParams): IOrgResource;
 }
 
 angular.module('orgs.services').factory('OrgService', [
@@ -71,6 +72,14 @@ angular.module('orgs.services').factory('OrgService', [
 			isArray: false
 		};
 
+		const joinRequestAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			params: {
+				orgId: '@orgId'
+			},
+			url: '/api/orgs/:orgId/joinRequest'
+		};
+
 		return $resource(
 			'/api/orgs/:orgId',
 			{
@@ -84,7 +93,8 @@ angular.module('orgs.services').factory('OrgService', [
 				myadmin: myAdminAction,
 				removeUser: removeUserAction,
 				addMeToOrg: addMeToOrgAction,
-				removeMeFromOrg: removeMeFromOrgAction
+				removeMeFromOrg: removeMeFromOrgAction,
+				joinRequest: joinRequestAction
 			}
 		) as IOrgService;
 	}

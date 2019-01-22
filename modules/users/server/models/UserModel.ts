@@ -13,7 +13,8 @@ import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelper
 import { IUser } from '../../shared/IUserDTO';
 
 export interface IUserModel extends IUser, Document {
-	_id: any;
+	_id: string;
+	id: string;
 	capabilities: ICapabilityModel[];
 	capabilitySkills: ICapabilitySkillModel[];
 	findUniqueUsername(username: string, suffix: string, callback: any): string;

@@ -66,7 +66,11 @@ const OrgSchema = new Schema(
 			type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 			default: []
 		},
-		invitedNonUsers: { type: [InvitedNonUserSchema], default: [] }
+		invitedNonUsers: { type: [InvitedNonUserSchema], default: [] },
+		joinRequests: {
+			type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+			default: []
+		}
 	},
 	{ usePushEach: true }
 );

@@ -50,6 +50,10 @@ class OrgsRouter {
 			.all(OrgsPolicy.isAllowed)
 			.get(OrgsServerController.removeMeFromCompany);
 
+		app.route('/api/orgs/:orgId/joinRequest')
+			.all(OrgsPolicy.isAllowed)
+			.put(OrgsServerController.joinRequest);
+
 		// Finish by binding the org middleware
 		app.param('orgId', OrgsServerController.orgByID);
 		app.param('orgSmallId', OrgsServerController.orgByIDSmall);
