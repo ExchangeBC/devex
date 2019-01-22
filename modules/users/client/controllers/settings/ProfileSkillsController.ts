@@ -57,7 +57,7 @@ export class ProfileSkillsController implements IController {
 			this.user.capabilities = this.user.capabilities.filter(cap => cap.code !== capability.code);
 
 			// remove any claimed skills under this capability
-			this.user.capabilitySkills.forEach(this.toggleSkill);
+			capability.skills.forEach(skill => this.userHasSkill(skill) && this.toggleSkill(skill));
 		}
 	}
 
