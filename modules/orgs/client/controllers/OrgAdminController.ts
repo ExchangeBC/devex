@@ -6,6 +6,7 @@ import { ICapabilityResource } from '../../../capabilities/client/services/Capab
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource, IOrgService } from '../services/OrgService';
+import { IUser } from '../../../users/shared/IUserDTO';
 
 export class OrgAdminController implements IController {
 	public static $inject = ['$scope', '$state', 'org', 'OrgService', 'UsersService', 'AuthenticationService', 'Notification', 'ask', 'capabilities', 'dataService', 'TINYMCE_OPTIONS', '$uibModal'];
@@ -121,6 +122,10 @@ export class OrgAdminController implements IController {
 			}
 		}
 	};
+
+	public requestAccepted(requestor: IUser, index: number): void {
+		
+	}
 
 	private async displayInvitationCompleteDialog(): Promise<void> {
 		if (!this.org.emaillist) {

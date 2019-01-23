@@ -1392,3 +1392,8 @@ div.selected {
     cursor: inherit;
     display: block;
 }
+
+ul.member-list {
+  list-style: none;
+  padding-inline-start: 0px;
+}

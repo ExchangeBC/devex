@@ -1,48 +1,66 @@
-<div class="bg-white round p-4">
+<div class="container bg-white round p-4">
   <form name="vm.orgForm" id="vm.orgForm">
-    <div class="row">
+    <div class="row align-items-center" style="height: 300px">
 
       <!-- Pending Requests -->
-      <div class="col-3 text-center p-4 mr-5 border">
+      <div class="col-sm-5 text-center p-4 border h-100">
         <h5>Pending Requests</h5>
-          <ul dnd-list="vm.org.joinRequests">
-            <li ng-repeat="requestor in vm.org.joinRequests" dnd-draggable="requestor" dnd-effect-allowed="move" class="font-weight-bold p-2 border">
+          <ul class="member-list">
+            <li ng-repeat="requestor in vm.org.joinRequests"
+                class="font-weight-bold p-2 border text-left"
+                ng-click="vm.selectMember(requestor)">
                 <avatar-display size="25" url="requestor.profileImageURL"></avatar-display>
                 <name>{{ requestor.displayName }}</name>
             </li>
           </ul>
       </div>
 
+      <!-- Accept button -->
+      <div class="col-sm-2 text-center">
+        <button type="button" class="btn btn-primary">Add to Team <i class="fas fa-arrow-alt-circle-right"></i></button>
+      </div>
+
       <!-- Current Team -->
-      <div class="col-3 text-center p-4 ml-5 border">
-        <h5>Current Team Members</h5>
-        <div ng-repeat="member in vm.org.members" class="font-weight-bold p-2 border">
-          <avatar-display size="25" url="member.profileImageURL"></avatar-display>
-          <name>{{ member.displayName }}</name>
-        </div>
+      <div class="col-sm-5 text-center p-4 border h-100">
+        <h5>Team Members</h5>
+        <ul class="member-list">
+          <li ng-repeat="member in vm.org.members"
+              class="font-weight-bold p-2 border text-left">
+              <avatar-display size="25" url="member.profileImageURL"></avatar-display>
+              <name>{{ member.displayName }}</name>
+          </li>
+        </ul>
+      </div>
+
+     
+    </div>
+
+    <div class="row" style="height: 250px">
+
+      <!-- Member Capabilities -->
+      <div class="col-sm-5 text-center p-4 h-100 border">
+        <h5>Member Detail</h5>
+      </div>
+
+      <!-- Spacer -->
+      <div class="col-sm-2">
+        &nbsp;
       </div>
 
       <!-- Team Capabilities -->
-      <div class="col-3 text-right">
-        <h5>Team Capabilities</h5>
+      <div class="col-sm-5 text-center p-4 h-100 border">
+          <h5>Team Capabilities</h5>
+          <span ng-repeat="capability in vm.capabilities">
+              <label class="label label-sm">
+                <i ng-class="{'far fa-circle text-dark': !vm.orgHasCapability(capability), 'fas fa-check-circle text-success': vm.orgHasCapability(capability)}"></i>
+                &nbsp;{{ capability.name }}
+              </label>
+          </span>
+          <br>
+          <!-- <span ng-repeat="skill in vm.skills"></span> -->
       </div>
     </div>
 
-
-    <div class="row">
-      
-      <!-- Selected member detail view -->
-      <div class="col-6">
-
-      </div>
-
-      <!-- Preferred Skill Summary for Team -->
-      <div class="col-3">
-
-      </div>
-
-
-    </div>
   </form>
 </div>
 
