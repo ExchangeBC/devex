@@ -209,17 +209,17 @@ class OpportunityCreateSpecs extends GebReportingSpec {
 
             and: "Set the title,teaser, descriptio.... and other details of the opportunity "
                 selectProject.value(Project)
- reportInfo("project value is  ${selectProject.value()}"  )
-            reportInfo("URL line 219 is ${driver.currentUrl}"  )
-            oppTitle.value(MyTitleData) //Title
-            oppTeaser.value(Teaser) //teaser
-            oppGithub.value(Github) //Github location
+                reportInfo("project value is  ${selectProject.value()}"  )
+                reportInfo("URL line 219 is ${driver.currentUrl}"  )
+                oppTitle.value(MyTitleData) //Title
+                oppTeaser.value(Teaser) //teaser
+                oppGithub.value(Github) //Github location
 
-            //Now we move to the Background tab  
-            BackgroundTabClick
-            sleep(5000)
-            reportInfo("URL line 225 is ${driver.currentUrl}"  )
-            reportInfo("Description is (2nd time):" + Description  )
+                //Now we move to the Background tab  
+                BackgroundTabClick
+                sleep(5000)
+                reportInfo("URL line 225 is ${driver.currentUrl}"  )
+                reportInfo("Description is (2nd time):" + Description  )
 
     //next line need to be executed, but I amn having problems right now
              //"Add Description" Description

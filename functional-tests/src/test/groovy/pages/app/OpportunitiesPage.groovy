@@ -15,7 +15,6 @@ class OpportunitiesPage extends Page {
 				PublishedOpportunity{$("div",class:"label-title ng-binding",0)}
 				DownloadTerms{$('a[href="/terms/cwu1"]')}
 
-
 		}
 
 

@@ -35,7 +35,8 @@ class HomePage extends Page {
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
 		LearnMoreCWU { $('a[data-automation-id ~="button-codewithus"]',0).click()   }
 		AdminIcon { $('img[class ~="navbar-header-user-image"]')}		
-
+		BrowseOpportunities { $('a[class="btn btn-lg btn-primary mt-5"][href="/opportunities" ]')}
+	
     }
 
     // Since webdriver does not want to click on non-visible links,

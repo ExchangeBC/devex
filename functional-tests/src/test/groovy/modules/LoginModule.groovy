@@ -4,6 +4,7 @@ import geb.spock.GebReportingSpec
 import geb.Module
 import geb.Browser
 import pages.app.HomePage
+import pages.app.SettingsProfilePage
 
 import spock.lang.Unroll
 
@@ -29,9 +30,6 @@ class LoginModule extends Module {
       loginInput { $("input", id:"login_field") }
       userDisplayPicture { $("img", class:"header-profile-image") }
       gitHubLink { $("a", "ng-click":"vm.callOauthProvider('/api/auth/github')")[0] }
-
-     
-    
    
     }
    
@@ -76,6 +74,26 @@ class LoginModule extends Module {
             return true
         }
     }
+
+
+ Boolean "Logout as user"(){
+        
+          def  UserIcon = "https://avatars1.githubusercontent.com/u/46409451?v=4"
+
+        if (!$("img",src:"${UserIcon}"))  {
+            println("Not logged as user")
+            return true
+        }
+        else {
+            $("img",src:"${UserIcon}").click()
+            sleep(1000)
+            //This line click in the Log Out option of the previous drop down list
+            $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()
+            println("Just logged off as user")
+            return true
+        }
+    }
+
 
 
 
