@@ -27,8 +27,7 @@ class ProjectCreatePage extends Page {
             
         
             descriptionFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-project-description"]//@id,"_ifr")]'), 0) }
-        //*[@id="ui-tinymce-1"]
-
+  
     }
 
 

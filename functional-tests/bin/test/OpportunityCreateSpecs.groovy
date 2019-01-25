@@ -204,39 +204,32 @@ class OpportunityCreateSpecs extends GebReportingSpec {
                 sleep(1000)
                 at OpportunitiesAdminCreatePage
                 sleep(1000)
-            // Fill in initial details
-            // We are assuming there is only one project
-            
-            // and it already selected by default
-            // We are in the Header tab
-            //selectProject.project = Project //Project
-reportInfo("URL line 213 is ${driver.currentUrl}"  )
-//selectProject.click()
-//selectProject.find("option").find{ it.value() == Project}.click()
 
-selectProject.value(Project)
- reportInfo("project value is  ${selectProject.value()}"  )
-            reportInfo("URL line 219 is ${driver.currentUrl}"  )
-            oppTitle.value(MyTitleData) //Title
-            oppTeaser.value(Teaser) //teaser
-            oppGithub.value(Github) //Github location
+                reportInfo("URL line 213 is ${driver.currentUrl}"  )
 
-            //Now we move to the Background tab  
-            BackgroundTabClick
-            sleep(5000)
-            reportInfo("URL line 225 is ${driver.currentUrl}"  )
-            reportInfo("Description is (2nd time):" + Description  )
+            and: "Set the title,teaser, descriptio.... and other details of the opportunity "
+                selectProject.value(Project)
+                reportInfo("project value is  ${selectProject.value()}"  )
+                reportInfo("URL line 219 is ${driver.currentUrl}"  )
+                oppTitle.value(MyTitleData) //Title
+                oppTeaser.value(Teaser) //teaser
+                oppGithub.value(Github) //Github location
+
+                //Now we move to the Background tab  
+                BackgroundTabClick
+                sleep(5000)
+                reportInfo("URL line 225 is ${driver.currentUrl}"  )
+                reportInfo("Description is (2nd time):" + Description  )
 
     //next line need to be executed, but I amn having problems right now
-           //  "Add Description" Description
+             //"Add Description" Description
             //Thread.sleep(3000)
 
 
             //Now we move to the Details tab   
             DetailsTabClick
-                //next line need to be executed, but I amn having problems right now
-                //selectOnsite(Onsite) //On site Requirements
-    
+
+
                 selectLocation.value(Location)
                 selectEarn.value(Earn)
 
@@ -246,8 +239,9 @@ selectProject.value(Project)
                 assert proposalDeadLine.attr("name")== "deadline"
 
                 reportInfo("Deadline name:" + proposalDeadLine.attr("name") )
+                reportInfo("Deadline type:" + proposalDeadLine.attr("type") )
                 reportInfo("Deadline value:" + proposalDeadLine.value() )
-                reportInfo("Formatted_deadline value:" + Formatted_start )
+                reportInfo("Formatted_deadline value:" + Formatted_deadline )
 
 
 
@@ -259,7 +253,7 @@ I have the suspicion the ng-not-empty directive is interfeering with geb capabil
 <input type="date" id="deadline" name="deadline" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
 */
 
-            proposalDeadLine.value(deadline)
+            proposalDeadLine.value(Formatted_deadline)
 
             reportInfo("Deadline value -after-:" + proposalDeadLine.value() )
 

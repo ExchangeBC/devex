@@ -5,7 +5,10 @@ plugins {
     id "groovy"
     id "com.energizedwork.webdriver-binaries" version "1.4"
     id "com.energizedwork.idea-base" version "1.2"
+    id 'java'
 }
+
+
 
 ext {
     // The drivers we want to use
@@ -101,10 +104,13 @@ tasks.withType(Test) {
     jvmArgs '-XX:MaxMetaspaceSize=128m'
     testLogging {
         exceptionFormat = 'full'
+        events 'started', 'passed'
     }
     systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
     systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
     systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
+
+
 }
 
 tasks.withType(GroovyCompile) {

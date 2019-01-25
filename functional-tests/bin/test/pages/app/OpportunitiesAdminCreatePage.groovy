@@ -6,6 +6,7 @@ import org.openqa.selenium.Keys
 import geb.Browser
 import extensions.AngularJSAware
 import modules.CheckboxModule
+import modules.AngularValidated
 
 //class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {  
 //	static at = { angularReady && title == "BCDevExchange - New Opportunity" }
@@ -93,7 +94,7 @@ ng-model="vm.opportunity.description" aria-hidden="true" style="display: none;">
                 }
 
     void "Add Description"(String desc){
-            //waitFor { angularReady }
+            waitFor { angularReady }
             withFrame( waitFor { descriptionOppFrame } ) {
               mceBody << desc
           }

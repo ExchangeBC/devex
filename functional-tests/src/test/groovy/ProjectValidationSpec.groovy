@@ -19,7 +19,7 @@ import spock.lang.Title
 import geb.spock.GebReportingSpec
 
 
-@Title("Create and publish projects, programs, and opportunities")
+@Title("Check the user can not create projects with Invalid names")
 class ProjectValidationSpec extends GebReportingSpec {
 
 
