@@ -26,6 +26,7 @@ class HomePage extends Page {
 		AboutLink { PositionAndClick("a","about") }
 		AccessibilityLink { PositionAndClick("a","accessibility") }
 		API { PositionAndClick("a","api") }
+		AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
 		BrowseOpportunities { $('a[class="btn btn-lg btn-primary mt-5"][href="/opportunities" ]')}
 		CodewithusLink { $(('a[data-automation-id ~= "button-codewithus"]'), 0).click() }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
@@ -41,6 +42,7 @@ class HomePage extends Page {
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SprintwithusLink { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0).click() }
+		UnreadMessageIcon{$("span",'data-automation-id':"unreadMessageIcon")}//Actually this is part of the header and perhaps should move to a module
 
     }
 

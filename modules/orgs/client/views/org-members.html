@@ -7,10 +7,10 @@
 
         <h5>Invite team members</h5>
         <div class="input-group">
-          <input class="input w-75" type="text" placeholder="name@example.com, name@example.com"
+          <input data-automation-id="inviteTeamMembers" class="input w-75" type="text" placeholder="name@example.com, name@example.com"
             ng-model="vm.emailList">
           <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
+            <button data-automation-id="btnSendInvitations" class="btn btn-primary" type="button" ng-click="vm.addMembers()">Send invitations</button>
           </span>
         </div>
         <span class="small text-black-50">Add multiple emails separated with a comma.</span>

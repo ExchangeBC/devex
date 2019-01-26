@@ -36,21 +36,21 @@
 
       <uib-tabset>
         <uib-tab index="0">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="businessInfoTab">
             Business Info
           </uib-tab-heading>
           <div ng-include="'/modules/orgs/client/views/org-main.html'"></div>
         </uib-tab>
 
         <uib-tab index="1">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="teamMembersTab">
             Team Members
           </uib-tab-heading>
           <div ng-include="'/modules/orgs/client/views/org-members.html'"></div>
         </uib-tab>
 
         <uib-tab index="2">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="termsTab">
             Terms
           </uib-tab-heading>
           <div ng-include="'/modules/orgs/client/views/org-terms.html'"></div>
@@ -60,9 +60,9 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary float-right">
+            <button data-automation-id="saveCompanyChanges" ng-click="vm.save(vm.orgForm.$valid)" class="btn btn-primary float-right">
               <i class="fas fa-save"></i> Save Changes</button>
-            <button class="btn btn-text-only float-left" ng-click="vm.remove()">
+            <button data-automation-id="deleteCompanyProfile" class="btn btn-text-only float-left" ng-click="vm.remove()">
               <i class="fas fa-trash"></i> Delete Company Profile</button>
           </div>
         </div>

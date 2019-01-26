@@ -145,7 +145,7 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             println("URL line 136 is ${driver.currentUrl}"  )
             DownloadTerms.click()
             sleep(2000)
-      then: "I check the downloaded document matches the one stored in this system"
+      then: "I check the downloaded document matches the one stored in this test"
             def  ComparisonOK = CompareFileContents()
             assert ComparisonOK
       then: "Click on the Authenticate button"
