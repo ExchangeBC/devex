@@ -58,7 +58,7 @@
           <ul class="dropdown-menu" role="menu" aria-labelledby="single-button" uib-dropdown-menu>
             <li class="dropdown-item"><a href="">{{vm.user.displayName}}</a></li>
             <li class="dropdown-divider"></li>
-            <li class="dropdown-item"><a ng-repeat="item in vm.accountMenu.items" ui-sref="{{item.state}}" ng-bind="item.title"></a></li>
+            <li class="dropdown-item" ng-repeat="item in vm.accountMenu.items"><a ui-sref="{{item.state}}" ng-bind="item.title"></a></li>
             <li class="dropdown-item"><a href="/api/auth/signout" target="_self">Sign Out</a></li>
           </ul>
         </li>
