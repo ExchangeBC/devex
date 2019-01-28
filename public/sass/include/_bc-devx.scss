@@ -416,10 +416,6 @@ form-title {
   background: linear-gradient($theme-primary, darken($theme-primary, 5%));
 }
 
-// .text-primary {
-//   color: $theme-primary;
-// }
-
 .no-gutter > [class*='col-'] {
   padding-right: 0;
   padding-left: 0;
@@ -1396,4 +1392,58 @@ div.selected {
 ul.member-list {
   list-style: none;
   padding-inline-start: 0px;
+}
+
+.hover-area .hidden-button > button {
+  @media (hover: none) {
+    visibility: visible;
+  }
+  @media (hover: hover) {
+    visibility: hidden;
+  }
+}
+.hover-area:hover .hidden-button > button {
+  visibility: visible;
+}
+.member {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: .75rem;
+  margin: .75rem;
+  border-radius: 2rem;
+}
+.member:hover {
+  background-color: #f0f2f4;
+  cursor: pointer;
+}
+div.table-wrapper {
+  height: 200px;
+}
+table, th, td {
+  font-family: sans-serif;
+}
+table.company-list > tbody > tr > td {
+  vertical-align: middle;
+}
+table.company-list > tbody > tr > th {
+  vertical-align: middle;
+}
+td.company-name {
+  max-width: 300px;
+}
+td.button-cell {
+  width: 70px;
+}
+td.members-cell {
+  min-width: 60px;
+}
+body table img {
+  max-width: none; 
+}
+div.members-list {
+  min-height: 150px;
+}
+img.edit-image {
+  cursor: pointer;
 }

@@ -453,9 +453,17 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		const message = 'WARNING: This will cause any calculations or entered data from the last stage to be deleted.';
 		const choice = await this.ask.yesNo(message);
 		if (choice) {
-			if (this.opportunity.evaluationStage === this.stages.PRICE || this.opportunity.evaluationStage === this.stages.ASSIGNED) {
+			if (this.opportunity.evaluationStage === this.stages.PRICE) {
 				this.opportunity.evaluationStage = this.stages.INTERVIEW_SCORES;
+			} else if (this.opportunity.evaluationStage === this.stages.ASSIGNED) {
+				const assignedProposal = this.proposals.find(proposal => proposal.status === 'Assigned');
+				if (assignedProposal) {
+					const index = this.proposals.indexOf(assignedProposal);
+					const updatedProposal = await this.ProposalService.unassignswu({ proposalId: assignedProposal._id }).$promise;
+					this.proposals.splice(index, 1, updatedProposal);
+				}
 				this.opportunity.proposal = null;
+				this.opportunity.evaluationStage = this.stages.PRICE;
 			} else if (this.opportunity.evaluationStage === this.stages.FAIL) {
 				this.opportunity.evaluationStage = this.stages.CODE_SCORES;
 			} else {
@@ -482,29 +490,39 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		const message = 'WARNING: This will reset the current evaluation and any calculations or entered data will be lost.  Proceed?';
 		const choice = await this.ask.yesNo(message);
 		if (choice) {
+			// if a proposal was assigned, unassign it
+			const assignedProposal = this.proposals.find(proposal => proposal.status === 'Assigned');
+			if (assignedProposal) {
+				const index = this.proposals.indexOf(assignedProposal);
+				const updatedProposal = await this.ProposalService.unassignswu({ proposalId: assignedProposal._id }).$promise;
+				this.proposals.splice(index, 1, updatedProposal);
+			}
+
 			this.opportunity.evaluationStage = this.stages.NEW;
 			this.opportunity.teamQuestionGradingType = this.gradingTypes.LINEAR;
 			this.opportunity.proposal = null;
-			this.proposals.forEach(proposal => {
+			this.proposals.forEach(async (proposal, index) => {
 				proposal.scores.skill = 0;
 				proposal.scores.question = 0;
 				proposal.scores.codechallenge = 0;
 				proposal.scores.interview = 0;
 				proposal.scores.total = 0;
 				proposal.scores.price = 0;
-				proposal.isAssigned = false;
 				proposal.screenedIn = false;
 				proposal.teamQuestionResponses.forEach(response => {
 					response.rejected = false;
 					response.score = 0;
 					response.rank = 0;
 				});
-				proposal.status = 'Submitted';
 			});
 
 			this.totalAndSort(this.proposals);
 			this.proposals = await this.saveProposals(this.proposals);
 			this.opportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
+
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Evaluation reset'
+			})
 			this.initializeEvaluation();
 		}
 	}
@@ -528,11 +546,13 @@ export class OpportunityEvaluationDirectiveController implements IController {
 	 * @param {Proposal} proposal
 	 */
 	public async assignOpportunity(proposal: IProposalResource): Promise<void> {
+		const proposalIndex = this.proposals.indexOf(proposal);
 		const message = `Assign this opportunity to ${proposal.businessName}?`;
 		const choice = await this.ask.yesNo(message);
 		if (choice) {
 			try {
 				const updatedProposal = await this.ProposalService.assignswu({ proposalId: proposal._id }).$promise;
+				this.proposals.splice(proposalIndex, 1, updatedProposal);
 				this.opportunity.evaluationStage = this.stages.ASSIGNED;
 				this.opportunity.proposal = updatedProposal;
 				this.opportunity = await this.OpportunitiesService.update(this.opportunity).$promise;

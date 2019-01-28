@@ -1,5 +1,8 @@
-<div class="row my-4">
-  <div class="col px-0">
+<div class="row mb-4">
+  <div class="col-sm-9">
+    <h3>Companies</h3>
+  </div>
+  <div class="col-sm-3 d-none d-sm-block">
     <button ng-if="vm.userCanAdd" class="btn btn-primary mx-0 float-right" ui-sref="orgs.create()" data-automation-id="button-register-a-company"
       title="Register a Company">
       <i class="fas fa-plus"></i> Register a Company
@@ -7,8 +10,65 @@
   </div>
 </div>
 
-<div class="card-deck">
-  <div class="card my-3" ng-repeat="org in vm.orgs">
-    <org-card org="org"></org-card>
+<!-- Search field to filter the list... -->
+<div class="row my-4">
+  <div class="col-sm-6">
+    <input  class="form-control" 
+            type="text" 
+            name=""
+            ng-model="vm.searchTerm" 
+            placeholder="Search companies..."
+            ng-change="vm.figureOutItemsToDisplay()">
+  </div>
+  <div class="col-sm-6">
+      <span class="font-italic font-weight-light small float-right"><i class="fas fa-shield-alt"></i>&nbsp;&nbsp;Sprint With Us Qualified</span><br>
+      <span class="font-italic font-weight-light small float-right"><i class="fas fa-trophy"></i>&nbsp;&nbsp;Sprint With Us Awardee</span>
   </div>
 </div>
+
+<div class="table-responsive">
+  <table class="table table-hover company-list">
+      <tbody>
+        <tr ng-repeat="org in vm.pagedItems" class="hover-area">
+          <th><img class="rounded" width="30" height="30" src="{{ org.orgImageURL }}"></th>
+          <td class="font-weight-bold text-truncate company-name">{{ org.name }}</td>
+          <td class="members-cell"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
+          <td><i ng-if="org.metRFQ" title="Sprint With Us Qualified" class="fas fa-shield-alt"></i></td>
+          <td><i ng-if="org.awardedContractCount > 0" title="Sprint With Us Awardee" class="fas fa-trophy"></i></td>
+          <td class="button-cell">
+            <div ng-if="vm.canJoinOrg(org)" class="hidden-button">
+              <button class="btn btn-text-only label secondary" ng-click="vm.sendJoinRequest(org)">
+              <i class="fas fa-sign-in-alt"></i>&nbsp;Join
+              </button>
+            </div>
+            <div ng-if="vm.isUserMember(org) && !vm.userIsOrgAdmin(org)">
+              <button class="btn btn-text-only label secondary">
+                <i class="fas fa-user"></i>&nbsp;Member
+              </button>
+            </div>
+            <div ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" ui-sref="orgs.view({ orgId: org._id })">
+              <button class="btn btn-text-only label secondary">
+                <i class="fas fa-cog"></i>&nbsp;Admin
+              </button>
+            </div>
+            <div ng-if="vm.hasPendingRequest(org)">
+              <button class="btn btn-text-only label secondary">
+              <i class="fas fa-clock"></i>&nbsp;Pending
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+</div>
+
+<div ng-if="vm.filteredItems.length > vm.itemsPerPage" class="row">
+  <div class="col-sm-12">
+      <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.filteredItems.length" ng-model="vm.currentPage"
+      ng-change="vm.figureOutItemsToDisplay()"></ul>
+  </div>
+</div>
+
+
+
+

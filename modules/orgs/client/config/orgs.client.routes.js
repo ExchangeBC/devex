@@ -92,34 +92,6 @@
 								return CapabilitiesService.query().$promise;
 							}
 						]
-					}
-				})
-				// -------------------------------------------------------------------------
-				//
-				// the base for editing
-				//
-				// -------------------------------------------------------------------------
-				.state('orgadmin', {
-					url: '/orgadmin/:orgId',
-					templateUrl: '/modules/orgs/client/views/org-edit.html',
-					controller: 'OrgAdminController',
-					controllerAs: 'vm',
-					resolve: {
-						org: [
-							'$stateParams',
-							'OrgService',
-							function($stateParams, OrgService) {
-								return OrgService.get({
-									orgId: $stateParams.orgId
-								}).$promise;
-							}
-						],
-						capabilities: [
-							'CapabilitiesService',
-							function(CapabilitiesService) {
-								return CapabilitiesService.query().$promise;
-							}
-						]
 					},
 					data: {
 						roles: ['user', 'admin']

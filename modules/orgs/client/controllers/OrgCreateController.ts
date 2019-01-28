@@ -45,7 +45,7 @@ export class OrgCreateController implements IController {
 				message: '<i class="fas fa-check-circle"></i> Company saved successfully'
 			});
 
-			this.$state.go('orgadmin', { orgId: newOrg._id });
+			this.$state.go('orgs.view', { orgId: newOrg._id });
 		} catch (error) {
 			this.handleError(error);
 			return;

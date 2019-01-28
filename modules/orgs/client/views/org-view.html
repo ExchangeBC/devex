@@ -9,38 +9,172 @@
 </div>
 
 <section>
-  <div class="container border">
-    <div class="row" ng-if="vm.canEdit">
-      <div class="col"></div>
-      <button type="button" class="btn btn-text-only float-right" ui-sref="orgadmin({orgId:vm.org._id})" title="Manage Company">
-        <i class="fas fa-2x fa-cog"></i>
-      </button>
-    </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <img class="rounded" src="/{{vm.org.orgImageURL}}" height="75" width="75">
-      </div>
-    </div>
-    <div class="row my-4">
-      <div class="col text-center">
-        <h2 ng-bind="vm.org.name"></h2>
-        <h4 class="my-4" ng-if="vm.org.website">
-          <a href="{{vm.org.website}}" target="_blank" rel="nofollow">
-            <i class="fas fa-external-link-alt"></i>Company Website
-          </a>
-        </h4>
-      </div>
-    </div>
-    <hr>
-    <div class="row py-3">
-      <div class="col text-center">
+  <div class="container">
 
+    <div class="row my-2">
+      <div class="col">
+        <div class="align-items-center">
+          <div class="float-left" ng-if="(vm.isOrgMember() || vm.isAdmin()) && vm.isOrgCapable() && vm.org.isAcceptedTerms">
+            <i class="fas fa-shield-alt"></i> 
+            <span class="font-italic font-weight-light">&nbsp;Sprint With Us</span> Qualified
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-between">
+      <div class="col col-xs-12 my-5 d-flex">
+        <edit-org-image org="vm.org"></edit-org-image>
+        <div class="d-flex align-items-start hover-area">
+          <div class="d-flex align-items-center mb-3">
+            <div>
+              <h3 class="m-0" ng-bind="vm.org.name"></h3>
+              <a class="text-truncate" ng-if="vm.org.website" href="{{vm.org.website}}" target="_blank" rel="nofollow">{{vm.org.website}}</a>
+              <a ng-if="!vm.org.website && (vm.isOrgAdmin() || vm.isAdmin())" ng-click="vm.editOrgInfo()" href="">Add website</a>
+            </div>
+          </div>
+          <!-- If user is a company admin, display this button to click into a modal where they can edit: Company Name, Company Logo, or Company Website -->
+          <div ng-if="vm.isOrgAdmin() || vm.isAdmin()" class="ml-5 hidden-button">
+            <button class="btn btn-text-only" ng-click="vm.editOrgInfo()" title="Edit">
+              <i class="fas fa-pencil-alt"></i> Edit
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Business info -->
+      <div ng-if="vm.isOrgMember() || vm.isAdmin()" class="col col-xs-12 my-3">
+        <div class="hover-area d-flex align-items-start">
+          <div>
+            <div>{{vm.org.address}}</div>
+            <div class="mb-3">{{vm.org.city}} {{vm.org.postalcode}}</div>
+            <div class="mb-3"><span class="text-muted">Business Registration No.:</span> {{vm.org.businessNumber}}</div>
+            <div class="text-muted">Company Contact:</div>
+            <div>{{vm.org.contactName}}</div>
+            <div>{{vm.org.contactPhone}}</div>
+            <div>{{vm.org.contactEmail}}</div>
+          </div>
+          <div ng-if="vm.isOrgAdmin() || vm.isAdmin()" class="ml-5 hidden-button">
+            <button class="btn btn-text-only" ng-click="vm.editOrgContact()" title="Edit">
+              <i class="fas fa-pencil-alt"></i>  Edit
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Members section; should only appear if user is logged in and is a company admin -->    
+<section class="bg-light" ng-if="vm.isOrgAdmin() || vm.isAdmin()">
+  <div class="container">
+    <div class="row d-flex justify-content-between">
+      <!-- Member requests -->
+      <div class="col-md-12 col-lg-5 my-3">
+        <h4>Requests</h4>
+        <div ng-if="vm.org.joinRequests.length > 0">
+          <p>These people want to affiliate with your company.</p>
+          <ul class="list-group">
+            <li ng-repeat="member in vm.org.joinRequests" 
+                class="list-group-item d-flex w-100 align-items-center member"
+                ng-click="vm.viewMemberDetails(member, true)">
+  
+              <avatar-display url="member.profileImageURL" size="40"></avatar-display>
+              <name>{{member.displayName}}</name>
+              <div class="float-right ml-auto">
+                <button type="button" class="btn btn-text-only" ng-click="vm.acceptMember(member); $event.stopPropagation();" title="Add member">
+                  <i class="far fa-2x fa-check-circle"></i>
+                </button>
+                <button type="button" class="btn btn-text-only" ng-click="vm.declineMember(member); $event.stopPropagation();" title="Decline request">
+                  <i class="far fa-2x fa-times-circle"></i>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div ng-if="vm.org.joinRequests.length === 0">
+          <p>There are no outstanding requests to join {{ vm.org.name }}.</p>
+        </div>
+      </div>
+      <!--END // Member requests -->
+
+      <!-- Members list -->
+      <div class="col-md-12 col-lg-6 my-3">
+        <h4>Members</h4>
+        <!-- Search field to filter the members list... -->
+        <input class="form-control" 
+                type="text" 
+                ng-model="vm.searchTerm" 
+                placeholder="Find someone...">
+        
+        <div class="members-list p-0">
+          <div class="member py-2" ng-repeat="member in vm.org.members | filter: { displayName: vm.searchTerm }" ng-click="vm.viewMemberDetails(member, false)">
+            <avatar-display url="member.profileImageURL" size="25"></avatar-display>
+            <name>{{member.displayName}}</name>
+          </div>
+        </div>
+      </div>
+      <!-- END // Members list -->
+    </div>
+  </div><!--END // Container -->
+</section><!--END // Section -->
+      
+
+<section>
+  <div class="container">
+    <!--Capabilities & Skills -->
+    <div ng-if="vm.isOrgMember() || vm.isOrgAdmin() || vm.isAdmin()" class="row my-5">
+      <div class="col">
+        <h4>Capabilities &amp; Skills</h4>
+
+        <div ng-if="vm.isOrgCapable()" class="alert alert-success">
+          <i class="fas fa-shield-alt"></i> 
+          <span class="font-weight-bold"><span class="font-italic">Sprint With Us</span> Qualified!</span>  Your company has all of the capabilities to apply on <span class="font-italic">Sprint With Us</span> opportunities.
+        </div>
+
+        <div ng-if="!vm.isOrgCapable()" class="alert alert-warning">
+          Before you can apply on <span>Sprint With Us</span> opportunities, you need to add members who collectively possess all of the following capabilities.
+        </div>
+
+        <!--Capabilities list-->
         <label-list>
-          <label ng-repeat="capability in vm.org.capabilities" class="label label-cap-default {{capability.labelClass}}"><i
-              class="fas fa-circle"></i> {{capability.name}}</label>
+          <label ng-repeat="capability in vm.capabilities" class="label label-cap-default">
+            <span ng-if="!vm.orgHasCapability(capability)"><i class="far fa-circle text-dark"></i></span>
+            <span ng-if="vm.orgHasCapability(capability)"><i class="fas fa-check-circle text-success"></i></span>
+            &nbsp;{{capability.name}}
+          </label>
+          <br>
           <label ng-repeat="capabilitySkill in vm.org.capabilitySkills" class="label label-preferred-skill-selected mx-1">{{capabilitySkill.name}}</label>
         </label-list>
       </div>
     </div>
-  </div>
+
+    <!--SWU Terms-->
+    <div ng-if="vm.isOrgAdmin() || vm.isAdmin()" class="row my-5">
+      <div class="col">
+        <h4><span class="font-italic">Sprint With Us</span> Terms</h4>
+        <!--Display this div if company has not yet accepted the terms-->
+        <div ng-if="!vm.org.isAcceptedTerms">
+          <p>To apply on <span class="font-italic">Sprint With Us</span> opportunities, you must agree to <a href="/terms/rfq1" target="_blank">the terms of the Request for Qualifications</a>.</p>
+          <div class="d-flex align-items-center">
+            <button class="btn btn-primary mr-4" ng-click="vm.acceptTerms()">Accept</button>
+            <div class="small text-muted">By clicking Accept, you are acknowledging that you have read, fully understand, and agree to all the terms, conditions and procedures.</div>
+          </div>
+        </div>
+        <!-- Display this paragraph once the company has accepted the terms-->
+        <!-- We only started tracking the date of term acceptance in Jan 2019.  So if the tracking date is not present, just show creation date for the org -->
+        <p ng-if="vm.org.isAcceptedTerms && !vm.org.acceptedTermsDate" class="text-muted">You accepted the <a href="/terms/rfq1" target="_blank">terms</a> on {{ vm.org.created | date : longDate }}</p>
+        <p ng-if="vm.org.isAcceptedTerms && vm.org.acceptedTermsDate" class="text-muted">You accepted the <a href="/terms/rfq1" target="_blank">terms</a> on {{ vm.org.acceptedTermsDate | date : longDate }}</p>
+      </div>
+    </div>
+
+    <div ng-if="vm.isOrgAdmin() || vm.isAdmin()" class="row">
+      <div class="col m-0 p-0">
+          <button class="btn btn-danger float-left" ng-click="vm.removeOrg()">
+            <i class="fas fa-trash"></i>&nbsp;Delete Company Profile
+          </button>
+      </div>
+    </div>
+  </div><!--End container-->
 </section>

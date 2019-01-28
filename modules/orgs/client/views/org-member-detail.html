@@ -1,0 +1,32 @@
+<div class="bg-white rounded p-4 container">
+    <div class="row">
+        <div class="col">
+            <button type="button" class="close float-right" ng-click="vm.close()" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-sm-12">
+            <avatar-display url="vm.member.profileImageURL" size="60"></avatar-display>
+            <name class="font-weight-bold">{{ vm.member.displayName }}</name>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-sm-12">
+            <label-list>
+                <label ng-repeat="capability in vm.member.capabilities" class="label label-cap-default {{ capability.labelClass }}">
+                    <i class="fas fa-circle"></i>&nbsp;{{capability.name}}
+                </label>
+                <br>
+                <label ng-repeat="capabilitySkill in vm.member.capabilitySkills" class="label label-preferred-skill-selected mx-1">{{capabilitySkill.name}}</label>
+            </label-list>
+        </div>
+    </div>
+    <div class="row" ng-if="!vm.isRequest">
+        <div class="col">
+            <button type="button" class="btn btn-danger float-right" ng-click="vm.removeMember()">Remove from team</button>
+        </div>
+    </div>
+
+</div>

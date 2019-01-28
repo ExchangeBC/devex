@@ -1,11 +1,18 @@
 'use strict';
 
 import angular, { IPromise, resource } from 'angular';
+import { IUserResource } from '../../../users/client/services/UsersService';
 import { IOrg } from '../../shared/IOrgDTO';
 
 interface IOrgServiceParams {
 	orgId?: string;
 	userId?: string;
+}
+
+interface IOrgRequestResponse extends resource.IResource<IOrgRequestResponse> {
+	user: IUserResource,
+	org: IOrgResource,
+	$promise: IPromise<IOrgRequestResponse>
 }
 
 export interface IOrgResource extends resource.IResource<IOrgResource>, IOrg {
@@ -22,7 +29,9 @@ export interface IOrgService extends resource.IResourceClass<IOrgResource> {
 	removeUser(params: IOrgServiceParams): IOrgResource;
 	addMeToOrg(params: IOrgServiceParams): IOrgResource;
 	removeMeFromOrg(params: IOrgServiceParams): IOrgResource;
-	joinRequest(params: IOrgServiceParams): IOrgResource;
+	joinRequest(params: IOrgServiceParams): IOrgRequestResponse;
+	acceptRequest(params: IOrgServiceParams): IOrgRequestResponse;
+	declineRequest(params: IOrgServiceParams): IOrgRequestResponse;
 }
 
 angular.module('orgs.services').factory('OrgService', [
@@ -80,6 +89,24 @@ angular.module('orgs.services').factory('OrgService', [
 			url: '/api/orgs/:orgId/joinRequest'
 		};
 
+		const acceptRequestAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			params: {
+				orgId: '@orgId',
+				userId: '@userId'
+			},
+			url: '/api/orgs/:orgId/acceptRequest/:userId'
+		};
+
+		const declineRequestAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			params: {
+				orgId: '@orgId',
+				userId: '@userId'
+			},
+			url: '/api/orgs/:orgId/declineRequest/:userId'
+		}
+
 		return $resource(
 			'/api/orgs/:orgId',
 			{
@@ -94,7 +121,9 @@ angular.module('orgs.services').factory('OrgService', [
 				removeUser: removeUserAction,
 				addMeToOrg: addMeToOrgAction,
 				removeMeFromOrg: removeMeFromOrgAction,
-				joinRequest: joinRequestAction
+				joinRequest: joinRequestAction,
+				acceptRequest: acceptRequestAction,
+				declineRequest: declineRequestAction
 			}
 		) as IOrgService;
 	}

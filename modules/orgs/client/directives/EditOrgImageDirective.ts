@@ -41,7 +41,8 @@ angular.module('orgs').directive('editOrgImage', () => {
 		},
 		controllerAs: 'wsx',
 		restrict: 'EAC',
-		template: '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
+		// template: '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
+		template: '<img class="mr-3 rounded edit-image" uib-tooltip="Click to edit" src="/{{wsx.org.orgImageURL}}" height="60" width="60" ng-click="wsx.edit()">',
 		controller: EditOrgImageDirectiveController
 	}
 });

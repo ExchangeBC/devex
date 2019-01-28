@@ -1,31 +1,329 @@
 'use strict';
 
-import angular, { IController, ISCEService } from 'angular';
+import angular, { IController, IScope, ui, uiNotification } from 'angular';
+import { IStateService } from 'angular-ui-router';
+import _ from 'lodash';
+import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
+import { ICapability } from '../../../capabilities/shared/ICapabilityDTO';
+import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
-import { IOrgResource } from '../services/OrgService';
+import { IOrgResource, IOrgService } from '../services/OrgService';
 
 export class OrgViewController implements IController {
-	public static $inject = ['org', 'AuthenticationService'];
+	public static $inject = ['$scope', 'org', 'AuthenticationService', 'capabilities', 'OrgService', 'Notification', '$uibModal', 'ask', '$state'];
 
 	public user: IUser;
 	public canEdit: boolean;
+	public org: IOrgResource;
+	public orgCapabilities: ICapability[];
+	public orgSkills: ICapabilitySkill[];
 
-	constructor(public org: IOrgResource, private AuthenticationService: IAuthenticationService) {
+	constructor(
+		private $scope: IScope,
+		org: IOrgResource,
+		private AuthenticationService: IAuthenticationService,
+		public capabilities: ICapabilityResource[],
+		private OrgService: IOrgService,
+		private Notification: uiNotification.INotificationService,
+		private $uibModal: ui.bootstrap.IModalService,
+		private ask: any,
+		private $state: IStateService
+	) {
+		this.refreshOrg(org);
 		this.user = this.AuthenticationService.user;
 		this.canEdit = this.isAdmin() || this.isOrgAdmin() || this.isOrgOwner();
 	}
 
-	private isAdmin(): boolean {
+	public isOrgMember(): boolean {
+		return this.isOrgAdmin() || this.isOrgOwner() || this.org.members.map(member => member._id).includes(this.user._id);
+	}
+
+	public isGov(): boolean {
+		return this.user && this.user.roles.includes('gov');
+	}
+
+	public isAdmin(): boolean {
 		return this.user && this.user.roles.includes('admin');
 	}
 
-	private isOrgAdmin(): boolean {
+	public isOrgAdmin(): boolean {
 		return this.user && this.org.admins && this.org.admins.map(admin => admin._id).includes(this.user._id);
 	}
 
-	private isOrgOwner(): boolean {
+	public isOrgOwner(): boolean {
 		return this.user && this.org.owner && this.user._id === this.org.owner._id;
+	}
+
+	public orgHasCapability(capability: ICapability): boolean {
+		const hasCap = this.orgCapabilities.map(cap => cap.code).includes(capability.code);
+		return hasCap;
+	}
+
+	public isOrgCapable(): boolean {
+		let isCapable = true;
+		this.capabilities.forEach(capability => {
+			if (!this.orgCapabilities.map(cap => cap.code).includes(capability.code)) {
+				isCapable = false;
+			}
+		});
+		return isCapable;
+	}
+
+	// Accepts a join request by adding the requesting member to the team and saving the org
+	public async acceptMember(member: IUser): Promise<void> {
+		const question = `Confirm addition of ${member.displayName} to ${this.org.name}`;
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			try {
+				const joinRequestResponse = await this.OrgService.acceptRequest({ orgId: this.org._id, userId: member._id }).$promise;
+				const updatedOrg = new this.OrgService(joinRequestResponse.org);
+				this.refreshOrg(updatedOrg);
+				this.Notification.success({
+					message: `<i class="fas fa-check-circle"></i> ${member.displayName} is now a member of ${this.org.name}`
+				});
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	}
+
+	// Declines a join requests by deleting the request and saving the org
+	public async declineMember(member: IUser): Promise<void> {
+		const question = `Confirm request declination for ${member.displayName}`;
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			try {
+				const joinRequestResponse = await this.OrgService.declineRequest({ orgId: this.org._id, userId: member._id }).$promise;
+				const updatedOrg = new this.OrgService(joinRequestResponse.org);
+				this.refreshOrg(updatedOrg);
+				this.Notification.success({
+					message: `<i class="fas fa-check-circle"></i> Request declined`
+				});
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	}
+
+	public async acceptTerms(): Promise<void> {
+		try {
+			this.org.isAcceptedTerms = true;
+			this.org.acceptedTermsDate = new Date();
+			const updatedOrg = await this.OrgService.update(this.org).$promise;
+			this.refreshOrg(updatedOrg);
+			this.Notification.success({
+				message: `<i class="fas fa-check-circle"></i> Terms accepted`
+			});
+		} catch (error) {
+			this.handleError(error);
+		}
+	}
+
+	// Open a modal to view team member details (also used for requesting users)
+	public async viewMemberDetails(member: IUser, isRequest: boolean): Promise<void> {
+		if (!this.isOrgAdmin && !this.isOrgOwner && !this.isAdmin) {
+			return;
+		}
+
+		this.$uibModal.open({
+			size: 'md',
+			templateUrl: '/modules/orgs/client/views/org-member-detail.html',
+			controllerAs: 'vm',
+			resolve: {
+				member: () => angular.copy(member),
+				isRequest: () => isRequest,
+				parent: () => this
+			},
+			controller: [
+				'$uibModalInstance',
+				'member',
+				'isRequest',
+				'parent',
+				function($uibModalInstance: ui.bootstrap.IModalInstanceService, member: IUser, isRequest: boolean, parent: OrgViewController) {
+					const vm = this;
+					vm.member = member;
+					vm.isRequest = isRequest;
+					vm.parent = parent;
+
+					vm.close = (): void => {
+						$uibModalInstance.close({});
+					}
+
+					vm.removeMember = async (): Promise<void> => {
+						await vm.parent.removeMember(vm.member);
+						$uibModalInstance.close({});
+					}
+				}
+			]
+		});
+	}
+
+	// Open a modal for editing the org name and/or logo image
+	public async editOrgInfo(): Promise<void> {
+		if (!this.isOrgAdmin && !this.isOrgOwner && !this.isAdmin) {
+			return;
+		}
+
+		const modalInstance = this.$uibModal.open({
+			size: 'md',
+			templateUrl: '/modules/orgs/client/views/org-edit-name.html',
+			controllerAs: 'vm',
+			resolve: {
+				org: () => angular.copy(this.org)
+			},
+			controller: [
+				'$uibModalInstance',
+				'org',
+				'OrgService',
+				function($uibModalInstance: ui.bootstrap.IModalServiceInstance, org: IOrgResource, OrgService: IOrgService) {
+					const vm = this;
+					vm.org = org;
+
+					vm.save = async (): Promise<void> => {
+
+						// put together the full website from the protocol and address
+						if (vm.org.websiteAddress) {
+							vm.org.website = vm.org.websiteProtocol + vm.org.websiteAddress;
+						} else {
+							vm.org.website = '';
+						}
+
+						const updatedOrg = await OrgService.update(org).$promise;
+						$uibModalInstance.close({
+							updatedOrg
+						});
+					}
+
+					vm.close = (): void => {
+						$uibModalInstance.close({});
+					};
+				}
+			]
+		});
+
+		// If the reponse includes an updated org, refresh the parent view
+		const returnedData = await modalInstance.result;
+		if (returnedData.updatedOrg) {
+			this.refreshOrg(returnedData.updatedOrg);
+		}
+	}
+
+	public async editOrgContact(): Promise<void> {
+		if (!this.isOrgAdmin && !this.isOrgOwner && !this.isAdmin) {
+			return;
+		}
+
+		const modalInstance = this.$uibModal.open({
+			size: 'md',
+			templateUrl: '/modules/orgs/client/views/org-edit-contact.html',
+			controllerAs: 'vm',
+			resolve: {
+				org: () => angular.copy(this.org),
+				parent: () => this
+			},
+			controller: [
+				'$uibModalInstance',
+				'org',
+				'OrgService',
+				function($uibModalInstance: ui.bootstrap.IModalServiceInstance, org: IOrgResource, OrgService: IOrgService) {
+					const vm = this;
+					vm.org = org;
+
+					vm.save = async (): Promise<void> => {
+						const updatedOrg = await OrgService.update(org).$promise;
+						$uibModalInstance.close({
+							updatedOrg
+						});
+					}
+
+					vm.close = (): void => {
+						$uibModalInstance.close({});
+					};
+				}
+			]
+		});
+
+		// If the reponse includes an updated org, refresh the parent view
+		const returnedData = await modalInstance.result;
+		if (returnedData.updatedOrg) {
+			this.refreshOrg(returnedData.updatedOrg);
+		}
+	}
+
+	public async removeMember(member: IUser): Promise<void> {
+		const question = `Please confirm you want to remove ${member.displayName} from the company`;
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			try {
+				const updatedOrg = await this.OrgService.removeUser({ orgId: this.org._id, userId: member._id }).$promise;
+				this.refreshOrg(updatedOrg);
+				this.Notification.success({
+					message: `<i class="fas fa-check-circle"></i> ${member.displayName} has been removed`
+				});
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	}
+
+	public async removeOrg(): Promise<void> {
+		const question = 'Please confirm you want to delete your company.  This will invalidate any submitted proposals and team members will no longer be associated.';
+		const choice = await this.ask.yesNo(question);
+		if (choice) {
+			try {
+				// delete the org
+				await this.org.$remove();
+
+				// notify and exit
+				this.Notification.success({
+					message: '<i class="fas fa-check-circle"></i> Company deleted'
+				});
+
+				this.$state.go('orgs.list');
+			} catch (error) {
+				this.handleError(error);
+			}
+		}
+	}
+
+	private refreshOrg(newOrg: IOrgResource): void {
+		this.org = newOrg;
+		this.refreshOrgCapabilities();
+		this.parseWebsite();
+	}
+
+	private refreshOrgCapabilities(): void {
+		const memberCaps = this.org.members ? _.flatten(this.org.members.map(member => member.capabilities)) : [];
+		this.orgCapabilities = _.uniqWith(memberCaps, (cap1, cap2) => cap1.code === cap2.code);
+		this.$scope.$applyAsync();
+	}
+
+	private parseWebsite() {
+		if (!this.org.website) {
+			this.org.websiteProtocol = 'https://';
+		} else {
+			const parts = this.org.website.split('://');
+			if (parts[0] === 'https') {
+				this.org.websiteProtocol = 'https://';
+			} else {
+				this.org.websiteProtocol = 'http://';
+			}
+
+			if (parts.length > 1) {
+				this.org.websiteAddress = parts[1];
+			} else {
+				this.org.websiteAddress = this.org.website;
+			}
+		}
+	}
+
+	private handleError(error: any): void {
+		const errorMessage = (error as any).data ? (error as any).data.message : error.message;
+		this.Notification.error({
+			title: 'Error',
+			message: `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`
+		});
 	}
 }
 
