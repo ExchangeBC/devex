@@ -82,6 +82,14 @@ class OrgsPolicy {
 					{
 						resources: '/api/orgs/:orgId/joinRequest',
 						permissions: ['put']
+					},
+					{
+						resources: '/api/orgs/:orgId/acceptRequest/:userId',
+						permissions: ['put']
+					},
+					{
+						resources: '/api/orgs/:orgId/declineRequest/:userId',
+						permissions: ['put']
 					}
 				]
 			},

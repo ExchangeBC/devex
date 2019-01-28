@@ -12,7 +12,7 @@ class OrgsRouter {
 
 	private constructor() {
 		OrgsPolicy.invokeRolesPolicies();
-	};
+	}
 
 	public setupRoutes = app => {
 		// Get a list of all orgs
@@ -53,6 +53,14 @@ class OrgsRouter {
 		app.route('/api/orgs/:orgId/joinRequest')
 			.all(OrgsPolicy.isAllowed)
 			.put(OrgsServerController.joinRequest);
+
+		app.route('/api/orgs/:orgId/acceptRequest/:userId')
+			.all(OrgsPolicy.isAllowed)
+			.put(OrgsServerController.acceptRequest);
+
+		app.route('/api/orgs/:orgId/declineRequest/:userId')
+			.all(OrgsPolicy.isAllowed)
+			.put(OrgsServerController.declineRequest);
 
 		// Finish by binding the org middleware
 		app.param('orgId', OrgsServerController.orgByID);

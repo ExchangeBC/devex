@@ -5,13 +5,10 @@ import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
-import { CapabilityModel, ICapabilityModel } from '../../../capabilities/server/models/CapabilityModel';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
-import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
-import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
 import { ProposalModel } from '../../../proposals/server/models/ProposalModel';
-import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
+import { IUserModel } from '../../../users/server/models/UserModel';
 import { IOrgModel, OrgModel } from '../models/OrgModel';
 
 class OrgsServerController {
@@ -20,62 +17,33 @@ class OrgsServerController {
 	}
 
 	private static instance: OrgsServerController;
-
-	private sendMessages = MessagesServerController.sendMessages;
 	private popfields = '_id lastName firstName displayName profileImageURL capabilities capabilitySkills';
 
 	private constructor() {
+		this.read = this.read.bind(this);
+		this.update = this.update.bind(this);
+		this.create = this.create.bind(this);
+		this.delete = this.delete.bind(this);
 		this.list = this.list.bind(this);
 		this.logo = this.logo.bind(this);
+		this.orgByID = this.orgByID.bind(this);
+		this.getOrgById = this.getOrgById.bind(this);
+		this.acceptRequest = this.acceptRequest.bind(this);
+		this.declineRequest = this.declineRequest.bind(this);
+		this.removeMember = this.removeMember.bind(this);
+		this.removeUserFromMemberList = this.removeUserFromMemberList.bind(this);
+		this.removeMeFromCompany = this.removeMeFromCompany.bind(this);
+		this.myadmin = this.myadmin.bind(this);
+		this.my = this.my.bind(this);
 	}
 
-	public getOrgById = (id): Promise<IOrgModel> => {
-		return new Promise((resolve, reject) => {
-			OrgModel.findById(id)
-				.populate('owner', '_id lastName firstName displayName profileImageURL')
-				.populate('createdBy', 'displayName')
-				.populate('updatedBy', 'displayName')
-				.populate('admins', this.popfields)
-				.populate('capabilities', 'code name')
-				.populate('capabilitySkills', 'code name')
-				.populate({
-					path: 'members',
-					select: this.popfields,
-					populate: [
-						{
-							path: 'capabilities',
-							model: 'Capability',
-							select: 'name code labelClass'
-						},
-						{
-							path: 'capabilitySkills',
-							model: 'CapabilitySkill',
-							select: 'name code'
-						}
-					]
-				})
-				.populate('invitedUsers')
-				.populate('invitedNonUsers')
-				.populate('joinRequests')
-				.exec((err, org) => {
-					if (err) {
-						reject(err);
-					} else if (!org) {
-						resolve(null);
-					} else {
-						resolve(org);
-					}
-				});
-		});
-	};
+	public async getOrgById(id: string): Promise<IOrgModel> {
+		const org = await OrgModel.findById(id);
+		const populatedOrg = await this.populateOrg(org);
+		return populatedOrg;
+	}
 
-	public updateOrgCapabilities = (orgId): Promise<IOrgModel> => {
-		return this.getOrgById(orgId)
-			.then(this.checkCapabilities)
-			.then(this.minisave);
-	};
-
-	public removeUserFromMemberList = (req, res): void => {
+	public async removeUserFromMemberList(req: Request, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -83,10 +51,11 @@ class OrgsServerController {
 			return;
 		}
 
-		this.removeMember(req.profile, req.org).then(this.saveOrg(req, res));
-	};
+		const updatedOrg = await this.removeMember(req.profile, req.org);
+		res.json(updatedOrg);
+	}
 
-	public removeMeFromCompany = (req, res): void => {
+	public async removeMeFromCompany(req: Request, res: Response): Promise<void> {
 		if (!req.user) {
 			res.status(422).send({
 				message: 'Valid user not provided'
@@ -98,20 +67,23 @@ class OrgsServerController {
 			res.status(422).send({
 				message: 'Valid company not provided'
 			});
+			return;
 		}
 
-		this.removeMember(req.user, req.org).then(this.saveOrg(req, res));
-	};
+		const updatedOrg = await this.removeMember(req.user, req.org);
+		res.json(updatedOrg);
+	}
 
-	public create = (req, res): void => {
+	public async create(req: Request, res: Response): Promise<void> {
 		const org = new OrgModel(req.body);
 
 		// set the owner and also add the owner to the list of admins
-		org.owner = req.user._id;
-		this.addAdmin(req.user, org).then(this.saveOrg(req, res));
-	};
+		org.owner = req.user;
+		const updatedOrg = await this.addAdmin(req.user, org);
+		res.json(updatedOrg);
+	}
 
-	public read = (req, res) => {
+	public read(req: Request, res: Response): void {
 		// If user is not authenticated, only send the publicly available org info
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			const org = _.pick(req.org, ['_id', 'orgImageURL', 'name', 'website', 'capabilities']);
@@ -119,9 +91,9 @@ class OrgsServerController {
 		} else {
 			res.json(req.org);
 		}
-	};
+	}
 
-	public update = (req, res) => {
+	public async update(req: Request, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -129,38 +101,21 @@ class OrgsServerController {
 			return;
 		}
 
-		let list = null;
-		if (req.body.additions) {
-			list = req.body.additions.split(/[ ,]+/);
-		}
-
-		const org = _.mergeWith(req.org, req.body, (objValue: any, srcValue: any) => {
-			if (_.isArray(objValue)) {
-				return srcValue;
+		const newOrgInfo = req.body;
+		CoreServerHelpers.applyAudit(newOrgInfo, req.user);
+		OrgModel.findOneAndUpdate({ _id: req.org.id }, newOrgInfo, { new: true }, async (err, updatedOrg) => {
+			if (err) {
+				res.status(500).send({
+					message: CoreServerErrors.getErrorMessage(err)
+				});
+			} else {
+				const populatedOrg = await this.populateOrg(updatedOrg);
+				res.json(populatedOrg);
 			}
 		});
+	}
 
-		org.adminName = req.user.displayName;
-		org.adminEmail = req.user.email;
-
-		const additionsList: any = {
-			found: [],
-			notFound: []
-		};
-
-		this.inviteMembers(list, org)
-			.then(
-				(newlist: any): IOrgModel => {
-					additionsList.found = newlist.found;
-					additionsList.notFound = newlist.notFound;
-					org.additionsList = additionsList;
-					return org;
-				}
-			)
-			.then(this.saveOrg(req, res));
-	};
-
-	public delete = (req, res) => {
+	public async delete(req: Request, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to delete this organization'
@@ -168,30 +123,20 @@ class OrgsServerController {
 			return;
 		}
 
-		const org = req.org;
-		const orgId = org._id;
-		org.remove(err => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				this.getAllAffectedMembers(orgId)
-					.then(this.removeAllCompanyReferences(orgId))
-					.then(() => {
-						res.json(org);
-					})
-					.catch(innerErr => {
-						res.status(422).send({
-							message: CoreServerErrors.getErrorMessage(innerErr)
-						});
-					});
-			}
-		});
-	};
+		// find the org model so that middleware is properly fired on delete
+		const org = await OrgModel.findById(req.org.id);
+
+		try {
+			const deletedOrg = await org.remove();
+			res.json(deletedOrg);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	public async list(req: Request, res: Response): Promise<void> {
-
 		try {
 			const orgs = await OrgModel.find()
 				.sort('user.lastName')
@@ -208,127 +153,87 @@ class OrgsServerController {
 				message: CoreServerErrors.getErrorMessage(error)
 			});
 		}
-	};
+	}
 
-	public myadmin = (req, res) => {
-		OrgModel.find({
-			admins: { $in: [req.user._id] }
-		})
-			.populate('owner', '_id lastName firstName displayName profileImageURL')
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('members', this.popfields)
-			.populate('admins', this.popfields)
-			.exec((err, orgs) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(orgs);
-				}
-			});
-	};
-
-	public my = (req, res) => {
-		OrgModel.find({
-			members: { $in: [req.user._id] }
-		})
-			.populate('owner', '_id lastName firstName displayName profileImageURL')
-			.populate('createdBy', 'displayName')
-			.populate('updatedBy', 'displayName')
-			.populate('members', this.popfields)
-			.populate('admins', this.popfields)
-			.exec((err, orgs) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(orgs);
-				}
-			});
-	};
-
-	public addUserToOrg = (req, res) => {
-		req.user = req.model;
-		const org = req.org;
-		const user = req.user;
-
-		if (req.params.actionCode === 'decline') {
-			return res.status(200).json({
-				message: '<i class="fas fa-lg fa-check-circle"></i> Company invitation declined.'
-			});
-		} else {
-			// The user accepting the invitation must be recorded by id if they were an existing user at time of invite or by email if they had not yet registered
-			if (
-				(org.invitedUsers &&
-					org.invitedUsers
-						.map((invitedUser: IUserModel) => {
-							return invitedUser.id;
-						})
-						.indexOf(user.id) !== -1) ||
-				(org.invitedNonUsers &&
-					org.invitedNonUsers
-						.map((invitedNonUser: IUserModel) => {
-							return invitedNonUser.email;
-						})
-						.indexOf(user.email) !== -1)
-			) {
-				Promise.resolve(user)
-					.then(this.addUserTo(org, 'members'))
-					.then(this.saveUser)
-					.then(() => {
-						return org;
-					})
-					.then(this.saveOrgReturnMessage(req, res));
-			} else {
-				return res.status(200).json({
-					message: '<h4>Invalid Invitation</h4>Your invitation has either expired or is invalid. \
-					Please ask your company admin to re-issue you another invite.'
-				});
-			}
-		}
-	};
-
-	public orgByID = (req, res, next, id) => {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).send({
-				message: 'Org is invalid'
-			});
-		}
-		this.getOrgById(id)
-			.then(org => {
-				if (!org) {
-					res.status(200).send({});
-				} else {
-					req.org = org;
-					next();
-				}
+	public async myadmin(req: Request, res: Response): Promise<void> {
+		try {
+			const orgs = await OrgModel.find({
+				admins: { $in: [req.user._id] }
 			})
-			.catch(err => {
-				next(err);
+				.populate('owner', '_id lastName firstName displayName profileImageURL')
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('members', this.popfields)
+				.populate('admins', this.popfields)
+				.exec();
+			res.json(orgs);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
+		}
+	}
 
-	public orgByIDSmall = (req, res, next, id) => {
+	public async my(req: Request, res: Response): Promise<void> {
+		try {
+			const orgs = await OrgModel.find({
+				members: { $in: [req.user._id] }
+			})
+				.populate('owner', '_id lastName firstName displayName profileImageURL')
+				.populate('createdBy', 'displayName')
+				.populate('updatedBy', 'displayName')
+				.populate('members', this.popfields)
+				.populate('admins', this.popfields)
+				.exec();
+			res.json(orgs);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
+
+	public async orgByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
 		if (!mongoose.Types.ObjectId.isValid(id)) {
-			return res.status(400).send({
+			res.status(400).send({
 				message: 'Org is invalid'
 			});
 		}
-		OrgModel.findById(id)
-			.populate('owner', '_id lastName firstName displayName profileImageURL')
-			.exec((err, org: IOrgModel) => {
-				if (err) {
-					return next(err);
-				} else if (!org) {
-					return res.status(200).send({});
-				}
+
+		try {
+			const org = await this.getOrgById(id);
+			if (!org) {
+				res.status(200).send({});
+			} else {
 				req.org = org;
 				next();
+			}
+		} catch (error) {
+			next(error);
+		}
+	}
+
+	public async orgByIDSmall(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		if (!mongoose.Types.ObjectId.isValid(id)) {
+			res.status(400).send({
+				message: 'Org is invalid'
 			});
-	};
+		}
+
+		try {
+			const org = await OrgModel.findById(id)
+				.populate('owner', '_id lastName firstName displayName profileImageURL')
+				.exec();
+			if (!org) {
+				res.status(200).send({});
+			} else {
+				req.org = org;
+				next();
+			}
+		} catch (error) {
+			return next(error);
+		}
+	}
 
 	public async logo(req: Request, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
@@ -364,13 +269,13 @@ class OrgsServerController {
 	public async joinRequest(req: Request, res: Response): Promise<void> {
 		if (!req.user) {
 			res.status(403).send({
-				message: 'You are not authorized to join this organization'
+				message: 'You must be signed in to join a company'
 			});
 			return;
 		}
 
 		const org = req.org;
-		const user = req.user;
+		const user = req.user as IUserModel;
 
 		if (!org || !user) {
 			res.status(422).send({
@@ -382,16 +287,21 @@ class OrgsServerController {
 		// check that user does not already having a request on that org and that they aren't already a member
 		if (org.joinRequests.map(user => user.id).indexOf(user.id) !== -1 || org.members.map(user => user.id).indexOf(user.id) !== -1 || org.admins.map(user => user.id).indexOf(user.id) !== -1) {
 			res.status(422).send({
-				message: 'You already have a pending request or are already a member of this organization'
+				message: 'You already have a pending request or are already a member of this company'
 			});
 			return;
 		}
 
-		// add the request and save the org, return in response
+		// add the request to org, add pendingOrg to user, save both, return both in response
 		org.joinRequests.push(user);
+		user.orgsPending.push(org);
 		try {
 			const updatedOrg = await org.save();
-			res.json(updatedOrg);
+			const updatedUser = await user.save();
+			res.json({
+				user: updatedUser,
+				org: updatedOrg
+			});
 		} catch (error) {
 			res.status(500).send({
 				message: CoreServerErrors.getErrorMessage(error)
@@ -400,12 +310,99 @@ class OrgsServerController {
 		}
 	}
 
-	//
-	// Private functions
-	//
+	// Accepts a join request by moving given user into team member list.  Updates org accordingly and returns.
+	public async acceptRequest(req: Request, res: Response): Promise<void> {
+		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
+			res.status(403).send({
+				message: 'You are not authorized to add members to this company'
+			});
+			return;
+		}
+
+		const org = req.org;
+		const requestingMember = req.profile;
+
+		if (!org || !requestingMember) {
+			res.status(422).send({
+				message: 'Invalid acceptance request'
+			});
+			return;
+		}
+
+		// Ensure that a join request exists for the passed in member and that the requesting member isn't already on the team
+		if (org.joinRequests.map(member => member.id).indexOf(requestingMember.id) !== -1 && org.members.map(member => member.id).indexOf(requestingMember.id) === -1) {
+			// Move member to team members
+			org.members.push(requestingMember);
+			org.joinRequests = org.joinRequests.filter(member => member.id !== requestingMember.id);
+
+			// Update user with appropriate membership
+			requestingMember.orgsPending = requestingMember.orgsPending.filter(pendingOrg => pendingOrg.id !== org.id);
+			requestingMember.orgsMember.push(org);
+
+			// TODO: send appropriate notification to user
+
+			// Save the org and user, return both in response
+			try {
+				const updatedOrg = await org.save();
+				const updatedUser = await requestingMember.save();
+				res.json({
+					user: updatedUser,
+					org: updatedOrg
+				});
+			} catch (error) {
+				res.status(500).send({
+					message: CoreServerErrors.getErrorMessage(error)
+				});
+				return;
+			}
+		} else {
+			// Return a no-op
+			res.json(org);
+		}
+	}
+
+	public async declineRequest(req: Request, res: Response): Promise<void> {
+		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
+			res.status(403).send({
+				message: 'You are not authorized to decline requests for this company'
+			});
+			return;
+		}
+
+		const org = req.org;
+		const requestingMember = req.profile;
+
+		if (!org || !requestingMember) {
+			res.status(422).send({
+				message: 'Invalid decline request'
+			});
+			return;
+		}
+
+		// Remove the request from both org and user
+		org.joinRequests = org.joinRequests.filter(member => member.id !== requestingMember.id);
+		requestingMember.orgsPending = requestingMember.orgsPending.filter(pendingOrg => pendingOrg.id !== org.id);
+
+		// TODO - Notify the requesting user
+
+		// Save the org and user and respond with both
+		try {
+			const updatedOrg = await org.save();
+			const updatedUser = await requestingMember.save();
+			res.json({
+				org: updatedOrg,
+				user: updatedUser
+			});
+		} catch (error) {
+			res.status(500).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+			return;
+		}
+	}
 
 	// Utility function which determines whether the given user is an administrator of the given organization
-	private isUserAdmin = (org, user) => {
+	private isUserAdmin(org: IOrgModel, user: IUserModel): boolean {
 		if (!user || !org) {
 			return false;
 		}
@@ -425,394 +422,108 @@ class OrgsServerController {
 		}
 
 		return false;
-	};
+	}
 
-	// Saves the given user to the backend
-	private saveUser = user => {
-		return new Promise((resolve, reject) => {
-			user.save((err, newuser) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(newuser);
+	// Updates all OPEN proposals with the given user.
+	// Note: if a proposal is SUBMITTED, it will be set back to DRAFT if a user is removed
+	private async removeUserFromProposals(user: IUserModel, org: IOrgModel): Promise<void> {
+		const rightNow = new Date();
+		const proposals = await ProposalModel.find({ org: org._id })
+			.populate('opportunity', 'opportunityTypeCd deadline')
+			.exec();
+
+		proposals.forEach(proposal => {
+			const deadline = new Date(proposal.opportunity.deadline);
+			const isSprintWithUs = proposal.opportunity.opportunityTypeCd === 'sprint-with-us';
+
+			if (isSprintWithUs && deadline.getTime() - rightNow.getTime() > 0) {
+				const beforeProposalUserCount = proposal.phases.inception.team.length + proposal.phases.proto.team.length + proposal.phases.implementation.team.length;
+				proposal.phases.inception.team = proposal.phases.inception.team.filter(member => member.id !== user.id);
+				proposal.phases.proto.team = proposal.phases.proto.team.filter(member => member.id !== user.id);
+				proposal.phases.implementation.team = proposal.phases.implementation.team.filter(member => member.id !== user.id);
+				const afterProposalUserCount = proposal.phases.inception.team.length + proposal.phases.proto.team.length + proposal.phases.implementation.team.length;
+
+				if (beforeProposalUserCount !== afterProposalUserCount) {
+					proposal.status = 'Draft';
+					proposal.save();
 				}
-			});
-		});
-	};
-
-	// Gets a list of user using the supplied list of terms
-	private getUsers = (terms: any): Promise<IUserModel[]> => {
-		return new Promise((resolve, reject) => {
-			UserModel.find(terms, '_id email displayName firstName username profileImageURL orgsAdmin orgsMember orgsPending').exec((err, user) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(user);
-				}
-			});
-		});
-	};
-
-	private addUserTo = (org, fieldName) => {
-		return user => {
-			if (fieldName === 'admins') {
-				user.orgsAdmin.addToSet(org._id);
-				user.markModified('orgsAdmin');
-				org.admins.addToSet(user._id);
-				org.markModified('admins');
-			} else {
-				user.orgsMember.addToSet(org._id);
-				user.markModified('orgsMember');
-				org.members.addToSet(user._id);
-				org.markModified('members');
 			}
-			return user;
-		};
-	};
-
-	private removeUserFrom = (org, fieldName) => {
-		return user => {
-			if (fieldName === 'admins') {
-				user.orgsAdmin.pull(org._id);
-				user.markModified('orgsAdmin');
-				org.admins.pull(user._id);
-				org.markModified('admins');
-			} else {
-				user.orgsMember.pull(org._id);
-				user.markModified('orgsMember');
-				org.members.pull(user._id);
-				org.markModified('members');
-			}
-			return user;
-		};
-	};
-
-	private getRequiredCapabilities = (): Promise<ICapabilityModel[]> => {
-		return new Promise((resolve, reject) => {
-			CapabilityModel.find(
-				{
-					isRequired: true
-				},
-				(err, capabilities: ICapabilityModel[]) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(capabilities);
-					}
-				}
-			);
 		});
-	};
+	}
 
-	private collapseCapabilities = org => {
-		return new Promise((resolve, reject) => {
-			const c = {};
-			const s = {};
-			const orgmembers = org.members.map(o => {
-				if (o._id) {
-					return o._id;
-				} else {
-					return o;
-				}
-			});
-			UserModel.find({ _id: { $in: orgmembers } })
-				.populate('capabilities', 'name code')
-				.populate('capabilitySkills', 'name code')
-				.exec((err, members) => {
-					if (err) {
-						reject({ message: 'Error getting members' });
+	private async addAdmin(user: IUserModel, org: IOrgModel): Promise<IOrgModel> {
+		user.orgsAdmin.push(org);
+		user.orgsMember.push(org);
+		await user.save();
+
+		org.admins.push(user);
+		org.members.push(user);
+		const updatedOrg = await org.save();
+		return updatedOrg;
+	}
+
+	// Removes organizations from user associations, user from org, and user from any open proposals
+	private async removeMember(user: IUserModel, org: IOrgModel): Promise<IOrgModel> {
+		// update user and save
+		user.orgsAdmin = user.orgsAdmin.filter(adminOrg => adminOrg.id !== org.id);
+		user.orgsMember = user.orgsMember.filter(memberOrg => memberOrg.id !== org.id);
+		await user.save();
+
+		// process proposals for removed user
+		await this.removeUserFromProposals(user, org);
+
+		// update org and return
+		org.members = org.members.filter(member => member.id !== user.id);
+		org.admins = org.admins.filter(admin => admin.id !== user.id);
+		const updatedOrg = org.save();
+		return updatedOrg;
+	}
+
+	// Populates the given org with referenced models
+	private async populateOrg(org: IOrgModel): Promise<IOrgModel> {
+		return await org
+			.populate('owner', '_id lastName firstName displayName profileImageURL')
+			.populate('createdBy', 'displayName')
+			.populate('updatedBy', 'displayName')
+			.populate('admins', this.popfields)
+			.populate('capabilities', 'code name')
+			.populate('capabilitySkills', 'code name')
+			.populate({
+				path: 'members',
+				select: this.popfields,
+				populate: [
+					{
+						path: 'capabilities',
+						model: 'Capability',
+						select: 'name code labelClass'
+					},
+					{
+						path: 'capabilitySkills',
+						model: 'CapabilitySkill',
+						select: 'name code'
 					}
-					members.forEach(member => {
-						if (member.capabilities) {
-							member.capabilities.forEach(capability => {
-								if (capability._id) {
-									c[capability._id.toString()] = true;
-								} else {
-									c[capability.toString()] = true;
-								}
-							});
-						}
-						if (member.capabilitySkills) {
-							member.capabilitySkills.forEach(skill => {
-								if (skill._id) {
-									s[skill._id.toString()] = true;
-								} else {
-									s[skill.toString()] = true;
-								}
-							});
-						}
-					});
-					org.capabilities = Object.keys(c);
-					org.capabilitySkills = Object.keys(s);
-					resolve(org);
-				});
-		});
-	};
-
-	private checkCapabilities = (org: IOrgModel): Promise<IOrgModel> => {
-		// make sure an org was found
-		if (!org) {
-			return;
-		}
-		return this.collapseCapabilities(org)
-			.then(this.getRequiredCapabilities)
-			.then(capabilities => {
-				const caps = org.capabilities.reduce((a, c) => {
-					a[c._id] = true;
-					return a;
-				}, {});
-
-				org.isCapable = capabilities
-					.map(ca => {
-						return caps[ca._id.toString()] || false;
-					})
-					.reduce((a, c) => {
-						return a && c;
-					}, true);
-				org.metRFQ = org.isCapable && org.isAcceptedTerms && org.members.length >= 2;
-				return org;
-			});
-	};
-
-	private minisave = (org: IOrgModel): Promise<IOrgModel> => {
-		// make sure an org was found
-		if (!org) {
-			return;
-		}
-		return new Promise((resolve, reject) => {
-			org.save((err, model) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(model);
-				}
-			});
-		});
-	};
-
-	private resolveOrg = org => {
-		return () => {
-			return org;
-		};
-	};
-
-	private saveOrg = (req, res) => {
-		return organization => {
-			let additionsList = organization.additionsList;
-			if (additionsList && additionsList.found.length === 0 && additionsList.notFound.length === 0) {
-				additionsList = null;
-			}
-			CoreServerHelpers.applyAudit(organization, req.user);
-			this.checkCapabilities(organization).then(org => {
-				org.save((err, neworg) => {
-					if (err) {
-						return res.status(422).send({
-							message: CoreServerErrors.getErrorMessage(err)
-						});
-					} else {
-						req.user.save((innerErr, user) => {
-							req.login(user, innerInnerErr => {
-								if (innerInnerErr) {
-									res.status(422).send({
-										message: CoreServerErrors.getErrorMessage(innerInnerErr)
-									});
-								}
-							});
-						});
-
-						this.getOrgById(neworg._id)
-							.then(o => {
-								o = o.toObject();
-								o.emaillist = additionsList;
-								res.json(o);
-							})
-							.catch(() => {
-								res.status(422).send({
-									message: 'Error populating organization'
-								});
-							});
-					}
-				});
-			});
-		};
-	};
-
-	private saveOrgReturnMessage = (req, res) => {
-		return organization => {
-			CoreServerHelpers.applyAudit(organization, req.user);
-			this.checkCapabilities(organization).then((org: IOrgModel) => {
-				org.save((err, neworg) => {
-					if (err) {
-						return res.status(422).send({
-							message: CoreServerErrors.getErrorMessage(err)
-						});
-					} else {
-						//
-						// TBD: the code following shoudl be nested in here and checked for
-						// failure properly etc.
-						//
-						req.user.save((innerErr, user) => {
-							req.login(user, innerInnerErr => {
-								if (innerInnerErr) {
-									res.status(422).send({
-										message: CoreServerErrors.getErrorMessage(innerInnerErr)
-									});
-								}
-							});
-						});
-						this.getOrgById(neworg._id)
-							.then(o => {
-								res.status(200).json({
-									message: '<i class="fas fa-lg fa-check-circle text-success"></i> You are now a member of ' + org.name
-								});
-							})
-							.catch(() => {
-								res.status(422).send({
-									message: 'Error populating organization'
-								});
-							});
-					}
-				});
-			});
-		};
-	};
-
-	private removeUserFromProposals = user => {
-		return org => {
-			const rightNow = new Date();
-			const userEmail = user.email;
-			return new Promise((resolve, reject) => {
-				ProposalModel.find({ org: org._id })
-					.populate('opportunity', 'opportunityTypeCd deadline')
-					.exec((err, proposals) => {
-						Promise.all(
-							proposals.map(proposal => {
-								const deadline = new Date(proposal.opportunity.deadline);
-								const isSprintWithUs = proposal.opportunity.opportunityTypeCd === 'sprint-with-us';
-								//
-								// if sprint with us and the opportunity is still open
-								// remove the user and save the proposal
-								//
-								if (isSprintWithUs && 0 < deadline.getTime() - rightNow.getTime()) {
-									return ProposalsServerController.removeUserFromProposal(proposal, userEmail);
-								} else {
-									return Promise.resolve({});
-								}
-							})
-						).then(resolve, reject);
-					});
-			});
-		};
-	};
-
-	private addAdmin = (user: IUserModel, org: IOrgModel): Promise<IOrgModel> => {
-		return Promise.resolve(user)
-			.then(this.addUserTo(org, 'members'))
-			.then(this.addUserTo(org, 'admins'))
-			.then(this.saveUser)
-			.then(this.resolveOrg(org));
-	};
-
-	private removeMember = (user: IUserModel, org: IOrgModel): Promise<IOrgModel> => {
-		return Promise.resolve(user)
-			.then(this.removeUserFrom(org, 'members'))
-			.then(this.removeUserFromProposals(user))
-			.then(this.resolveOrg(org));
-	};
-
-	private inviteMembersWithMessages = (emaillist: [string], org: IOrgModel): Promise<any> => {
-		const list: any = {
-			found: [],
-			notFound: []
-		};
-
-		if (!emaillist) {
-			return Promise.resolve(list);
-		}
-
-		return this.getUsers({ email: { $in: emaillist } })
-			.then((users: IUserModel[]) => {
-				if (users) {
-					list.found = users;
-
-					list.notFound = emaillist
-						.filter(email => {
-							return (
-								users
-									.map(user => {
-										return user.email;
-									})
-									.indexOf(email) === -1
-							);
-						})
-						.map(email => {
-							return { email };
-						});
-				}
-				return users;
+				]
 			})
-			.then((users: IUserModel[]) => {
-				this.sendMessages('add-user-to-company-request', list.found, { org });
-				this.sendMessages('invitation-from-company', list.notFound, { org });
-
-				// record users so that they have 'permission' to self add
-				if (!org.invitedNonUsers) {
-					org.invitedNonUsers = [] as any;
-				}
-
-				if (!org.invitedUsers) {
-					org.invitedUsers = [] as any;
-				}
-
-				users.forEach(user => {
-					org.invitedUsers.push(user);
-				});
-
-				list.notFound.forEach(email => {
-					org.invitedNonUsers.push(email);
-				});
-			})
-			.then(() => {
-				return Promise.resolve(list);
-			});
-	};
-
-	private inviteMembers = (emaillist: [string], org: IOrgModel): Promise<any> => {
-		return this.inviteMembersWithMessages(emaillist, org);
-	};
-
-	private getAllAffectedMembers = (orgId: string): Promise<IUserModel[]> => {
-		return new Promise((resolve, reject) => {
-			UserModel.find(
-				{
-					$or: [{ orgsAdmin: { $in: [orgId] } }, { orgsMember: { $in: [orgId] } }, { orgsPending: { $in: [orgId] } }]
-				},
-				(err, users) => {
-					if (err) {
-						reject(err);
-					} else {
-						resolve(users);
+			.populate({
+				path: 'joinRequests',
+				select: this.popfields,
+				populate: [
+					{
+						path: 'capabilities',
+						model: 'Capability',
+						select: 'name code labelClass'
+					},
+					{
+						path: 'capabilitySkills',
+						model: 'CapabilitySkill',
+						select: 'name code'
 					}
-				}
-			);
-		});
-	};
-
-	private removeAllCompanyReferences = orgId => {
-		return users => {
-			return Promise.all(
-				users.map(user => {
-					user.orgsAdmin.pull(orgId);
-					user.orgsMember.pull(orgId);
-					user.orgsPending.pull(orgId);
-					user.markModified('orgsAdmin');
-					user.markModified('orgsMember');
-					user.markModified('orgsPending');
-					return user.save();
-				})
-			);
-		};
-	};
+				]
+			})
+			.populate('invitedUsers')
+			.populate('invitedNonUsers')
+			.execPopulate();
+	}
 }
 
 export default OrgsServerController.getInstance();

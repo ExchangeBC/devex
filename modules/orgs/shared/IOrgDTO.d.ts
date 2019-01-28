@@ -5,6 +5,7 @@ import { IUser } from "../../users/shared/IUserDTO";
 
 export interface IOrg {
 	_id: string;
+	id: string;
 	name: string;
 	dba: string;
 	address: string;
@@ -41,6 +42,8 @@ export interface IOrg {
 	invitedUsers: IUser[];
 	invitedNonUsers: string[];
 	joinRequests: IUser[];
+	awardedContractCount: number;
+	acceptedTermsDate: Date;
 	emaillist?: {
 		found: string[];
 		notFound: string[];

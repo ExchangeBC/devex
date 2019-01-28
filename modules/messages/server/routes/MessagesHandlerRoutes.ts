@@ -1,6 +1,5 @@
 'use strict';
 
-import OrgsServerController from '../../../orgs/server/controllers/OrgsServerController';
 import UserAuthenticationController from '../../../users/server/controllers/users/UserAuthenticationController';
 
 class MessageHandlerRouter {
@@ -69,14 +68,6 @@ class MessageHandlerRouter {
 				return res.status(400).send({ message: '<p>this is some BAD html ' + req.model.displayName + '</p>' });
 			}
 		});
-		// -------------------------------------------------------------------------
-		//
-		// user adds themselves to an org
-		//
-		// -------------------------------------------------------------------------
-		app.route('/api/message/handler/action/:actionCode/user/:userId/join/org/:orgId')
-			.all(this.isUser)
-			.get(OrgsServerController.addUserToOrg);
 		// -------------------------------------------------------------------------
 		//
 		// requesting user is granted government role

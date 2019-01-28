@@ -25,6 +25,9 @@ class UserAuthorizationController {
 		})
 			.populate('capabilities', 'code name')
 			.populate('capabilitySkills', 'code name')
+			.populate('orgsAdmin')
+			.populate('orgsPending')
+			.populate('orgsMember')
 			.exec((err, user) => {
 				if (err) {
 					return next(err);

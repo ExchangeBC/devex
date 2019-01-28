@@ -9,6 +9,7 @@ import { ICapabilitySkill } from "../../capabilities/shared/ICapabilitySkillDTO"
 import { ICapabilitySkillModel } from "../../capabilities/server/models/CapabilitySkillModel";
 import { IMessageModel } from "../../messages/server/models/MessageModel";
 import { IMessageTemplateModel } from "../../messages/server/models/MessageTemplateModel";
+import { IUserModel } from "../../users/server/models/UserModel";
 
 declare global {
     namespace Express {
@@ -21,6 +22,7 @@ declare global {
             capabilitySkill?: ICapabilitySkillModel;
             message?: IMessageModel;
             template?: IMessageTemplateModel;
+            profile?: IUserModel;
         }
     }
 } 

@@ -105,7 +105,7 @@ class UserProfileController {
 					if (isClaimMessages) {
 						this.claimMessages(user);
 					}
-					this.updateOrgs(user.orgsMember);
+
 					req.login(user, loginErr => {
 						if (loginErr) {
 							res.status(400).send(loginErr);
@@ -286,14 +286,6 @@ class UserProfileController {
 				}
 			});
 		}
-	};
-
-	private updateOrgs = orglist => {
-		return Promise.all(
-			orglist.map(orgid => {
-				return OrgsServerController.updateOrgCapabilities(orgid);
-			})
-		);
 	};
 }
 

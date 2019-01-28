@@ -4,8 +4,8 @@ import { Document, Model, model, Schema } from 'mongoose';
 import { IOrg } from '../../shared/IOrgDTO';
 
 export interface IOrgModel extends IOrg, Document {
-	_id: any;
-	capabilities: any[];
+	_id: string;
+	id: string;
 }
 
 const InvitedNonUserSchema = new Schema({
@@ -70,7 +70,9 @@ const OrgSchema = new Schema(
 		joinRequests: {
 			type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 			default: []
-		}
+		},
+		awardedContractCount: { type: Number, default: 0 },
+		acceptedTermsDate: { type: Date, default: null }
 	},
 	{ usePushEach: true }
 );
@@ -87,6 +89,27 @@ OrgSchema.pre('save', function(next) {
 		', ' +
 		orgSchema.postalcode;
 	next();
+});
+
+// Org middleware to cascade org removal to user team associations
+OrgSchema.pre('remove', function(next) {
+	const org = this as IOrgModel;
+
+	// Remove any team admin references to removed org
+	org.model('User').update(
+		{ orgsAdmin: org.id },
+		{ $pull: { orgsAdmin: org.id } },
+		{ multi: true },
+		next
+	);
+
+	// Remove any team member references to removed org
+	org.model('User').update(
+		{ orgsMember: org.id },
+		{ $pull: { orgsMember: org.id } },
+		{ multi: true },
+		next
+	);
 });
 
 export const OrgModel: Model<IOrgModel> = model<IOrgModel>('Org', OrgSchema);
