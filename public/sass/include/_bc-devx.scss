@@ -1396,14 +1396,14 @@ ul.member-list {
 
 .hover-area .hidden-button > button {
   @media (hover: none) {
-    visibility: visible;
+    display: initial;
   }
   @media (hover: hover) {
-    visibility: hidden;
+    display: none
   }
 }
 .hover-area:hover .hidden-button > button {
-  visibility: visible;
+  display: initial;
 }
 .member {
   display: inline-block;
