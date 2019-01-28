@@ -9,6 +9,7 @@ import FileStream from '../../../../config/lib/FileStream';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
+import { IOrgModel } from '../../../orgs/server/models/OrgModel';
 import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { AttachmentModel, IProposalModel, ProposalModel } from '../models/ProposalModel';
 
@@ -31,6 +32,7 @@ class ProposalsServerController {
 		this.update = this.update.bind(this);
 		this.assign = this.assign.bind(this);
 		this.assignswu = this.assignswu.bind(this);
+		this.unassignswu = this.unassignswu.bind(this);
 		this.unassign = this.unassign.bind(this);
 		this.delete = this.delete.bind(this);
 		this.list = this.list.bind(this);
@@ -149,13 +151,36 @@ class ProposalsServerController {
 
 	public async assignswu(req: Request, res: Response): Promise<void> {
 		const proposal = req.proposal;
+		const org = req.proposal.org as IOrgModel;
+
 		proposal.status = 'Assigned';
 		proposal.isAssigned = true;
+		org.awardedContractCount = !org.awardedContractCount ? 1 : org.awardedContractCount + 1;
 		CoreServerHelpers.applyAudit(proposal, req.user);
 
 		try {
 			const updatedProposal = await this.saveProposal(proposal);
 			const populatedProposal = await this.populateProposal(updatedProposal);
+			await org.save();
+			res.json(populatedProposal);
+		} catch (error) {
+			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
+		}
+	}
+
+	public async unassignswu(req: Request, res: Response): Promise<void> {
+		const proposal = req.proposal;
+		const org = req.proposal.org as IOrgModel;
+
+		proposal.status = 'Submitted';
+		proposal.isAssigned = false;
+		org.awardedContractCount--;
+		CoreServerHelpers.applyAudit(proposal, req.user);
+
+		try {
+			const updatedProposal = await this.saveProposal(proposal);
+			const populatedProposal = await this.populateProposal(updatedProposal);
+			await org.save();
 			res.json(populatedProposal);
 		} catch (error) {
 			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
@@ -462,6 +487,7 @@ class ProposalsServerController {
 			.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
+			.populate('teamQuestionResponses')
 			.populate('org')
 			.populate({
 				path: 'phases.proto.team',

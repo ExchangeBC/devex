@@ -22,6 +22,7 @@ export interface IProposalService extends resource.IResourceClass<IProposalResou
 	update(proposal: IProposalResource): IProposalResource;
 	assign(params: IProposalServiceParams): IProposalResource;
 	assignswu(params: IProposalServiceParams): IProposalResource;
+	unassignswu(params: IProposalServiceParams): IProposalResource;
 	removeDoc(params: IProposalServiceParams): IProposalResource;
 	makeRequest(params: IProposalServiceParams): IProposalResource;
 	getMyProposal(params: IProposalServiceParams): IProposalResource;
@@ -55,6 +56,14 @@ angular.module('proposals.services').factory('ProposalService', [
 		const assignSWUAction: resource.IActionDescriptor = {
 			method: 'PUT',
 			url: '/api/proposals/:proposalId/assignswu',
+			params: {
+				proposalId: '@proposalId'
+			}
+		};
+
+		const unassignSWUAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposals/:proposalId/unassignswu',
 			params: {
 				proposalId: '@proposalId'
 			}
@@ -119,6 +128,7 @@ angular.module('proposals.services').factory('ProposalService', [
 				update: updateAction,
 				assign: assignAction,
 				assignswu: assignSWUAction,
+				unassignswu: unassignSWUAction,
 				removeDoc: removeDocAction,
 				makeRequest: makeRequestAction,
 				getMyProposal: getMyProposalAction,

@@ -34,6 +34,10 @@ class ProposalsPolicy {
 						permissions: ['put']
 					},
 					{
+						resources: '/api/proposals/:proposalId/unassignswu',
+						permissions: ['put']
+					},
+					{
 						resources: '/api/proposals/for/:opportunityId',
 						permissions: ['get']
 					}

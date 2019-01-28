@@ -38,6 +38,10 @@ class ProposalsRouter {
 			.all(ProposalsPolicy.isAllowed)
 			.put(ProposalsServerController.assignswu);
 
+		app.route('/api/proposals/:proposalId/unassignswu')
+			.all(ProposalsPolicy.isAllowed)
+			.put(ProposalsServerController.unassignswu);
+
 		// Potential resources that match up to opportunity requirements
 		app.route('/api/proposals/resources/opportunity/:opportunityId/org/:orgSmallId')
 			.all(ProposalsPolicy.isAllowed)
