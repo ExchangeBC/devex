@@ -81,7 +81,7 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
       }
 
 /*
-  @Unroll
+
 
   def "From the Home Page to the CWU" () {
 
@@ -111,7 +111,6 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
   }
 */
 
-  @Unroll
   def "From the Code With Us to Opportunities Page" () {
       given: "Starting with the Code with Us Page"
             to CodewithusPage
@@ -241,12 +240,15 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
 
       // At this moment I do not know how to upload a file
       and: "Click on the Proposal tab"  
-             at InitialCWUProposalPage
-             sleep(5000)
+            at InitialCWUProposalPage
+            sleep(5000)
             ProposalTab.click()  
 
-             "Add Proposal" 'Les Nenes Maques'
-sleep(5000)
+            "Add Proposal" 'Les Nenes Maques'
+            sleep(5000)
+
+
+            
 /*  Different test to try to make the proposal box work
               reportInfo("------> ${$('#tinymce > p').text()}"  )
               reportInfo("------> ${$("textarea",id:"ui-tinymce-1")}")
@@ -277,15 +279,7 @@ sleep(5000)
       then: "End"      
 
 
-
-            //$('#tinymce > p').text('La mate porque era mia')
- /*
-<iframe id="ui-tinymce-6_ifr" frameborder="0" allowtransparency="true"
-
- title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help" style="width: 100%; height: 100px; display: block;"></iframe>
-#tinymce > p
-*/
-sleep(1000)
+            sleep(1000)
 
 
   }

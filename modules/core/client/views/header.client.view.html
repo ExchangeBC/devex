@@ -16,7 +16,7 @@
         <!-- Navbar items with subitems -->
         <li class="nav-item" ng-repeat="item in vm.menu.items | orderBy: position" ng-if="item.shouldRender(vm.authentication.user)"
           ng-switch="item.type" uib-dropdown="item.type === 'dropdown'">
-          <a ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
+          <a data-automation-id="AdminMenuItem" ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
             <i class="nav-icon" ng-class="item.icon || 'fas fa-puzzle-piece'" aria-hidden="true"></i>
             {{item.title}}
           </a>
