@@ -1430,20 +1430,32 @@ table.company-list > tbody > tr > th {
   vertical-align: middle;
 }
 td.company-name {
-  max-width: 300px;
+  @media (min-width: 768px) {
+      min-width: 450px;
+      max-width: 450px;
+  }
+  @media (max-width: 767px) {
+    min-width: 100px;
+    max-width: 100px;
+  }
 }
 td.button-cell {
-  width: 70px;
-}
-td.members-cell {
-  min-width: 60px;
+  text-align: center;
+  min-width: 70px;
+  max-width: 70px;
 }
 body table img {
-  max-width: none; 
+  width: none; 
 }
 div.members-list {
   min-height: 150px;
 }
 img.edit-image {
   cursor: pointer;
+}
+div.company-info {
+  max-width: 150px;
+}
+div.company-contact {
+  max-width: 300px;
 }
