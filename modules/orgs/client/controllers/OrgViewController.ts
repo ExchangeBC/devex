@@ -275,6 +275,9 @@ export class OrgViewController implements IController {
 				// delete the org
 				await this.org.$remove();
 
+				// emit event
+				this.$rootScope.$emit('orgUpdated');
+
 				// notify and exit
 				this.Notification.success({
 					message: '<i class="fas fa-check-circle"></i> Company deleted'
