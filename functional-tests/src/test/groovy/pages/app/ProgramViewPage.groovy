@@ -1,14 +1,21 @@
 package pages.app
 import geb.Page
-import extensions.AngularJSAware
+import org.openqa.selenium.By
+//import extensions.AngularJSAware
 
-class ProgramViewPage extends Page implements AngularJSAware {
-	static at = { angularReady && title.startsWith("BCDevExchange - Program") }
-	static url = "programs"
+//class ProgramViewPage extends Page implements AngularJSAware {
+class ProgramViewPage extends Page {    
+	//static at = { angularReady && title.startsWith("BCDevExchange - The BC Developer") }
+    static at = { title.startsWith("BCDevExchange - The BC Developer") }
 	static content = {
-    EditButton { $('button[data-automation-id ~= "button-program-edit"]') }
-    PublishButton { $('a[data-automation-id ~= "button-program-publish"]') }  
-    UnpublishButton { $('a[data-automation-id ~= "button-program-unpublish"]') }
-    RequestMembershipButton { $('button[data-automation-id ~= "button-program-request-membership"]') }
+        PublishButton{ $('a[data-automation-id ~= "button-program-publish"]') }  
+        EditButton { $('button[data-automation-id ~= "button-program-edit"]') }
+        UnpublishButton { $('a[data-automation-id ~= "button-program-unpublish"]') }
+        RequestMembershipButton { $('button[data-automation-id ~= "button-program-request-membership"]') }
     }
 }
+
+
+
+
+

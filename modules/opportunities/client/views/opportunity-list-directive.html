@@ -53,7 +53,7 @@
           </h6>
 
           <opportunity-card ng-cloak class="card my-3" ng-repeat="opportunity in vm.opportunities | filter: vm.filterOpen | orderBy: 'created': true track by $index"
-            opportunity="opportunity" />
+            opportunity="opportunity" data-automation-id="opportunityTitle{{$index}}" />
         </div>
       </div>
     </div>

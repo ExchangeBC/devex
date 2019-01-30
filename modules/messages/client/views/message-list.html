@@ -7,7 +7,7 @@
       <div class="message-list-item-body">
         <p ng-bind-html="message.messageBody"></p>
         <div class="message-actions">
-            <button class="btn mx-1" ng-repeat="action in message.actions | orderBy : 'isDefault' : false" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{ action.linkTitle }}</button>
+            <button data-automation-id="btnMessage" class="btn" ng-repeat="action in message.actions | orderBy : 'isDefault' : false" ng-class="{'btn-default': action.isDefault,'btn-primary': !action.isDefault}" ng-click="vm.takeAction(message._id, action)">{{action.linkTitle}}</button>
         </div>
       </div>
     </div>

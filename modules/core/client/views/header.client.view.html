@@ -16,7 +16,7 @@
         <!-- Navbar items with subitems -->
         <li class="nav-item" ng-repeat="item in vm.menu.items | orderBy: position" ng-if="item.shouldRender(vm.user)"
           ng-switch="item.type" uib-dropdown="item.type === 'dropdown'">
-          <a ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
+          <a data-automation-id="AdminMenuItem" ng-switch-when="dropdown" class="nav-link" uib-dropdown-toggle role="button">
             <i class="nav-icon" ng-class="item.icon || 'fas fa-puzzle-piece'" aria-hidden="true"></i>
             {{item.title}}
           </a>
@@ -47,13 +47,13 @@
         <li class="nav-item">
           <a href="/settings/messages" class="nav-link">
             <i class="far fa-2x fa-envelope"></i>
-            <span class="unread-badge" ng-if="vm.messageCount > 0" ng-bind="vm.messageCount"></span>
+            <span data-automation-id="unreadMessageIcon" class="unread-badge" ng-if="vm.messageCount > 0" ng-bind="vm.messageCount"></span>
           </a>
         </li>
 
         <li uib-dropdown class="nav-item">
           <button id="single-button" type="button" class="btn btn-link profile-button caret-off" uib-dropdown-toggle>
-            <img ng-src="{{vm.avatarImageUrl}}" class="navbar-header-user-image">
+            <img ng-src="{{vm.avatarImageUrl}}" data-automation-id="UserAvatarImage" class="navbar-header-user-image">
           </button>
           <ul class="dropdown-menu" role="menu" aria-labelledby="single-button" uib-dropdown-menu>
             <li class="dropdown-item"><a href="">{{vm.user.displayName}}</a></li>
