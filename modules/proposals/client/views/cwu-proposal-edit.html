@@ -42,35 +42,35 @@
       <uib-tabset>
 
         <uib-tab index="0">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tab-cwu-proposal-developer">
             <i class="fas fa-user"></i> Developer
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-developer.html'"></div>
         </uib-tab>
 
         <uib-tab index="1" disable="!ppp.proposal.isCompany">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tab-cwu-proposal-company">
             <i class="fas fa-building"></i> Company
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-company.html'"></div>
         </uib-tab>
 
         <uib-tab index="2">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tab-cwu-proposal-proposal">
             <i class="fas fa-pencil-alt"></i> Proposal
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-proposal.html'"></div>
         </uib-tab>
 
         <uib-tab index="3" disable="!ppp.proposal._id" ng-hide="!ppp.proposal._id">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tab-cwu-proposal-attachment">
             <i class="fas fa-file"></i> Attachments
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
         </uib-tab>
 
         <uib-tab index="4" ng-if="!ppp.isSprintWithUs">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tab-cwu-proposal-terms">
             <i class="far fa-handshake"></i> Terms
           </uib-tab-heading>
           <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
@@ -80,16 +80,16 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-success float-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i
+            <button type="button" data-automation-id="button-cwu-proposal-submit"  class="btn btn-success float-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms"><i
                 class="fas fa-paper-plane"></i> Submit</button>
-            <button type="submit" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'Submitted'"><i
+            <button type="submit" data-automation-id="button-cwu-proposal-save-updates" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'Submitted'"><i
                 class="fas fa-save"></i>
               Save Updates</button>
-            <button type="submit" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i
+            <button type="submit" data-automation-id="button-cwu-proposal-save-changes" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'"><i
                 class="fas fa-save"></i> Save Changes</button>
-            <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only"
+            <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" data-automation-id="button-cwu-proposal-delete" class="btn btn-text-only"
               data-ng-click="ppp.delete()" "><i class=" fas fa-trash"></i> Delete My Proposal</button>
-            <button ng-if="ppp.proposal.status === 'Submitted'" type="button" class="btn btn-text-only" data-ng-click="ppp.withdraw()"
+            <button ng-if="ppp.proposal.status === 'Submitted'" type="button" data-automation-id="button-cwu-proposal-withdraw" class="btn btn-text-only" data-ng-click="ppp.withdraw()"
               "><i class=" fas fa-ban"></i> Withdraw Proposal</button>
           </div>
         </div>

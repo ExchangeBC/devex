@@ -3,19 +3,22 @@ import org.apache.tools.ant.taskdefs.condition.Os
 plugins {
     id "idea"
     id "groovy"
-    id "com.energizedwork.webdriver-binaries" version "1.0"
+    id "com.energizedwork.webdriver-binaries" version "1.4"
     id "com.energizedwork.idea-base" version "1.2"
+    id 'java'
 }
+
+
 
 ext {
     // The drivers we want to use
-    drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
-
+    //drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
+    drivers = ["chrome"]
     ext {
-        groovyVersion = '2.4.12'
-        gebVersion = '2.1'
-        seleniumVersion = '3.6.0'
-        chromeDriverVersion = '2.36'
+        groovyVersion = '2.5.4'
+        gebVersion = '2.3'
+        seleniumVersion = '3.141.59'
+        chromeDriverVersion = '2.45'
         geckoDriverVersion = '0.18.0'
         ieDriverVersion = '3.6'
         edgeDriverVersion = seleniumVersion
@@ -76,7 +79,7 @@ drivers.each { driver ->
         systemProperty "geb.env", driver
     }
 }
-
+/*
 ieTest {
     dependsOn unzipIeDriver
 
@@ -90,7 +93,7 @@ edgeTest {
     def edgedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "MicrosoftWebDriver.exe" : "MicrosoftWebDriver.exe"
     systemProperty "webdriver.edge.driver", new File(unzipEdgeDriver.outputs.files.singleFile,edgedriverFilename).absolutePath
 }
-
+*/
 test {
     dependsOn drivers.collect { tasks["${it}Test"] }
     enabled = false
@@ -101,10 +104,13 @@ tasks.withType(Test) {
     jvmArgs '-XX:MaxMetaspaceSize=128m'
     testLogging {
         exceptionFormat = 'full'
+        events 'started', 'passed'
     }
     systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
     systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
     systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
+
+
 }
 
 tasks.withType(GroovyCompile) {
