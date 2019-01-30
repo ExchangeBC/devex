@@ -77,7 +77,7 @@
         <div class="row">
           <div class="col">
             <!-- // The Continue button should be disabled until: information has been entered into all of the three fields, AND the checkbox has been checked // -->
-            <button type="submit" class="btn btn-primary float-right" ng-disabled="!vm.orgForm.$valid || !vm.hasAgreed"><i
+            <button type="submit" class="btn btn-primary float-right" ng-disabled="!vm.orgForm.$valid || !vm.hasAgreed || vm.creating"><i
                 class="fas fa-arrow-circle-right"></i> Continue</button>
             <button class="btn btn-default float-right" ng-click="vm.delete()">Cancel</button>
           </div>

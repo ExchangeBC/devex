@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	angular.module('orgs').run(['menuService', 'OrgService', 'AuthenticationService', function (menuService, OrgService, AuthenticationService) {
+	angular.module('orgs').run(['$rootScope', 'menuService', 'OrgService', 'AuthenticationService', function ($rootScope, menuService, OrgService, AuthenticationService) {
 		menuService.addMenuItem ('topbar', {
 			title: 'Companies',
 			state: 'orgs.list',
@@ -10,18 +10,33 @@
 			position: 1
 		});
 
-		if (AuthenticationService.user) {
-			OrgService.myadmin().$promise.then(orgs => {
-				if (orgs.length > 0) {
-					orgs.forEach(org => {
-						menuService.addSubMenuItem('account', 'settings', {
-							title: org.name,
-							state: `orgs.view({ orgId: '${org._id}' })`
+		function addOrgSubMenus() {
+			if (AuthenticationService.user) {
+
+				menuService.getMenu('account').items[0].items.forEach(item => {
+					if (item.state.startsWith('orgs.view')) {
+						menuService.removeSubMenuItem('account', item.state);
+					}
+				});
+
+				OrgService.myadmin().$promise.then(orgs => {
+					if (orgs.length > 0) {
+						orgs.forEach(org => {
+							menuService.addSubMenuItem('account', 'settings', {
+								title: org.name,
+								state: `orgs.view({ orgId: '${org._id}' })`
+								// state: 'orgs'
+							})
 						})
-					})
-				}
-			});
+					}
+				});
+			}
 		}
+		addOrgSubMenus();
+
+		$rootScope.$on('orgUpdated', () => {
+			addOrgSubMenus();
+		});
 	}]);
 
 }());

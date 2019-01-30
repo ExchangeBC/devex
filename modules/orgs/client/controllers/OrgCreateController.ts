@@ -1,19 +1,21 @@
 'use strict';
 
-import angular, { IController, IFormController, IScope, uiNotification } from 'angular';
+import angular, { IController, IFormController, IRootScopeService, IScope, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource } from '../services/OrgService';
 
 export class OrgCreateController implements IController {
-	public static $inject = ['$scope', '$state', 'org', 'AuthenticationService', 'Notification', 'UsersService'];
+	public static $inject = ['$rootScope', '$scope', '$state', 'org', 'AuthenticationService', 'Notification', 'UsersService'];
 
 	public orgForm: IFormController;
 	public hasAgreed: boolean;
+	public creating = false;
 	private user: IUserResource;
 
 	constructor(
+		private $rootScope: IRootScopeService,
 		private $scope: IScope,
 		private $state: IStateService,
 		public org: IOrgResource,
@@ -31,6 +33,15 @@ export class OrgCreateController implements IController {
 		}
 
 		try {
+			this.creating = true;
+			this.Notification.primary({
+				title: 'Please wait',
+				message: 'Creating company...',
+				positionX: 'center',
+				positionY: 'top',
+				closeOnClick: false
+			});
+
 			// save the new org
 			const newOrg = await this.org.$save();
 			this.orgForm.$setPristine();
@@ -42,12 +53,16 @@ export class OrgCreateController implements IController {
 			this.AuthenticationService.user = updatedUser;
 
 			this.Notification.success({
-				message: '<i class="fas fa-check-circle"></i> Company saved successfully'
+				message: '<i class="fas fa-check-circle"></i> Company saved successfully',
+				replaceMessage: true
 			});
+
+			this.$rootScope.$emit('orgUpdated');
 
 			this.$state.go('orgs.view', { orgId: newOrg._id });
 		} catch (error) {
 			this.handleError(error);
+			this.creating = false;
 			return;
 		}
 	}

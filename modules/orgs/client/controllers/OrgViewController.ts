@@ -1,6 +1,6 @@
 'use strict';
 
-import angular, { IController, IScope, ui, uiNotification } from 'angular';
+import angular, { IController, IRootScopeService, IScope, ui, uiNotification } from 'angular';
 import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
@@ -11,7 +11,7 @@ import { IUser } from '../../../users/shared/IUserDTO';
 import { IOrgResource, IOrgService } from '../services/OrgService';
 
 export class OrgViewController implements IController {
-	public static $inject = ['$scope', 'org', 'AuthenticationService', 'capabilities', 'OrgService', 'Notification', '$uibModal', 'ask', '$state'];
+	public static $inject = ['$rootScope', '$scope', 'org', 'AuthenticationService', 'capabilities', 'OrgService', 'Notification', '$uibModal', 'ask', '$state'];
 
 	public user: IUser;
 	public canEdit: boolean;
@@ -20,6 +20,7 @@ export class OrgViewController implements IController {
 	public orgSkills: ICapabilitySkill[];
 
 	constructor(
+		private $rootScope: IRootScopeService,
 		private $scope: IScope,
 		org: IOrgResource,
 		private AuthenticationService: IAuthenticationService,
@@ -148,12 +149,12 @@ export class OrgViewController implements IController {
 
 					vm.close = (): void => {
 						$uibModalInstance.close({});
-					}
+					};
 
 					vm.removeMember = async (): Promise<void> => {
 						await vm.parent.removeMember(vm.member);
 						$uibModalInstance.close({});
-					}
+					};
 				}
 			]
 		});
@@ -181,7 +182,6 @@ export class OrgViewController implements IController {
 					vm.org = org;
 
 					vm.save = async (): Promise<void> => {
-
 						// put together the full website from the protocol and address
 						if (vm.org.websiteAddress) {
 							vm.org.website = vm.org.websiteProtocol + vm.org.websiteAddress;
@@ -193,7 +193,7 @@ export class OrgViewController implements IController {
 						$uibModalInstance.close({
 							updatedOrg
 						});
-					}
+					};
 
 					vm.close = (): void => {
 						$uibModalInstance.close({});
@@ -235,7 +235,7 @@ export class OrgViewController implements IController {
 						$uibModalInstance.close({
 							updatedOrg
 						});
-					}
+					};
 
 					vm.close = (): void => {
 						$uibModalInstance.close({});
@@ -289,6 +289,7 @@ export class OrgViewController implements IController {
 
 	private refreshOrg(newOrg: IOrgResource): void {
 		this.org = newOrg;
+		this.$rootScope.$emit('orgUpdated');
 		this.refreshOrgCapabilities();
 		this.parseWebsite();
 	}
