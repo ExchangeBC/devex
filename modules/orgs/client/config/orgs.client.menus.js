@@ -25,7 +25,6 @@
 							menuService.addSubMenuItem('account', 'settings', {
 								title: org.name,
 								state: `orgs.view({ orgId: '${org._id}' })`
-								// state: 'orgs'
 							})
 						})
 					}
@@ -35,6 +34,10 @@
 		addOrgSubMenus();
 
 		$rootScope.$on('orgUpdated', () => {
+			addOrgSubMenus();
+		});
+
+		$rootScope.$on('userSignedIn', () => {
 			addOrgSubMenus();
 		});
 	}]);

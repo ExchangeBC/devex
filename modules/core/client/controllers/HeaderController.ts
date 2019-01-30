@@ -25,20 +25,21 @@ class HeaderController implements IController {
 		private $uibModal: ui.bootstrap.IModalService,
 		private Idle: idle.IIdleService
 	) {
-		this.accountMenu = this.menuService.getMenu('account').items[0];
+		this.refreshHeader();
 		this.isCollapsed = false;
 		this.menu = this.menuService.getMenu('topbar');
+		this.setScopeBindings();
+		this.setupIdleTimeout();
+	}
 
+	private refreshHeader(): void {
+		this.accountMenu = this.menuService.getMenu('account').items[0];
 		this.user = this.AuthenticationService.user;
-
 		if (this.user) {
 			this.updateMessageCount();
 			this.setAvatarImage(this.user);
 			this.Idle.watch();
 		}
-
-		this.setScopeBindings();
-		this.setupIdleTimeout();
 	}
 
 	private async updateMessageCount(): Promise<void> {
@@ -61,8 +62,7 @@ class HeaderController implements IController {
 		});
 
 		this.$rootScope.$on('userSignedIn', () => {
-			this.user = this.AuthenticationService.user;
-			this.setAvatarImage(this.user);
+			this.refreshHeader();
 		});
 
 		this.$scope.$on('$stateChangeSuccess', this.stateChangeSuccess);
