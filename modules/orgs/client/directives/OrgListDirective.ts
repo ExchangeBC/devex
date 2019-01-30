@@ -78,13 +78,19 @@ class OrgListDirectiveController implements IController {
 		return org.joinRequests.map(member => member._id).includes(userId);
 	}
 
-	public async figureOutItemsToDisplay(): Promise<void> {
-		const searchText = this.searchTerm.toLowerCase();
-		this.filteredItems = this.orgs.filter(org => org.name.toLowerCase().includes(searchText));
-
+	public paginateItems(): void {
 		const begin = (this.currentPage - 1) * this.itemsPerPage;
 		const end = begin + this.itemsPerPage;
 		this.pagedItems = this.filteredItems.slice(begin, end);
+	}
+
+	public filterItems(): void {
+		// reset to first page to keep it simple
+		this.currentPage = 1;
+
+		const searchText = this.searchTerm.toLowerCase();
+		this.filteredItems = this.orgs.filter(org => org.name.toLowerCase().includes(searchText));
+		this.paginateItems();
 	}
 
 	public canJoinOrg(org: IOrg): boolean {
@@ -128,7 +134,8 @@ class OrgListDirectiveController implements IController {
 		}
 
 		// do initial filtering/paging
-		this.figureOutItemsToDisplay();
+		this.filterItems();
+		this.paginateItems();
 
 		this.$scope.$applyAsync();
 	}

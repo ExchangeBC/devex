@@ -18,7 +18,7 @@
             name=""
             ng-model="vm.searchTerm" 
             placeholder="Search companies..."
-            ng-change="vm.figureOutItemsToDisplay()">
+            ng-change="vm.filterItems()">
   </div>
   <div class="col-sm-6">
       <span class="font-italic font-weight-light small float-right"><i class="fas fa-shield-alt"></i>&nbsp;&nbsp;Sprint With Us Qualified</span><br>
@@ -65,7 +65,7 @@
 <div ng-if="vm.filteredItems.length > vm.itemsPerPage" class="row">
   <div class="col-sm-12">
       <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.filteredItems.length" ng-model="vm.currentPage"
-      ng-change="vm.figureOutItemsToDisplay()"></ul>
+      ng-change="vm.paginateItems()"></ul>
   </div>
 </div>
 
