@@ -131,5 +131,56 @@ module.exports = {
 			minPhraseLength: 20,
 			minOptionalTestsToPass: 4
 		}
-	}
+	},
+	seedDB: {
+		seed: process.env.MONGO_SEED === 'true',
+		options: {
+		  logResults: process.env.MONGO_SEED_LOG_RESULTS !== 'false',
+		  seedUser: {
+			username: process.env.MONGO_SEED_USER_USERNAME || 'user',
+			provider: 'local',
+			email: process.env.MONGO_SEED_USER_EMAIL || 'user@localhost.com',
+			firstName: 'User',
+			lastName: 'Local',
+			displayName: 'User Local',
+			roles: ['user']
+		  },
+		  seedAdmin: {
+			username: process.env.MONGO_SEED_ADMIN_USERNAME || 'admin',
+			provider: 'local',
+			email: process.env.MONGO_SEED_ADMIN_EMAIL || 'admin@localhost.com',
+			firstName: 'Admin',
+			lastName: 'Local',
+			displayName: 'Admin Local',
+			roles: ['user', 'admin']
+		  },
+		  seedDev: {
+			username: 'dev',
+					provider: 'local',
+					email: 'dev@localhost.com',
+					firstName: 'Test',
+					lastName: 'Developer',
+					displayName: 'Test Developer',
+					roles: ['user']
+		  },
+		  seedDev2: {
+			username: 'dev2',
+					provider: 'local',
+					email: 'dev2@localhost.com',
+					firstName: 'Test 2',
+					lastName: 'Developer 2',
+					displayName: 'Test Developer 2',
+					roles: ['user']
+		  },
+		  seedGov: {
+			username: 'gov',
+					provider: 'local',
+					email: 'gov@localhost.com',
+					firstName: 'Test',
+					lastName: 'Government',
+					displayName: 'Test Government',
+					roles: ['user', 'gov']
+		  }
+		}
+	  }
 };

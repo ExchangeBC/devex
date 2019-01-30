@@ -103,22 +103,15 @@ gulp.task('tsc-server', () => {
 		.pipe(gulp.dest(path.resolve('./server-dist')));
 });
 
-gulp.task('tsc-watch', () => {
-	return new Promise(resolve => {
-		gulp.watch(defaultAssets.server.allTS, gulp.series('tsc-server'));
-		resolve();
-	});
-});
-
 // Nodemon task
 gulp.task('nodemon', () => {
-	return new Promise((resolve, reject) => {
+	return new Promise(resolve => {
 		plugins.nodemon({
 			script: 'server-dist/server.js',
 			nodeArgs: ['--inspect=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
-			delay: 1,
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
+			tasks: ['tsc-server'],
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.allTS)
 		});
 		resolve();
 	});
@@ -126,13 +119,14 @@ gulp.task('nodemon', () => {
 
 // Nodemon debug task
 gulp.task('nodemon-debug', function() {
-	return new Promise((resolve, reject) => {
+	return new Promise(resolve => {
 		plugins.nodemon({
 			script: 'server-dist/server.js',
 			nodeArgs: ['--inspect-brk=0.0.0.0:9229', '-r', 'dotenv/config'],
 			ext: 'ts,js,html',
 			verbose: true,
-			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS)
+			tasks: ['tsc-server'],
+			watch: _.union(defaultAssets.server.views, defaultAssets.server.allJS, defaultAssets.server.allTS)
 		});
 		resolve();
 	});
@@ -150,14 +144,14 @@ gulp.task('makeUploadsDir', () => {
 // Lint project files and run webpack
 gulp.task('build', gulp.series('env:prod', 'webpack', 'tsc-server'));
 
-// Run without watch - used when developing containerized solution to keep machines from spinning up
-gulp.task('quiet', gulp.series('env:dev', 'webpack', 'tsc-server', 'nodemon'));
+// Run without livereload/webpack watch - used when developing containerized solution to keep machines from spinning up
+gulp.task('quiet', gulp.series('env:dev', 'webpack', 'nodemon'));
 
 // Run the project in development mode (watch/livereload on webpack)
-gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'tsc-server', gulp.parallel('tsc-watch', 'nodemon')));
+gulp.task('default', gulp.series('env:dev', 'webpack-watch', 'nodemon'));
 
 // Run the project but automatically break on init - used for debugging startup issues
-gulp.task('debug', gulp.series('env:dev', 'webpack-watch', 'tsc-server', 'nodemon-debug'));
+gulp.task('debug', gulp.series('env:dev', 'webpack-watch', 'nodemon-debug'));
 
 // Run the project in production mode
-gulp.task('prod', gulp.series('env:prod', 'webpack', 'tsc-server', 'nodemon'));
+gulp.task('prod', gulp.series('env:prod', 'webpack', 'nodemon'));

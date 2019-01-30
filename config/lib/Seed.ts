@@ -15,21 +15,14 @@ class Seed {
 
 	private static instance: Seed;
 
-	// global seed options object
-	private seedOptions: any = {};
+	private constructor() {
+		this.start = this.start.bind(this);
+	}
 
-	private devexProd = config.devexProd === 'true';
-
-	private constructor() {}
-
-	public start = (options?) => {
-		// Initialize the default seed options
-		this.seedOptions = _.clone(config.seedDB.options);
-
-		this.seedTestMessageTemplate();
-
-		this.seedLocalUserAccounts();
-	};
+	public async start(): Promise<void> {
+		await this.seedMessageTemplates();
+		await this.seedLocalUserAccounts();
+	}
 
 	// Seeds the database with any preconfigured or default accounts
 	private async seedLocalUserAccounts(): Promise<void> {
@@ -46,6 +39,7 @@ class Seed {
 
 		// If production, only seed admin account and use environment defined password
 		// Otherwise, seed all local accounts
+		process.stdout.write(chalk.yellow('Database seeding:\tSeeding development accounts...'));
 		if (isDevexProd) {
 			const password = process.env.ADMINPW;
 			if (!password) {
@@ -53,19 +47,16 @@ class Seed {
 			} else {
 				adminAccount.password = password;
 				await this.saveUser(adminAccount);
-				if (seedOptions.logResults) {
-					this.reportSuccess(adminAccount);
-				}
 			}
 		} else {
-			localAccounts.forEach(async account => {
-				account.password = process.env[`DEV_${account.username.toUpperCase()}_PWD`];
-				await this.saveUser(account);
-				if (seedOptions.logResults) {
-					this.reportSuccess(account);
-				}
-			});
+			await Promise.all([
+				localAccounts.map(async account => {
+					account.password = process.env[`DEV_${account.username.toUpperCase()}_PWD`];
+					return this.saveUser(account);
+				})
+			]);
 		}
+		console.log(chalk.yellow('done'));
 	}
 
 	private async saveUser(user: IUserModel): Promise<void> {
@@ -83,25 +74,23 @@ class Seed {
 		}
 	}
 
-	private reportSuccess(user: IUserModel): void {
-		console.log(chalk.yellow(`Database Seeding:\tLocal user '${user.username}' has password set to '${user.password}'`));
-	}
-
-	private seedTestMessageTemplate() {
-		console.log(chalk.yellow('Database seeding:\tSeeding message templates.'));
+	private async seedMessageTemplates(): Promise<void> {
+		process.stdout.write(chalk.yellow('Database seeding:\tSeeding message templates...'));
 		try {
-			MessagesServerController.clearMessageTemplates();
+			await MessagesServerController.clearMessageTemplates();
 		} catch (error) {
 			console.error(chalk.red(CoreServerErrors.getErrorMessage(error)));
 			console.error(chalk.red('Error clearing message templates'));
 		}
 
 		try {
-			MessagesServerController.seedMessageTemplates();
+			await MessagesServerController.seedMessageTemplates();
 		} catch (error) {
 			console.error(chalk.red(CoreServerErrors.getErrorMessage(error)));
 			console.error(chalk.red('Error seeding message templates'));
 		}
+
+		console.log(chalk.yellow('done'));
 	}
 }
 

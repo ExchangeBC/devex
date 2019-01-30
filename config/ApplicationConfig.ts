@@ -43,7 +43,7 @@ class ApplicationConfig {
 
 		// read package.json for MEAN.JS project information
 		const pkg = require(path.resolve('./package.json'));
-		this.config.meanjs = pkg;
+		this.config.pkg = pkg;
 
 		// Extend the config object with the local-NODE_ENV.js custom/local environment. This will override any settings present in the local configuration.
 		this.config = _.merge(

@@ -1,18 +1,17 @@
 {
-  "name": "meanjs",
-  "description": "Full-Stack JavaScript with MongoDB, Express, AngularJS, and Node.js.",
-  "version": "0.5.0-beta",
-  "meanjs-version": "0.5.0-beta",
+  "name": "devex",
+  "description": "BC Developer's Exchange - Code With Us & Sprint With Us",
+  "version": "1.0.0",
   "private": false,
-  "author": "https://github.com/meanjs/mean/graphs/contributors",
-  "license": "MIT",
+  "author": "https://github.com/BCDevExchange/devex/graphs/contributors",
+  "license": "Apache 2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/meanjs/mean.git"
+    "url": "https://github.com/BCDevExchange/devex.git"
   },
   "engines": {
-    "node": ">=0.12.0",
-    "npm": ">=2.0.0"
+    "node": ">=8.0.0",
+    "npm": ">=6.0.0"
   },
   "scripts": {
     "lint": "tslint './modules/*/client/**/*.ts'",
