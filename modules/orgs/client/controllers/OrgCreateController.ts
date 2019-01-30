@@ -4,10 +4,10 @@ import angular, { IController, IFormController, IRootScopeService, IScope, uiNot
 import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
-import { IOrgResource } from '../services/OrgService';
+import { IOrgResource, IOrgService } from '../services/OrgService';
 
 export class OrgCreateController implements IController {
-	public static $inject = ['$rootScope', '$scope', '$state', 'org', 'AuthenticationService', 'Notification', 'UsersService'];
+	public static $inject = ['$rootScope', '$scope', '$state', 'org', 'AuthenticationService', 'Notification', 'UsersService', 'OrgService'];
 
 	public orgForm: IFormController;
 	public hasAgreed: boolean;
@@ -21,7 +21,8 @@ export class OrgCreateController implements IController {
 		public org: IOrgResource,
 		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
-		private UsersService: IUserService
+		private UsersService: IUserService,
+		private OrgService: IOrgService
 	) {
 		this.user = new this.UsersService(this.AuthenticationService.user);
 	}
@@ -39,18 +40,15 @@ export class OrgCreateController implements IController {
 				message: 'Creating company...',
 				positionX: 'center',
 				positionY: 'top',
-				closeOnClick: false
+				closeOnClick: false,
+				delay: null
 			});
 
 			// save the new org
-			const newOrg = await this.org.$save();
+			const createResponse = await this.OrgService.create(this.org).$promise;
 			this.orgForm.$setPristine();
-
-			// update the user with membership, then save user
-			this.user.orgsMember.push(newOrg);
-			this.user.orgsAdmin.push(newOrg);
-			const updatedUser = await this.UsersService.update(this.user).$promise;
-			this.AuthenticationService.user = updatedUser;
+			this.AuthenticationService.user = createResponse.user;
+			const newOrg = createResponse.org;
 
 			this.Notification.success({
 				message: '<i class="fas fa-check-circle"></i> Company saved successfully',

@@ -15,13 +15,19 @@ interface IOrgRequestResponse extends resource.IResource<IOrgRequestResponse> {
 	$promise: IPromise<IOrgRequestResponse>
 }
 
+interface IOrgCreateResponse extends resource.IResource<IOrgCreateResponse> {
+	user: IUserResource,
+	org: IOrgResource,
+	$promise: IPromise<IOrgCreateResponse>
+}
+
 export interface IOrgResource extends resource.IResource<IOrgResource>, IOrg {
 	orgId: string;
 	$promise: IPromise<IOrgResource>;
 }
 
 export interface IOrgService extends resource.IResourceClass<IOrgResource> {
-	create(org: IOrgResource): IOrgResource;
+	create(org: IOrgResource): IOrgCreateResponse;
 	update(org: IOrgResource): IOrgResource;
 	list(): IOrgResource[];
 	my(): IOrgResource[];

@@ -80,8 +80,12 @@ class OrgsServerController {
 
 		// set the owner and also add the owner to the list of admins
 		org.owner = req.user;
-		const updatedOrg = await this.addAdmin(req.user, org);
-		res.json(updatedOrg);
+		const updatedOrg = await this.addAdminToOrg(req.user, org);
+		const updatedUser = await this.addOrgToUser(req.user, org);
+		res.json({
+			org: updatedOrg,
+			user: updatedUser
+		});
 	}
 
 	public read(req: Request, res: Response): void {
@@ -459,15 +463,16 @@ class OrgsServerController {
 		});
 	}
 
-	private async addAdmin(user: IUserModel, org: IOrgModel): Promise<IOrgModel> {
-		user.orgsAdmin.push(org);
-		user.orgsMember.push(org);
-		await user.save();
-
+	private async addAdminToOrg(user: IUserModel, org: IOrgModel): Promise<IOrgModel> {
 		org.admins.push(user);
 		org.members.push(user);
-		const updatedOrg = await org.save();
-		return updatedOrg;
+		return await org.save();
+	}
+
+	private async addOrgToUser(user: IUserModel, org: IOrgModel): Promise<IUserModel> {
+		user.orgsAdmin.push(org);
+		user.orgsMember.push(org);
+		return await user.save();
 	}
 
 	// Removes organizations from user associations, user from org, and user from any open proposals
