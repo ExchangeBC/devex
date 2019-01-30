@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <p>Hi {{ user.firstName }},</p>
+    <p>{{ requestingUser.displayName }} has requested to join <strong>{{ org.name }}</strong> on the BC Developer's Exchange.</p>
+    <p>If you accept their request, {{org.name}} will be able to put them forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>
+    <p> Click <a href="{{domain}}/orgs/{{org._id}}">here</a> to view and process this request.</p>
+</body>
+</html>

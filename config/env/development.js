@@ -86,6 +86,33 @@ var devConfig = {
         lastName: 'Local',
         displayName: 'Admin Local',
         roles: ['user', 'admin']
+      },
+      seedDev: {
+        username: 'dev',
+				provider: 'local',
+				email: 'dev@localhost.com',
+				firstName: 'Test',
+				lastName: 'Developer',
+				displayName: 'Test Developer',
+				roles: ['user']
+      },
+      seedDev2: {
+        username: 'dev2',
+				provider: 'local',
+				email: 'dev2@localhost.com',
+				firstName: 'Test 2',
+				lastName: 'Developer 2',
+				displayName: 'Test Developer 2',
+				roles: ['user']
+      },
+      seedGov: {
+        username: 'gov',
+				provider: 'local',
+				email: 'gov@localhost.com',
+				firstName: 'Test',
+				lastName: 'Government',
+				displayName: 'Test Government',
+				roles: ['user', 'gov']
       }
     }
   }

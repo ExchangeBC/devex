@@ -9,7 +9,9 @@
     <script src="main.js"></script>
 </head>
 <body>
-    <p>Hello,</p>
-    <p>You've been invited to sign up on the BCDevExchange and to join <strong>{{org.name}}</strong>.</p>
+    <p>Hi {{ user.firstName }},</p>
+    <p>Your request to join <strong>{{ org.name }}</strong> was declined.</p>
+    <p>Before trying again, please ensure you have filled out your <a href="{{domain}}/settings/profile">profile</a> on the BC Developer's Exchange so that comnpanies know who you are.</p>
+    <p>Thanks!</p>
 </body>
 </html>

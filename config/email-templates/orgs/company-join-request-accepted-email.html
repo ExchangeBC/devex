@@ -3,13 +3,14 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script>
 </head>
 <body>
-    <p>Hi {{user.firstName}},</p>
-    <p>You've been invited to join <strong>{{org.name}}</strong>. If you accept, {{org.name}} will be able to put you forward as a team member on proposals for <i>Sprint With Us</i> opportunities.</p>
+    <p>Hi {{ user.firstName }},</p>
+    <p>Your request to join <strong>{{ org.name }}</strong> has been accepted!</p>
+    <p>You are now a team member on {{ org.name }} and can be included in their proposals on <i>Sprint With Us</i> opportunities.</p>
 </body>
 </html>

@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	angular.module('orgs').run(['menuService', 'OrgService', function (menuService, OrgService) {
+	angular.module('orgs').run(['menuService', 'OrgService', 'AuthenticationService', function (menuService, OrgService, AuthenticationService) {
 		menuService.addMenuItem ('topbar', {
 			title: 'Companies',
 			state: 'orgs.list',
@@ -10,16 +10,18 @@
 			position: 1
 		});
 
-		OrgService.myadmin().$promise.then(orgs => {
-			if (orgs.length > 0) {
-				orgs.forEach(org => {
-					menuService.addSubMenuItem('account', 'settings', {
-						title: org.name,
-						state: `orgs.view({ orgId: '${org._id}' })`
+		if (AuthenticationService.user) {
+			OrgService.myadmin().$promise.then(orgs => {
+				if (orgs.length > 0) {
+					orgs.forEach(org => {
+						menuService.addSubMenuItem('account', 'settings', {
+							title: org.name,
+							state: `orgs.view({ orgId: '${org._id}' })`
+						})
 					})
-				})
-			}
-		});
+				}
+			});
+		}
 	}]);
 
 }());

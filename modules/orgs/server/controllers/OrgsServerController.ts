@@ -7,6 +7,7 @@ import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
+import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import { ProposalModel } from '../../../proposals/server/models/ProposalModel';
 import { IUserModel } from '../../../users/server/models/UserModel';
 import { IOrgModel, OrgModel } from '../models/OrgModel';
@@ -297,7 +298,12 @@ class OrgsServerController {
 		user.orgsPending.push(org);
 		try {
 			const updatedOrg = await org.save();
+			updatedOrg.populate('admins', 'email').execPopulate();
 			const updatedUser = await user.save();
+
+			// send notification to admins for org
+			await MessagesServerController.sendMessages('company-join-request', updatedOrg.admins, { org: updatedOrg, requestingUser: updatedUser });
+
 			res.json({
 				user: updatedUser,
 				org: updatedOrg
@@ -339,7 +345,8 @@ class OrgsServerController {
 			requestingMember.orgsPending = requestingMember.orgsPending.filter(pendingOrg => pendingOrg.id !== org.id);
 			requestingMember.orgsMember.push(org);
 
-			// TODO: send appropriate notification to user
+			// send notification to requesting user
+			await MessagesServerController.sendMessages('company-join-request-accepted', [requestingMember], { org });
 
 			// Save the org and user, return both in response
 			try {
@@ -383,7 +390,8 @@ class OrgsServerController {
 		org.joinRequests = org.joinRequests.filter(member => member.id !== requestingMember.id);
 		requestingMember.orgsPending = requestingMember.orgsPending.filter(pendingOrg => pendingOrg.id !== org.id);
 
-		// TODO - Notify the requesting user
+		// send notification to requesting user
+		await MessagesServerController.sendMessages('company-join-request-declined', [requestingMember], { org });
 
 		// Save the org and user and respond with both
 		try {

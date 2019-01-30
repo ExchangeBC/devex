@@ -2,6 +2,7 @@
 
 import chalk from 'chalk';
 import { Request, Response } from 'express';
+import fs from 'fs';
 import handlebars from 'handlebars';
 import htmlToText from 'html-to-text';
 import _ from 'lodash';
@@ -25,7 +26,372 @@ class MessagesServerController {
 	private smtpTransport = nodemailer.createTransport(config.mailer.options);
 
 	private constructor() {
+		this.seedMessageTemplates = this.seedMessageTemplates.bind(this);
 		this.mycount = this.mycount.bind(this);
+	}
+
+	public async clearMessageTemplates(): Promise<void> {
+		await MessageTemplateModel.deleteMany({});
+	}
+
+	public async seedMessageTemplates(): Promise<void> {
+		await Promise.all([
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-update',
+				messageLevel: 'info',
+				description: 'notify the user that there were updates to an opportunity they are watching',
+				isSubscriptionType: true,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-update-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: "An opportunity you're watching has been updated",
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-update-email.html'),
+				emailSubjectTemplate: 'Opportunity {{ opportunity.name }} has been updated',
+				modelsRequired: ['opportunity'],
+				daysToArchive: 1,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-add-cwu',
+				messageLevel: 'info',
+				description: 'notify the user that there is a new opportunity',
+				isSubscriptionType: true,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-add-cwu-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: 'A new opportunity has just been posted!',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-add-cwu-email.html'),
+				emailSubjectTemplate: 'A new opportunity has just been posted!',
+				modelsRequired: ['opportunity'],
+				daysToArchive: 1,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-add-swu',
+				messageLevel: 'info',
+				description: 'notify the user that there is a new opportunity',
+				isSubscriptionType: true,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-add-swu-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: 'A new opportunity has just been posted!',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-add-swu-email.html'),
+				emailSubjectTemplate: 'A new opportunity has just been posted!',
+				modelsRequired: ['opportunity'],
+				daysToArchive: 1,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-assign-cwu',
+				messageLevel: 'info',
+				description: 'notify the user that they have been assigned the opportunity',
+				isSubscriptionType: true,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-assign-cwu-msg.html'),
+				messageShortTemplate: '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate: 'Your Proposal has been selected!',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-assign-cwu-email.html'),
+				emailSubjectTemplate: 'Your Proposal has been selected!',
+				modelsRequired: ['opportunity'],
+				daysToArchive: 1,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-assign-swu',
+				messageLevel: 'info',
+				description: 'notify the user that they have been assigned the opportunity',
+				isSubscriptionType: true,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-assign-swu-msg.html'),
+				messageShortTemplate: '<a href="{{ opportunity.path }}">{{ opportunity.name }}</a>',
+				messageTitleTemplate: 'Your Proposal has been selected!',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-assign-swu-email.html'),
+				emailSubjectTemplate: 'Your Proposal has been selected!',
+				modelsRequired: ['opportunity'],
+				daysToArchive: 1,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'gov-member-request',
+				messageLevel: 'request',
+				description: 'Notify the devex administrator account of a new government membership request',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/users/gov-member-request-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/users/gov-member-request-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Government Access Request",
+				modelsRequired: ['user'],
+				daysToArchive: 0,
+				linkTemplate: '/gov/add/{{ requestingUser._id }}',
+				actions: [
+					{
+						actionCd: 'approve',
+						linkTitleTemplate: 'Approve'
+					},
+					{
+						actionCd: 'decline',
+						linkTitleTemplate: 'Decline',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'gov-request-declined',
+				messageLevel: 'info',
+				description: 'Notify a user requesting government access that their request has been declined',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/users/gov-request-declined-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/users/gov-request-declined-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Government Access Request",
+				modelsRequired: ['user'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'gov-request-approved',
+				messageLevel: 'info',
+				description: 'Notify a user requesting government access that their request has been approved',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/users/gov-request-approved-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/users/gov-request-approved-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Government Access Request",
+				modelsRequired: ['user'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-pre-approval-request',
+				messageLevel: 'request',
+				description: 'Send a pre-approval for publishing an opportunity',
+				isSubscriptionType: false,
+				messageBodyTemplate: '',
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/message-templates/opportunities/pre-approval-request.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Opportunity Pre-Approval",
+				modelsRequired: ['opportunity'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-approval-request',
+				messageLevel: 'request',
+				description: 'Send an approval for publishing an opportunity',
+				isSubscriptionType: false,
+				messageBodyTemplate: '',
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/message-templates/opportunities/approval-request.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Opportunity Approval",
+				modelsRequired: ['opportunity'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-approved-notification',
+				messageLevel: 'info',
+				description: 'Send a notification that an approval request has been approved',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/request-approved.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/message-templates/opportunities/request-approved.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Opportunity Approved",
+				modelsRequired: ['opportunity'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-denied-notification',
+				messageLevel: 'info',
+				description: 'Send a notification that an approval request has been denied',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/request-denied.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/message-templates/opportunities/request-denied.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Opportunity Denied",
+				modelsRequired: ['opportunity'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-approval-2FA',
+				messageLevel: 'info',
+				description: 'Send a 2FA token for approval by email',
+				isSubscriptionType: false,
+				messageBodyTemplate: '',
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/message-templates/opportunities/approval-2FA.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - 2FA Approval Token",
+				modelsRequired: ['approvalInfo'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'company-join-request',
+				messageLevel: 'info',
+				description: 'Notification sent to company contact stating that a member has requested to join the company',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/orgs/company-join-request-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/orgs/company-join-request-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Request to join {{ org.name }}",
+				modelsRequired: [],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'company-join-request-accepted',
+				messageLevel: 'info',
+				description: 'Notification sent to user stating that a company has accepted their request to join',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/orgs/company-join-request-accepted-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/orgs/company-join-request-accepted-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Request to join {{ org.name }} accepted!",
+				modelsRequired: [],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'company-join-request-declined',
+				messageLevel: 'info',
+				description: 'Notification sent to user stating that a company has declined their request to join',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/orgs/company-join-request-declined-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/orgs/company-join-request-declined-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Request to join {{ org.name }} declined.",
+				modelsRequired: [],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
+			})
+		]);
 	}
 
 	// Sends messages to an array of users
