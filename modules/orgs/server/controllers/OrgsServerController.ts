@@ -464,14 +464,16 @@ class OrgsServerController {
 	}
 
 	private async addAdminToOrg(user: IUserModel, org: IOrgModel): Promise<IOrgModel> {
-		org.admins.push(user);
-		org.members.push(user);
+		// depopulate the objects before adding since orgs and users are a circular reference, and mongoose chokes
+		org.admins.push(user.toObject({ depopulate: true }));
+		org.members.push(user.toObject({ depopulate: true }));
 		return await org.save();
 	}
 
 	private async addOrgToUser(user: IUserModel, org: IOrgModel): Promise<IUserModel> {
-		user.orgsAdmin.push(org);
-		user.orgsMember.push(org);
+		// depopulate the objects before adding since orgs and users are a circular reference, and mongoose chokes
+		user.orgsAdmin.push(org.toObject({ depopulate: true }));
+		user.orgsMember.push(org.toObject({ depopulate: true }));
 		return await user.save();
 	}
 

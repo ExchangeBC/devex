@@ -32,7 +32,7 @@ docker run \
 -e "GITHUB_SECRET=your_oauth_github_secret" \
 -e "MONGO_SEED_LOG_RESULTS=${MONGO_SEED_LOG_RESULTS-true}" \
 -e "DEVEX_PROD=${DEVEX_PROD-false}" \
--e "DOMAIN=http://localhost:3030" \
+-e "DOMAIN=http://localhost:3000" \
 -e "DEV_ADMIN_PWD=adminadmin" \
 -e "DEV_USER_PWD=useruser" \
 -e "DEV_DEV_PWD=devdev" \
