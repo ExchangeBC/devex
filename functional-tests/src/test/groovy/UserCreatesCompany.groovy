@@ -112,11 +112,10 @@ class UserCreatesCompany extends GebReportingSpec {
         CompanyName.value("Hugo and friend\'s Company") 
         Jurisdiction.value("Vancouver Island and the Inlets") 
         BusinessNumber.value("BC-123456789")
-
         AgreeConditions.click() // When all the fields are completed the next button should be enabled
-
         ContinueSubmitButton.click()
         sleep(2000) //There is an angular animation and I prefer is gone before proceeding
+
     then: "A new page appears. In this section we verify the field that have already been enter"
         at CompaniesCreateDetailsPage
         waitFor{SaveCompanyButton} //Made sure the page is fully loaded, as the URL is not fixed

@@ -7,6 +7,7 @@
 
           <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-primary"
+                    data-automation-id="btnInception"
                     ng-click="vm.changeToStartPhase(vm.opportunity.phases.inception)"
                     ng-disabled="vm.opportunity.phases.inception.isInception">
               Start Here
@@ -59,6 +60,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
             <ul class="list-group">
               <li class="list-group-item"
+                  data-automation-id="tglCapabilityInception"
                   ng-repeat="capability in vm.allCapabilities"
                   ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.inception.capabilities)}"
                   ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.inception.capabilities)">
@@ -81,6 +83,7 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
+                      data-automation-id="btnProofOfConcept"
                       ng-click="vm.changeToStartPhase(vm.opportunity.phases.proto)"
                       ng-disabled="!vm.opportunity.phases.inception.isInception && vm.opportunity.phases.proto.isPrototype">
                 Start Here
@@ -136,6 +139,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
               <ul class="list-group">
                 <li class="list-group-item"
+                    data-automation-id="tglCapabilityProofOfConcept"
                     ng-repeat="capability in vm.allCapabilities"
                     ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.proto.capabilities)}"
                     ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.proto.capabilities)">
@@ -158,6 +162,7 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
+                      data-automation-id="btnImplementation"
                       ng-click="vm.changeToStartPhase(vm.opportunity.phases.implementation)"
                       ng-disabled="!vm.opportunity.phases.proto.isPrototype">
                 Start Here
@@ -208,6 +213,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
               <ul class="list-group">
                 <li class="list-group-item"
+                    data-automation-id="tglCapabilityImplementation"
                     ng-repeat="capability in vm.allCapabilities"
                     ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.implementation.capabilities)}"
                     ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.implementation.capabilities)">

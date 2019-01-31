@@ -73,7 +73,7 @@
 
         <!-- PUBLISH -->
         <div class="col-sm-4">
-          <a ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary text-white float-right"
+          <a data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary text-white float-right"
             ng-click="vm.publish(true)" title="Publish this Opportunity">
             <i class="fa fa-bullhorn text-white"></i>
             Publish

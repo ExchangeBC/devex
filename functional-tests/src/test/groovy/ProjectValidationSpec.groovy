@@ -23,13 +23,12 @@ import geb.spock.GebReportingSpec
 class ProjectValidationSpec extends GebReportingSpec {
 
 
-      def setup() {
-        to HomePage
-
-        // Need to login as an admin
-        def loginOK = login."Login as an adminstrator"("admin","adminadmin","Admin Local")
-        assert loginOK
-      }
+        def setup() {
+            to HomePage
+            // Need to login as an admin
+            def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
+            assert loginOK
+        }
 
   @Unroll
   def "Testing project creation validation" () {

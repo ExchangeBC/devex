@@ -37,6 +37,7 @@ class OpportunitiesAdminCreatePage extends Page {
         oppSkills { $("input", id:"skilllist") }
         selectLocation(wait:true){$('select',name:'location')} //Location Drop Down list
         selectEarn(wait:true){$('select', name:'earn')}//Fixed-Price Reward Drop down list
+        LocationRadioButton {option -> $("input[type='radio']", name: "onsite", value: option)}
 
         //Dates section
         proposalDeadLine(wait: true) {$("input",id:"deadline") }
@@ -49,11 +50,14 @@ class OpportunitiesAdminCreatePage extends Page {
             //<input type="date" id="start" name="start" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
 //<input type="date" id="deadline" name="deadline" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
 
+
+
+/*
     void "selectOnsite"(String selectOption){
         def SelectOnsite=$(name:"onsite").module(RadioButtons)
         SelectOnsite.checked=selectOption
     }
-
+*/
    
     void "Set All Dates"(){//CRC: I am setting the dates in the CreatePorgramProjectOpp script, so I do not use this function
         def dateFormat = 'yyyy-MM-dd'

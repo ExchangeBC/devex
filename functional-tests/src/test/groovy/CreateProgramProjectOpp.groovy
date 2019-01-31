@@ -203,6 +203,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     withFrame(OppBackgroundBox){$("body", id:"tinymce") << Background }
 
                     DetailsTabClick //Now we move to the Details tab  
+                    LocationRadioButton(Onsite).click()
                     selectLocation.value(Location)
                     selectEarn.value(Earn)
 
@@ -218,11 +219,12 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     reportInfo("Formatted_deadline value:" + Formatted_deadline )
 
 
-                    $(By.xpath('//*[@id="deadline"]')).value("2020-01-01")
-                    //proposalDeadLine.value(Formatted_deadline)
+                    //$(By.xpath('//*[@id="deadline"]')).value("2020-01-01")
+
+                    proposalDeadLine << Formatted_deadline
                     reportInfo("Deadline value -after-:" + proposalDeadLine.value() )
-                    proposalAssignment.value(Formatted_assignment)
-                    proposalStartDate.value(Formatted_start)
+                    proposalAssignment<<Formatted_assignment
+                    proposalStartDate <<Formatted_start
     
                     AcceptanceTabClick //Now we move to the Acceptance and Evaluatio tab  
                     waitFor{OppAcceptanceBox}
@@ -241,6 +243,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 and: "I click the 'save changes' button for the opportunity: '#TitleData'"
                     SaveButton.click()  //This action saves the changes but does not change the page
                     sleep(3000) //This makes no sense given the next waitFor, but without it, then fails
+
                 then: "Go to the opportunities page to publish it"
                     waitFor{to OpportunitiesPage}
 

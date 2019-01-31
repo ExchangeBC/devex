@@ -14,27 +14,27 @@
         <table>
           <tr class="spaceUnder">
             <td align="right" class="weight-entry-label-cell">Skills</td>
-            <td><input class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
+            <td><input data-automation-id="skillScore" class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
                 ng-model="vm.opportunity.weights.skill" percentage-input onclick="this.select()"/></td>
           </tr>
           <tr class="spaceUnder">
             <td align="right" class="weight-entry-label-cell">Team Questions</td>
-            <td><input class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
+            <td><input data-automation-id="teamQuestionScore" class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
                 ng-model="vm.opportunity.weights.question" percentage-input onclick="this.select()" /></td>
           </tr>
           <tr class="spaceUnder">
             <td align="right" class="weight-entry-label-cell">Code Challenge</td>
-            <td><input class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
+            <td><input data-automation-id="codeChallengeScore" class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
                 ng-model="vm.opportunity.weights.codechallenge" percentage-input onclick="this.select()" /></td>
           </tr>
           <tr class="spaceUnder">
             <td align="right" class="weight-entry-label-cell">Team Scenario</td>
-            <td><input class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
+            <td><input data-automation-id="teamScenarioScore" class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
                 ng-model="vm.opportunity.weights.interview" percentage-input onclick="this.select()" /></td>
           </tr>
           <tr class="spaceUnder">
             <td align="right" class="weight-entry-label-cell">Price</td>
-            <td><input class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
+            <td><input data-automation-id="priceScore" class="weight-entry-input" name="input" type="number" min="0" ng-disabled="vm.opportunity.isPublished || vm.opportunity.wasPublished"
                 ng-model="vm.opportunity.weights.price" percentage-input onclick="this.select()" /></td>
           </tr>
           <tr class="spaceUnder">

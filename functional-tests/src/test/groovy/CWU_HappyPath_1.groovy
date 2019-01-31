@@ -171,6 +171,7 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
 		$(id:"password").value('Devex_Test1')
             $("input", name:"commit" ).click()
             sleep(1000)
+
       then: "Once logged we are in the HomePage. Here we verify the default user icon is there proving we are logged"
             at HomePage  //verify we are in the home page
             def AdminIconLocation = 'https://avatars1.githubusercontent.com/u/46409451?v=4' //This is the default icon for a logged user
@@ -210,7 +211,10 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             at InitialCWUProposalPage
             println("URL line 212 is ${driver.currentUrl}"  )
             //assert $('li[class="uib-tab nav-item ng-scope ng-isolate-scope"][index="2"]').click()
+    
+    
       and: "Confirm the Company tab is present but disabled"
+
       /*      ask for help to Andrew to locate the page that has the element
       <a href="" ng-click="select($event)" ng-class="[{active: active, disabled: disabled}, classes]" class="nav-link ng-binding disabled" uib-tab-heading-transclude=""><uib-tab-heading data-automation-id="tab-cwu-proposal-company" class="ng-scope">
       <svg class="svg-inline--fa fa-building fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="building" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M436 480h-20V24c0-13.255-10.745-24-24-24H56C42.745 0 32 10.745 32 24v456H12c-6.627 0-12 5.373-12 12v20h448v-20c0-6.627-5.373-12-12-12zM128 76c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12V76zm0 96c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40zm52 148h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12zm76 160h-64v-84c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v84zm64-172c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40zm0-96c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40zm0-96c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12V76c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40z"></path></svg><!-- <i class="fas fa-building"></i> --> Company
@@ -249,24 +253,7 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
 
 
             
-/*  Different test to try to make the proposal box work
-              reportInfo("------> ${$('#tinymce > p').text()}"  )
-              reportInfo("------> ${$("textarea",id:"ui-tinymce-1")}")
-              reportInfo("------> ${$("textarea",'data-automation-id':"text-proposal-description")}")
-            
-            //def MyTextArea $(By.xpath('//[@id="ui-tinymce-2_ifr"]/../@id="tinymce"]'))
-            //assert $(By.xpath('//*[@id="tinymce"]'))
-             //[@class='lmn-edititem-modal']/../[@class=''btn-primary']"
 
- 
-            assert $("textarea",'data-automation-id':"text-proposal-description")
-            descriptionFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-proposal-description"]//@id,"_ifr")]'), 0) }
-            "Set Description" "Lesz nenes ma ues"
-            //def MyTextArea=$("textarea",'data-automation-id':"text-proposal-description").module(Textarea)
-
-
-/           /MyTextArea.text='Lesz nenes ma ues'
-  */
 
 
       and: "Delete the proposal, part to check for functionality, part for clean up" 
