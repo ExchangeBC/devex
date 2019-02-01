@@ -43,9 +43,9 @@ class OpportunitiesAdminCreateSWUPage extends Page {
         //Details tab objects
         LocationRadioButton {option -> $("input[type='radio']", name: "onsite", value: option)}
         selectLocation(wait:true){$('select',name:'location')} //Location Drop Down list
-                //Dates in Details tab
-                proposalDeadLine(wait: true) {$("input",id:"deadline") }
-                proposalAssignment{$("input", type:"date", name:"assignment")}
+            //Dates in Details tab
+            proposalDeadLine{$("input",id:"deadline") }
+            proposalAssignment{$("input", type:"date", name:"assignment")}
 
         //Phases tab objects
         CapabilityInceptionBtn{$("button",'data-automation-id':"btnInception")}
@@ -57,15 +57,20 @@ class OpportunitiesAdminCreateSWUPage extends Page {
         CapabilityImplementationTgl{$("li",'data-automation-id':"tglCapabilityImplementation")}
 
                 //Dates in Phases tab --- there are problems with the ids of the diferent elements. This section will need more work
-                inceptionStartDate(wait: true) {$("input",id:"inceptionStartDate") }
+                InceptionStartDate(wait: true) {$("input",id:"inceptionStartDate") }
+                InceptionCompleteDate(wait: true) {$("input",id:"inceptionCompleteDate") }
 
+                PrototypeStartDate(wait: true) {$("input",id:"prototypeStartDate") }
+                PrototypeEndDate(wait: true) {$("input",id:"prototypeEndDate") }
+
+                ImplementationStartDate(wait: true) {$("input",id:"implementationStartDate") }
+                ImplementationEndDate(wait: true) {$("input",id:"implementationEndDate") }
+         
 
         //Preferred Technical Skills tab objects
         Skill0{$("label",'data-automation-id':"lstSkills",0)}
         Skill1{$("label",'data-automation-id':"lstSkills",1)}
         Skill2{$("label",'data-automation-id':"lstSkills",2)}
-
-
 
         //Budget tab objects
         MaxBudgetTotal{$("input",id:"budget")}

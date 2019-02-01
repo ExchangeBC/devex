@@ -97,11 +97,8 @@ class UserCreatesCompany extends GebReportingSpec {
         println("Line 69 (Company Page)  ${driver.currentUrl}"  )
 
     and: "Click on the 'Register a Company' button"
-        
         waitFor{RegisterCompanyButton}
         RegisterCompanyButton.click()
-
-        //$("button",'data-automation-id':"button-register-a-company").click()
 
     then: "Opens the page to create a new company" 
         at CompaniesCreatePage 
@@ -112,7 +109,9 @@ class UserCreatesCompany extends GebReportingSpec {
         CompanyName.value("Hugo and friend\'s Company") 
         Jurisdiction.value("Vancouver Island and the Inlets") 
         BusinessNumber.value("BC-123456789")
+
         AgreeConditions.click() // When all the fields are completed the next button should be enabled
+
         ContinueSubmitButton.click()
         sleep(2000) //There is an angular animation and I prefer is gone before proceeding
 

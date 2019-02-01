@@ -12,14 +12,14 @@ import pages.app.AuthenticationGovernmentPage
 import pages.app.AuthenticationSigninPage
 import pages.app.AuthenticationSigninadminPage
 import pages.app.CodewithusPage
-
+import pages.app.CompaniesPage
 import pages.app.CopyrightPage
 import pages.app.DisclaimerPage
 import pages.app.HomePage
 import pages.app.NotificationsPage
 import pages.app.OpportunitiesPage
 import pages.app.OpportunityDetailPage
-import pages.app.OrgsListPage
+
 import pages.app.PrivacyPage
 import pages.app.ProfilesPage
 import pages.app.ProgramsPage
@@ -50,7 +50,7 @@ class FlowSpecs extends GebReportingSpec {
     where:
          StartPage | ClickLink               || AssertPage 
          HomePage  | "HomeLink"              || HomePage
-         HomePage  | "CompaniesNavbar"       || OrgsListPage
+         HomePage  | "CompaniesNavbar"       || CompaniesPage
          HomePage  | "ProgramsNavbar"        || ProgramsPage
          HomePage  | "ProjectsNavbar"        || ProjectsPage
          HomePage  | "OpportunitiesNavBar"   || OpportunitiesPage

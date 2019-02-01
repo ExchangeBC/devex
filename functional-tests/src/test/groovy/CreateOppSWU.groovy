@@ -46,17 +46,42 @@ class CreateOppSWU extends GebReportingSpec {
                 Calendar calendar= Calendar.getInstance()
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
-                calendar.add(Calendar.DATE,3)
-                def deadline=calendar.getTime()  //Define the deadline for applications (set to 3 days from today)
+                calendar.add(Calendar.DATE,3)//Define the deadline for applications (set to 3 days from today)
+                def deadline=calendar.getTime()  
                 def Formatted_deadline=format.format( deadline )
+                def Formatted_deadline_Year=deadline.year +1900 //Year start counting from 1900
+                def Formatted_deadline_Month=deadline.month +1 //Month start counting from 0
+                def Formatted_deadline_Day=deadline.date
 
-                calendar.add(Calendar.DATE,21)
-                def assignment=calendar.getTime() //Define the date the oppoortunity is assigned (set to 21 + 3 days from today)
+
+                calendar.add(Calendar.DATE,21)//Define the date the opportunity is assigned (set to 21 + 3 days from today)
+                def assignment=calendar.getTime() 
                 def Formatted_assignment=format.format(assignment)
+                def Formatted_assignment_Year=assignment.year +1900 //Year start counting from 1900
+                def Formatted_assignment_Month=assignment.month +1 //Month start counting from 0
+                def Formatted_assignment_Day=assignment.date
 
-                calendar.add(Calendar.DATE,21)
-                def start=calendar.getTime()   //Define the start date for the work (set to 21+21+3 days from today)
-                def Formatted_start=format.format(start)
+
+                calendar.add(Calendar.DATE,21)//Define the date for the end of the Inception Phase (set to 21+ 21 + 3 days from today)
+                def endInception=calendar.getTime() 
+                def Formatted_InceptionEnd=format.format(endInception)
+                def Formatted_InceptionEnd_Year=endInception.year +1900 //Year start counting from 1900
+                def Formatted_InceptionEnd_Month=endInception.month +1 //Month start counting from 0
+                def Formatted_InceptionEnd_Day=endInception.date
+
+                calendar.add(Calendar.DATE,21)//Define the date the end of the POC Phase (set to 21+ 21 +21 + 3 days from today)
+                def endPOC=calendar.getTime() 
+                def Formatted_PrototypeEnd=format.format(endPOC)
+                def Formatted_PrototypeEnd_Year=endPOC.year +1900 //Year start counting from 1900
+                def Formatted_PrototypeEnd_Month=endPOC.month +1 //Month start counting from 0
+                def Formatted_PrototypeEnd_Day= endPOC.date
+
+                calendar.add(Calendar.DATE,21)//Define the date the end of the Implementation Phase(set to 21 +21+ 21 +21 + 3 days from today)
+                def endImplementation=calendar.getTime() 
+                def Formatted_ImplementationEnd=format.format(endImplementation)
+                def Formatted_ImplementationEnd_Year=endImplementation.year +1900 //Year start counting from 1900
+                def Formatted_ImplementationEnd_Month=endImplementation.month +1 //Month start counting from 0
+                def Formatted_ImplementationEnd_Day=endImplementation.date
 
                 def  MyTitleData = TitleData + ": " + RandomID
 
@@ -92,21 +117,73 @@ class CreateOppSWU extends GebReportingSpec {
                     LocationRadioButton(Onsite).click()
                     selectLocation.value(Location)
 
-                    //I an having problems with the dates, so I am doing nothing at this moment
-                    //proposalDeadLine
-                    //proposalAssignment
+                    //Setting the proposal Deadline
+                    proposalDeadLine.firstElement().clear()  //clean the field from the preselected date
+                    proposalDeadLine << Formatted_deadline_Year.toString() //write the year
+                    proposalDeadLine << Keys.ARROW_RIGHT  // move right to the month
+                    proposalDeadLine << Formatted_deadline_Month.toString()
+                    proposalDeadLine << Keys.ARROW_RIGHT  //move right to the day
+                    proposalDeadLine << Formatted_deadline_Day.toString() 
+              
+                    //Setting the proposal Assignment
+                    proposalAssignment.firstElement().clear()  //clean the field from the preselected date
+                    proposalAssignment << Formatted_assignment_Year.toString() //write the year
+                    proposalAssignment<< Keys.ARROW_RIGHT  // move right to the month
+                    proposalAssignment<< Formatted_assignment_Month.toString()
+                    proposalAssignment << Keys.ARROW_RIGHT  //move right to the day
+                    proposalAssignment << Formatted_assignment_Day.toString() 
 
                 and: "Move to the Phases tab to enter the dates for the different phases"
                     PhasesTabClick
-                    waitFor{CapabilityInceptionTgl.click()} //Click on the Capability for Inception Phase
+                        //sleep(1000)
+                        CapabilityInceptionTgl.click() //Click on the Capability on the Inception Phase
+                        //Setting dates for Inception phase. Use the Assigment date as the start of Inception phase                
+                        InceptionStartDate.firstElement().clear()  //clean the field from the preselected date
+                        InceptionStartDate << Formatted_assignment_Year.toString() //write the year
+                        InceptionStartDate<< Keys.ARROW_RIGHT  // move right to the month
+                        InceptionStartDate<< Formatted_assignment_Month.toString()
+                        InceptionStartDate << Keys.ARROW_RIGHT  //move right to the day
+                        InceptionStartDate << Formatted_assignment_Day.toString() 
+
+                        InceptionCompleteDate.firstElement().clear()  //clean the field from the preselected date
+                        InceptionCompleteDate << Formatted_InceptionEnd_Year.toString() //write the year
+                        InceptionCompleteDate << Keys.ARROW_RIGHT  // move right to the month
+                        InceptionCompleteDate << Formatted_InceptionEnd_Month.toString()
+                        InceptionCompleteDate << Keys.ARROW_RIGHT  //move right to the day
+                        InceptionCompleteDate << Formatted_InceptionEnd_Day.toString() 
 
 
-                    //CapabilityProofOfConceptBtn.click() //Click on the 'Start Here' proof of concept button
-                    CapabilityProofOfConceptTgl.click() //Click on the Capability for proof of concept Phase
+                        CapabilityProofOfConceptTgl.click() //Click on the Capability on the Proof of concept Phase
+                        //Setting dates for Proof of Concept phase. Use the Formatted_InceptionEnd date  the start of Proof of Concept phase                
+                        PrototypeStartDate.firstElement().clear()  //clean the field from the preselected date
+                        PrototypeStartDate << Formatted_InceptionEnd_Year.toString() //write the year
+                        PrototypeStartDate << Keys.ARROW_RIGHT  // move right to the month
+                        PrototypeStartDate << Formatted_InceptionEnd_Month.toString()
+                        PrototypeStartDate << Keys.ARROW_RIGHT  //move right to the day
+                        PrototypeStartDate << Formatted_InceptionEnd_Day.toString() 
 
-                    CapabilityImplementationBtn.click() //Click on the 'Start Here' Implementation button
+                        PrototypeEndDate.firstElement().clear()  //clean the field from the preselected date
+                        PrototypeEndDate << Formatted_PrototypeEnd_Year.toString() //write the year
+                        PrototypeEndDate << Keys.ARROW_RIGHT  // move right to the month
+                        PrototypeEndDate << Formatted_PrototypeEnd_Month.toString()
+                        PrototypeEndDate << Keys.ARROW_RIGHT  //move right to the day
+                        PrototypeEndDate << Formatted_PrototypeEnd_Day.toString() 
+                   
                     CapabilityImplementationTgl.click() //Click on the Capability for Implementation Phase
+                        //Setting dates for Implementation phase. Use the Formatted_PrototypeEnd date  the start of Proof of Concept phase                
+                        ImplementationStartDate.firstElement().clear()  //clean the field from the preselected date
+                        ImplementationStartDate << Formatted_PrototypeEnd_Year.toString() //write the year
+                        ImplementationStartDate << Keys.ARROW_RIGHT  // move right to the month
+                        ImplementationStartDate << Formatted_PrototypeEnd_Month.toString()
+                        ImplementationStartDate << Keys.ARROW_RIGHT  //move right to the day
+                        ImplementationStartDate << Formatted_PrototypeEnd_Day.toString() 
 
+                        ImplementationEndDate.firstElement().clear()  //clean the field from the preselected date
+                        ImplementationEndDate << Formatted_ImplementationEnd_Year.toString() //write the year
+                        ImplementationEndDate << Keys.ARROW_RIGHT  // move right to the month
+                        ImplementationEndDate << Formatted_ImplementationEnd_Month.toString()
+                        ImplementationEndDate << Keys.ARROW_RIGHT  //move right to the day
+                        ImplementationEndDate << Formatted_ImplementationEnd_Day.toString() 
 
                 and: "Move to the Preferred Technical Skills tab to enter the dates for the different phases"
                     TechnicalSkillTabClick
@@ -118,12 +195,15 @@ class CreateOppSWU extends GebReportingSpec {
                     BudgetTabClick
                     //Because in the Phases tab we clicked on the CapabilityImplementationBtn button, only the Total and Implementation budget lines will appear
                     waitFor{MaxBudgetTotal.value(BudgetTotal)}
+                    MaxBudgetInception.value(BudgetInc)
+                    MaxBudgetPOC.value(BudgetPOC)
                     MaxBudgetImplementation.value(BudgetImpl)
                     //And these two will not appear
 
-                expect: "The budget tab does NOT display the lines for inception and Proof of concept"
-                    MaxBudgetInception.empty
-                    MaxBudgetPOC.empty
+                //The first iteration these two sections were not set, but now they are defined in the Phases tab
+                //expect: "The budget tab does NOT display the lines for inception and Proof of concept"
+                //    MaxBudgetInception.empty
+                //    MaxBudgetPOC.empty
 
                 and: "Move to the Terms and Conditions tabs"
                     TermsTabClick
@@ -159,7 +239,6 @@ class CreateOppSWU extends GebReportingSpec {
                     waitFor{to OpportunitiesPage}
 
                 and: "Click on the newly created opportunity (still unpublished)"
-                    //def OppTitle =PublishedOpportunity.text()  //Opportunity title
                     def MyCurrentURL=getCurrentUrl() //URL opportunity page
                     waitFor{FirstListedOpportunity.click()}  //it clicks on the first opportunity of the list
                     sleep(3000) //Giving some time so it can later grab the correct URL
@@ -177,7 +256,7 @@ class CreateOppSWU extends GebReportingSpec {
 
 
      where: "The values used to create the Opportunity are:"
-      Project | TitleData | Teaser | Background | Github | Location | Onsite | BudgetTotal | BudgetInc | BudgetPOC| BudgetImpl | AdditionalTerms | Question | Addenda
+      Project | TitleData | Teaser | Background | Github | Location | Onsite | BudgetTotal | BudgetInc | BudgetPOC|BudgetImpl | AdditionalTerms | Question | Addenda
       "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | 1000000 | 100000| 300000 | 600000 | "Additional Terms for this SWU proposal" | "Stat rosa pristina nomine, nomina nuda tenemus?" | "Addenda for SWU opportunity"
   }
 

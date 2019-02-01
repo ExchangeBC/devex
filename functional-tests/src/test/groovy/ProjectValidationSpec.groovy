@@ -19,7 +19,7 @@ import spock.lang.Title
 import geb.spock.GebReportingSpec
 
 
-@Title("Check the user can not create projects with Invalid names")
+@Title("Check the user can not create projects with Invalid names-Precondition: At least a Program need to alredy exists")
 class ProjectValidationSpec extends GebReportingSpec {
 
 

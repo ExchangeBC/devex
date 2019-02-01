@@ -192,7 +192,7 @@ class CoreServerHelpers {
 					if (!result) {
 						callback(possible);
 					} else {
-						return model.findUniqueCode(title, (suffix || 0) + 1, callback);
+						return model.schema.statics.findUniqueCode(title, (suffix || 0) + 1, callback);
 					}
 				} else {
 					callback(null);
