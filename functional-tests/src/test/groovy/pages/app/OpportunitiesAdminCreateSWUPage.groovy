@@ -101,16 +101,10 @@ class OpportunitiesAdminCreateSWUPage extends Page {
         PriceScore{$("input",'data-automation-id':"priceScore")}
 
 
-
-
-///////////////////
-
-
         SaveButton { $('button[data-automation-id ~= "btnSaveChanges"]') }
         DeleteButton { $('a[data-automation-id ~= "button-cwu-delete"]') }
 
-
-         }
+    }
 
 
 }
