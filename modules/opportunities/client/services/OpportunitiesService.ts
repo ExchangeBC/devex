@@ -11,6 +11,10 @@ interface IOpportunityServiceParams {
 	preapproval?: string;
 }
 
+interface IDeadlineResource extends resource.IResource<any> {
+	$promise: IPromise<any>
+}
+
 export interface IOpportunityResource extends resource.IResource<IOpportunity>, IOpportunity {
 	opportunityId: '@_id';
 	$promise: IPromise<IOpportunityResource>;
@@ -25,7 +29,7 @@ export interface IOpportunitiesService extends resource.IResourceClass<IOpportun
 	unassign(params: IOpportunityServiceParams): IOpportunityResource;
 	addWatch(params: IOpportunityServiceParams): IOpportunityResource;
 	removeWatch(params: IOpportunityServiceParams): IOpportunityResource;
-	getDeadlineStatus(params: IOpportunityServiceParams): IPromise<any>;
+	getDeadlineStatus(params: IOpportunityServiceParams): IDeadlineResource;
 	getProposalStats(params: IOpportunityServiceParams): object;
 	requestCode(params: IOpportunityServiceParams): IOpportunityResource;
 	submitCode(params: IOpportunityServiceParams): IOpportunityResource;
