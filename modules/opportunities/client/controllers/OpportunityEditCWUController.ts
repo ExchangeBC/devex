@@ -1,13 +1,14 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IFormController, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
+import { IDataService } from '../../../core/client/services/DataService';
 import { IProject } from '../../../projects/shared/IProjectDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityEditCWUController {
-	public static $inject = ['$state', 'opportunity', 'editing', 'projects', 'AuthenticationService', 'Notification', 'dataService', 'ask', 'TINYMCE_OPTIONS', 'OpportunitiesService'];
+	public static $inject = ['$state', 'opportunity', 'editing', 'projects', 'AuthenticationService', 'Notification', 'DataService', 'ask', 'TinyMceConfiguration', 'OpportunitiesService'];
 
 	public isAdmin: boolean;
 	public isGov: boolean;
@@ -22,15 +23,15 @@ export default class OpportunityEditCWUController {
 	private isUser: boolean;
 
 	constructor(
-		private $state: IStateService,
+		private $state: StateService,
 		public opportunity: IOpportunityResource,
 		public editing: boolean,
 		public projects: IProject[],
 		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
-		private dataService,
+		private DataService: IDataService,
 		private ask,
-		public TINYMCE_OPTIONS,
+		public TinyMceConfiguration,
 		private OpportunitiesService: IOpportunitiesService
 	) {
 		// set up roles/permissions
@@ -40,7 +41,7 @@ export default class OpportunityEditCWUController {
 
 		// set up the dropdown amounts for CWU earnings
 		this.initDropDownAmounts();
-		this.cities = this.dataService.cities;
+		this.cities = this.DataService.cities;
 
 		// if the user doesn't have the right access then kick them out
 		if (this.editing && !this.isAdmin && !this.opportunity.userIs.admin) {

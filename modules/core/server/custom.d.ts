@@ -25,4 +25,13 @@ declare global {
             profile?: IUserModel;
         }
     }
-} 
+}
+
+declare module '@uirouter/angularjs/lib/interface' {
+    export interface Ng1StateDeclaration {
+        ncyBreadcrumb?: {
+            label: string;
+            parent?: string;
+        };
+    }
+}

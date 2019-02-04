@@ -1,6 +1,8 @@
-// Augment globals as necessary
-declare interface Window {
-	_: any;
-	env: any;
-	ApplicationConfiguration: any;
+import { IApplicationConfiguration } from './ApplicationConfiguration';
+
+declare global {
+	interface Window {
+		env: string;
+		ApplicationConfiguration: IApplicationConfiguration;
+	}
 }

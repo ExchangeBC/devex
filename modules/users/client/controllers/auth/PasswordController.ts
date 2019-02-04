@@ -1,7 +1,7 @@
 'use strict';
 
-import angular, { IController, ILocationService, IScope, uiNotification } from 'angular';
-import { IStateParamsService } from 'angular-ui-router';
+import { StateParams } from '@uirouter/core';
+import { IController, ILocationService, IScope, uiNotification } from 'angular';
 import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserResource, IUserService } from '../../services/UsersService';
@@ -26,7 +26,7 @@ export class PasswordController implements IController {
 
 	constructor(
 		private $scope: IScope,
-		private $stateParams: IStateParamsService,
+		private $stateParams: StateParams,
 		private UsersService: IUserService,
 		private $location: ILocationService,
 		private AuthenticationService: IAuthenticationService,

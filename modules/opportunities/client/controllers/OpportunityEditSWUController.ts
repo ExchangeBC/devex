@@ -1,8 +1,8 @@
 'use strict';
 
 // Import certain style elements here so that webpack picks them up
+import { StateService } from '@uirouter/core';
 import angular, { IController, IFormController, IRootScopeService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment';
 import { ICapabilitiesService, ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
@@ -22,10 +22,10 @@ export class OpportunityEditSWUController implements IController {
 		'projects',
 		'AuthenticationService',
 		'Notification',
-		'dataService',
+		'DataService',
 		'ask',
 		'CapabilitiesService',
-		'TINYMCE_OPTIONS',
+		'TinyMceConfiguration',
 		'OpportunitiesService'
 	];
 
@@ -52,16 +52,16 @@ export class OpportunityEditSWUController implements IController {
 
 	constructor(
 		private $scope: IRootScopeService,
-		private $state: IStateService,
+		private $state: StateService,
 		public opportunity: IOpportunityResource,
 		private editing: boolean,
 		public projects: IProject[],
 		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
-		private dataService,
+		private DataService,
 		private ask,
 		private CapabilitiesService: ICapabilitiesService,
-		public TINYMCE_OPTIONS,
+		public TinyMceConfiguration,
 		private OpportunitiesService: IOpportunitiesService
 	) {
 		this.toggleSelectedSkill = this.toggleSelectedSkill.bind(this);
@@ -71,7 +71,7 @@ export class OpportunityEditSWUController implements IController {
 		this.isGov = this.isUser && this.AuthenticationService.user.roles.indexOf('gov') !== -1;
 
 		this.closing = 'CLOSED';
-		this.cities = this.dataService.cities;
+		this.cities = this.DataService.cities;
 
 		if (!this.editing) {
 			this.populateNewOpportunity();

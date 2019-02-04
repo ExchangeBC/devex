@@ -1,8 +1,8 @@
 (function () {
 	'use strict';
 
-	angular.module('projects').run(['menuService', function (menuService) {
-		menuService.addMenuItem ('topbar', {
+	angular.module('projects').run(['MenuService', function (MenuService) {
+		MenuService.addMenuItem ('topbar', {
 			title: 'Projects',
 			state: 'projects.list',
 			roles: ['*'],

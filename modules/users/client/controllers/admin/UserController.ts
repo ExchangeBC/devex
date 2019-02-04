@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IController, IScope, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import '../../css/users.css';
 import { IAdminService } from '../../services/AdminService';
 import { IAuthenticationService } from '../../services/AuthenticationService';
@@ -12,7 +12,7 @@ export class UserController implements IController {
 
 	constructor(
 		private $scope: IScope,
-		private $state: IStateService,
+		private $state: StateService,
 		private AuthenticationService: IAuthenticationService,
 		public user: IUserResource,
 		private Notification: uiNotification.INotificationService,

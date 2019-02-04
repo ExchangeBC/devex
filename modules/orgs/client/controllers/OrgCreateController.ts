@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IController, IFormController, IRootScopeService, IScope, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserResource, IUserService } from '../../../users/client/services/UsersService';
 import { IOrgResource, IOrgService } from '../services/OrgService';
@@ -17,7 +17,7 @@ export class OrgCreateController implements IController {
 	constructor(
 		private $rootScope: IRootScopeService,
 		private $scope: IScope,
-		private $state: IStateService,
+		private $state: StateService,
 		public org: IOrgResource,
 		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,

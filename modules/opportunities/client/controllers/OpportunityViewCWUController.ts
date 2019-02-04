@@ -1,10 +1,10 @@
 'use strict';
 
 import angular, { IController, ILocationService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
 (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+import { StateService } from '@uirouter/core';
 import moment from 'moment-timezone';
 import { IProposalResource } from '../../../proposals/client/services/ProposalService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
@@ -34,7 +34,7 @@ export default class OpportunityViewCWUController implements IController {
 	private approvalCode: string;
 
 	constructor(
-		private $state: IStateService,
+		private $state: StateService,
 		private $location: ILocationService,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
@@ -167,7 +167,7 @@ export default class OpportunityViewCWUController implements IController {
 				this.refreshOpportunity(updatedOpportunity);
 				this.Notification.success({
 					message: '<i class="fas fa-check-circle"></i> Proposal Unassigned'
-				})
+				});
 			} catch (error) {
 				this.handleError(error);
 			}
@@ -188,13 +188,12 @@ export default class OpportunityViewCWUController implements IController {
 	}
 
 	public exportApprovalRecord() {
-
 		const imgToExport = document.getElementById('imgToExport') as HTMLImageElement;
 		const canvas = document.createElement('canvas');
 		canvas.width = imgToExport.width;
 		canvas.height = imgToExport.height;
 		canvas.getContext('2d').drawImage(imgToExport, 0, 0);
-		const imgData = canvas.toDataURL('image/png')
+		const imgData = canvas.toDataURL('image/png');
 
 		const docDefinition = {
 			content: [
@@ -268,7 +267,7 @@ export default class OpportunityViewCWUController implements IController {
 		approvalInfo.push({
 			text: `This record was generated on ${new Date().toLocaleString()} PST`,
 			style: ['quote', 'small']
-		})
+		});
 
 		approvalInfo.forEach((item: any) => {
 			docDefinition.content.push(item);

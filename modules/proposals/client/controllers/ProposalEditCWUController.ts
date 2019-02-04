@@ -1,11 +1,12 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import moment from 'moment-timezone';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IUserService } from '../../../users/client/services/UsersService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IProposalResource, IProposalService } from '../services/ProposalService';
 
@@ -24,7 +25,7 @@ export default class ProposalEditCWUController {
 		'UsersService',
 		'Notification',
 		'org',
-		'TINYMCE_OPTIONS'
+		'TinyMceConfiguration'
 	];
 
 	public members: any[];
@@ -38,16 +39,16 @@ export default class ProposalEditCWUController {
 		private $scope: IRootScopeService,
 		private ask,
 		private Upload: angularFileUpload.IUploadService,
-		private $state: IStateService,
+		private $state: StateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
 		private ProposalService: IProposalService,
-		private OopportunitiesService: IOpportunitiesService,
-		private UsersService,
+		private OpportunitiesService: IOpportunitiesService,
+		private UsersService: IUserService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TINYMCE_OPTIONS
+		public TinyMceConfiguration
 	) {
 		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
 		// if they do, transition to edit view for that proposal
@@ -80,12 +81,7 @@ export default class ProposalEditCWUController {
 
 		try {
 			// First, check with server to ensure deadline hasn't passed
-			const response = await this.OopportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id });
-			if (response.deadlineStatus === 'CLOSED') {
-				this.Notification.error({
-					title: 'Error',
-					message: '<i class="fas fa-3x fa-exclamation-triangle"></i> Deadline has passed!'
-				});
+			if (!(await this.checkDeadline())) {
 				return;
 			}
 
@@ -124,37 +120,47 @@ export default class ProposalEditCWUController {
 
 	// Delete a proposal
 	public async delete(): Promise<void> {
-		const confirmMessage = 'Are you sure you want to delete your proposal? All your work will be lost.';
-		const choice = await this.ask.yesNo(confirmMessage);
-		if (choice) {
-			try {
-				await this.proposal.$remove();
-				this.proposalForm.$setPristine();
-				this.$state.go('opportunities.viewcwu', { opportunityId: this.opportunity.code });
-				this.Notification.success({
-					message: '<i class="fas fa-check-circle"></i> Proposal Deleted'
-				});
-			} catch (error) {
-				this.handleError(error);
+		if (await this.checkDeadline()) {
+			const confirmMessage = 'Are you sure you want to delete your proposal? All your work will be lost.';
+			const choice = await this.ask.yesNo(confirmMessage);
+			if (choice) {
+				try {
+					await this.proposal.$remove();
+					this.proposalForm.$setPristine();
+					this.$state.go('opportunities.viewcwu', { opportunityId: this.opportunity.code });
+					this.Notification.success({
+						message: '<i class="fas fa-check-circle"></i> Proposal Deleted'
+					});
+				} catch (error) {
+					this.handleError(error);
+				}
 			}
 		}
 	}
 
 	// Withdraw a proposal
-	public withdraw(): void {
-		this.proposal.status = 'Draft';
-		this.save(true, 'Proposal Withdrawn');
+	public async withdraw(): Promise<void> {
+		if (await this.checkDeadline()) {
+			this.proposal.status = 'Draft';
+			this.save(true, 'Proposal Withdrawn');
+		}
 	}
 
 	// Submit the proposal
-	public submit(): void {
-		this.proposal.status = 'Submitted';
-		this.save(true, 'Proposal Submitted');
+	public async submit(): Promise<void> {
+		if (await this.checkDeadline()) {
+			this.proposal.status = 'Submitted';
+			this.save(true, 'Proposal Submitted');
+		}
 	}
 
 	// Upload documents as attachments to proposal
 	public async upload(file: File): Promise<void> {
 		if (!file) {
+			return;
+		}
+
+		if (!(await this.checkDeadline())) {
 			return;
 		}
 
@@ -188,6 +194,10 @@ export default class ProposalEditCWUController {
 
 	// Delete an attachment from a proposal
 	public async deleteAttachment(fileId: string): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		try {
 			const updatedProposal = await this.ProposalService.removeDoc({
 				proposalId: this.proposal._id,
@@ -218,6 +228,20 @@ export default class ProposalEditCWUController {
 			return 'fa-file-powerpoint';
 		} else {
 			return 'fa-file';
+		}
+	}
+
+	private async checkDeadline(): Promise<boolean> {
+		// Check with server to ensure deadline hasn't passed
+		const response = await this.OpportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id }).$promise;
+		if (response.deadlineStatus === 'CLOSED') {
+			this.Notification.error({
+				title: 'Error',
+				message: '<i class="fas fa-exclamation-triangle"></i> Deadline has passed!'
+			});
+			return false;
+		} else {
+			return true;
 		}
 	}
 

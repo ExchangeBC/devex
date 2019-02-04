@@ -44,16 +44,14 @@ const commonConfig = merge([
 		entry: {
 			main: [
 				'./vendor.ts',
-				'./modules/core/client/app/config.ts',
-				'./modules/core/client/app/init.ts',
+				'./modules/core/client/app/ApplicationConfiguration.ts'
 			].concat(
 				glob.sync('./modules/*/client/*.{js,ts}'),
 				glob.sync('./modules/*/client/**/*.{js,ts}', {
 					ignore: [
 						'./modules/*/client/*.{js,ts}',
 						'./main.js',
-						'./modules/core/client/app/config.ts',
-						'./modules/core/client/app/init.ts'
+						'./modules/core/client/app/ApplicationConfiguration.ts'
 					]
 				}),
 				glob.sync('./modules/*/client/**/*.html'),

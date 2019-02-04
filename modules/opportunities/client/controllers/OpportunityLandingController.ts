@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateParams } from '@uirouter/core';
 import angular from 'angular';
-import { IStateParamsService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 
 export default class OpportunityLandingController {
@@ -19,7 +19,7 @@ export default class OpportunityLandingController {
 	private isGov: boolean;
 
 	// Controller for the view of the opportunity landing page
-	constructor(AuthenticationService: IAuthenticationService, $stateParams: IStateParamsService) {
+	constructor(AuthenticationService: IAuthenticationService, $stateParams: StateParams) {
 		this.programId = $stateParams.programId;
 		this.programTitle = $stateParams.programTitle;
 		this.projectId = $stateParams.projectId;

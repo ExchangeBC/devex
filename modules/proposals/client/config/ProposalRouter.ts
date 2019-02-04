@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateParams, StateProvider } from '@uirouter/angularjs';
 import angular from 'angular';
-import { IStateParamsService, IStateProvider } from 'angular-ui-router';
 import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
 import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
@@ -11,7 +11,7 @@ import { IProposalService } from '../services/ProposalService';
 (() => {
 	angular.module('proposals.routes').config([
 		'$stateProvider',
-		($stateProvider: IStateProvider) => {
+		($stateProvider: StateProvider) => {
 			$stateProvider
 
 				// this is the top level, abstract route for all proposal routes, it only
@@ -43,7 +43,7 @@ import { IProposalService } from '../services/ProposalService';
 						proposal: [
 							'$stateParams',
 							'ProposalService',
-							($stateParams: IStateParamsService, proposalService: IProposalService) => {
+							($stateParams: StateParams, proposalService: IProposalService) => {
 								return proposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -65,7 +65,7 @@ import { IProposalService } from '../services/ProposalService';
 						proposal: [
 							'$stateParams',
 							'ProposalService',
-							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+							($stateParams: StateParams, ProposalService: IProposalService) => {
 								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -106,7 +106,7 @@ import { IProposalService } from '../services/ProposalService';
 						proposal: [
 							'$stateParams',
 							'ProposalService',
-							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+							($stateParams: StateParams, ProposalService: IProposalService) => {
 								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -115,7 +115,7 @@ import { IProposalService } from '../services/ProposalService';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+							($stateParams: StateParams, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -163,7 +163,7 @@ import { IProposalService } from '../services/ProposalService';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+							($stateParams: StateParams, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -205,7 +205,7 @@ import { IProposalService } from '../services/ProposalService';
 						proposal: [
 							'$stateParams',
 							'ProposalService',
-							($stateParams: IStateParamsService, ProposalService: IProposalService) => {
+							($stateParams: StateParams, ProposalService: IProposalService) => {
 								return ProposalService.get({
 									proposalId: $stateParams.proposalId
 								}).$promise;
@@ -214,7 +214,7 @@ import { IProposalService } from '../services/ProposalService';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+							($stateParams: StateParams, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -244,7 +244,7 @@ import { IProposalService } from '../services/ProposalService';
 							'AuthenticationService',
 							'ProposalService',
 							'$stateParams',
-							(OrgService, AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService) => {
+							(OrgService, AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: StateParams) => {
 								if (!AuthenticationService.user) {
 									return null;
 								} else {
@@ -285,7 +285,7 @@ import { IProposalService } from '../services/ProposalService';
 						opportunity: [
 							'$stateParams',
 							'OpportunitiesService',
-							($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService) => {
+							($stateParams: StateParams, OpportunitiesService: IOpportunitiesService) => {
 								return OpportunitiesService.get({
 									opportunityId: $stateParams.opportunityId
 								}).$promise;
@@ -312,7 +312,7 @@ import { IProposalService } from '../services/ProposalService';
 							'ProposalService',
 							'$stateParams',
 							'OrgService',
-							(AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: IStateParamsService, OrgService) => {
+							(AuthenticationService: IAuthenticationService, ProposalService: IProposalService, $stateParams: StateParams, OrgService) => {
 								if (!AuthenticationService.user) {
 									return null;
 								} else {

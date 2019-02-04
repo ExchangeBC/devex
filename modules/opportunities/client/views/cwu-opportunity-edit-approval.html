@@ -290,7 +290,7 @@
                       "title" :"Summary of Services",
                       "name"  :"summary"
                     }'>
-                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.TINYMCE_OPTIONS"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="summary" id="summary" data-automation-id="text-cwu-summary" ui-tinymce="vm.TinyMceConfiguration"
                   ng-model="vm.opportunity.contract.summary">
                     </textarea>
               </form-display>
@@ -322,7 +322,7 @@
                       "name"  :"staffResource",
                       "required": true
                     }'>
-                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="staffResource" id="staffResource" data-automation-id="text-cwu-staffResource" ui-tinymce="vm.TINYMCE_OPTIONS"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="staffResource" id="staffResource" data-automation-id="text-cwu-staffResource" ui-tinymce="vm.TinyMceConfiguration"
                   ng-model="vm.opportunity.contract.staffResourceExplanation">
                     </textarea>
               </form-display>
@@ -336,7 +336,7 @@
                       "name"  :"impact",
                       "required": true
                     }'>
-                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.TINYMCE_OPTIONS"
+                <textarea ng-disabled="vm.opportunity.intermediateApproval.state !== 'draft'" name="impact" id="impact" data-automation-id="text-cwu-impact" ui-tinymce="vm.TinyMceConfiguration"
                   ng-model="vm.opportunity.contract.impactNotApproved">
                     </textarea>
               </form-display>

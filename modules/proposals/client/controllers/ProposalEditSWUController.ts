@@ -1,12 +1,13 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { angularFileUpload, IFormController, IWindowService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment-timezone';
+import { Settings } from 'tinymce';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
-import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
@@ -24,9 +25,10 @@ export default class ProposalEditSWUController {
 		'ProposalService',
 		'Notification',
 		'org',
-		'TINYMCE_OPTIONS',
+		'TinyMceConfiguration',
 		'resources',
-		'$window'
+		'$window',
+		'OpportunitiesService'
 	];
 
 	public title: string;
@@ -52,16 +54,17 @@ export default class ProposalEditSWUController {
 		public editing: boolean,
 		private ask,
 		private Upload: angularFileUpload.IUploadService,
-		private $state: IStateService,
+		private $state: StateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
 		private ProposalService: IProposalService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TINYMCE_OPTIONS,
+		public TinyMceConfiguration: Settings,
 		public resources: any,
-		private $window: IWindowService
+		private $window: IWindowService,
+		private OpportunitiesService: IOpportunitiesService
 	) {
 		this.user = this.AuthenticationService.user;
 		this.activeTab = 1;
@@ -156,6 +159,10 @@ export default class ProposalEditSWUController {
 
 	// perform the save, both user info and proposal info
 	public async save(successMessage?: string): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		if (!successMessage) {
 			successMessage = 'Changes saved';
 		}
@@ -181,13 +188,19 @@ export default class ProposalEditSWUController {
 		}
 	}
 
-	public withdraw() {
-		this.proposal.status = 'Draft';
-		this.save('Your proposal has been withdrawn');
+	public async withdraw(): Promise<void> {
+		if (await this.checkDeadline()) {
+			this.proposal.status = 'Draft';
+			this.save('Your proposal has been withdrawn');
+		}
 	}
 
 	// submit the proposal
 	public async submit(): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		// validate the phase and total amounts
 		if (!this.validateAllAmounts()) {
 			this.Notification.error({
@@ -234,6 +247,10 @@ export default class ProposalEditSWUController {
 
 	// delete the proposal with confirmation
 	public async delete(): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		const question = 'Are you sure you want to permanently delete your proposal?';
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
@@ -251,6 +268,10 @@ export default class ProposalEditSWUController {
 
 	// upload documents
 	public async upload(file: File): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		if (!file) {
 			return;
 		}
@@ -284,6 +305,10 @@ export default class ProposalEditSWUController {
 	}
 
 	public async deletefile(fileId: string): Promise<void> {
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
 		const updatedProposal = await this.ProposalService.removeDoc({
 			proposalId: this.proposal._id,
 			documentId: fileId
@@ -313,6 +338,20 @@ export default class ProposalEditSWUController {
 
 	public toggleGuidance(index: number): void {
 		this.opportunity.teamQuestions[index].showGuidance = !this.opportunity.teamQuestions[index].showGuidance;
+	}
+
+	private async checkDeadline(): Promise<boolean> {
+		// Check with server to ensure deadline hasn't passed
+		const response = await this.OpportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id }).$promise;
+		if (response.deadlineStatus === 'CLOSED') {
+			this.Notification.error({
+				title: 'Error',
+				message: '<i class="fas fa-exclamation-triangle"></i> Deadline has passed!'
+			});
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	private isTeamCapable(): boolean {

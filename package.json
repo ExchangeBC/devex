@@ -110,7 +110,6 @@
     "@types/angular-resource": "^1.5.14",
     "@types/angular-ui-bootstrap": "^0.13.47",
     "@types/angular-ui-notification": "^0.0.4",
-    "@types/angular-ui-router": "^1.1.40",
     "@types/async": "^2.0.50",
     "@types/chalk": "^2.2.0",
     "@types/compression": "^0.0.36",

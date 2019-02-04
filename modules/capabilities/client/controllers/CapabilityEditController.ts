@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IRootScopeService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { ICapabilitiesService, ICapabilityResource } from '../services/CapabilitiesService';
 import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/CapabilitiesSkillsService';
@@ -16,17 +16,17 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 			'capability',
 			'AuthenticationService',
 			'Notification',
-			'TINYMCE_OPTIONS',
+			'TinyMceConfiguration',
 			'CapabilitiesService',
 			'CapabilitySkillsService',
 			'ask',
 			function(
 				$scope: IRootScopeService,
-				$state: IStateService,
+				$state: StateService,
 				capability: ICapabilityResource,
 				AuthenticationService: IAuthenticationService,
 				Notification: uiNotification.INotificationService,
-				TINYMCE_OPTIONS,
+				TinyMceConfiguration,
 				CapabilitiesService: ICapabilitiesService,
 				CapabilitySkillsService: ICapabilitySkillsService,
 				ask
@@ -34,7 +34,7 @@ import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/
 				const qqq = this;
 				qqq.capability = capability;
 				qqq.auth = AuthenticationService.permissions();
-				qqq.tinymceOptions = TINYMCE_OPTIONS;
+				qqq.tinymceOptions = TinyMceConfiguration;
 				qqq.newskill = '';
 				qqq.editingskill = false;
 

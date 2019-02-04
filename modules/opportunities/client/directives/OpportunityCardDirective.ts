@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IController, IScope, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
@@ -23,7 +23,7 @@ export class OpportunityCardDirectiveController implements IController {
 
 	constructor(
 		private $scope: IOpportunityCardScope,
-		private $state: IStateService,
+		private $state: StateService,
 		private AuthenticationService: IAuthenticationService,
 		private OpportunitiesCommonService: IOpportunitiesCommonService,
 		private OpportunitiesService: IOpportunitiesService,
@@ -93,9 +93,9 @@ export class OpportunityCardDirectiveController implements IController {
 	public goToView(editView?: boolean): void {
 		let routeName: string;
 		if (editView) {
-			routeName = (this.opportunity.opportunityTypeCd === 'code-with-us') ? 'opportunityadmin.editcwu' : 'opportunityadmin.editswu';
+			routeName = this.opportunity.opportunityTypeCd === 'code-with-us' ? 'opportunityadmin.editcwu' : 'opportunityadmin.editswu';
 		} else {
-			routeName = (this.opportunity.opportunityTypeCd === 'code-with-us') ? 'opportunities.viewcwu' : 'opportunities.viewswu';
+			routeName = this.opportunity.opportunityTypeCd === 'code-with-us' ? 'opportunities.viewcwu' : 'opportunities.viewswu';
 		}
 
 		this.$state.go(routeName, { opportunityId: this.opportunity.code });
@@ -106,10 +106,9 @@ export class OpportunityCardDirectiveController implements IController {
 	}
 
 	public getOpportunitySkills(): void {
-
 		if (this.opportunity.opportunityTypeCd === 'code-with-us') {
 			this.oppSkills = this.opportunity.skills.map(sk => {
-				return { name: sk, _id: '', code: '' }
+				return { name: sk, _id: '', code: '' };
 			});
 		} else {
 			this.oppSkills = _.flatten(
@@ -126,7 +125,7 @@ export class OpportunityCardDirectiveController implements IController {
 
 angular.module('opportunities').directive('opportunityCard', [
 	'$state',
-	($state: IStateService) => {
+	($state: StateService) => {
 		return {
 			restrict: 'E',
 			controllerAs: 'vm',

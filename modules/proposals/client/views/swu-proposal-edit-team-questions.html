@@ -38,7 +38,7 @@
         Response Guideline <i>(<span ng-if="question.showGuidance">click
             to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
       <div class="alert alert-info" ng-show="question.showGuidance && question.guideline" ng-bind-html="question.guideline"></div>
-      <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.TINYMCE_OPTIONS" ng-model="ppp.proposal.teamQuestionResponses[$index].response"></textarea>
+      <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.TinyMceConfiguration" ng-model="ppp.proposal.teamQuestionResponses[$index].response"></textarea>
     </div>
   </div>
 </div>
