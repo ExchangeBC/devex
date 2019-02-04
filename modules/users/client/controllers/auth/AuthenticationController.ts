@@ -1,7 +1,8 @@
 'use strict';
 
+import { Ng1StateDeclaration } from '@uirouter/angularjs';
+import { StateService } from '@uirouter/core';
 import angular, { IController, IRootScopeService, IScope, IWindowService, uiNotification } from 'angular';
-import { IState, IStateService } from 'angular-ui-router';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
 
@@ -10,9 +11,9 @@ interface ICredentials {
 	password: string;
 }
 
-interface IStateServiceWithPrevious extends IStateService {
+interface StateServiceWithPrevious extends StateService {
 	previous?: {
-		state: IState;
+		state: Ng1StateDeclaration;
 		params: any;
 		href: any;
 	};
@@ -26,7 +27,7 @@ export class AuthenticationController implements IController {
 	constructor(
 		private $scope: IScope,
 		private $rootScope: IRootScopeService,
-		private $state: IStateServiceWithPrevious,
+		private $state: StateServiceWithPrevious,
 		private UsersService: IUserService,
 		private $window: IWindowService,
 		private AuthenticationService: IAuthenticationService,
@@ -51,12 +52,6 @@ export class AuthenticationController implements IController {
 			// Emit an event up communicating a user has signed in so application updates appropriately
 			this.$rootScope.$broadcast('userSignedIn', signedInUser);
 			this.$state.go('home', this.$state.params);
-
-			if (this.$state.previous && this.$state.previous.state) {
-				this.$state.go(this.$state.previous.state.name, this.$state.previous.state.params);
-			} else {
-				this.$state.go('home', this.$state.params);
-			}
 		} catch (error) {
 			this.Notification.error({
 				title: 'Error',

@@ -8,7 +8,7 @@ import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
 
 export class ProfileSkillsController implements IController {
-	public static $inject = ['$scope', 'Notification', 'AuthenticationService', 'UsersService', 'capabilities', 'TINYMCE_OPTIONS'];
+	public static $inject = ['$scope', 'Notification', 'AuthenticationService', 'UsersService', 'capabilities', 'TinyMceConfiguration'];
 	public user: IUser;
 
 	constructor(
@@ -17,7 +17,7 @@ export class ProfileSkillsController implements IController {
 		private AuthenticationService: IAuthenticationService,
 		private UsersService: IUserService,
 		public capabilities: ICapability[],
-		private TINYMCE_OPTIONS
+		private TinyMceConfiguration
 	) {
 		this.user = this.AuthenticationService.user;
 		this.toggleSkill = this.toggleSkill.bind(this);

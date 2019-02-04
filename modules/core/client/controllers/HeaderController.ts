@@ -4,9 +4,10 @@ import angular, { IController, idle, IRootScopeService, IScope, ui } from 'angul
 import { IMessagesService } from '../../../messages/client/services/MessagesService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
+import { IMenuService } from '../services/MenuService';
 
 class HeaderController implements IController {
-	public static $inject = ['$rootScope', '$scope', 'AuthenticationService', 'menuService', 'MessagesService', '$uibModal', 'Idle'];
+	public static $inject = ['$rootScope', '$scope', 'AuthenticationService', 'MenuService', 'MessagesService', '$uibModal', 'Idle'];
 	public accountMenu: any;
 	public isCollapsed: boolean;
 	public menu: any;
@@ -20,20 +21,20 @@ class HeaderController implements IController {
 		private $rootScope: IRootScopeService,
 		private $scope: IScope,
 		private AuthenticationService: IAuthenticationService,
-		private menuService: any,
+		private MenuService: IMenuService,
 		private MessagesService: IMessagesService,
 		private $uibModal: ui.bootstrap.IModalService,
 		private Idle: idle.IIdleService
 	) {
 		this.refreshHeader();
 		this.isCollapsed = false;
-		this.menu = this.menuService.getMenu('topbar');
+		this.menu = this.MenuService.getMenu('topbar');
 		this.setScopeBindings();
 		this.setupIdleTimeout();
 	}
 
 	private refreshHeader(): void {
-		this.accountMenu = this.menuService.getMenu('account').items[0];
+		this.accountMenu = this.MenuService.getMenu('account').items[0];
 		this.user = this.AuthenticationService.user;
 		if (this.user) {
 			this.updateMessageCount();

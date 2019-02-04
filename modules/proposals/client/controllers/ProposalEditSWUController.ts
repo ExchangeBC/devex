@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { angularFileUpload, IFormController, IWindowService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import moment from 'moment-timezone';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
@@ -24,7 +24,7 @@ export default class ProposalEditSWUController {
 		'ProposalService',
 		'Notification',
 		'org',
-		'TINYMCE_OPTIONS',
+		'TinyMceConfiguration',
 		'resources',
 		'$window'
 	];
@@ -52,14 +52,14 @@ export default class ProposalEditSWUController {
 		public editing: boolean,
 		private ask,
 		private Upload: angularFileUpload.IUploadService,
-		private $state: IStateService,
+		private $state: StateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
 		private ProposalService: IProposalService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TINYMCE_OPTIONS,
+		public TinyMceConfiguration,
 		public resources: any,
 		private $window: IWindowService
 	) {

@@ -92,7 +92,7 @@ class ExpressApplication {
 	}
 
 	// Initialize local variables
-	private initLocalVariables = app => {
+	private initLocalVariables(app: express.Application): void {
 		// Setting application local variables
 		app.locals.title = config.app.title;
 		app.locals.description = config.app.description;

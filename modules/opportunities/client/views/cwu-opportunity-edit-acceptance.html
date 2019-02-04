@@ -6,7 +6,7 @@
 				"help"  :"In this section, you need to clearly define everything that must be delivered and all criteria that must be met in order for you to be satisfied and ready to pay the developer."
 			}'>
       <textarea name="criteria" id="criteria" data-automation-id="text-cwu-acceptance" class="form-control input-sm"
-        ui-tinymce="vm.TINYMCE_OPTIONS" placeholder="A clear definition of everything that must be delivered to get paid for this opportunity..."
+        ui-tinymce="vm.TinyMceConfiguration" placeholder="A clear definition of everything that must be delivered to get paid for this opportunity..."
         ng-model="vm.opportunity.criteria">
 			</textarea>
     </form-display>
@@ -26,7 +26,7 @@
 				"help"  :"In this section, you must explicitly describe the criteria you will use to score the Proposals you receive. State the weight or points you will give to each criteria (e.g. \"Experience contributing Java code to any public code repositories with more than 5 contributors: (10 points)\".<br/> It is at your discretion which mandatory and weighted criteria you wish to use. Refer to the <a target=\"_blank\" href=\"http://www2.gov.bc.ca/gov/content/governments/services-for-government/bc-bid-resources/how-to-buy-services/procurement-process/pre-award/prepare-solicitation-documents/mandatory-and-weighted-criteria\">Government of B.C. information on procurement</a> for guidance."
 			}'>
       <textarea name="evaluation" id="evaluation" data-automation-id="text-cwu-evaluation" class="form-control"
-        ui-tinymce="vm.TINYMCE_OPTIONS" placeholder="An explicit definition of the criteria you will use to score Proposals..."
+        ui-tinymce="vm.TinyMceConfiguration" placeholder="An explicit definition of the criteria you will use to score Proposals..."
         ng-model="vm.opportunity.evaluation">
 			</textarea>
     </form-display>

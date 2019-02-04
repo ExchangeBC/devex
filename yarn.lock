@@ -634,7 +634,7 @@
   dependencies:
     "@types/angular" "*"
 
-"@types/angular-ui-router@*", "@types/angular-ui-router@^1.1.40":
+"@types/angular-ui-router@*":
   version "1.1.40"
   resolved "https://registry.yarnpkg.com/@types/angular-ui-router/-/angular-ui-router-1.1.40.tgz#d8a10fe4af86a069f8c3302946363f1149e5a6b3"
   integrity sha512-4xMwNeSNrRHj2uaLAbeACVjgTCLCDHqwMQOKE0lq6MIXngVuvc0zucGKg2WYd4i+goxl9R3agH3w4qnEseIbxw==

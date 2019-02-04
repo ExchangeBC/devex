@@ -1,7 +1,7 @@
 'use strict';
 
+import { Ng1StateDeclaration, StateParams, StateProvider } from '@uirouter/angularjs';
 import angular, { resource } from 'angular';
-import { IState, IStateParamsService, IStateProvider } from 'angular-ui-router';
 import { ICapabilitiesService, ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { IOrgService } from '../../../orgs/client/services/OrgService';
 import { IOrg } from '../../../orgs/shared/IOrgDTO';
@@ -14,7 +14,7 @@ import { IOpportunitiesService, IOpportunityResource } from '../services/Opportu
 export default class OpportunityRouter {
 	public static $inject = ['$stateProvider'];
 
-	constructor(private $stateProvider: IStateProvider) {
+	constructor(private $stateProvider: StateProvider) {
 		this.init();
 	}
 
@@ -32,7 +32,7 @@ export default class OpportunityRouter {
 		this.$stateProvider.state('oppcreatelanding', this.createLandingState());
 	}
 
-	private rootState(): IState {
+	private rootState(): Ng1StateDeclaration {
 		return {
 			abstract: true,
 			url: '/opportunities',
@@ -48,7 +48,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private listState(): IState {
+	private listState(): Ng1StateDeclaration {
 		return {
 			url: '',
 			templateUrl: '/modules/opportunities/client/views/opportunity-list.html',
@@ -61,7 +61,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private viewCWUState(): IState {
+	private viewCWUState(): Ng1StateDeclaration {
 		return {
 			url: '/cwu/:opportunityId',
 			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-view.html',
@@ -71,7 +71,7 @@ export default class OpportunityRouter {
 				opportunity: [
 					'$stateParams',
 					'OpportunitiesService',
-					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+					async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
 						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
@@ -81,7 +81,7 @@ export default class OpportunityRouter {
 					'$stateParams',
 					'ProposalService',
 					'AuthenticationService',
-					async ($stateParams: IStateParamsService, ProposalService: IProposalService, AuthenticationService: IAuthenticationService): Promise<IProposalResource> => {
+					async ($stateParams: StateParams, ProposalService: IProposalService, AuthenticationService: IAuthenticationService): Promise<IProposalResource> => {
 						if (!AuthenticationService.user) {
 							return null;
 						}
@@ -102,7 +102,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private viewSWUState(): IState {
+	private viewSWUState(): Ng1StateDeclaration {
 		return {
 			url: '/swu/:opportunityId',
 			templateUrl: '/modules/opportunities/client/views/swu-opportunity-view.html',
@@ -112,7 +112,7 @@ export default class OpportunityRouter {
 				opportunity: [
 					'$stateParams',
 					'OpportunitiesService',
-					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+					async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
 						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
@@ -139,7 +139,7 @@ export default class OpportunityRouter {
 					'ProposalService',
 					'AuthenticationService',
 					'org',
-					async ($stateParams: IStateParamsService, ProposalService: IProposalService, AuthenticationService: IAuthenticationService, org: IOrg): Promise<IProposalResource> => {
+					async ($stateParams: StateParams, ProposalService: IProposalService, AuthenticationService: IAuthenticationService, org: IOrg): Promise<IProposalResource> => {
 						if (!AuthenticationService.user) {
 							return null;
 						}
@@ -164,7 +164,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private adminRootState(): IState {
+	private adminRootState(): Ng1StateDeclaration {
 		return {
 			abstract: true,
 			url: '/opportunityadmin/:opportunityId',
@@ -194,7 +194,7 @@ export default class OpportunityRouter {
 				opportunity: [
 					'$stateParams',
 					'OpportunitiesService',
-					async ($stateParams: IStateParamsService, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
+					async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
 						return await OpportunitiesService.get({
 							opportunityId: $stateParams.opportunityId
 						}).$promise;
@@ -204,7 +204,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private editCWUState(): IState {
+	private editCWUState(): Ng1StateDeclaration {
 		return {
 			url: '/editcwu',
 			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
@@ -221,7 +221,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private editSWUState(): IState {
+	private editSWUState(): Ng1StateDeclaration {
 		return {
 			url: '/editswu',
 			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
@@ -238,7 +238,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private createCWUState(): IState {
+	private createCWUState(): Ng1StateDeclaration {
 		return {
 			url: '/createcwu',
 			templateUrl: '/modules/opportunities/client/views/cwu-opportunity-edit.html',
@@ -272,7 +272,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private createSWUState(): IState {
+	private createSWUState(): Ng1StateDeclaration {
 		return {
 			url: '/createswu',
 			templateUrl: '/modules/opportunities/client/views/swu-opportunity-edit.html',
@@ -318,7 +318,7 @@ export default class OpportunityRouter {
 		};
 	}
 
-	private createLandingState(): IState {
+	private createLandingState(): Ng1StateDeclaration {
 		return {
 			url: '/createlanding',
 			templateUrl: '/modules/opportunities/client/views/opportunity-create.html',
@@ -336,4 +336,4 @@ export default class OpportunityRouter {
 	}
 }
 
-angular.module('opportunities.routes').config(['$stateProvider', ($stateProvider: IStateProvider) => new OpportunityRouter($stateProvider)]);
+angular.module('opportunities.routes').config(['$stateProvider', ($stateProvider: StateProvider) => new OpportunityRouter($stateProvider)]);

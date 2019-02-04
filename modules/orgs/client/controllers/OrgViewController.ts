@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IController, IRootScopeService, IScope, ui, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import _ from 'lodash';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapability } from '../../../capabilities/shared/ICapabilityDTO';
@@ -29,7 +29,7 @@ export class OrgViewController implements IController {
 		private Notification: uiNotification.INotificationService,
 		private $uibModal: ui.bootstrap.IModalService,
 		private ask: any,
-		private $state: IStateService
+		private $state: StateService
 	) {
 		this.refreshOrg(org);
 		this.user = this.AuthenticationService.user;

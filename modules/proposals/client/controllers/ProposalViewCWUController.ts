@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import { IOpportunitiesService } from '../../../opportunities/client/services/OpportunitiesService';
 import { IProposalResource } from '../services/ProposalService';
 
@@ -9,7 +9,7 @@ export default class ProposalViewCWUController {
 	public static $inject = ['$state', 'proposal', 'OpportunitiesService', 'Notification', 'ask'];
 
 	constructor(
-		private $state: IStateService,
+		private $state: StateService,
 		public proposal: IProposalResource,
 		private OpportunitiesService: IOpportunitiesService,
 		private Notification: uiNotification.INotificationService,

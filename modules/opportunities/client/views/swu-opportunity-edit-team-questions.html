@@ -28,12 +28,12 @@
                   "name":"teamQuestion"
                 }'>
             Question:
-            <textarea name="teamQuestion" id="teamQuestion" class="form-control input-sm" ui-tinymce="vm.TINYMCE_OPTIONS"
+            <textarea name="teamQuestion" id="teamQuestion" class="form-control input-sm" ui-tinymce="vm.TinyMceConfiguration"
               placeholder="Team Question" ng-model="vm.opportunity.teamQuestions[$index].question">
                 </textarea>
             <br>
             Response Guideline (leave blank to omit):
-            <textarea name="responseGuideline" id="responseGuideline" class="form-control input-sm" ui-tinymce="vm.TINYMCE_OPTIONS"
+            <textarea name="responseGuideline" id="responseGuideline" class="form-control input-sm" ui-tinymce="vm.TinyMceConfiguration"
               placeholder="Response Guideline" ng-model="vm.opportunity.teamQuestions[$index].guideline">
                 </textarea>
             <table>

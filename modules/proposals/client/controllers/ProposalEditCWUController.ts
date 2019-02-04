@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import moment from 'moment-timezone';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
@@ -24,7 +24,7 @@ export default class ProposalEditCWUController {
 		'UsersService',
 		'Notification',
 		'org',
-		'TINYMCE_OPTIONS'
+		'TinyMceConfiguration'
 	];
 
 	public members: any[];
@@ -38,7 +38,7 @@ export default class ProposalEditCWUController {
 		private $scope: IRootScopeService,
 		private ask,
 		private Upload: angularFileUpload.IUploadService,
-		private $state: IStateService,
+		private $state: StateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
@@ -47,7 +47,7 @@ export default class ProposalEditCWUController {
 		private UsersService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TINYMCE_OPTIONS
+		public TinyMceConfiguration
 	) {
 		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
 		// if they do, transition to edit view for that proposal

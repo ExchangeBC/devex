@@ -1,7 +1,7 @@
 'use strict';
 
+import { StateService } from '@uirouter/core';
 import angular, { IController, IFormController, IScope, uiNotification } from 'angular';
-import { IStateService } from 'angular-ui-router';
 import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
@@ -17,7 +17,7 @@ export class EditProfileController implements IController {
 
 	constructor(
 		private $scope: IScope,
-		private $state: IStateService,
+		private $state: StateService,
 		private UsersService: IUserService,
 		private AuthenticationService: IAuthenticationService,
 		private Notification: uiNotification.INotificationService,
