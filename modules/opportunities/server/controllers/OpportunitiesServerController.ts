@@ -4,9 +4,9 @@ import { NextFunction, Request, Response } from 'express';
 import fs from 'fs';
 import JSZip from 'jszip';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import { model, Types } from 'mongoose';
 import Nexmo from 'nexmo';
-import moment from 'moment-timezone';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
@@ -1007,8 +1007,8 @@ class OpportunitiesServerController {
 	};
 
 	private getOppBody = opp => {
-		//	This will format the deadline like:
-		//	Thursday, January 31, 2019 at 16:00 PST
+		// This will format the deadline like:
+		// Thursday, January 31, 2019 at 16:00 PST
 		const deadline = moment(opp.deadline)
 			.tz('America/Vancouver')
 			.format('dddd, MMMM Do, YYYY [at] HH:mm z');
