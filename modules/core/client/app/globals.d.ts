@@ -1,4 +1,4 @@
-import { IApplicationConfiguration } from "./ApplicationConfiguration";
+import { IApplicationConfiguration } from './ApplicationConfiguration';
 
 declare global {
 	interface Window {
