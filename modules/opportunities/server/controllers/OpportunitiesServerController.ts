@@ -6,6 +6,7 @@ import JSZip from 'jszip';
 import _ from 'lodash';
 import { model, Types } from 'mongoose';
 import Nexmo from 'nexmo';
+import moment from 'moment-timezone';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
@@ -1006,33 +1007,22 @@ class OpportunitiesServerController {
 	};
 
 	private getOppBody = opp => {
-		let dt = opp.deadline;
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-		const deadline = dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
-		dt = opp.assignment;
-		dt = opp.start;
-		let opptype = 'cwu';
-		if (opp.opportunityTypeCd === 'sprint-with-us') {
-			opptype = 'swu';
-		}
-		let ret = '';
+		//	This will format the deadline like:
+		//	Thursday, January 31, 2019 at 16:00 PST
+		const deadline = moment(opp.deadline)
+			.tz('America/Vancouver')
+			.format('dddd, MMMM Do, YYYY [at] HH:mm z');
+		const oppType = opp.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu';
+		const oppUrl = `https://bcdevexchange.org/opportunities/${oppType}/${opp.code}`;
 
-		ret +=
-			'<p>This issue has been auto-generated to facilitate questions about <a href="https://bcdevexchange.org/opportunities/' +
-			opptype +
-			'/' +
-			opp.code +
-			'">a paid opportunity</a> that has just been posted on the <a href="https://bcdevexchange.org">BCDevExchange</a>.</p>';
-		ret +=
-			'<p>To learn more or apply, <a href="https://bcdevexchange.org/opportunities/' +
-			opptype +
-			'/' +
-			opp.code +
-			'">visit the opportunity page</a>. The opportunity closes on <b>' +
-			deadline +
-			'</b>.</p>';
-		return ret;
+		return `
+<p>This issue has been auto-generated to facilitate questions about
+<a href="${oppUrl}"> a paid opportunity</a> that has just been posted on the
+<a href="https://bcdevexchange.org">BCDevExchange</a>.</p>
+
+<p>To learn more or apply, <a href="${oppUrl}">visit the opportunity page</a>.
+The opportunity closes on <b>${deadline}</b>.</p>
+		`;
 	};
 
 	private populateOpportunity = (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
