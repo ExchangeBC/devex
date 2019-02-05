@@ -35,18 +35,6 @@ const OrgSchema = new Schema(
 		description: { type: String, default: '' },
 		website: { type: String, default: '' },
 		orgImageURL: { type: String, default: 'img/default.png' },
-		skills: [String],
-		badges: [String],
-		capabilities: {
-			type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
-			default: []
-		},
-		capabilitySkills: {
-			type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
-			default: []
-		},
-		metRFQ: { type: Boolean, default: false },
-		isCapable: { type: Boolean, default: false },
 		isAcceptedTerms: { type: Boolean, default: false },
 		owner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 		created: { type: Date, default: null },

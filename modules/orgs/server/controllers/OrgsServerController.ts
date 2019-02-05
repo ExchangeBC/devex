@@ -148,7 +148,22 @@ class OrgsServerController {
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
-				.populate('members', this.popfields)
+				.populate({
+					path: 'members',
+					select: this.popfields,
+					populate: [
+						{
+							path: 'capabilities',
+							model: 'Capability',
+							select: 'name code labelClass'
+						},
+						{
+							path: 'capabilitySkills',
+							model: 'CapabilitySkill',
+							select: 'name code'
+						}
+					]
+				})
 				.populate('admins', this.popfields)
 				.populate('joinRequests', '_id')
 				.exec();
@@ -168,7 +183,22 @@ class OrgsServerController {
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
-				.populate('members', this.popfields)
+				.populate({
+					path: 'members',
+					select: this.popfields,
+					populate: [
+						{
+							path: 'capabilities',
+							model: 'Capability',
+							select: 'name code labelClass'
+						},
+						{
+							path: 'capabilitySkills',
+							model: 'CapabilitySkill',
+							select: 'name code'
+						}
+					]
+				})
 				.populate('admins', this.popfields)
 				.exec();
 			res.json(orgs);
@@ -187,7 +217,22 @@ class OrgsServerController {
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
-				.populate('members', this.popfields)
+				.populate({
+					path: 'members',
+					select: this.popfields,
+					populate: [
+						{
+							path: 'capabilities',
+							model: 'Capability',
+							select: 'name code labelClass'
+						},
+						{
+							path: 'capabilitySkills',
+							model: 'CapabilitySkill',
+							select: 'name code'
+						}
+					]
+				})
 				.populate('admins', this.popfields)
 				.exec();
 			res.json(orgs);

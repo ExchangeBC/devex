@@ -24,12 +24,6 @@ export interface IOrg {
 	websiteProtocol?: string;
 	websiteAddress?: string;
 	orgImageURL: string;
-	skills: string[];
-	badges: string[];
-	capabilities: ICapability[];
-	capabilitySkills: ICapabilitySkill[];
-	metRFQ: boolean;
-	isCapable: boolean;
 	isAcceptedTerms: boolean;
 	owner: IUser;
 	created: Date;

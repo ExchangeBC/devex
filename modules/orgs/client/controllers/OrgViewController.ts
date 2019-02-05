@@ -8,16 +8,19 @@ import { ICapability } from '../../../capabilities/shared/ICapabilityDTO';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
+import { IOrgCommonService } from '../services/OrgCommonService';
 import { IOrgResource, IOrgService } from '../services/OrgService';
 
 export class OrgViewController implements IController {
-	public static $inject = ['$rootScope', '$scope', 'org', 'AuthenticationService', 'capabilities', 'OrgService', 'Notification', '$uibModal', 'ask', '$state'];
+	public static $inject = ['$rootScope', '$scope', 'org', 'AuthenticationService', 'capabilities', 'OrgService', 'Notification', '$uibModal', 'ask', '$state', 'OrgCommonService'];
 
 	public user: IUser;
 	public canEdit: boolean;
 	public org: IOrgResource;
 	public orgCapabilities: ICapability[];
 	public orgSkills: ICapabilitySkill[];
+	public orgIsCapable: boolean;
+	public orgHasMetRFQ: boolean;
 
 	constructor(
 		private $rootScope: IRootScopeService,
@@ -29,7 +32,8 @@ export class OrgViewController implements IController {
 		private Notification: uiNotification.INotificationService,
 		private $uibModal: ui.bootstrap.IModalService,
 		private ask: any,
-		private $state: StateService
+		private $state: StateService,
+		private OrgCommonService: IOrgCommonService
 	) {
 		this.refreshOrg(org);
 		this.user = this.AuthenticationService.user;
@@ -57,18 +61,8 @@ export class OrgViewController implements IController {
 	}
 
 	public orgHasCapability(capability: ICapability): boolean {
-		const hasCap = this.orgCapabilities.map(cap => cap.code).includes(capability.code);
+		const hasCap = this.orgCapabilities && this.orgCapabilities.map(cap => cap.code).includes(capability.code);
 		return hasCap;
-	}
-
-	public isOrgCapable(): boolean {
-		let isCapable = true;
-		this.capabilities.forEach(capability => {
-			if (!this.orgCapabilities.map(cap => cap.code).includes(capability.code)) {
-				isCapable = false;
-			}
-		});
-		return isCapable;
 	}
 
 	// Accepts a join request by adding the requesting member to the team and saving the org
@@ -290,8 +284,10 @@ export class OrgViewController implements IController {
 		}
 	}
 
-	private refreshOrg(newOrg: IOrgResource): void {
+	private async refreshOrg(newOrg: IOrgResource): Promise<void> {
 		this.org = newOrg;
+		this.orgIsCapable = await this.OrgCommonService.isOrgCapable(this.org);
+		this.orgHasMetRFQ = await this.OrgCommonService.hasOrgMetRFQ(this.org);
 		this.$rootScope.$emit('orgUpdated');
 		this.refreshOrgCapabilities();
 		this.parseWebsite();
@@ -300,6 +296,10 @@ export class OrgViewController implements IController {
 	private refreshOrgCapabilities(): void {
 		const memberCaps = this.org.members ? _.flatten(this.org.members.map(member => member.capabilities)) : [];
 		this.orgCapabilities = _.uniqWith(memberCaps, (cap1, cap2) => cap1.code === cap2.code);
+
+		const memberSkills = this.org.members ? _.flatten(this.org.members.map(member => member.capabilitySkills)) : [];
+		this.orgSkills = _.uniqWith(memberSkills, (sk1, sk2) => sk1.code === sk2.code);
+
 		this.$scope.$applyAsync();
 	}
 

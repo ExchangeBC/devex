@@ -33,7 +33,7 @@
           <td class="button-cell"><img class="rounded" width="30" height="30" src="{{ org.orgImageURL }}"></td>
           <td class="font-weight-bold text-truncate company-name">{{ org.name }}</td>
           <td class="button-cell"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
-          <td class="button-cell"><i ng-if="org.metRFQ" title="Sprint With Us Qualified" class="fas fa-shield-alt"></i></td>
+          <td class="button-cell"><i ng-if="vm.hasOrgMetRFQ(org)" title="Sprint With Us Qualified" class="fas fa-shield-alt"></i></td>
           <!-- <td><i ng-if="org.awardedContractCount > 0" title="Sprint With Us Awardee" class="fas fa-trophy"></i></td> -->
           <td class="button-cell">
             <div ng-if="vm.canJoinOrg(org)" class="hidden-button">
