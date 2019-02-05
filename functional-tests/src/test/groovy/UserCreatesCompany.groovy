@@ -87,22 +87,22 @@ class UserCreatesCompany extends GebReportingSpec {
 
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
         at HomePage //verify we are in the home page
-        assert AvatarImage  //Verify the avatar image is present. In the future I may check the image is correct
+        assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
 
     and: "Click on the Companies link to go to the orgs page"
         CompaniesNavbar //this reference already includes a click
 
     then: "Arrive at the orgs page. It should be empty"
-        at CompaniesPage
-        println("Line 69 (Company Page)  ${driver.currentUrl}"  )
+        waitFor{at CompaniesPage}
+        println("Line 97 (Company Page)  ${driver.currentUrl}"  )
 
     and: "Click on the 'Register a Company' button"
         waitFor{RegisterCompanyButton}
         RegisterCompanyButton.click()
 
     then: "Opens the page to create a new company" 
-        at CompaniesCreatePage 
-        println("Line 76 (Company Create Page)   ${driver.currentUrl}"  )
+        waitFor{at CompaniesCreatePage}
+        println("Line 105 (Company Create Page)   ${driver.currentUrl}"  )
 
     and: "Fill the Name of the Company, Jurisdiction, Business ID, accept the terms and continue"  
         waitFor{CompanyName}

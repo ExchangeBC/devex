@@ -32,12 +32,12 @@ import spock.lang.Title
 @Stepwise
 
 @Title("Code with Us Happy Path 1")
-class CodeWithUSHappyPath1 extends GebReportingSpec {
+class CWU_HappyPath_1 extends GebReportingSpec {
 
       def CompareFileContents() {
            //if(f1.length()!=f2.length())return false
 
-            //reportInfo("User directory is:" + System.getProperty('user.home') )
+            //println("User directory is:" + System.getProperty('user.home') )
             File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
             File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/code-with-us-terms.pdf")
 
@@ -61,17 +61,12 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             return true
       }
 
-      void "Set Description"(String desc){
-            //waitFor { angularReady }
-            withFrame( waitFor { descriptionFrame } ) {
-                mceBody << desc
-                }
-    }
+ 
 
 
       //We make sure we are not logged as admin
       def setup() {
-            to HomePage
+            waitFor{to HomePage}
             //I get the base URL to build (in the LoginModule) the URL to the admin icon
             def baseURL = getBrowser().getConfig().getBaseUrl().toString()
 
@@ -80,7 +75,7 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             assert logoffOK
       }
 
-/*
+
 
 
   def "From the Home Page to the CWU" () {
@@ -93,55 +88,56 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
 
       then: "I should be at the CodeWithUs Page- So the page exists"
             at CodewithusPage
-            reportInfo("URL -1  is ${driver.currentUrl}"  )
+            println("URL -1  is ${driver.currentUrl}"  )
 
       and: "Check Developers button is active"
             assert DevelopersButtonClass=="nav-link active"
-            reportInfo("URL -2  ${driver.currentUrl}"  )
+            println("URL -2  ${driver.currentUrl}"  )
 
       and: "Check the Public Sector Product Managers link is inactive"
             assert PublicSectorProductManagers=="nav-link"
-            reportInfo("URL -3 ${driver.currentUrl}"  )
+            println("URL -3 ${driver.currentUrl}"  )
 
       and: "Click on the 'Read the Guide button' to end in the 'https://github.com/BCDevExchange/code-with-us/wiki/3.--For-Developers:-How-to-Apply-on-a-Code-With-Us-Opportunity' page"
             ReadtheGuideLink.click()
-            reportInfo("URL -4 ${driver.currentUrl}"  )
+            sleep(3000)
+            println("URL -4 ${driver.currentUrl}"  )
             assert GitHubPage_ReadGuide
+            println("assert we are in the GITHub Read Guide page")
 
   }
-*/
+
 
   def "From the Code With Us to Opportunities Page" () {
       given: "Starting with the Code with Us Page"
-            to CodewithusPage
-            //reportInfo("URL0 is ${driver.currentUrl}"  )
+            waitFor{to CodewithusPage}
+            //println("URL0 is ${driver.currentUrl}"  )
       when: "I click in the Browse Opportunities Button "
             BrowseOpportunitiesLink
-            sleep(1000)
+            sleep(3000)
             println("URL 1 line 112 is ${driver.currentUrl}"  )
       then: "I should be at the Opportunities Page- So the page exists"
             assert OpportunitiesPage
             at OpportunitiesPage
-            sleep(1000)
-            reportInfo("URL2 is ${driver.currentUrl}"  )
+            println("URL2 is ${driver.currentUrl}"  )
       and: "I click on the first opportunity listed on the page"
-            def OppTitle =PublishedOpportunity.text()  //Opportunity title
+            def OppTitle =FirstListedOpportunity.text()  //Opportunity title
             def MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-            reportInfo("${OppTitle} " )
-            reportInfo("${OppURL} " )
-            PublishedOpportunity.click()
-            sleep(100)
+            println("${OppTitle} " )
+            println("${OppURL} " )
+            FirstListedOpportunity.click()
+            sleep(1000)
 
             def NewURL=getCurrentUrl() //This is the specific opportunity URL
+            println("URL3 is ${driver.currentUrl}"  )
 
       then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
             sleep(1000)
       and: "Click on terms, to download the document that sets the terms and the legalese"
-            //$('#page-top > main > ui-view > section > div.container.border.p-4 > div:nth-child(8) > div > p:nth-child(5) > a:nth-child(2)').click()
-            println("URL line 136 is ${driver.currentUrl}"  )
+            println("URL line 139 is ${driver.currentUrl}"  )
             DownloadTerms.click()
             sleep(2000)
       then: "I check the downloaded document matches the one stored in this test"
@@ -184,13 +180,13 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             at OpportunitiesPage
             sleep(1000)
       when: "I click again on the first opportunity listed on the page, this time as a logged-in user"
-            OppTitle =PublishedOpportunity.text()  //Opportunity title
+            OppTitle =FirstListedOpportunity.text()  //Opportunity title
             MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
             println("${OppTitle} " )
             println("${OppURL} " )
-            PublishedOpportunity.click()
+            FirstListedOpportunity.click()
             sleep(100)
 
             NewURL=getCurrentUrl() //This is the specific opportunity URL
@@ -198,40 +194,31 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
       then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
             sleep(1000)
-             //reportInfo("OppURL is ${driver.currentUrl}"  )
-             //reportInfo("URL after waiting 60s is ${driver.currentUrl}"  )
+             //println("OppURL is ${driver.currentUrl}"  )
+             //println("URL after waiting 60s is ${driver.currentUrl}"  )
       and: "Click on Start a proposal button"
-            println("URL line 204 is ${driver.currentUrl}"  )
-
+            println("URL line 200 is ${driver.currentUrl}"  )
             $("button",0, id:"proposaladmin.create").click()
 
       then: " Arrive to the page that allows to submit a proposal"
             //we verify we are in the correct page by checking the 'Proposal' tab exists
             sleep(1000)
             at InitialCWUProposalPage
-            println("URL line 212 is ${driver.currentUrl}"  )
+            println("URL line 208 is ${driver.currentUrl}"  )
             //assert $('li[class="uib-tab nav-item ng-scope ng-isolate-scope"][index="2"]').click()
     
     
       and: "Confirm the Company tab is present but disabled"
-
-      /*      ask for help to Andrew to locate the page that has the element
-      <a href="" ng-click="select($event)" ng-class="[{active: active, disabled: disabled}, classes]" class="nav-link ng-binding disabled" uib-tab-heading-transclude=""><uib-tab-heading data-automation-id="tab-cwu-proposal-company" class="ng-scope">
-      <svg class="svg-inline--fa fa-building fa-w-14" aria-hidden="true" data-prefix="fas" data-icon="building" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" data-fa-i2svg=""><path fill="currentColor" d="M436 480h-20V24c0-13.255-10.745-24-24-24H56C42.745 0 32 10.745 32 24v456H12c-6.627 0-12 5.373-12 12v20h448v-20c0-6.627-5.373-12-12-12zM128 76c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12V76zm0 96c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40zm52 148h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40c0 6.627-5.373 12-12 12zm76 160h-64v-84c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v84zm64-172c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40zm0-96c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12v-40c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40zm0-96c0 6.627-5.373 12-12 12h-40c-6.627 0-12-5.373-12-12V76c0-6.627 5.373-12 12-12h40c6.627 0 12 5.373 12 12v40z"></path></svg><!-- <i class="fas fa-building"></i> --> Company
-          </uib-tab-heading></a>
-
-            I want to check that specific element with class="nav-link ng-binding disabled"  exist
-            at this moment I am using the following command, it works but is it dependent on the class. BTW: there are 
-            two elements that have that disable class attribute, the Company and the Attachment tab
-   */
-           assert !$(('a[class~= "nav-link ng-binding disabled"]'),0).empty()
+            assert !$(('a[class~= "nav-link ng-binding disabled"]'),0).empty()
 
       and: "Confirm the attachment tab is not even present "
             assert(!AttachmentTab.displayed)
             //println(AttachmentTab)
+
       and: "Click the Terms tab to accept the terms"
             TermsTab.click()
             CheckTerms.click()
+
       and: "Save this first draft"
             ButtonSaveChanges.click()
             sleep(1000)
@@ -240,21 +227,18 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
             assert(AttachmentTab.displayed)
 
       and: "Click on the Attachment tab"  
+            // At this moment I do not know how to upload a file
             AttachmentTab.click()   
-
-      // At this moment I do not know how to upload a file
+      
       and: "Click on the Proposal tab"  
-            at InitialCWUProposalPage
-            sleep(5000)
+            waitFor{at InitialCWUProposalPage}
+            sleep(1000)
             ProposalTab.click()  
-
-            "Add Proposal" 'Les Nenes Maques'
-            sleep(5000)
-
-
+            println("Line 246 before waiting for the Proposal Description Box")
+            waitFor{ProposalDescriptionBox}
+            //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
+            withFrame(ProposalDescriptionBox){$("body", id:"tinymce") << 'Les Nenes Maques'}
             
-
-
 
       and: "Delete the proposal, part to check for functionality, part for clean up" 
             ButtonDelete.click()   
@@ -271,20 +255,19 @@ class CodeWithUSHappyPath1 extends GebReportingSpec {
 
   }
 
-
         def cleanup(){//Logoff as user
             to HomePage
+            sleep(10000)
             //I get the base URL to build (in the LoginModule) the URL to the admin icon
             def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-
+            println("the URL is "+ baseURL)
             // Login off as an admin
             def  logoffOK=login."Logout as user"()
             assert logoffOK
         }
 
 
-
-
-
 }
+
+
 

@@ -48,7 +48,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             assert loginOK
         }
 
-/*        @Unroll //Not actually necessary if we are using only single set of data (ie, creating only one program)
+       @Unroll //Not actually necessary if we are using only single set of data (ie, creating only one program)
         def "Create Program: '#ProgramTitleValue'" () {
             given: "After login as Administrator, I go to the Programs Page"
                 waitFor { to ProgramsPage }
@@ -98,7 +98,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 waitFor { to ProjectsPage }
 
             when: "Click on 'List a Project' button to create a new project- Program alredy exists"
-                waitFor{ListProjectButton}
                 ListProjectButton.click()
 
             then: "Load the Create Project page"
@@ -146,7 +145,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 "Project: Automation Test Project 1" | "Short Descriptive for Automation Test Project 1" | "Longer descriptive for Automation Test Project 1" | "https://github.com/BCDevExchange" | "javascript,html,mongo" | "3" | "Program: Automation Test 1"
         }
 
-*/
+
 
        @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
             def "Publish Opportunity: '#TitleData'" () {
@@ -280,9 +279,9 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 then: "Open the newly created opportunity"      
                     assert NewURL==OppURL  //matching the URL
                     assert waitFor{$("button",'data-automation-id':"button-opportunity-publish")}
-         //           $("button",'data-automation-id':"button-opportunity-publish").click()  //Finally, we publish the opp
+                    $("button",'data-automation-id':"button-opportunity-publish").click()  //Finally, we publish the opp
                     //And then click Yes in the modal box that appears after clciking the Publish button
-         //           $("button",'data-automation-id':"button-modal-yes").click()
+                   $("button",'data-automation-id':"button-modal-yes").click()
                     
 
      where: "The values used to create the Opportunity are:"
