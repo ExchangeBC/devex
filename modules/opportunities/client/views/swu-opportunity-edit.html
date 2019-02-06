@@ -19,61 +19,61 @@
 
       <uib-tabset active="vm.activeTab" class="edit-form-tabs">
         <uib-tab index="0">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabHeader">
             Header
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-title.html'"></div>
         </uib-tab>
         <uib-tab index="1">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabBackground">
             Background
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-description.html'"></div>
         </uib-tab>
         <uib-tab index="2">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabDetails">
             Details
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-details.html'"></div>
         </uib-tab>
         <uib-tab index="3">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabPhases">
             Phases
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-phases.html'"></div>
         </uib-tab>
         <uib-tab index="4">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabTechnicalSkills">
             Preferred Technical Skills
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-skills.html'"></div>
         </uib-tab>
         <uib-tab index="5">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabBudget">
             Budget
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-budget.html'"></div>
         </uib-tab>
         <uib-tab index="6">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabTerms">
             Terms and Conditions
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-terms.html'"></div>
         </uib-tab>
         <uib-tab index="7">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabQuestions">
             Team Questions
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-team-questions.html'"></div>
         </uib-tab>
         <uib-tab index="8">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabAddenda">
             Addenda
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-addenda.html'"></div>
         </uib-tab>
         <uib-tab index="9">
-          <uib-tab-heading>
+          <uib-tab-heading data-automation-id="tabScoring">
             Scoring
           </uib-tab-heading>
           <div ng-include="'/modules/opportunities/client/views/swu-opportunity-edit-scoring.html'"></div>
@@ -83,9 +83,9 @@
       <div class="bg-light rounded px-3 py-2">
         <div class="row">
           <div class="col">
-            <button type="button" ng-click="vm.save(vm.opportunityForm.$valid)" class="btn btn-primary float-right"><i class="fas fa-save"></i>
+            <button type="button" data-automation-id="btnSaveChanges" ng-click="vm.save(vm.opportunityForm.$valid)" class="btn btn-primary float-right"><i class="fas fa-save"></i>
               Save Changes</button>
-            <a href="javascript:void(0);" ng-if="vm.editing && vm.closing == 'OPEN'" class="btn btn-text-only" ng-click="vm.remove()"
+            <a href="javascript:void(0);" data-automation-id="lnkDeleteOpp" ng-if="vm.editing && vm.closing == 'OPEN'" class="btn btn-text-only" ng-click="vm.remove()"
               title="Remove"><i class="fas fa-trash"></i> Delete this Opportunity</a>
           </div>
         </div>

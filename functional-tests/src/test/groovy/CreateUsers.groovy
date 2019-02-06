@@ -32,7 +32,7 @@ The test finish with each user logged off from BC Exchange and GitHub
  ''')
 
 @Title("Create three users, and assign one capability")
-class CreateThreeUsers extends GebReportingSpec {
+class CreateUsers extends GebReportingSpec {
 
   @Unroll
   def "Go to Home Page and click on the log to GitHub button as user '#UserFirstName' '#UserLastName'" () {
