@@ -29,6 +29,7 @@ module.exports = {
 	},
 	sessionTimeout: process.env.SESSION_TIMEOUT || 300,
 	sessionTimeoutWarning: process.env.SESSION_WARNING || 300,
+	allowCapabilityEditing: process.env.ALLOW_EDIT_CAPS || false,
 	home: process.env.PWD || process.cwd() || '/opt/mean.js',
 	terms: {
 		cwu1: {

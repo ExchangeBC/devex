@@ -4,5 +4,8 @@ declare global {
 	interface Window {
 		env: string;
 		ApplicationConfiguration: IApplicationConfiguration;
+		sessionTimeoutWarning: number;
+		sessionTimeout: number;
+		allowCapabilityEditing: boolean;
 	}
 }

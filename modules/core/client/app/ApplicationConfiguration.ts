@@ -108,8 +108,8 @@ class ApplicationConfiguration implements IApplicationConfiguration {
 			'IdleProvider',
 			'KeepaliveProvider',
 			(IdleProvider: idle.IIdleProvider, KeepaliveProvider: idle.IKeepAliveProvider) => {
-				IdleProvider.idle(Number((window as any).sessionTimeoutWarning));
-				IdleProvider.timeout(Number((window as any).sessionTimeout));
+				IdleProvider.idle(Number(window.sessionTimeoutWarning));
+				IdleProvider.timeout(Number(window.sessionTimeout));
 				KeepaliveProvider.interval(2);
 			}
 		]);

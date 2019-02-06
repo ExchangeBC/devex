@@ -14,7 +14,7 @@
     <div class="row py-3" ng-if="vm.canEdit">
       <div class="col text-right">
         <button type="button" class="btn btn-text-only" ui-sref="capabilityadmin.edit({capabilityId:vm.capability.code})"
-          title="Edit capability"><i class="fas fa-pencil-alt"></i> Edit</button>
+          title="Edit capability" ng-disabled="!vm.editingAllowed"><i class="fas fa-pencil-alt"></i> Edit</button>
       </div>
     </div>
 

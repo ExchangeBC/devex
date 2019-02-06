@@ -1,21 +1,19 @@
 'use strict';
 
-import angular from 'angular';
+import angular, { IController } from 'angular';
+import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { ICapability } from '../../shared/ICapabilityDTO';
 
-(() => {
-	angular
-		.module('capabilities')
-		// Controller the view of the capability page
-		.controller('CapabilityViewController', [
-			'$sce',
-			'capability',
-			'AuthenticationService',
-			function($sce, capability, authenticationService) {
-				const vm = this;
-				vm.trust = $sce.trustAsHtml;
-				vm.capability = capability;
-				vm.auth = authenticationService.permissions();
-				vm.canEdit = vm.auth.isAdmin;
-			}
-		]);
-})();
+class CapabilityViewController implements IController {
+	public static $inject = ['capability', 'AuthenticationService'];
+
+	public canEdit: boolean;
+	public editingAllowed: boolean;
+
+	constructor(private capability: ICapability, private AuthenticationService: IAuthenticationService) {
+		this.canEdit = this.AuthenticationService.user && this.AuthenticationService.user.roles.includes('admin');
+		this.editingAllowed = window.allowCapabilityEditing;
+	}
+}
+
+angular.module('capabilities').controller('CapabilityViewController', CapabilityViewController);
