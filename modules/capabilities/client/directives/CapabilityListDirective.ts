@@ -10,7 +10,7 @@ interface ICapabilityListDirectiveScope extends IScope {
 }
 
 class CapabilityListDirectiveController implements IController {
-	public $inject = ['$rootScope', '$scope', 'CapabilitiesService', 'AuthenticationService'];
+	public static $inject = ['$rootScope', '$scope', 'CapabilitiesService', 'AuthenticationService'];
 
 	public canAdd: boolean;
 	public capabilities: ICapability[];
@@ -22,7 +22,6 @@ class CapabilityListDirectiveController implements IController {
 		private CapabilitiesService: ICapabilitiesService,
 		private AuthenticationService: IAuthenticationService
 	) {
-		const vm = this;
 		this.editingEnabled = window.allowCapabilityEditing;
 		this.capabilities = this.$scope.capabilities;
 		this.canAdd = this.AuthenticationService.user && this.AuthenticationService.user.roles.includes('admin');
