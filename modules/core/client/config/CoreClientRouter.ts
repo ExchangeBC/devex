@@ -30,6 +30,7 @@ class CoreClientRouter {
 		this.$stateProvider.state('about', this.aboutState());
 		this.$stateProvider.state('copyright', this.copyrightState());
 		this.$stateProvider.state('template', this.templateState());
+		this.$stateProvider.state('sprintwithus-howtoapply', this.sprintWithUsHowToApplyState());
 	}
 
 	private urlRouteNotFoundHandler($injector: auto.IInjectorService): void {
@@ -225,6 +226,17 @@ class CoreClientRouter {
 			data: {
 				ignoreState: true,
 				pageTitle: 'Template'
+			}
+		}
+	}
+
+	private sprintWithUsHowToApplyState(): Ng1StateDeclaration {
+		return {
+			url: '/sprintwithus-howtoapply',
+			templateUrl: '/modules/core/client/views/sprintwithus-howtoapply.view.html',
+			data: {
+				ignoreState: true,
+				pageTitle: 'How to Apply'
 			}
 		}
 	}
