@@ -16,7 +16,7 @@
         </th>
         <td>
           <label-list>
-            <label ng-repeat="skill in capability.skills" class="label mx-1"
+            <label ng-repeat="skill in capability.skills" class="label mx-1" data-automation-id="lstSkills"
                    ng-class="{'label-preferred-skill': !vm.isSkillSelected(skill), 'label-preferred-skill-selected': vm.isSkillSelected(skill)}"
                    ng-click="vm.toggleSelectedSkill(skill)">
                     {{skill.name}}

@@ -1,5 +1,6 @@
 package pages.app
 import geb.Page
+import org.openqa.selenium.By
 
 
 class InitialCWUProposalPage extends Page {
@@ -29,8 +30,8 @@ class InitialCWUProposalPage extends Page {
 
             FirstName{ $('[id ~= "firstName"]') }
 
-            proposalOppFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-proposal-description"]//@id,"_ifr")]'), 0) }
-           
+            //proposalOppFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-proposal-description"]//@id,"_ifr")]'), 0) }
+           ProposalDescriptionBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
     }
 
 

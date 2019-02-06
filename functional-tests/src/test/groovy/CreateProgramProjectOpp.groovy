@@ -25,6 +25,7 @@ import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 
+
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
@@ -46,8 +47,8 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
             assert loginOK
         }
-/*
-        @Unroll //Not actually necessary if we are using only single set of data (ie, creating only one program)
+
+       @Unroll //Not actually necessary if we are using only single set of data (ie, creating only one program)
         def "Create Program: '#ProgramTitleValue'" () {
             given: "After login as Administrator, I go to the Programs Page"
                 waitFor { to ProgramsPage }
@@ -97,7 +98,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 waitFor { to ProjectsPage }
 
             when: "Click on 'List a Project' button to create a new project- Program alredy exists"
-                waitFor{ListProjectButton}
                 ListProjectButton.click()
 
             then: "Load the Create Project page"
@@ -145,11 +145,11 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 "Project: Automation Test Project 1" | "Short Descriptive for Automation Test Project 1" | "Longer descriptive for Automation Test Project 1" | "https://github.com/BCDevExchange" | "javascript,html,mongo" | "3" | "Program: Automation Test 1"
         }
 
-*/
+
 
        @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
             def "Publish Opportunity: '#TitleData'" () {
-                //Assignements in the beginning
+
                 // This section set and format the dates 
                 Calendar calendar= Calendar.getInstance()
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
@@ -157,14 +157,24 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 calendar.add(Calendar.DATE,3)
                 def deadline=calendar.getTime()  //Define the deadline for applications (set to 3 days from today)
                 def Formatted_deadline=format.format( deadline )
+                def Formatted_deadline_Year=deadline.year +1900 //Year start counting from 1900
+                def Formatted_deadline_Month=deadline.month +1 //Month start counting from 0
+                def Formatted_deadline_Day=deadline.date
+
 
                 calendar.add(Calendar.DATE,21)
                 def assignment=calendar.getTime() //Define the date the oppoortunity is assigned (set to 21 + 3 days from today)
                 def Formatted_assignment=format.format(assignment)
+                def Formatted_assignment_Year=assignment.year +1900 //Year start counting from 1900
+                def Formatted_assignment_Month=assignment.month +1 //Month start counting from 0
+                def Formatted_assignment_Day=assignment.date
 
                 calendar.add(Calendar.DATE,21)
                 def start=calendar.getTime()   //Define the start date for the work (set to 21+21+3 days from today)
                 def Formatted_start=format.format(start)
+                def Formatted_start_Year=start.year +1900 //Year start counting from 1900
+                def Formatted_start_Month=start.month +1 //Month start counting from 0
+                def Formatted_start_Day=start.date
 
                 def  MyTitleData = TitleData + ": " + RandomID
                 reportInfo("Variable a is :"  + TitleData  )
@@ -203,6 +213,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     withFrame(OppBackgroundBox){$("body", id:"tinymce") << Background }
 
                     DetailsTabClick //Now we move to the Details tab  
+                    waitFor{LocationRadioButton(Onsite).click()}
                     selectLocation.value(Location)
                     selectEarn.value(Earn)
 
@@ -210,20 +221,30 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     // oppEmail.value(Email)
                     // oppEmail << Keys.chord(Keys.TAB)
 
-                    assert proposalDeadLine.attr("name")== "deadline"
-            //Dates
-                    reportInfo("Deadline name:" + proposalDeadLine.attr("name") )
-                    reportInfo("Deadline type:" + proposalDeadLine.attr("type") )
-                    reportInfo("Deadline value:" + proposalDeadLine.value() )
-                    reportInfo("Formatted_deadline value:" + Formatted_deadline )
+                    //Setting the proposal Deadline
+                    proposalDeadLine.firstElement().clear()  //clean the field from the preselected date
+                    proposalDeadLine << Formatted_deadline_Year.toString() //write the year
+                    proposalDeadLine << Keys.ARROW_RIGHT  // move right to the month
+                    proposalDeadLine << Formatted_deadline_Month.toString()
+                    proposalDeadLine << Keys.ARROW_RIGHT  //move right to the day
+                    proposalDeadLine << Formatted_deadline_Day.toString() 
+              
+                    //Setting the proposal Assignment
+                    proposalAssignment.firstElement().clear()  //clean the field from the preselected date
+                    proposalAssignment << Formatted_assignment_Year.toString() //write the year
+                    proposalAssignment<< Keys.ARROW_RIGHT  // move right to the month
+                    proposalAssignment<< Formatted_assignment_Month.toString()
+                    proposalAssignment << Keys.ARROW_RIGHT  //move right to the day
+                    proposalAssignment << Formatted_assignment_Day.toString() 
 
-
-                    $(By.xpath('//*[@id="deadline"]')).value("2020-01-01")
-                    //proposalDeadLine.value(Formatted_deadline)
-                    reportInfo("Deadline value -after-:" + proposalDeadLine.value() )
-                    proposalAssignment.value(Formatted_assignment)
-                    proposalStartDate.value(Formatted_start)
-    
+                    //Setting the proposal StartDate
+                    proposalStartDate.firstElement().clear()  //clean the field from the preselected date
+                    proposalStartDate << Formatted_start_Year.toString() //write the year
+                    proposalStartDate << Keys.ARROW_RIGHT  // move right to the month
+                    proposalStartDate << Formatted_start_Month.toString()
+                    proposalStartDate << Keys.ARROW_RIGHT  //move right to the day
+                    proposalStartDate << Formatted_start_Day.toString() 
+ 
                     AcceptanceTabClick //Now we move to the Acceptance and Evaluatio tab  
                     waitFor{OppAcceptanceBox}
                     //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
@@ -241,6 +262,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 and: "I click the 'save changes' button for the opportunity: '#TitleData'"
                     SaveButton.click()  //This action saves the changes but does not change the page
                     sleep(3000) //This makes no sense given the next waitFor, but without it, then fails
+
                 then: "Go to the opportunities page to publish it"
                     waitFor{to OpportunitiesPage}
 
@@ -259,7 +281,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     assert waitFor{$("button",'data-automation-id':"button-opportunity-publish")}
                     $("button",'data-automation-id':"button-opportunity-publish").click()  //Finally, we publish the opp
                     //And then click Yes in the modal box that appears after clciking the Publish button
-                    $("button",'data-automation-id':"button-modal-yes").click()
+                   $("button",'data-automation-id':"button-modal-yes").click()
                     
 
      where: "The values used to create the Opportunity are:"
@@ -267,7 +289,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
       "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"
   }
 
-    
+   
         def cleanup(){
             to HomePage
             //I get the base URL to build (in the LoginModule) the URL to the admin icon

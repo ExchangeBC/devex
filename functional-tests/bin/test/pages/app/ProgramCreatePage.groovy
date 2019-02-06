@@ -19,13 +19,8 @@ class ProgramCreatePage extends Page  {
     Website { $('input[data-automation-id ~= "text-program-website"]')}
     SaveButton { $('a[data-automation-id ~= "button-program-save"]') }
     DeleteButton { $('a[data-automation-id ~= "button-program-delete"]') }
-		descriptionFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-program-description"]//@id,"_ifr")]'), 0) }
+    ProgramDescriptionBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
+
   }
 
-    void "Set Description"(String desc){
-          //waitFor { angularReady }
-          withFrame( waitFor { descriptionFrame } ) {
-            mceBody << desc
-        }
-  }
 }

@@ -78,14 +78,16 @@ class LoginModule extends Module {
 
  Boolean "Logout as user"(){
         
-          def  UserIcon = "https://avatars1.githubusercontent.com/u/46409451?v=4"
+         // def  UserIcon = "https://avatars1.githubusercontent.com/u/46409451?v=4"
 
-        if (!$("img",src:"${UserIcon}"))  {
+     //   if (!$("img",src:"${UserIcon}"))  {    created a data-automation-id for this element
+        if (!$("img",'data-automation-id':"UserAvatarImage" )) {
             println("Not logged as user")
             return true
         }
         else {
-            $("img",src:"${UserIcon}").click()
+      //      $("img",src:"${UserIcon}").click()
+            $("img",'data-automation-id':"UserAvatarImage" ).click()
             sleep(1000)
             //This line click in the Log Out option of the previous drop down list
             $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()

@@ -7,6 +7,7 @@
 
           <div class="d-flex justify-content-center">
             <button type="button" class="btn btn-primary"
+                    data-automation-id="btnInception"
                     ng-click="vm.changeToStartPhase(vm.opportunity.phases.inception)"
                     ng-disabled="vm.opportunity.phases.inception.isInception">
               Start Here
@@ -48,8 +49,8 @@
             <br>
             <label for="phase-deadline" class="text-black-50">I want Inception <span class="strong">complete</span> by:</label>
             <form-input ng-model="vm.opportunity.phases.inception.endDate" x-form="vm.opportunityForm" x-options='{
-									"id":"inceptionStartDate",
-                  "name":"inceptionStartDate",
+									"id":"inceptionCompleteDate",
+                  "name":"inceptionCompleteDate",
 									"type":"date"
 								}'>
             </form-input>
@@ -59,6 +60,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
             <ul class="list-group">
               <li class="list-group-item"
+                  data-automation-id="tglCapabilityInception"
                   ng-repeat="capability in vm.allCapabilities"
                   ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.inception.capabilities)}"
                   ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.inception.capabilities)">
@@ -81,6 +83,7 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
+                      data-automation-id="btnProofOfConcept"
                       ng-click="vm.changeToStartPhase(vm.opportunity.phases.proto)"
                       ng-disabled="!vm.opportunity.phases.inception.isInception && vm.opportunity.phases.proto.isPrototype">
                 Start Here
@@ -125,8 +128,8 @@
             <label for="phase-deadline" class="text-black-50">I want an <span class="strong">Alpha release</span> on or
               before:</label>
             <form-input ng-model="vm.opportunity.phases.proto.endDate" x-form="vm.opportunityForm" x-options='{
-									"id":"prototypeStartDate",
-									"name":"prototypeStartDate",
+									"id":"prototypeEndDate",
+									"name":"prototypeEndDate",
 									"type":"date"
 								}'>
             </form-input>
@@ -136,6 +139,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
               <ul class="list-group">
                 <li class="list-group-item"
+                    data-automation-id="tglCapabilityProofOfConcept"
                     ng-repeat="capability in vm.allCapabilities"
                     ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.proto.capabilities)}"
                     ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.proto.capabilities)">
@@ -158,6 +162,7 @@
 
             <div class="d-flex justify-content-center">
               <button type="button" class="btn btn-primary"
+                      data-automation-id="btnImplementation"
                       ng-click="vm.changeToStartPhase(vm.opportunity.phases.implementation)"
                       ng-disabled="!vm.opportunity.phases.proto.isPrototype">
                 Start Here
@@ -189,16 +194,16 @@
             <label for="start-date" class="text-black-50">I want this phase to <span class="strong">start</span> on or
               before:</label>
             <form-input ng-model="vm.opportunity.phases.implementation.startDate" x-form="vm.opportunityForm" x-options='{
-									"id":"prototypeStartDate",
-									"name":"prototypeStartDate",
+									"id":"implementationStartDate",
+									"name":"mplementationStartDate",
 									"type":"date"
 								}'>
             </form-input>
             <br>
             <label for="phase-deadline" class="text-black-50">I want my Implementation team until:</label>
             <form-input ng-model="vm.opportunity.phases.implementation.endDate" x-form="vm.opportunityForm" x-options='{
-									"id":"prototypeStartDate",
-									"name":"prototypeStartDate",
+									"id":"implementationEndDate",
+									"name":"implementationEndDate",
 									"type":"date"
 								}'>
             </form-input>
@@ -208,6 +213,7 @@
               mark it with the <label class="label label-fulltime-selected">F/T</label> label.</p>
               <ul class="list-group">
                 <li class="list-group-item"
+                    data-automation-id="tglCapabilityImplementation"
                     ng-repeat="capability in vm.allCapabilities"
                     ng-class="{'list-group-item-selected' : vm.isCapabilitySelected(capability, vm.opportunity.phases.implementation.capabilities)}"
                     ng-click="vm.toggleSelectedCapability(capability, vm.opportunity.phases.implementation.capabilities)">

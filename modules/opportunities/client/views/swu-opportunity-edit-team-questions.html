@@ -61,7 +61,7 @@
 
   <!-- Add new team question button -->
   <div class="add-button-wrapper">
-    <button class="btn btn-sm btn-default" ng-show="!vm.editingQuestion && !vm.opportunity.isPublished && !vm.opportunity.wasPublished"
+    <button data-automation-id="btnAddNewQuestion" class="btn btn-sm btn-default" ng-show="!vm.editingQuestion && !vm.opportunity.isPublished && !vm.opportunity.wasPublished"
       type="button" ng-click="vm.addNewTeamQuestion()"><i class="fas fa-plus"></i> Add New</button>
   </div>
   <div ng-show="vm.opportunity.isPublished || vm.opportunity.wasPublished" class="alert alert-warning">
