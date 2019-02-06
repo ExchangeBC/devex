@@ -3,10 +3,10 @@
 import angular, { IController, IScope } from 'angular';
 import moment from 'moment-timezone';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgCommonService } from '../../../orgs/client/services/OrgCommonService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IProposalResource } from '../services/ProposalService';
-import { IOrgCommonService } from '../../../orgs/client/services/OrgCommonService';
 
 interface IProposalApplyScope extends IScope {
 	opportunity: IOpportunityResource;
