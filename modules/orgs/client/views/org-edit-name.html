@@ -1,0 +1,46 @@
+<form name="vm.orgForm" id="vm.orgForm">
+	<div class="bg-white rounded p-4 container">
+
+		<div class="row">
+			<div class="col">
+				<button type="button" class="close float-right" ng-click="vm.close()" aria-label="Close"><span
+					aria-hidden="true">&times;</span></button>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<fieldset>
+					<form-input ng-model="vm.org.name" x-form="vm.orgForm" x-options='{
+						"title":"Legal Name of Company",
+						"id":"companyname",
+						"name":"companyname",
+						"placeholder":"Enter your company name"
+					}'>
+					</form-input>
+					<form-display x-options='{
+						"title":"Website",
+						"id":"website",
+						"name":"website"
+					}'
+						x-form="vm.orgForm">
+						<div class="row mx-auto">
+							<select class="form-control protocol-input col-4" ng-model="vm.org.websiteProtocol">
+								<option>http://</option>
+								<option>https://</option>
+							</select>
+							<input data-automation-id="inpCompanyWebAddress" class="form-control website-input col-8" type="text" placeholder="www.mycompany.org" ng-model="vm.org.websiteAddress" />
+						</div>
+					</form-display>
+				</fieldset>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col">
+				<button data-automation-id="btnSaveCompanyName" ng-click="vm.save()" class="btn btn-primary float-right">
+					<i class="fas fa-save"></i>&nbsp;Save</button>
+			</div>
+		</div>
+	</div>
+</form>
