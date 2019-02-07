@@ -2,8 +2,9 @@
 
 import angular, { IController, IScope, uiNotification } from 'angular';
 import _ from 'lodash';
+import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IProposalResource, IProposalService } from '../../../proposals/client/services/ProposalService';
-import { ITeamQuestionResponse } from '../../../proposals/shared/IProposalDTO';
+import { IProposal, ITeamQuestionResponse } from '../../../proposals/shared/IProposalDTO';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { ITeamQuestion } from '../../shared/IOpportunityDTO';
@@ -522,7 +523,7 @@ export class OpportunityEvaluationDirectiveController implements IController {
 
 			this.Notification.success({
 				message: '<i class="fas fa-check-circle"></i> Evaluation reset'
-			})
+			});
 			this.initializeEvaluation();
 		}
 	}
@@ -613,6 +614,17 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		}
 	}
 
+	// Returns an array consisting of the aggregated skills from all team members on the given proposals, for all phases
+	private getAggregatedProposalSkills(proposal: IProposal): ICapabilitySkill[] {
+		const inceptionSkills = _.unionWith(_.flatten(proposal.phases.inception.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
+		const protoSkills = _.unionWith(_.flatten(proposal.phases.proto.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
+		const implSkills = _.unionWith(_.flatten(proposal.phases.implementation.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
+
+		const aggregatedProposalSkills = _.unionWith(inceptionSkills, protoSkills, implSkills, (sk1, sk2) => sk1.code === sk2.code);
+
+		return aggregatedProposalSkills;
+	}
+
 	// calculate skill-based score on proposals in place
 	private calculateSkillScores(proposals: IProposalResource[]): void {
 		// aggregate skills on opportunity
@@ -631,13 +643,7 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		proposals.forEach(proposal => {
 			proposal.scores.skill = 0;
 			if (maxPossibleSkillScore > 0) {
-				// aggregate skills for this proposal
-				const aggregatedProposalSkills = _.unionWith(
-					proposal.phases.inception.capabilitySkills,
-					proposal.phases.proto.capabilitySkills,
-					proposal.phases.implementation.capabilitySkills,
-					(sk1, sk2) => sk1.code === sk2.code
-				);
+				const aggregatedProposalSkills = this.getAggregatedProposalSkills(proposal);
 
 				// raw score is intersection, used to calculate weighted score percentage
 				const rawScore = _.intersectionWith(aggregatedOpportunitySkills, aggregatedProposalSkills, (sk1, sk2) => sk1.code === sk2.code).length;

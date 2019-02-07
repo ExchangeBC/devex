@@ -175,7 +175,6 @@ export default class ProposalEditSWUController {
 		}
 
 		this.syncBusinessInformation();
-		this.syncCapabilitiesAndSkills();
 
 		try {
 			let updatedProposal: IProposalResource;
@@ -446,20 +445,6 @@ export default class ProposalEditSWUController {
 		this.proposal.businessContactName = this.org.contactName;
 		this.proposal.businessContactEmail = this.org.contactEmail;
 		this.proposal.businessContactPhone = this.org.contactPhone;
-	}
-
-	// Copy over the aggregated capabilities and skills on the proposal from the componsed team members for each phase
-	private syncCapabilitiesAndSkills(): void {
-		this.proposal.phases.inception.capabilities = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-		this.proposal.phases.proto.capabilities = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-		this.proposal.phases.implementation.capabilities = _.unionWith(_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-
-		this.proposal.phases.inception.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
-		this.proposal.phases.proto.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
-		this.proposal.phases.implementation.capabilitySkills = _.unionWith(
-			_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilitySkills)),
-			(sk1, sk2) => sk1.code === sk2.code
-		);
 	}
 
 	private handleError(error: any): void {
