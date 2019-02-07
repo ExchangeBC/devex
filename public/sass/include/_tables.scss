@@ -4,3 +4,6 @@
 		width: 1%;
 	}
 }
+.table-hover > tbody > tr:hover {
+	background: $gray-lighter;	
+}
