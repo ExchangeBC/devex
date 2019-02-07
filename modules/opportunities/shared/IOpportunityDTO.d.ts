@@ -11,9 +11,9 @@ export interface IPhase {
 	isInception?: boolean;
 	isPrototype?: boolean;
 	team?: IUser[];
-	capabilities: ICapability[];
+	capabilities?: ICapability[];
 	capabilitiesCore?: ICapability[];
-	capabilitySkills: ICapabilitySkill[];
+	capabilitySkills?: ICapabilitySkill[];
 	cost?: number;
 	maxCost?: number;
 	endDate: Date;

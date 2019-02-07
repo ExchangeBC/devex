@@ -48,14 +48,6 @@ const PhaseSchema = new Schema({
 		type: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 		default: []
 	},
-	capabilities: {
-		type: [{ type: Schema.Types.ObjectId, ref: 'Capability' }],
-		default: []
-	},
-	capabilitySkills: {
-		type: [{ type: Schema.Types.ObjectId, ref: 'CapabilitySkill' }],
-		default: []
-	},
 	cost: { type: Number, default: 0 }
 });
 
