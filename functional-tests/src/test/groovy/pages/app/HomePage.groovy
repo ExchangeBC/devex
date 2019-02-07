@@ -21,7 +21,6 @@ class HomePage extends Page {
         //HomeLink { PositionAndClick("a","home") }
 		HomeLink { $("img", class:"navbar-brand" ).click() }
 
-
 		AdminIcon { $('img[class ~="navbar-header-user-image"]')}
 
 		AdminMenuDropDown{$("a",'data-automation-id':"AdminMenuItem")}	

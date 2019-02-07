@@ -76,7 +76,9 @@ class LoginModule extends Module {
         
         if ($("img",'data-automation-id':"UserAvatarImage" ).displayed) {
             println("Logged as user")
+            sleep(500)
             $("img",'data-automation-id':"UserAvatarImage" ).click()
+            sleep(500)
             //This line click in the Log Out option of the previous drop down list
             $("a", href:"/api/auth/signout" ).click()
             return true
