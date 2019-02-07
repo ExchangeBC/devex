@@ -14,13 +14,8 @@
     <div class="row my-2">
       <div class="col">
         <div class="align-items-center">
-<<<<<<< Updated upstream
           <div class="float-left" ng-if="(vm.isOrgMember() || vm.isAdmin()) && vm.orgHasMetRFQ">
             <i class="fas fa-shield-alt"></i>
-=======
-          <div class="float-left" ng-if="(vm.isOrgMember() || vm.isAdmin()) && vm.isOrgCapable() && vm.org.isAcceptedTerms">
-            <i class="fas fa-shield-alt"></i>
->>>>>>> Stashed changes
             <span class="font-italic font-weight-light">&nbsp;Sprint With Us</span> Qualified
           </div>
         </div>
@@ -111,20 +106,11 @@
       <div class="col-md-12 col-lg-6 my-3">
         <h4>Members</h4>
         <!-- Search field to filter the members list... -->
-<<<<<<< Updated upstream
         <input class="form-control"
                 type="text"
                 ng-model="vm.searchTerm"
                 placeholder="Find team members...">
 
-=======
-        <input class="form-control"
-                data-automation-id="findMembers"
-                type="text"
-                ng-model="vm.searchTerm"
-                placeholder="Find someone...">
-
->>>>>>> Stashed changes
         <div class="members-list p-0">
           <div class="member py-2" ng-repeat="member in vm.org.members | filter: { displayName: vm.searchTerm }" ng-click="vm.viewMemberDetails(member, false)">
             <avatar-display url="member.profileImageURL" size="25"></avatar-display>
@@ -145,15 +131,10 @@
       <div class="col">
         <h4>Capabilities &amp; Skills</h4>
 
-<<<<<<< Updated upstream
         <div ng-if="vm.orgIsCapable" class="alert alert-success">
           <i class="fas fa-shield-alt"></i>
           <span>Your company has covered all of the capabilities required to apply on <span class="font-italic">Sprint With Us</span> opportunities.
-=======
-        <div ng-if="vm.isOrgCapable()" class="alert alert-success">
-          <i class="fas fa-shield-alt"></i>
-          <span class="font-weight-bold"><span class="font-italic">Sprint With Us</span> Qualified!</span>  Your company has all of the capabilities to apply on <span class="font-italic">Sprint With Us</span> opportunities.
->>>>>>> Stashed changes
+
         </div>
 
         <div ng-if="!vm.orgIsCapable" class="alert alert-warning">
