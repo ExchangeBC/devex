@@ -8,6 +8,7 @@ import { Settings } from 'tinymce';
 import { ICapabilityResource } from '../../../capabilities/client/services/CapabilitiesService';
 import { ICapabilitySkillResource } from '../../../capabilities/client/services/CapabilitiesSkillsService';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgCommonService } from '../../../orgs/client/services/OrgCommonService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUser } from '../../../users/shared/IUserDTO';
@@ -28,6 +29,7 @@ export default class ProposalEditSWUController {
 		'TinyMceConfiguration',
 		'resources',
 		'$window',
+		'OrgCommonService',
 		'OpportunitiesService'
 	];
 
@@ -64,6 +66,7 @@ export default class ProposalEditSWUController {
 		public TinyMceConfiguration: Settings,
 		public resources: any,
 		private $window: IWindowService,
+		private OrgCommonService: IOrgCommonService,
 		private OpportunitiesService: IOpportunitiesService
 	) {
 		this.user = this.AuthenticationService.user;
@@ -141,6 +144,10 @@ export default class ProposalEditSWUController {
 
 	public validateEntireAmount(): boolean {
 		return this.proposal.phases.inception.cost + this.proposal.phases.proto.cost + this.proposal.phases.implementation.cost <= this.opportunity.budget;
+	}
+
+	public hasMetRFQ(): boolean {
+		return this.OrgCommonService.hasOrgMetRFQ(this.org);
 	}
 
 	public validateAllAmounts(): boolean {
@@ -231,7 +238,7 @@ export default class ProposalEditSWUController {
 		}
 
 		// ensure that proposal has met all the criteria for submission
-		if (!this.proposal.isAcceptedTerms || !this.isTeamCapable() || !this.org.metRFQ) {
+		if (!this.OrgCommonService.hasOrgMetRFQ(this.org) || (!this.isTeamCapable())) {
 			this.Notification.error({
 				message: 'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
 				title: 'Error',

@@ -44,6 +44,7 @@ class MongooseController {
 			})
 
 			_.assign(config.db.options, { useNewUrlParser: true });
+			mongoose.set('useFindAndModify', false);
 
 			try {
 				setTimeout(() => {

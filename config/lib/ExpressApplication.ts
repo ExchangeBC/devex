@@ -110,6 +110,7 @@ class ExpressApplication {
 		app.locals.domain = config.domain;
 		app.locals.sessionTimeout = config.sessionTimeout || 300;
 		app.locals.sessionTimeoutWarning = config.sessionTimeoutWarning || 300;
+		app.locals.allowCapabilityEditing = config.allowCapabilityEditing || false;
 
 		// Passing the request url to environment locals
 		app.use((req, res, next) => {

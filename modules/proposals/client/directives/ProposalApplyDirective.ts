@@ -3,6 +3,7 @@
 import angular, { IController, IScope } from 'angular';
 import moment from 'moment-timezone';
 import { IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
+import { IOrgCommonService } from '../../../orgs/client/services/OrgCommonService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IProposalResource } from '../services/ProposalService';
@@ -22,14 +23,14 @@ enum UserStates {
 }
 
 export class ProposalApplyDirectiveController implements IController {
-	public static $inject = ['$scope', 'AuthenticationService'];
+	public static $inject = ['$scope', 'AuthenticationService', 'OrgCommonService'];
 	public opportunity: IOpportunityResource;
 	public proposal: IProposalResource;
 	public org: IOrgResource;
 	public userState: UserStates;
 	public userStates = UserStates;
 
-	constructor($scope: IProposalApplyScope, AuthenticationService: IAuthenticationService) {
+	constructor($scope: IProposalApplyScope, AuthenticationService: IAuthenticationService, private OrgCommonService: IOrgCommonService) {
 		this.opportunity = $scope.opportunity;
 		this.proposal = $scope.proposal;
 		this.org = $scope.org;
@@ -46,7 +47,7 @@ export class ProposalApplyDirectiveController implements IController {
 		} else if (canEdit) {
 			if (isProposal) {
 				this.userState = this.userStates.CAN_EDIT;
-			} else if (this.opportunity.opportunityTypeCd !== 'sprint-with-us' || (this.org && this.org.metRFQ)) {
+			} else if (this.opportunity.opportunityTypeCd !== 'sprint-with-us' || (this.org && this.OrgCommonService.hasOrgMetRFQ(this.org))) {
 				this.userState = this.userStates.CAN_ADD;
 			} else {
 				this.userState = this.userStates.NEEDS_COMPANY;

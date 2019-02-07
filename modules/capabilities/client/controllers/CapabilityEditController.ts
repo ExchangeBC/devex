@@ -1,234 +1,225 @@
 'use strict';
 
 import { StateService } from '@uirouter/core';
-import angular, { IRootScopeService, uiNotification } from 'angular';
+import angular, { IController, IFormController, IRootScopeService, uiNotification } from 'angular';
+import { Settings } from 'tinymce';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IUser } from '../../../users/shared/IUserDTO';
+import { ICapabilitySkill } from '../../shared/ICapabilitySkillDTO';
 import { ICapabilitiesService, ICapabilityResource } from '../services/CapabilitiesService';
 import { ICapabilitySkillResource, ICapabilitySkillsService } from '../services/CapabilitiesSkillsService';
 
-(() => {
-	angular
-		.module('capabilities')
-		// Controller the view of the capability page
-		.controller('CapabilityEditController', [
-			'$scope',
-			'$state',
-			'capability',
-			'AuthenticationService',
-			'Notification',
-			'TinyMceConfiguration',
-			'CapabilitiesService',
-			'CapabilitySkillsService',
-			'ask',
-			function(
-				$scope: IRootScopeService,
-				$state: StateService,
-				capability: ICapabilityResource,
-				AuthenticationService: IAuthenticationService,
-				Notification: uiNotification.INotificationService,
-				TinyMceConfiguration,
-				CapabilitiesService: ICapabilitiesService,
-				CapabilitySkillsService: ICapabilitySkillsService,
-				ask
-			) {
-				const qqq = this;
-				qqq.capability = capability;
-				qqq.auth = AuthenticationService.permissions();
-				qqq.tinymceOptions = TinyMceConfiguration;
-				qqq.newskill = '';
-				qqq.editingskill = false;
+class CapabilityEditController implements IController {
+	public static $inject = ['$scope', '$state', 'capability', 'Notification', 'TinyMceConfiguration', 'CapabilitiesService', 'CapabilitySkillsService', 'ask'];
 
-				// check for duplicate skills
-				qqq.isDuplicateSkill = (newSkillName: string, existingSkills: ICapabilitySkillResource[]): boolean => {
-					let found = false;
-					let i = 0;
-					while (!found && i < existingSkills.length) {
-						found = existingSkills[i++].name.toLowerCase() === newSkillName.toLowerCase();
-					}
-					return found;
-				};
+	public newskill: string;
+	public editingskill: ICapabilitySkill;
+	public capabilityForm: IFormController;
 
-				// save the capability, could be added or edited (post or put)
-				qqq.savenow = async (isValid: boolean): Promise<void> => {
-					if (!isValid) {
-						$scope.$broadcast('show-errors-check-validity', 'qqq.capabilityForm');
-						return;
-					}
+	constructor(
+		private $scope: IRootScopeService,
+		private $state: StateService,
+		public capability: ICapabilityResource,
+		private Notification: uiNotification.INotificationService,
+		public TinyMceConfiguration: Settings,
+		private CapabilitiesService: ICapabilitiesService,
+		private CapabilitySkillsService: ICapabilitySkillsService,
+		private ask: any
+	) {
+		this.newskill = '';
+	}
 
-					try {
-						let newCapability: ICapabilityResource;
-						if (qqq.capability._id) {
-							newCapability = await CapabilitiesService.update(qqq.capability).$promise;
-						} else {
-							newCapability = await CapabilitiesService.create(qqq.capability).$promise;
-						}
-						qqq.capabilityForm.$setPristine();
-						Notification.success({
-							message: '<i class="fas fa-check-circle"></i> Capability saved'
-						});
-						qqq.capability = newCapability;
-						return;
-					} catch (error) {
-						Notification.error({
-							message: "<i class='fas fa-exclamation-triangle'></i> Save failed: " + error
-						});
-						return;
-					}
-				};
+	// check for duplicate skills
+	public isDuplicateSkill = (newSkillName: string, existingSkills: ICapabilitySkill[]): boolean => {
+		let found = false;
+		let i = 0;
+		while (!found && i < existingSkills.length) {
+			found = existingSkills[i++].name.toLowerCase() === newSkillName.toLowerCase();
+		}
+		return found;
+	};
 
-				// add a new capability skill
-				qqq.addSkill = async (): Promise<void> => {
-					// leave if no string
-					if (!qqq.newskill) {
-						Notification.error({
-							message: 'No Skill was supplied',
-							title: "<i class='fas fa-exclamation-triangle'></i> Missing Skill"
-						});
-						qqq.newskill = '';
-						return;
-					}
+	// save the capability, could be added or edited (post or put)
+	public savenow = async (isValid: boolean): Promise<void> => {
+		if (!isValid) {
+			this.$scope.$broadcast('show-errors-check-validity', 'qqq.capabilityForm');
+			return;
+		}
 
-					// check that this is not a duplicate within the current set
-					qqq.capability.skills = qqq.capability.skills ? qqq.capability.skills : [];
-					if (qqq.isDuplicateSkill(qqq.newskill, qqq.capability.skills)) {
-						Notification.error({
-							message: 'Duplicate Skill',
-							title: "<i class='fas fa-exclamation-triangle'></i> Duplicate Skill"
-						});
-						qqq.newskill = '';
-						return;
-					}
-
-					const capabilitySkill: any = {
-						name: qqq.newskill
-					};
-
-					try {
-						const newSkill = await CapabilitySkillsService.create(capabilitySkill).$promise;
-						qqq.capability.skills.push(newSkill);
-						qqq.savenow(true);
-						qqq.newskill = '';
-						qqq.capabilityForm.$setPristine();
-						return;
-					} catch (error) {
-						Notification.error({
-							title: 'Error',
-							message: "<i class='fas fa-exclamation-triangle'></i> Error Saving Skill"
-						});
-						return;
-					}
-				};
-
-				// enter edit mode for a skill
-				qqq.editSkill = (capabilitySkill: ICapabilitySkillResource): void => {
-					qqq.newskill = capabilitySkill.name;
-					qqq.editingskill = capabilitySkill;
-				};
-
-				// update a skill
-				qqq.updateSkill = async (): Promise<void> => {
-					// leave if no string
-					if (!qqq.newskill) {
-						Notification.error({
-							message: 'No Skill was supplied',
-							title: "<i class='fas fa-exclamation-triangle'></i> Missing Skill"
-						});
-						qqq.newskill = '';
-						return;
-					}
-
-					// check that this is not a duplicate within the current set
-					if (!qqq.editingskill) {
-						if (qqq.isDuplicateSkill(qqq.newskill, qqq.capability.skills)) {
-							Notification.error({
-								title: "<i class='fas fa-exclamation-triangle'></i> Duplicate Skill"
-							});
-							qqq.newskill = '';
-							return;
-						}
-					}
-
-					qqq.editingskill.name = qqq.newskill;
-
-					try {
-						await CapabilitySkillsService.update(qqq.editingskill).$promise;
-						Notification.success({
-							message: '<i class="fas fa-check-circle"></i> Skill updated'
-						});
-						qqq.newskill = '';
-						qqq.editingskill = null;
-						qqq.capabilityForm.$setPristine();
-						return;
-					} catch (error) {
-						Notification.error({
-							title: 'Error',
-							message: "<i class='fas fa-exclamation-triangle'></i> Error Updating Skill"
-						});
-						return;
-					}
-				};
-
-				// delete a skill - confirm first
-				qqq.deleteSkill = async (capabilitySkill: ICapabilitySkillResource): Promise<void> => {
-					const question = 'Confirm you want to delete this skill.  This cannot be undone.';
-					const response = await ask.yesNo(question);
-					if (response) {
-						try {
-							await CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
-							qqq.capability.skills = qqq.capability.skills.reduce((accum, current) => {
-								if (current.code !== capabilitySkill.code) {
-									accum.push(current);
-								}
-								return accum;
-							}, []);
-							qqq.savenow(true);
-							return;
-						} catch (error) {
-							Notification.error({
-								title: 'Error',
-								message: "<i class='fas fa-exclamation-triangle'></i> Error Removing Skill"
-							});
-							return;
-						}
-					}
-				};
-
-				// remove the capability with some confirmation
-				qqq.remove = async (): Promise<void> => {
-					const question = 'Confirm you want to delete this capability.  This cannot be undone.';
-					const response = await ask.yesNo(question);
-					if (response) {
-						try {
-							qqq.capability.skills.forEach(
-								async (capabilitySkill: ICapabilitySkillResource): Promise<void> => {
-									await CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
-								}
-							);
-
-							await CapabilitiesService.remove({ capabilityId: capability._id }).$promise;
-							$state.go('capabilities.list');
-							Notification.success({
-								message: '<i class="fas fa-check-circle"></i> Capability deleted'
-							});
-							return;
-						} catch (error) {
-							Notification.error({
-								title: 'Error',
-								message: "<i class='fas fa-exclamation-triangle'></i> Error Removing Capability"
-							});
-							return;
-						}
-					}
-				};
-
-				// close the edit view and return to the capability list or capability view
-				qqq.close = (): void => {
-					if (qqq.capability._id) {
-						$state.go('capabilities.view', { capabilityId: qqq.capability._id });
-					} else {
-						$state.go('capabilities.list');
-					}
-				};
+		try {
+			let newCapability: ICapabilityResource;
+			if (this.capability._id) {
+				newCapability = await this.CapabilitiesService.update(this.capability).$promise;
+			} else {
+				newCapability = await this.CapabilitiesService.create(this.capability).$promise;
 			}
-		]);
-})();
+			this.capabilityForm.$setPristine();
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Capability saved'
+			});
+			this.capability = newCapability;
+			return;
+		} catch (error) {
+			this.Notification.error({
+				message: "<i class='fas fa-exclamation-triangle'></i> Save failed: " + error
+			});
+			return;
+		}
+	};
+
+	// add a new capability skill
+	public addSkill = async (): Promise<void> => {
+		// leave if no string
+		if (!this.newskill) {
+			this.Notification.error({
+				message: 'No Skill was supplied',
+				title: "<i class='fas fa-exclamation-triangle'></i> Missing Skill"
+			});
+			this.newskill = '';
+			return;
+		}
+
+		// check that this is not a duplicate within the current set
+		this.capability.skills = this.capability.skills ? this.capability.skills : [];
+		if (this.isDuplicateSkill(this.newskill, this.capability.skills)) {
+			this.Notification.error({
+				message: 'Duplicate Skill',
+				title: "<i class='fas fa-exclamation-triangle'></i> Duplicate Skill"
+			});
+			this.newskill = '';
+			return;
+		}
+
+		const capabilitySkill: any = {
+			name: this.newskill
+		};
+
+		try {
+			const newSkill = await this.CapabilitySkillsService.create(capabilitySkill).$promise;
+			this.capability.skills.push(newSkill);
+			this.savenow(true);
+			this.newskill = '';
+			this.capabilityForm.$setPristine();
+			return;
+		} catch (error) {
+			this.Notification.error({
+				title: 'Error',
+				message: "<i class='fas fa-exclamation-triangle'></i> Error Saving Skill"
+			});
+			return;
+		}
+	};
+
+	// enter edit mode for a skill
+	public editSkill = (capabilitySkill: ICapabilitySkillResource): void => {
+		this.newskill = capabilitySkill.name;
+		this.editingskill = capabilitySkill;
+	};
+
+	// update a skill
+	public updateSkill = async (): Promise<void> => {
+		// leave if no string
+		if (!this.newskill) {
+			this.Notification.error({
+				message: 'No Skill was supplied',
+				title: "<i class='fas fa-exclamation-triangle'></i> Missing Skill"
+			});
+			this.newskill = '';
+			return;
+		}
+
+		// check that this is not a duplicate within the current set
+		if (!this.editingskill) {
+			if (this.isDuplicateSkill(this.newskill, this.capability.skills)) {
+				this.Notification.error({
+					title: "<i class='fas fa-exclamation-triangle'></i> Duplicate Skill"
+				});
+				this.newskill = '';
+				return;
+			}
+		}
+
+		this.editingskill.name = this.newskill;
+
+		try {
+			await this.CapabilitySkillsService.update(this.editingskill as ICapabilitySkillResource).$promise;
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Skill updated'
+			});
+			this.newskill = '';
+			this.editingskill = null;
+			this.capabilityForm.$setPristine();
+			return;
+		} catch (error) {
+			this.Notification.error({
+				title: 'Error',
+				message: "<i class='fas fa-exclamation-triangle'></i> Error Updating Skill"
+			});
+			return;
+		}
+	};
+
+	// delete a skill - confirm first
+	public deleteSkill = async (capabilitySkill: ICapabilitySkillResource): Promise<void> => {
+		const question = 'Confirm you want to delete this skill.  This cannot be undone.';
+		const response = await this.ask.yesNo(question);
+		if (response) {
+			try {
+				await this.CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
+				this.capability.skills = this.capability.skills.reduce((accum, current) => {
+					if (current.code !== capabilitySkill.code) {
+						accum.push(current);
+					}
+					return accum;
+				}, []);
+				this.savenow(true);
+				return;
+			} catch (error) {
+				this.Notification.error({
+					title: 'Error',
+					message: "<i class='fas fa-exclamation-triangle'></i> Error Removing Skill"
+				});
+				return;
+			}
+		}
+	};
+
+	// remove the capability with some confirmation
+	public remove = async (): Promise<void> => {
+		const question = 'Confirm you want to delete this capability.  This cannot be undone.';
+		const response = await this.ask.yesNo(question);
+		if (response) {
+			try {
+				this.capability.skills.forEach(
+					async (capabilitySkill: ICapabilitySkillResource): Promise<void> => {
+						await this.CapabilitySkillsService.remove({ capabilityskillId: capabilitySkill._id }).$promise;
+					}
+				);
+
+				await this.CapabilitiesService.remove({ capabilityId: this.capability._id }).$promise;
+				this.$state.go('capabilities.list');
+				this.Notification.success({
+					message: '<i class="fas fa-check-circle"></i> Capability deleted'
+				});
+				return;
+			} catch (error) {
+				this.Notification.error({
+					title: 'Error',
+					message: "<i class='fas fa-exclamation-triangle'></i> Error Removing Capability"
+				});
+				return;
+			}
+		}
+	};
+
+	// close the edit view and return to the capability list or capability view
+	public close = (): void => {
+		if (this.capability._id) {
+			this.$state.go('capabilities.view', { capabilityId: this.capability._id });
+		} else {
+			this.$state.go('capabilities.list');
+		}
+	};
+}
+
+angular.module('capabilities').controller('CapabilityEditController', CapabilityEditController);

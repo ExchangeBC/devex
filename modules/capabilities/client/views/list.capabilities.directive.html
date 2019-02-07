@@ -1,11 +1,12 @@
 <div class="row py-3">
-  <div class="col-sm-9">
+  <div class="col-sm-6">
     <h3>
       Capabilities
     </h3>
   </div>
-  <div class="d-none d-sm-block col-sm-3">
-    <button ng-if="vm.canAdd" class="btn btn-primary float-right" ui-sref="capabilityadmin.create()" title="New">
+  <div class="col-sm-6 float-right">
+    <span class="alert alert-warning float-right" ng-if="vm.canAdd && !vm.editingEnabled">Capability editing disabled for this instance of the application.</span>
+    <button ng-if="vm.canAdd" ng-disabled="!vm.editingEnabled" class="btn btn-primary float-right" ui-sref="capabilityadmin.create()" title="New">
       <i class="fas fa-plus"></i> Add a Capability
     </button>
   </div>

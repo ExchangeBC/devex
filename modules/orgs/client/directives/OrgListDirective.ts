@@ -5,6 +5,7 @@ import { IAuthenticationService } from '../../../users/client/services/Authentic
 import { IUserService } from '../../../users/client/services/UsersService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IOrg } from '../../shared/IOrgDTO';
+import { IOrgCommonService } from '../services/OrgCommonService';
 import { IOrgService } from '../services/OrgService';
 
 interface IOrgListDirectiveScope extends IScope {
@@ -12,7 +13,7 @@ interface IOrgListDirectiveScope extends IScope {
 }
 
 class OrgListDirectiveController implements IController {
-	public static $inject = ['$scope', 'OrgService', 'AuthenticationService', 'ask', 'Notification', 'UsersService'];
+	public static $inject = ['$scope', 'OrgService', 'AuthenticationService', 'ask', 'Notification', 'UsersService', 'OrgCommonService'];
 	public user: IUser;
 	public isUser: boolean;
 	public isAdmin: boolean;
@@ -33,7 +34,8 @@ class OrgListDirectiveController implements IController {
 		private AuthenticationService: IAuthenticationService,
 		private ask: any,
 		private Notification: uiNotification.INotificationService,
-		private UsersService: IUserService
+		private UsersService: IUserService,
+		private OrgCommonService: IOrgCommonService
 	) {
 		this.user = this.AuthenticationService.user;
 		this.isUser = !!this.AuthenticationService.user;
@@ -123,6 +125,11 @@ class OrgListDirectiveController implements IController {
 				this.handleError(error);
 			}
 		}
+	}
+
+	public hasOrgMetRFQ(org: IOrg): boolean {
+		const status = this.OrgCommonService.hasOrgMetRFQ(org)
+		return status;
 	}
 
 	private async init(): Promise<void> {

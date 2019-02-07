@@ -9,10 +9,10 @@ import angular from 'angular';
 		.controller('CapabilitiesListController', [
 			'capabilities',
 			'AuthenticationService',
-			function(capabilities, authenticationService) {
+			function(capabilities, AuthenticationService) {
 				const vm = this;
 				vm.capabilities = capabilities;
-				vm.auth = authenticationService.permissions();
+				vm.auth = AuthenticationService.permissions();
 			}
 		]);
 })();

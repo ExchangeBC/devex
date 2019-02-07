@@ -3,14 +3,14 @@
     <h4>
       Review and Submit Your Proposal
     </h4>
-    <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && !(ppp.proposal.isAcceptedTerms && ppp.isTeamCapable() && ppp.org.metRFQ)">
+    <div class="alert alert-danger" ng-if="ppp.proposal.status === 'Draft' && (!ppp.hasMetRFQ() || !ppp.isTeamCapable())">
       <i class="fas fa-exclamation-triangle"></i> &nbsp; <strong>Hold up!</strong>
       You won't be able to submit this Proposal until you:
       <ul>
         <li ng-if="!ppp.proposal.isAcceptedTerms">Accept the Terms</li>
         <li ng-if="!ppp.isTeamCapable()">Select Team members who cover all of the required capabilities in
           each phase</li>
-        <li ng-if="!ppp.org.metRFQ">Ensure that your company meets the RFQ requirements to apply on Sprint With
+        <li ng-if="!ppp.hasMetRFQ()">Ensure that your company meets the RFQ requirements to apply on Sprint With
           Us opportunities (see your <a ui-sref="orgadmin.profile({orgId:ppp.org._id})">company profile</a>)</li>
       </ul>
     </div>
