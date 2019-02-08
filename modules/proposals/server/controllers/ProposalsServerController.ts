@@ -128,7 +128,9 @@ class ProposalsServerController {
 
 		// notify admins and then update proposal
 		const proposal = req.body as IProposalModel;
-		await MessagesServerController.sendMessages('proposal-submitted', [proposal.user], { opportunity: proposal.opportunity });
+		const msgOpp = proposal.opportunity as any;
+		msgOpp.path = '/opportunities/' + (msgOpp.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu') + '/' + msgOpp.code;
+		await MessagesServerController.sendMessages('proposal-submitted', [proposal.user], { opportunity: msgOpp });
 
 		proposal.status = 'Submitted';
 		this.update(req, res);
