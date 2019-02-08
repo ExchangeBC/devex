@@ -237,7 +237,7 @@ export default class ProposalEditSWUController {
 		}
 
 		// ensure that proposal has met all the criteria for submission
-		if (!this.OrgCommonService.hasOrgMetRFQ(this.org) || (!this.isTeamCapable())) {
+		if (!this.OrgCommonService.hasOrgMetRFQ(this.org) || !this.isTeamCapable()) {
 			this.Notification.error({
 				message: 'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
 				title: 'Error',
@@ -246,9 +246,17 @@ export default class ProposalEditSWUController {
 			return;
 		}
 
-		this.proposal.status = 'Submitted';
-		await this.save('Your proposal has been submitted');
-		this.close();
+		this.syncBusinessInformation();
+
+		try {
+			await this.ProposalService.submit(this.proposal).$promise;
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Your proposal has been submitted'
+			});
+			this.close();
+		} catch (error) {
+			this.handleError(error);
+		}
 	}
 
 	// delete the proposal with confirmation

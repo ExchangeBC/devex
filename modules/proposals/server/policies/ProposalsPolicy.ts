@@ -73,6 +73,10 @@ class ProposalsPolicy {
 					{
 						resources: '/api/proposals/:proposalId',
 						permissions: '*'
+					},
+					{
+						resources: '/api/proposals/:proposalId/submit',
+						permissions: ['put']
 					}
 				]
 			},

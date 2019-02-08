@@ -8,6 +8,7 @@ import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
+import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
 import { IOrgModel } from '../../../orgs/server/models/OrgModel';
 import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
@@ -45,6 +46,7 @@ class ProposalsServerController {
 		this.getUserProposalForOpp = this.getUserProposalForOpp.bind(this);
 		this.saveProposal = this.saveProposal.bind(this);
 		this.addAttachment = this.addAttachment.bind(this);
+		this.submit = this.submit.bind(this);
 	}
 
 	// Get a proposal for the given opportunity and user
@@ -114,6 +116,22 @@ class ProposalsServerController {
 				message: 'User is not authorized'
 			});
 		}
+	}
+
+	public async submit(req: Request, res: Response): Promise<void> {
+		if (!this.ensureProposalOwner(req.proposal, req.user) && !this.ensureAdminOnOpp(req.proposal.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+			res.status(403).send({
+				message: 'User is not authorized'
+			});
+			return;
+		}
+
+		// notify admins and then update proposal
+		const proposal = req.body as IProposalModel;
+		await MessagesServerController.sendMessages('proposal-submitted', [proposal.user], { opportunity: proposal.opportunity });
+
+		proposal.status = 'Submitted';
+		this.update(req, res);
 	}
 
 	// Update the document, make sure to apply audit.
