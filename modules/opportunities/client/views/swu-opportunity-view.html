@@ -136,47 +136,56 @@
 
     <!-- Opportunity details -->
     <div class="row">
-      <div class="container col opp-dl-description">
-        <dl class="row">
-          <dt class="col-6 text-right">Work Location:</dt>
-          <dd class="col-6 text-left"><i class="fas fa-map-marker"></i>&nbsp;{{ vm.opportunity.location }}</dd>
-          <dt class="col-6 text-right">On-site requirements:</dt>
-          <dd class="col-6 text-left">
+      <div class="col-md-6">
+        <dl class="row mb-2">
+          <dt class="col-5 text-right text-muted pr-0">Location:</dt>
+          <dd class="col-7 text-left"><i class="fas fa-map-marker"></i>&nbsp;{{ vm.opportunity.location }}</dd>
+        </dl>
+        <dl class="row mb-2">
+          <dt class="col-5 text-right text-muted pr-0">On-site requirements:</dt>
+          <dd class="col-7 text-left">
             <span ng-if="vm.opportunity.onsite == 'offsite'">In-person work NOT required</span>
             <span ng-if="vm.opportunity.onsite == 'onsite'">In-person work required</span>
             <span ng-if="vm.opportunity.onsite == 'mixed'">Some in-person work required</span>
           </dd>
-          <dt class="col-6 text-right">Required skills:</dt>
-          <dd class="col-6 text-left">
+        </dl>
+        <dl class="row">
+          <dt class="col-5 text-right text-muted pr-0">Required skills:</dt>
+          <dd class="col-7 text-left">
             <div class="label-list">
               <label class="label label-skill" ng-repeat="skill in vm.capabilitySkills">{{skill.name}}</label>
             </div>
           </dd>
         </dl>
       </div>
-      <div class="container col opp-dl-description">
-        <dl class="row">
-          <dt class="col-6 text-right" ng-if="vm.canApply">Government Contact:</dt>
-          <dd class="col-6 text-left" ng-if="vm.canApply">
+      <div class="col-md-6">
+        <dl class="row mb-2">
+          <dt class="col-5 text-right text-muted pr-0" ng-if="vm.canApply">Government Contact:</dt>
+          <dd class="col-7 text-left" ng-if="vm.canApply">
             <a ng-if="vm.opportunity.createdBy" id="creator.view" href="mailto:bcdevexchange.empr@gov.bc.ca"><i
               class="far fa-user-circle"></i> {{vm.opportunity.createdBy.displayName}}</a>
             <span ng-if="!vm.opportunity.createdBy">Deleted User</span>
           </dd>
-          <dt class="col-6 text-right">Program:</dt>
-          <dd class="col-6 text-left">
+        </dl>
+        <dl class="row mb-2">
+          <dt class="col-5 text-right text-muted pr-0">Program:</dt>
+          <dd class="col-7 text-left">
             <a ng-if="vm.opportunity.program" id="programs.view" ui-sref="programs.view({programId:vm.opportunity.program.code})"><i
                 class="fas fa-university"></i> {{vm.opportunity.program.title}}</a>
             <span ng-if="!vm.opportunity.program" class="text-muted">No program</span>
           </dd>
-          <dt class="col-6 text-right">Project:</dt>
-          <dd class="col-6 text-left">
+        </dl>
+        <dl class="row mb-2">
+          <dt class="col-5 text-right text-muted pr-0">Project:</dt>
+          <dd class="col-7 text-left">
             <a ng-if="vm.opportunity.project" id="projects.view" ui-sref="projects.view({projectId:vm.opportunity.project.code})"><i
                 class="fas fa-chart-pie"></i> {{vm.opportunity.project.name}}</a>
             <span ng-if="!vm.opportunity.project" class="text-muted">No project</span>
           </dd>
-
-          <dt class="col-6 text-right">Code:</dt>
-          <dd class="col-6 text-left">
+        </dl>
+        <dl class="row">
+          <dt class="col-5 text-right text-muted pr-0">Code:</dt>
+          <dd class="col-7 text-left">
             <a ng-if="vm.opportunity.github && vm.opportunity.github.length > 0" href="{{vm.opportunity.github}}" rel="nofollow"
               target="_blank"><i class="fab fa-github"></i> GitHub Repository</a>
           </dd>
