@@ -9,10 +9,10 @@ class OpportunityDetailPage extends Page implements AngularJSAware {
 	static at = { angularReady && title.startsWith("BCDevExchange - Opportunity:") }
     
     static content = {
-      unPublished { $('[data-automation-id ~= "button-opportunity-publish]').isDisplayed() }
-		  published { $('[data-automation-id ~= "button-opportunity-unpublish]').isDisplayed() } 
-      oppDetailTitle { $('[data-automation-id ~= "text-opportunity-name"]').text() }
-		  oppPublishClick { $('[data-automation-id ~= "button-opportunity-publish"]').click()  }
-		  oppubYesClick { $("button", text: startsWith("Yes")) << Keys.chord(Keys.ENTER) }
+        unPublished { $('[data-automation-id ~= "button-opportunity-publish]').isDisplayed() }
+	    published { $('[data-automation-id ~= "button-opportunity-unpublish]').isDisplayed() } 
+        oppDetailTitle { $('[data-automation-id ~= "text-opportunity-name"]').text() }
+	    oppPublishClick { $('[data-automation-id ~= "button-opportunity-publish"]').click()  }
+	    oppubYesClick { $("button", text: startsWith("Yes")) << Keys.chord(Keys.ENTER) }
     }
 }

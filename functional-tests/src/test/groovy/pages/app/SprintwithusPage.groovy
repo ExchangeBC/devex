@@ -7,5 +7,9 @@ import extensions.AngularJSAware
 class SprintwithusPage extends Page {
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static url = "sprintwithus"
-	static content = {}
+	static content = {
+		HowToApply{$("a",id:"sprintwithus-howtoapply")}
+
+
+	}
 }
