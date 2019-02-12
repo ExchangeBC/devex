@@ -42,12 +42,12 @@
               </button>
             </div>
             <div ng-if="vm.isUserMember(org) && !vm.userIsOrgAdmin(org)">
-              <button class="btn btn-text-only label secondary">
+              <button data-automation-id="btnUserMember" class="btn btn-text-only label secondary">
                 <i class="fas fa-user"></i>&nbsp;Member
               </button>
             </div>
             <div ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" ui-sref="orgs.view({ orgId: org._id })">
-              <button class="btn btn-text-only label secondary">
+              <button data-automation-id="btnOrgAdmin" class="btn btn-text-only label secondary">
                 <i class="fas fa-cog"></i>&nbsp;Admin
               </button>
             </div>
