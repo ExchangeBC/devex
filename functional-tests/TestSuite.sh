@@ -11,3 +11,6 @@
 
 ./gradlew chromeTest --tests="UserCreatesCompany"
 ./gradlew chromeTest --tests="CreateOppSWU"
+./gradlew chromeTest --tests="SWU_HappyPath_1"
+
+./gradlew chromeTest --tests="UserDeletesProposal_Company"

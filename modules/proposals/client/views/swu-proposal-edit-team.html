@@ -66,6 +66,7 @@
       <div class="row">
         <div class="col-10 px-0 py-2 mx-auto">
           <div ng-repeat="member in ppp.filteredInceptionMembers"
+                data-automation-id="inceptionPhaseTeamMember"
                 class="font-weight-bold p-2 border"
                 ng-class="{'bg-primary text-white': ppp.teamHasMember(ppp.proposal.phases.inception.team, member)}"
                 ng-click="ppp.clickMember(member, ppp.proposal.phases.inception.team)">
@@ -131,6 +132,7 @@
       <div class="row">
         <div class="col-10 px-0 py-2 mx-auto">
           <div ng-repeat="member in ppp.filteredPrototypeMembers"
+                data-automation-id="prototypePhaseTeamMember"
                 class="font-weight-bold p-2 border"
                 ng-class="{'bg-primary text-white': ppp.teamHasMember(ppp.proposal.phases.proto.team, member)}"
                 ng-click="ppp.clickMember(member, ppp.proposal.phases.proto.team)">
@@ -195,6 +197,7 @@
       <div class="row">
         <div class="col-10 px-0 py-2 mx-auto">
           <div ng-repeat="member in ppp.filteredImplementationMembers"
+                data-automation-id="implementationPhaseTeamMember"
                 class="font-weight-bold p-2 border"
                 ng-class="{'bg-primary text-white': ppp.teamHasMember(ppp.proposal.phases.implementation.team, member)}"
                 ng-click="ppp.clickMember(member, ppp.proposal.phases.implementation.team)">
@@ -212,7 +215,7 @@
             <tr ng-repeat="capability in ppp.opportunity.phases.implementation.capabilities">
               <th ng-if="ppp.teamHasCapability(ppp.proposal.phases.implementation.team, capability)"><i class="fas fa-check-circle fa-2x text-success"></i></th>
               <th ng-if="!ppp.teamHasCapability(ppp.proposal.phases.implementation.team, capability)"><i class="far fa-circle fa-2x text-muted"></i></th>
-  
+
               <td><label class="label label-lg label-cap-default {{capability.labelClass}} m-auto"></i>
                   {{capability.name}}</label></td>
               <td ng-if="ppp.isFullTime(ppp.opportunity.phases.implementation.capabilitiesCore, capability)"><label class="label label-fulltime-selected m-auto">F/T</label></td>

@@ -9,7 +9,7 @@ class MessagesPage extends Page {
         BtnDecline{$("button",'data-automation-id':"btnMessage",1)}
 
         UnreadMessageIcon{$("span",'data-automation-id':"unreadMessageIcon")}//Actually this is part of the header and perhaps should move to a module
-
+        ProcessUserRequest{$("a",'data-automation-id':"processUserRequest",0)}
 
     }
 }
