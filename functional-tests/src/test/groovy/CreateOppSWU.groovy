@@ -89,7 +89,7 @@ class CreateOppSWU extends GebReportingSpec {
                     waitFor { to OpportunitiesPage }
 
                 when: "I click on 'Post and opportunity' button to create a new opportunity- Program and Project alredy exists"
-                    PostAnOpportunity.click()
+                    waitFor { PostAnOpportunity.click()}
 
                 then: "I load the Landing Page that allows to create a CWU or SWU opportunity"
                     waitFor{at OpportunitiesAdminCreateLandingPage}

@@ -7,7 +7,7 @@
           aria-hidden="true">&times;</span></button>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col">
         <fieldset>
@@ -20,7 +20,7 @@
                   "placeholder":"Address"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.address2" x-form="vm.orgForm" x-options='{
                   "title": "Legal Address 2",
                   "id":"address2",
@@ -28,14 +28,14 @@
                   "placeholder":"Address 2"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.city" x-form="vm.orgForm" x-options='{
                   "title":"City",
                   "id":"city",
                   "name":"city"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.province" x-form="vm.orgForm" x-options='{
                   "title":"Province/State/Other",
                   "id":"province",
@@ -43,7 +43,7 @@
                   "placeholder":"e.g. BC"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.postalcode" x-form="vm.orgForm" x-options='{
                   "title":"Postal Code",
                   "id":"postalcode",
@@ -52,7 +52,7 @@
                 }'>
                 </form-input>
             </div>
-    
+
             <div class="col-sm-6">
                 <form-input ng-model="vm.org.businessNumber" x-form="vm.orgForm" x-options='{
                   "title":"Business Registration No.",
@@ -61,7 +61,7 @@
                   "placeholder":"Business Number"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.businessJurisdiction" x-form="vm.orgForm" x-options='{
                   "title":"Registration Jurisdiction",
                   "id":"businessJurisdiction",
@@ -69,7 +69,7 @@
                   "placeholder":"Registered In"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.contactName" x-form="vm.orgForm" x-options='{
                   "title":"Contact Name",
                   "id":"contactName",
@@ -77,7 +77,7 @@
                   "placeholder":"Jane Smith"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.contactPhone" x-form="vm.orgForm" x-options='{
                   "title":"Contact Phone",
                   "id":"contactPhone",
@@ -85,7 +85,7 @@
                   "placeholder":"e.g. 250-288-0999"
                 }'>
                 </form-input>
-          
+
                 <form-input ng-model="vm.org.contactEmail" x-form="vm.orgForm" x-options='{
                   "title":"Contact Email",
                   "id":"contactEmail",
@@ -98,10 +98,10 @@
         </fieldset>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col">
-        <button ng-click="vm.save()" class="btn btn-primary float-right">
+        <button data-automation-id="btnSaveCompanyOtherInformation" ng-click="vm.save()" class="btn btn-primary float-right">
           <i class="fas fa-save"></i>&nbsp;Save</button>
       </div>
     </div>

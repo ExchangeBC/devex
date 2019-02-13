@@ -61,7 +61,6 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             return true
       }
 
- 
 
 
       //We make sure we are not logged as admin
@@ -74,9 +73,6 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             def  logoffOK=login."Logout as administrator"(baseURL)
             assert logoffOK
       }
-
-
-
 
   def "From the Home Page to the CWU" () {
 
@@ -256,12 +252,8 @@ class CWU_HappyPath_1 extends GebReportingSpec {
   }
 
         def cleanup(){//Logoff as user
-            to HomePage
-            sleep(10000)
-            //I get the base URL to build (in the LoginModule) the URL to the admin icon
-            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-            println("the URL is "+ baseURL)
-            // Login off as an admin
+            waitFor{to HomePage}
+            sleep(1000)  //Do not fully trust waitFor
             def  logoffOK=login."Logout as user"()
             assert logoffOK
         }
