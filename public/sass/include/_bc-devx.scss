@@ -159,8 +159,8 @@ table.swu-eval-table {
 }
 
 li.question-ranking-item {
-  max-height: 42px;
-  min-height: 42px;
+  max-height: 50px;
+  min-height: 50px;
   overflow-y: hidden;
 }
 
@@ -244,7 +244,7 @@ div.question-viewer {
 ul[dnd-list] .dndPlaceholder {
   background-color: #ddd;
   display: block;
-  min-height: 42px;
+  min-height: 50px;
 }
 
 ul[dnd-list] li {
@@ -267,27 +267,27 @@ ul.question-input-list {
 
 li.question-input {
   text-align: right;
-  max-height: 42px;
+  max-height: 50px;
 }
 
 ul.question-list {
   list-style-type: none;
 }
 li.question-item {
-  max-height: 42px;
-  min-height: 42px;
+  max-height: 50px;
+  min-height: 50px;
   overflow-y: hidden;
 }
 div.question-cell {
   border: solid;
   border-width: 1px;
   border-color: lightgray;
-  height: 42px;
+  height: 50px;
   overflow-y: hidden;
 }
 
 ul[dnd-list] {
-  min-height: 42px;
+  min-height: 50px;
   padding-left: 0px;
 }
 
@@ -1096,12 +1096,12 @@ form-title {
 // Banners
 
 .banner {
-  padding: 10px;
+  padding: 5px;
   margin: 0px;
   text-align: center;
 }
 
-.banner p {
+.banner p { // In case
   padding: 0px;
   margin: 0px;
 }
@@ -1116,7 +1116,7 @@ form-title {
 }
 
 .banner-important {
-  background-color: $theme-important;
+  background-color: $theme-warning;
 }
 
 .banner-gray {
@@ -1425,27 +1425,61 @@ table, th, td {
 }
 table.company-list > tbody > tr > td {
   vertical-align: middle;
+  padding: 0.33rem;
 }
 table.company-list > tbody > tr > th {
   vertical-align: middle;
+  padding: 0.33rem;
+}
+td.company-logo {
+  @media (min-width: 768px) {
+    text-align: left;
+    min-width: 50px;
+    max-width: 50px;
+  }
+  @media (max-width: 767px) {
+    text-align: left;
+    min-width: 50px;
+    max-width: 50px;
+  }
+}
+body table img {
+  max-width: 100% !important; // To override browser default of 95% 
 }
 td.company-name {
+  text-align: left;
   @media (min-width: 768px) {
       min-width: 450px;
       max-width: 450px;
   }
   @media (max-width: 767px) {
-    min-width: 100px;
-    max-width: 100px;
+    min-width: 250px;
+    max-width: 250px;
   }
+}
+td.member-count {
+  text-align: left;
+  min-width: 40px;
+  max-width: 40px;
+}
+td.swu-status {
+  text-align: center;
+  min-width: 40px;
+  max-width: 40px;
+}
+td.membership-status {
+  text-align: left;
+  min-width: 88px;
+  max-width: 88px;
 }
 td.button-cell {
   text-align: center;
-  min-width: 70px;
-  max-width: 70px;
-}
-body table img {
-  width: none; 
+  min-width: 80px;
+  max-width: 80px;
+  button.join {
+    font-size: 0.875rem;
+    padding: .25rem .5rem;
+  }
 }
 div.members-list {
   min-height: 150px;

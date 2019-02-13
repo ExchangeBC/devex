@@ -32,6 +32,7 @@ export interface IProposalService extends resource.IResourceClass<IProposalResou
 	getMembers(params: IProposalServiceParams): any[];
 	confirmMember(params: IProposalServiceParams): any;
 	denyMember(params: IProposalServiceParams): any;
+	submit(proposal: IProposalResource): IProposalResource;
 }
 
 angular.module('proposals.services').factory('ProposalService', [
@@ -118,6 +119,11 @@ angular.module('proposals.services').factory('ProposalService', [
 			url: '/api/proposals/requests/deny/:proposalId/:userId'
 		};
 
+		const submitAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/proposals/:proposalId/submit'
+		}
+
 		return $resource(
 			'/api/proposals/:proposalId',
 			{
@@ -137,7 +143,8 @@ angular.module('proposals.services').factory('ProposalService', [
 				getRequests: getRequestsAction,
 				getMembers: getMembersAction,
 				confirmMember: confirmMemberAction,
-				denyMember: denyMemberAction
+				denyMember: denyMemberAction,
+				submit: submitAction
 			}
 		) as IProposalService;
 	}

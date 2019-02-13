@@ -28,6 +28,11 @@ class ProposalsRouter {
 			.put(ProposalsServerController.update)
 			.delete(ProposalsServerController.delete);
 
+		// Submitting a proposal
+		app.route('/api/proposals/:proposalId/submit')
+			.all(ProposalsPolicy.isAllowed)
+			.put(ProposalsServerController.submit);
+
 		// Assignment of CWU proposals to individual
 		app.route('/api/proposals/:proposalId/assigncwu')
 			.all(ProposalsPolicy.isAllowed)

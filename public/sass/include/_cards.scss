@@ -9,6 +9,14 @@
     cursor: pointer;
   }
 }
+.card-flat {
+  box-shadow: none;
+  &:active,
+  &:hover {
+    box-shadow: none;
+    cursor: auto;
+  }
+}
 
 // Responsive card deck logic
 $grid-breakpoints: (

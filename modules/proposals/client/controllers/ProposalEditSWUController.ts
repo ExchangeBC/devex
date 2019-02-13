@@ -175,7 +175,6 @@ export default class ProposalEditSWUController {
 		}
 
 		this.syncBusinessInformation();
-		this.syncCapabilitiesAndSkills();
 
 		try {
 			let updatedProposal: IProposalResource;
@@ -238,7 +237,7 @@ export default class ProposalEditSWUController {
 		}
 
 		// ensure that proposal has met all the criteria for submission
-		if (!this.OrgCommonService.hasOrgMetRFQ(this.org) || (!this.isTeamCapable())) {
+		if (!this.OrgCommonService.hasOrgMetRFQ(this.org) || !this.isTeamCapable()) {
 			this.Notification.error({
 				message: 'Please ensure you have met the RFQ.  The Terms & Conditions must be accepted and your selected team members must meet all capabilities',
 				title: 'Error',
@@ -247,9 +246,17 @@ export default class ProposalEditSWUController {
 			return;
 		}
 
-		this.proposal.status = 'Submitted';
-		await this.save('Your proposal has been submitted');
-		this.close();
+		this.syncBusinessInformation();
+
+		try {
+			await this.ProposalService.submit(this.proposal).$promise;
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Your proposal has been submitted'
+			});
+			this.close();
+		} catch (error) {
+			this.handleError(error);
+		}
 	}
 
 	// delete the proposal with confirmation
@@ -446,20 +453,6 @@ export default class ProposalEditSWUController {
 		this.proposal.businessContactName = this.org.contactName;
 		this.proposal.businessContactEmail = this.org.contactEmail;
 		this.proposal.businessContactPhone = this.org.contactPhone;
-	}
-
-	// Copy over the aggregated capabilities and skills on the proposal from the componsed team members for each phase
-	private syncCapabilitiesAndSkills(): void {
-		this.proposal.phases.inception.capabilities = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-		this.proposal.phases.proto.capabilities = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-		this.proposal.phases.implementation.capabilities = _.unionWith(_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilities)), (cap1, cap2) => cap1.code === cap2.code);
-
-		this.proposal.phases.inception.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.inception.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
-		this.proposal.phases.proto.capabilitySkills = _.unionWith(_.flatten(this.proposal.phases.proto.team.map(member => member.capabilitySkills)), (sk1, sk2) => sk1.code === sk2.code);
-		this.proposal.phases.implementation.capabilitySkills = _.unionWith(
-			_.flatten(this.proposal.phases.implementation.team.map(member => member.capabilitySkills)),
-			(sk1, sk2) => sk1.code === sk2.code
-		);
 	}
 
 	private handleError(error: any): void {

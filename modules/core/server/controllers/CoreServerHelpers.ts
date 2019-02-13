@@ -6,6 +6,7 @@ import fs from 'fs';
 import http from 'http';
 import https from 'https';
 import _ from 'lodash';
+import moment from 'moment-timezone';
 import { Document, Model } from 'mongoose';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from './CoreServerErrors';
@@ -158,19 +159,14 @@ class CoreServerHelpers {
 		);
 	};
 
-	public formatDate = d => {
-		if (!d) {
-			return 'no date';
+	public formatDate(date: Date): string {
+		if (!date) {
+			return '';
 		}
-		const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-		const monthIndex = d.getMonth();
-		const year = d.getFullYear();
-		const day = d.getDate();
-		return monthNames[monthIndex] + ' ' + day + ', ' + year;
-	};
 
-	public formatTime = d => {
-		return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+		return moment(date)
+			.tz('America/Vancouver')
+			.format('MMMM Do, YYYY [at] HH:mm z');
 	};
 
 	public modelFindUniqueCode = (model, prefix, title, suffix, callback) => {

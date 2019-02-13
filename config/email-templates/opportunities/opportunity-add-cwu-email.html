@@ -15,7 +15,7 @@
     <h4>{{ opportunity.name }}</h4>
     <ul>
         <li>Value: <b>{{ formattedEarnings }}</b> CAD</li>
-        <li>Deadline to apply: <b>16:00 Pacific Time</b> on <b>{{ opportunity.deadline_format_date }}</b></li>
+        <li>Deadline to apply: <b>{{ opportunity.dateDeadline }}</b></li>
     </ul>
     <h4><a href="{{ domain }}/{{ opportunity.path }}">Click here to see the details</a></h4>
     <p>Have a great day!<br/><b>The BCDevExchange Team</b></p>

@@ -390,6 +390,28 @@ class MessagesServerController {
 						isDefault: true
 					}
 				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'proposal-submitted',
+				messageLevel: 'info',
+				description: 'Notification sent to a vendor letting them know that they have submitted a proposal',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/proposals/proposal-submitted-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/proposals/proposal-submitted-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Your proposal has been submitted",
+				modelsRequired: [],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'Dismiss',
+						isDefault: true
+					}
+				]
 			})
 		]);
 	}

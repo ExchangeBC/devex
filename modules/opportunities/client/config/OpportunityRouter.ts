@@ -52,6 +52,8 @@ export default class OpportunityRouter {
 		return {
 			url: '',
 			templateUrl: '/modules/opportunities/client/views/opportunity-list.html',
+			controller: 'OpportunityListController',
+			controllerAs: 'vm',
 			data: {
 				pageTitle: 'Opportunities List'
 			},

@@ -3,6 +3,7 @@
 import { StateService } from '@uirouter/core';
 import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
 import moment from 'moment-timezone';
+import { Settings } from 'tinymce';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
 import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
@@ -48,7 +49,7 @@ export default class ProposalEditCWUController {
 		private UsersService: IUserService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TinyMceConfiguration
+		public TinyMceConfiguration: Settings
 	) {
 		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
 		// if they do, transition to edit view for that proposal
@@ -148,9 +149,26 @@ export default class ProposalEditCWUController {
 
 	// Submit the proposal
 	public async submit(): Promise<void> {
-		if (await this.checkDeadline()) {
-			this.proposal.status = 'Submitted';
-			this.save(true, 'Proposal Submitted');
+		// First, check with server to ensure deadline hasn't passed
+		if (!(await this.checkDeadline())) {
+			return;
+		}
+
+		try {
+			// Save the current user (proposal contact info tied to user - TODO: unlink this)
+			const updatedUser = await this.UsersService.update(this.user).$promise;
+			this.user = this.AuthenticationService.user = updatedUser;
+
+			// Submit the proposal
+			this.copyUserInfo();
+
+			await this.ProposalService.submit(this.proposal).$promise;
+			this.Notification.success({
+				message: '<i class="fas fa-check-circle"></i> Your proposal has been submitted'
+			});
+			this.close();
+		} catch (error) {
+			this.handleError(error);
 		}
 	}
 
