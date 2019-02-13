@@ -697,10 +697,10 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		proposals.forEach(proposal => {
 			proposal.totalCost = proposal.phases.inception.cost + proposal.phases.proto.cost + proposal.phases.implementation.cost;
 		});
-		const nonZeroProposals = proposals.filter(proposal => proposal.totalCost > 0);
-		const lowestBiddingProposal = _.minBy(nonZeroProposals, 'totalCost');
+		const validProposals = proposals.filter(proposal => proposal.totalCost > 0 && proposal.screenedIn && proposal.passedCodeChallenge);
+		const lowestBiddingProposal = _.minBy(validProposals, 'totalCost');
 
-		nonZeroProposals.forEach(proposal => {
+		validProposals.forEach(proposal => {
 			proposal.scores.price = Math.round((lowestBiddingProposal.totalCost / proposal.totalCost) * (this.opportunity.weights.price * this.maximumScore) * 100) / 100;
 		});
 	}
