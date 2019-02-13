@@ -28,7 +28,7 @@ class HomePage extends Page {
 		AccessibilityLink { PositionAndClick("a","accessibility") }
 		API { PositionAndClick("a","api") }
 		AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
-		BrowseOpportunities { $('a[class="btn btn-lg btn-primary mt-5"][href="/opportunities" ]')}
+		BrowseOpportunities { $("a", 'data-automation-id':"lnkBrowseOpportunities")}
 		CodewithusLink { $(('a[data-automation-id ~= "button-codewithus"]'), 0).click() }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
 		Copyright { PositionAndClick("a","copyright") }
