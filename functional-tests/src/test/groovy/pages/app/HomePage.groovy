@@ -28,7 +28,7 @@ class HomePage extends Page {
 		AccessibilityLink { PositionAndClick("a","accessibility") }
 		API { PositionAndClick("a","api") }
 		AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
-		BrowseOpportunities { $('a[class="btn btn-lg btn-primary mt-5"][href="/opportunities" ]')}
+		BrowseOpportunities { $("a", 'data-automation-id':"lnkBrowseOpportunities")}
 		CodewithusLink { $(('a[data-automation-id ~= "button-codewithus"]'), 0).click() }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
 		Copyright { PositionAndClick("a","copyright") }
@@ -40,7 +40,6 @@ class HomePage extends Page {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0).click() }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0).click() }
-		RoadmapLink { PositionAndClick("a","roadmap") }
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SprintwithusLink { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0).click() }
