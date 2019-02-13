@@ -836,15 +836,11 @@ class OpportunitiesServerController {
 			name: opportunity.name,
 			short: opportunity.short,
 			description: opportunity.description,
-			earn_format_mnoney: CoreServerHelpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
 			earn: CoreServerHelpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2),
 			dateDeadline: CoreServerHelpers.formatDate(new Date(opportunity.deadline)),
-			timeDeadline: CoreServerHelpers.formatTime(new Date(opportunity.deadline)),
 			dateAssignment: CoreServerHelpers.formatDate(new Date(opportunity.assignment)),
 			dateStart: CoreServerHelpers.formatDate(new Date(opportunity.start)),
 			datePublished: CoreServerHelpers.formatDate(new Date(opportunity.lastPublished)),
-			deadline_format_date: CoreServerHelpers.formatDate(new Date(opportunity.deadline)),
-			deadline_format_time: CoreServerHelpers.formatTime(new Date(opportunity.deadline)),
 			updatenotification: 'not-update-' + opportunity.code,
 			code: opportunity.code,
 			opptype: opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu',
@@ -854,15 +850,11 @@ class OpportunitiesServerController {
 
 	private setMessageData = opportunity => {
 		opportunity.path = '/opportunities/' + (opportunity.opportunityTypeCd === 'sprint-with-us' ? 'swu' : 'cwu') + '/' + opportunity.code;
-		opportunity.earn_format_mnoney = CoreServerHelpers.formatMoney(opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn, 2);
 		opportunity.earn = opportunity.opportunityTypeCd === 'sprint-with-us' ? opportunity.phases.aggregate.target : opportunity.earn;
 		opportunity.dateDeadline = CoreServerHelpers.formatDate(new Date(opportunity.deadline));
-		opportunity.timeDeadline = CoreServerHelpers.formatTime(new Date(opportunity.deadline));
 		opportunity.dateAssignment = CoreServerHelpers.formatDate(new Date(opportunity.assignment));
 		opportunity.dateStart = CoreServerHelpers.formatDate(new Date(opportunity.start));
 		opportunity.datePublished = CoreServerHelpers.formatDate(new Date(opportunity.lastPublished));
-		opportunity.deadline_format_date = CoreServerHelpers.formatDate(new Date(opportunity.deadline));
-		opportunity.deadline_format_time = CoreServerHelpers.formatTime(new Date(opportunity.deadline));
 
 		opportunity.contract.estimatedValue_formatted = Intl.NumberFormat('en', {
 			style: 'currency',
