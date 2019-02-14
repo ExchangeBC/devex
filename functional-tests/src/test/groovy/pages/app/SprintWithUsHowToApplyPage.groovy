@@ -7,10 +7,8 @@ class SprintWithUsHowToApplyPage extends Page {
 
 	static url = "sprintwithus-howtoapply"
 	static content = {
-		SWUTerms{$("a",'href':"/terms/rfq1")}
+		SWUTerms{$("a",'data-automation-id':"lnkSWUTerms")}
         OpportunitiesNavBar { $('a[ui-sref ~= "opportunities.list"]', 0).click() }
-
-
 
 	}
 }

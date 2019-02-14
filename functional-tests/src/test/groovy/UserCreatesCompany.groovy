@@ -16,8 +16,8 @@ import geb.module.RadioButtons
 
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-
 import org.openqa.selenium.interactions.Actions
+import org.openqa.selenium.WebElement
 //import extensions.AngularJSAware
 
 import spock.lang.Unroll
@@ -28,8 +28,7 @@ import spock.lang.Stepwise
 import java.io.File
 import java.io.IOException
 
-import org.openqa.selenium.WebElement
-import org.openqa.selenium.By
+
 
 @Stepwise
 
@@ -70,7 +69,7 @@ class UserCreatesCompany extends GebReportingSpec {
             return true
       }
 
-//*
+
   def "User Hugo Chibougamau creates a Company" () {
     def actions = new Actions(driver)
     
@@ -183,31 +182,30 @@ def "Log as user '#Login' and join the newly created company" () {
 
     given: "Starting from the Home Page"
         waitFor {to HomePage}
-        sleep(3000)
+        sleep(1000)
 
     when: "Click on the Sign In  link to go to the Authentication page"
-        waitFor{SigninLink} //The definition for this element includes a Click
-        at AuthenticationSigninPage 
+        assert SigninLink //The definition for this element includes a Click
+        waitFor{at AuthenticationSigninPage}
 
     and: "Click on the: 'Sign in with you GitHub account'"
         SingInButton.click()
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
-        at GitHubSignInPage
+        waitFor{at GitHubSignInPage}
         
         waitFor{GitHubSignInButton} //If this element is present the page has loaded
 		GitHubLogin.value(Login)
 		GitHubPwd.value(Pwd)
         GitHubSignInButton.click()
-    
+
     then: "Once logged, go to Companies Page"
         waitFor {to CompaniesPage}
+        sleep(1000)
 
     then: "Hover over the newly created company name"
         WebElement element = driver.findElement(By.id("holderCompanyName"))//These two lines move the cursor over one of the labels to make the Edit button visible
         actions.moveToElement(element).build().perform()//Hovering over makes the Join button visible
-
-        println(NewCompany.text())
         waitFor{JoinCompanyButton.click()}
         sleep(1000) //to give time to the pop up window to appear
 
@@ -236,7 +234,7 @@ def "Log as user '#Login' and join the newly created company" () {
         "hectorcunniculus"|"Devex_Test1"  
 
   }
-//*/
+
 def "User Hugo, logs again and accept the request to join the Company from the two previous users" () {
     given: "Starting from the Home Page"
         waitFor {to HomePage}
