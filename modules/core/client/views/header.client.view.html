@@ -60,7 +60,7 @@
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" ng-repeat="item in vm.accountMenu.items" ui-sref="{{item.state}}" ng-bind="item.title"></a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/api/auth/signout" target="_self">Sign Out</a>
+            <a data-automation-id="lnkSignOut" class="dropdown-item" href="/api/auth/signout" target="_self">Sign Out</a>
           </div>
         </li>
       </ul>

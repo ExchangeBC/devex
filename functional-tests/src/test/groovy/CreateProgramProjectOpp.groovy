@@ -290,7 +290,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
   }
 
    
-        def cleanup(){
+        def teardown(){
             to HomePage
             //I get the base URL to build (in the LoginModule) the URL to the admin icon
             def baseURL = getBrowser().getConfig().getBaseUrl().toString()
