@@ -65,7 +65,7 @@ class LoginModule extends Module {
             $("img",src:"${AdminIconLocation}").click()
             sleep(1000)
             //This line click in the Log Out option of the previous drop down list
-            $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()
+            $("a",'data-automation-id':"lnkSignOut").click()
             println("Just logged off as admin")
             return true
         }
