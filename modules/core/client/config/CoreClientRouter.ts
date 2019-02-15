@@ -24,7 +24,6 @@ class CoreClientRouter {
 		this.$stateProvider.state('privacy', this.privacyState());
 		this.$stateProvider.state('accessibility', this.accessibilityState());
 		this.$stateProvider.state('codewithus', this.codeWithUsState());
-		this.$stateProvider.state('roadmap', this.roadMapState());
 		this.$stateProvider.state('codewithusps', this.codeWithUsPsState());
 		this.$stateProvider.state('sprintwithus', this.sprintWithUs());
 		this.$stateProvider.state('about', this.aboutState());
@@ -154,17 +153,6 @@ class CoreClientRouter {
 			data: {
 				ignoreState: true,
 				pageTitle: 'Code With Us'
-			}
-		}
-	}
-
-	private roadMapState(): Ng1StateDeclaration {
-		return {
-			url: '/roadmap',
-			templateUrl: '/modules/core/client/views/roadmap.view.html',
-			data: {
-				ignoreState: true,
-				pageTitle: 'Roadmap'
 			}
 		}
 	}

@@ -41,7 +41,6 @@ class HomePage extends Page {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0).click() }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0).click() }
-		RoadmapLink { PositionAndClick("a","roadmap") }
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SprintwithusLink { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0).click() }

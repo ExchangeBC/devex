@@ -125,7 +125,7 @@ class CoreServerHelpers {
 			},
 			deleteOldImage: () => {
 				return new Promise((resolve, reject) => {
-					if (existingImageUrl !== doc[field]) {
+					if (existingImageUrl !== doc[field] && existingImageUrl !== 'img/default.png') {
 						fs.unlink('./public/' + existingImageUrl, () => {
 							resolve();
 						});

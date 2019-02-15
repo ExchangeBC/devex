@@ -25,7 +25,6 @@ import pages.app.ProfilesPage
 import pages.app.ProgramsPage
 import pages.app.ProjectsPage
 import pages.app.ProposalsPage
-import pages.app.RoadmapPage
 
 import pages.app.SettingsPicturePage
 import pages.app.SettingsProfilePage
@@ -61,7 +60,6 @@ class FlowSpecs extends GebReportingSpec {
          HomePage  | "SprintwithusLink"      || SprintwithusPage
          HomePage  | "DisclaimerLink"        || DisclaimerPage
          HomePage  | "PrivacyLink"           || PrivacyPage
-         HomePage  | "RoadmapLink"           || RoadmapPage
          HomePage  | "SigninadminLink"       || AuthenticationSigninadminPage 
          HomePage  | "Copyright"             || CopyrightPage
          HomePage  | "API"                   || APIPage
