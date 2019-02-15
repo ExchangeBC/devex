@@ -2,11 +2,10 @@ package pages.app
 import geb.Page
 import org.openqa.selenium.By
 
-
 class InitialCWUProposalPage extends Page {
 	static at = { title.startsWith("BCDevExchange") }
 	//static at = { title == "BCDevExchange - Proposals List" }
-	//static url = ${driver.currentUrl()}   <-- It seems it can not be set dynamically
+	//static url = ${driver.currentUrl()}   <-- Can not be set dynamically
 	static content = {
             DeveloperTab{ $('[data-automation-id ~= "tab-cwu-proposal-developer"]')}
             CompanyTab { $('[data-automation-id ~= "tab-cwu-proposal-company"]') }
@@ -15,31 +14,15 @@ class InitialCWUProposalPage extends Page {
             TermsTab { $('[data-automation-id ~= "tab-cwu-proposal-terms"]') }
            
             CheckTerms{ $('[data-automation-id ~= "checkbox-cwu-proposal-terms"]') }
-
             ButtonSubmit { $('[data-automation-id ~= "button-cwu-proposal-submit"]') }
             ButtonSaveUpdates { $('[data-automation-id ~= "button-cwu-proposal-save-updates"]') }
             ButtonSaveChanges { $('[data-automation-id ~= "button-cwu-proposal-save-changes"]') }
             ButtonDelete { $('[data-automation-id ~= "button-cwu-proposal-delete"]') }
             ButtonWithdraw { $('[data-automation-id ~= "button-cwu-proposal-withdraw"]') }
-
             ButtonUploadFile{ $('[data-automation-id~="button-cwu-proposal-upload-file"]') }
-            
-
             ButtonModalYes{$('[data-automation-id~="button-modal-yes"]')}
-            
-
             FirstName{ $('[id ~= "firstName"]') }
-
-            //proposalOppFrame(page: MCEFrame) { $(By.xpath('//iframe[@id=concat(//textarea[@data-automation-id="text-proposal-description"]//@id,"_ifr")]'), 0) }
-           ProposalDescriptionBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
-    }
-
-
-    void "Add Proposal"(String desc){
-            //waitFor { angularReady }
-            withFrame( waitFor { proposalOppFrame } ) {
-              mceBody << desc
-          }
+            ProposalDescriptionBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
     }
     
 }

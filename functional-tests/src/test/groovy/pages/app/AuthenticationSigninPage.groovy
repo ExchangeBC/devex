@@ -8,7 +8,7 @@ class AuthenticationSigninPage extends Page {
 
 	static url = "authentication"
 	static content = {
-		SingInButton {$("body > main > section > div > div > div > div")}
+		SignInButton {$("body > main > section > div > div > div > div")}
 		GitLogin{$(id:"login_field")}
 		GitPassword{$(id:"password")}
 		

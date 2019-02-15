@@ -4,7 +4,7 @@ import pages.app.HomePage
 import pages.app.ProjectsPage
 import pages.app.ProjectCreatePage
 import pages.app.ProjectViewPage
-import pages.app.SignedIn
+//import pages.app.SignedIn
 
 import geb.module.RadioButtons
 import org.openqa.selenium.By
@@ -32,32 +32,29 @@ class ProjectValidationSpec extends GebReportingSpec {
 
   @Unroll
   def "Testing project creation validation" () {
-      given:
-          to HomePage
+    given:
+        waitFor { to ProjectsPage }
 
-          waitFor { to ProjectsPage }
+    when: "I choose to create a new project"
+        ListProjectButton.click()
 
-          when: "I choose to create a new project"
-          ListProjectButton.click()
+    then:
+        at ProjectCreatePage
 
-          then:
-          at ProjectCreatePage
+    when: "I enter the details for the new project and click the save button"
+        ProjectName.value(ProjectNameValue)
+        ShortDescription.value(ShortDescriptionValue)
+        SaveButton.click()
 
-          when: "I enter the details for the new project and click the save button"
-          ProjectName.value(ProjectNameValue)
-          ShortDescription.value(ShortDescriptionValue)
+    then: "Field validity should match expectation"
+        assert { ProjectName.isInvalid() == ProjectNameShouldBeInvalid }
+        assert { ProjectName.isInvalid() == ShortDescriptionShouldBeInvalid }
 
-          SaveButton.click()
-
-          then: "Field validity should match expectation"
-          assert { ProjectName.isInvalid() == ProjectNameShouldBeInvalid }
-          assert { ProjectName.isInvalid() == ShortDescriptionShouldBeInvalid }
-
-     where:
-      ProjectNameValue | ProjectNameShouldBeInvalid |  ShortDescriptionValue | ShortDescriptionShouldBeInvalid
-      "" | true | "Short Descriptive Text" | false
-      "\u200B" | true | "Evil zero-width space" | false
-      "Possibly\u200BOkay?" | false | "" | true
-  }
+    where:
+        ProjectNameValue | ProjectNameShouldBeInvalid |  ShortDescriptionValue | ShortDescriptionShouldBeInvalid
+        "" | true | "Short Descriptive Text" | false
+        "\u200B" | true | "Evil zero-width space" | false
+        "Possibly\u200BOkay?" | false | "" | true
+    }
 
 }

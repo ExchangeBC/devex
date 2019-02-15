@@ -56,8 +56,11 @@ class InitialSWUProposalPage extends Page {
             ProposalQuestionsBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
 
             //REFERENCES TAB Elements
+            //Upload documents. No able to automate at this moment the uploading of documents 
 
             //ADDENDA TAB Elements
+            //Read Only page
+            
 
 
             //REVIEW TAB Elements

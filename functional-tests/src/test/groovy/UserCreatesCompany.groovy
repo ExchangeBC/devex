@@ -18,7 +18,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import org.openqa.selenium.interactions.Actions
 import org.openqa.selenium.WebElement
-//import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -28,15 +27,14 @@ import spock.lang.Stepwise
 import java.io.File
 import java.io.IOException
 
-
-
 @Stepwise
 
 
 @Narrative('''In this test, the already existing user 'HugoChibougamau' will create a company named 
 'Hugo's Company'.
 
-Then users 'HibouleBlanc' and 'Hector' will request to join the company. 
+Then users 'HibouleBlanc' and 'Hector' will request to join the company. 'HugoChibougamau', the admin for the company
+will accept 'HibouleBlanc' and reject 'Hector'
 
 The test finish with each user logged off from BC Exchange and GitHub
  ''')
@@ -81,7 +79,7 @@ class UserCreatesCompany extends GebReportingSpec {
         at AuthenticationSigninPage 
 
     and: "Click on the: 'Sign in with you GitHub account'"
-        SingInButton.click()
+        SignInButton.click()
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
         at GitHubSignInPage
@@ -115,7 +113,7 @@ class UserCreatesCompany extends GebReportingSpec {
         BusinessNumber.value("BC-123456789")
         AgreeConditions.click() // When all the fields are completed the next button should be enabled
         ContinueSubmitButton.click()
-        sleep(2000) //There is an angular animation and I prefer is gone before proceeding
+        sleep(1000) //There is an angular animation and I prefer is gone before proceeding
 
     then: "Arribe to the organization page. This page allows to add extra information and accept the terms"
         waitFor{at OrgDetailsPage}
@@ -128,7 +126,7 @@ class UserCreatesCompany extends GebReportingSpec {
         assert CompanyLegalName.value()=="Hugo and friend\'s Company" //check the previously added name has been correctly saved
         CompanyWebAddress.value("www.thehs.ca") //adding the web site address
         SaveCompanyNameBtn.click()
-        sleep(1000)
+        sleep(1000) //the WaitFor does not work well for the next instructions
 
     and:"Open the second edit pop-up window that allows editing more fields"
         WebElement element = driver.findElement(By.id("lblBusinessRegistration"))//These two lines move the cursor over one of the labels to make the Edit button visible
@@ -155,11 +153,10 @@ class UserCreatesCompany extends GebReportingSpec {
 
     and:" Accept the terms to finish creating the company"
         waitFor{AcceptButton.click()}  //Accept the terms
-        sleep(2000)//Give time to the message to appear and dissappear
+        sleep(1000)//Give time to the message to appear and dissappear
 
     then: "Go to the Companies page and check the name of the newly created company is listed"    
         waitFor{to CompaniesPage}
-        //sleep(1000) //despite all the WaitFor, I need this delay
         assert waitFor{NewCompany.text()}=="Hugo and friend\'s Company" 
 
     and: "Log out user 'hugochibougamau' from GitHub" 
@@ -173,7 +170,6 @@ class UserCreatesCompany extends GebReportingSpec {
         def  logoffOK=login."Logout as user"()
         assert logoffOK
         sleep(3000)
-
     }
 
 @Unroll 
@@ -189,19 +185,18 @@ def "Log as user '#Login' and join the newly created company" () {
         waitFor{at AuthenticationSigninPage}
 
     and: "Click on the: 'Sign in with you GitHub account'"
-        SingInButton.click()
+        SignInButton.click()
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
-        waitFor{at GitHubSignInPage}
-        
-        waitFor{GitHubSignInButton} //If this element is present the page has loaded
+        waitFor{at GitHubSignInPage}   
+        assert waitFor{GitHubSignInButton} //If this element is present the page has loaded
 		GitHubLogin.value(Login)
 		GitHubPwd.value(Pwd)
         GitHubSignInButton.click()
 
     then: "Once logged, go to Companies Page"
         waitFor {to CompaniesPage}
-        sleep(1000)
+        sleep(1000)//Next lines of code need this delay
 
     then: "Hover over the newly created company name"
         WebElement element = driver.findElement(By.id("holderCompanyName"))//These two lines move the cursor over one of the labels to make the Edit button visible
@@ -227,12 +222,10 @@ def "Log as user '#Login' and join the newly created company" () {
         def  logoffOK=login."Logout as user"()
         assert logoffOK
    
-    
-    where: "The values used to create the Opportunity are:"
+    where: "The values to create the Users are:"
         Login | Pwd 
         "hibouleblanc"|"Devex_Test1" 
         "hectorcunniculus"|"Devex_Test1"  
-
   }
 
 def "User Hugo, logs again and accept the request to join the Company from the two previous users" () {
@@ -246,7 +239,7 @@ def "User Hugo, logs again and accept the request to join the Company from the t
         waitFor{at AuthenticationSigninPage}
 
     and: "Click on the: 'Sign in with you GitHub account'"
-        waitFor{SingInButton.click()}
+        waitFor{SignInButton.click()}
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
         waitFor{at GitHubSignInPage}
@@ -257,7 +250,6 @@ def "User Hugo, logs again and accept the request to join the Company from the t
         GitHubSignInButton.click()
 
 
-
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
         waitFor{at HomePage} //verify we are in the home page
         sleep(3000) //The icons take a little time to appear
@@ -265,22 +257,17 @@ def "User Hugo, logs again and accept the request to join the Company from the t
 
     and: "Click on the Messages icon. This icon should reflect there are messages waiting"
         assert UnreadMessageIcon.text().toInteger()>0
-        println("# Messages --->"+UnreadMessageIcon.text() )
         UnreadMessageIcon.click()
-        sleep(2000)
+        sleep(2000) // Do not trust the waitFor
     
-
     then: "Redirects to the message page"
-         println("Line 272 (Message Page)  ${driver.currentUrl}"  )
-         waitFor{at MessagesPage}
-        println("Line 274 (Message Page)  ${driver.currentUrl}"  )
+        waitFor{at MessagesPage}
 
-    and: "Click to accept the user request to join the company"
-        sleep(5000)
-        //ProcessUserRequest.click()
-        //$(('a[href ~= "http://localhost:3000/orgs/"]'), 0).click()
-        $(By.xpath('//*[@id="page-top"]/main/div/div/div[3]/section/div/message-list/div[1]/div/div[2]/p/p[3]/a'),0).click()
-   
+    and: "Open the drop down by clicking the top right icon"   
+        waitFor{$("img",'data-automation-id':"UserAvatarImage").click()}
+
+    and: "Click on the newly created Company name that appears in the drop down"     
+        waitFor{$("a", text: contains("Hugo and friend\'s Company")).click()}
 
     then: "It bring us to the page that defines the new company. There we click to accept for one of the users"
         waitFor{$("button",'data-automation-id':"btnAcceptMember",0)}
@@ -288,17 +275,16 @@ def "User Hugo, logs again and accept the request to join the Company from the t
 
     and: "Click yes to confirm in the modal box"
         $("button",'data-automation-id':"button-modal-yes").click()
-        sleep(2000)
+        sleep(1000) //For the modal box to dissappear
    
     and: "Wait to dissappear the modal box, and then reject the second user"
         waitFor{$("button",'data-automation-id':"btnDeclineMember",0)}//After accepting the previous user, it dissappears, so the 'second' user in the list becames 'first'
         $("button",'data-automation-id':"btnDeclineMember",0).click() //Reject the second user
-
-        sleep(1000)
+        sleep(1000)  //For the modal box to dissappear
 
     and: "Click No to confirm the rejection in the modal box"
         $("button",'data-automation-id':"button-modal-no").click()
-        sleep(2000)
+        sleep(1000)  //For the modal box to dissappear
 
     then: "Hugo can log off from BC Exchange and GitHub"    
         waitFor{to HomePage}
@@ -310,16 +296,18 @@ def "User Hugo, logs again and accept the request to join the Company from the t
         AvatarImage.click()
         waitFor{SignOutGit}
         SignOutGit.click()
-
-
   }
 
 
-        def cleanup(){
-            js.exec('window.scrollTo(0, document.body.scrollHeight);')
-            sleep(5000)
-         //   DeleteButton.click()
-         //   $("button",'data-automation-id':"button-modal-yes").click()
+        def teardown(){
+            //Logoff as user
+            waitFor{to HomePage}
+            sleep(1000)  //Do not fully trust waitFor
+            def  logoffOK=login."Logout as user"()
+            assert logoffOK
+
+            waitFor{to GitHubPage }
+            SignOutGit.click()
         }
 
 }
