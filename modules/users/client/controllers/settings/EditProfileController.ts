@@ -39,7 +39,6 @@ export class EditProfileController implements IController {
 			this.Notification.success({
 				message: '<i class="fas fa-check-circle"></i> Changes saved'
 			});
-			this.AuthenticationService.user = updatedUser;
 			this.refreshUser(updatedUser);
 		} catch (error) {
 			this.handleError(error);
