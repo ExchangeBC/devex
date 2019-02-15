@@ -4,6 +4,7 @@ import angular, { IAttributes, IAugmentedJQuery, IDirective, IDirectiveFactory, 
 import { ModelFormatConfig } from '../../config/ModelFormatConfig';
 
 class ModelFormatDirective implements IDirective {
+
 	public static factory(): IDirectiveFactory {
 		return ($filter: IFilterService, $parse: IParseService) => new ModelFormatDirective($filter, $parse);
 	}
@@ -85,4 +86,4 @@ class ModelFormatDirective implements IDirective {
 	}
 }
 
-angular.module('core').directive('modelFormat', ModelFormatDirective.factory());
+angular.module('core').directive('modelFormat', ['$filter', '$parse', ModelFormatDirective.factory()]);

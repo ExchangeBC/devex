@@ -9,7 +9,6 @@ class PercentageInputDirective implements IDirective {
 
 	public restict = 'A';
 	public require = 'ngModel';
-	public $inject = ['$filter'];
 
 	constructor(private $filter: IFilterService) {
 		this.getModelValue = this.getModelValue.bind(this);
@@ -35,4 +34,4 @@ class PercentageInputDirective implements IDirective {
 	}
 }
 
-angular.module('core').directive('percentageInput', PercentageInputDirective.factory());
+angular.module('core').directive('percentageInput', ['$filter', PercentageInputDirective.factory()]);
