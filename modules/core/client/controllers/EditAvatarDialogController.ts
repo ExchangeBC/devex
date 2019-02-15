@@ -1,13 +1,13 @@
 'use strict';
 
 import { angularFileUpload, IController, IRootScopeService, IScope, ITimeoutService, ui, uiNotification } from 'angular';
-import { IOrg } from '../../shared/IOrgDTO';
+import { IOrg } from '../../../orgs/shared/IOrgDTO';
 
 interface EditLogoDialogScope extends IScope {
 	myPic?: any;
 }
 
-export class EditOrgImageDialogController implements IController {
+export class EditAvatarDialogController implements IController {
 	public static $inject = ['$scope', '$rootScope', '$timeout', 'org', '$uibModalInstance', 'Upload', 'Notification'];
 	public fileSelected: boolean;
 	public uploadUrl: string;

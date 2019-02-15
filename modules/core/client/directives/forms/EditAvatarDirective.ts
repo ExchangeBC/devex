@@ -1,22 +1,20 @@
 'use strict';
 
 import angular, { IController, IScope, ui } from 'angular';
-import { IOrg } from '../../shared/IOrgDTO';
-import { EditOrgImageDialogController } from '../controllers/EditOrgImageDialogController';
+import { IOrg } from '../../../../orgs/shared/IOrgDTO';
+import { EditAvatarDialogController } from '../../controllers/EditAvatarDialogController';
 
 interface EditOrgImageDirectiveScope extends IScope {
 	org: IOrg;
 }
 
-class EditOrgImageDirectiveController implements IController {
+class EditAvatarDirectiveController implements IController {
 	public static $inject = ['$uibModal', '$scope'];
 	public org: IOrg;
-	public uploadUrl: string;
 	public blockingObject = { block: true };
 
 	constructor(private $uibModal: ui.bootstrap.IModalService, private $scope: EditOrgImageDirectiveScope) {
 		this.org = this.$scope.org;
-		this.uploadUrl = `/api/org/${this.org._id}/upload/logo`;
 	}
 
 	public async edit(): Promise<void> {
@@ -29,12 +27,12 @@ class EditOrgImageDirectiveController implements IController {
 					return this.org;
 				}
 			},
-			controller: EditOrgImageDialogController
+			controller: EditAvatarDialogController
 		});
 	}
 }
 
-angular.module('orgs').directive('editOrgImage', () => {
+angular.module('orgs').directive('editAvatar', () => {
 	return {
 		scope: {
 			org: '='
@@ -43,6 +41,6 @@ angular.module('orgs').directive('editOrgImage', () => {
 		restrict: 'EAC',
 		// template: '<button class="btn btn-sm btn-default" ng-click="wsx.edit()">Update logo</button>',
 		template: '<img class="mr-3 rounded edit-image" uib-tooltip="Click to edit" src="/{{wsx.org.orgImageURL}}" height="60" width="60" ng-click="wsx.edit()">',
-		controller: EditOrgImageDirectiveController
+		controller: EditAvatarDirectiveController
 	}
 });
