@@ -34,7 +34,7 @@ class CoreClientRouter {
 	}
 
 	private urlRouteNotFoundHandler($injector: auto.IInjectorService): void {
-		const $state = $injector.get('$state') as StateService;
+		const $state: StateService = $injector.get('$state');
 		$state.transitionTo('not-found', null, {
 			location: false
 		});
