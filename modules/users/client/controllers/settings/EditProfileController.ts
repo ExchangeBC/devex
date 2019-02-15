@@ -1,13 +1,13 @@
 'use strict';
 
 import { StateService } from '@uirouter/core';
-import angular, { IController, IFormController, IScope, uiNotification } from 'angular';
+import angular, { IController, IFormController, IRootScopeService, IScope, uiNotification } from 'angular';
 import { IUser } from '../../../shared/IUserDTO';
 import { IAuthenticationService } from '../../services/AuthenticationService';
 import { IUserService } from '../../services/UsersService';
 
 export class EditProfileController implements IController {
-	public static $inject = ['$scope', '$state', 'UsersService', 'AuthenticationService', 'Notification', 'ask'];
+	public static $inject = ['$rootScope', '$scope', '$state', 'UsersService', 'AuthenticationService', 'Notification', 'ask'];
 	public userForm: IFormController;
 	public user: IUser;
 	public isGov: boolean;
@@ -16,6 +16,7 @@ export class EditProfileController implements IController {
 	public cities: string[];
 
 	constructor(
+		private $rootScope: IRootScopeService,
 		private $scope: IScope,
 		private $state: StateService,
 		private UsersService: IUserService,
@@ -69,6 +70,9 @@ export class EditProfileController implements IController {
 		if (choice) {
 			try {
 				await this.UsersService.removeSelf().$promise;
+				this.AuthenticationService.user = null;
+				// emit a signed-in event, so that the application updates the log-in status appropriately
+				this.$rootScope.$broadcast('userSignedIn');
 				this.$state.go('home');
 				this.Notification.success({
 					message: '<i class="fas fa-check-circle"></i> Profile deleted'

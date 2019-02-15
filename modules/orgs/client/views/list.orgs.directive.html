@@ -30,7 +30,7 @@
           <tr ng-repeat="org in vm.pagedItems" class="hover-area">
             <td class="company-logo">
               <a ng-if="org.website" href="{{org.website}}" target="_blank" title="Visit website"><img class="rounded" width="36" height="36" src="{{ org.orgImageURL }}"></a>
-              <img ng-if="!org.website" class="rounded" width="36" height="36" src="{{ org.orgImageURL }}">
+              <img ng-if="!org.website" class="rounded border" width="36" height="36" src="{{ org.orgImageURL }}">
             </td>
             <td class="company-name font-weight-bold text-truncate">{{ org.name }}</td>
             <td class="member-count"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
@@ -49,7 +49,7 @@
             </td>
             <td class="button-cell">
               <div ng-if="vm.canJoinOrg(org)" class="hidden-button">
-                <button class="btn btn-primary join" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
+                <button class="btn btn-primary" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
               </div>
               <div ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" class="hidden-button">
                 <button class="btn btn-text-only" ui-sref="orgs.view({ orgId: org._id })" title="Manage company profile">

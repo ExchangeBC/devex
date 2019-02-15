@@ -1,7 +1,9 @@
 <form name="vm.userForm" id="vm.userForm" ng-submit="vm.updateUserProfile(vm.userForm.$valid)" class="signin"
   novalidate autocomplete="off">
-  <h3>{{vm.user.displayName}}</h3>
-  <edit-avatar></edit-avatar>
+  <div class="d-flex">
+    <edit-avatar></edit-avatar>
+    <h3>{{vm.user.displayName}}</h3>
+  </div>
   <div class="mt-3">
     <fieldset>
       <form-input ng-model="vm.user.firstName" class="col-sm-12" x-form="vm.userForm" x-options='{
