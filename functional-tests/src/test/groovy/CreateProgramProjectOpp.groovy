@@ -5,13 +5,11 @@ import java.text.SimpleDateFormat
 import static java.util.Calendar.*
 
 import pages.app.HomePage
-
 import pages.app.OpportunitiesPage
 import pages.app.OpportunitiesAdminCreatePage
 import pages.app.OpportunitiesAdminCreateLandingPage
 import pages.app.OpportunityDetailPage
-import pages.app.OpportunitiesAdminEditPage
-
+//import pages.app.OpportunitiesAdminEditPage
 import pages.app.ProgramsPage
 import pages.app.ProgramCreatePage
 import pages.app.ProgramViewPage 
@@ -19,12 +17,9 @@ import pages.app.ProjectsPage
 import pages.app.ProjectCreatePage
 import pages.app.ProjectViewPage
 
-import pages.app.SignedIn
-
 import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -43,7 +38,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
     
         def setup() {
             to HomePage
-            // Need to login as an admin
+            // Need to log as an admin
             def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
             assert loginOK
         }
@@ -74,17 +69,13 @@ class CreateProgramProjectOpp extends GebReportingSpec {
 
             then: "After Saving, the Programs View Page should be displayed and the Publish button show be there"
                 waitFor { at ProgramViewPage }
-                //waitFor {to ProgramViewPage } //Not sure if I need it
                 assert waitFor{PublishButton}
     
             when: "Click the publish button"
                 PublishButton.click()
 
             then: "The Program View Page reloadas with am 'Unpublish' button"
-                //waitFor { at ProgramViewPage }
-                assert UnpublishButton
                 assert UnpublishButton.isDisplayed()
-                sleep(1000)
 
             where: "The following values are used to populate the Program"
                 ProgramTitleValue | ShortDescriptionValue | DescriptionValue | WebsiteValue
@@ -122,14 +113,9 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             and: "Click the 'Save Changes' button for the project: '#ProjectNameValue'"
                 waitFor{SaveButton}
                 SaveButton.click()
-                reportInfo("142 URL inmediately after save is ${driver.currentUrl}"  )
 
             then: "I arrive to the Projects View Page, and verify the Publish button exists"
                 waitFor {at ProjectViewPage}
-                reportInfo("146 URL after loading ProjectViewPage  is ${driver.currentUrl}"  )
-                //to ProjectViewPage
-
-            reportInfo("149 URL after insisting loading ProjectViewPage is ${driver.currentUrl}"  )
                 assert waitFor{PublishButton}
 
             when: "I click the publish button"
@@ -149,7 +135,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
 
        @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
             def "Publish Opportunity: '#TitleData'" () {
-
                 // This section set and format the dates 
                 Calendar calendar= Calendar.getInstance()
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
@@ -160,7 +145,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 def Formatted_deadline_Year=deadline.year +1900 //Year start counting from 1900
                 def Formatted_deadline_Month=deadline.month +1 //Month start counting from 0
                 def Formatted_deadline_Day=deadline.date
-
 
                 calendar.add(Calendar.DATE,21)
                 def assignment=calendar.getTime() //Define the date the oppoortunity is assigned (set to 21 + 3 days from today)
@@ -177,9 +161,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 def Formatted_start_Day=start.date
 
                 def  MyTitleData = TitleData + ": " + RandomID
-                reportInfo("Variable a is :"  + TitleData  )
-                reportInfo("Variable a is ${MyTitleData}"  )
-
 
                 given: "Already logged as Administrator, go to Opportunities Page. Program and Project already exists"
                     waitFor { to OpportunitiesPage }
@@ -189,13 +170,11 @@ class CreateProgramProjectOpp extends GebReportingSpec {
 
                 then: "I load the Landing Page that allows to create a CWU or SWU opportunity"
                     waitFor{at OpportunitiesAdminCreateLandingPage}
-                    reportInfo("URL line 203 is ${driver.currentUrl}"  )
 
                 and: "Click on the Get Started button under CWU"  
                     waitFor{createCWUOpportunityButton}
                     createCWUOpportunityButton.click()
                     waitFor{at OpportunitiesAdminCreatePage}
-                    reportInfo("URL line 209 is ${driver.currentUrl}"  )
 
                 and: "Set the title,teaser, description.... and other details of the opportunity "
                     selectProject.value(Project)
@@ -267,9 +246,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                     waitFor{to OpportunitiesPage}
 
                 and: "Click on the newly created opportunity (still unpublished)"
-                    //def OppTitle =PublishedOpportunity.text()  //Opportunity title
                     def MyCurrentURL=getCurrentUrl() //URL opportunity page
-                    sleep(5000)
                     FirstListedOpportunity.click()  //it clicks on the first opportunity of the list
                     sleep(1000)
                     //The following is to create from the opp title the URL
@@ -279,11 +256,13 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 then: "Open the newly created opportunity"      
                     assert NewURL==OppURL  //matching the URL
                     assert waitFor{$("button",'data-automation-id':"button-opportunity-publish")}
-                    $("button",'data-automation-id':"button-opportunity-publish").click()  //Finally, we publish the opp
-                    //And then click Yes in the modal box that appears after clciking the Publish button
-                   $("button",'data-automation-id':"button-modal-yes").click()
+                
+                and: "Finally, we publish the opp by clicking the Publish button"
+                    $("button",'data-automation-id':"button-opportunity-publish").click()  
+                
+                and: "And then click Yes in the modal box to confirmn"
+                    $("button",'data-automation-id':"button-modal-yes").click()
                     
-
      where: "The values used to create the Opportunity are:"
       Project | TitleData | Teaser | Background | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
       "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"

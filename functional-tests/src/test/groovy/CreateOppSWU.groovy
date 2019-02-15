@@ -5,12 +5,10 @@ import java.text.SimpleDateFormat
 import static java.util.Calendar.*
 
 import pages.app.HomePage
-
 import pages.app.OpportunitiesPage
 import pages.app.OpportunitiesAdminCreateLandingPage
 import pages.app.OpportunitiesAdminCreateSWUPage
 
-//import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 
@@ -37,8 +35,6 @@ class CreateOppSWU extends GebReportingSpec {
             assert loginOK
         }
 
-        //def  LocationRadioButton=$(name:"onsite").module(RadioButtons)
-
         @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one SWU opportunity)
             def "Create SWU Opportunity: '#TitleData'" () {
                 //Assignements in the beginning
@@ -53,14 +49,12 @@ class CreateOppSWU extends GebReportingSpec {
                 def Formatted_deadline_Month=deadline.month +1 //Month start counting from 0
                 def Formatted_deadline_Day=deadline.date
 
-
                 calendar.add(Calendar.DATE,21)//Define the date the opportunity is assigned (set to 21 + 3 days from today)
                 def assignment=calendar.getTime() 
                 def Formatted_assignment=format.format(assignment)
                 def Formatted_assignment_Year=assignment.year +1900 //Year start counting from 1900
                 def Formatted_assignment_Month=assignment.month +1 //Month start counting from 0
                 def Formatted_assignment_Day=assignment.date
-
 
                 calendar.add(Calendar.DATE,21)//Define the date for the end of the Inception Phase (set to 21+ 21 + 3 days from today)
                 def endInception=calendar.getTime() 
@@ -114,24 +108,24 @@ class CreateOppSWU extends GebReportingSpec {
 
                 and: "Move to the Details tab to enter the Details information"
                     DetailsTabClick  //Move to the Details tab
-                    LocationRadioButton(Onsite).click()
-                    selectLocation.value(Location)
+                        LocationRadioButton(Onsite).click()
+                        selectLocation.value(Location)
 
-                    //Setting the proposal Deadline
-                    proposalDeadLine.firstElement().clear()  //clean the field from the preselected date
-                    proposalDeadLine << Formatted_deadline_Year.toString() //write the year
-                    proposalDeadLine << Keys.ARROW_RIGHT  // move right to the month
-                    proposalDeadLine << Formatted_deadline_Month.toString()
-                    proposalDeadLine << Keys.ARROW_RIGHT  //move right to the day
-                    proposalDeadLine << Formatted_deadline_Day.toString() 
-              
-                    //Setting the proposal Assignment
-                    proposalAssignment.firstElement().clear()  //clean the field from the preselected date
-                    proposalAssignment << Formatted_assignment_Year.toString() //write the year
-                    proposalAssignment<< Keys.ARROW_RIGHT  // move right to the month
-                    proposalAssignment<< Formatted_assignment_Month.toString()
-                    proposalAssignment << Keys.ARROW_RIGHT  //move right to the day
-                    proposalAssignment << Formatted_assignment_Day.toString() 
+                        //Setting the proposal Deadline
+                        proposalDeadLine.firstElement().clear()  //clean the field from the preselected date
+                        proposalDeadLine << Formatted_deadline_Year.toString() //write the year
+                        proposalDeadLine << Keys.ARROW_RIGHT  // move right to the month
+                        proposalDeadLine << Formatted_deadline_Month.toString()
+                        proposalDeadLine << Keys.ARROW_RIGHT  //move right to the day
+                        proposalDeadLine << Formatted_deadline_Day.toString() 
+                
+                        //Setting the proposal Assignment
+                        proposalAssignment.firstElement().clear()  //clean the field from the preselected date
+                        proposalAssignment << Formatted_assignment_Year.toString() //write the year
+                        proposalAssignment<< Keys.ARROW_RIGHT  // move right to the month
+                        proposalAssignment<< Formatted_assignment_Month.toString()
+                        proposalAssignment << Keys.ARROW_RIGHT  //move right to the day
+                        proposalAssignment << Formatted_assignment_Day.toString() 
 
                 and: "Move to the Phases tab to enter the dates for the different phases"
                     PhasesTabClick
@@ -169,7 +163,7 @@ class CreateOppSWU extends GebReportingSpec {
                         PrototypeEndDate << Keys.ARROW_RIGHT  //move right to the day
                         PrototypeEndDate << Formatted_PrototypeEnd_Day.toString() 
                    
-                    CapabilityImplementationTgl.click() //Click on the Capability for Implementation Phase
+                        CapabilityImplementationTgl.click() //Click on the Capability for Implementation Phase
                         //Setting dates for Implementation phase. Use the Formatted_PrototypeEnd date  the start of Proof of Concept phase                
                         ImplementationStartDate.firstElement().clear()  //clean the field from the preselected date
                         ImplementationStartDate << Formatted_PrototypeEnd_Year.toString() //write the year
@@ -187,49 +181,42 @@ class CreateOppSWU extends GebReportingSpec {
 
                 and: "Move to the Preferred Technical Skills tab to enter the dates for the different phases"
                     TechnicalSkillTabClick
-                    waitFor{Skill0.click()}  //There are three skill, select the three of them
-                    Skill1.click()
-                    Skill2.click()
+                        waitFor{Skill0.click()}  //There are three skill, select the three of them
+                        Skill1.click()
+                        Skill2.click()
 
                 and: "Move to the Budget tab to enter the budget numbers"
                     BudgetTabClick
-                    //Because in the Phases tab we clicked on the CapabilityImplementationBtn button, only the Total and Implementation budget lines will appear
-                    waitFor{MaxBudgetTotal.value(BudgetTotal)}
-                    MaxBudgetInception.value(BudgetInc)
-                    MaxBudgetPOC.value(BudgetPOC)
-                    MaxBudgetImplementation.value(BudgetImpl)
-                    //And these two will not appear
-
-                //The first iteration these two sections were not set, but now they are defined in the Phases tab
-                //expect: "The budget tab does NOT display the lines for inception and Proof of concept"
-                //    MaxBudgetInception.empty
-                //    MaxBudgetPOC.empty
+                        waitFor{MaxBudgetTotal.value(BudgetTotal)}
+                        MaxBudgetInception.value(BudgetInc)
+                        MaxBudgetPOC.value(BudgetPOC)
+                        MaxBudgetImplementation.value(BudgetImpl)
 
                 and: "Move to the Terms and Conditions tabs"
                     TermsTabClick
-                    waitFor{ConflictOfInterestCkb.click()}
-                    waitFor{DocNonDisclosureCkb.click()}
-                    waitFor{RequestForReferencesCkb.click()}
-                    withFrame(AdditionalTermsBox){$("body", id:"tinymce") << Background }
+                        waitFor{ConflictOfInterestCkb.click()}
+                        waitFor{DocNonDisclosureCkb.click()}
+                        waitFor{RequestForReferencesCkb.click()}
+                        withFrame(AdditionalTermsBox){$("body", id:"tinymce") << Background }
 
                 and: "Move to the Questions tab "
                     QuestionsTabClick
-                    waitFor{AddNewQuestionBtn.click()}  //It will create a question box
-                    waitFor{QuestionBox}
-                    withFrame(QuestionBox){$("body", id:"tinymce") << Question}
+                        waitFor{AddNewQuestionBtn.click()}  //It will create a question box
+                        waitFor{QuestionBox}
+                        withFrame(QuestionBox){$("body", id:"tinymce") << Question}
 
                 and: "Move to the Addenda tab"
                     AddendaTabClick
-                    waitFor{AddAddAddenda.click()}
-                    withFrame(AddendaBox){$("body", id:"tinymce") << Addenda }
+                        waitFor{AddAddAddenda.click()}
+                        withFrame(AddendaBox){$("body", id:"tinymce") << Addenda }
 
                 and: "Move to the Scoring tab"
                     ScoringTabClick
-                    waitFor{SkillScore.value(5)}
-                    TeamQuestionScore.value(10)
-                    CodeChallengeScore.value(20)
-                    TeamScenarioScore.value(40)
-                    PriceScore.value(25)
+                        waitFor{SkillScore.value(5)}
+                        TeamQuestionScore.value(10)
+                        CodeChallengeScore.value(20)
+                        TeamScenarioScore.value(40)
+                        PriceScore.value(25)
 
                 when: "Finally we save the SWU opportunity"
                     waitFor{SaveButton.click()}
@@ -248,7 +235,7 @@ class CreateOppSWU extends GebReportingSpec {
 
                 then: "Publish the newly created opportunity"
                     assert NewURL==OppURL  //matching the URL
-                    sleep(1000)
+                    sleep(1000)//ok, call it paranoid behaviour, but I do not fully trust waitFor
                     assert waitFor{$("a",'data-automation-id':"button-opportunity-publish")}
                     $("a",'data-automation-id':"button-opportunity-publish").click()  //Finally, we publish the opp
                     //And then click Yes in the modal box that appears after clicking the Publish button
@@ -260,17 +247,15 @@ class CreateOppSWU extends GebReportingSpec {
       "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | 1000000 | 100000| 300000 | 600000 | "Additional Terms for this SWU proposal" | "Stat rosa pristina nomine, nomina nuda tenemus?" | "Addenda for SWU opportunity"
   }
 
-/*
-        def cleanup(){
-            to HomePage
-            //I get the base URL to build (in the LoginModule) the URL to the admin icon
-            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
 
-            // Login off as an admin
-            def  logoffOK=login."Logout as administrator"(baseURL)
-            assert logoffOK
-        }
-*/
+    def teardown(){
+        to HomePage
+        //I get the base URL to build (in the LoginModule) the URL to the admin icon
+        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
 
+        // Login off as an admin
+        def  logoffOK=login."Logout as administrator"(baseURL)
+        assert logoffOK
+    }
 
 }

@@ -2,24 +2,19 @@ import geb.spock.GebReportingSpec
 
 import pages.app.HomePage
 import pages.app.CapabilitiesPage
-
 import pages.app.CapabilitiesSkillsPage
 import pages.app.CapabilityCreatePage
 
-
-
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-
 
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
 
 
-@Narrative('''This test one capability named Cooking with three skills associated to it 
+@Narrative('''This test creates one capability named 'Cooking' with three skills associated to it 
 ''')
-
 
 @Title("Create one capability and three skills")
 class CreateCapability extends GebReportingSpec {
@@ -30,8 +25,6 @@ class CreateCapability extends GebReportingSpec {
         def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
         assert loginOK
     }
-
-
 
   @Unroll
   def "Go to Home Page and click on the Admin menu item to open the drop down list" () {
@@ -46,7 +39,6 @@ class CreateCapability extends GebReportingSpec {
         waitFor{ManageCapabilities}  
         ManageCapabilities.click() 
      
-
     then: "Arrive at the Capabilities Page'"
         waitFor{at CapabilitiesPage}
     
@@ -60,44 +52,34 @@ class CreateCapability extends GebReportingSpec {
     and: "Enter values for the new capability"
         waitFor{CapabilityName}
         CapabilityName.value(CapName)
-        
-
-
-       CapabilityLabel.value(CapLabel)
-       waitFor{ DescriptionBox}
-       withFrame(DescriptionBox){$("body", id:"tinymce") << CapDescription}
+        CapabilityLabel.value(CapLabel)
+        waitFor{ DescriptionBox}
+        withFrame(DescriptionBox){$("body", id:"tinymce") << CapDescription}
 
     then: "Save the information"
         waitFor{SaveCapability}
         SaveCapability.click()  
 
-
     and: "will add three technical skills"  
         waitFor{AddNewSkillText}
-          AddNewSkillText.value("chopping")
-          AddNewSkillBtn.click()
+        AddNewSkillText.value("chopping")
+        AddNewSkillBtn.click()
 
-          waitFor{AddNewSkillText}
-          AddNewSkillText.value("roasting")
-          AddNewSkillBtn.click()
+        waitFor{AddNewSkillText}
+        AddNewSkillText.value("roasting")
+        AddNewSkillBtn.click()
 
-          waitFor{AddNewSkillText}
-          AddNewSkillText.value("butchering")
-          AddNewSkillBtn.click()
+        waitFor{AddNewSkillText}
+        AddNewSkillText.value("butchering")
+        AddNewSkillBtn.click()
 
     then: "Save the information"
         waitFor{SaveCapability}
-            SaveCapability.click() 
+        SaveCapability.click() 
 
-
-
-
-    where: "The values used to create the Opportunity are:"
+    where: "The values used to create the Capability are:" //Case we want to add more capabilities
         CapName | CapLabel| CapDescription
         "Cooking" | "Kitchen" | "Tossing veggies, chooping onions, skinning rabbits, roasting full pigs... all this without accidents"
-
-  }
-
-  
+    }
 
 }

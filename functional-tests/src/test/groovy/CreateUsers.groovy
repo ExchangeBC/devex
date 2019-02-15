@@ -11,7 +11,6 @@ import geb.module.RadioButtons
 
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-//import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -44,7 +43,7 @@ class CreateUsers extends GebReportingSpec {
         at AuthenticationSigninPage 
 
     and: "Click on the: 'Sign in with you GitHub account'"
-        SingInButton.click()
+        SignInButton.click()
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials '#Login' and '#Pwd'"
         at GitHubSignInPage
