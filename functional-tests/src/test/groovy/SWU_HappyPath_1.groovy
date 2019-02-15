@@ -3,12 +3,12 @@ import geb.spock.GebReportingSpec
 import geb.module.*
 
 import pages.app.HomePage
-import pages.app.SprintwithusPage
-import pages.app.SprintWithUsHowToApplyPage
-import pages.app.OpportunitiesPage
 import pages.app.AuthenticationSigninPage
 import pages.app.InitialSWUProposalPage
 import pages.app.GitHubPage
+import pages.app.SprintwithusPage
+import pages.app.SprintWithUsHowToApplyPage
+import pages.app.OpportunitiesPage
 
 import modules.LoginModule
 
@@ -34,51 +34,51 @@ class SWU_HappyPath_1 extends GebReportingSpec {
     static OppURL_global=""  //define a global URL for the OpportunityDetailPage associated to the opportunity
     static ProposalURL_global=""  //define a global URL for the Proposal associated to the opportunity
 
-      def CompareFileContents(fileNameToCompare) {
-            //The files we are comparing have the same fixed name, and the directories where they are located are known. A more
-            //flexible function will require very long input strings making it less readable
+    def CompareFileContents(fileNameToCompare) {
+        //The files we are comparing have the same fixed name, and the directories where they are located are known. A more
+        //flexible function will require very long input strings making it less readable
 
-            File FilePath1=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
-            File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/"+fileNameToCompare)
+        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
+        File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/"+fileNameToCompare)
 
-            FileInputStream fis1 = new FileInputStream(FilePath1)
-            FileInputStream fis2 = new FileInputStream(FilePath2)
-            try {
-                int byte1
-                while((byte1 = fis1.read())!=-1) {
-                    int byte2 = fis2.read()
-                    if(byte1!=byte2)return false
-                }
-            } finally {
-                fis1.close()
-                fis2.close()
-                //Delete the just downloaded file. Useful when running lots of test one after the other
-                //The FileInputStream class does not have a delete method, so I need to use another class
-                def ftd=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-                ftd.delete()
+        FileInputStream fis1 = new FileInputStream(FilePath1)
+        FileInputStream fis2 = new FileInputStream(FilePath2)
+        try {
+            int byte1
+            while((byte1 = fis1.read())!=-1) {
+                int byte2 = fis2.read()
+                if(byte1!=byte2)return false
             }
-
-            return true
-      }
-
-        boolean MoveTo(int x,int y){
-        //def MoveTo(){
-            int XCoor=x
-            int YCoor=y
-            js.exec('window.scrollTo('+  XCoor +','+ YCoor +');')
-            return true
+        } finally {
+            fis1.close()
+            fis2.close()
+            //Delete the just downloaded file. Useful when running lots of test one after the other
+            //The FileInputStream class does not have a delete method, so I need to use another class
+            def ftd=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+            ftd.delete()
         }
 
-      //We make sure we are not logged as admin
-      def startup() {
-            waitFor{to HomePage}
-            //I get the base URL to build (in the LoginModule) the URL to the admin icon
-            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
+        return true
+    }
 
-            // Login off as an admin
-            def  logoffOK=login."Logout as administrator"(baseURL)
-            assert logoffOK
-      }
+    boolean MoveTo(int x,int y){
+    //def MoveTo(){
+        int XCoor=x
+        int YCoor=y
+        js.exec('window.scrollTo('+  XCoor +','+ YCoor +');')
+        return true
+    }
+
+    //We make sure we are not logged as admin
+    def startup() {
+        waitFor{to HomePage}
+        //I get the base URL to build (in the LoginModule) the URL to the admin icon
+        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
+
+        // Login off as an admin
+        def  logoffOK=login."Logout as administrator"(baseURL)
+        assert logoffOK
+    }
 
 def "Looking at the existing opportunities and SWU information as a non-authenticated user" () {
 
@@ -90,17 +90,14 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
 
     then: "I should be at the Sprintwithus Page- So the page exists"
         waitFor{at SprintwithusPage}
-        println("URL line 83 is ${driver.currentUrl}"  )
 
     and: "Click on the How to Apply button"
         HowToApply.click()
 
-        println("URL 105  is ${driver.currentUrl}"  )
     then: "Arrive at the SWU page that explains how to apply"
         waitFor{at SprintWithUsHowToApplyPage}
 
     then: "Click on terms, to download the document that sets the terms and the legalese"
-        println("URL line 93 is ${driver.currentUrl}"  )
         waitFor{SWUTerms.click()}
         sleep(2000) //Give time for the document to be downloaded
 
@@ -109,11 +106,9 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
 
     then: "Click on the opportunities link on the header of the page"
         OpportunitiesNavBar //it includes a click
-        println("URL 1 line 102 is ${driver.currentUrl}"  )
 
     then: "I should be at the Opportunities Page- So the page exists"
         waitFor{at OpportunitiesPage}
-        println("URL line 106 is ${driver.currentUrl}"  )
 
       and: "I click on the first opportunity listed on the page"
         waitFor{FirstListedOpportunity}
@@ -148,14 +143,11 @@ def "User authenticates and navigates to the proposal to start filling it" () {
         assert AuthenticationSigninPage
 
     and:"User clicks th 'Sign In' button in the Authentication page"
-        println("URL line 141 is ${driver.currentUrl}"  )
-        waitFor{SingInButton.click()}
+        waitFor{SignInButton.click()}
         sleep(1000)
 
     and: "User arrive to the GitHub page, where will be able to log"
-        println("URL line 146 is ${driver.currentUrl}")
         assert waitFor{$("input", name:"commit" )}//Verifies the sign in button exists
-
 		$(id:"login_field").value('hugochibougamau')
 		$(id:"password").value('Devex_Test1')
         $("input", name:"commit" ).click()
@@ -165,7 +157,7 @@ def "User authenticates and navigates to the proposal to start filling it" () {
         waitFor {at HomePage}
         def AdminIconLocation = 'https://avatars1.githubusercontent.com/u/46409451?v=4' //This is the default icon for a logged user
         assert $("img",src:"${AdminIconLocation}")
-        println("URL line 158 is ${driver.currentUrl}")
+
     and: "Click the Browse Opportunties button"
         waitFor{BrowseOpportunities.click()}
 
@@ -193,29 +185,25 @@ def "User authenticates and navigates to the proposal to start filling it" () {
     when: "Click on Start a proposal button"
         println("URL line 188 is ${driver.currentUrl}"  )
         OppURL_global=driver.currentUrl   //Save to a global variable. It is the Opportunity URL that will be used in the following tests
-
         waitFor{$("button",0, id:"proposaladmin.create").click()}
         sleep(1000)
-
         ProposalURL_global=driver.currentUrl //Save to a global variable. It is the Proposal URL that will be used in the following tests
 
-        println("URL line 193 is ${driver.currentUrl}"  )
- 
     then: "Loads the page that allows to fill the proposal for the selected opportunity"
         assert waitFor{at InitialSWUProposalPage}
-        println("URL line 197 is ${driver.currentUrl}")
+
 }
 
-def "User partially fills the proposal. Then saves the entries and leaves with the proposal unsubmitted" () {
+def "User start filling the proposal without completing it. Then saves the entries and leaves with the proposal unsubmitted" () {
     //Note: We are already logged as the user, so no need to log again
     given:"Authenticated user starts a proposal after Clicking on start a proposal button"
         go ProposalURL_global  //defined in the previous feature
         waitFor{at InitialSWUProposalPage}  //this page definition does not have a URL, as it changes with the opportunity
-        sleep(2000)
+
 
     when: "We download the code challenge"
-        CodeChallengeDownload.click()
-        sleep(2000)
+        waitFor{CodeChallengeDownload.click()}
+        sleep(2000)//Give time to download the document
 
     and: "Verify the downloaded document 'code-challenge.pdf' matches the one stored in this test system"
         assert CompareFileContents('code-challenge.pdf')
@@ -225,7 +213,7 @@ def "User partially fills the proposal. Then saves the entries and leaves with t
 
     and: "Click on the 'Download the Terms & Conditions' button"
         DownLoadTermsConditions.click()
-        sleep(2000)
+        sleep(2000)//Give time to download the document
 
     and: "Verify the downloaded file'sprint-with-us-terms' matches the one stored in this test system"
         assert CompareFileContents('sprint-with-us-terms.pdf')
@@ -282,50 +270,21 @@ def "User logs in, selects the opportunity, continues filling the proposal, save
         //Note: because in the previous step we didn't log off GitHub, we only need to log into BCDev Exchange
         waitFor{at AuthenticationSigninPage}
         assert AuthenticationSigninPage
-        waitFor{SingInButton.click()}
-
-
-
-/*  This section is active only when testing this feature alone
-
-    and: "User arrive to the GitHub page, where will be able to log"
-        println("URL line 278 is ${driver.currentUrl}")
-        assert waitFor{$("input", name:"commit" )}//Verifies the sign in button exists
-
-		$(id:"login_field").value('hugochibougamau')
-		$(id:"password").value('Devex_Test1')
-        $("input", name:"commit" ).click()
-        sleep(5000)
-
-//URL will need to change accordingly
-OppURL_global='http://localhost:3000/opportunities/swu/opp-opportunity-automation-test-opportunity-1--83cc8b01-60c1-4e84-a728-d5257c0fd9ac'
-
-println("OppURL is ${OppURL_global }")
-*/
-
-
+        waitFor{SignInButton.click()}
+        sleep(2000)
 
     and:"Once logged, the user returns to the Opportunity page, and select the opportunity has been working on"
         //Here I am cheating a bit, but selecting a specific opp has been tested in the previous features methods
         go OppURL_global  //defined in the previous feature
-        println("URL line 297 is ${driver.currentUrl}")
-        sleep(2000)
-        println("URL line 299 is ${driver.currentUrl}")
-
         waitFor{at InitialSWUProposalPage}  //this page definition does not have a URL, as it changes with the opportunity
-        println("URL line 302 is ${driver.currentUrl}")
         sleep(2000)
-        println("URL line 304 is ${driver.currentUrl}")
+
 
     expect:"Verify the new page does NOT have the 'Start Proposal' button"
         assert !$("button",0, id:"proposaladmin.create") //Just in case...
 
     when: "click the 'Update my proposal' link"
         waitFor{UpdateSWUProposal.click()}
-
-
-
-        println("URL line 311 is ${driver.currentUrl}")
         sleep(1000)
 
     and: "users goes to 'Select Team' tab to update the team"
@@ -349,10 +308,6 @@ println("OppURL is ${OppURL_global }")
     and: "Move to the Questions Tab and enter a response "
         QuestionsTab.click()
         withFrame(ProposalQuestionsBox){$("body", id:"tinymce") << "Semper vivens semperque pulcherrima rosa idea aeterna est"}
-
-
-
-
 
     and: "Move to the References Tab and upload a file "
         ReferencesTab.click()
@@ -381,7 +336,6 @@ println("OppURL is ${OppURL_global }")
             waitFor{to GitHubPage }
             SignOutGit.click()
         }
-
 
 }
 
