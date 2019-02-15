@@ -23,12 +23,6 @@
 							});
 						break;
 					case 401:
-						// Deauthenticate the global user
-						authenticationService.user = null;
-						$injector
-							.get('$state')
-							.transitionTo('authentication.signin');
-						break;
 					case 403:
 						authenticationService.user = null;
 						$injector
