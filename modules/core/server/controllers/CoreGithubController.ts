@@ -101,37 +101,11 @@ class CoreGithubController {
 
 	// Lock an issue to prevent comments from non-contributors
 	public async lockIssue(opts: GitHubOptions): Promise<boolean> {
-		opts.token = opts.token ? opts.token : this.accessToken;
-		opts.repo = this.getrepo(opts.repo);
-		const url = this.githubRepos + opts.repo + '/issues/' + opts.number + '/lock?access_token=' + opts.token;
-		await fetch(url, {
-			method: 'put',
-			body: '',
-			headers: {
-				'Content-Type': 'application/json',
-				'Content-Length': '0',
-				Accept: 'application/vnd.github.v3.full+json'
-			}
-		});
-
-		return true;
+		return await this.setIssueLock(opts, true);
 	}
 
 	public async unlockIssue(opts: GitHubOptions): Promise<boolean> {
-		opts.token = opts.token ? opts.token : this.accessToken;
-		opts.repo = this.getrepo(opts.repo);
-		const url = this.githubRepos + opts.repo + '/issues/' + opts.number + '/lock?access_token=' + opts.token;
-		await fetch(url, {
-			method: 'delete',
-			body: '',
-			headers: {
-				'Content-Type': 'application/json',
-				'Content-Length': '0',
-				Accept: 'application/vnd.github.v3.full+json'
-			}
-		});
-
-		return true;
+		return await this.setIssueLock(opts, false);
 	}
 
 	// Add a comment to a GitHub issue
@@ -151,6 +125,23 @@ class CoreGithubController {
 			}
 		};
 		await fetch(url, payload);
+		return true;
+	}
+
+	private async setIssueLock(opts: GitHubOptions, lock: boolean): Promise<boolean> {
+		opts.token = opts.token ? opts.token : this.accessToken;
+		opts.repo = this.getrepo(opts.repo);
+		const url = this.githubRepos + opts.repo + '/issues/' + opts.number + '/lock?access_token=' + opts.token;
+		const method = lock ? 'put' : 'delete';
+		await fetch(url, {
+			method,
+			body: '',
+			headers: {
+				'Content-Type': 'application/json',
+				'Content-Length': '0',
+				Accept: 'application/vnd.github.v3.full+json'
+			}
+		});
 		return true;
 	}
 

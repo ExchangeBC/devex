@@ -44,7 +44,7 @@ class Application {
 	private async init(): Promise<express.Application> {
 		const connection = await MongooseController.connect();
 		await this.seedDB();
-		return await ExpressApplication.init(connection);
+		return ExpressApplication.init(connection);
 	}
 
 	private async seedDB(): Promise<void> {
