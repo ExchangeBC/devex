@@ -66,6 +66,10 @@ class HeaderController implements IController {
 			this.refreshHeader();
 		});
 
+		this.$rootScope.$on('userImageUpdated', () => {
+			this.refreshHeader();
+		});
+
 		this.$scope.$on('$stateChangeSuccess', this.stateChangeSuccess);
 	}
 

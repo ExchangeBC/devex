@@ -1,28 +1,33 @@
 'use strict';
 
 import { angularFileUpload, IController, IRootScopeService, IScope, ITimeoutService, ui, uiNotification } from 'angular';
-import { IOrg } from '../../shared/IOrgDTO';
+import { IOrg } from '../../../orgs/shared/IOrgDTO';
+import { IUser } from '../../../users/shared/IUserDTO';
 
-interface EditLogoDialogScope extends IScope {
-	myPic?: any;
-}
-
-export class EditOrgImageDialogController implements IController {
-	public static $inject = ['$scope', '$rootScope', '$timeout', 'org', '$uibModalInstance', 'Upload', 'Notification'];
+export class EditAvatarDialogController implements IController {
+	public static $inject = ['$rootScope', '$timeout', 'org', 'user', '$uibModalInstance', 'Upload', 'Notification'];
 	public fileSelected: boolean;
 	public uploadUrl: string;
 	public picFile: any;
 
 	constructor(
-		private $scope: EditLogoDialogScope,
 		private $rootScope: IRootScopeService,
 		private $timeout: ITimeoutService,
 		public org: IOrg,
+		public user: IUser,
 		private $uibModalInstance: ui.bootstrap.IModalInstanceService,
 		private Upload: angularFileUpload.IUploadService,
 		private Notification: uiNotification.INotificationService
 	) {
-		this.uploadUrl = `/api/org/${this.org._id}/upload/logo`;
+		this.uploadUrl = this.org ? `/api/org/${this.org._id}/upload/logo` : '/api/users/picture';
+	}
+
+	public getCurrentImageUrl(): string {
+		return this.org ? this.org.orgImageURL : this.user.profileImageURL;
+	}
+
+	public getSourceName(): string {
+		return this.org ? this.org.name : this.user.displayName;
 	}
 
 	public onSelectPicture(file: File): void {
@@ -43,16 +48,22 @@ export class EditOrgImageDialogController implements IController {
 	public async upload(base64File: string): Promise<void> {
 		try {
 			const croppedFile = this.dataUrlToFile(base64File, this.picFile.name);
+			let data: any;
+			data = this.org ? { orgImageURL: this.Upload.rename(croppedFile, 'pic') } : { newProfilePicture: this.Upload.rename(croppedFile, 'pic') };
+
 			const uploadResponse = (await this.Upload.upload({
 				url: this.uploadUrl,
-				data: {
-					orgImageURL: this.Upload.rename(croppedFile, `${this.org.name}-pic`)
-				},
+				data,
 				method: 'POST'
 			})) as any;
 
-			this.org.orgImageURL = uploadResponse.data.orgImageURL;
-			this.$rootScope.$broadcast('orgImageUpdated', uploadResponse.data.orgImageURL);
+			if (this.org) {
+				this.org.orgImageURL = uploadResponse.data.orgImageURL;
+			} else {
+				this.user.profileImageURL = uploadResponse.data.profileImageURL;
+				this.$rootScope.$broadcast('userImageUpdated');
+			}
+
 			this.$uibModalInstance.dismiss('cancel');
 			this.$timeout(() => {
 				this.onSuccessItem(uploadResponse.data);
