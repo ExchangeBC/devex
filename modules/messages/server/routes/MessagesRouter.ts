@@ -39,30 +39,12 @@ class MessagesRouter {
 			.all(MessagesPolicy.isAllowed)
 			.get((req, res) => {
 				return res.json(req.message);
-			})
-			.delete(MessagesServerController.archive);
+			});
 
 		// Specific actions taken for a message by the user
-		app.route('/api/messages/:messageId/viewed')
-			.all(MessagesPolicy.isAllowed)
-			.put(MessagesServerController.viewed);
-
 		app.route('/api/messages/:messageId/action')
 			.all(MessagesPolicy.isAllowed)
 			.put(MessagesServerController.actioned);
-
-		app.route('/api/messagestemplates')
-			.all(MessagesPolicy.isAllowed)
-			.get(MessagesServerController.listTemplates)
-			.post(MessagesServerController.createTemplate);
-
-		app.route('/api/messagestemplates/:templateId')
-			.all(MessagesPolicy.isAllowed)
-			.get((req, res) => {
-				return res.json(req.template);
-			})
-			.put(MessagesServerController.updateTemplate)
-			.delete(MessagesServerController.removeTemplate);
 
 		// Define route parameters
 		app.param('messageId', (req, res, next, id) => {

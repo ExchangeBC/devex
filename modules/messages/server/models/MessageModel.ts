@@ -31,7 +31,7 @@ export const MessageModel: Model<IMessageModel> = model<IMessageModel>(
 			{
 				dateSent: { type: Date, default: null },
 				isOk: { type: Boolean, default: false },
-				error: {}
+				error: { type: Object, default: {} }
 			}
 		],
 		emailSent: { type: Boolean, default: false },

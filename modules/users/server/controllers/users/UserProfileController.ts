@@ -19,7 +19,6 @@ class UserProfileController {
 	private static instance: UserProfileController;
 
 	private sendMessages = MessagesServerController.sendMessages;
-	private claimMessages = MessagesServerController.claimMessages;
 	private whitelistedFields = [
 		'orgsAdmin',
 		'orgsMember',
@@ -80,7 +79,6 @@ class UserProfileController {
 			});
 
 			user.email = user.email.toLowerCase();
-			const isClaimMessages = !user.email && req.body.email;
 
 			// Previous state of user
 			//
@@ -103,9 +101,6 @@ class UserProfileController {
 						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
-					if (isClaimMessages) {
-						this.claimMessages(user);
-					}
 
 					req.login(user, loginErr => {
 						if (loginErr) {

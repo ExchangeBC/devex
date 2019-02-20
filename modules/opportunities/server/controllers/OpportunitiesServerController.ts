@@ -13,7 +13,7 @@ import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelper
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
 import { IAttachmentModel, ProposalModel } from '../../../proposals/server/models/ProposalModel';
-import { UserModel } from '../../../users/server/models/UserModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 import OpportunitiesUtilities from '../utilities/OpportunitiesUtilities';
 
@@ -749,7 +749,6 @@ class OpportunitiesServerController {
 	// pre-approval email and configuring the opportunity as required
 	private sendApprovalMessages = async (requestingUser, opportunity) => {
 		if (opportunity.intermediateApproval.state === 'ready-to-send') {
-
 			// ensure opportunity is populated
 			opportunity = await this.populateOpportunity(opportunity);
 
@@ -938,17 +937,9 @@ class OpportunitiesServerController {
 	};
 
 	// Get a list of all users who are listening to the add opp event
-	private getSubscribedUsers = () => {
-		return new Promise((resolve, reject) => {
-			UserModel.find({ notifyOpportunities: true, email: { $ne: null } }, '_id email firstName lastName displayName').exec((err, users) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(users);
-				}
-			});
-		});
-	};
+	private async getSubscribedUsers(): Promise<IUserModel[]> {
+		return await UserModel.find({ notifyOpportunities: true, email: { $ne: null } }, '_id email firstName lastName displayName').exec();
+	}
 
 	// Save the given opportunity and returns the updated version
 	private updateSave = async (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {

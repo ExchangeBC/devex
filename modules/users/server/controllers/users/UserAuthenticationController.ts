@@ -13,7 +13,6 @@ class UserAuthenticationController {
 
 	private static instance: UserAuthenticationController;
 
-	private claimMessages = MessagesServerController.claimMessages;
 	private sendMessages = MessagesServerController.sendMessages;
 
 	// URLs for which user can't be redirected on signin
@@ -43,11 +42,6 @@ class UserAuthenticationController {
 				// Remove sensitive data before login
 				user.password = undefined;
 				user.salt = undefined;
-				//
-				// CC: this bit claims any messages attributed to this new
-				// user's email address
-				//
-				this.claimMessages(user);
 				req.login(user, loginErr => {
 					if (loginErr) {
 						res.status(400).send(loginErr);
@@ -174,7 +168,6 @@ class UserAuthenticationController {
 
 							// And save the user
 							user.save(saveErr => {
-								this.claimMessages(user);
 								return done(saveErr, user, info);
 							});
 						});
