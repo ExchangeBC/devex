@@ -451,12 +451,12 @@ class MessagesServerController {
 
 		// if this is a list of userids
 		if (mongoose.Types.ObjectId.isValid(users[0])) {
-			users.map(async (userId: string) => {
+			users.forEach(async (userId: string) => {
 				const user = await this.getUser(userId);
 				await this.sendMessage(template, user, data);
 			});
 		} else {
-			users.map(async user => {
+			users.forEach(async user => {
 				await this.sendMessage(template, user, data);
 			});
 		}
