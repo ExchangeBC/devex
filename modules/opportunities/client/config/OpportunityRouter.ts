@@ -12,7 +12,6 @@ import { IAuthenticationService } from '../../../users/client/services/Authentic
 import { IOpportunitiesService, IOpportunityResource } from '../services/OpportunitiesService';
 
 export default class OpportunityRouter {
-	public static $inject = ['$stateProvider'];
 
 	private rootState: Ng1StateDeclaration = {
 		abstract: true,
@@ -50,11 +49,7 @@ export default class OpportunityRouter {
 			opportunity: [
 				'$stateParams',
 				'OpportunitiesService',
-				async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
-					return await OpportunitiesService.get({
-						opportunityId: $stateParams.opportunityId
-					}).$promise;
-				}
+				this.resolveOpportunity
 			],
 			myproposal: [
 				'$stateParams',
@@ -89,11 +84,7 @@ export default class OpportunityRouter {
 			opportunity: [
 				'$stateParams',
 				'OpportunitiesService',
-				async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
-					return await OpportunitiesService.get({
-						opportunityId: $stateParams.opportunityId
-					}).$promise;
-				}
+				this.resolveOpportunity
 			],
 			org: [
 				'AuthenticationService',
@@ -169,11 +160,7 @@ export default class OpportunityRouter {
 			opportunity: [
 				'$stateParams',
 				'OpportunitiesService',
-				async ($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> => {
-					return await OpportunitiesService.get({
-						opportunityId: $stateParams.opportunityId
-					}).$promise;
-				}
+				this.resolveOpportunity
 			]
 		}
 	};
@@ -315,6 +302,12 @@ export default class OpportunityRouter {
 		this.$stateProvider.state('createcwu', this.createCWUState);
 		this.$stateProvider.state('createswu', this.createSWUState);
 		this.$stateProvider.state('oppcreatelanding', this.createLandingState);
+	}
+
+	private async resolveOpportunity($stateParams: StateParams, OpportunitiesService: IOpportunitiesService): Promise<IOpportunityResource> {
+		return await OpportunitiesService.get({
+			opportunityId: $stateParams.opportunityId
+		}).$promise;
 	}
 }
 

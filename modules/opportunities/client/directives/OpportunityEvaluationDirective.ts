@@ -1,6 +1,6 @@
 'use strict';
 
-import angular, { IController, IScope, uiNotification } from 'angular';
+import angular, { IController, IScope, ui, uiNotification } from 'angular';
 import _ from 'lodash';
 import { ICapabilitySkill } from '../../../capabilities/shared/ICapabilitySkillDTO';
 import { IProposalResource, IProposalService } from '../../../proposals/client/services/ProposalService';
@@ -12,6 +12,13 @@ import { IOpportunitiesService, IOpportunityResource } from '../services/Opportu
 
 interface IEvaluationScope extends IScope {
 	opportunity: IOpportunityResource;
+}
+
+interface IEvalModalScope {
+	proposals: IProposalResource[];
+	maxPoints: number;
+	cancel(): void;
+	save(): Promise<void>;
 }
 
 enum Stages {
@@ -321,13 +328,6 @@ export class OpportunityEvaluationDirectiveController implements IController {
 	}
 
 	public async openCodeChallengeModal(): Promise<void> {
-		interface ICodeChallengeModalScope {
-			proposals: IProposalResource[];
-			maxCodeChallengePoints: number;
-			cancel(): void;
-			save(): Promise<void>;
-		}
-
 		const modalResponse = await this.modalService.showModal(
 			{
 				size: 'sm',
@@ -336,23 +336,16 @@ export class OpportunityEvaluationDirectiveController implements IController {
 				controller: [
 					'$scope',
 					'$uibModalInstance',
-					($scope: ICodeChallengeModalScope, $uibModalInstance: ng.ui.bootstrap.IModalInstanceService) => {
+					($scope: IEvalModalScope, $uibModalInstance: ng.ui.bootstrap.IModalInstanceService) => {
 						$scope.proposals = angular.copy(this.proposals);
-						$scope.maxCodeChallengePoints = this.opportunity.weights.codechallenge * this.maximumScore;
+						$scope.maxPoints = this.opportunity.weights.codechallenge * this.maximumScore;
 
 						$scope.cancel = (): void => {
 							$uibModalInstance.close({});
 						};
 
 						$scope.save = async (): Promise<void> => {
-							const message = 'Are you sure you wish to commit the code challenge scores as entered?';
-							const choice = await this.ask.yesNo(message);
-							if (choice) {
-								$uibModalInstance.close({
-									action: 'save',
-									proposalsToSave: $scope.proposals
-								});
-							}
+							this.confirmModalSave('Are you sure you wish to commit the code challenge scores as entered?', $uibModalInstance, $scope);
 						};
 					}
 				]
@@ -393,13 +386,6 @@ export class OpportunityEvaluationDirectiveController implements IController {
 	 * Validates based on interview weighting and max points
 	 */
 	public async openInterviewModal(): Promise<void> {
-		interface IInterviewModalScope {
-			proposals: IProposalResource[];
-			maxInterviewPoints: number;
-			cancel(): void;
-			save(): Promise<void>;
-		}
-
 		const modalResponse = await this.modalService.showModal(
 			{
 				size: 'sm',
@@ -408,23 +394,16 @@ export class OpportunityEvaluationDirectiveController implements IController {
 				controller: [
 					'$scope',
 					'$uibModalInstance',
-					($scope: IInterviewModalScope, $uibModalInstance: ng.ui.bootstrap.IModalInstanceService) => {
+					($scope: IEvalModalScope, $uibModalInstance: ng.ui.bootstrap.IModalInstanceService) => {
 						$scope.proposals = angular.copy(this.proposals);
-						$scope.maxInterviewPoints = this.opportunity.weights.interview * this.maximumScore;
+						$scope.maxPoints = this.opportunity.weights.interview * this.maximumScore;
 
 						$scope.cancel = (): void => {
 							$uibModalInstance.close({});
 						};
 
-						$scope.save = async (): Promise<void> => {
-							const message = 'Are you sure you wish to commit the team scenario scores as entered?';
-							const choice = await this.ask.yesNo(message);
-							if (choice) {
-								$uibModalInstance.close({
-									action: 'save',
-									proposalsToSave: $scope.proposals
-								});
-							}
+						$scope.save = async () => {
+							this.confirmModalSave('Are you sure you wish to commit the team scenario scores as entered?', $uibModalInstance, $scope);
 						};
 					}
 				]
@@ -752,8 +731,18 @@ export class OpportunityEvaluationDirectiveController implements IController {
 		}
 	}
 
+	private async confirmModalSave(message: string, modalInstance: ui.bootstrap.IModalServiceInstance, scope: IEvalModalScope): Promise<void> {
+		const choice = await this.ask.yesNo(message);
+		if (choice) {
+			modalInstance.close({
+				action: 'save',
+				proposalsToSave: scope.proposals
+			});
+		}
+	}
+
 	private handleError(error: any): void {
-		const errorMessage = (error as any).data ? (error as any).data.message : error.message;
+		const errorMessage = error.data ? error.data.message : error.message;
 		this.Notification.error({
 			title: 'Error',
 			message: `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`
