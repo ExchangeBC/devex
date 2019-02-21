@@ -26,7 +26,7 @@ class HomePage extends Page {
 		AdminMenuDropDown{$("a",'data-automation-id':"AdminMenuItem")}	
 		AboutLink { PositionAndClick("a","about") }
 		AccessibilityLink { PositionAndClick("a","accessibility") }
-		API { PositionAndClick("a","api") }
+		APIs { PositionAndClick("a","api") }
 		AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
 		BrowseOpportunities { $("a", 'data-automation-id':"lnkBrowseOpportunities")}
 		CodewithusLink { $(('a[data-automation-id ~= "button-codewithus"]'), 0).click() }
@@ -40,6 +40,7 @@ class HomePage extends Page {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0).click() }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0).click() }
+		SettingsOption{$("a", text: contains("Settings"))}
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SprintwithusLink { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0).click() }

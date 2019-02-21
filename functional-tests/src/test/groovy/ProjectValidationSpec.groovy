@@ -36,7 +36,7 @@ class ProjectValidationSpec extends GebReportingSpec {
         waitFor { to ProjectsPage }
 
     when: "I choose to create a new project"
-        ListProjectButton.click()
+        waitFor{ListProjectButton.click()}
 
     then:
         at ProjectCreatePage

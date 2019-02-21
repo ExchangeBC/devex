@@ -14,9 +14,9 @@ class OpportunitiesPage extends Page {
 				PostAnOpportunity(wait: true) { $("button",("class"):"btn btn-primary float-right ng-scope btn-default") }
 				FirstListedOpportunity(required: false, wait: 2) {$("div",class:"label-title ng-binding",0)}//This corresponds to a SWU opp
 				SecondListedOpportunity(required: false, wait: 2) {$("div",class:"label-title ng-binding",1)}//This corresponds to a CWU opp
-				ownloadTerms{$('a[href="/terms/cwu1"]')}
-				cwuLearnMore{$('data-automation-id':"cwu-LearnMore").click()}
-				swuLearnMore{$('data-automation-id':"swu-LearnMore").click()}
+				DownloadTerms{$('a[href="/terms/cwu1"]')}
+				CWULearnMore{$('data-automation-id':"cwu-LearnMore").click()}
+				SWULearnMore{$('data-automation-id':"swu-LearnMore").click()}
 		}
 
 

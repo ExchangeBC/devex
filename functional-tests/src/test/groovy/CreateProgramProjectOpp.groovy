@@ -24,12 +24,14 @@ import org.openqa.selenium.Keys
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
+import spock.lang.Ignore
+import spock.lang.Stepwise
 
 
 @Narrative('''The test will simulate an Administrator creating, in this order, a Program, a Project and one Opportunity.
 They are required as preconditions for other tests.
  ''')
-
+@Stepwise //Order is important, as the second element of the list must be deleted first
 
 @Title("Create and publish projects, programs, and opportunities")
 class CreateProgramProjectOpp extends GebReportingSpec {
@@ -43,7 +45,9 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             assert loginOK
         }
 
+    //@Ignore
        @Unroll //Not actually necessary if we are using only single set of data (ie, creating only one program)
+     
         def "Create Program: '#ProgramTitleValue'" () {
             given: "After login as Administrator, I go to the Programs Page"
                 waitFor { to ProgramsPage }
@@ -82,14 +86,14 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 "Program: Automation Test 1" | "Short Descriptive Program: Automation Test 1" | "Long description Program: Automation Test 1" | "https://www.google.com"
         }
 
-
+    //@Ignore
         @Unroll  //Not actually necessary if we are using only single set of data (ie, creating only one project)
         def "Create Project: '#ProjectNameValue'" () {
             given: "Already logged as Administrator, go to Projects page"
                 waitFor { to ProjectsPage }
 
             when: "Click on 'List a Project' button to create a new project- Program alredy exists"
-                ListProjectButton.click()
+                waitFor{ListProjectButton.click()}
 
             then: "Load the Create Project page"
                 waitFor{at ProjectCreatePage}
@@ -119,7 +123,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 assert waitFor{PublishButton}
 
             when: "I click the publish button"
-                PublishButton.click()
+                waitFor{PublishButton.click()}
 
             then:"The Unpublish button exists and it is displayed"
                 at ProjectViewPage
@@ -132,8 +136,8 @@ class CreateProgramProjectOpp extends GebReportingSpec {
         }
 
 
-
-       @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
+        //@Ignore
+        @Unroll   //Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
             def "Publish Opportunity: '#TitleData'" () {
                 // This section set and format the dates 
                 Calendar calendar= Calendar.getInstance()
@@ -178,8 +182,6 @@ class CreateProgramProjectOpp extends GebReportingSpec {
 
                 and: "Set the title,teaser, description.... and other details of the opportunity "
                     selectProject.value(Project)
-                    reportInfo("project value is  ${selectProject.value()}"  )
-                    reportInfo("URL line 214 is ${driver.currentUrl}"  )
                     oppTitle.value(MyTitleData) //Title
                     oppTeaser.value(Teaser) //teaser
                     oppGithub.value(Github) //Github location
@@ -263,10 +265,10 @@ class CreateProgramProjectOpp extends GebReportingSpec {
                 and: "And then click Yes in the modal box to confirmn"
                     $("button",'data-automation-id':"button-modal-yes").click()
                     
-     where: "The values used to create the Opportunity are:"
-      Project | TitleData | Teaser | Background | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
-      "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"
-  }
+                where: "The values used to create the Opportunity are:"
+                    Project | TitleData | Teaser | Background | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
+                    "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"
+            }
 
    
         def teardown(){

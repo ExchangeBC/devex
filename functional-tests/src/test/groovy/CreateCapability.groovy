@@ -34,6 +34,7 @@ class CreateCapability extends GebReportingSpec {
     when: "Click on the Admin Menu item to expand the drop down options"
         waitFor{AdminMenuDropDown}
         AdminMenuDropDown.click()
+        sleep(1000) //Despite all the waitFor{}, this seems to be necessary
    
     and:"Click on the Manage Capabilities option"  
         waitFor{ManageCapabilities}  
