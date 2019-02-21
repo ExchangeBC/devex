@@ -33,6 +33,18 @@ class SWU_HappyPath_1 extends GebReportingSpec {
 
     static OppURL_global=""  //define a global URL for the OpportunityDetailPage associated to the opportunity
     static ProposalURL_global=""  //define a global URL for the Proposal associated to the opportunity
+    
+    Boolean CheckIfReauthIsNeeded(){
+        if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+                println("Had to reauthorize Devex to access the GibHub account")
+                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+                sleep(2000)
+        }
+        else {
+                println("No need to reauthorize Devex to access the GibHub account")
+        }
+        return true
+    }
 
     def CompareFileContents(fileNameToCompare) {
         //The files we are comparing have the same fixed name, and the directories where they are located are known. A more
@@ -151,7 +163,10 @@ def "User authenticates and navigates to the proposal to start filling it" () {
 		$(id:"login_field").value('hugochibougamau')
 		$(id:"password").value('Devex_Test1')
         $("input", name:"commit" ).click()
-        sleep(1000)
+        sleep(2000) //Leave time case the next page is the reauthorization page
+
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "Once logged the application redirects to the HomePage. Here we verify the default user icon is there proving we are logged"
         waitFor {at HomePage}

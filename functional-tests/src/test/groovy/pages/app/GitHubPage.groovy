@@ -2,7 +2,8 @@ package pages.app
 import geb.Page
 
 class GitHubPage extends Page  {
-	static at = { title == "GitHub" }
+	//static at = { title == "GitHub" }
+	static at = {title.contains("GitHub") } 
 	static url = "https://github.com"
 	static content = {
 

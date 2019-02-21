@@ -49,11 +49,7 @@
             </td>
             <td class="button-cell">
               <div ng-if="vm.canJoinOrg(org)" class="hidden-button">
-<<<<<<< HEAD
-                <button class="btn btn-primary join" data-automation-id="btnJoinCompany" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
-=======
-                <button class="btn btn-primary" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
->>>>>>> 78e4ee2ca2e4d0dffe5116a253cb243e68792c05
+                <button class="btn btn-primary" data-automation-id="btnJoinCompany" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
               </div>
               <div ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" class="hidden-button">
                 <button data-automation-id="btnOrgAdmin" class="btn btn-text-only" ui-sref="orgs.view({ orgId: org._id })" title="Manage company profile">

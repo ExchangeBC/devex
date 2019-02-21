@@ -13,13 +13,13 @@ plugins {
 ext {
     // The drivers we want to use
     //drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
-    drivers = ["chrome"]
+    drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless"]
     ext {
         groovyVersion = '2.5.4'
         gebVersion = '2.3'
         seleniumVersion = '3.141.59'
         chromeDriverVersion = '2.45'
-        geckoDriverVersion = '0.18.0'
+        geckoDriverVersion = '0.24.0'
         ieDriverVersion = '3.6'
         edgeDriverVersion = seleniumVersion
         safariDriverVersion = seleniumVersion
@@ -56,12 +56,12 @@ dependencies {
     // Spock reports
     testCompile( 'com.athaydes:spock-reports:1.4.0' ) {
         transitive = false // this avoids affecting your version of Groovy/Spock
-    }
+        }
     testCompile 'org.slf4j:slf4j-api:1.7.13'
     testCompile 'org.slf4j:slf4j-simple:1.7.13'
 
     //testCompile 'org.owasp:dependency-check-gradle:3.1.2'
-}
+    }
 
 webdriverBinaries {
     chromedriver chromeDriverVersion
@@ -106,9 +106,10 @@ tasks.withType(Test) {
         exceptionFormat = 'full'
         events 'started', 'passed'
     }
-    systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
-    systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
-    systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
+
+systemProperty 'com.athaydes.spockframework.report.outputDir', 'build/reports/spock'
+systemProperty 'com.athaydes.spockframework.report.internal.HtmlReportCreator.inlineCss', false
+systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
 
 
 }

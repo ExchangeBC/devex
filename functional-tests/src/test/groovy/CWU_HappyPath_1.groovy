@@ -28,6 +28,17 @@ proposal.
 
 @Title("Code with Us Happy Path 1")
 class CWU_HappyPath_1 extends GebReportingSpec {
+      def Boolean CheckIfReauthIsNeeded(){
+            if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+                println("Had to reauthorize Devex to access the GibHub account")
+                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+                sleep(2000)
+            }
+            else {
+                println("No need to reauthorize Devex to access the GibHub account")
+            }
+            return true
+      }
 
       def CompareFileContents() {
             File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
@@ -113,7 +124,6 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
             def NewURL=getCurrentUrl() //This is the specific opportunity URL
 
-
       then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
             sleep(1000)
@@ -140,7 +150,10 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 		$(id:"login_field").value('hugochibougamau')
 		$(id:"password").value('Devex_Test1')
             $("input", name:"commit" ).click()
-            sleep(1000)
+            sleep(2000) //Leave time case the next page is the reauthorization page
+
+      and:"If redirected to the reauthorization page, click to reauthorize"    
+            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
       then: "Once logged we are in the HomePage. Here we verify the default user icon is there proving we are logged"
             at HomePage  //verify we are in the home page
