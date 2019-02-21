@@ -135,9 +135,7 @@ class OpportunitiesServerController {
 							});
 						})
 						.catch(() => {
-							res.status(422).send({
-								message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
-							});
+							this.respondWithRepoEditError(res);
 						});
 				} else {
 					this.populateOpportunity(updatedOpp).then(populatedOpportunity => {
@@ -397,14 +395,12 @@ class OpportunitiesServerController {
 		// if code matches, action and then return 200
 		if (approvalInfo.twoFACode === code) {
 			let notification: string;
-			let successMessage: string;
 			let whoToNotifyWhenDone: any;
 
 			// set up depending on action type (approve or deny) and state (pre-approval or final approval)
 			if (action === 'approve') {
 				approvalInfo.action = 'approved';
 				notification = isPreApproval ? 'opportunity-approval-request' : 'opportunity-approved-notification';
-				successMessage = isPreApproval ? 'Opportunity pre-approved!' : 'Opportunity Approved!';
 				whoToNotifyWhenDone = isPreApproval ? { email: opportunity.finalApproval.email } : opportunity.finalApproval.requestor;
 				if (!isPreApproval) {
 					opportunity.isApproved = true;
@@ -415,7 +411,6 @@ class OpportunitiesServerController {
 			} else {
 				approvalInfo.action = 'denied';
 				notification = 'opportunity-denied-notification';
-				successMessage = 'Opportunity Denied!';
 				whoToNotifyWhenDone = opportunity.finalApproval.requestor;
 			}
 
@@ -888,7 +883,6 @@ class OpportunitiesServerController {
 		// save and notify
 		this.updateSave(opportunity)
 			.then(() => {
-				const data = this.setNotificationData(opportunity);
 				if (firstTime) {
 					this.getSubscribedUsers().then(users => {
 						const messageCode = opportunity.opportunityTypeCd === 'code-with-us' ? 'opportunity-add-cwu' : 'opportunity-add-swu';
@@ -914,9 +908,7 @@ class OpportunitiesServerController {
 						res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 					})
 					.catch(() => {
-						res.status(422).send({
-							message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
-						});
+						this.respondWithRepoEditError(res);
 					});
 			})
 			.catch(err => {
@@ -1075,6 +1067,12 @@ The opportunity closes on <b>${deadline}</b>.</p>
 				.folder(proponentName)
 				.folder('docs')
 				.file(file.name, fs.readFileSync(file.path), { binary: true });
+		});
+	}
+
+	private respondWithRepoEditError(res: Response) {
+		res.status(422).send({
+			message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
 		});
 	}
 }
