@@ -1,32 +1,28 @@
-<div class="bg-white rounded p-4 container">
-    <div class="row">
-        <div class="col">
-            <button type="button" class="close float-right" ng-click="vm.close()" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="d-flex align-items-center">
+            <h5 class="modal-title">
+                <avatar-display url="vm.member.profileImageURL" size="60"></avatar-display> 
+                {{ vm.member.displayName }}
+            </h5>
         </div>
     </div>
-
-    <div class="row justify-content-center">
-        <div class="col-sm-12">
-            <avatar-display url="vm.member.profileImageURL" size="60"></avatar-display>
-            <name class="font-weight-bold">{{ vm.member.displayName }}</name>
-        </div>
+    <div class="modal-body">
+        <label-list>
+            <label ng-repeat="capability in vm.member.capabilities" class="label label-cap-default">
+                <i class="fas fa-lg fa-check-circle"></i> {{capability.name}}
+            </label>
+            <br>
+            <label ng-repeat="capabilitySkill in vm.member.capabilitySkills" class="label label-preferred-skill-possessed mx-1">{{capabilitySkill.name}}</label>
+        </label-list>
     </div>
-    <div class="row mt-5">
-        <div class="col-sm-12">
-            <label-list>
-                <label ng-repeat="capability in vm.member.capabilities" class="label label-cap-default {{ capability.labelClass }}">
-                    <i class="fas fa-circle"></i>&nbsp;{{capability.name}}
-                </label>
-                <br>
-                <label ng-repeat="capabilitySkill in vm.member.capabilitySkills" class="label label-preferred-skill-selected mx-1">{{capabilitySkill.name}}</label>
-            </label-list>
-        </div>
+    <!--Footer for detail view of active member-->
+    <div class="modal-footer justify-content-between" ng-if="!vm.isRequest">
+        <button type="button" class="btn btn-text-only float-left" ng-click="vm.removeMember()"><i class="far fa-trash-alt"></i>&nbsp;Remove member</button>
+        <button type="button" ng-click="vm.close()" class="btn btn-text-only">Close</button>
     </div>
-    <div class="row" ng-if="!vm.isRequest">
-        <div class="col">
-            <button type="button" class="btn btn-danger float-right" ng-click="vm.removeMember()">Remove from team</button>
-        </div>
+    <!--Footer for detail view of member request-->
+    <div class="modal-footer" ng-if="vm.isRequest">
+        <button type="button" ng-click="vm.close()" class="btn btn-text-only">Close</button>
     </div>
-
 </div>
