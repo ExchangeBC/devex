@@ -576,12 +576,7 @@ class OpportunitiesServerController {
 				zip.folder(opportunityName)
 					.folder(proponentName)
 					.file('index.html', content);
-				files.forEach(file => {
-					zip.folder(opportunityName)
-						.folder(proponentName)
-						.folder('docs')
-						.file(file.name, fs.readFileSync(file.path), { binary: true });
-				});
+				this.addFilesToZip(zip, opportunityName, proponentName, files);
 			});
 
 			res.setHeader('Content-Type', 'application/zip');
@@ -703,12 +698,7 @@ class OpportunitiesServerController {
 			zip.folder(opportunityName)
 				.folder(proponentName)
 				.file('proposal-summary.html', content);
-			files.forEach(file => {
-				zip.folder(opportunityName)
-					.folder(proponentName)
-					.folder('docs')
-					.file(file.name, fs.readFileSync(file.path), { binary: true });
-			});
+			this.addFilesToZip(zip, opportunityName, proponentName, files);
 
 			res.setHeader('Content-Type', 'application/zip');
 			res.setHeader('Content-Type', 'application/octet-stream');
@@ -1078,6 +1068,15 @@ The opportunity closes on <b>${deadline}</b>.</p>
 			.populate('addenda.createdBy', 'displayName')
 			.execPopulate();
 	};
+
+	private addFilesToZip(zip: JSZip, opportunityName: string, proponentName: string, files: IAttachmentModel[]): void {
+		files.forEach(file => {
+			zip.folder(opportunityName)
+				.folder(proponentName)
+				.folder('docs')
+				.file(file.name, fs.readFileSync(file.path), { binary: true });
+		});
+	}
 }
 
 export default OpportunitiesServerController.getInstance();
