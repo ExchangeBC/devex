@@ -136,12 +136,23 @@
   color: #fff;
   border: 1px solid $theme-orange;
 }
-
+.label-preferred-skill-possessed {
+  color: $gray-dark;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
 .label-swu {
   background: $gray-darker;
   color: #fff;
 }
-
+.label-swu-qualified {
+  display: inline-block;
+  background: $brand-yellow;
+  color: $gray-base;
+  font-size: 1rem;
+  padding: 2px 9px 3px;
+  border-radius: 14px;
+}
 .label-title {
   font-size: 1.15em;
   font-weight: 700;
@@ -156,9 +167,9 @@
 // Capability Labels
 
 .label-cap-default {
+  font-size: 0.9rem;
   color: $gray-dark;
-  background: transparent;
-  letter-spacing: -0.02em;
+  margin-right: 1rem;
 }
 
 .label-agilecoaching {
