@@ -7,9 +7,29 @@ import http from 'http';
 import https from 'https';
 import _ from 'lodash';
 import moment from 'moment-timezone';
-import { Document, Model } from 'mongoose';
+import { Document } from 'mongoose';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from './CoreServerErrors';
+
+interface IUserRoleSummary {
+	isAdmin: boolean;
+	isUser: boolean;
+	programs: {
+		admin: string[];
+		member: string[];
+		request: string[];
+	},
+	projects: {
+		admin: string[];
+		member: string[];
+		request: string[];
+	},
+	opportunities: {
+		admin: string[];
+		member: string[];
+		request: string[];
+	}
+}
 
 class CoreServerHelpers {
 	public static getInstance() {
@@ -44,10 +64,8 @@ class CoreServerHelpers {
 		return this.isNumeric(n) ? parseFloat(n) : 0;
 	};
 
-	public myStuff = roles => {
-		let a;
-		let l;
-		const r = {
+	public summarizeRoles(roles: string[]): IUserRoleSummary {
+		const summary = {
 			isAdmin: false,
 			isUser: false,
 			programs: {
@@ -69,41 +87,43 @@ class CoreServerHelpers {
 		if (roles) {
 			_.each(roles, role => {
 				if (role === 'admin') {
-					r.isAdmin = true;
+					summary.isAdmin = true;
 				} else if (role === 'user') {
-					r.isUser = true;
+					summary.isUser = true;
 				} else {
-					a = role.split('-');
-					l = a.pop();
-					if (a[0] === 'prj') {
-						if (l === 'request') {
-							r.projects.request.push(a.join('-'));
-						} else if (l === 'admin') {
-							r.projects.admin.push(a.join('-'));
+					let parts: string[];
+					let lastPart: string;
+					parts = role.split('-');
+					lastPart = parts.pop();
+					if (parts[0] === 'prj') {
+						if (lastPart === 'request') {
+							summary.projects.request.push(parts.join('-'));
+						} else if (lastPart === 'admin') {
+							summary.projects.admin.push(parts.join('-'));
 						} else {
-							r.projects.member.push(role);
+							summary.projects.member.push(role);
 						}
-					} else if (a[0] === 'opp') {
-						if (l === 'request') {
-							r.opportunities.request.push(a.join('-'));
-						} else if (l === 'admin') {
-							r.opportunities.admin.push(a.join('-'));
+					} else if (parts[0] === 'opp') {
+						if (lastPart === 'request') {
+							summary.opportunities.request.push(parts.join('-'));
+						} else if (lastPart === 'admin') {
+							summary.opportunities.admin.push(parts.join('-'));
 						} else {
-							r.opportunities.member.push(role);
+							summary.opportunities.member.push(role);
 						}
 					} else {
-						if (l === 'request') {
-							r.programs.request.push(a.join('-'));
-						} else if (l === 'admin') {
-							r.programs.admin.push(a.join('-'));
+						if (lastPart === 'request') {
+							summary.programs.request.push(parts.join('-'));
+						} else if (lastPart === 'admin') {
+							summary.programs.admin.push(parts.join('-'));
 						} else {
-							r.programs.member.push(role);
+							summary.programs.member.push(role);
 						}
 					}
 				}
 			});
 		}
-		return r;
+		return summary;
 	};
 
 	public fileUploadFunctions(doc: Document, field: string, req: Request, res: Response, upload: RequestHandler, existingImageUrl: string) {

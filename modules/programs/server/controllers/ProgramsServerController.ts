@@ -1,5 +1,6 @@
 'use strict';
 
+import { Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -7,7 +8,8 @@ import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import ProjectsServerController from '../../../projects/server/controllers/ProjectsServerController';
-import { ProgramModel } from '../models/ProgramModel';
+import { IUserModel } from '../../../users/server/models/UserModel';
+import { IProgramModel, ProgramModel } from '../models/ProgramModel';
 
 class ProgramsServerController {
 	public static getInstance() {
@@ -16,43 +18,23 @@ class ProgramsServerController {
 
 	private static instance: ProgramsServerController;
 
-	private constructor() {}
-	// -------------------------------------------------------------------------
-	//
-	// get a list of all my programs, but only ones I have access to as a normal
-	// member or admin, just not as request
-	//
-	// -------------------------------------------------------------------------
-	public my = (req, res) => {
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
-		const search = me.isAdmin ? {} : { code: { $in: me.programs.member } };
-		ProgramModel.find(search)
-			.select('code title short')
-			.exec((err, programs) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(programs);
-				}
-			});
-	};
+	private constructor() {
+		this.getMyAdminPrograms = this.getMyAdminPrograms.bind(this);
+	}
 
-	public myadmin = (req, res) => {
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
-		const search = me.isAdmin ? {} : { code: { $in: me.programs.admin } };
-		ProgramModel.find(search)
-			.select('code title short')
-			.exec((err, programs) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(programs);
-				}
+	public async getMyAdminPrograms(req: Request, res: Response): Promise<void> {
+		try {
+			const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
+			const search = me.isAdmin ? {} : { code: { $in: me.programs.admin } };
+			const myPrograms = await ProgramModel.find(search)
+				.select('code title short')
+				.exec();
+			res.json(myPrograms);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
+		}
 	};
 
 	// -------------------------------------------------------------------------
@@ -213,7 +195,7 @@ class ProgramsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public list = (req, res) => {
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		const search = me.isAdmin ? {} : { $or: [{ isPublished: true }, { code: { $in: me.programs.admin } }] };
 		ProgramModel.find(search)
 			.sort('title')

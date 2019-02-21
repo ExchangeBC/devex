@@ -22,7 +22,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public my = (req, res) => {
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		const search = me.isAdmin ? {} : { code: { $in: me.projects.member } };
 		ProjectModel.find(search)
 			.select('code name short')
@@ -475,7 +475,7 @@ class ProjectsServerController {
 
 	private searchTerm = (req, opts) => {
 		opts = opts || {};
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.projects.admin } }];
 		}

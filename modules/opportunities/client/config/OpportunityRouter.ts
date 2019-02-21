@@ -142,12 +142,6 @@ export default class OpportunityRouter {
 					return await CapabilitiesService.query().$promise;
 				}
 			],
-			programs: [
-				'ProgramsService',
-				async (ProgramsService: any): Promise<IProgram[]> => {
-					return await ProgramsService.myadmin().$promise;
-				}
-			],
 			projects: [
 				'ProjectsService',
 				async (ProjectsService: any): Promise<IProject> => {
@@ -243,12 +237,6 @@ export default class OpportunityRouter {
 				'CapabilitiesService',
 				async (CapabilitiesService: ICapabilitiesService): Promise<resource.IResourceArray<ICapabilityResource>> => {
 					return await CapabilitiesService.query().$promise;
-				}
-			],
-			programs: [
-				'ProgramsService',
-				async (ProgramsService: any): Promise<IProgram> => {
-					return await ProgramsService.myadmin().$promise;
 				}
 			],
 			projects: [

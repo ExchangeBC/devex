@@ -803,7 +803,7 @@ class OpportunitiesServerController {
 
 	private searchTerm = (req: Request, opts?: any): any => {
 		opts = opts || {};
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.opportunities.admin } }];
 		}
