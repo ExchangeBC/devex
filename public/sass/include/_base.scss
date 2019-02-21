@@ -1,6 +1,10 @@
 //body {
 //  padding-top: 61px !important; // To accommodate fixed navbar
 //}
+body {
+  color: #595959;
+  font-weight: 300;
+}
 
 main {
   min-height: 80vh !important; // Prevent footer from appearing in the middle of the view with whitespace below
@@ -12,4 +16,31 @@ main {
 
 .unpublished {
 	opacity: 0.3;
+}
+div.subhead {
+	border-bottom: 1px solid #e1e4e8;
+	margin-bottom: 0.5rem;
+	margin-top: 2rem;
+ }
+
+.missing-info {
+    font-weight: lighter;
+    font-style: italic;
+    color: #0074f0;
+  }
+.missing-info:hover {
+    cursor: pointer;
+ }
+
+a.subhead {
+  color: $theme-primary;
+  margin-bottom: 0.5rem !important; // Match the margin of the subhead
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+a:not([href]):not([tabindex]) {
+  color: $theme-primary !important; // Override default inherit color
+}
+a:not([href]):not([tabindex]):hover {
+  color: $theme-primary !important; // Override default inherit color
 }
