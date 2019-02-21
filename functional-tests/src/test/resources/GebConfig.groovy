@@ -28,7 +28,7 @@ environments {
 	chrome {
 		driver = { new ChromeDriver() }
 	}
-/*
+
 	// run via “./gradlew chromeHeadlessTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chromeHeadless {
@@ -44,6 +44,7 @@ environments {
 	
 	// run via “./gradlew firefoxTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/FirefoxDriver
+	// See also https://www.guru99.com/gecko-marionette-driver-selenium.html
 
 
 	firefox {
@@ -57,7 +58,7 @@ environments {
 			new FirefoxDriver(o)
 		}
 	}
-	
+/*	
 	// run via “./gradlew ieTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/InternetExplorerDriver
 	ie {

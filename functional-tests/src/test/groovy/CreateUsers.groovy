@@ -33,6 +33,19 @@ The test finish with each user logged off from BC Exchange and GitHub
 @Title("Create three users, and assign one capability")
 class CreateUsers extends GebReportingSpec {
 
+    def Boolean CheckIfReauthIsNeeded(){
+        if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+                println("Had to reauthorize Devex to access the GibHub account")
+                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+                sleep(2000)
+        }
+        else {
+                println("No need to reauthorize Devex to access the GibHub account")
+        }
+        return true
+    }
+
+
   @Unroll
   def "Go to Home Page and click on the log to GitHub button as user '#UserFirstName' '#UserLastName'" () {
     given: "Starting from the Home Page"
@@ -51,11 +64,16 @@ class CreateUsers extends GebReportingSpec {
 		GitHubLogin.value(Login)
 		GitHubPwd.value(Pwd)
         GitHubSignInButton.click()
+        sleep(2000) //Leave time case the next page is the reauthorization page
+
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "After successful Login, arrive at the Profile page for the user"
         at SingleProfilePage  //verify we are in the user's settings page
 
     and: "Check the Name and Last Name have been imported correctly from GitHub"
+        waitFor{FirstName}
         assert FirstName.value().toString()==UserFirstName 
         assert LastName.value().toString()==UserLastName
 
@@ -89,7 +107,7 @@ class CreateUsers extends GebReportingSpec {
         SignOutGit.click()
 
 
-    where: "The values used to create the Opportunity are:"
+    where: "The values used to create the Users are:"
         Login | Pwd | UserFirstName | UserLastName | UserEmail | UserCity 
         "hugochibougamau" | "Devex_Test1" | "Hugo" | "Chibougamau" | "hugochibougamau@fakeaddress.ca" | "Salt Spring Island"
         "hibouleblanc"|"Devex_Test1" |"Hibou" |"Leblanc"|"hibouleblanc@fakeaddress.ca"|"Victoria"

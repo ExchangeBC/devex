@@ -39,7 +39,7 @@
     <div class="label-list text-truncate">
       <span class="label label-project-tags" ng-repeat="code in project.tags">{{code}}</span>
     </div>
-    <h5 class="card-title mt-2 text-truncate" ng-bind="project.name"></h5>
+    <h5 data-automation-id="listedProject" class="card-title mt-2 text-truncate" ng-bind="project.name"></h5>
     <p class="card-text" ng-bind="project.short"></p>
     <p ng-if="!vm.program && project.program" class="text-muted mb-0 text-truncate"><i class="fas fa-university"></i>
       {{project.program.title}}</p>

@@ -7,6 +7,7 @@ class CapabilitiesPage extends Page {
 	static content = {
 
         AddACapability{$("button",title:"New")}
+		CapabilityFirstEntry{$('data-automation-id':"lstCapabilityEntry",0)}
 
     }
 }

@@ -40,29 +40,42 @@ The test finish with each user logged off from BC Exchange and GitHub
  ''')
 
 @Title("User creates a Company")
-class UserCreatesCompany extends GebReportingSpec {         
+class UserCreatesCompany extends GebReportingSpec {
 
-            def CompareFileContents() {
+    def Boolean CheckIfReauthIsNeeded(){
+        if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+                println("Had to reauthorize Devex to access the GibHub account")
+                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+                sleep(2000)
+        }
+        else {
+                println("No need to reauthorize Devex to access the GibHub account")
+        }
+        return true
+    }         
 
-            File FilePath1=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
-            File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/rfq-sprint-with-us-company.pdf")
+    def CompareFileContents() {
 
-            FileInputStream fis1 = new FileInputStream(FilePath1)
-            FileInputStream fis2 = new FileInputStream(FilePath2)
-            try {
-                int byte1
-                while((byte1 = fis1.read())!=-1) {
-                    int byte2 = fis2.read()
-                    if(byte1!=byte2)return false
+        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
+        File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/rfq-sprint-with-us-company.pdf")
+
+        FileInputStream fis1 = new FileInputStream(FilePath1)
+        FileInputStream fis2 = new FileInputStream(FilePath2)
+        try {
+            int byte1
+            while((byte1 = fis1.read())!=-1) {
+                int byte2 = fis2.read()
+                if(byte1!=byte2)return false
                 }
-            } finally {
-                fis1.close()
-                fis2.close()
-                //Delete the just downloaded file. Useful when running lots of test one after the other
-                //The FileInputStream class does not have a delete method, so I need to use another class
-                def ftd=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
-                ftd.delete()
-            }
+            } 
+        finally {
+            fis1.close()
+            fis2.close()
+            //After comparing, delete the just downloaded file. Useful when running lots of test one after the other
+            //The FileInputStream class does not have a delete method, so I need to use another class
+            def ftd=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
+            ftd.delete()
+        }
 
             return true
       }
@@ -88,6 +101,10 @@ class UserCreatesCompany extends GebReportingSpec {
 		GitHubLogin.value("hugochibougamau")
 		GitHubPwd.value("Devex_Test1")
         GitHubSignInButton.click()
+        sleep(2000) //Leave time case the next page is the reauthorization page
+
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
         at HomePage //verify we are in the home page
@@ -193,6 +210,10 @@ def "Log as user '#Login' and join the newly created company" () {
 		GitHubLogin.value(Login)
 		GitHubPwd.value(Pwd)
         GitHubSignInButton.click()
+        sleep(2000) //Leave time case the next page is the reauthorization page
+
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "Once logged, go to Companies Page"
         waitFor {to CompaniesPage}
@@ -248,7 +269,10 @@ def "User Hugo, logs again and accept the request to join the Company from the t
 		GitHubLogin.value("hugochibougamau")
 		GitHubPwd.value("Devex_Test1")
         GitHubSignInButton.click()
+        sleep(2000) //Leave time case the next page is the reauthorization page
 
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
         waitFor{at HomePage} //verify we are in the home page
@@ -264,7 +288,7 @@ def "User Hugo, logs again and accept the request to join the Company from the t
         waitFor{at MessagesPage}
 
     and: "Open the drop down by clicking the top right icon"   
-        waitFor{$("img",'data-automation-id':"UserAvatarImage").click()}
+        AvatarImage.click()
 
     and: "Click on the newly created Company name that appears in the drop down"     
         waitFor{$("a", text: contains("Hugo and friend\'s Company")).click()}
