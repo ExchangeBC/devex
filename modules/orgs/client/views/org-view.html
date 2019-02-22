@@ -179,7 +179,7 @@
         <div ng-if="!vm.org.isAcceptedTerms">
           <p><i class="fas fa-exclamation-triangle danger"></i> To apply on <span class="font-italic">Sprint With Us</span> opportunities, you must agree to <a href="/terms/rfq1" target="_blank">the terms of the Request for Qualifications</a>.</p>
           <div class="d-flex align-items-center">
-            <button class="btn btn-primary mr-4" ng-click="vm.acceptTerms()">Accept</button>
+            <button class="btn btn-primary mr-4" data-automation-id="btnAccept" ng-click="vm.acceptTerms()">Accept</button>
             <div class="small text-muted">By clicking Accept, you are acknowledging that you have read, fully understand, and agree to all the terms, conditions and procedures.</div>
           </div>
         </div>
