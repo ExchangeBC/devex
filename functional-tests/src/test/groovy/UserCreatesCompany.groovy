@@ -132,12 +132,15 @@ class UserCreatesCompany extends GebReportingSpec {
         sleep(1000)
 
     and:"Open the second edit pop-up window that allows editing more fields"
-        WebElement element = driver.findElement(By.id("lblBusinessRegistration"))//These two lines move the cursor over one of the labels to make the Edit button visible
-        actions.moveToElement(element).build().perform()
-        waitFor{EditButtonRight.click()}
+        //WebElement element = driver.findElement(By.id("lblBusinessRegistration"))//These two lines move the cursor over one of the labels to make the Edit button visible
+        //actions.moveToElement(element).build().perform()
+        //waitFor{EditButtonRight.click()}
+        //assert element.@innerHTML="BC-123456789"
+        $('data-automation-id':"btnEdit_right").click()
+        sleep(1000)
 
     and: "First check the Registration number and Jurisdiction have been saved correctly"
-        waitFor{SaveCompanyOtherInformationBtn}
+        //waitFor{SaveCompanyOtherInformationBtn}
         assert BusinessNumber.value()=="BC-123456789"
         assert Jurisdiction.value()=="Vancouver Island and the Inlets"
 
