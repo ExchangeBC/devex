@@ -37,7 +37,7 @@
               <a ng-if="org.website" href="{{org.website}}" target="_blank" title="Visit website"><img class="rounded" width="36" height="36" src="{{ org.orgImageURL }}"></a>
               <img ng-if="!org.website" class="rounded border" width="36" height="36" src="{{ org.orgImageURL }}">
             </td>
-            <td class="company-name font-weight-bold text-truncate">{{ org.name }}</td>
+            <td class="company-name font-weight-bold text-truncate" data-automation-id="holderCompanyName">{{ org.name }}</td>
             <td class="member-count"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
             <td class="swu-status"><i ng-if="vm.hasOrgMetRFQ(org)" title="Sprint With Us Qualified" class="fas fa-certificate"></i></td>
             <!-- <td><i ng-if="org.awardedContractCount > 0" title="Sprint With Us Awardee" class="fas fa-trophy"></i></td> -->
