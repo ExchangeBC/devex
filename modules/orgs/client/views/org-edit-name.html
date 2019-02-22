@@ -26,14 +26,14 @@
 							<option>http://</option>
 							<option>https://</option>
 						</select>
-						<input class="form-control website-input col-8" type="text" placeholder="www.mycompany.org" ng-model="vm.org.websiteAddress" />
+						<input class="form-control website-input col-8" data-automation-id="inpCompanyWebAddress" type="text" placeholder="www.mycompany.org" ng-model="vm.org.websiteAddress" />
 					</div>
 				</form-display>
 			</fieldset>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-text-only" ng-click="vm.close()" aria-label="Close">Cancel</button>
-			<button type="button" ng-click="vm.save()" class="btn btn-primary">Save changes</button>
+			<button type="button" data-automation-id="btnSaveCompanyName" ng-click="vm.save()" class="btn btn-primary">Save changes</button>
 		</div>
 	</div>
 </form>
