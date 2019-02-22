@@ -289,7 +289,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
       "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"
   }
 
-   
+  /* 
         def cleanup(){
             to HomePage
             //I get the base URL to build (in the LoginModule) the URL to the admin icon
@@ -299,7 +299,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             def  logoffOK=login."Logout as administrator"(baseURL)
             assert logoffOK
         }
-
+*/
 
 
 }
