@@ -14,7 +14,7 @@ class OrgDetailsPage extends Page {
             EditButtonLeft{$("button",'data-automation-id':"btnEdit_left" )}
             EditButtonRight{$("button",'data-automation-id':"btnEdit_right" )}
 
-            AddWebsite{$("a",'data-automation-id':"lnkAddWebsite")}
+            AddWebsite{$('data-automation-id':"lnkAddWebsite")}
             BusinessRegistration{$("div",'data-automation-id':"lblBusinessRegistration")} //Note, this is a label, not an input entry field
 
             CompanyLegalName { $("input",id:"companyname") }
