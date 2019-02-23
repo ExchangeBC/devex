@@ -55,9 +55,10 @@ class UserDeletesProposal_Company extends GebReportingSpec {
 		GitHubLogin.value("hugochibougamau")
 		GitHubPwd.value("Devex_Test1")
         GitHubSignInButton.click()
+        sleep(1000)
 
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
-        at HomePage //verify we are in the home page
+        waitFor{at HomePage} //verify we are in the home page
         assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
 
     and: "Click on the Opportunities link to go to the opportunities page"

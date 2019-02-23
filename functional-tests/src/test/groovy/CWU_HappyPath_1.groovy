@@ -42,8 +42,10 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
       def CompareFileContents() {
             File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-            File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/code-with-us-terms.pdf")
-
+            //File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/code-with-us-terms.pdf")
+            File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/code-with-us-terms.pdf")
+println(FilePath1)
+println(FilePath2)
             FileInputStream fis1 = new FileInputStream(FilePath1)
             FileInputStream fis2 = new FileInputStream(FilePath2)
             try {
@@ -100,7 +102,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
   }
 
 
-  def "In this section the user logs, submits a proposal and then deletes it" () {
+  def "In this section the user logs, submits a proposal" () {
       given: "Starting with the Code with Us Page"
             waitFor{to CodewithusPage}
 
@@ -130,7 +132,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
       and: "Click on terms, to download the document that sets the terms and the legalese"
             DownloadTerms.click()
-            sleep(2000)//wait for document to download
+            sleep(5000)//wait for document to download
 
       then: "I check the downloaded document matches the one stored in this test"
             def  ComparisonOK = CompareFileContents()

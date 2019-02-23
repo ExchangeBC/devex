@@ -51,8 +51,8 @@ class SWU_HappyPath_1 extends GebReportingSpec {
         //flexible function will require very long input strings making it less readable
 
         File FilePath1=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
-        File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/"+fileNameToCompare)
-
+        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/"+fileNameToCompare)
+        
         FileInputStream fis1 = new FileInputStream(FilePath1)
         FileInputStream fis2 = new FileInputStream(FilePath2)
         try {
