@@ -23,6 +23,7 @@ declare global {
             message?: IMessageModel;
             template?: IMessageTemplateModel;
             profile?: IUserModel;
+            model?: IUserModel;
         }
     }
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import multer from 'multer';
@@ -8,7 +8,7 @@ import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import ProjectsServerController from '../../../projects/server/controllers/ProjectsServerController';
-import { IUserModel } from '../../../users/server/models/UserModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { IProgramModel, ProgramModel } from '../models/ProgramModel';
 
 class ProgramsServerController {
@@ -20,6 +20,8 @@ class ProgramsServerController {
 
 	private constructor() {
 		this.getMyAdminPrograms = this.getMyAdminPrograms.bind(this);
+		this.members = this.members.bind(this);
+		this.listMembers = this.listMembers.bind(this);
 	}
 
 	public async getMyAdminPrograms(req: Request, res: Response): Promise<void> {
@@ -35,28 +37,18 @@ class ProgramsServerController {
 				message: CoreServerErrors.getErrorMessage(error)
 			});
 		}
-	};
+	}
 
-	// -------------------------------------------------------------------------
-	//
 	// return a list of all program members. this means all members NOT
 	// including users who have requested access and are currently waiting
-	//
-	// -------------------------------------------------------------------------
-	public members = (program, cb) => {
-		mongoose
-			.model('User')
-			.find({ roles: this.memberRole(program) })
+	public async members(program: IProgramModel): Promise<IUserModel[]> {
+		return await UserModel.find({ roles: this.memberRole(program) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
-			.exec(cb);
-	};
+			.exec();
+	}
 
-	// -------------------------------------------------------------------------
-	//
 	// return a list of all users who are currently waiting to be added to the
 	// program member list
-	//
-	// -------------------------------------------------------------------------
 	public requests = (program, cb) => {
 		mongoose
 			.model('User')
@@ -108,12 +100,8 @@ class ProgramsServerController {
 		res.json(this.decorate(req.program, req.user ? req.user.roles : []));
 	};
 
-	// -------------------------------------------------------------------------
-	//
 	// update the document, make sure to apply audit. We don't mess with the
 	// code if they change the title as that would mean reworking all the roles
-	//
-	// -------------------------------------------------------------------------
 	public update = (req, res) => {
 		if (this.ensureAdmin(req.program, req.user, res)) {
 			const wasPublished = req.program.isPublished;
@@ -128,25 +116,6 @@ class ProgramsServerController {
 			// audit fields, but they get updated in the following step
 			//
 			const program = _.assign(req.program, req.body);
-			//
-			// determine what notify actions we want to send out, if any
-			// if not published, then we send nothing
-			//
-			let notificationCodes = [];
-			const doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
-			if (isPublished && !doNotNotify) {
-				if (wasPublished) {
-					//
-					// this is an update, we send both specific and general
-					//
-					notificationCodes = ['not-updateany-program', 'not-update-' + program.code];
-				} else {
-					//
-					// this is an add as it is the first time being published
-					//
-					notificationCodes = ['not-add-program'];
-				}
-			}
 
 			program.wasPublished = program.isPublished || program.wasPublished;
 			//
@@ -212,22 +181,17 @@ class ProgramsServerController {
 			});
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// this is the service front to the members call
-	//
-	// -------------------------------------------------------------------------
-	public listMembers = (req, res) => {
-		this.members(req.program, (err, users) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(users);
-			}
-		});
-	};
+	// Returns a list of members for the given program
+	public async listMembers(req: Request, res: Response): Promise<void> {
+		try {
+			const users = await this.members(req.program);
+			res.json(users);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -257,40 +221,34 @@ class ProgramsServerController {
 		res.json({ ok: true });
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// deal with members
-	//
-	// -------------------------------------------------------------------------
-	public confirmMember = (req, res) => {
+	// Confirm a member on the program
+	public async confirmMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProgramRequest(req.program, user);
 		this.setProgramMember(req.program, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
-	};
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
-	public denyMember = (req, res) => {
+	public async denyMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProgramRequest(req.program, user);
 		this.unsetProgramMember(req.program, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
-	};
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -302,50 +260,42 @@ class ProgramsServerController {
 		res.json(p);
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// magic that populates the program on the request
-	//
-	// -------------------------------------------------------------------------
-	public programByID = (req, res, next, id) => {
+	// Get a program by ID
+	public async programByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		let queryObject: any;
 		if (id.substr(0, 3) === 'pro') {
-			ProgramModel.findOne({ code: id })
-				.populate('createdBy', 'displayName')
-				.populate('updatedBy', 'displayName')
-				.exec((err, program) => {
-					if (err) {
-						return next(err);
-					} else if (!program) {
-						return res.status(404).send({
-							message: 'No program with that identifier has been found'
-						});
-					}
-					req.program = program;
-					next();
-				});
+			queryObject = { code: id };
 		} else {
 			if (!mongoose.Types.ObjectId.isValid(id)) {
-				return res.status(400).send({
+				res.status(400).send({
 					message: 'Program is invalid'
 				});
+			} else {
+				queryObject = { _id: id };
 			}
+		}
 
-			ProgramModel.findById(id)
+		try {
+			const program = await ProgramModel.findOne(queryObject)
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
-				.exec((err, program) => {
-					if (err) {
-						return next(err);
-					} else if (!program) {
-						return res.status(404).send({
-							message: 'No program with that identifier has been found'
-						});
-					}
-					req.program = program;
-					next();
+				.exec();
+
+			if (!program) {
+				res.status(404).send({
+					message: 'No program with that identifier has been found'
 				});
+			} else {
+				req.program = program;
+				next();
+			}
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
 		}
-	};
+	}
+
 	// -------------------------------------------------------------------------
 	//
 	// Logo upload

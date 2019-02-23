@@ -42,7 +42,6 @@ import '../css/projects.css';
 				//
 				var isUser = authenticationService.user;
 				var isAdmin = isUser && !!~authenticationService.user.roles.indexOf('admin');
-				var isGov = isUser && !!~authenticationService.user.roles.indexOf('gov');
 				var isMemberOrWaiting = project.userIs.member || project.userIs.request;
 				vm.isAdmin = isAdmin;
 				vm.loggedIn = isUser;

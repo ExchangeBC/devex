@@ -144,25 +144,6 @@ class ProjectsServerController {
 			// audit fields, but they get updated in the following step
 			//
 			const project = _.assign(req.project, req.body);
-			//
-			// determine what notify actions we want to send out, if any
-			// if not published, then we send nothing
-			//
-			let notificationCodes = [];
-			const doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
-			if (isPublished && !doNotNotify) {
-				if (wasPublished) {
-					//
-					// this is an update, we send both specific and general
-					//
-					notificationCodes = ['not-updateany-project', 'not-update-' + project.code];
-				} else {
-					//
-					// this is an add as it is the first time being published
-					//
-					notificationCodes = ['not-add-project'];
-				}
-			}
 
 			project.wasPublished = project.isPublished || project.wasPublished;
 
