@@ -27,12 +27,9 @@ class ProjectsRouter {
 			.put(ProjectsController.update)
 			.delete(ProjectsController.delete);
 
-		app.route('/api/my/projects')
-			.all(ProjectsPolicy.isAllowed)
-			.get(ProjectsController.my);
 		app.route('/api/myadmin/projects')
 			.all(ProjectsPolicy.isAllowed)
-			.get(ProjectsController.myadmin);
+			.get(ProjectsController.getMyAdminProjects);
 
 		//
 		// projects for program

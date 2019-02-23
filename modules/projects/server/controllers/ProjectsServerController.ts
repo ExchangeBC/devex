@@ -1,5 +1,6 @@
 'use strict';
 
+import { Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
@@ -13,42 +14,23 @@ class ProjectsServerController {
 
 	private static instance: ProjectsServerController;
 
-	private constructor() {}
+	private constructor() {
+		this.getMyAdminProjects = this.getMyAdminProjects.bind(this);
+		this.getSearchTerm = this.getSearchTerm.bind(this);
+	}
 
-	// -------------------------------------------------------------------------
-	//
-	// get a list of all my projects, but only ones I have access to as a normal
-	// member or admin, just not as request
-	//
-	// -------------------------------------------------------------------------
-	public my = (req, res) => {
-		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
-		const search = me.isAdmin ? {} : { code: { $in: me.projects.member } };
-		ProjectModel.find(search)
-			.select('code name short')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(projects);
-				}
+	public async getMyAdminProjects(req: Request, res: Response): Promise<void> {
+		try {
+			const myProjects = await ProjectModel.find(this.getSearchTerm(req, {}))
+				.populate('program', 'code title short logo')
+				.select('code name short program')
+				.exec();
+			res.json(myProjects);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
-	public myadmin = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, {}))
-			.populate('program', 'code title short logo')
-			.select('code name short program')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(projects);
-				}
-			});
+		}
 	};
 	// -------------------------------------------------------------------------
 	//
@@ -193,7 +175,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public list = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, {}))
+		ProjectModel.find(this.getSearchTerm(req, {}))
 			.sort('activity name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -295,7 +277,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public getProjectForPrograms = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, { program: req.program._id }))
+		ProjectModel.find(this.getSearchTerm(req, { program: req.program._id }))
 			.sort('name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -454,7 +436,7 @@ class ProjectsServerController {
 		});
 	};
 
-	private searchTerm = (req, opts) => {
+	private getSearchTerm(req: Request, opts: any): any {
 		opts = opts || {};
 		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {

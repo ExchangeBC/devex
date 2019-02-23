@@ -24,11 +24,6 @@
         method: 'GET',
         url :'/api/request/project/:projectId'
       },
-      my: {
-        method: 'GET',
-        url: '/api/my/projects',
-        isArray: true
-      },
       myadmin: {
         method: 'GET',
         url: '/api/myadmin/projects',
