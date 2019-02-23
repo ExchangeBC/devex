@@ -57,8 +57,8 @@ class UserCreatesCompany extends GebReportingSpec {
     def CompareFileContents() {
 
         File FilePath1=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
-        File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/rfq-sprint-with-us-company.pdf")
-
+        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/rfq-sprint-with-us-company.pdf")
+        
         FileInputStream fis1 = new FileInputStream(FilePath1)
         FileInputStream fis2 = new FileInputStream(FilePath2)
         try {
