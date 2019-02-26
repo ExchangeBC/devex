@@ -45,12 +45,12 @@
       <!-- Business info -->
       <div ng-if="vm.isOrgMember() || vm.isAdmin()" class="col col-xs-12 my-3">
         <div class="hover-area d-flex align-items-start">
-          <div class="company-contact">
+          <div  class="company-contact">
             <div>{{vm.org.address}}</div>
-            <div class="mb-3">{{vm.org.city}} {{vm.org.postalcode}}</div>
+            <div  data-automation-id="lblBusinessCityPostalCode" class="mb-3">{{vm.org.city}} {{vm.org.postalcode}}</div>
             <div data-automation-id="lblBusinessRegistration" id="lblBusinessRegistration" class="mb-3"><span class="text-muted">Business Registration No.:</span> {{vm.org.businessNumber}}</div>
             <div class="text-muted">Company Contact:</div>
-            <div>{{vm.org.contactName}}</div>
+            <div data-automation-id="lblBusinessContactName">{{vm.org.contactName}}</div>
             <div>{{vm.org.contactPhone}}</div>
             <div>{{vm.org.contactEmail}}</div>
           </div>

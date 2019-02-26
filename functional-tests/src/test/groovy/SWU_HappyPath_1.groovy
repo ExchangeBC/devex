@@ -66,7 +66,7 @@ class SWU_HappyPath_1 extends GebReportingSpec {
             fis2.close()
             //Delete the just downloaded file. Useful when running lots of test one after the other
             //The FileInputStream class does not have a delete method, so I need to use another class
-            def ftd=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+            def ftd=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
             ftd.delete()
         }
 
@@ -74,15 +74,14 @@ class SWU_HappyPath_1 extends GebReportingSpec {
     }
 
     boolean MoveTo(int x,int y){
-    //def MoveTo(){
         int XCoor=x
         int YCoor=y
         js.exec('window.scrollTo('+  XCoor +','+ YCoor +');')
         return true
     }
 
-    //We make sure we are not logged as admin
-    def startup() {
+
+    def startup() {//We make sure we are not logged as admin
         waitFor{to HomePage}
         //I get the base URL to build (in the LoginModule) the URL to the admin icon
         def baseURL = getBrowser().getConfig().getBaseUrl().toString()
@@ -128,8 +127,6 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
         def MyCurrentURL=getCurrentUrl() //Should be the URL for the opportunity page
         //The following line createe the URL to access the specific opportunity
         def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-        println("${OppTitle} " )
-        println("${OppURL} " )
         FirstListedOpportunity.click()
         sleep(2000)
 
@@ -187,9 +184,6 @@ def "User authenticates and navigates to the proposal to start filling it" () {
         def MyCurrentURL=getCurrentUrl() //URL opportunity page
         //The following is to create from the opp title the URL
         def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-        println("${OppTitle} " )
-        println("${OppURL} " )
-
         FirstListedOpportunity.click()  //Same opportunity as before
         sleep(1000)
         def NewURL=getCurrentUrl() //This is the specific opportunity URL
@@ -198,7 +192,6 @@ def "User authenticates and navigates to the proposal to start filling it" () {
         assert NewURL==OppURL  //OppURL was defined before. This step is a bit paranoid, and may be deleted
 
     when: "Click on Start a proposal button"
-        println("URL line 188 is ${driver.currentUrl}"  )
         OppURL_global=driver.currentUrl   //Save to a global variable. It is the Opportunity URL that will be used in the following tests
         waitFor{$("button",0, id:"proposaladmin.create").click()}
         sleep(1000)
