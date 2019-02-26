@@ -162,7 +162,7 @@ class UserCreatesCompany extends GebReportingSpec {
         Province.value("British Columbia")
         PostalCode.value("V1V 2L2")
 
-        ContactName.value("Hugo Chibougmaiu")
+        ContactName.value("Hugo Chibougmaiu")  //spelling mistake to be corrected later
         ContactPhone.value("250 200 1234")
         ContactEmail.value("hugo@fakeaddress.ca")
 
@@ -321,6 +321,66 @@ def "User Hugo, logs again and accept the request to join the Company from the t
         waitFor{SignOutGit}
         SignOutGit.click()
   }
+
+    def "User Hugo Chibougamau updates the Company Info" () {
+        def actions = new Actions(driver)
+    
+        given: "Starting from the Home Page"
+           waitFor {to HomePage}
+
+        when: "Click on the Sign In  link to go to the Authentication page"
+          SigninLink //The definition for this element includes a Click
+         at AuthenticationSigninPage 
+
+        and: "Click on the: 'Sign in with you GitHub account'"
+            SignInButton.click()
+
+        and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
+            at GitHubSignInPage
+        
+            waitFor{GitHubSignInButton} //If this element is present the page has loaded
+		    GitHubLogin.value("hugochibougamau")
+		    GitHubPwd.value("Devex_Test1")
+            GitHubSignInButton.click()
+            sleep(2000) //Leave time case the next page is the reauthorization page
+
+
+        and:"If redirected to the reauthorization page, click to reauthorize"    
+            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
+
+        then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
+            waitFor{at HomePage} //verify we are in the home page
+            sleep(3000) //The icons take a little time to appear
+            assert AvatarImage  //Verify the avatar image is present. In the future I may check the image is correct
+
+        and: "Open the drop down by clicking the top right icon"   
+            AvatarImage.click()
+
+        and: "Click on the newly created Company name that appears in the drop down"     
+            waitFor{$("a", text: contains("Hugo and friend\'s Company")).click()}
+
+        then:"It bring us to the page that defines the new company. "   
+            waitFor{at OrgDetailsPage}
+
+        then: "There we click over the company info to make the edit button visible"
+            waitFor{$('data-automation-id':"lblBusinessRegistration" )}//I use this element because I already had wrote a label for it
+            $('data-automation-id':"lblBusinessRegistration" ).click()
+            sleep(1000)
+
+        and: "After the edit button becames visible, I click on it"
+            $("button",'data-automation-id':"btnEdit_right" ).click() 
+            sleep(1000)
+
+        and: "Change some values"  
+            City.value("Malcom Island") 
+            ContactName.value("Hugo Chibougamau")  //Correcting the spelling mistake
+            SaveCompanyOtherInformationBtn.click()
+            sleep(1000) //There is an angular animation and I prefer is gone before proceeding
+
+        expect: "Verify the changes have took effect"
+            assert  $("div",'data-automation-id':"lblBusinessCityPostalCode" ).text()=="Malcom Island V1V 2L2"
+            assert  $("div",'data-automation-id':"lblBusinessContactName"  ).text()=="Hugo Chibougamau"
+    }
 
 
         def teardown(){

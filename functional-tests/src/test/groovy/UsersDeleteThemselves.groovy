@@ -11,9 +11,7 @@ import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
 
-
 @Narrative('''In this test, the three users created in the previous tests will log and delete their own profile from the system''')
-
 
 @Title("Users delete themselves from the system")
 class UsersDeleteThemselves extends GebReportingSpec {

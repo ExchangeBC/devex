@@ -1,11 +1,13 @@
 //package com.athaydes.spockframework.report
 import geb.spock.GebReportingSpec
+import geb.module.*
 
 import pages.app.HomePage
 import pages.app.AuthenticationSigninPage
 import pages.app.InitialCWUProposalPage
 import pages.app.CodewithusPage
 import pages.app.GitHubPage_ReadGuide
+import pages.app.GitHubSignInPage
 import pages.app.OpportunitiesPage
 import pages.app.SettingsProfilePage
 
@@ -20,8 +22,9 @@ import spock.lang.Narrative
 import spock.lang.Title
 
 
-@Narrative('''In this test, the user 'HugoChibougamau' logs into the system and  presents a CWU
-proposal.
+@Narrative('''In this test, the user 'HugoChibougamau' logs into the system and creates a CWU proposal
+and saves it. Later it updates the proposal and submits it. Finally, Hugo logs again to check the information 
+was submitted has been correctly saved.
  ''')
 
 @Stepwise
@@ -42,10 +45,8 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
       def CompareFileContents() {
             File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-            //File FilePath2=new File(System.getProperty('user.home')+"/Feina/Contractes/BCDEVEX/devex/functional-tests/src/test/resources/code-with-us-terms.pdf")
             File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/code-with-us-terms.pdf")
-println(FilePath1)
-println(FilePath2)
+
             FileInputStream fis1 = new FileInputStream(FilePath1)
             FileInputStream fis2 = new FileInputStream(FilePath2)
             try {
@@ -119,8 +120,6 @@ println(FilePath2)
             def MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-            println("${OppTitle} " )
-            println("${OppURL} " )
             FirstListedOpportunity.click()
             sleep(1000)
 
@@ -162,7 +161,6 @@ println(FilePath2)
             def AdminIconLocation = 'https://avatars1.githubusercontent.com/u/46409451?v=4' //This is the default icon for a logged user
             assert $("img",src:"${AdminIconLocation}")
 
-
       and: "Click the Browse Opportunities button"
             BrowseOpportunities.click()
 
@@ -175,19 +173,15 @@ println(FilePath2)
             MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-            println("${OppTitle} " )
-            println("${OppURL} " )
             FirstListedOpportunity.click()
-            sleep(100)
-
+            sleep(2000)//Give time to navigate to the new specific opp
             NewURL=getCurrentUrl() //This is the specific opportunity URL
-
+            
       then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
-            sleep(1000)
 
       and: "Click on Start a proposal button"
-            $("button",0, id:"proposaladmin.create").click()
+            $("button",id:"proposaladmin.create",0).click()
             sleep(1000)
 
       then: " Arrive to the page that allows to submit a proposal"
@@ -199,13 +193,15 @@ println(FilePath2)
       and: "Confirm the attachment tab is not even present "
             assert(!AttachmentTab.displayed)
 
-      and: "Click the Terms tab to accept the terms"
+      and: "Click the Terms tab"
             TermsTab.click()
+
+      and: "Accept the terms. If not accepted we can not submit"
             CheckTerms.click()
 
       and: "Save this first draft"
             ButtonSaveChanges.click()
-            sleep(1000)
+            sleep(2000) //to give time to tha angular message to appear and dissappear
 
       then: "Check the Attachment tab is present"
             assert(AttachmentTab.displayed)
@@ -218,15 +214,97 @@ println(FilePath2)
             waitFor{at InitialCWUProposalPage}
             sleep(1000)
             ProposalTab.click()  
-            println("Line 246 before waiting for the Proposal Description Box")
+            println("Line 219 before waiting for the Proposal Description Box")
             waitFor{ProposalDescriptionBox}
             //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             withFrame(ProposalDescriptionBox){$("body", id:"tinymce") << 'Les Nenes Maques'}
+            sleep(2000) //Not sure why, but without this delay the text is not properly saved
 
       then: "End by saving this draft"
-            waitFor{ButtonSaveChanges.click()}
+            waitFor{ButtonSaveChanges}
+            ButtonSaveChanges.click()
+            sleep(2000) //to give time to tha angular message to appear and dissappear
 
   }
+
+
+  def "In this section the user updates the previous proposal" () {
+      given: "Starting from the Home Page"
+            waitFor {to HomePage}
+            sleep(1000)
+            //Note: in the context of this test, the User Hugo is already logged as we didn't log out in the
+            //previous feature, so no need to Authenticate again
+
+      and: "Go to the opportunities page"
+            OpportunitiesNavBar //It includes the 'click'
+
+      when: "At the Opportunities page"
+            waitFor{at OpportunitiesPage}
+ 
+      and: "I click on the first opportunity listed on the page"
+            FirstListedOpportunity.click()
+            sleep(1000)
+
+      and: "Arrive at the page that allows to edit the proposal"
+            waitFor{at InitialCWUProposalPage}
+
+      then: "Click on 'Update My Proposal'"
+            UpdateMyProposalLnk.click()
+            sleep(1000)
+
+      and: "Click on the 'Payment can be made to a company checkbox'"     
+            IsCompanyCheckBox.click() 
+
+      and: "Now the Company tab is visible and we navigate to it"  
+            waitFor{ CompanyTab }
+            CompanyTab.click()
+            sleep(1000)
+
+      and: "Update a couple elements"  
+            waitFor{BusinessAddress}    
+            BusinessAddress.value("456 Lower Ganges Road")
+            BusinessContactPhone.value("250 765 4321")
+
+      then: "Save the changes"  
+            waitFor{SaveChangesButton}
+            SaveChangesButton.click()
+            sleep(1000)
+      
+      and: "Submit the proposal"
+            SubmitProposal.click()
+            sleep(1000)
+  }
+
+
+  def "In this section we verify the previous entries and changes have been saved" () {
+      given: "Starting from the Opportunities page"
+            waitFor{at OpportunitiesPage}
+ 
+      and: "I click on the first opportunity listed on the page"
+            FirstListedOpportunity.click()
+            sleep(1000)
+
+      and: "Arrive at the page that allows to edit the proposal"
+            waitFor{at InitialCWUProposalPage}
+
+      when: "Click on 'Update My Proposal'"
+            UpdateMyProposalLnk.click()
+            sleep(1000)
+
+      then: "We start at the 'Developer' tab. We check a couple fields"
+            assert FirstName.value()=='Hugo'
+            assert Email.value()=='hugochibougamau@editedfakeaddress.ca'
+
+      and: "Navigate to the Company tab"  
+            waitFor{ CompanyTab }
+            CompanyTab.click()
+            sleep(1000)
+
+      then: "Check a couple elements"     
+            assert BusinessAddress.value()=="456 Lower Ganges Road"
+            assert BusinessContactPhone.value()=="250 765 4321"
+  }
+
 
         def teardown(){//Logoff as user
             waitFor{to HomePage}

@@ -21,10 +21,10 @@ As for February 2019 the coverage is the following:
 			Check the administrator can not create projects with Invalid names
 	
 	CreateUsers.groovy
-			Three users (already existing in GitHub) register themselves into the BCDevExchange system
+			Three users (already existing in GitHub) register themselves into the BCDevExchange system. The last feature checks a user is able to update his profile.
 
 	CWU_HappyPath_1.groovy
-			One user creates and submit a CWU proposal	
+			One user creates and submit a CWU proposal, then updates it. The final step check the info has been correctly saved.	
 
 	UserCreatesCompany.groovy
 			One user creates a company. Two different users request to be added to the company. Company creator accepts one request and rejects the second.
@@ -72,10 +72,23 @@ The previous command will run the test using Chrome. Currently the system is onl
 
 	⁨.../devex⁩/functional-tests⁩/src⁩/test⁩/resources/GebConfig.groovy
 
-However, this suite is fully tested using Chrome, but I have run into problems using the other options. In the case of Firefox there is a couple bugs in the code that prevents to proceed (bugs that do not show up in Chrome). Another problem i have found is that chromeHeadless can't download files (the reported bug can be checked at https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver. You can also read the discussions  in https://github.com/TheBrainFamily/chimpy/issues/108 and https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver)
+You will find that ./TestSuite.sh contains entries for browsers other than Chrome, albeit they are commented out. This is because ./TestSuite.sh is fully tested using Chrome, but I have run into problems using the other options:
+
+
+Firefox: There are a couple bugs in the code that prevents to proceed (bugs that do not show up in Chrome).
+		In addition, it looks like Firefox does not like some of the waitFor{} and is happier with longer sleep(). I have not got very deep due the mentioned bugs in the code
+		(the bug shows when Publishing a Program, it calls a unsafe:javascript:void(0); and Firefox stops)
+
+Safari: Same bugs as in Firefox. I have not tried further
+
+ChromeHeadless: It can't download files (the reported bug can be checked at 
+		https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver. You can also read the discussions  in https://github.com/TheBrainFamily/chimpy/issues/108 and 
+		
+		https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver)
+
+
 
 Do not be tempted to run all the test with the following command
-
     ./gradlew Test
 
 the reason is the tests need to be run in order, so any alteration of the order will generated errors.

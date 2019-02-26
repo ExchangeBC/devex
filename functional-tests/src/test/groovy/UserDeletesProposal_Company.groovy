@@ -6,19 +6,12 @@ import pages.app.AuthenticationSigninPage
 import pages.app.CompaniesPage
 import pages.app.GitHubPage
 import pages.app.GitHubSignInPage
-
 import pages.app.OpportunitiesPage
-
-
-
-
-
 
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
 import spock.lang.Stepwise
-
 
 import org.openqa.selenium.Keys
 import org.openqa.selenium.WebElement
@@ -26,7 +19,6 @@ import org.openqa.selenium.By
 import org.openqa.selenium.interactions.Actions
 
 @Stepwise
-
 
 @Narrative('''In this test, the already existing user 'HugoChibougamau' will delete one SWU proposal and then
 will delete a CWU proposal -created by the user in previous tests- 
@@ -131,10 +123,8 @@ class UserDeletesProposal_Company extends GebReportingSpec {
     and:" We move to the Proposal Edit Page and click on the 'Delete this Proposal' -in the shape of a garbage bin-"
         waitFor{$("button",'data-automation-id':"button-cwu-proposal-delete").click()}
 
-
     then: "A modal window appears. Click on the Yes button"    
         waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
-
 
     expect:"Returns to the same opportunity page, but this time showing the 'Star a Proposal' button "
         assert waitFor{$("button",id:"proposaladmin.create")}
