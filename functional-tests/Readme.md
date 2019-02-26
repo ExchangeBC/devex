@@ -122,6 +122,16 @@ These components are <Iframes> element nested inside several <div> element. If a
 Gecko version is set in build.gradle, you do not need to install Gecko on your box, Gradle download it for you, but still need to indicate the version of Gecko you want to use.
 
 
+- The file build.gradle contains the versions used in this test suite.
+In addition, the version of other important components is
+	java version 
+		"11.0.1" 2018-10-16 LTS
+
+	gradle version
+		v5.0
+
+	node version
+		v8.15.0
 
 
 ## Useful Links:
