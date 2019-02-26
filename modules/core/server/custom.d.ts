@@ -10,6 +10,7 @@ import { ICapabilitySkillModel } from "../../capabilities/server/models/Capabili
 import { IMessageModel } from "../../messages/server/models/MessageModel";
 import { IMessageTemplateModel } from "../../messages/server/models/MessageTemplateModel";
 import { IUserModel } from "../../users/server/models/UserModel";
+import { IProjectModel } from "../../projects/server/models/ProjectModel";
 
 declare global {
     namespace Express {
@@ -17,6 +18,7 @@ declare global {
             opportunity?: IOpportunityModel;
             proposal?: IProposalModel;
             program?: IProgramModel;
+            project?: IProjectModel;
             org?: IOrgModel;
             capability?: ICapabilityModel;
             capabilitySkill?: ICapabilitySkillModel;

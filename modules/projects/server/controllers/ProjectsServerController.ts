@@ -1,10 +1,11 @@
 'use strict';
 
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
 import mongoose from 'mongoose';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { IProjectModel, ProjectModel } from '../models/ProjectModel';
 
 class ProjectsServerController {
@@ -17,6 +18,10 @@ class ProjectsServerController {
 	private constructor() {
 		this.getMyAdminProjects = this.getMyAdminProjects.bind(this);
 		this.getSearchTerm = this.getSearchTerm.bind(this);
+		this.update = this.update.bind(this);
+		this.members = this.members.bind(this);
+		this.listMembers = this.listMembers.bind(this);
+		this.getProjectForPrograms = this.getProjectForPrograms.bind(this);
 	}
 
 	public async getMyAdminProjects(req: Request, res: Response): Promise<void> {
@@ -31,20 +36,18 @@ class ProjectsServerController {
 				message: CoreServerErrors.getErrorMessage(error)
 			});
 		}
-	};
+	}
 	// -------------------------------------------------------------------------
 	//
 	// return a list of all project members. this means all members NOT
 	// including users who have requested access and are currently waiting
 	//
 	// -------------------------------------------------------------------------
-	public members = (project, cb) => {
-		mongoose
-			.model('User')
-			.find({ roles: this.memberRole(project) })
+	public async members(project: IProjectModel): Promise<IUserModel[]> {
+		return await UserModel.find({ roles: this.memberRole(project) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
-			.exec(cb);
-	};
+			.exec();
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -106,48 +109,30 @@ class ProjectsServerController {
 		res.json(this.decorate(req.project, req.user ? req.user.roles : []));
 	};
 
-	// -------------------------------------------------------------------------
-	//
 	// update the document, make sure to apply audit. We don't mess with the
 	// code if they change the name as that would mean reworking all the roles
-	//
-	// -------------------------------------------------------------------------
-	public update = (req, res) => {
+	public async update(req: Request, res: Response): Promise<void> {
 		if (this.ensureAdmin(req.project, req.user, res)) {
-			const wasPublished = req.project.isPublished;
-			const isPublished = req.body.isPublished;
-			// if (!wasPublished && isPublished) {
-			// 	this.opportunitiesController.rePublishOpportunities(req.project.program._id, req.project._id);
-			// } else if (wasPublished && !isPublished) {
-			// 	this.opportunitiesController.unPublishOpportunities(req.project.program._id, req.project._id);
-			// }
-			//
 			// copy over everything passed in. This will overwrite the
 			// audit fields, but they get updated in the following step
-			//
 			const project = _.assign(req.project, req.body);
-
 			project.wasPublished = project.isPublished || project.wasPublished;
 
-			//
+			const newProjectInfo = req.body;
+
 			// set the audit fields so we know who did what when
-			//
 			CoreServerHelpers.applyAudit(project, req.user);
-			//
-			// save
-			//
-			project.save(err => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					project.link = 'https://' + (process.env.DOMAIN || 'localhost') + '/projects/' + project.code;
-					res.json(this.decorate(project, req.user ? req.user.roles : []));
-				}
-			});
+
+			try {
+				const updatedProject = await ProjectModel.findOneAndUpdate({ _id: req.project._id }, newProjectInfo, { new: true });
+				res.json(this.decorate(updatedProject, req.user ? req.user.roles : []));
+			} catch (error) {
+				res.status(422).send({
+					message: CoreServerErrors.getErrorMessage(error)
+				});
+			}
 		}
-	};
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -191,22 +176,17 @@ class ProjectsServerController {
 			});
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// this is the service front to the members call
-	//
-	// -------------------------------------------------------------------------
-	public listMembers = (req, res) => {
-		this.members(req.project, (err, users) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(users);
-			}
-		});
-	};
+	// Returns a list of members for the given project
+	public async listMembers(req: Request, res: Response): Promise<void> {
+		try {
+			const users = await this.members(req.project);
+			res.json(users);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -236,60 +216,49 @@ class ProjectsServerController {
 		res.json({ ok: true });
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// deal with members
-	//
-	// -------------------------------------------------------------------------
-	public confirmMember = (req, res) => {
+	// Confirm a member as belonging to the project
+	public async confirmMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProjectRequest(req.project, user);
 		this.setProjectMember(req.project, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
-	public denyMember = (req, res) => {
+	public async denyMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProjectRequest(req.project, user);
 		this.unsetProjectMember(req.project, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// get projects under program
-	//
-	// -------------------------------------------------------------------------
-	public getProjectForPrograms = (req, res) => {
-		ProjectModel.find(this.getSearchTerm(req, { program: req.program._id }))
+	// Get projects for a given program
+	public async getProjectForPrograms(req: Request, res: Response): Promise<void> {
+		try {
+			const projects = await ProjectModel.find(this.getSearchTerm(req, { program: req.program._id }))
 			.sort('name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(this.decorateList(projects, req.user ? req.user.roles : []));
-				}
+			.exec();
+			res.json(this.decorateList(projects, req.user ? req.user.roles : []));
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
+		}
 	};
 
 	// -------------------------------------------------------------------------
@@ -302,52 +271,42 @@ class ProjectsServerController {
 		res.json(p);
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// magic that populates the project on the request
-	//
-	// -------------------------------------------------------------------------
-	public projectByID = (req, res, next, id) => {
+	// Get a project by ID
+	public async projectByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		let queryObject: any;
 		if (id.substr(0, 3) === 'prj') {
-			ProjectModel.findOne({ code: id })
-				.populate('createdBy', 'displayName')
-				.populate('updatedBy', 'displayName')
-				.populate('program', 'code title logo isPublished')
-				.exec((err, project) => {
-					if (err) {
-						return next(err);
-					} else if (!project) {
-						return res.status(404).send({
-							message: 'No project with that identifier has been found'
-						});
-					}
-					req.project = project;
-					next();
-				});
+			queryObject = { code: id };
 		} else {
 			if (!mongoose.Types.ObjectId.isValid(id)) {
-				return res.status(400).send({
+				res.status(400).send({
 					message: 'Project is invalid'
 				});
+			} else {
+				queryObject = { _id: id };
 			}
+		}
 
-			ProjectModel.findById(id)
+		try {
+			const project = await ProjectModel.findOne(queryObject)
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
 				.populate('program', 'code title logo isPublished')
-				.exec((err, project) => {
-					if (err) {
-						return next(err);
-					} else if (!project) {
-						return res.status(404).send({
-							message: 'No project with that identifier has been found'
-						});
-					}
-					req.project = project;
-					next();
+				.exec();
+
+			if (!project) {
+				res.status(404).send({
+					message: 'No project with that identifier has been found'
 				});
+			} else {
+				req.project = project;
+				next();
+			}
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
 		}
-	};
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -443,7 +402,7 @@ class ProjectsServerController {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.projects.admin } }];
 		}
 		return opts;
-	};
+	}
 
 	// -------------------------------------------------------------------------
 	//
