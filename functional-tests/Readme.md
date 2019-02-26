@@ -5,6 +5,7 @@
 Automated functional test suite for the https://www.bcdevexchange.org/ microprocurement application. 
 
 As for February 2019 the coverage is the following:
+	
 	CompanyLoginValidationSpec.groovy
 			Validate that unauthenticated users don't have a 'register company' button but authenticated users do.
 
