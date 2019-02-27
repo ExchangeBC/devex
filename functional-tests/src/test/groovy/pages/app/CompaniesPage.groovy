@@ -12,10 +12,10 @@ class CompaniesPage extends Page {
 
 	static content = {
     	RegisterCompanyButton { $("button",'data-automation-id':"button-register-a-company") }
-		NewCompany{$("td",'data-automation-id':"holderCompanyName")} //first element of the table
+		NewCompany{$("td",'id':"holderCompanyName")} //first element of the table
 		JoinCompanyButton { $("button",'data-automation-id':"btnJoinCompany") }
 		YesButton { $("button",'data-automation-id':"button-modal-yes") }
-		PendingLbl{$(By.xpath('//*[@id="page-top"]/main/ui-view/section/div/org-list/div[3]/table/tbody/tr/td[5]/div/button'))}
+		PendingLbl{ $("button", 'data-automation-id':"pendingLabel") }
 
   }
 }
