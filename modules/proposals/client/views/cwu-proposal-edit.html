@@ -18,7 +18,7 @@
         <p><span class="strong"><i class="fas fa-file"></i> This Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
           <strong><span ng-bind="ppp.formatDate(ppp.opportunity.deadline, true)"></span></strong>
           to be considered for this opportunity!</p>
-        <p class="alert alert-danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your Proposal, you
+        <p data-automation-id="mustAgreeTermsWarning" class="alert alert-danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your Proposal, you
           must agree to
           the Terms.</p>
       </div>

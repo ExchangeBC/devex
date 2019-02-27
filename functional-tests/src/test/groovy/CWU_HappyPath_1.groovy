@@ -186,6 +186,9 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
       then: " Arrive to the page that allows to submit a proposal"
             waitFor{at InitialCWUProposalPage}
+
+      and: "Enter a value in the address field"
+            Address.value("999 Rainbow Road")
     
       and: "Confirm the Company tab is present but disabled"
             assert !$(('a[class~= "nav-link ng-binding disabled"]'),0).empty()
@@ -193,15 +196,18 @@ class CWU_HappyPath_1 extends GebReportingSpec {
       and: "Confirm the attachment tab is not even present "
             assert(!AttachmentTab.displayed)
 
+      and: "User saves this first draft"
+            ButtonSaveChanges.click()
+            sleep(2000) //to give time to tha angular message to appear and dissappear
+
+      and: "Because terms are not accepted, check there is warning message to the user indicating it can not be submitted"
+            assert MustAgreeTermsMsg.text().contains("Before you can submit your Proposal, you must agree to the Terms.")
+
       and: "Click the Terms tab"
             TermsTab.click()
 
       and: "Accept the terms. If not accepted we can not submit"
             CheckTerms.click()
-
-      and: "Save this first draft"
-            ButtonSaveChanges.click()
-            sleep(2000) //to give time to tha angular message to appear and dissappear
 
       then: "Check the Attachment tab is present"
             assert(AttachmentTab.displayed)
@@ -214,7 +220,8 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             waitFor{at InitialCWUProposalPage}
             sleep(1000)
             ProposalTab.click()  
-            println("Line 219 before waiting for the Proposal Description Box")
+            
+      and: "Enter text in the description box"      
             waitFor{ProposalDescriptionBox}
             //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             withFrame(ProposalDescriptionBox){$("body", id:"tinymce") << 'Les Nenes Maques'}
@@ -278,9 +285,11 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
   def "In this section we verify the previous entries and changes have been saved" () {
       given: "Starting from the Opportunities page"
-            waitFor{at OpportunitiesPage}
+            waitFor{to OpportunitiesPage}
+            sleep(1000)
  
       and: "I click on the first opportunity listed on the page"
+            waitFor{FirstListedOpportunity}
             FirstListedOpportunity.click()
             sleep(1000)
 
@@ -300,9 +309,20 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             CompanyTab.click()
             sleep(1000)
 
-      then: "Check a couple elements"     
+      then: "Check another couple elements in the Company tab"     
             assert BusinessAddress.value()=="456 Lower Ganges Road"
             assert BusinessContactPhone.value()=="250 765 4321"
+
+      and: "Navigate to the Proposal tab"  
+            waitFor{ProposalTab  }
+            ProposalTab .click()
+            sleep(1000)
+
+      then: "Check the description element in the Proposal tab"  
+            waitFor{ProposalDescriptionBox}
+            //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
+            assert withFrame(ProposalDescriptionBox){$("body", id:"tinymce").text()}=='Les Nenes Maques'
+
   }
 
 
