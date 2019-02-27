@@ -13,7 +13,8 @@ class InitialCWUProposalPage extends Page {
             ProposalTab { $('[data-automation-id ~= "tab-cwu-proposal-proposal"]') }
             AttachmentTab { $('[data-automation-id ~= "tab-cwu-proposal-attachment"]') }
             TermsTab { $('[data-automation-id ~= "tab-cwu-proposal-terms"]') }
-           
+ 
+            Address{$("input",id:"address")}
             BusinessAddress{$("input",id:"businessAddress")}
             BusinessContactPhone{$("input",id:"businessContactPhone")}
             ButtonSubmit { $('[data-automation-id ~= "button-cwu-proposal-submit"]') }
@@ -27,6 +28,8 @@ class InitialCWUProposalPage extends Page {
             Email{ $('[id ~= "email"]') }
             IsCompanyCheckBox{$("input",name:"isCompany").module(Checkbox)}           
             FirstName{ $('[id ~= "firstName"]') }
+            MustAgreeTermsMsg{$('data-automation-id':"mustAgreeTermsWarning")}
+             
             ProposalDescriptionBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'))}
             UpdateMyProposalLnk{ $("a",id:"proposaladmin.edit",0)} //there are two of these links
             SaveChangesButton{$("button",'data-automation-id':"button-cwu-proposal-save-changes")}

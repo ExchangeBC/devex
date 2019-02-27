@@ -10,27 +10,14 @@ class OpportunitiesPage extends Page {
 	static url = "opportunities"
 
 	static content = {
-			//PostAnOpportunity(wait: true) { $("button", title:"New") }
 			PostAnOpportunity(wait: true) { $("button",href:"/createlanding") }
 			FirstListedOpportunity(required: false, wait: 2) {$("div",class:"label-title ng-binding",0)}//This corresponds to a SWU opp
 			SecondListedOpportunity(required: false, wait: 2) {$("div",class:"label-title ng-binding",1)}//This corresponds to a CWU opp
-		
-			//FirstListedOpportunity(required: false, wait: 2) {$("div",id:"opportunities.view",0)}//This corresponds to a SWU opp
-			//SecondListedOpportunity(required: false, wait: 2) {$("div",id:"opportunities.view",1)}//This corresponds to a CWU opp
-
-
-			//FirstListedOpportunity(required: false, wait: 2) {$("opportunity-card",'data-automation-id':"opportunityTitle0")}//This corresponds to a SWU opp
-			//SecondListedOpportunity(required: false, wait: 2) {$("opportunity-card",'data-automation-id':"opportunityTitle1")}//This corresponds to a CWU opp
-	
-
-
-		
 		
 			DownloadTerms{$('a[href="/terms/cwu1"]')}
 			CWULearnMore{$('data-automation-id':"cwu-LearnMore").click()}
 			SWULearnMore{$('data-automation-id':"swu-LearnMore").click()}
 			EditOppLnk{$("a",id:"opportunityadmin.edit",0)}
-
 
 		}
 
