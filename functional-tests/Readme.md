@@ -54,88 +54,60 @@ As for February 2019 the coverage is the following:
 
 
 ## Usage
-To run the test suite, open terminal and navigate to the .../devex/functional-test directory and execute
-	./TestSuite.sh
+To run the test suite, open terminal and navigate to `.../devex/functional-test` and execute `$ ./TestSuite.sh`.
 
 This script will run the groovy scripts in the appropriate order: some of the test are preconditions for the following test. For example, before a user can submit a proposal, the proposal is required to exist.
 
-Opening TestSuite.sh you wIll learn the order in which the scripts are run. To run any of them individually, you can execute the following command
-
-	./gradlew chromeTest --tests="NameOfTtheSpecificationToRun"
-
-for example
-
-	./gradlew chromeTest --tests="CreateUsers"
+Opening `TestSuite.sh`, you will learn the order in which the scripts are to run. To run any of them individually, you can execute `$ ./gradlew chromeTest --tests="NameOfTtheSpecificationToRun"`, for example, `./gradlew chromeTest --tests="CreateUsers"`.
 
 For this suite, each groovy script contains only one specification, and the name of the specification is the same as the groovy script.
 
-The previous command will run the test using Chrome. Currently the system is only configured to run on Chrome, chromeHeadless, Firefox and firefoxHeadless. The file that controls it is
+The previous command will run the test using Chrome. Currently the system is only configured to run on Chrome, chromeHeadless, Firefox and firefoxHeadless. The file that controls it is `⁨.../devex⁩/functional-tests⁩/src⁩/test⁩/resources/GebConfig.groovy`
 
-	⁨.../devex⁩/functional-tests⁩/src⁩/test⁩/resources/GebConfig.groovy
+You will find that `./TestSuite.sh` contains entries for browsers other than Chrome, albeit they are commented out. This is because `./TestSuite.sh` is fully tested using Chrome, but I have run into problems using the other options:
 
-You will find that ./TestSuite.sh contains entries for browsers other than Chrome, albeit they are commented out. This is because ./TestSuite.sh is fully tested using Chrome, but I have run into problems using the other options:
+- **Firefox**: There are a couple bugs in the code that prevents to proceed (bugs that do not show up in Chrome). In addition, it looks like Firefox does not like some of the `waitFor{}` and is happier with longer `sleep()`. I have not got very deep due the mentioned bugs in the code (the bug shows when Publishing a Program, it calls a `unsafe:javascript:void(0);` and Firefox stops).
 
+- **Safari**: Same bugs as in Firefox. I have not tried further.
 
-Firefox: There are a couple bugs in the code that prevents to proceed (bugs that do not show up in Chrome).
-		In addition, it looks like Firefox does not like some of the waitFor{} and is happier with longer sleep(). I have not got very deep due the mentioned bugs in the code
-		(the bug shows when Publishing a Program, it calls a unsafe:javascript:void(0); and Firefox stops)
+- **ChromeHeadless**: It can't download files! Here are a few discussions I found about this bug: 
+   - [Stack Overflow #1](https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver)
+   - [Stack Overflow #2](https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver)
+   - [GitHub](https://github.com/TheBrainFamily/chimpy/issues/108)
 
-Safari: Same bugs as in Firefox. I have not tried further
-
-ChromeHeadless: It can't download files (the reported bug can be checked at 
-		https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver. You can also read the discussions  in https://github.com/TheBrainFamily/chimpy/issues/108 and 
-		
-		https://stackoverflow.com/questions/50905846/how-to-enable-download-file-in-headless-chrome-in-the-latest-chrome-driver-ver)
+:warning: **Important!** Do not be tempted to run all the tests with `./gradlew Test` — the reason is the tests need to be run in order, so any alteration of the order will generated errors!
 
 
+## Pitfalls and weirdness
 
-Do not be tempted to run all the test with the following command
-    ./gradlew Test
+- When creating **locators**, this is ok: 
+```groovy
+   HowToApply{$("a",id:"sprintwithus-howtoapply")}
+```
+Notice the `id` is not surrounded by quotes. However, more complex labels need to be surrounded by quotes, like this:
+```groovy
+   SaveChangesButton { $("button", 'data-automation-id': "btnSaveChangesSkills")}
+```
+- **XPath locators** are by definition brittle. There are a few ones in the code, as other locators that I tried didn’t work. The text boxes where the user can format their text are all located with XPath locators.
+These components are <Iframes> element nested inside several <div> element. If all the block (all the <div>) is moved  to another section of the page as unit, I think that the automation will continue working with no trouble
 
-the reason is the tests need to be run in order, so any alteration of the order will generated errors.
+- Sprinkled through the code there are a lot of `Sleep()` delays. In most of the cases it does not make any sense, as the `waitFor{}` function should be enough, but without them the test breaks! If you find a more elegant way to avoid them please share!
 
+- A couple times I have noticed that checking the APIs link (to http://apilist.pathfinder.gov.bc.ca/) the test fails. The problem seems to not be on the code or the test, the problem is that sometimes the target server takes a long time to reply.
+
+- The first time I ran the test in Firefox it was an utter chaos: the system was spinning Firefox browser instances by the dozen collapsing the machine resources. The problem was that I was using the latest and greatest version of Firefox (65.0.1) but not the latest version of Gecko (0.24.0). Once synchronized all was fine. Gecko version is set in build.gradle, you do not need to install Gecko on your box—Gradle downloads it for you—but still need to indicate the version of Gecko you want to use.
+
+- The file `build.gradle` contains the versions used in this test suite.
+In addition, the versions of other important components are:
+   - java version "11.0.1" 2018-10-16 LTS
+   - gradle v5.0
+   - node v8.15.0
 
 ## Questions and issues
 
-Please ask questions on our [Slack Channel][slack_channel] and raise issues in [BDDStack issue tracker][issue_tracker].
+Seek help through the **#bddstack** channel on the [BC Gov DevOps Slack][slack_channel] and raise issues in [BDDStack issue tracker][issue_tracker].
 
-
-##Pitfalls and weirdness
-
-- When creating locators this is ok
-	HowToApply{$("a",id:"sprintwithus-howtoapply")}
-
-Notice id is not surrounded by quotes. However, more complex labels need to be surrounded by quotes, like
-	SaveChangesButton { $("button", 'data-automation-id': "btnSaveChangesSkills")}
-
-
-- XPath locators are by definition brittle. There are a few ones in the code, as other locators that I tried didn’t work. The text boxes where the user can format their text are all located with XPath locators.
-These components are <Iframes> element nested inside several <div> element. If all the block (all the <div>) is moved  to another section of the page as unit, I think that the automation will continue working with no trouble
-
-
-- Sprinkled through the code there are a lot of Sleep() delays. In most of the cases it does not make any sense, as WaitFor{} function should be enough, but without them the test breaks!. If you find a more elegant way to avoid them please share!
-
-
-- A couple times I have noticed that checking the APIs link (to http://apilist.pathfinder.gov.bc.ca/) the test fails. The problem seems to not be on the code or the test, the problem is that sometimes the target server takes a long time to reply
-
-
-- The first time I run the test in Firefox it was an utter chaos: the system was spinning Firefox browser instances by the dozen collapsing the machine resources. The problem was that I was using the latest and greatest version of Firefox (65.0.1) but not the latest version of Gecko (0.24.0). Once synchronized all was fine. 
-Gecko version is set in build.gradle, you do not need to install Gecko on your box, Gradle download it for you, but still need to indicate the version of Gecko you want to use.
-
-
-- The file build.gradle contains the versions used in this test suite.
-In addition, the version of other important components is
-	java version 
-		"11.0.1" 2018-10-16 LTS
-
-	gradle version
-		v5.0
-
-	node version
-		v8.15.0
-
-
-## Useful Links:
+## Useful links:
 
 <http://www.gebish.org/manual/current>
 
