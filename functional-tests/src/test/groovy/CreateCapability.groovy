@@ -12,29 +12,28 @@ import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
 
+@Narrative
+('''This test creates one capability named'Cooking'with three skills associated to it''')
 
-@Narrative('''This test creates one capability named 'Cooking' with three skills associated to it 
-''')
-
-@Title("Create one capability and three skills")
-class CreateCapability extends GebReportingSpec {
+@Title("Create one capability and three skills")class CreateCapability extends GebReportingSpec {
 
     def setup() {
         to HomePage
         // Need to login as an admin
-        def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
+        def loginOK = login."Login As An Administrator"("admin","adminadmin","Admin Local")
         assert loginOK
     }
 
-  @Unroll
-  def "Go to Home Page and click on the Admin menu item to open the drop down list" () {
+    @Unroll def"Go to Home Page and click on the Admin menu item to open the drop down list"()
+
+    {
     given: "Starting from the Home Page"
         waitFor {to HomePage}
 
     when: "Click on the Admin Menu item to expand the drop down options"
         waitFor{AdminMenuDropDown}
         AdminMenuDropDown.click()
-        sleep(1000) //Despite all the waitFor{}, this seems to be necessary
+        sleep(1000) // Despite all the waitFor{}, this seems to be necessary
    
     and:"Click on the Manage Capabilities option"  
         waitFor{ManageCapabilities}  
@@ -82,5 +81,4 @@ class CreateCapability extends GebReportingSpec {
         CapName | CapLabel| CapDescription
         "Cooking" | "Kitchen" | "Tossing veggies, chooping onions, skinning rabbits, roasting full pigs... all this without accidents"
     }
-
 }
