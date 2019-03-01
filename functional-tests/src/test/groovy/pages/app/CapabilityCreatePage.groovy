@@ -5,9 +5,7 @@ import org.openqa.selenium.By
 class CapabilityCreatePage extends Page {
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static url = "/capabilityadmin/create"
-
 	static content = {
-
       CapabilityName{$("input",id:"name",placeholder:"e.g. Front-end Development")}
       CapabilityLabel{$("input",id:"name",placeholder:"e.g. label-frontend")}
       CapabilityDescription{$("input",'data-automation-id':"inputCapabilityDescription")}
@@ -15,7 +13,5 @@ class CapabilityCreatePage extends Page {
       SaveCapability{$("button", 'data-automation-id':"btnSaveCapability")}
       AddNewSkillText{$("input", 'data-automation-id':"addNewSkillText")}
       AddNewSkillBtn{$("button", 'data-automation-id':"btnAddNewSkill")}
-
   }
-
 }
