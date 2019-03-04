@@ -33,7 +33,7 @@
 <div class="card-deck">
   <div class="card my-3" ng-repeat="capability in vm.capabilities">
     <div class="card-body" ui-sref="capabilities.view({ capabilityId: capability.code })">
-      <h5 data-automation-id="lstCapabilityEntry" class="m-0 p-0 card-title" ng-bind="capability.name"></h5>
+      <h5 data-automation-id="lstCapabilityEntry-{{capability.name}}" class="m-0 p-0 card-title" ng-bind="capability.name"></h5>
     </div>
   </div>
 </div>
