@@ -37,7 +37,7 @@ class AdminDeletesCapability extends GebReportingSpec {
         waitFor{at CapabilitiesPage}
     
     when: "Click the first listed capability"
-        waitFor{CapabilityFirstEntry.click()}
+        waitFor{CapabilityCookingEntry.click()}
 
     and: "Click on the 'pencil' icon"
         waitFor{$('data-icon':"pencil-alt").click()} //Use inline, as the name of the page change with the capability
