@@ -30,6 +30,7 @@ class CoreClientRouter {
 		this.$stateProvider.state('copyright', this.copyrightState());
 		this.$stateProvider.state('template', this.templateState());
 		this.$stateProvider.state('sprintwithus-howtoapply', this.sprintWithUsHowToApplyState());
+		this.$stateProvider.state('bctechsummit', this.techSummitState());
 	}
 
 	private urlRouteNotFoundHandler($injector: auto.IInjectorService): void {
@@ -225,6 +226,17 @@ class CoreClientRouter {
 			data: {
 				ignoreState: true,
 				pageTitle: 'How to Apply'
+			}
+		}
+	}
+
+	private techSummitState(): Ng1StateDeclaration {
+		return {
+			url: '/bctechsummit',
+			templateUrl: '/modules/core/client/views/tech.summit.html',
+			data: {
+				ignoreState: true,
+				pageTitle: 'BC Tech Summit'
 			}
 		}
 	}
