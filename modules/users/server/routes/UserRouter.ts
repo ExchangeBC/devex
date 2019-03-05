@@ -14,9 +14,11 @@ class UsersRouter {
 
 	private constructor() {
 		UserPolicy.invokeRolesPolicies();
+
+		this.setupRoutes = this.setupRoutes.bind(this);
 	}
 
-	public setupRoutes = app => {
+	public setupRoutes(app) {
 		// Setting up the users profile api
 		app.route('/api/users')
 			.all(UserPolicy.isAllowed)
@@ -34,6 +36,10 @@ class UsersRouter {
 		app.route('/api/users/picture')
 			.all(UserPolicy.isAllowed)
 			.post(UserProfileController.changeProfilePicture);
+
+		app.route('/api/users/registration')
+			.all(UserPolicy.isAllowed)
+			.get(UserProfileController.newsletterSubscriptionStatus);
 
 		// Finish by binding the user middleware
 		app.param('userId', UserAuthorizationController.userByID);

@@ -13,6 +13,7 @@ interface IUserServiceParams {
 }
 
 export interface IUserResource extends resource.IResource<IUserResource>, IUser {
+	subscribed?: boolean;
 	$promise: IPromise<IUserResource>;
 }
 
@@ -26,6 +27,7 @@ export interface IUserService extends resource.IResourceClass<IUserResource> {
 	signup(params: IUserServiceParams): IUserResource;
 	signin(params: IUserServiceParams): IUserResource;
 	signout(): void;
+	registrationStatus(): IUserResource;
 }
 
 angular.module('users.services').factory('UsersService', [
@@ -74,6 +76,11 @@ angular.module('users.services').factory('UsersService', [
 			url: '/api/auth/signout'
 		};
 
+		const registrationStatusAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/users/registration'
+		}
+
 		return $resource(
 			'/api/users',
 			{},
@@ -86,7 +93,8 @@ angular.module('users.services').factory('UsersService', [
 				resetPasswordWithToken: resetPasswordWithTokenAction,
 				signup: signupAction,
 				signin: signinAction,
-				signout: signoutAction
+				signout: signoutAction,
+				registrationStatus: registrationStatusAction
 			}
 		) as IUserService;
 	}

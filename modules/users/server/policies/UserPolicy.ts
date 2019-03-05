@@ -31,6 +31,10 @@ class UserPolicy {
 					{
 						resources: '/api/users/picture',
 						permissions: 'post'
+					},
+					{
+						resources: '/api/users/registration',
+						permissions: 'get'
 					}
 				]
 			},

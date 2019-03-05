@@ -1,13 +1,14 @@
 'use strict';
 
+import { Request, Response } from 'express';
 import fs from 'fs';
 import _ from 'lodash';
 import multer from 'multer';
 import validator from 'validator';
 import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
+import { SubscriptionModel } from '../../../../core/server/models/SubscriptionModel';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
-import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';
 import { UserModel } from '../../models/UserModel';
 
 class UserProfileController {
@@ -287,6 +288,26 @@ class UserProfileController {
 			});
 		}
 	};
+
+	public async newsletterSubscriptionStatus(req: Request, res: Response): Promise<void> {
+		try {
+			const user = req.user;
+			const subscribedUsers = await SubscriptionModel.find({ email: user.email });
+			if (subscribedUsers && subscribedUsers.length > 0) {
+				res.json({
+					subscribed: true
+				});
+			} else {
+				res.json({
+					subscribed: false
+				});
+			}
+		} catch (error) {
+			res.status(500).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 }
 
 export default UserProfileController.getInstance();

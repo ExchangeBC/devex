@@ -1,38 +1,187 @@
-<!-- Main -->
-<section class="bg-dark">  
-  <div class="container">
-    <div class="row text-center text-light">
-      <div class="col">
-        <h3>See what the Continuous Service Improvement Lab is up to at the 2019 BC Tech Summit!</h3>
-      </div>
+<section class="bc-tech-header">
+<div class="container">
+  <div class="row">
+    <div class="col">  
+      <!--Booth callout-->
+      <div class="booth-callout">
+        <h2>Visit our "Pop-up Lab" at the <a href="https://www.bctechsummit.ca/home" target="_blank">#BCTECHSummit</a></h2>
+        <p class="lead">Join us at <label class="booth-label">booth (34/35)</label> on the conference floor March 12-13, 2019.</p>
+        <p class="lead">Our booth features teams making it better to work with and for the BC Government:</p>
+      </div>  
     </div>
   </div>
-</section>
+  <div class="row">
+    <div class="col">      
+      <!--CSI Lab section-->
+      <div class="team-box">
+        <div class="row">
+          <div class="col-lg-8">
+            <img src="/modules/core/client/img/bc-tech-summit/csi-lab.png" class="img-fluid my-3" style="max-height: 100px;">
+            <p>The Continuous Service Improvement Lab creates and accelerates high performing teams that rapidly engage people, design, make, and ship service improvements using modern methods.</p>
+            <p>A CSI Lab residency is for Leaders who want to offer exemplary service, optimize tax dollars, and build high performing modern organizations.</p>
+            <p>Unlike team retreats, courses, and consultant reports, the CSI lab invests heavily in learning by doing, with the support of Agile methods, service design, modern technology, and community.</p>
+            <br>
+            <p ng-if="!$ctrl.isSubscribed" class="alert alert-success text-center strong">Sign up for the CSI Lab Newsletter! <button type="button" class="btn btn-primary" ng-click="$ctrl.openNewsLetterSignup()">Subscribe</button></p>
+            <p ng-if="$ctrl.isSubscribed" class="alert alert-success text-center strong">You are subscribed to the CSI Lab Newsletter!</p>
 
-<!-- Visit Booth Section -->
-<section class="bg-light py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <div class="card card-flat h-100 align-items-center">
-          Booth Info items here
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap py-3">
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/heather.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Heather Remacle</div>
+                  <div class="staff-title">Director of Lab Operations</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/diana.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Diana De Cotiis</div>
+                  <div class="staff-title">Lab Administrator</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/meaghan.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Meaghan Stewart</div>
+                  <div class="staff-title">Scrum Master</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/rumon.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Rumon Carter</div>
+                  <div class="staff-title">Executive Director</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Stay Connected Section -->
-<section class="bg-light py-5">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <div class="card card-flat h-100 align-items-center">
-            Sign up for our CSI Lab newsletter!
-            <button class="btn btn-primary" type="button" ng-click="$ctrl.openNewsLetterSignup()">Sign-up</button>
+      <!--BCDevExchange-->
+      <div class="team-box">
+        <div class="row">
+          <div class="col-lg-8">
+            <img src="/modules/core/client/img/logo/new-logo.svg" class="img-fluid my-3" style="max-width: 250px;">
+            <p>In an effort to make it faster and easier for government and developers to work together, the BCDevExchange has created two new procurement processes.</p>
+            <p><a href="/codewithus" target="_blank"><span class="font-italic">Code With Us</span></a> drives government to develop its digital products in the open and enables government to instantly reach a large community of talented software developers and quickly acquire enhancements to government digital products.</p>
+            <p>To date over $700,000 has been paid out to developers under small opportunities ranging from $1,000 - $70,000, many of whom have never worked for government.</p>
+            <p><a href="/sprintwithus" target="_blank"><span class="font-italic">Sprint With Us</span></a> enables government to hire an entire software development team within 30 calendar days for contracts of up to 2 years or $2M.  Sprint With Us allows teams to demonstrate their strength through a code challenge and in-person scenario. And under a new Agile Software Development Agreement, teams get to bring their innovation to shape the product, rather than being locked into delivering on a pre-determined set of requirements.</p>
+            <p>Come learn about <a href="/opportunities" target="_blank">these new opportunities</a> and how you can apply. If you’ve already applied for opportunities or participated in the process, we’d be keen to get your feedback and learn how we might improve the process.</p></div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap">
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/steve.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Steve Chapman</div>
+                  <div class="staff-title">Scrum Master</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/andrew.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Andrew Sutherland</div>
+                  <div class="staff-title">Architect and Developer</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/mark.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Mark Wilson</div>
+                  <div class="staff-title">Researcher and Designer</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/peter.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Peter Watkins</div>
+                  <div class="staff-title">Founding Executive Sponsor</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </div><!--End BCDevExchange-->
+      <!--DevHub-->
+      <div class="team-box">
+        <div class="row">
+          <div class="col-lg-8">
+            <img src="/modules/core/client/img/bc-tech-summit/devhub.jpg" class="img-fluid my-3" style="max-width: 250px;">
+            <p>Blurb about DevHub etc...</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap">
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/todd.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Todd Wilson</div>
+                  <div class="staff-title">Director</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/todd.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Davis Levine</div>
+                  <div class="staff-title">Service Designer</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/todd.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Kelsey Singbeil</div>
+                  <div class="staff-title">Service Designer</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!--End DevHub-->
+      <!--DataBC section-->
+      <div class="team-box">
+        <div class="row">
+          <div class="col-lg-8">
+            <img src="/modules/core/client/img/bc-tech-summit/data-bc.png" class="img-fluid my-3" style="max-width: 200px;">
+            <p>Blurb about DataBC and the VR demo.....</p>
+          </div>
+          <div class="col-lg-4">
+            <div class="d-flex flex-wrap py-3">
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/heather.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Alex Ritchie</div>
+                  <div class="staff-title">Director of Data &amp; Services</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/diana.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">?????</div>
+                  <div class="staff-title">Llamazoo Person</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!--End DataBC-->
     </div>
   </div>
+
+  <!--Other BCGov happenings-->
+  <div class="row">
+    <div class="col">
+      <p>Also, check out some excellent opportunities to engage with teams doing exciting things in this ecosystem:</p>
+      <ul>
+        <li><a href="https://www.eventbrite.ca/e/bootcampbc-hyperledger-indy-and-the-verifiable-organizations-network-tickets-56540289528" target="_blank">BootcampBC with Hyperledger Indy</a> (March 11th, 9:00am-5:00pm)</li>
+        <li><a href="https://www.eventbrite.ca/e/bc-startup-in-residence-demo-day-tickets-57153750406" target="_blank">Startup In Residence (STIR) Demo day</a> (March 11th, 2:00pm - 3:30pm)</li>
+        <li><a href="http://www.bctechsummit.ca/page/1397340/digital-government-challenges" target="_blank">Digital Government & Procurement Concierge Challenges</a> (Tuesday, Mar 12th, 1:15pm – 2:15pm)</li>
+        <li>VR Weather Simulation Demo (Come by and request a demo!)</li>
+      </ul>
+    </div>
+  </div>
+  <!--Photo citation-->
+  <div class="photo-citation float-right"><a href="https://www.flickr.com/photos/bcgovphotos/33312752211/in/photolist-SKJyCK-STRczW-SnbQ1o-STRihs-SX3WR4-SHuUUh-STR6nA-D9vV5X-DeAnKY-CHpA1z-Cjw4Ni-Cjw5aR-CHpApR-CHpAot-Cjw5Gn-CPMC8S-24rC4o3-TjDofy-SoX7Ts-CogCCd-27cgQAR-SLjLGB-REWqS1-RHjk7g-RGVaTo-SKJHLp-SnoAZu-SnoAyE-REWriG-REWtFh-RGVano-SLjM9Z-SMJ1Rr-RGw8CN-CK35TX-SMHZu8-SK31d5-266DuYC-RGwbYW-SMHYcP-CK36jg-266DuJj-24rC3JY-Cm9qUP-25PGpTZ-27cgQLR-REyHHj-RHjjE4-SX3RYt-RHGs6n">Photo</a> &copy; Province of British Columbia used under <a href=https://creativecommons.org/licenses/by-nc-nd/2.0/ target="_blank">CC BY-NC-ND 2.0</a></div>
+    
+</div><!--End container-->
 </section>
 
