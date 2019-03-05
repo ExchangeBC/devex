@@ -12,7 +12,7 @@
 
   <!-- Fav Icon -->
   <link href="/{{favicon}}" rel="shortcut icon" type="image/x-icon">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 
 <body class="ng-cloak" id="page-top">
@@ -41,6 +41,7 @@
     var sessionTimeout = "{{ sessionTimeout }}";
     var sessionTimeoutWarning = "{{ sessionTimeoutWarning }}";
     var allowCapabilityEditing = "{{ allowCapabilityEditing }}" === 'true';
+    var recaptchaSiteId = "{{ googleRecaptchaSiteID }}";
   </script>
 
   {{#if livereload}}

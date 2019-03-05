@@ -1,7 +1,10 @@
 'use strict';
 
+import { Request, Response } from 'express';
+import fetch from 'node-fetch';
 import validator from 'validator';
 import config from '../../../../config/ApplicationConfig';
+import { SubscriptionModel } from '../models/SubscriptionModel';
 
 export class CoreServerController {
 	public static getInstance() {
@@ -100,6 +103,48 @@ export class CoreServerController {
 			}
 		});
 	};
+
+	public async verifyNotABot(req: Request, res: Response): Promise<void> {
+		const token = req.body.token;
+		const response = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: `secret=${process.env.RECAPTCHA_SECRET}&response=${token}`
+		});
+
+		const respJSON = await response.json();
+		if (respJSON.success) {
+			res.send({
+				message: 'valid'
+			});
+		} else {
+			res.send({
+				message: 'invalid'
+			})
+		}
+	}
+
+	public async saveNewsletterEmail(req: Request, res: Response): Promise<void> {
+		try {
+			const subscription = new SubscriptionModel(req.body);
+
+			// check for existing email
+			const existingEmails = await SubscriptionModel.find({ email: subscription.email });
+			if (existingEmails && existingEmails.length > 0) {
+				res.status(422).send({
+					message: 'Email has already been subscribed'
+				});
+				return;
+			}
+
+			const savedSubscription = await subscription.save();
+			res.json(savedSubscription);
+		} catch (error) {
+			res.status(422).send({
+				message: `Error: ${error}`
+			});
+		}
+	}
 }
 
 export default CoreServerController.getInstance();

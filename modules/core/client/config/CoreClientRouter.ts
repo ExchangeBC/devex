@@ -234,6 +234,8 @@ class CoreClientRouter {
 		return {
 			url: '/bctechsummit',
 			templateUrl: '/modules/core/client/views/tech.summit.html',
+			controller: 'TechSummitController',
+			controllerAs: '$ctrl',
 			data: {
 				ignoreState: true,
 				pageTitle: 'BC Tech Summit'

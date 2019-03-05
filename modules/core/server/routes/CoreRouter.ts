@@ -43,6 +43,12 @@ class CoreRouter {
 			}
 		});
 
+		// Define recaptcha verification route
+		app.route('/newsletter/verify').post(CoreServerController.verifyNotABot);
+
+		// Define newsletter registration route
+		app.route('/newsletter/register').post(CoreServerController.saveNewsletterEmail);
+
 		// Define application route
 		app.route('/*').get(CoreServerController.renderIndex);
 	};

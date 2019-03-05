@@ -7,5 +7,7 @@ declare global {
 		sessionTimeoutWarning: number;
 		sessionTimeout: number;
 		allowCapabilityEditing: boolean;
+		enableSave: any;
+		recaptchaSiteId: string;
 	}
 }
