@@ -42,10 +42,10 @@
         <div class="col">
             <form id="emailForm" ng-submit="$ctrl.saveEmail()">
                 <div class="input-group my-3 d-flex flex-column">
-                    <input id="name" type="text" required ng-model="$ctrl.name" class="mb-2 w-100 form-control" placeholder="Recipient's Name" aria-label="Recipient's Name" aria-describedby="button-addon2" ng-disabled="!$ctrl.allowSave">
-                    <input id="email" type="email" required ng-model="$ctrl.email" class="mb-2 w-100 form-control" placeholder="Recipient's Email" aria-label="Recipient's Email" aria-describedby="button-addon2" ng-disabled="!$ctrl.allowSave">
+                    <input id="name" type="text" required ng-model="$ctrl.name" class="mb-2 w-100 form-control" placeholder="Your name" aria-label="Your name" aria-describedby="button-addon2" ng-disabled="!$ctrl.allowSave">
+                    <input id="email" type="email" required ng-model="$ctrl.email" class="mb-2 w-100 form-control" placeholder="Your email" aria-label="Your email" aria-describedby="button-addon2" ng-disabled="!$ctrl.allowSave">
                     <div class="input-group-append flex-row-reverse">
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2" ng-disabled="!$ctrl.allowSave">Submit</button>
+                        <button class="btn btn-block btn-primary" type="submit" id="button-addon2" ng-disabled="!$ctrl.allowSave">Submit</button>
                     </div>
                 </div>
             </form>
