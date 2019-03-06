@@ -11,12 +11,6 @@ section.gov-events {
     color: $white;
     padding: 3rem 0;
 }
-.booth-callout {
-    background: $white;
-    border-radius: 1px;
-    padding: 2rem 1rem;
-    text-align: center;
-}
 .photo-citation {
     color: $white;
     font-style: italic;
@@ -24,18 +18,18 @@ section.gov-events {
     font-size: 0.6rem;
 }
 .booth-label {
-    background-color: $brand-orange;
+    background-color: $black;
     color: $white;
-    font-weight: 500;
-    padding: .25rem .5rem;
-    margin: 5px;
-    border-radius: 3px;
+    font-weight: 400;
+    font-size: 1.4rem;
+    padding: 5px 8px;
+    border-radius: 22px;
 }
 .team-box {
+    border-right: 22px solid;
+    border-left: 4px solid;
     background: $white;
-    border-radius: 1px;
-    padding: 2rem 3rem;
-    margin: 2rem 0;
+    padding: 2.5rem 1.5rem;
 }
 @media (max-width: 767px) {
     .team-box {
@@ -49,7 +43,7 @@ section.gov-events {
 }
 @media (min-width: 992px) {
     .team-box {
-        padding: 2rem 3rem;
+        padding: 2rem;
     }
 }
 .staff-members-list {
@@ -76,8 +70,4 @@ img.staff-member {
     font-size: 0.8rem;
     font-weight: 300;
     color: $gray;
-}
-.staff-org {
-    font-size: 0.8rem;
-    font-weight: 300;
 }

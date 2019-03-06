@@ -1,29 +1,24 @@
 <section class="bc-tech-header">
 <div class="container">
-  <div class="row d-flex justify-content-center">
-    <div class="col-lg-10 col-xl-8">  
+  <div class="row d-flex justify-content-center mb-5">
+    <div class="col-xl-10">  
       <!--Booth callout-->
-      <div class="booth-callout">
-        <div class="mb-2"><label class="booth-label">Booth 34/35</label></div>
+      <div class="team-box">
+        <div class="text-right"><span class="text-muted">We're at booth</span> <label class="booth-label">34</label> <label class="booth-label">35</label></div>
         <h3 class="my-4">Visit our "Pop-up Lab" at the <a href="https://www.bctechsummit.ca/home" target="_blank">#BCTECHSummit</a></h3>
         <div>Join us on the conference floor <strong>March 12-13, 2019</strong> and meet some of the teams who are making it better to work with and for the BC Government</div>
-      </div>  
-    </div>
-  </div>
-  <div class="row d-flex justify-content-center">
-    <div class="col-lg-10 col-xl-8">      
+      </div>      
       <!--CSI Lab section-->
-      <div class="team-box">
+      <div class="team-box bg-light" style="border-color: #BD42AC">
         <div class="row">
           <div class="col-lg-8">
             <img src="/modules/core/client/img/bc-tech-summit/csi-lab.png" class="img-fluid my-3" style="max-height: 100px;">
             <p>The <strong>Continuous Service Improvement Lab</strong> creates and accelerates high performing teams that rapidly engage people, design, make, and ship service improvements using modern methods.</p>
             <p>A CSI Lab residency is for Leaders who want to offer exemplary service, optimize tax dollars, and build high performing modern organizations.</p>
             <p>Unlike team retreats, courses, and consultant reports, the CSI lab invests heavily in learning by doing, with the support of Agile methods, service design, modern technology, and community.</p>
-            <br>
-            <p ng-if="!$ctrl.isSubscribed" class="alert alert-success text-center">Sign up for the CSI Lab Newsletter! <button type="button" class="btn btn-sm btn-primary" ng-click="$ctrl.openNewsLetterSignup()">Subscribe</button></p>
-            <p ng-if="$ctrl.isSubscribed" class="alert alert-success text-center">You are subscribed to the CSI Lab Newsletter!</p>
-
+            <p><a href="https://www.linkedin.com/company/bc-gov-csi-lab/" target="_blank"><i class="fab fa-lg fa-linkedin"></i>&nbsp;Join our Linkedin Community page </a></p>
+            <p ng-if="!$ctrl.isSubscribed"><a href="" ng-click="$ctrl.openNewsLetterSignup()"><i class="fas fa-lg fa-envelope"></i>&nbsp;Subscribe to our newsletter</a></p>
+            <p ng-if="$ctrl.isSubscribed" class="text-muted"><i class="fas fa-lg fa-envelope"></i>&nbsp;You are subscribed to our newsletter</p>
           </div>
           <div class="col-lg-4 d-flex align-items-center">
             <div class="d-flex flex-wrap py-3">
@@ -55,20 +50,28 @@
                   <div class="staff-title">Executive Director</div>
                 </div>
               </div>
+              <div class="d-flex align-items-center staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/molly.jpg" class="staff-member">
+                <div>  
+                  <div class="staff-name">Molly Pilchar</div>
+                  <div class="staff-title">Agile Project Manager</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <!--BCDevExchange-->
-      <div class="team-box">
+      <div class="team-box" style="border-color: #368692">
         <div class="row">
           <div class="col-lg-8">
             <img src="/modules/core/client/img/logo/new-logo.svg" class="img-fluid my-3" style="max-width: 250px;">
             <p>In an effort to make it faster and easier for government and developers to work together, the <strong>BCDevExchange</strong> has created two new procurement processes.</p>
             <p><a href="/codewithus" target="_blank"><span class="font-italic">Code With Us</span></a> drives government to develop its digital products in the open and enables government to instantly reach a large community of talented software developers and quickly acquire enhancements to government digital products.</p>
-            <p>To date over $700,000 has been paid out to developers under small opportunities ranging from $1,000 - $70,000, many of whom have never worked for government.</p>
-            <p><a href="/sprintwithus" target="_blank"><span class="font-italic">Sprint With Us</span></a> enables government to hire an entire software development team within 30 calendar days for contracts of up to 2 years or $2M.  Sprint With Us allows teams to demonstrate their strength through a code challenge and in-person scenario. And under a new Agile Software Development Agreement, teams get to bring their innovation to shape the product, rather than being locked into delivering on a pre-determined set of requirements.</p>
-            <p>Come learn about <a href="/opportunities" target="_blank">these new opportunities</a> and how you can apply. If you’ve already applied for opportunities or participated in the process, we’d be keen to get your feedback and learn how we might improve the process.</p></div>
+            <p>So far, over $700,000 worth of small opportunities ranging from $1,000 - $70,000  have been awarded to developers, many of whom have never worked for government.</p>
+            <p><a href="/sprintwithus" target="_blank"><span class="font-italic">Sprint With Us</span></a> enables government to hire an entire software development team within 30 calendar days for contracts of up to 2 years or $2M.  Teams who apply get the opportunity to strut their stuff through a code challenge and in-person scenario. And under a new <a href="/terms/serviceagreement"
+              target="_blank" class="font-italic">Agile Software Development Agreement</a>, teams are freed to bring their innovation to shape the product, rather than being locked into delivering on a pre-determined set of requirements.</p>
+            <p>Come learn about <a href="/opportunities" target="_blank">these new opportunities</a> and how you can apply. If you’ve already applied, we'll be keen to hear about your experience and learn how we can improve.</p></div>
           <div class="col-lg-4 d-flex align-items-center">
             <div class="d-flex flex-wrap">
               <div class="d-flex align-items-center staff-member">
@@ -104,10 +107,10 @@
         </div>
       </div><!--End BCDevExchange-->
       <!--DevHub-->
-      <div class="team-box">
+      <div class="team-box bg-light" style="border-color: #7848BE">
         <div class="row">
           <div class="col-lg-8">
-            <img src="/modules/core/client/img/bc-tech-summit/devhub.jpg" class="img-fluid my-3" style="max-width: 250px;">
+            <img src="/modules/core/client/img/bc-tech-summit/devhub.jpg" class="img-fluid my-3" style="max-width: 276px;">
             <p><a href="https://developer.gov.bc.ca" target="_blank">https://developer.gov.bc.ca</a></p>
             <p>DevHub blurb here.....</p>
             <p>The <strong>Design System</strong> is a collection of digital resources and tools - including reusable UI components and design patterns -- aimed to help developers and designers build custom B.C government products.</p>
@@ -131,7 +134,7 @@
                 </div>
               </div>
               <div class="d-flex align-items-center staff-member">
-                <img src="/modules/core/client/img/bc-tech-summit/todd.jpg" class="staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/kelsey.jpg" class="staff-member">
                 <div>  
                   <div class="staff-name">Kelsey Singbeil</div>
                   <div class="staff-title">Service Designer</div>
@@ -145,43 +148,31 @@
       <div class="team-box">
         <div class="row">
           <div class="col-lg-8">
-            <img src="/modules/core/client/img/bc-tech-summit/data-bc.png" class="img-fluid my-3" style="max-width: 200px;">
-            <p>Blurb about DataBC and the VR demo.....</p>
+            <img src="/modules/core/client/img/bc-tech-summit/data-bc.png" class="img-fluid my-3" style="max-height: 75px;">
+            <p><strong>Virtual Reality – Weather Real-time data demo</strong></p>
+            <p>The <strong>Integrated Data Division</strong> has partnered with <a href="https://www.llamazoo.com/" target="_blank">LlamaZOO</a>, through a <a href="https://www.bcdevexchange.org/opportunities/cwu/opp-augmented-reality---virtual-reality-demonstration-of-weather-real-time-data-apis" target="_blank"><span class="font-italic">Code With Us</span> opportunity</a>, to develop a prototype real-time data API service lightning strike and wildfire simulated data and Virtual Reality demonstration of the use of the APIs.</p>
+            <p>The project aims to help us understand the value of open data innovation in solving public sector challenges, increase awareness of new approaches to data visualization in the public sector and create new approaches to deliver real-time data through APIs for data visualization platforms.</p>
           </div>
           <div class="col-lg-4 d-flex align-items-center">
             <div class="d-flex flex-wrap py-3">
               <div class="d-flex align-items-center staff-member">
-                <img src="/modules/core/client/img/bc-tech-summit/heather.jpg" class="staff-member">
+                <img src="/modules/core/client/img/bc-tech-summit/alex.jpg" class="staff-member">
                 <div>  
                   <div class="staff-name">Alex Ritchie</div>
                   <div class="staff-title">Director of Data &amp; Services</div>
                 </div>
               </div>
-              <div class="d-flex align-items-center staff-member">
-                <img src="/modules/core/client/img/bc-tech-summit/diana.jpg" class="staff-member">
-                <div>  
-                  <div class="staff-name">?????</div>
-                  <div class="staff-title">Llamazoo Person</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
-      </div><!--End DataBC-->
-    </div>
-  </div>
-
-  <!--Other BCGov happenings-->
-  <div class="row d-flex justify-content-center">
-    <div class="col-lg-10 col-xl-8">      
-      <!--CSI Lab section-->
-      <div class="team-box">
-        <p>Also, check out some excellent opportunities to engage with teams doing exciting things in this ecosystem:</p>
+      </div><!--End DataBC-->    
+      <!--Other BC Gov section-->
+      <div class="team-box bg-light" style="border-color: #A18C48">
+        <p>Check out these other excellent opportunities to engage with teams doing exciting things in the BC Government ecosystem:</p>
         <ul>
           <li><a href="https://www.eventbrite.ca/e/bootcampbc-hyperledger-indy-and-the-verifiable-organizations-network-tickets-56540289528" target="_blank">BootcampBC with Hyperledger Indy</a> (March 11th, 9:00am-5:00pm)</li>
           <li><a href="https://www.eventbrite.ca/e/bc-startup-in-residence-demo-day-tickets-57153750406" target="_blank">Startup In Residence (STIR) Demo day</a> (March 11th, 2:00pm - 3:30pm)</li>
           <li><a href="http://www.bctechsummit.ca/page/1397340/digital-government-challenges" target="_blank">Digital Government & Procurement Concierge Challenges</a> (Tuesday, Mar 12th, 1:15pm – 2:15pm)</li>
-          <li>VR Weather Simulation Demo (Come by and request a demo!)</li>
         </ul>
       </div>
     </div>
