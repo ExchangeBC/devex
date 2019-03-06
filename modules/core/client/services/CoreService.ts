@@ -15,6 +15,7 @@ interface ICoreResource extends resource.IResource<ICoreResource> {
 export interface ICoreService extends resource.IResourceClass<ICoreResource> {
 	verifyRecaptcha(params: ICoreServiceParams): ICoreResource;
 	registerEmail(params: ICoreServiceParams): ICoreResource;
+	unregisterEmail(params: ICoreServiceParams): ICoreResource;
 }
 
 angular.module('core').factory('CoreService', [
@@ -30,6 +31,10 @@ angular.module('core').factory('CoreService', [
 				},
 				registerEmail: {
 					method: 'POST',
+					url: '/newsletter/register'
+				},
+				unregisterEmail: {
+					method: 'DELETE',
 					url: '/newsletter/register'
 				}
 			}

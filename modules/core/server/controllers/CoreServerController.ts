@@ -145,6 +145,17 @@ export class CoreServerController {
 			});
 		}
 	}
+
+	public async removeNewsletterSub(req: Request, res: Response): Promise<void> {
+		try {
+			const deletedEmail = await SubscriptionModel.findOneAndDelete({ email: req.body.email });
+			res.json(deletedEmail);
+		} catch (error) {
+			res.status(422).send({
+				message: `Error: ${error}`
+			});
+		}
+	}
 }
 
 export default CoreServerController.getInstance();

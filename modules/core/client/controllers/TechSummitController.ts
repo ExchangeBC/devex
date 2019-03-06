@@ -9,6 +9,7 @@ import { NewsletterSignupModalController } from './NewsletterSignupModalControll
 class TechSummitController implements IController {
 	public static $inject = ['$scope', '$uibModal', 'AuthenticationService', 'CoreService', 'Notification', 'UsersService'];
 	public isSubscribed: boolean;
+	public showUnsubscribe = false;
 
 	constructor(
 		private $scope: IScope,
@@ -50,8 +51,22 @@ class TechSummitController implements IController {
 		}
 	}
 
+	public async unsubscribe(): Promise<void> {
+		try {
+			await this.CoreService.unregisterEmail({ email: this.AuthenticationService.user.email }).$promise;
+			this.Notification.success({
+				message: 'Unsubscribe complete'
+			});
+		} catch (error) {
+			this.Notification.error({
+				message: `${error.data.message}`
+			});
+		}
+	}
+
 	private async init() {
 		this.isSubscribed = this.AuthenticationService.user && (await this.getSubscriptionStatus());
+		this.showUnsubscribe = true;
 	}
 
 	private async getSubscriptionStatus(): Promise<boolean> {

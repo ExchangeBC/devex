@@ -47,7 +47,9 @@ class CoreRouter {
 		app.route('/newsletter/verify').post(CoreServerController.verifyNotABot);
 
 		// Define newsletter registration route
-		app.route('/newsletter/register').post(CoreServerController.saveNewsletterEmail);
+		app.route('/newsletter/register')
+			.post(CoreServerController.saveNewsletterEmail)
+			.delete(CoreServerController.removeNewsletterSub);
 
 		// Define application route
 		app.route('/*').get(CoreServerController.renderIndex);
