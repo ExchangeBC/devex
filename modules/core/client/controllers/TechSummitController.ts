@@ -1,6 +1,6 @@
 'use strict';
 
-import angular, { IController, ui, uiNotification, IScope } from 'angular';
+import angular, { IController, IScope, ui, uiNotification } from 'angular';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserService } from '../../../users/client/services/UsersService';
 import { ICoreService } from '../services/CoreService';
@@ -27,6 +27,8 @@ class TechSummitController implements IController {
 			const user = this.AuthenticationService.user;
 			try {
 				await this.CoreService.registerEmail({ name: user.displayName, email: user.email }).$promise;
+				this.isSubscribed = true;
+				this.$scope.$apply();
 				this.Notification.success({
 					message: 'Subscription complete!'
 				});
