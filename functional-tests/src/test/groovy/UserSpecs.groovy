@@ -38,6 +38,7 @@ import spock.lang.Stepwise
 @Narrative('''As a regular user, I want to create, update, and delete my user profile.''')
 class UserSpecs extends GebReportingSpec {
 
+  // TODO: Remove this or move it to a module
   def Boolean CheckIfReauthIsNeeded(){
         if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
                 println("Had to reauthorize Devex to access the GibHub account")
@@ -51,17 +52,16 @@ class UserSpecs extends GebReportingSpec {
     }
   
   void 'Creating a user profile'() {
-    given: "Starting from the Home Page"
-      //to HomePage
+    given: "I have navigated to the Home Page"    
       waitFor {to HomePage}
     and: 'I click on the Sign In link to go to the Authentication page'
-      SigninLink //The definition for this element includes a Click
+      SigninLink 
       at AuthenticationSigninPage 
     and: 'I click on the "Sign in with your GitHub" account button'
       SignInButton.click()
-    and: "Arrive to the GitHub login page, where we will be able to log using the credentials '#Login' and '#Pwd'"
       at GitHubSignInPage
-      waitFor{GitHubSignInButton} //If this element is present the page has loaded
+    and: "I enter the credentials for an active GitHub account"      
+      waitFor{GitHubSignInButton} 
 		  GitHubLogin.value(Login)
 		  GitHubPwd.value(Pwd)
       GitHubSignInButton.click()
@@ -72,12 +72,12 @@ class UserSpecs extends GebReportingSpec {
     and: "After successful Login, arrive at the Profile page for the user"
         at SingleProfilePage  //verify we are in the user's settings page
 
-    and: "Check the Name and Last Name have been imported correctly from GitHub"
+    and: "I confirm that user's first name and last name have been imported correctly from GitHub"
         waitFor{FirstName}
         assert FirstName.value().toString()==UserFirstName 
         assert LastName.value().toString()==UserLastName
 
-    and: "Now lets write an email address and city"
+    and: "I enter the user's email address and city"
         emailprofile.value(UserEmail)
         city.value(UserCity)
 
@@ -95,7 +95,7 @@ class UserSpecs extends GebReportingSpec {
     when: 'I save the company'  
       SaveChangesButton.click()
 
-    then: 'New user profile created'
+    then: 'New user profile created - email and address persisted'
       // TODO: Check user list for user
       assert emailprofile.value().toString() == UserEmail
       assert city.value().toString() == UserCity
@@ -123,7 +123,6 @@ class UserSpecs extends GebReportingSpec {
     given: 'I am logged in as an regular user'
     and: "I have navigated to the Home Page"
         waitFor{to HomePage}  //verify we are in the user's settings page
-        sleep(1000)
 
     and:"Click on the Setting options of the drop down"  
         AvatarImage.click() //Click on the icon, it will open the drop down menu
@@ -131,36 +130,34 @@ class UserSpecs extends GebReportingSpec {
 
     and:"We arrive to the Settings page for the Hugo user"
         waitFor{at SingleProfilePage}  //verify we are in the user's settings page
-        sleep(1000)
-
 
     // Modify this
     and: "Check the Name and Last Name have been imported correctly from GitHub"
+        waitFor{FirstName}
         assert FirstName.value().toString()=="Hugo"
-        assert LastName.value().toString()=="Chibougamau" 
+        assert LastName.value().toString()=="Chibougamau"         
 
      // TODO: test moving "Update email address" and "Update city" methods to related Page object   
 
     and: "Now lets write an email address and city"
-        // emailprofile.value("hugochibougamau@EditedFakeaddress.ca" )
-        // city.value("Malcom Island")
         to SingleProfilePage
+        setFirstName(NewFirstName)
+        setLastName(NewLastName)
         setEmailAddress(NewUserEmail)
         setCity(NewUserCity)     
-        sleep(1000)
 
     when: "I save the edits to the user profile"   
         SaveChangesButton.click()
 
     then: "The user profile is updated"    
-        assert FirstName.value().toString()=="Hugo"
-        assert LastName.value().toString()=="Chibougamau" 
+        assert FirstName.value().toString()=="NewFirstName"
+        assert LastName.value().toString()=="NewLastName" 
         assert emailprofile.value().toString()=="new@new.com" 
         assert city.value().toString()=="New City"
 
 where:
-    NewUserEmail | NewUserCity
-    "new@new.com" | "New City"
+    NewFirstName | NewLastName | NewUserEmail | NewUserCity
+    "NewFirstName"  | "NewLastName" | "new@new.com" | "New City"
 
   }
 

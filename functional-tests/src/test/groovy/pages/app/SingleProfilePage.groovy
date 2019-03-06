@@ -23,6 +23,14 @@ class SingleProfilePage extends Page {
         MyAffiliations {$("a",id:"setttings.affiliations")}
     }
 
+    void setFirstName(String newFirstName) {
+        FirstName.value(newFirstName)
+    }
+
+    void setLastName(String newLastName){
+        LastName.value(newLastName)
+    } 
+    
     void setEmailAddress(String newEmailAddress) {
         emailprofile.value(newEmailAddress)
     }
