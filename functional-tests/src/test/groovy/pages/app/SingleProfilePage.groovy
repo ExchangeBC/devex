@@ -21,8 +21,13 @@ class SingleProfilePage extends Page {
         MyCapabilitiesLink {$("a",id:"settings.skills")}
         MyMessages {$("a",id:"setttings.messages")}
         MyAffiliations {$("a",id:"setttings.affiliations")}
-
-
-
     }
+
+    void setEmailAddress(String newEmailAddress) {
+        emailprofile.value(newEmailAddress)
+    }
+
+    void setCity(String newCity){
+        city.value(newCity)
+    }    
 }
