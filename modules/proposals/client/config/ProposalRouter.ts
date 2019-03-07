@@ -92,10 +92,10 @@ class ProposalRouter {
 			},
 			org: ['AuthenticationService', 'OrgService', this.resolveOrg],
 			resources: [
-				'OrgService',
 				'AuthenticationService',
 				'ProposalService',
 				'$stateParams',
+				'OrgService',
 				this.resolveResources
 			]
 		}
