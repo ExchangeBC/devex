@@ -6,10 +6,10 @@ section.bc-tech-header {
     background: url('/modules/core/client/img/bc-tech-summit/summit-banner.jpg') no-repeat center;
     background-size: cover;
 }
-section.gov-events {
-    background: $brand-darkblue;
-    color: $white;
-    padding: 3rem 0;
+@media (max-width: 576px) {
+    .no-pad-xs {
+        padding: 0;
+    }
 }
 .photo-citation {
     color: $white;
