@@ -22,9 +22,9 @@ class ProposalsServerController {
 	private static instance: ProposalsServerController;
 
 	private userfields =
-		'_id displayName firstName lastName email phone address username profileImageURL \
-						businessName businessAddress businessContactName businessContactPhone businessContactEmail \
-						roles provider';
+		'_id displayName firstName lastName email phone address username profileImageURL ' +
+		'businessName businessAddress businessContactName businessContactPhone businessContactEmail ' +
+		'roles provider';
 	private fileStream: FileStream = new FileStream();
 
 	private constructor() {

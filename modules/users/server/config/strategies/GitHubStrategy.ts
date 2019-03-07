@@ -23,7 +23,7 @@ export default class GitHubAuthStrategy {
 				},
 				(req, accessToken, refreshToken, profile, done) => {
 					// Set the provider data and include tokens
-					const providerData = (profile as any)._json;
+					const providerData = profile._json;
 					providerData.accessToken = accessToken;
 					providerData.refreshToken = refreshToken;
 

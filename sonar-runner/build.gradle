@@ -15,7 +15,7 @@ sonarqube {
         property "sourceEncoding", "UTF-8"
         property "sonar.python.coveragePlugin","cobertura"
         property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
-        property "sonar.exclusions", ["**/node_modules/**/*", "**/public/dist/**/*", "**/webpack.parts.js", "**/webpack.config.js", "**/server-dist/**/*"]
+        property "sonar.exclusions", ["**/node_modules/**/*", "**/public/**/*", "**/webpack.parts.js", "**/webpack.config.js", "**/server-dist/**/*"]
     }
 }
 

@@ -78,15 +78,6 @@ mg.connect(function (db) {
 
       if (processedCount === 0) {
         console.log(chalk.yellow('No users were found.'));
-      } else {
-        var alert;
-        if (!errorCount) {
-          alert = chalk.green;
-        } else if ((successCount / processedCount) < 0.8) {
-          alert = chalk.red;
-        } else {
-          alert = chalk.yellow;
-        }
       }
 
       process.exit(0);

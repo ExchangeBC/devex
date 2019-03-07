@@ -47,8 +47,8 @@
 				}
 
 				vm.removeAffiliation = function(affiliation) {
-					var question = 'Removing your affiliation with ' + affiliation.name + ' means they won\'t be able to include you on proposals to Sprint With Us opportunities. \
-					Are you sure you want to do this?';
+					var question = 'Removing your affiliation with ' + affiliation.name + ' means they won\'t be able to include you on proposals to Sprint With Us opportunities. ' +
+					'Are you sure you want to do this?';
 					ask.yesNo(question).then(function (result) {
 						if (result) {
 							OrgService.removeMeFromOrg ({
