@@ -104,14 +104,14 @@ class CompanySpecs extends GebReportingSpec {
         assert Jurisdiction.value()==jurisdiction
 
     and: "I enter additional information about the company"
-        Address1.value("Upper Ganges Road 123")
-        Address2.value("corner with Spark Road")
-        City.value("Salt Spring Island")
-        Province.value("British Columbia")
-        PostalCode.value("V1V 2L2")
-        ContactName.value("Hugo Chibougmaiu")  //spelling mistake to be corrected later
-        ContactPhone.value("250 200 1234")
-        ContactEmail.value("hugo@fakeaddress.ca")
+        Address1.value(address1)
+        Address2.value(address2)
+        City.value(city)
+        Province.value(province)
+        PostalCode.value(postalCode)
+        ContactName.value(contactName)  //spelling mistake to be corrected later
+        ContactPhone.value(contactPhone)
+        ContactEmail.value(contactEmail)
         SaveCompanyOtherInformationBtn.click()
 
     when:"I click on the Accept button to complete the creation of my new company"
@@ -128,8 +128,8 @@ class CompanySpecs extends GebReportingSpec {
         assert logoffOK
         sleep(3000)
     where:
-        username | password | companyName | jurisdiction | businessNumber
-        "user" | "useruser" | "DevEx Company" | "BC" | "123456789"
+        username | password | companyName | jurisdiction | businessNumber | address1 | address2 | city | province | postalCode | contactName | contactPhone | contactEmail
+        "user" | "useruser" | "DevEx Company" | "BC" | "123456789" | "Main Street" | "Apt. #1" | "Victoria" | "BC" | "V1A B2C" | "Joe Smith" | "250.123.4567" | "joe@joe.com"
     }
 
 // @Unroll 
