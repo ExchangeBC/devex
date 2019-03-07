@@ -38,6 +38,7 @@ class CompanySpecs extends GebReportingSpec {
     // Add setup() method?
     def setup() {
         to HomePage
+        // TODO:  Fix the error re "Cannot read property 'scrollIntoView' of null" for SigninadminLink
         SigninadminLink
         at AuthenticationSigninadminPage
     }
@@ -48,87 +49,87 @@ class CompanySpecs extends GebReportingSpec {
   def "Creating a New Company" () {
     def actions = new Actions(driver)
     
-    given: 'I have navigated to the Admin Login page'
-    when: 'I enter credentials to login as an admin user'
+    given: 'I have navigated to the Admin Login page' 
+
+    and: 'I enter credentials to login as an admin user'
         //logInAsDevUser()  
-        Username.value("user")
-        Password.value("useruser") 
+        Username.value(username)
+        Password.value(password) 
         SignInButton.click()
-    then: 'I am logged in as a dev user'
+
+    and: 'I confirm that I am logged in to the application'
         at HomePage  
         assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
 
-    and: "Click on the Companies link to go to the orgs page"
+    and: "I click on the Companies link to navigate to the orgs page"
         CompaniesNavbar //this reference already includes a click
-
-    then: "Arrive at the orgs page. It should be empty"
         waitFor{at CompaniesPage}
-        
-    and: "Click on the 'Register a Company' button"
         waitFor{RegisterCompanyButton}
+        
+    and: "I click on the 'Register a Company' button"
         RegisterCompanyButton.click()
-
-    then: "Opens the page to create a new company" 
         waitFor{at CompaniesCreatePage}
-
-    and: "Fill the Name of the Company, Jurisdiction, Business ID, accept the terms and continue"  
         waitFor{CompanyName}
-        CompanyName.value("Hugo and friend\'s Company") 
-        Jurisdiction.value("Vancouver Island and the Inlets") 
-        BusinessNumber.value("BC-123456789")
+
+    and: "I enter information for the required fields and accept the terms and conditions"  
+        CompanyName.value(companyName) 
+        Jurisdiction.value(jurisdiction) 
+        BusinessNumber.value(businessNumber)
         AgreeConditions.click() // When all the fields are completed the next button should be enabled
+        assert ContinueSubmitButton
+    
+    and: "I click on the Submit button"
         ContinueSubmitButton.click()
         sleep(1000) //There is an angular animation and I prefer is gone before proceeding
-
-    then: "Arribe to the organization page. This page allows to add extra information and accept the terms"
         waitFor{at OrgDetailsPage}
 
-    then: "Open the pop up window that contains the name and website address"
+    and: "I open the pop up window that contains the name and website address"
         AddWebsite.click()  //Clicking here makes the next window pop up
-
-    then:"The pop up window appears. Now check the name has bee properly saved and add a web site address"
         waitFor{SaveCompanyNameBtn} //Made sure the pop up window is fully loaded, as the URL is not fixed
-        assert CompanyLegalName.value()=="Hugo and friend\'s Company" //check the previously added name has been correctly saved
+        assert CompanyLegalName.value()==companyName //check the previously added name has been correctly saved
+
+    and: "I enter additonal (and optional) information about the company."        
         CompanyWebAddress.value("www.thehs.ca") //adding the web site address
         SaveCompanyNameBtn.click()
         sleep(1000) //the WaitFor does not work well for the next instructions
 
-    and:"Open the second edit pop-up window that allows editing more fields"
+    and:"I open the second modal that allows me access to additional fields"
         WebElement element = driver.findElement(By.id("lblBusinessRegistration"))//These two lines move the cursor over one of the labels to make the Edit button visible
         actions.moveToElement(element).build().perform()
         waitFor{EditButtonRight.click()}
-
-    and: "First check the Registration number and Jurisdiction have been saved correctly"
         waitFor{SaveCompanyOtherInformationBtn}
-        assert BusinessNumber.value()=="BC-123456789"
-        assert Jurisdiction.value()=="Vancouver Island and the Inlets"
 
-    and: "Finish entering all the company information"
+    and: "I confirm that the Registration number and Jurisdiction have been saved correctly"       
+        assert BusinessNumber.value()==businessNumber
+        assert Jurisdiction.value()==jurisdiction
+
+    and: "I enter additional information about the company"
         Address1.value("Upper Ganges Road 123")
         Address2.value("corner with Spark Road")
         City.value("Salt Spring Island")
         Province.value("British Columbia")
         PostalCode.value("V1V 2L2")
-
         ContactName.value("Hugo Chibougmaiu")  //spelling mistake to be corrected later
         ContactPhone.value("250 200 1234")
         ContactEmail.value("hugo@fakeaddress.ca")
-
         SaveCompanyOtherInformationBtn.click()
 
-    and:" Accept the terms to finish creating the company"
+    when:"I click on the Accept button to complete the creation of my new company"
         waitFor{AcceptButton.click()}  //Accept the terms
         sleep(1000)//Give time to the message to appear and dissappear
 
-    then: "Go to the Companies page and check the name of the newly created company is listed"    
+    then: "I navigate to the Companies page to confirm that the list of companies includes my new company"    
         waitFor{to CompaniesPage}
-        assert waitFor{NewCompany.text()}=="Hugo and friend\'s Company" 
+        assert waitFor{NewCompany.text()}==companyName 
 
     and: "Log out from BC Developers Exchange"
         waitFor{to HomePage}
         def  logoffOK=login."Logout as user"()
         assert logoffOK
         sleep(3000)
+    where:
+        username | password | companyName | jurisdiction | businessNumber
+        "user" | "useruser" | "DevEx Company" | "BC" | "123456789"
     }
 
 // @Unroll 
