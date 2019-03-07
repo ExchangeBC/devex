@@ -2,6 +2,7 @@
 
 import async from 'async';
 import crypto from 'crypto';
+import { NextFunction, Request, Response } from 'express';
 import nodemailer from 'nodemailer';
 import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
@@ -105,11 +106,7 @@ class UserPasswordController {
 					});
 				}
 			],
-			err => {
-				if (err) {
-					return next(err);
-				}
-			}
+			this.handleErr(next)
 		);
 	};
 
@@ -137,7 +134,7 @@ class UserPasswordController {
 	/**
 	 * Reset password POST from email token
 	 */
-	public reset = (req, res, next) => {
+	public async reset(req: Request, res: Response, next: NextFunction): Promise<void> {
 		// Init Variables
 		const passwordDetails = req.body;
 
@@ -218,11 +215,7 @@ class UserPasswordController {
 					});
 				}
 			],
-			err => {
-				if (err) {
-					return next(err);
-				}
-			}
+			this.handleErr(next)
 		);
 	};
 
@@ -285,6 +278,14 @@ class UserPasswordController {
 			});
 		}
 	};
+
+	private handleErr(next: NextFunction) {
+		return (err: any) => {
+			if (err) {
+				return next(err);
+			}
+		}
+	}
 }
 
 export default UserPasswordController.getInstance();
