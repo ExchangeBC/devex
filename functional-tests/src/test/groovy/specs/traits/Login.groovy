@@ -20,17 +20,13 @@ import pages.app.AuthenticationSigninadminPage
 /**
  * Methods to manage logging in.
  */
-public trait Login implements Users {
+trait Login implements Users {
 
   /**
    * Log a user in.
    *
    * @param a Map containing username and password keys. eg: [username:'someUsername', password:'somePassword']
    */
-
-  void logInAsAdminUser() {
-    login(getAdminUser())
-  } 
   void login(Map user) {
     to HomePage // TODO 1/2 find way to not hardcode HomePage, if possible, and allow any page?
 
@@ -48,7 +44,9 @@ public trait Login implements Users {
     at HomePage // TODO 2/2 as above
   }
 
-  
+  void logInAsAdminUser() {
+    login(getAdminUser())
+  }
 
   void logInAsLocalUser() {
     login(getLocalUser())

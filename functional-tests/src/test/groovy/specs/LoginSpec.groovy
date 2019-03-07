@@ -24,11 +24,12 @@ class LoginSpec extends GebReportingSpec {
     given: 'I have navigated to the Admin Login page'
     when: 'I enter credentials to login as an admin user'
       //logInAsAdminUser() 
-    //   Map env = System.getenv()
-    //   Username.value(env['DEV_ADMIN_USERNAME'])
-    //   Password.value(env['DEV_ADMIN_PWD'])   
+      //   Map env = System.getenv()
+      //   Username.value(env['DEV_ADMIN_USERNAME'])
+      //   Password.value(env['DEV_ADMIN_PWD'])   
       Username.value("admin")
-      Password.value("adminadmin")  
+      Password.value("adminadmin") 
+      SignInButton.click() 
     then: 'I am logged in as an admin user'
       at HomePage      
   }
@@ -38,7 +39,8 @@ class LoginSpec extends GebReportingSpec {
     when: 'I enter credentials to login as a local user'
       //logInAsLocalUser() 
       Username.value("user")
-      Password.value("useruser")      
+      Password.value("useruser")  
+      SignInButton.click()   
     then: 'I am logged in as a local user'
       at HomePage      
   }
@@ -49,6 +51,7 @@ class LoginSpec extends GebReportingSpec {
       //logInAsDevUser()
       Username.value("dev")
       Password.value("devdev")
+      SignInButton.click()
     then: 'I am logged in as a dev user'
       at HomePage      
   }
@@ -59,6 +62,7 @@ class LoginSpec extends GebReportingSpec {
       //logInAsDev2User()
       Username.value("dev2")
       Password.value("devdev")
+      SignInButton.click()
     then: 'I am logged in as a dev2 user'
       at HomePage      
   }
@@ -69,6 +73,7 @@ class LoginSpec extends GebReportingSpec {
       //logInAsGovUser()
       Username.value("gov")
       Password.value("govgov")
+      SignInButton.click()
     then: 'I am logged in as a gov user'
       at HomePage      
   }
