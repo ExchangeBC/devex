@@ -7,5 +7,10 @@ import geb.Page
 class AuthenticationSigninadminPage extends Page {
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static url = "authentication/signinadmin"
-	static content = {}
+	static content = {
+		Username { $("input", id: "username")}
+        Password { $("input", id: "password")}
+
+        SignInButton { $("button", 'data-automation-id': "btnAdminSignIn")}
+	}
 }
