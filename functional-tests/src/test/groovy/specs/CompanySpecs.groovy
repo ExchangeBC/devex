@@ -118,11 +118,9 @@ class CompanySpecs extends GebReportingSpec {
         sleep(1000)//Give time to the message to appear and dissappear
 
     then: "I navigate to the Companies page to confirm that the list of companies includes my new company"    
-        waitFor{to CompaniesPage}
-        /* TODO - This assert is too brittle.  
-        It assumes that there is only one company in list.  
-        We need to fix it to make it more general. */
-        // assert waitFor{NewCompany.text()}==companyName 
+        waitFor {to CompaniesPage}
+        waitFor {CompanySearchTextbox.value(companyName)}
+        assert CompanyTable.$('tbody tr').size()>0
 
     and: "Log out from BC Developers Exchange"
         waitFor{to HomePage}
@@ -329,34 +327,31 @@ class CompanySpecs extends GebReportingSpec {
 
         // TODO - Abstract this to deleteCompany(String companyName)
         def "Deleting a company a company" () {
-            //User already logged in
+            
             def actions = new Actions(driver)  
             
-            given: "I have navigated to the Home Page"
-                waitFor {to HomePage}
-
-            and: "I click on the \"Companies\" item on the navigation bar"
+            given: "I am logged in as an admin user"                
+            and: "I select a company"
                 CompaniesNavbar //this reference already includes a click
                 waitFor{at CompaniesPage}
                 sleep(1000)
-
-            when: "I enter the company's name in the search textbox and select the company"                
+                // Enter the company's name in the search textbox and select the first item in resulting list              
                 waitFor {CompanySearchTextbox.value(companyName)}
                 WebElement element = CompanyTable.$('tbody tr').firstElement()
                 actions.moveToElement(element).build().perform()//Hovering over makes the gear/Admin button visible
 
-            and: "I click on the settings icon"
+            and: "I access the settings menu"
                 waitFor{$("button",'data-automation-id':"btnOrgAdmin" ,0).click()} //Just in case there are more than one company listed
                 sleep(1000) //to give time to the pop up window to appear
 
-            then:"I click on the 'Delete Company Profile' button"
-                waitFor{$("button",'data-automation-id':"btnDelete").click()} 
-
-            then: "I confirm that I want to delete the company"    
+            when:"I click on the 'Delete Company' button"
+                waitFor{$("button",'data-automation-id':"btnDelete").click()}    
                 waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
 
-            expect:"Returns to the same Company page"
-                assert waitFor{at CompaniesPage}
+            then:"The company is deleted"                
+                waitFor {at CompaniesPage}
+                waitFor {CompanySearchTextbox.value(companyName)}
+                assert CompanyTable.$('tbody tr').size()==0
                  
             where:
                 companyName << ["DevEx Company"]              
