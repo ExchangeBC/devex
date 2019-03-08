@@ -329,7 +329,7 @@ class CompanySpecs extends GebReportingSpec {
 
         // TODO - Abstract this to deleteCompany(String companyName)
         def "Deleting a company a company" () {
-            //User already logged
+            //User already logged in
             def actions = new Actions(driver)  
             
             given: "I have navigated to the Home Page"
@@ -340,25 +340,27 @@ class CompanySpecs extends GebReportingSpec {
                 waitFor{at CompaniesPage}
                 sleep(1000)
 
-            // TODO:  This is too brittle.  It won't work if there are multiple companies and you have the wrong one.
-            when: "Hover over the company name to make the gear icon appear"
-                WebElement element = driver.findElement(By.id("holderCompanyName"))//These two lines move the cursor over one of the labels to make the Edit button visible
+            when: "I enter the company's name in the search textbox and select the company"                
+                waitFor {CompanySearchTextbox.value(companyName)}
+                WebElement element = CompanyTable.$('tbody tr').firstElement()
                 actions.moveToElement(element).build().perform()//Hovering over makes the gear/Admin button visible
 
-            and: "Clicks on the Admin gear to edit the company"
+            and: "I click on the settings icon"
                 waitFor{$("button",'data-automation-id':"btnOrgAdmin" ,0).click()} //Just in case there are more than one company listed
                 sleep(1000) //to give time to the pop up window to appear
 
-            then:" Redirected to the page that displays the compoany information, we click on the 'Delete Company Profile' button"
+            then:"I click on the 'Delete Company Profile' button"
                 waitFor{$("button",'data-automation-id':"btnDelete").click()} 
 
-            then: "A modal window appears. Click on the Yes button"    
+            then: "I confirm that I want to delete the company"    
                 waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
 
             expect:"Returns to the same Company page"
                 assert waitFor{at CompaniesPage}
-            }
-
+                 
+            where:
+                companyName << ["DevEx Company"]              
+        }
 
         def cleanupSpec(){
             //Logoff as user

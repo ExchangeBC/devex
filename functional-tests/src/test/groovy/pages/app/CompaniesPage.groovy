@@ -16,6 +16,8 @@ class CompaniesPage extends Page {
 		JoinCompanyButton{$("button",'data-automation-id':"btnJoinCompany") }
 		YesButton { $("button",'data-automation-id':"button-modal-yes") }
 		PendingLbl{$("label",'data-automation-id':"lblPending")}
+		CompanySearchTextbox{$("input", 'data-automation-id':"company-search-textbox")}
+		CompanyTable{$("table", 'class':"company-list")}
   }
 }
 
