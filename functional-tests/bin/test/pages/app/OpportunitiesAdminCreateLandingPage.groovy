@@ -15,5 +15,5 @@ class OpportunitiesAdminCreateLandingPage extends Page {
 	static content = {
     	createCWUOpportunityButton{ $(('button[data-automation-id ~= "button-create-codewithus"]'), 0) }
     	createSWUOpportunityButton{ $(('button[data-automation-id ~= "button-create-sprintwithus"]'), 0) }
-}
+	}
 }

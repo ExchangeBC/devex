@@ -11,13 +11,9 @@ import spock.lang.Unroll
 import java.io.File
 import java.io.IOException
 
-/**
- * Example of a Module in Groovy.
- */
+
 
 class LoginModule extends Module {
-
-  
 
     static content = {
       adminLogin(wait: true) { $("#authentication.signinadmin") }
@@ -69,7 +65,7 @@ class LoginModule extends Module {
             $("img",src:"${AdminIconLocation}").click()
             sleep(1000)
             //This line click in the Log Out option of the previous drop down list
-            $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()
+            $("a",'data-automation-id':"lnkSignOut").click()
             println("Just logged off as admin")
             return true
         }
@@ -78,20 +74,17 @@ class LoginModule extends Module {
 
  Boolean "Logout as user"(){
         
-         // def  UserIcon = "https://avatars1.githubusercontent.com/u/46409451?v=4"
-
-     //   if (!$("img",src:"${UserIcon}"))  {    created a data-automation-id for this element
-        if (!$("img",'data-automation-id':"UserAvatarImage" )) {
-            println("Not logged as user")
+        if ($("img",'data-automation-id':"UserAvatarImage" ).displayed) {
+            println("Logged as user")
+            sleep(500)
+            $("img",'data-automation-id':"UserAvatarImage" ).click()
+            sleep(500)
+            //This line click in the Log Out option of the previous drop down list
+            $("a", href:"/api/auth/signout" ).click()
             return true
         }
         else {
-      //      $("img",src:"${UserIcon}").click()
-            $("img",'data-automation-id':"UserAvatarImage" ).click()
-            sleep(1000)
-            //This line click in the Log Out option of the previous drop down list
-            $("body > div:nth-child(1) > nav > div > div.navbar-collapse.collapse > ul:nth-child(3) > li.nav-item.dropdown.show > ul > li:nth-child(4) > a").click()
-            println("Just logged off as user")
+            println("Not logged as user")
             return true
         }
     }
