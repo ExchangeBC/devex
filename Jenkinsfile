@@ -75,19 +75,19 @@ node('maven') {
     //       }
     // }
 
-    stage('sonarqube') {
-      script {
-        openshift.withCluster() {
-          openshift.withProject() {
-            def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
-            def build = sonarqube.startBuild()
-            build.untilEach(1) {
-              return it.object().status.phase == "Complete"
-            }
-          }
-        }
-      }
-    }
+    // stage('sonarqube') {
+    //   script {
+    //     openshift.withCluster() {
+    //       openshift.withProject() {
+    //         def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
+    //         def build = sonarqube.startBuild()
+    //         build.untilEach(1) {
+    //           return it.object().status.phase == "Complete"
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     stage('build') {
 	    echo "Building..."
