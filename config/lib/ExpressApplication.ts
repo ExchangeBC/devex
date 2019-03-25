@@ -86,8 +86,7 @@ class ExpressApplication {
 		this.initErrorRoutes(app);
 
 		// Configure Socket.io
-		// app = 
-		this.configureSocketIO(app, db);
+		app = this.configureSocketIO(app, db);
 
 		return app;
 	}
