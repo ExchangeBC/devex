@@ -2,7 +2,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import {Types} from 'mongoose';
+import { Types } from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
@@ -167,7 +167,7 @@ class OrgsServerController {
 				.populate('admins', this.popfields)
 				.populate('joinRequests', '_id')
 				.exec();
-			res.json(orgs);
+				res.json(orgs);
 		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)

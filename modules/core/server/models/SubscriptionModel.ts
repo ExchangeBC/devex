@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 
 export interface ISubscriptionModel extends Document {
 	_id: string;
@@ -18,4 +19,4 @@ const SubscriptionSchema = new Schema(
 	{ usePushEach: true }
 )
 
-export const SubscriptionModel: Model<ISubscriptionModel> = model<ISubscriptionModel>('Subscription', SubscriptionSchema);
+export const SubscriptionModel: Model<ISubscriptionModel> = MongooseController.mongoose.model<ISubscriptionModel>('Subscription', SubscriptionSchema);

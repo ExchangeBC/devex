@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import { IOpportunity } from '../../shared/IOpportunityDTO';
 
@@ -289,7 +290,7 @@ OpportunitySchema.virtual('implementationEndDateDisplay').get(function() {
 	return dayNames[dt.getDay()] + ', ' + monthNames[dt.getMonth()] + ' ' + dt.getDate() + ', ' + dt.getFullYear();
 });
 
-export const OpportunityModel: Model<IOpportunityModel> = model<IOpportunityModel>('Opportunity', OpportunitySchema);
+export const OpportunityModel: Model<IOpportunityModel> = MongooseController.mongoose.model<IOpportunityModel>('Opportunity', OpportunitySchema);
 
 OpportunitySchema.statics.findUniqueCode = (title, suffix, callback) => {
 	return CoreServerHelpers.modelFindUniqueCode(OpportunityModel, 'opp', title, suffix, callback);

@@ -15,6 +15,11 @@ class MongooseController {
 
 	private constructor() {}
 
+	public get mongoose() {
+		// Should only import mongoose once within an app!
+		return mongoose;
+	}
+
 	public connect(): Promise<mongoose.Connection> {
 
 		return new Promise(resolve => {

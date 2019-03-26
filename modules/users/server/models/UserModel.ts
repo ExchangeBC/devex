@@ -3,7 +3,8 @@
 import crypto from 'crypto';
 import generatePassword from 'generate-password';
 import _ from 'lodash';
-import { Document, model, Model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import owasp from 'owasp-password-strength-test';
 import validator from 'validator';
 import config from '../../../../config/ApplicationConfig';
@@ -367,4 +368,4 @@ UserSchema.statics.generateRandomPassphrase = () => {
 	});
 };
 
-export const UserModel: Model<IUserModel> = model<IUserModel>('User', UserSchema);
+export const UserModel: Model<IUserModel> = MongooseController.mongoose.model<IUserModel>('User', UserSchema);

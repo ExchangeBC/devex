@@ -2,7 +2,8 @@
 
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
@@ -56,7 +57,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public requests = (project, cb) => {
-		mongoose
+		MongooseController.mongoose
 			.model('User')
 			.find({ roles: this.requestRole(project) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
@@ -277,7 +278,7 @@ class ProjectsServerController {
 		if (id.substr(0, 3) === 'prj') {
 			queryObject = { code: id };
 		} else {
-			if (!mongoose.Types.ObjectId.isValid(id)) {
+			if (!Types.ObjectId.isValid(id)) {
 				res.status(400).send({
 					message: 'Project is invalid'
 				});

@@ -7,7 +7,8 @@
 // configuring the system form outside.
 
 import express from 'express';
-import { model, Types } from 'mongoose';
+import { Types } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import MessagesServerController from '../controllers/MessagesServerController';
 import { IMessageModel } from '../models/MessageModel';
 import { IMessageTemplateModel } from '../models/MessageTemplateModel';
@@ -51,13 +52,13 @@ class MessagesRouter {
 			if (!Types.ObjectId.isValid(id)) {
 				return res.status(400).send({ message: 'Invalid Message Id' });
 			} else {
-				model('Message')
+				MongooseController.mongoose.model('Message')
 					.findById(id)
 					.exec((err, message) => {
 						if (err) {
 							return next(err);
 						} else if (!message) {
-							model('MessageArchive')
+							MongooseController.mongoose.model('MessageArchive')
 								.findById(id)
 								.exec((findErr, findMsg) => {
 									if (findErr) {
@@ -81,7 +82,7 @@ class MessagesRouter {
 			if (!Types.ObjectId.isValid(id)) {
 				return res.status(400).send({ message: 'Invalid Message Template Id' });
 			} else {
-				model('MessageTemplate')
+				MongooseController.mongoose.model('MessageTemplate')
 					.findById(id)
 					.exec((err, template) => {
 						if (err) {

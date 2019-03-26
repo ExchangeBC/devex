@@ -1,7 +1,6 @@
 'use strict';
 
 import { NextFunction, Request, Response } from 'express';
-import mongoose from 'mongoose';
 import passport from 'passport';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';

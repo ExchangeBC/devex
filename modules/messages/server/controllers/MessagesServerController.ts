@@ -6,7 +6,7 @@ import fs from 'fs';
 import handlebars from 'handlebars';
 import htmlToText from 'html-to-text';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import nodemailer from 'nodemailer';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
@@ -450,7 +450,7 @@ class MessagesServerController {
 		});
 
 		// if this is a list of userids
-		if (mongoose.Types.ObjectId.isValid(users[0])) {
+		if (Types.ObjectId.isValid(users[0])) {
 			users.forEach(async (userId: string) => {
 				const user = await this.getUser(userId);
 				await this.sendMessage(template, user, data);

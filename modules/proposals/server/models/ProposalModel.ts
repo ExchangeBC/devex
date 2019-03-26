@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import { IOpportunityModel } from '../../../opportunities/server/models/OpportunityModel';
 import { IUserModel } from '../../../users/server/models/UserModel';
 import { IAttachment, IProposal } from '../../shared/IProposalDTO';
@@ -121,5 +122,5 @@ const ProposalSchema = new Schema(
 	{ usePushEach: true }
 );
 
-export const ProposalModel: Model<IProposalModel> = model<IProposalModel>('Proposal', ProposalSchema);
-export const AttachmentModel: Model<IAttachmentModel> = model<IAttachmentModel>('Attachment', AttachmentSchema);
+export const ProposalModel: Model<IProposalModel> = MongooseController.mongoose.model<IProposalModel>('Proposal', ProposalSchema);
+export const AttachmentModel: Model<IAttachmentModel> = MongooseController.mongoose.model<IAttachmentModel>('Attachment', AttachmentSchema);

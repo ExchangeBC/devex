@@ -2,9 +2,10 @@
 
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
+import MongooseController from '../../../../config/lib/MongooseController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import ProjectsServerController from '../../../projects/server/controllers/ProjectsServerController';
@@ -50,7 +51,7 @@ class ProgramsServerController {
 	// return a list of all users who are currently waiting to be added to the
 	// program member list
 	public requests = (program, cb) => {
-		mongoose
+		MongooseController.mongoose
 			.model('User')
 			.find({ roles: this.requestRole(program) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
@@ -266,7 +267,7 @@ class ProgramsServerController {
 		if (id.substr(0, 3) === 'pro') {
 			queryObject = { code: id };
 		} else {
-			if (!mongoose.Types.ObjectId.isValid(id)) {
+			if (!Types.ObjectId.isValid(id)) {
 				res.status(400).send({
 					message: 'Program is invalid'
 				});

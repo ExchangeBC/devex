@@ -1,13 +1,14 @@
 'use strict';
 
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import { IMessage } from '../../shared/IMessageDTO';
 
 export interface IMessageModel extends IMessage, Document {
 	_id: string;
 }
 
-export const MessageModel: Model<IMessageModel> = model<IMessageModel>(
+export const MessageModel: Model<IMessageModel> = MongooseController.mongoose.model<IMessageModel>(
 	'Message',
 	new Schema({
 		messageCd: { type: String, default: '' },

@@ -2,7 +2,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
 import FileStream from '../../../../config/lib/FileStream';
@@ -377,7 +377,7 @@ class ProposalsServerController {
 
 	// Populates the proposal on the request
 	public async proposalByID(req: Request, res: Response, next: NextFunction, id: string): Promise<IProposalModel> {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
+		if (!Types.ObjectId.isValid(id)) {
 			res.status(400).send({
 				message: 'Proposal is invalid'
 			});
