@@ -2,7 +2,7 @@
 
 import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import {Types} from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
@@ -244,7 +244,7 @@ class OrgsServerController {
 	}
 
 	public async orgByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
+		if (!Types.ObjectId.isValid(id)) {
 			res.status(400).send({
 				message: 'Org is invalid'
 			});
@@ -264,7 +264,7 @@ class OrgsServerController {
 	}
 
 	public async orgByIDSmall(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
+		if (!Types.ObjectId.isValid(id)) {
 			res.status(400).send({
 				message: 'Org is invalid'
 			});

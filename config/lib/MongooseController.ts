@@ -38,22 +38,26 @@ class MongooseController {
 				console.log(chalk.yellow(`Disconnected from ${config.db.uri}`));
 
 				// attempt to reconnect to database every 5 seconds
-				setTimeout(() => {
-					mongoose.connect(config.db.uri, config.db.options);
-				}, 5000);
+				// setTimeout(() => {
+				// 	console.log('connect options: ', config.db.options);
+				// 	mongoose.connect(config.db.uri, config.db.options);
+				// }, 5000);
 			})
 
 			_.assign(config.db.options, { useNewUrlParser: true });
 			mongoose.set('useFindAndModify', false);
+			config.db.options.bufferCommands = false;
+			config.db.options.bufferMaxEntries = 0;
+			mongoose.connect(config.db.uri, config.db.options);
+			// try {
+			// 	setTimeout(() => {
+			// 		console.log('config.db.options',config.db.options);
+					
+			// 	}, 5000);
 
-			try {
-				setTimeout(() => {
-					mongoose.connect(config.db.uri, config.db.options);
-				}, 5000);
-
-			} catch (error) {
-				console.log(chalk.red(`Unable to establish connection to ${config.db.ui}`));
-			}
+			// } catch (error) {
+			// 	console.log(chalk.red(`Unable to establish connection to ${config.db.ui}`));
+			// }
 		})
 	}
 }
