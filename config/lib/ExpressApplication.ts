@@ -307,7 +307,7 @@ class ExpressApplication {
 			// Log it
 			console.error(err.stack);
 
-			res.status(500).send("Oops that didn't work"); 
+			res.status(500).json({message:"Oops that didn't work"}); 
 		});
 	};
 
