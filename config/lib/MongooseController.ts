@@ -38,10 +38,10 @@ class MongooseController {
 				console.log(chalk.yellow(`Disconnected from ${config.db.uri}`));
 
 				// attempt to reconnect to database every 5 seconds
-				// setTimeout(() => {
-				// 	console.log('connect options: ', config.db.options);
-				// 	mongoose.connect(config.db.uri, config.db.options);
-				// }, 5000);
+				setTimeout(() => {
+					console.log('connect options: ', config.db.options);
+					mongoose.connect(config.db.uri, config.db.options);
+				}, 5000);
 			})
 
 			_.assign(config.db.options, { useNewUrlParser: true });
