@@ -143,54 +143,6 @@ import { IProposalService } from '../services/ProposalService';
 					}
 				})
 
-				// create a new CWU proposal and edit it
-				.state('proposaladmin.createcwu', {
-					url: '/createcwu/:opportunityId',
-					data: {
-						roles: ['user'],
-						notroles: ['gov']
-					},
-					templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
-					controller: 'ProposalEditCWUController',
-					controllerAs: 'ppp',
-					resolve: {
-						proposal: [
-							'ProposalService',
-							(ProposalService: IProposalService) => {
-								return new ProposalService();
-							}
-						],
-						opportunity: [
-							'$stateParams',
-							'OpportunitiesService',
-							($stateParams: StateParams, OpportunitiesService: IOpportunitiesService) => {
-								return OpportunitiesService.get({
-									opportunityId: $stateParams.opportunityId
-								}).$promise;
-							}
-						],
-						org: [
-							'AuthenticationService',
-							'OrgService',
-							(AuthenticationService: IAuthenticationService, OrgService) => {
-								if (!AuthenticationService.user) {
-									return {};
-								}
-								return OrgService.myadmin().$promise.then(orgs => {
-									if (orgs && orgs.length > 0) {
-										return orgs[0];
-									} else {
-										return null;
-									}
-								});
-							}
-						],
-						editing() {
-							return false;
-						}
-					}
-				})
-
 				// edit a SWU proposal
 				.state('proposaladmin.editswu', {
 					url: '/:proposalId/editswu/:opportunityId',

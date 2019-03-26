@@ -1,7 +1,7 @@
 'use strict';
 
 import { StateService } from '@uirouter/core';
-import angular, { angularFileUpload, IFormController, IRootScopeService, uiNotification } from 'angular';
+import angular, { angularFileUpload, IFormController, IRootScopeService, ui, uiNotification } from 'angular';
 import moment from 'moment-timezone';
 import { Settings } from 'tinymce';
 import { IOpportunitiesService, IOpportunityResource } from '../../../opportunities/client/services/OpportunitiesService';
@@ -26,7 +26,8 @@ export default class ProposalEditCWUController {
 		'UsersService',
 		'Notification',
 		'org',
-		'TinyMceConfiguration'
+		'TinyMceConfiguration',
+		'$uibModalInstance'
 	];
 
 	public members: any[];
@@ -49,7 +50,8 @@ export default class ProposalEditCWUController {
 		private UsersService: IUserService,
 		private Notification: uiNotification.INotificationService,
 		public org: IOrgResource,
-		public TinyMceConfiguration: Settings
+		public TinyMceConfiguration: Settings,
+		private $uibModalInstance: ui.bootstrap.IModalServiceInstance
 	) {
 		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
 		// if they do, transition to edit view for that proposal
@@ -99,16 +101,14 @@ export default class ProposalEditCWUController {
 				updatedProposal = await this.ProposalService.create(this.proposal).$promise;
 			}
 
-			this.refreshProposal(updatedProposal);
 			this.Notification.success({
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
 			});
-			this.proposalForm.$setPristine();
 
-			// if this is a newly created proposal, transition to edit view
-			if (!this.editing) {
-				this.$state.go('proposaladmin.editcwu', { proposalId: this.proposal._id, opportunityId: this.opportunity.code });
-			}
+			// close the modal and include the proposal in the response
+			this.$uibModalInstance.close({
+				proposal: updatedProposal
+			});
 		} catch (error) {
 			this.handleError(error);
 		}

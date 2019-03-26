@@ -53,7 +53,7 @@
 <div ng-if="$ctrl.opportunity.opportunityTypeCd !== 'sprint-with-us'">
   <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_ADD">
     <div class="col px-0 pb-3">
-      <button id="proposaladmin.create" ui-sref="proposaladmin.createcwu({ opportunityId: $ctrl.opportunity._id })" class="btn btn-primary float-right">
+      <button id="proposaladmin.create" ng-click="$ctrl.openProposalApplicationDialog(false)" class="btn btn-primary float-right">
         <i class="fas fa-paper-plane"></i> Start a Proposal
       </button>
     </div>
@@ -69,8 +69,8 @@
         &nbsp;You can make updates or withdraw your Proposal until <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>.
         &nbsp;
         <div class="update-proposal-link">
-          <a id="proposaladmin.edit" ui-sref="proposaladmin.editcwu({ proposalId: $ctrl.proposal._id, opportunityId: $ctrl.opportunity._id })"><i
-              class="fas fa-pencil-alt"></i> Update my Proposal</a>
+          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog(true, $ctrl.proposal._id)">
+            <i class="fas fa-pencil-alt"></i> Update my Proposal</a>
         </div>
       </div>
     </div>
@@ -81,8 +81,9 @@
         <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>
         to be considered for this opportunity. &nbsp;
         <div class="update-proposal-link">
-          <a id="proposaladmin.edit" ui-sref="proposaladmin.editcwu({ proposalId: $ctrl.proposal._id, opportunityId: $ctrl.opportunity._id })"><i
-              class="fas fa-pencil-alt"></i> Update my Proposal</a>
+          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog(true, $ctrl.proposal._id)"><i
+              class="fas fa-pencil-alt"></i> Update my Proposal
+          </a>
         </div>
       </div>
     </div>
