@@ -29,7 +29,7 @@ class MongooseController {
 			});
 
 			mongoose.connection.on('connecting', () => {
-				console.log(chalk.yellow(`Attempting to connect to ${config.db.uri}...`));
+				console.log(chalk.yellow(`Attempting to connect to ${config.db.uri} with options:`), config.db.options);
 			})
 
 			mongoose.connection.on('connected', () => {
@@ -44,25 +44,18 @@ class MongooseController {
 
 				// attempt to reconnect to database every 5 seconds
 				setTimeout(() => {
-					console.log('connect options: ', config.db.options);
 					mongoose.connect(config.db.uri, config.db.options);
 				}, 5000);
 			})
 
-			_.assign(config.db.options, { useNewUrlParser: true });
-			mongoose.set('useFindAndModify', false);
-			config.db.options.bufferCommands = false;
-			config.db.options.bufferMaxEntries = 0;
-			mongoose.connect(config.db.uri, config.db.options);
-			// try {
-			// 	setTimeout(() => {
-			// 		console.log('config.db.options',config.db.options);
-					
-			// 	}, 5000);
+			_.assign(config.db.options, { 
+				useNewUrlParser: true, 
+				bufferCommands: false, 
+				bufferMaxEntries: 0 
+			});	
 
-			// } catch (error) {
-			// 	console.log(chalk.red(`Unable to establish connection to ${config.db.ui}`));
-			// }
+			mongoose.set('useFindAndModify', false);
+			mongoose.connect(config.db.uri, config.db.options);
 		})
 	}
 }
