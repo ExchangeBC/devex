@@ -186,13 +186,6 @@
 										"port": 3000
 									}
 								},
-								"lifecycle" :{
-									"preStop": {
-										"exec": {
-											"command": ["sleep","15"]
-										}
-									}
-								},
 								"resources": {
 									"limits": {
 										"memory": "${MEMORY_LIMIT}"
