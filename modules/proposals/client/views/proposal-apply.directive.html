@@ -53,7 +53,7 @@
 <div ng-if="$ctrl.opportunity.opportunityTypeCd !== 'sprint-with-us'">
   <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_ADD">
     <div class="col px-0 pb-3">
-      <button id="proposaladmin.create" ng-click="$ctrl.openProposalApplicationDialog(false)" class="btn btn-primary float-right">
+      <button id="proposaladmin.create" ng-click="$ctrl.openProposalApplicationDialog()" class="btn btn-primary float-right">
         <i class="fas fa-paper-plane"></i> Start a Proposal
       </button>
     </div>
@@ -69,19 +69,19 @@
         &nbsp;You can make updates or withdraw your Proposal until <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>.
         &nbsp;
         <div class="update-proposal-link">
-          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog(true, $ctrl.proposal._id)">
+          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">
             <i class="fas fa-pencil-alt"></i> Update my Proposal</a>
         </div>
       </div>
     </div>
     <!-- If Proposal is in DRAFT -->
     <div class="col">
-      <div class="alert alert-warning" ng-if="$ctrl.proposal.status === 'Draft'">
+      <div class="alert alert-warning" ng-if="$ctrl.proposal.status === 'Draft' || $ctrl.proposal.status === 'New'">
         <span class="strong"><i class="fas fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;Submit before 
         <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>
         to be considered for this opportunity. &nbsp;
         <div class="update-proposal-link">
-          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog(true, $ctrl.proposal._id)"><i
+          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)"><i
               class="fas fa-pencil-alt"></i> Update my Proposal
           </a>
         </div>

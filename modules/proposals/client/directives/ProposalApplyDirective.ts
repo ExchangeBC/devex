@@ -7,6 +7,7 @@ import { IOpportunitiesService, IOpportunityResource } from '../../../opportunit
 import { IOrgCommonService } from '../../../orgs/client/services/OrgCommonService';
 import { IOrgResource, IOrgService } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
+import { IUser } from '../../../users/shared/IUserDTO';
 import ProposalEditCWUController from '../controllers/ProposalEditCWUController';
 import { IProposalResource, IProposalService } from '../services/ProposalService';
 
@@ -24,11 +25,18 @@ enum UserStates {
 	NOTHING
 }
 
+export enum ProposalModalActions {
+	CANCELLED = 0,
+	SAVED,
+	DELETED
+}
+
 export class ProposalApplyDirectiveController implements IController {
 	public static $inject = ['$scope', 'AuthenticationService', 'OrgCommonService', 'modalService'];
 	public opportunity: IOpportunityResource;
 	public proposal: IProposalResource;
 	public org: IOrgResource;
+	public user: IUser;
 	public userState: UserStates;
 	public userStates = UserStates;
 
@@ -37,11 +45,11 @@ export class ProposalApplyDirectiveController implements IController {
 		this.proposal = $scope.proposal;
 		this.org = $scope.org;
 		this.userState = this.userStates.NOTHING;
-
+		this.user = this.AuthenticationService.user;
 		this.refreshDirective();
 	}
 
-	public async openProposalApplicationDialog(editing: boolean, proposalId?: string): Promise<void> {
+	public async openProposalApplicationDialog(proposalId?: string): Promise<void> {
 
 		const modalResponse = await this.modalService.showModal({
 			size: 'lg',
@@ -49,12 +57,21 @@ export class ProposalApplyDirectiveController implements IController {
 			controller: ProposalEditCWUController,
 			controllerAs: 'ppp',
 			resolve: {
-				editing: () => editing,
 				proposal: [
 					'ProposalService',
-					(ProposalService: IProposalService) => {
-						if (!editing) {
-							return new ProposalService();
+					async (ProposalService: IProposalService) => {
+						if (!proposalId) {
+							// create a new proposal, and immediately save, the proposal edit controller will handle cleaning up if the user opts not to save their draft
+							const proposal = new ProposalService();
+							proposal.opportunity = this.opportunity;
+
+							proposal.businessName = this.user.businessName;
+							proposal.businessAddress = this.user.businessAddress;
+							proposal.businessContactName = this.user.businessContactName;
+							proposal.businessContactEmail = this.user.businessContactEmail;
+							proposal.businessContactPhone = this.user.businessContactPhone;
+							const newProposal = await ProposalService.create(proposal).$promise;
+							return newProposal;
 						} else {
 							return ProposalService.get({ proposalId }).$promise;
 						}
@@ -88,7 +105,17 @@ export class ProposalApplyDirectiveController implements IController {
 			}
 		});
 
-		this.$scope.proposal = modalResponse.proposal;
+		let action: ProposalModalActions = ProposalModalActions.CANCELLED;
+		if (modalResponse && modalResponse.action) {
+			action = modalResponse.action;
+		}
+
+		if (action === ProposalModalActions.SAVED) {
+			this.$scope.proposal = modalResponse.proposal;
+		} else {
+			this.$scope.proposal = null;
+		}
+
 		this.refreshDirective();
 	}
 

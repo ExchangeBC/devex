@@ -9,15 +9,14 @@ import { IOrgResource } from '../../../orgs/client/services/OrgService';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
 import { IUserService } from '../../../users/client/services/UsersService';
 import { IUser } from '../../../users/shared/IUserDTO';
+import { ProposalModalActions } from '../directives/ProposalApplyDirective';
 import { IProposalResource, IProposalService } from '../services/ProposalService';
 
 export default class ProposalEditCWUController {
 	public static $inject = [
-		'editing',
 		'$scope',
 		'ask',
 		'Upload',
-		'$state',
 		'proposal',
 		'opportunity',
 		'AuthenticationService',
@@ -37,11 +36,9 @@ export default class ProposalEditCWUController {
 	private user: IUser;
 
 	constructor(
-		public editing: boolean,
 		private $scope: IRootScopeService,
 		private ask,
 		private Upload: angularFileUpload.IUploadService,
-		private $state: StateService,
 		public proposal: IProposalResource,
 		public opportunity: IOpportunityResource,
 		private AuthenticationService: IAuthenticationService,
@@ -53,10 +50,6 @@ export default class ProposalEditCWUController {
 		public TinyMceConfiguration: Settings,
 		private $uibModalInstance: ui.bootstrap.IModalServiceInstance
 	) {
-		// if not editing (i.e. creating), ensure that the current user doesn't already have a proposal started for this opp
-		// if they do, transition to edit view for that proposal
-		this.checkForExisting();
-
 		// refresh the view based on passed in proposal
 		this.refreshProposal(this.proposal);
 
@@ -94,12 +87,10 @@ export default class ProposalEditCWUController {
 
 			// Save the proposal
 			this.copyUserInfo();
-			let updatedProposal: IProposalResource;
-			if (this.editing) {
-				updatedProposal = await this.ProposalService.update(this.proposal).$promise;
-			} else {
-				updatedProposal = await this.ProposalService.create(this.proposal).$promise;
+			if (this.proposal.status === 'New') {
+				this.proposal.status = 'Draft';
 			}
+			const updatedProposal = await this.ProposalService.update(this.proposal).$promise;
 
 			this.Notification.success({
 				message: `<i class="fas fa-check-circle"></i> ${successMessage}`
@@ -107,6 +98,7 @@ export default class ProposalEditCWUController {
 
 			// close the modal and include the proposal in the response
 			this.$uibModalInstance.close({
+				action: ProposalModalActions.SAVED,
 				proposal: updatedProposal
 			});
 		} catch (error) {
@@ -114,9 +106,16 @@ export default class ProposalEditCWUController {
 		}
 	}
 
-	// Leave the edit view
-	public close(): void {
-		this.$state.go('opportunities.viewcwu', { opportunityId: this.opportunity.code });
+	// Leave the edit view - if this was a brand new opportunity (i.e. not previously saved), delete it
+	public async close(): Promise<void> {
+
+		if (this.proposal.status === 'New') {
+			await this.proposal.$remove();
+		}
+
+		this.$uibModalInstance.close({
+			action: ProposalModalActions.CANCELLED
+		});
 	}
 
 	// Delete a proposal
@@ -128,9 +127,11 @@ export default class ProposalEditCWUController {
 				try {
 					await this.proposal.$remove();
 					this.proposalForm.$setPristine();
-					this.$state.go('opportunities.viewcwu', { opportunityId: this.opportunity.code });
 					this.Notification.success({
 						message: '<i class="fas fa-check-circle"></i> Proposal Deleted'
+					});
+					this.$uibModalInstance.close({
+						action: ProposalModalActions.DELETED
 					});
 				} catch (error) {
 					this.handleError(error);
@@ -162,11 +163,15 @@ export default class ProposalEditCWUController {
 			// Submit the proposal
 			this.copyUserInfo();
 
-			await this.ProposalService.submit(this.proposal).$promise;
+			const submittedProposal = await this.ProposalService.submit(this.proposal).$promise;
 			this.Notification.success({
 				message: '<i class="fas fa-check-circle"></i> Your proposal has been submitted'
 			});
-			this.close();
+
+			this.$uibModalInstance.close({
+				action: ProposalModalActions.SAVED,
+				proposal: submittedProposal
+			});
 		} catch (error) {
 			this.handleError(error);
 		}
@@ -202,7 +207,7 @@ export default class ProposalEditCWUController {
 					message: '<i class="fas fa-check-circle"></i> Attachment Uploaded'
 				});
 
-				const updatedProposal = response.data as IProposalResource;
+				const updatedProposal = new this.ProposalService(response.data);
 				this.refreshProposal(updatedProposal);
 			} catch (error) {
 				this.handleError(error);
@@ -263,16 +268,6 @@ export default class ProposalEditCWUController {
 		}
 	}
 
-	private async checkForExisting(): Promise<void> {
-		if (!this.editing) {
-			const myProposal = await this.ProposalService.getMyProposal({ opportunityId: this.opportunity.code }).$promise;
-
-			if (myProposal && myProposal._id) {
-				this.$state.go('proposaladmin.editcwu', { proposalId: myProposal._id, opportunityId: this.opportunity.code });
-			}
-		}
-	}
-
 	private refreshProposal(newProposal: IProposalResource): void {
 		this.proposal = newProposal;
 
@@ -282,14 +277,9 @@ export default class ProposalEditCWUController {
 			this.members = this.org.members.concat(this.org.admins);
 		}
 
-		this.title = this.editing ? 'Edit' : 'Create';
+		this.title = 'Edit';
 		if (!this.proposal.team) {
 			this.proposal.team = [];
-		}
-
-		// ensure status set accordingly
-		if (!this.editing) {
-			this.proposal.status = 'New';
 		}
 	}
 
