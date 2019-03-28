@@ -48,11 +48,11 @@ class MongooseController {
 				}, 5000);
 			})
 
-			_.assign(config.db.options, { 
-				useNewUrlParser: true, 
-				bufferCommands: false, 
-				bufferMaxEntries: 0 
-			});	
+			_.assign(config.db.options, {
+				useNewUrlParser: true,
+				bufferCommands: false,
+				bufferMaxEntries: 0
+			});
 
 			mongoose.set('useFindAndModify', false);
 			mongoose.connect(config.db.uri, config.db.options);
