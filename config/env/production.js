@@ -1,7 +1,7 @@
 'use strict';
 
 var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase().replace(/-/g, '_');
-var replicaSetString = process.env.MONGODB_REPLICA_NAME ? `?${process.env.MONGODB_REPLICA_NAME}` : '';
+var replicaSetString = process.env.MONGODB_REPLICA_NAME ? `?replicaSet=${process.env.MONGODB_REPLICA_NAME}` : '';
 
 module.exports = {
   sessionSecret: process.env.SESSION_SECRET || 'super amazing secret',
