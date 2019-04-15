@@ -2,7 +2,7 @@
 
 var defaultEnvConfig = require('./default');
 
-var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase();
+var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase().replace(/-/g, '_');
 
 var devConfig = {
   db: {

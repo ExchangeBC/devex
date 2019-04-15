@@ -1,6 +1,6 @@
 'use strict';
 
-var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase();
+var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase().replace(/-/g, '_');
 
 module.exports = {
   sessionSecret: process.env.SESSION_SECRET || 'super amazing secret',
