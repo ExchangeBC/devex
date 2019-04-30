@@ -32,104 +32,106 @@
     </div>
     
     <nav class="nav nav-pills nav-fill">
-      <!-- Andrew: Can you please make these two nav links hide/show the two separate sections of content below, within this page? -->
-      <a class="nav-item nav-link active" href="#">For Government</a>
-      <a class="nav-item nav-link" href="#">For Companies</a>
+      <a class="nav-item nav-link" ng-class="{'active': govSelected }" ng-click="govSelected = true; companySelected = false" ng-init="govSelected = true">For Government</a>
+      <a class="nav-item nav-link" ng-class="{'active': companySelected }" ng-click="companySelected = true; govSelected = false" ng-init="companySelected = false">For Companies</a>
     </nav>
 
-<section id="#ForGovernment">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <p>Coming soon ..... content addressed to gov audience</p>
+    <section ng-show="govSelected">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <p>Coming soon ..... content addressed to gov audience</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section ng-show="companySelected">
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col-sm-8 col-md-9">
+            <p class="lead">The Government of B.C. is procuring Agile software development teams.</p>
+            <p class="lead">If your company wins a Sprint With Us opportunity, here's how you can expect to work with us:</p>
+          </div>
+          <div class="d-none d-sm-block col-sm-4 col-md-3">
+            <img src="/modules/core/client/img/photos/agile-team-225px.png" class="img-fluid">
+          </div>
+        </div>
+
+        <div class="card-deck py-5">
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="70px" height="70px" src="/img/product-owner.png" alt="Government Product Owners">
+              <h4 class="card-title py-2">Government Product Managers</h4>
+              <p>You'll work closely with a trained government product manager who has the expertise and the
+                responsibility to run the service.</p>
+            </div>
+          </div>
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="110" height="70" src="/img/agile.png" alt="Agile">
+              <h4 class="card-title py-2">Agile</h4>
+              <p>You'll be adaptable to change and follow the Agile Scrum process, building and validating features
+                iteratively with users.</p>
+            </div>
+          </div>
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="106" height="70" src="/img/interdisciplinary.png" alt="Interdisciplinary teams">
+              <h4 class="card-title py-2">Interdisciplinary Teams</h4>
+              <p>Your team will possess all the skills necessary for continuous delivery, such as DevOps engineering,
+                front-end and back-end development, and user experience research and design.</p>
+            </div>
+          </div>
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="162" height="70" src="/img/agile-phases.png" alt="Agile Phases">
+              <h4 class="card-title py-2">Agile Phases</h4>
+              <p>Don’t expect lengthy requirements. This is Agile. You'll start with <span class="strong"><i class="fas fa-map"></i>
+                  Inception</span> to understand the business problem, then build a <span class="strong"><i class="fas fa-rocket"></i>
+                  Proof of Concept</span> to demonstrate the feasibility of the solution. Finally, you'll build out
+                the
+                rest of the product in <span class="strong"><i class="fas fa-cogs"></i> Implementation</span>.</p>
+            </div>
+          </div>
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="75" height="70" src="/img/open-source.png" alt="Open Source">
+              <h4 class="card-title py-2">Open Source</h4>
+              <p>Your team will own the code that's produced, but it will be published in GitHub under an open
+                source
+                license.</p>
+            </div>
+          </div>
+
+          <div class="card card-flat my-3 text-center">
+            <div class="card-body">
+              <img width="40" height="70" src="/img/money-sack.png" alt="Open Source">
+              <h4 class="card-title py-2">Pricing &amp; Incentives</h4>
+              <p>These are not time &amp; materials contracts! For each phase, you'll charge a fixed price for your
+                interdisciplinary team to meet the deliverables for the time period. There's incentives to complete
+                a
+                phase early!</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <div class="banner banner-important">
+      <div class="container">
+        <i class="fas fa-comments"></i> <strong>Help Us Improve</strong><br>
+        We are making procurement easier and the delivery of software continuous. Please <a href="mailto:bcdevexchange@gov.bc.ca?"
+          analytics-on="">share your feedback</a>!
       </div>
     </div>
+
   </div>
 </section>
-
-<section id="#ForCompanies">
-  <div class="container">
-    <div class="row justify-content-between">
-      <div class="col-sm-8 col-md-9">
-        <p class="lead">The Government of B.C. is procuring Agile software development teams.</p>
-        <p class="lead">If your company wins a Sprint With Us opportunity, here's how you can expect to work with us:</p>
-      </div>
-      <div class="d-none d-sm-block col-sm-4 col-md-3">
-        <img src="/modules/core/client/img/photos/agile-team-225px.png" class="img-fluid">
-      </div>
-    </div>
-
-    <div class="card-deck py-5">
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="70px" height="70px" src="/img/product-owner.png" alt="Government Product Owners">
-          <h4 class="card-title py-2">Government Product Managers</h4>
-          <p>You'll work closely with a trained government product manager who has the expertise and the
-            responsibility to run the service.</p>
-        </div>
-      </div>
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="110" height="70" src="/img/agile.png" alt="Agile">
-          <h4 class="card-title py-2">Agile</h4>
-          <p>You'll be adaptable to change and follow the Agile Scrum process, building and validating features
-            iteratively with users.</p>
-        </div>
-      </div>
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="106" height="70" src="/img/interdisciplinary.png" alt="Interdisciplinary teams">
-          <h4 class="card-title py-2">Interdisciplinary Teams</h4>
-          <p>Your team will possess all the skills necessary for continuous delivery, such as DevOps engineering,
-            front-end and back-end development, and user experience research and design.</p>
-        </div>
-      </div>
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="162" height="70" src="/img/agile-phases.png" alt="Agile Phases">
-          <h4 class="card-title py-2">Agile Phases</h4>
-          <p>Don’t expect lengthy requirements. This is Agile. You'll start with <span class="strong"><i class="fas fa-map"></i>
-              Inception</span> to understand the business problem, then build a <span class="strong"><i class="fas fa-rocket"></i>
-              Proof of Concept</span> to demonstrate the feasibility of the solution. Finally, you'll build out
-            the
-            rest of the product in <span class="strong"><i class="fas fa-cogs"></i> Implementation</span>.</p>
-        </div>
-      </div>
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="75" height="70" src="/img/open-source.png" alt="Open Source">
-          <h4 class="card-title py-2">Open Source</h4>
-          <p>Your team will own the code that's produced, but it will be published in GitHub under an open
-            source
-            license.</p>
-        </div>
-      </div>
-
-      <div class="card card-flat my-3 text-center">
-        <div class="card-body">
-          <img width="40" height="70" src="/img/money-sack.png" alt="Open Source">
-          <h4 class="card-title py-2">Pricing &amp; Incentives</h4>
-          <p>These are not time &amp; materials contracts! For each phase, you'll charge a fixed price for your
-            interdisciplinary team to meet the deliverables for the time period. There's incentives to complete
-            a
-            phase early!</p>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-<div class="banner banner-important">
-  <div class="container">
-    <i class="fas fa-comments"></i> <strong>Help Us Improve</strong><br>
-    We are making procurement easier and the delivery of software continuous. Please <a href="mailto:bcdevexchange@gov.bc.ca?"
-      analytics-on="">share your feedback</a>!
-  </div>
-</div>
