@@ -26,7 +26,10 @@ environments {
 	// run via “./gradlew chromeTest”
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chrome {
-		driver = { new ChromeDriver() }
+		driver = { 
+			System.setProperty('webdriver.chrome.driver', '/usr/local/bin/chromedriver')
+			new ChromeDriver() 
+		}
 	}
 
 	// run via “./gradlew chromeHeadlessTest”

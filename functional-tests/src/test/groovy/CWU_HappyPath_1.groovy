@@ -1,4 +1,3 @@
-//package com.athaydes.spockframework.report
 import geb.spock.GebReportingSpec
 import geb.module.*
 
@@ -21,7 +20,6 @@ import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
 
-
 @Narrative('''In this test, the user 'HugoChibougamau' logs into the system and creates a CWU proposal
 and saves it. Later it updates the proposal and submits it. Finally, Hugo logs again to check the information 
 was submitted has been correctly saved.
@@ -31,113 +29,113 @@ was submitted has been correctly saved.
 
 @Title("Code with Us Happy Path 1")
 class CWU_HappyPath_1 extends GebReportingSpec {
-      def Boolean CheckIfReauthIsNeeded(){
-            if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
-                println("Had to reauthorize Devex to access the GibHub account")
-                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
-                sleep(2000)
+     
+    def Boolean CheckIfReauthIsNeeded(){
+        if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+            println("Had to reauthorize Devex to access the GibHub account")
+            $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+            sleep(2000)
+        }
+        else {
+            println("No need to reauthorize Devex to access the GibHub account")
+        }
+        return true
+    }
+
+    def CompareFileContents() {
+        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/code-with-us-terms.pdf")
+
+        FileInputStream fis1 = new FileInputStream(FilePath1)
+        FileInputStream fis2 = new FileInputStream(FilePath2)
+        try {
+            int byte1
+            while((byte1 = fis1.read())!=-1) {
+                int byte2 = fis2.read()
+                if(byte1!=byte2)return false
             }
-            else {
-                println("No need to reauthorize Devex to access the GibHub account")
-            }
-            return true
-      }
+        } finally {
+            fis1.close()
+            fis2.close()
+            //Delete the just downloaded file. Useful when running lots of test one after the other
+            //The FileInputStream class does not have a delete method, so I need to use another class
+            def ftd = new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
+            ftd.delete()
+        }
 
-      def CompareFileContents() {
-            File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-            File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/code-with-us-terms.pdf")
+        return true
+    }
 
-            FileInputStream fis1 = new FileInputStream(FilePath1)
-            FileInputStream fis2 = new FileInputStream(FilePath2)
-            try {
-                int byte1
-                while((byte1 = fis1.read())!=-1) {
-                    int byte2 = fis2.read()
-                    if(byte1!=byte2)return false
-                }
-            } finally {
-                fis1.close()
-                fis2.close()
-                //Delete the just downloaded file. Useful when running lots of test one after the other
-                //The FileInputStream class does not have a delete method, so I need to use another class
-                def ftd=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-                ftd.delete()
-            }
+    //We make sure we are not logged as admin
+    def setup() {
+        waitFor{to HomePage}
+        //I get the base URL to build (in the LoginModule) the URL to the admin icon
+        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
 
-            return true
-      }
+        // Login off as an admin
+        def logoffOK = login."Logout as administrator"(baseURL)
+        assert logoffOK
+    }
 
+    def "From the Home Page to the CWU" () {
 
-      //We make sure we are not logged as admin
-      def setup() {
-            waitFor{to HomePage}
-            //I get the base URL to build (in the LoginModule) the URL to the admin icon
-            def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-
-            // Login off as an admin
-            def  logoffOK=login."Logout as administrator"(baseURL)
-            assert logoffOK
-      }
-
-  def "From the Home Page to the CWU" () {
-
-      given: "Starting at the Home Page"
+        given: "Starting at the Home Page"
             waitFor { to HomePage}
 
-      when: "I click on Learn More button"
+        when: "I click on Learn More button"
             LearnMoreCWU
 
-      then: "I should be at the CodeWithUs Page- So the page exists"
+        then: "I should be at the CodeWithUs Page- So the page exists"
             waitFor{at CodewithusPage}
 
-      and: "Check Developers button is active"
+        and: "Check Developers button is active"
             assert DevelopersButtonClass=="nav-link active"
 
-      and: "Check the Public Sector Product Managers link is inactive"
+        and: "Check the Public Sector Product Managers link is inactive"
             assert PublicSectorProductManagers=="nav-link"
 
-      and: "Click on the 'Read the Guide button' to end in the 'https://github.com/BCDevExchange/code-with-us/wiki/3.--For-Developers:-How-to-Apply-on-a-Code-With-Us-Opportunity' page"
+        and: "Click on the 'Read the Guide button' to end in the 'https://github.com/BCDevExchange/code-with-us/wiki/3.--For-Developers:-How-to-Apply-on-a-Code-With-Us-Opportunity' page"
             ReadtheGuideLink.click()
             sleep(3000) //time to download the document
             assert GitHubPage_ReadGuide
-  }
+    }
 
 
-  def "In this section the user logs, submits a proposal" () {
-      given: "Starting with the Code with Us Page"
+    def "In this section the user logs, submits a proposal" () {
+        given: "Starting with the Code with Us Page"
             waitFor{to CodewithusPage}
 
-      when: "I click in the Browse Opportunities Button "
+        when: "I click in the Browse Opportunities Button "
             BrowseOpportunitiesLink
             sleep(1000) 
 
-      then: "I should be at the Opportunities Page- So the page exists"
+        then: "I should be at the Opportunities Page- So the page exists"
             assert waitFor{OpportunitiesPage}
             at OpportunitiesPage
- 
-      and: "I click on the first opportunity listed on the page"
-            def OppTitle =FirstListedOpportunity.text()  //Opportunity title
+
+        and: "I click on the first opportunity listed on the page"
+            def OppTitle = TestCWUOpportunity.text()  //Opportunity title
             def MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
-            def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-            FirstListedOpportunity.click()
+            def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+            TestCWUOpportunity.click()
             sleep(1000)
 
             def NewURL=getCurrentUrl() //This is the specific opportunity URL
 
-      then: "We have arrived to the selected opportunity URL"
+        then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
             sleep(1000)
 
-      and: "Click on terms, to download the document that sets the terms and the legalese"
+        and: "Click on terms, to download the document that sets the terms and the legalese"
             DownloadTerms.click()
             sleep(5000)//wait for document to download
 
-      then: "I check the downloaded document matches the one stored in this test"
+        then: "I check the downloaded document matches the one stored in this test"
             def  ComparisonOK = CompareFileContents()
             assert ComparisonOK
 
-      then: "Click on the Authenticate button"
+        then: "Click on the Authenticate button"
             $('a[id = "authentication.signin"]').click()
             assert(1000)
             assert AuthenticationSigninPage
@@ -146,93 +144,92 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             SignInButton.click()
             sleep(1000)
 
-      and: "I arrive to the GitHub page, where I will be able to log"
+        and: "I arrive to the GitHub page, where I will be able to log"
             assert waitFor{$("input", name:"commit" )}//Verifies the sign in button exists
-		$(id:"login_field").value('hugochibougamau')
-		$(id:"password").value('Devex_Test1')
+            $(id:"login_field").value('hugochibougamau')
+            $(id:"password").value('Devex_Test1')
             $("input", name:"commit" ).click()
             sleep(2000) //Leave time case the next page is the reauthorization page
 
-      and:"If redirected to the reauthorization page, click to reauthorize"    
+        and:"If redirected to the reauthorization page, click to reauthorize"    
             assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
-      then: "Once logged we are in the HomePage. Here we verify the default user icon is there proving we are logged"
+        then: "Once logged we are in the HomePage. Here we verify the default user icon is there proving we are logged"
             at HomePage  //verify we are in the home page
             def AdminIconLocation = 'https://avatars1.githubusercontent.com/u/46409451?v=4' //This is the default icon for a logged user
             assert $("img",src:"${AdminIconLocation}")
 
-      and: "Click the Browse Opportunities button"
+        and: "Click the Browse Opportunities button"
             BrowseOpportunities.click()
 
-      then: "We return to the Opportunities page"
+        then: "We return to the Opportunities page"
             at OpportunitiesPage
             sleep(1000)
 
-      when: "I click again on the first opportunity listed on the page, this time as a logged-in user"
-            OppTitle =FirstListedOpportunity.text()  //Opportunity title
+        when: "I click again on the first opportunity listed on the page, this time as a logged-in user"
+            OppTitle =TestCWUOpportunity.text()  //Opportunity title
             MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
-            OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-            FirstListedOpportunity.click()
+            OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+            TestCWUOpportunity.click()
             sleep(2000)//Give time to navigate to the new specific opp
             NewURL=getCurrentUrl() //This is the specific opportunity URL
             
-      then: "We have arrived to the selected opportunity URL"
+        then: "We have arrived to the selected opportunity URL"
             assert NewURL==OppURL
 
-      and: "Click on Start a proposal button"
+        and: "Click on Start a proposal button"
             $("button",id:"proposaladmin.create",0).click()
             sleep(1000)
 
-      then: " Arrive to the page that allows to submit a proposal"
+        then: " Arrive to the page that allows to submit a proposal"
             waitFor{at InitialCWUProposalPage}
 
-      and: "Enter a value in the address field"
+        and: "Enter a value in the address field"
             Address.value("999 Rainbow Road")
-    
-      and: "Confirm the Company tab is present but disabled"
+
+        and: "Confirm the Company tab is present but disabled"
             assert !$(('a[class~= "nav-link ng-binding disabled"]'),0).empty()
 
-      and: "Confirm the attachment tab is not even present "
+        and: "Confirm the attachment tab is not even present "
             assert(!AttachmentTab.displayed)
 
-      and: "User saves this first draft"
+        and: "User saves this first draft"
             ButtonSaveChanges.click()
             sleep(2000) //to give time to tha angular message to appear and dissappear
 
-      and: "Because terms are not accepted, check there is warning message to the user indicating it can not be submitted"
+        and: "Because terms are not accepted, check there is warning message to the user indicating it can not be submitted"
             assert MustAgreeTermsMsg.text().contains("Before you can submit your Proposal, you must agree to the Terms.")
 
-      and: "Click the Terms tab"
+        and: "Click the Terms tab"
             TermsTab.click()
 
-      and: "Accept the terms. If not accepted we can not submit"
+        and: "Accept the terms. If not accepted we can not submit"
             CheckTerms.click()
 
-      then: "Check the Attachment tab is present"
+        then: "Check the Attachment tab is present"
             assert(AttachmentTab.displayed)
 
-      and: "Click on the Attachment tab"  
+        and: "Click on the Attachment tab"  
             // At this moment I do not know how to upload a file
             AttachmentTab.click()   
-      
-      and: "Click on the Proposal tab"  
+        
+        and: "Click on the Proposal tab"  
             waitFor{at InitialCWUProposalPage}
             sleep(1000)
             ProposalTab.click()  
             
-      and: "Enter text in the description box"      
+        and: "Enter text in the description box"      
             waitFor{ProposalDescriptionBox}
             //Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             withFrame(ProposalDescriptionBox){$("body", id:"tinymce") << 'Les Nenes Maques'}
             sleep(2000) //Not sure why, but without this delay the text is not properly saved
 
-      then: "End by saving this draft"
+        then: "End by saving this draft"
             waitFor{ButtonSaveChanges}
             ButtonSaveChanges.click()
             sleep(2000) //to give time to tha angular message to appear and dissappear
-
-  }
+    }
 
 
   def "In this section the user updates the previous proposal" () {
@@ -249,7 +246,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             waitFor{at OpportunitiesPage}
  
       and: "I click on the first opportunity listed on the page"
-            FirstListedOpportunity.click()
+            TestCWUOpportunity.click()
             sleep(1000)
 
       and: "Arrive at the page that allows to edit the proposal"
@@ -289,8 +286,8 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             sleep(1000)
  
       and: "I click on the first opportunity listed on the page"
-            waitFor{FirstListedOpportunity}
-            FirstListedOpportunity.click()
+            waitFor{TestCWUOpportunity}
+            TestCWUOpportunity.click()
             sleep(1000)
 
       and: "Arrive at the page that allows to edit the proposal"
@@ -302,7 +299,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
 
       then: "We start at the 'Developer' tab. We check a couple fields"
             assert FirstName.value()=='Hugo'
-            assert Email.value()=='hugochibougamau@editedfakeaddress.ca'
+            assert Email.value()=='hugochibougamau@fakeaddress.ca'
 
       and: "Navigate to the Company tab"  
             waitFor{ CompanyTab }
