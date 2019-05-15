@@ -6,6 +6,6 @@ class CapabilitiesPage extends Page {
 	static url = "/capabilities"
 	static content = {
 		AddACapability{$("button",title:"New")}
-		CapabilityCookingEntry{$('data-automation-id':"lstCapabilityEntry-Cooking",0)}
+		CapabilityCookingEntries(required: false, wait: 2) { $('data-automation-id':"lstCapabilityEntry-Cooking") }
 	}
 }

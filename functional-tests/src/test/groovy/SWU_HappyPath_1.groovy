@@ -46,33 +46,6 @@ class SWU_HappyPath_1 extends GebReportingSpec {
         return true
     }
 
-    def CompareFileContents(fileNameToCompare) {
-        //The files we are comparing have the same fixed name, and the directories where they are located are known. A more
-        //flexible function will require very long input strings making it less readable
-
-        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
-        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/"+fileNameToCompare)
-        
-        FileInputStream fis1 = new FileInputStream(FilePath1)
-        FileInputStream fis2 = new FileInputStream(FilePath2)
-        try {
-            int byte1
-            while((byte1 = fis1.read())!=-1) {
-                int byte2 = fis2.read()
-                if(byte1!=byte2)return false
-            }
-        } finally {
-            fis1.close()
-            fis2.close()
-            //Delete the just downloaded file. Useful when running lots of test one after the other
-            //The FileInputStream class does not have a delete method, so I need to use another class
-            def ftd=new File(System.getProperty('user.home')+"/Downloads/"+fileNameToCompare)
-            ftd.delete()
-        }
-
-        return true
-    }
-
     boolean MoveTo(int x,int y){
         int XCoor=x
         int YCoor=y
@@ -108,38 +81,24 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
     then: "Arrive at the SWU page that explains how to apply"
         waitFor{at SprintWithUsHowToApplyPage}
 
-    then: "Click on terms, to download the document that sets the terms and the legalese"
-        waitFor{SWUTerms.click()}
-        sleep(2000) //Give time for the document to be downloaded
-
-    and: "Verify the downloaded document 'rfq-sprint-with-us-company.pdf' matches the one stored in this test"
-        assert CompareFileContents('rfq-sprint-with-us-company.pdf')
-
-    then: "Click on the opportunities link on the header of the page"
+    and: "Click on the opportunities link on the header of the page"
         OpportunitiesNavBar //it includes a click
 
     then: "I should be at the Opportunities Page- So the page exists"
         waitFor{at OpportunitiesPage}
 
       and: "I click on the first opportunity listed on the page"
-        waitFor{FirstListedOpportunity}
-        def OppTitle =FirstListedOpportunity.text()  //Get the Opportunity title
+        waitFor{TestSWUOpportunities[0]}
+        def OppTitle =TestSWUOpportunities[0].text()  //Get the Opportunity title
         def MyCurrentURL=getCurrentUrl() //Should be the URL for the opportunity page
         //The following line createe the URL to access the specific opportunity
-        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-        FirstListedOpportunity.click()
+        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+        TestSWUOpportunities[0].click()
         sleep(2000)
 
     then: "Check the target URL corresponds to the expected opportunity"
         def NewURL=getCurrentUrl() //This is the specific opportunity URL
         assert NewURL==OppURL
-
-    and: "Now, the opportunity is open, click on the Conditions of the Contract to download it"
-        $("a",'href':"/terms/serviceagreement").click() //I use the inline declaration because I prefer not to use the existing OpportunityDetailPage object
-        sleep(2000) //Give time to download, it may be set shorter though as automation will happen in the same server
-
-    then: "Verify downloaded document 'service-agreement.pdf' matches the one stored in this test"
-        assert CompareFileContents('service-agreement.pdf')
 }
 
 def "User authenticates and navigates to the proposal to start filling it" () {
@@ -179,12 +138,12 @@ def "User authenticates and navigates to the proposal to start filling it" () {
 
     when: "User clicks again on the opportunity she visited in the previous feature, this time as a logged-in user"
         //Because we are in another bloc of code these variables need to be defined them again
-        waitFor{FirstListedOpportunity}
-        def OppTitle =FirstListedOpportunity.text()  //Opportunity title
+        waitFor{TestSWUOpportunities}
+        def OppTitle =TestSWUOpportunities[0].text()  //Opportunity title
         def MyCurrentURL=getCurrentUrl() //URL opportunity page
         //The following is to create from the opp title the URL
-        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
-        FirstListedOpportunity.click()  //Same opportunity as before
+        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+        TestSWUOpportunities[0].click()  //Same opportunity as before
         sleep(1000)
         def NewURL=getCurrentUrl() //This is the specific opportunity URL
 
@@ -213,20 +172,10 @@ def "User start filling the proposal without completing it. Then saves the entri
         waitFor{CodeChallengeDownload.click()}
         sleep(2000)//Give time to download the document
 
-    and: "Verify the downloaded document 'code-challenge.pdf' matches the one stored in this test system"
-        assert CompareFileContents('code-challenge.pdf')
-
     then: "Move to the Terms tab"
         TermsTab.click()
 
-    and: "Click on the 'Download the Terms & Conditions' button"
-        DownLoadTermsConditions.click()
-        sleep(2000)//Give time to download the document
-
-    and: "Verify the downloaded file'sprint-with-us-terms' matches the one stored in this test system"
-        assert CompareFileContents('sprint-with-us-terms.pdf')
-
-    then: "Move to the Select Team tab"
+    and: "Move to the Select Team tab"
         SelectTeamTab.click()
 
     and: "Select the first user on the Inception Phase list"

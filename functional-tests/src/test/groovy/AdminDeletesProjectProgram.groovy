@@ -33,16 +33,17 @@ class AdminDeletesProjectProgram extends GebReportingSpec {
         given: "Starting at the Projects Page"
             waitFor {to ProjectsPage}
 
-        when: "Click on the listed project (there is only one"
-            ListedProject.click()
-            sleep(2000) //Whitouth it, the 'pencil' is 'hovered' but not clicked
+        when: "Click on the first listed project"
+            def projectCount = ListedProjects.size()
+            ListedProjects[0].click()
+            sleep(2000)
             
         and: "In the new page, click the 'pencil' button to edit the project"
             waitFor{$("button",'data-automation-id':"button-project-edit")}
             $("button",'data-automation-id':"button-project-edit").click()
             sleep(2000)
 
-        then: "We arrive at the edit Porject page and click the 'Delete this Project'"
+        then: "We arrive at the edit Project page and click the 'Delete this Project'"
             waitFor{$("a",'data-automation-id':"button-project-delete" )}
             $("a",'data-automation-id':"button-project-delete" ).click()
             sleep(1000)
@@ -56,7 +57,7 @@ class AdminDeletesProjectProgram extends GebReportingSpec {
             assert waitFor {at ProjectsPage}  
 
         expect: "Confirm the project does not exist anymore"
-            assert ListedProject.empty
+            assert ListedProjects.empty || ListedProjects.size() == projectCount - 1
 
     }
 
@@ -66,8 +67,9 @@ class AdminDeletesProjectProgram extends GebReportingSpec {
         given: "Starting from the Programs Page"
             waitFor {to ProgramsPage}
 
-        when: "Click on the listed Program, there is only one."
-            ListedProgram.click()
+        when: "Click on the first listed Program"
+            def programCount = ListedPrograms.size()
+            ListedPrograms[0].click()
             sleep(2000) 
             
         and: "In the new page, click the 'pencil' button to edit the program"
@@ -89,7 +91,7 @@ class AdminDeletesProjectProgram extends GebReportingSpec {
             assert waitFor {at ProgramsPage}  
 
         expect: "Confirm the Program does not exist anymore"
-            assert ListedProgram.empty
+            assert ListedPrograms.empty || ListedPrograms.size() == programCount - 1
     
     }
 

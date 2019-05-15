@@ -243,7 +243,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
 
         and: "Click on the newly created opportunity (still unpublished)"
             def MyCurrentURL=getCurrentUrl() // URL opportunity page
-            TestCWUOpportunity.click()  // it clicks on the opportunity in the list
+            TestCWUOpportunities[0].click()  // it clicks on the first opportunity in the list (this will be the newly created one)
             sleep(1000)
             // The following is to create from the opp title the URL
             def OppURL= MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()

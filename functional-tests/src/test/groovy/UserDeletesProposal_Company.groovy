@@ -61,13 +61,13 @@ class UserDeletesProposal_Company extends GebReportingSpec {
         sleep(1000)
 
     when: "User clicks again on the first opportunity of the list (we assume is the one the previously used to present a proposal"
-        waitFor{FirstListedOpportunity}
-        def OppTitle =FirstListedOpportunity.text()  //Opportunity title
+        waitFor{ TestSWUOpportunities }
+        def OppTitle = TestSWUOpportunities[0].text()  //Opportunity title
         def MyCurrentURL=getCurrentUrl() //URL opportunity page
         //The following is to create from the opp title the URL
-        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
+        def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
 
-        FirstListedOpportunity.click()  //Same opportunity as before
+        TestSWUOpportunities[0].click()  //Same opportunity as before
         sleep(1000)
         def NewURL=getCurrentUrl() //This is the specific opportunity URL
 
@@ -104,13 +104,13 @@ class UserDeletesProposal_Company extends GebReportingSpec {
         sleep(1000)
 
     and: "User clicks again on the first opportunity of the list (we assume is the one the previously used to present a proposal"
-        waitFor{FirstListedOpportunity}
-        def OppTitle =SecondListedOpportunity.text()  //Opportunity title
+        waitFor{ TestCWUOpportunities }
+        def OppTitle = TestCWUOpportunities[0].text()  //Opportunity title
         def MyCurrentURL=getCurrentUrl() //URL opportunity page
         //The following is to create from the opp title the URL
-        def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
+        def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
 
-        SecondListedOpportunity.click()  //Same opportunity as before
+        TestCWUOpportunities[0].click()  //Same opportunity as before
         sleep(1000)
         def NewURL=getCurrentUrl() //This is the specific opportunity URL
 

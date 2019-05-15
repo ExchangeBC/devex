@@ -5,13 +5,11 @@ import pages.app.CodewithusPage
 import modules.LoginModule
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-//import extensions.AngularJSAware
+// import extensions.AngularJSAware
 
-//class HomePage extends Page implements AngularJSAware {
 class HomePage extends Page {
 
-  
-//	static at = { angularReady && title == "BCDevExchange" }
+	// static at = { angularReady && title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
     static url = "/"
     static content = {

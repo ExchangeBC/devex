@@ -227,10 +227,10 @@ class CreateOppSWU extends GebReportingSpec {
 
                 and: "Click on the newly created opportunity (still unpublished)"
                     def MyCurrentURL=getCurrentUrl() //URL opportunity page
-                    waitFor{FirstListedOpportunity.click()}  //it clicks on the first opportunity of the list
+                    waitFor{TestSWUOpportunities[0].click()}  //it clicks on the first opportunity of the list
                     sleep(3000) //Giving some time so it can later grab the correct URL
                     //The following is to create from the opp title the URL
-                    def OppURL= MyCurrentURL + "/swu/opp-" + MyTitleData.replaceAll(' ','-').replaceFirst(':','').replaceAll(':','-').toLowerCase()
+                    def OppURL= MyCurrentURL + "/swu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
                     def NewURL=getCurrentUrl() //This is the specific opportunity URL
 
                 then: "Publish the newly created opportunity"
@@ -244,7 +244,7 @@ class CreateOppSWU extends GebReportingSpec {
 
      where: "The values used to create the Opportunity are:"
       Project | TitleData | Teaser | Background | Github | Location | Onsite | BudgetTotal | BudgetInc | BudgetPOC|BudgetImpl | AdditionalTerms | Question | Addenda
-      "Project: Automation Test Project 1" | "Opportunity: Automation Test Opportunity 1" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | 1000000 | 100000| 300000 | 600000 | "Additional Terms for this SWU proposal" | "Stat rosa pristina nomine, nomina nuda tenemus?" | "Addenda for SWU opportunity"
+      "Project: Automation Test Project 1" | "SWU Opportunity" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | 1000000 | 100000| 300000 | 600000 | "Additional Terms for this SWU proposal" | "Stat rosa pristina nomine, nomina nuda tenemus?" | "Addenda for SWU opportunity"
   }
 
 

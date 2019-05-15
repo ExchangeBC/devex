@@ -55,32 +55,6 @@ class UserCreatesCompany extends GebReportingSpec {
         return true
     }         
 
-    def CompareFileContents() {
-
-        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
-        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/rfq-sprint-with-us-company.pdf")
-        
-        FileInputStream fis1 = new FileInputStream(FilePath1)
-        FileInputStream fis2 = new FileInputStream(FilePath2)
-        try {
-            int byte1
-            while((byte1 = fis1.read())!=-1) {
-                int byte2 = fis2.read()
-                if(byte1!=byte2)return false
-                }
-            } 
-        finally {
-            fis1.close()
-            fis2.close()
-            //After comparing, delete the just downloaded file. Useful when running lots of test one after the other
-            //The FileInputStream class does not have a delete method, so I need to use another class
-            def ftd=new File(System.getProperty('user.home')+"/Downloads/rfq-sprint-with-us-company.pdf")
-            ftd.delete()
-        }
-
-            return true
-      }
-
     @Unroll
     def "User Hugo Chibougamau creates a Company" () {
         def actions = new Actions(driver)

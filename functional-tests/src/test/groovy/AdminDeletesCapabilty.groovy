@@ -35,9 +35,10 @@ class AdminDeletesCapability extends GebReportingSpec {
      
     then: "Arrive at the Capabilities Page'"
         waitFor{at CapabilitiesPage}
+        def capCount = CapabilityCookingEntries.size()
     
     when: "Click the first listed capability"
-        waitFor{CapabilityCookingEntry.click()}
+        waitFor{CapabilityCookingEntries[0].click()}
 
     and: "Click on the 'pencil' icon"
         waitFor{$('data-icon':"pencil-alt").click()} //Use inline, as the name of the page change with the capability
@@ -49,7 +50,8 @@ class AdminDeletesCapability extends GebReportingSpec {
         waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
 
     then: "Verify there are no capabilities left in the list"
-        assert waitFor{$(text: contains("No Capabilities right now. Check back soon!"))}
+        waitFor{at CapabilitiesPage}
+        assert (!CapabilityCookingEntries || CapabilityCookingEntries.size() == capCount - 1)
 
      }
 

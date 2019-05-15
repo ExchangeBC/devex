@@ -42,30 +42,6 @@ class CWU_HappyPath_1 extends GebReportingSpec {
         return true
     }
 
-    def CompareFileContents() {
-        File FilePath1=new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-        File FilePath2=new File(System.getProperty('user.dir')+"/src/test/resources/code-with-us-terms.pdf")
-
-        FileInputStream fis1 = new FileInputStream(FilePath1)
-        FileInputStream fis2 = new FileInputStream(FilePath2)
-        try {
-            int byte1
-            while((byte1 = fis1.read())!=-1) {
-                int byte2 = fis2.read()
-                if(byte1!=byte2)return false
-            }
-        } finally {
-            fis1.close()
-            fis2.close()
-            //Delete the just downloaded file. Useful when running lots of test one after the other
-            //The FileInputStream class does not have a delete method, so I need to use another class
-            def ftd = new File(System.getProperty('user.home')+"/Downloads/code-with-us-terms.pdf")
-            ftd.delete()
-        }
-
-        return true
-    }
-
     //We make sure we are not logged as admin
     def setup() {
         waitFor{to HomePage}
@@ -114,11 +90,11 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             at OpportunitiesPage
 
         and: "I click on the first opportunity listed on the page"
-            def OppTitle = TestCWUOpportunity.text()  //Opportunity title
+            def OppTitle = TestCWUOpportunities[0].text()  //Opportunity title
             def MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
-            TestCWUOpportunity.click()
+            TestCWUOpportunities[0].click()
             sleep(1000)
 
             def NewURL=getCurrentUrl() //This is the specific opportunity URL
@@ -127,15 +103,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             assert NewURL==OppURL
             sleep(1000)
 
-        and: "Click on terms, to download the document that sets the terms and the legalese"
-            DownloadTerms.click()
-            sleep(5000)//wait for document to download
-
-        then: "I check the downloaded document matches the one stored in this test"
-            def  ComparisonOK = CompareFileContents()
-            assert ComparisonOK
-
-        then: "Click on the Authenticate button"
+        and: "Click on the Authenticate button"
             $('a[id = "authentication.signin"]').click()
             assert(1000)
             assert AuthenticationSigninPage
@@ -167,11 +135,11 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             sleep(1000)
 
         when: "I click again on the first opportunity listed on the page, this time as a logged-in user"
-            OppTitle =TestCWUOpportunity.text()  //Opportunity title
+            OppTitle =TestCWUOpportunities[0].text()  //Opportunity title
             MyCurrentURL=getCurrentUrl() //URL opportunity page
             //The following is to create from the opp title the URL
             OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
-            TestCWUOpportunity.click()
+            TestCWUOpportunities[0].click()
             sleep(2000)//Give time to navigate to the new specific opp
             NewURL=getCurrentUrl() //This is the specific opportunity URL
             
@@ -246,7 +214,7 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             waitFor{at OpportunitiesPage}
  
       and: "I click on the first opportunity listed on the page"
-            TestCWUOpportunity.click()
+            TestCWUOpportunities[0].click()
             sleep(1000)
 
       and: "Arrive at the page that allows to edit the proposal"
@@ -286,8 +254,8 @@ class CWU_HappyPath_1 extends GebReportingSpec {
             sleep(1000)
  
       and: "I click on the first opportunity listed on the page"
-            waitFor{TestCWUOpportunity}
-            TestCWUOpportunity.click()
+            waitFor{TestCWUOpportunities}
+            TestCWUOpportunities[0].click()
             sleep(1000)
 
       and: "Arrive at the page that allows to edit the proposal"

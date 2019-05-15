@@ -1,4 +1,3 @@
-//package com.athaydes.spockframework.report
 import geb.spock.GebReportingSpec
 
 import pages.app.HomePage

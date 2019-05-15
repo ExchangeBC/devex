@@ -27,7 +27,7 @@ environments {
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chrome {
 		driver = { 
-			System.setProperty('webdriver.chrome.driver', '/usr/local/bin/chromedriver')
+			// System.setProperty('webdriver.chrome.driver', '/usr/local/bin/chromedriver')
 			new ChromeDriver() 
 		}
 	}
@@ -36,11 +36,16 @@ environments {
 	// See: https://github.com/SeleniumHQ/selenium/wiki/ChromeDriver
 	chromeHeadless {
 		driver = {
+			// System.setProperty('webdriver.chrome.driver', '/usr/local/bin/chromedriver')
+			// System.setProperty('webdriver.chrome.logfile', './log.txt')
+			// System.setProperty('webdriver.chrome.verboseLogging', 'true')
 			ChromeOptions o = new ChromeOptions()
-			o.addArguments('headless')
-			//o.addArguments('disable-gpu') 
-			//o.addArguments('no-sandbox')
-			o.addArguments('window-size=1980,1080')
+			o.addArguments("--enable-features=NetworkService,NetworkServiceInProcess")
+			o.addArguments('--headless')
+			o.addArguments('--no-sandbox')
+			o.addArguments('--window-size=1200,1100')
+			o.addArguments("--proxy-server='direct://'", "--proxy-bypass-list=*")
+
 			new ChromeDriver(o)
 		}
 	}

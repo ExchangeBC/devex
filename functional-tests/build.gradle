@@ -12,13 +12,12 @@ plugins {
 
 ext {
     // The drivers we want to use
-    //drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless","ie","edge","safari"]
     drivers = ["firefox", "firefoxHeadless", "chrome", "chromeHeadless"]
     ext {
         groovyVersion = '2.5.4'
-        gebVersion = '2.3'
+        gebVersion = '2.3.1'
         seleniumVersion = '3.141.59'
-        chromeDriverVersion = '2.45'
+        chromeDriverVersion = '75.0.3770.8'
         geckoDriverVersion = '0.24.0'
         ieDriverVersion = '3.6'
         edgeDriverVersion = seleniumVersion
@@ -66,7 +65,6 @@ dependencies {
 webdriverBinaries {
     chromedriver chromeDriverVersion
     geckodriver geckoDriverVersion
-    //iedriver ieDriverVersion
 }
 
 drivers.each { driver ->
@@ -79,21 +77,7 @@ drivers.each { driver ->
         systemProperty "geb.env", driver
     }
 }
-/*
-ieTest {
-    dependsOn unzipIeDriver
 
-    def iedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "IEDriverServer.exe" : "IEDriverServer"
-    systemProperty "webdriver.ie.driver", new File(unzipIeDriver.outputs.files.singleFile, iedriverFilename).absolutePath
-}
-
-edgeTest {
-    dependsOn unzipEdgeDriver
-
-    def edgedriverFilename = Os.isFamily(Os.FAMILY_WINDOWS) ? "MicrosoftWebDriver.exe" : "MicrosoftWebDriver.exe"
-    systemProperty "webdriver.edge.driver", new File(unzipEdgeDriver.outputs.files.singleFile,edgedriverFilename).absolutePath
-}
-*/
 test {
     dependsOn drivers.collect { tasks["${it}Test"] }
     enabled = false
@@ -101,7 +85,7 @@ test {
 
 tasks.withType(Test) {
     maxHeapSize = "1g"
-    jvmArgs '-XX:MaxMetaspaceSize=128m'
+    jvmArgs '-XX:MaxMetaspaceSize=512m'
     testLogging {
         exceptionFormat = 'full'
         events 'started', 'passed'
@@ -115,6 +99,6 @@ systemProperty 'com.athaydes.spockframework.report.projectName',"DEVEX"
 }
 
 tasks.withType(GroovyCompile) {
-    groovyOptions.forkOptions.memoryMaximumSize = '256m'
+    groovyOptions.forkOptions.memoryMaximumSize = '512m'
 }
 
