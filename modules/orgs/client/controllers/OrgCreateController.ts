@@ -65,9 +65,9 @@ export class OrgCreateController implements IController {
 		}
 	}
 
-	//Leave the edit view
+	// Leave the edit view
 	public close(): void {
-		this.$state.go('orgs.list', {orgId: this.org._id});
+		this.$state.go('orgs.list', { orgId: this.org._id });
 	}
 
 	private handleError(error: any): void {
