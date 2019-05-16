@@ -129,7 +129,7 @@ stage('Functional Test Dev') {
     containers: [
       containerTemplate(
         name: 'jnlp',
-        image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
+        image: 'docker-registry.default.svc:5000/devex-platform-tools/jenkins-slave-bddstack',
         resourceRequestCpu: '500m',
         resourceLimitCpu: '2000m',
         resourceRequestMemory: '2Gi',
