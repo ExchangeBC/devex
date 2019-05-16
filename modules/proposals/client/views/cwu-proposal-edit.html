@@ -46,8 +46,8 @@
   <div class="modal-footer justify-content-between">
     <!--Left-aligned button-->
     <div>
-      <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" data-automation-id="button-cwu-proposal-delete" class="btn btn-text-only" data-ng-click="ppp.delete()">
-        <i class=" fas fa-trash"></i> Delete My Proposal
+      <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" aria-label="Delete proposal" data-automation-id="button-cwu-proposal-delete" class="btn btn-text-only" data-ng-click="ppp.delete()">
+        <i class="far fa-trash-alt"></i>
       </button>
     </div>
     <!--Right-aligned buttons-->
