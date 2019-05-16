@@ -6,7 +6,7 @@ stage('Functional Test Dev') {
       ],
       containers: [ containerTemplate(
         name: 'jnlp',
-        image: '172.50.0.2:5000/openshift/jenkins-slave-bddstack',
+        image: 'docker-registry.default.svc:5000/devex-platform-tools/jenkins-slave-bddstack:v1-latest',
         resourceRequestCpu: '500m',
         resourceLimitCpu: '2000m',
         resourceRequestMemory: '2Gi',
@@ -19,15 +19,13 @@ stage('Functional Test Dev') {
         ])
     ]) {
       node(podlabel) {
-	//the checkout is mandatory, otherwise functional test would fail
+	      //the checkout is mandatory, otherwise functional test would fail
         echo "checking out source"
         checkout scm
-	//sleep 600
+
         dir('functional-tests') {
             try {
-	      sh 'df -h'
-	      sh './gradlew chromeHeadlessTest'
-              //sh './gradlew --debug chromeHeadlessTest'
+	            sh './TestSuite_ChromeHeadless.sh'
             } finally { 
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
