@@ -51,42 +51,34 @@
 
 <!-- // Code With Us // -->
 <div ng-if="$ctrl.opportunity.opportunityTypeCd !== 'sprint-with-us'">
+  
   <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_ADD">
     <div class="col px-0 pb-3">
       <button id="proposaladmin.create" ng-click="$ctrl.openProposalApplicationDialog()" class="btn btn-primary float-right">
-        <i class="fas fa-paper-plane"></i> Start a Proposal
+        Submit a proposal
       </button>
     </div>
   </div>
 
   <!-- // If user has started a Proposal // -->
   <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_EDIT">
-
-    <!-- If Proposal has been SUBMITTED -->
-    <div class="alert alert-success" ng-if="$ctrl.proposal.status === 'Submitted'">
-      <div class="col">
-        <span class="strong"><i class="fas fa-lg fa-check-circle"></i>&nbsp; Your Proposal has been submitted!</span>
-        &nbsp;You can make updates or withdraw your Proposal until <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>.
-        &nbsp;
-        <div class="update-proposal-link">
-          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">
-            <i class="fas fa-pencil-alt"></i> Update my Proposal</a>
-        </div>
-      </div>
-    </div>
-    <!-- If Proposal is in DRAFT -->
     <div class="col">
-      <div class="alert alert-warning" ng-if="$ctrl.proposal.status === 'Draft' || $ctrl.proposal.status === 'New'">
-        <span class="strong"><i class="fas fa-file"></i>&nbsp;You have a Proposal in DRAFT!</span> &nbsp;Submit before 
-        <span class="strong" ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>
-        to be considered for this opportunity. &nbsp;
-        <div class="update-proposal-link">
-          <a id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)"><i
-              class="fas fa-pencil-alt"></i> Update my Proposal
-          </a>
-        </div>
+      
+      <!--If proposal has been submitted. Andrew: logic change needed here I think. This needs to be visible to the user even after the closing deadline.-->
+      <div class="alert alert-success" role="alert" ng-if="$ctrl.proposal.status === 'Submitted'">
+        <i class="far fa-check-circle"></i> Your proposal has been received! 
+        <!--Andrew: please insert logic to make this span only display until the closing deadline -->
+        <span>You can submit updates until <span ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>.</span> 
+        <a class="alert-link" id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">View proposal</a>
       </div>
+      
+      <!-- If Proposal is in DRAFT -->
+      <div class="alert alert-warning" ng-if="$ctrl.proposal.status === 'Draft' || $ctrl.proposal.status === 'New'">
+        <i class="fas fa-file"></i> You have a proposal in draft. Submit before 
+        <span ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>
+        to be considered for this opportunity. <a class="alert-link" id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">View proposal</a>
+      </div>
+      
     </div>
-
   </div>
 </div>
