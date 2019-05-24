@@ -111,23 +111,25 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
-		const init_deletable = async function(){
-			vm.deletable = await determineIfDeletable();
-		}
 
-		const determineIfDeletable = async function(){
-			
-			//Determine whether program has any associated open or unassigned opportunities
-			const opportunities = await fetch('/api/opportunities/for/program/'+vm.program._id).then(response => response.json());
-			const hasOpenOpportunities = opportunities.some(element => new Date().getTime() <= new Date(element.deadline).getTime());
-			const hasUnassigned = opportunities.some(element => element.status != 'Assigned');
+		const determineIfDeletable = async function() {
 
-			//Determine whether program has any associated projects or opportunities
-			const projects = await fetch('/api/projects/for/program/'+vm.program._id).then(response => response.json());
+			// Determine whether program has any associated open or unassigned opportunities
+			const opportunities = await fetch('/api/opportunities/for/program/' + vm.program._id).then(response => response.json());
+			const hasPublished = opportunities.some(element => element.isPublished);
+			const hasAssigned = opportunities.some(element => element.status === 'Assigned');
+
+			// Determine whether program has any associated projects or opportunities
+			const projects = await fetch('/api/projects/for/program/' + vm.program._id).then(response => response.json());
 			const hasChildProjects = projects.length > 0;
 			const hasChildOpps = opportunities.length > 0;
 
-			return (!hasOpenOpportunities && !hasUnassigned && (vm.isAdmin || (program.userIs.admin && !hasChildProjects && !hasChildOpps)));
+			// if no published opps, and no assigned opps and either root admin or program admin (with no child projects or opps)
+			return (!hasPublished && !hasAssigned && (vm.isAdmin || (program.userIs.admin && !hasChildProjects && !hasChildOpps)));
+		}
+
+		const init_deletable = async function() {
+			vm.deletable = await determineIfDeletable();
 		}
 
 		init_deletable();
@@ -145,38 +147,38 @@
 		// remove the program and associated projects and opportunities with some confirmation
 		//
 		// -------------------------------------------------------------------------
-		vm.remove = async function () {
+		vm.remove = async function() {
 
 			let confirmMessage = 'Are you sure you want to delete this program?\n\nThe following projects and opportunities will also be deleted:\n';
-			
-			//Fetch all projects associated with the program
+
+			// Fetch all projects associated with the program
 			const projects = await fetch('/api/projects/for/program/'+vm.program._id).then(response => response.json());
 			projects.forEach(function(element){
 				confirmMessage+=element.name+'\n';
 			});
 
-			//Fetch all opportunities associated with the program
+			// Fetch all opportunities associated with the program
 			const opportunities = await fetch('/api/opportunities/for/program/'+vm.program._id).then(response => response.json());
 			opportunities.forEach(function(element){
 				confirmMessage+=element.name+'\n';
 			});
 
-			//Show confirmation dialog
+			// Show confirmation dialog
 			if ($window.confirm(confirmMessage)) {
 
-				//Delete child projects
+				// Delete child projects
 				projects.forEach(function(element){
 					var projectResource = new ProjectsService(element);
 					projectResource.$remove();
 				});
 
-				//Delete child opportunities
+				// Delete child opportunities
 				opportunities.forEach(function(element){
 					var opportunityResource = new OpportunitiesService(element);
 					opportunityResource.$remove();
 				});
 
-				//Delete program
+				// Delete program
 				vm.program.$remove(function() {
 					$state.go('programs.list');
 					Notification.success({ message: '<i class="fas fa-check-circle"></i> program deleted successfully!' });
