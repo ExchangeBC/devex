@@ -109,6 +109,7 @@ import '../css/projects.css';
 			'AuthenticationService',
 			'Notification',
 			'previousState',
+			'OpportunitiesService',
 			function(
 				$scope,
 				$state,
@@ -119,7 +120,8 @@ import '../css/projects.css';
 				programs,
 				authenticationService,
 				Notification,
-				previousState
+				previousState,
+				OpportunitiesService
 			) {
 				var vm = this;
 				vm.previousState = previousState;
@@ -187,6 +189,32 @@ import '../css/projects.css';
 						vm.project.program = vm.programId;
 					}
 				}
+				const determineIfDeletable = async function() {
+
+					if (editing){
+
+						// Fetch all opportunities associated with the parent program
+						const opportunitiesForProgram = await fetch('/api/opportunities/for/program/'+vm.programId).then(response => response.json());
+
+						// Filter for opportunities associated with the current project
+						const opportunitiesForProject = opportunitiesForProgram.filter(opp => opp.project === null ? false : opp.project._id === vm.project._id);
+
+						// Determine whether project has any associated published or assigned opportunities
+						const hasChildOpps = opportunitiesForProject.length > 0;
+						const hasPublished = opportunitiesForProject.some(element => element.isPublished);
+						const hasAssigned = opportunitiesForProject.some(element => element.status === 'Assigned');
+
+						// if no published opps, and no assigned opps and either root admin or project admin (with no child opps)
+						return (!hasPublished && !hasAssigned && (vm.isAdmin || (project.userIs.admin && !hasChildOpps)));
+					} else {
+						return false;
+					}
+				}
+				const init_deletable = async function() {
+					vm.deletable = await determineIfDeletable();
+				}
+
+				init_deletable();
 
 				vm.close = function() {
 					if (editing) {
@@ -197,11 +225,34 @@ import '../css/projects.css';
 				}
 				// -------------------------------------------------------------------------
 				//
-				// remove the project with some confirmation
+				// remove the project and associated opportunities with some confirmation
 				//
 				// -------------------------------------------------------------------------
-				vm.remove = function() {
-					if ($window.confirm('Are you sure you want to delete?')) {
+				vm.remove = async function() {
+
+					let confirmMessage = 'Are you sure you want to delete this project?\n\nThe following opportunities will also be deleted:\n';
+
+					// Fetch all opportunities associated with the parent program
+					const opportunitiesForProgram = await fetch('/api/opportunities/for/program/'+vm.programId).then(response => response.json());
+
+					// Filter for opportunities associated with the current project
+					const opportunitiesForProject = opportunitiesForProgram.filter(opp => opp.project === null ? false : opp.project._id === vm.project._id);
+
+					// Add opportunities to confirmation message
+					opportunitiesForProject.forEach(function(element){
+						confirmMessage+=element.name+'\n';
+					});
+
+					// Show confirmation dialog
+					if ($window.confirm(confirmMessage)){
+
+						// Delete child opportunities
+						opportunitiesForProject.forEach(function(element){
+							var opportunityResource = new OpportunitiesService(element);
+							opportunityResource.$remove();
+						});
+
+						// Delete project
 						vm.project.$remove(function() {
 							$state.go('projects.list');
 							Notification.success({
