@@ -4,16 +4,11 @@ import geb.module.*
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
 import geb.Browser
-//import extensions.AngularJSAware
 import modules.CheckboxModule
 import modules.AngularValidated
 
-//class OpportunitiesAdminCreatePage extends Page implements AngularJSAware {  
-//	static at = { angularReady && title == "BCDevExchange - New Opportunity" }
-
 class OpportunitiesAdminCreatePage extends Page {  
 	static at = {title.startsWith("BCDevExchange - The BC Developer") } 
-	//static url = "opportunityadmin/createcwu"
     static url = "createcwu"
 
 	static content = {
@@ -32,11 +27,10 @@ class OpportunitiesAdminCreatePage extends Page {
         selectProject { $('[id=project]') }
         oppTitle { $("input",id:"title") }
         oppTeaser { $("#short") }
-        //oppEmail { $("input", id:"proposalEmail") }
         oppGithub { $("input",id:"github") }
         oppSkills { $("input", id:"skilllist") }
-        selectLocation(wait:true){$('select',name:'location')} //Location Drop Down list
-        selectEarn(wait:true){$('select', name:'earn')}//Fixed-Price Reward Drop down list
+        selectLocation(wait:true){$('select',name:'location')} // Location Drop Down list
+        selectEarn(wait:true){$('select', name:'earn')} // Fixed-Price Reward Drop down list
         LocationRadioButton {option -> $("input[type='radio']", name: "onsite", value: option)}
 
         //Dates section
@@ -44,22 +38,9 @@ class OpportunitiesAdminCreatePage extends Page {
         proposalAssignment{$("input", type:"date", name:"assignment")}
         proposalStartDate{$('input[name="start"]')}
 
-        
-            //proposalStartDate{$("input", type:"date", name:"start")}
-         }
-            //<input type="date" id="start" name="start" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
-//<input type="date" id="deadline" name="deadline" class="form-control  ng-pristine ng-valid ng-not-empty ng-touched" ng-model="ngModel" style="">
-
-
-
-/*
-    void "selectOnsite"(String selectOption){
-        def SelectOnsite=$(name:"onsite").module(RadioButtons)
-        SelectOnsite.checked=selectOption
     }
-*/
    
-    void "Set All Dates"(){//CRC: I am setting the dates in the CreatePorgramProjectOpp script, so I do not use this function
+    void "Set All Dates"() {
         def dateFormat = 'yyyy-MM-dd'
         def deadline = new Date().plus('7')
         def assignment = new Date().plus('21')
@@ -76,18 +57,14 @@ class OpportunitiesAdminCreatePage extends Page {
     }
 
     void "Set Deadline Date"(String dDate){
-        //waitFor { angularReady }
         $("input", type:"date", name:"deadline").jquery.val(dDate)
     }
 
     void "Set Assignment Date"(String dDate){
-        //waitFor { angularReady }
         $("input", type:"date", name:"assignment").jquery.val(dDate)
     }
 
     void "Set Start Date"(String dDate){
-        //waitFor { angularReady }
         $("input", type:"date", name:"start").jquery.val(dDate)
-        }
-
+    }
 }
