@@ -49,7 +49,6 @@
     "express": "4.16.4",
     "express-hbs": "^1.0.4",
     "express-session": "1.15.6",
-    "generate-password": "1.4.0",
     "glob": "7.1.3",
     "handlebars": "4.0.12",
     "has-gulplog": "0.1.0",
