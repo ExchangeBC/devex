@@ -51,7 +51,7 @@
       <i class="fas fa-question-circle" uib-tooltip="If you're a public sector employee in British Columbia, you can use the BCDevExchange to pay for code and hire Agile product teams."></i>
       <span class="lighter">Verify me as a BC public sector employee so I can post opportunities!</span>
 
-      <button type="button" class="btn btn-sm btn-default" ng-if="!vm.pendingGovRequest" ng-click="vm.addGovtRequest()">Send
+      <button type="button" class="btn btn-sm btn-default" ng-if="!vm.pendingGovRequest" ng-disabled="vm.creatingRequest" ng-click="vm.addGovtRequest()">Send
         Request</button>
       <button type="button" class="btn btn-sm btn-warning" ng-if="vm.pendingGovRequest" disabled>Request Pending</button>
     </label>
