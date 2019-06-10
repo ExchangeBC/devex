@@ -11,7 +11,7 @@
           <i class="fas {{ppp.getIconName(file.type)}}"></i>
         </td>
         <td class="text-left">
-          {{file.name}}
+          <a href="/api/proposals/{{ppp.proposal._id}}/documents/{{file._id}}" target="_blank">{{file.name}}</i></a>
         </td>
         <td class="text-left">
           <span ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="fas fa-trash btn-remove-attachment" title="remove"></i><span>
