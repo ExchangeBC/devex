@@ -129,9 +129,9 @@
     </div>
 
     <!-- // Proposal Application Directive // -->
-    <div class="row" ng-if="!vm.isClosed()">
+    <div class="row">
       <div class="col">
-        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+        <proposal-apply opportunity="vm.opportunity" isclosed="vm.isClosed()" proposal="vm.myproposal"></proposal-apply>
       </div>
 
     </div>

@@ -52,7 +52,7 @@
 <!-- // Code With Us // -->
 <div ng-if="$ctrl.opportunity.opportunityTypeCd !== 'sprint-with-us'">
   
-  <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_ADD">
+  <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_ADD && !$ctrl.isclosed">
     <div class="col px-0 pb-3">
       <button id="proposaladmin.create" ng-click="$ctrl.openProposalApplicationDialog()" class="btn btn-primary float-right">
         Submit a proposal
@@ -64,12 +64,17 @@
   <div class="row" ng-if="$ctrl.userState === $ctrl.userStates.CAN_EDIT">
     <div class="col">
       
-      <!--If proposal has been submitted. Andrew: logic change needed here I think. This needs to be visible to the user even after the closing deadline.-->
-      <div class="alert alert-success" role="alert" ng-if="$ctrl.proposal.status === 'Submitted'">
+      <!--If proposal has been submitted and the opportunity is open. -->
+      <div class="alert alert-success" role="alert" ng-if="!$ctrl.isclosed && $ctrl.proposal.status === 'Submitted'" >
         <i class="far fa-check-circle"></i> Your proposal has been received! 
-        <!--Andrew: please insert logic to make this span only display until the closing deadline -->
         <span>You can submit updates until <span ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>.</span> 
         <a class="alert-link" id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">View proposal</a>
+      </div>
+
+      <!--If proposal has been submitted and the opportunity is closed. -->
+      <div class="alert alert-success" role="alert" ng-if="$ctrl.isclosed && ($ctrl.proposal.status === 'Submitted' || $ctrl.proposal.status === 'Assigned')">
+        <i class="far fa-check-circle"></i> The deadline for this opportunity has passed.
+        <a class="alert-link" id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">View your submitted proposal</a>
       </div>
       
       <!-- If Proposal is in DRAFT -->
@@ -78,7 +83,7 @@
         <span ng-bind="$ctrl.formatDate($ctrl.opportunity.deadline, true)"></span>
         to be considered for this opportunity. <a class="alert-link" id="proposaladmin.edit" href="" ng-click="$ctrl.openProposalApplicationDialog($ctrl.proposal._id)">View proposal</a>
       </div>
-      
+
     </div>
   </div>
 </div>

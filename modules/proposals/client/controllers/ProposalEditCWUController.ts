@@ -34,6 +34,7 @@ export default class ProposalEditCWUController {
 	public proposalForm: IFormController;
 
 	private user: IUser;
+	private isclosed: boolean;
 
 	constructor(
 		private $scope: IRootScopeService,
@@ -55,6 +56,12 @@ export default class ProposalEditCWUController {
 
 		// set the user
 		this.user = this.AuthenticationService.user;
+
+		this.init();
+	}
+
+	private async init(){
+		this.isclosed = await this.isClosed();
 	}
 
 	// Format dates to always be in PST (America/Vancouver timezone)
@@ -254,6 +261,13 @@ export default class ProposalEditCWUController {
 		}
 	}
 
+	// Determine whether the deadline for the opportunity has passed
+	public async isClosed(){
+		const response = await this.OpportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id }).$promise;
+		return response.deadlineStatus === 'CLOSED'; 
+	}
+
+	// Determine whether the deadline for the opportunity has passed and send an error if it has
 	private async checkDeadline(): Promise<boolean> {
 		// Check with server to ensure deadline hasn't passed
 		const response = await this.OpportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id }).$promise;

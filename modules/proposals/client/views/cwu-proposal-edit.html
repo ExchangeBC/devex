@@ -1,5 +1,5 @@
 <!-- // Banner if Proposal is Submitted // -->
-<div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'">
+<div class="banner banner-success" ng-if="ppp.proposal.status === 'Submitted'&& !ppp.isclosed">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -40,10 +40,10 @@
 
   <div class="modal-body">
     <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
-    <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
+    <div ng-if="!ppp.isclosed" ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
   </div>
   
-  <div class="modal-footer justify-content-between">
+  <div class="modal-footer justify-content-between" ng-if="!ppp.isclosed">
     <!--Left-aligned button-->
     <div>
       <button ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" type="button" aria-label="Delete proposal" data-automation-id="button-cwu-proposal-delete" class="btn btn-text-only" data-ng-click="ppp.delete()">

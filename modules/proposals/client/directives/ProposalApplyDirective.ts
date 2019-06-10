@@ -15,6 +15,7 @@ interface IProposalApplyScope extends IScope {
 	opportunity: IOpportunityResource;
 	proposal?: IProposalResource;
 	org: IOrgResource;
+	isclosed: boolean;
 }
 
 enum UserStates {
@@ -34,6 +35,7 @@ export enum ProposalModalActions {
 export class ProposalApplyDirectiveController implements IController {
 	public static $inject = ['$scope', 'AuthenticationService', 'OrgCommonService', 'modalService'];
 	public opportunity: IOpportunityResource;
+	public isclosed: boolean;
 	public proposal: IProposalResource;
 	public org: IOrgResource;
 	public user: IUser;
@@ -42,6 +44,7 @@ export class ProposalApplyDirectiveController implements IController {
 
 	constructor(private $scope: IProposalApplyScope, private AuthenticationService: IAuthenticationService, private OrgCommonService: IOrgCommonService, private modalService: any) {
 		this.opportunity = $scope.opportunity;
+		this.isclosed = $scope.isclosed;
 		this.proposal = $scope.proposal;
 		this.org = $scope.org;
 		this.userState = this.userStates.NOTHING;
@@ -156,6 +159,7 @@ angular.module('proposals').directive('proposalApply', () => {
 		templateUrl: '/modules/proposals/client/views/proposal-apply.directive.html',
 		scope: {
 			opportunity: '=',
+			isclosed: '=',
 			proposal: '=',
 			org: '='
 		},

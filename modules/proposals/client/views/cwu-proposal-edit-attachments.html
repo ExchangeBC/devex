@@ -1,6 +1,6 @@
 <div class="m-4">
-  <div class="alert alert-info">Upload any supporting material here.</div>
-  <div>
+  <div class="alert alert-info" ng-if="!ppp.isclosed">Upload any supporting material here.</div>
+  <div ng-if="!ppp.isclosed">
     <a href class="btn btn-default" id="button-cwu-proposal-upload-file"  data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
       file</a> &nbsp; <span class="text-black-50">Max 3 MB per file</span>
   </div>
@@ -14,7 +14,7 @@
           {{file.name}}
         </td>
         <td class="text-left">
-          <span ng-click="ppp.deleteAttachment(file._id)"><i class="fas fa-trash btn-remove-attachment" title="remove"></i><span>
+          <span ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="fas fa-trash btn-remove-attachment" title="remove"></i><span>
         </td>
       </tr>
     </table>
