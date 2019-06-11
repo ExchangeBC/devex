@@ -99,6 +99,7 @@ export interface IOpportunity {
 	issueUrl: string;
 	issueNumber: string;
 	assignment: Date;
+	assignedAt: Date;
 	proposal: IProposal;
 	phases: IPhases;
 	budget: number;

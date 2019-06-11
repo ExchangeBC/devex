@@ -224,6 +224,7 @@ class OpportunitiesServerController {
 			// update the opportunity
 			opportunity.status = 'Assigned';
 			opportunity.proposal = proposal;
+			opportunity.assignedAt = new Date();
 			const savedOpportunity = await this.updateSave(opportunity);
 
 			// update any subscribers
