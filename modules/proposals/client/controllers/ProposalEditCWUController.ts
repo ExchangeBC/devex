@@ -35,6 +35,7 @@ export default class ProposalEditCWUController {
 
 	private user: IUser;
 	private isclosed: boolean;
+	private hasAttachments: boolean;
 
 	constructor(
 		private $scope: IRootScopeService,
@@ -113,16 +114,20 @@ export default class ProposalEditCWUController {
 		}
 	}
 
-	// Leave the edit view - if this was a brand new opportunity (i.e. not previously saved), delete it
+	// Leave the edit view and save any changes made if needed
 	public async close(): Promise<void> {
 
-		if (this.proposal.status === 'New') {
-			await this.proposal.$remove();
-		}
+		// If looking at a proposal for a closed opportunity, simply close the modal
+		if(this.isclosed){
+			this.$uibModalInstance.close({
+				action: ProposalModalActions.SAVED,
+				proposal: this.proposal
+			});
 
-		this.$uibModalInstance.close({
-			action: ProposalModalActions.CANCELLED
-		});
+		// If looking at a proposal for an open opportunity, save any changes made
+		}else{
+			this.save(true);
+		}
 	}
 
 	// Delete a proposal
@@ -295,6 +300,8 @@ export default class ProposalEditCWUController {
 		if (!this.proposal.team) {
 			this.proposal.team = [];
 		}
+
+		this.hasAttachments = this.proposal.attachments.length>0;
 	}
 
 	// Copy over user and org information to the proposal

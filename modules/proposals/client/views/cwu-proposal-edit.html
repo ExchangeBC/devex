@@ -12,7 +12,7 @@
 
 <!-- // Banner if Proposal is in Draft // -->
 <!--This can be deleted when completing BA-1160-->
-<!--
+
 <div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
   <div class="container">
     <div class="row">
@@ -26,9 +26,9 @@
       </div>
     </div>
   </div>
-</div>-->
+</div>
 
-<form id="proposalform" name="ppp.proposalForm" ng-submit="ppp.save(ppp.proposalForm.$valid)"
+<form id="proposalform" name="ppp.proposalForm" ng-submit="ppp.submit()"
   novalidate warn-on-exit>
 
   <div class="modal-header">
@@ -52,14 +52,8 @@
     </div>
     <!--Right-aligned buttons-->
     <div>
-      <button type="button" data-automation-id="button-cwu-proposal-submit"  class="btn btn-success float-right" data-ng-click="ppp.submit()" ng-if="ppp.proposal.status === 'Draft' && ppp.proposal.isAcceptedTerms">
+      <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-success float-right" ng-disabled="!ppp.proposal.isAcceptedTerms || !ppp.hasAttachments">
         Submit
-      </button>
-      <button type="submit" data-automation-id="button-cwu-proposal-save-updates" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'Submitted'">
-        Save Updates
-      </button>
-      <button type="submit" data-automation-id="button-cwu-proposal-save-changes" class="btn btn-primary float-right" ng-if="ppp.proposal.status === 'New' || ppp.proposal.status === 'Draft'">
-        Save Changes
       </button>
     </div>
   </div>
