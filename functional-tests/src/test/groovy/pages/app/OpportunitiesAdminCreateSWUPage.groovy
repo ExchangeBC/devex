@@ -19,9 +19,9 @@ class OpportunitiesAdminCreateSWUPage extends Page {
 
 	static content = {
         //Tabs
-        HeaderTabClick { $('[data-automation-id ~= "tabHeader"]').click() }
-        BackgroundTabClick { $('[data-automation-id ~= "tabBackground"]').click() }
-        DetailsTabClick { $('[data-automation-id ~= "tabDetails"]').click() }
+        HeaderTab { $('[data-automation-id ~= "tabHeader"]') }
+        BackgroundTab { $('[data-automation-id ~= "tabBackground"]') }
+        DetailsTab { $('[data-automation-id ~= "tabDetails"]') }
         PhasesTabClick{ $('[data-automation-id ~= "tabPhases"]').click() }
         TechnicalSkillTabClick{ $('[data-automation-id ~= "tabTechnicalSkills"]').click() }
         BudgetTabClick{ $('[data-automation-id ~= "tabBudget"]').click() }

@@ -5,10 +5,8 @@ import pages.app.ProjectsPage
 import pages.app.ProjectCreatePage
 import pages.app.ProjectViewPage
 
-import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -16,25 +14,23 @@ import spock.lang.Title
 
 import geb.spock.GebReportingSpec
 
-
 @Title("Check the user can not create projects with Invalid names-Precondition: At least a Program need to alredy exists")
     class ProjectValidationSpec extends GebReportingSpec {
-
 
         def setup() {
             to HomePage
             // Need to login as an admin
-            def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
+            def  loginOK = login."Login As An Administrator"("admin","adminadmin","Admin Local")
             assert loginOK
         }
 
         @Unroll
-        def "Testing project creation validation" () {
+        def "Testing project creation validation"() {
             given:
             waitFor { to ProjectsPage }
 
         when: "I choose to create a new project"
-            waitFor{ListProjectButton.click()}
+            waitFor { ListProjectButton.click() }
 
         then:
             at ProjectCreatePage

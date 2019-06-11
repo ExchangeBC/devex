@@ -9,7 +9,6 @@ import pages.app.CompaniesCreateDetailsPage
 import pages.app.GitHubPage
 import pages.app.GitHubSignInPage
 import pages.app.MessagesPage
-
 import pages.app.OrgDetailsPage
 
 import geb.module.RadioButtons
@@ -29,41 +28,39 @@ import java.io.File
 import java.io.IOException
 
 @Stepwise
-
-
 @Narrative('''In this test, the already existing user 'HugoChibougamau' will create a company named 
-'Hugo's Company'.
+'Hugo and friend\'s Company'.
 
 Then users 'HibouleBlanc' and 'Hector' will request to join the company. 'HugoChibougamau', the admin for the company
 will accept 'HibouleBlanc' and reject 'Hector'
 
-The test finish with each user logged off from BC Exchange and GitHub
- ''')
+The test finishes with each user logged off from BC Exchange and GitHub
+''')
 
 @Title("User creates a Company")
 class UserCreatesCompany extends GebReportingSpec {
 
     def Boolean CheckIfReauthIsNeeded(){
         if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
-                println("Had to reauthorize Devex to access the GibHub account")
-                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
-                sleep(2000)
+            println("Had to reauthorize Devex to access the GibHub account")
+            $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+            sleep(2000)
         }
         else {
-                println("No need to reauthorize Devex to access the GibHub account")
+            println("No need to reauthorize Devex to access the GibHub account")
         }
         return true
     }         
 
     @Unroll
-    def "User Hugo Chibougamau creates a Company" () {
+    def "User Hugo Chibougamau creates a Company"() {
         def actions = new Actions(driver)
         
         given: "Starting from the Home Page"
             waitFor {to HomePage}
 
         when: "Click on the Sign In  link to go to the Authentication page"
-            SigninLink //The definition for this element includes a Click
+            SigninLink.click()
             at AuthenticationSigninPage 
 
         and: "Click on the: 'Sign in with you GitHub account'"
@@ -72,61 +69,60 @@ class UserCreatesCompany extends GebReportingSpec {
         and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
             at GitHubSignInPage
             
-            waitFor{GitHubSignInButton} //If this element is present the page has loaded
+            waitFor{ GitHubSignInButton }
             GitHubLogin.value("hugochibougamau")
             GitHubPwd.value("Devex_Test1")
             GitHubSignInButton.click()
-            sleep(2000) //Leave time case the next page is the reauthorization page
+            sleep(2000) // Leave time case the next page is the reauthorization page
 
         and:"If redirected to the reauthorization page, click to reauthorize"    
-            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
+            assert CheckIfReauthIsNeeded()
 
         then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
-            at HomePage //verify we are in the home page
-            assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
+            at HomePage
+            assert AvatarImage
 
         and: "Click on the Companies link to go to the orgs page"
-            CompaniesNavbar //this reference already includes a click
+            CompaniesNavbar.click()
 
         then: "Arrive at the orgs page. It should be empty"
-            waitFor{at CompaniesPage}
+            waitFor { at CompaniesPage }
 
         and: "Click on the 'Register a Company' button"
-            waitFor{RegisterCompanyButton}
+            waitFor { RegisterCompanyButton }
             RegisterCompanyButton.click()
 
         then: "Opens the page to create a new company" 
-            waitFor{at CompaniesCreatePage}
+            waitFor { at CompaniesCreatePage }
 
         and: "Fill the Name of the Company, Jurisdiction, Business ID, accept the terms and continue"  
-            waitFor{CompanyName}
+            waitFor { CompanyName }
             CompanyName.value("Hugo and friend\'s Company") 
             Jurisdiction.value("Vancouver Island and the Inlets") 
             BusinessNumber.value("BC-123456789")
-            AgreeConditions.click() // When all the fields are completed the next button should be enabled
+            AgreeConditions.click()
             ContinueSubmitButton.click()
-            sleep(1000) //There is an angular animation and I prefer is gone before proceeding
 
-        then: "Arribe to the organization page. This page allows to add extra information and accept the terms"
-            waitFor{at OrgDetailsPage}
+        then: "Arrive at the organization page. This page allows one to add extra information and accept the terms"
+            waitFor { at OrgDetailsPage }
 
         then: "Open the pop up window that contains the name and website address"
-            AddWebsite.click()  //Clicking here makes the next window pop up
+            AddWebsite.click()
 
         then:"The pop up window appears. Now check the name has bee properly saved and add a web site address"
-            waitFor{SaveCompanyNameBtn} //Made sure the pop up window is fully loaded, as the URL is not fixed
-            assert CompanyLegalName.value()=="Hugo and friend\'s Company" //check the previously added name has been correctly saved
-            CompanyWebAddress.value("www.thehs.ca") //adding the web site address
+            waitFor { SaveCompanyNameBtn }
+            assert CompanyLegalName.value() == "Hugo and friend\'s Company"
+            CompanyWebAddress.value("www.thehs.ca")
             SaveCompanyNameBtn.click()
-            sleep(1000) //the WaitFor does not work well for the next instructions
+            sleep(1000)
 
         and:"Open the second edit pop-up window that allows editing more fields"
-            WebElement element = driver.findElement(By.id("lblBusinessRegistration"))//These two lines move the cursor over one of the labels to make the Edit button visible
+            WebElement element = driver.findElement(By.id("lblBusinessRegistration"))
             actions.moveToElement(element).build().perform()
-            waitFor{EditButtonRight.click()}
+            waitFor {EditButtonRight.click() }
 
         and: "First check the Registration number and Jurisdiction have been saved correctly"
-            waitFor{SaveCompanyOtherInformationBtn}
+            waitFor { SaveCompanyOtherInformationBtn }
             assert BusinessNumber.value()=="BC-123456789"
             assert Jurisdiction.value()=="Vancouver Island and the Inlets"
 
@@ -144,22 +140,28 @@ class UserCreatesCompany extends GebReportingSpec {
             SaveCompanyOtherInformationBtn.click()
 
         and:" Accept the terms to finish creating the company"
-            waitFor{AcceptButton.click()}  //Accept the terms
-            sleep(1000)//Give time to the message to appear and dissappear
+            waitFor { AcceptButton.click() }
+            sleep(1000)
 
         then: "Go to the Companies page and check the name of the newly created company is listed"    
-            waitFor{to CompaniesPage}
-            assert waitFor{NewCompany.text()}=="Hugo and friend\'s Company" 
+            waitFor { to CompaniesPage }
+
+            // Continually click 'Next until we get to last page of companies
+            while (!NextPageLink.@disabled) {
+                NextPageLink.click()
+                sleep(1000)
+            }
+            assert waitFor { NewCompany.text() } == "Hugo and friend\'s Company" 
 
         and: "Log out user 'hugochibougamau' from GitHub" 
-            waitFor{to GitHubPage}
+            waitFor { to GitHubPage }
             AvatarImage.click()
-            waitFor{SignOutGit}
+            waitFor { SignOutGit }
             SignOutGit.click()
 
         and: "Log out from BC Developers Exchange"
-            waitFor{to HomePage}
-            def  logoffOK=login."Logout as user"()
+            waitFor { to HomePage }
+            def logoffOK = login."Logout as user"()
             assert logoffOK
             sleep(3000)
     }
@@ -169,53 +171,59 @@ class UserCreatesCompany extends GebReportingSpec {
         def actions = new Actions(driver)
 
         given: "Starting from the Home Page"
-            waitFor {to HomePage}
+            waitFor { to HomePage }
             sleep(1000)
 
-        when: "Click on the Sign In  link to go to the Authentication page"
-            assert SigninLink //The definition for this element includes a Click
-            waitFor{at AuthenticationSigninPage}
+        when: "Click on the Sign In link to go to the Authentication page"
+            assert SigninLink.click()
+            waitFor { at AuthenticationSigninPage }
 
         and: "Click on the: 'Sign in with you GitHub account'"
             SignInButton.click()
 
         and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
-            waitFor{at GitHubSignInPage}   
-            assert waitFor{GitHubSignInButton} //If this element is present the page has loaded
+            waitFor { at GitHubSignInPage }
+            assert waitFor { GitHubSignInButton }
             GitHubLogin.value(Login)
             GitHubPwd.value(Pwd)
             GitHubSignInButton.click()
-            sleep(2000) //Leave time case the next page is the reauthorization page
+            sleep(2000)
 
         and:"If redirected to the reauthorization page, click to reauthorize"    
-            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
+            assert CheckIfReauthIsNeeded()
 
         then: "Once logged, go to Companies Page"
-            waitFor {to CompaniesPage}
-            sleep(1000)//Next lines of code need this delay
+            waitFor { to CompaniesPage }
+            sleep(1000)
 
         then: "Hover over the newly created company name"
-            WebElement element = driver.findElement(By.id("holderCompanyName"))//These two lines move the cursor over one of the labels to make the Edit button visible
-            actions.moveToElement(element).build().perform()//Hovering over makes the Join button visible
-            waitFor{JoinCompanyButton.click()}
-            sleep(1000) //to give time to the pop up window to appear
+            // Continually click 'Next until we get to last page of companies
+            while (!NextPageLink.@disabled) {
+                NextPageLink.click()
+                sleep(1000)
+            }
+            
+            WebElement element = driver.findElement(By.id("holderCompanyName"))
+            actions.moveToElement(element).build().perform()
+            waitFor { JoinCompanyButton.click() }
+            sleep(1000)
 
         and: "Click Yes on the pop up confirmation window"    
-            waitFor{YesButton.click()}
-            sleep(1000) //to give time to the pop up window to disappear
+            waitFor { YesButton.click() }
+            sleep(1000)
     
         expect: "The label has effectively changed to Pending"  
-        assert  PendingLbl.text().trim()=='Pending'
+        assert PendingLbl.text().trim() == 'Pending'
 
-        and: "Log out user 'Login' from GitHub" 
-            waitFor{to GitHubPage}
+        and: "Log out user from GitHub" 
+            waitFor { to GitHubPage }
             AvatarImage.click()
-            waitFor{SignOutGit}
+            waitFor { SignOutGit }
             SignOutGit.click()
 
         and: "Log out from BC Developers Exchange"
-            waitFor{to HomePage}
-            def  logoffOK=login."Logout as user"()
+            waitFor { to HomePage }
+            def logoffOK = login."Logout as user"()
             assert logoffOK
     
         where: "The values to create the Users are:"

@@ -54,7 +54,7 @@ class UserDeletesProposal_Company extends GebReportingSpec {
         assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
 
     and: "Click on the Opportunities link to go to the opportunities page"
-        OpportunitiesNavBar //this reference already includes a click
+        OpportunitiesNavBar.click()
 
     then: "Arrive at the opportunities page."
         waitFor{at OpportunitiesPage}
@@ -97,7 +97,7 @@ class UserDeletesProposal_Company extends GebReportingSpec {
         assert AvatarImage  //Verify the avatar image is present, it indicates user is logged
 
     and: "Click on the Opportunities link to go to the opportunities page"
-        OpportunitiesNavBar //this reference already includes a click
+        OpportunitiesNavBar.click()
 
     when: "Arrive at the opportunities page."
         waitFor{at OpportunitiesPage}
@@ -140,7 +140,7 @@ def "User Hugo Chibougamau deletes a company" () {
         waitFor {to HomePage}
 
     and: "Click on the Companies link to go to the Companies page"
-        CompaniesNavbar //this reference already includes a click
+        CompaniesNavbar.click()
 
     when: "Arrive at the companies page."
         waitFor{at CompaniesPage}

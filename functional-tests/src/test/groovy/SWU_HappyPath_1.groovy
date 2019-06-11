@@ -53,14 +53,9 @@ class SWU_HappyPath_1 extends GebReportingSpec {
         return true
     }
 
-
     def startup() {//We make sure we are not logged as admin
-        waitFor{to HomePage}
-        //I get the base URL to build (in the LoginModule) the URL to the admin icon
-        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-
-        // Login off as an admin
-        def  logoffOK=login."Logout as administrator"(baseURL)
+        waitFor { to HomePage }
+        def  logoffOK=login."Logout as user"()
         assert logoffOK
     }
 
@@ -70,7 +65,7 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
         waitFor { to HomePage}
 
     when: "I click on Learn More button under SWU"
-        SprintwithusLink
+        SprintwithusLink.click()
 
     then: "I should be at the Sprintwithus Page- So the page exists"
         waitFor{at SprintwithusPage}
@@ -82,7 +77,7 @@ def "Looking at the existing opportunities and SWU information as a non-authenti
         waitFor{at SprintWithUsHowToApplyPage}
 
     and: "Click on the opportunities link on the header of the page"
-        OpportunitiesNavBar //it includes a click
+        OpportunitiesNavBar.click()
 
     then: "I should be at the Opportunities Page- So the page exists"
         waitFor{at OpportunitiesPage}

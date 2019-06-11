@@ -94,7 +94,7 @@ class CreateOppSWU extends GebReportingSpec {
                     waitFor{at OpportunitiesAdminCreateSWUPage}
     
                 and: "Confirm the Header tab is the initially selected one"
-                    assert waitFor{HeaderTabClick }
+                    assert waitFor { HeaderTab.click() }
 
                 and: "Set the title,teaser, description.... and other details of the opportunity in the Header tab"
                     waitFor{selectProject.value(Project)}
@@ -103,11 +103,11 @@ class CreateOppSWU extends GebReportingSpec {
                     oppGithub.value(Github) //Github location
 
                 and: "Move to the Background tab to enter the Background information"
-                    BackgroundTabClick
+                    BackgroundTab.click()
                     withFrame(OppBackgroundBox){$("body", id:"tinymce") << Background }
 
                 and: "Move to the Details tab to enter the Details information"
-                    DetailsTabClick  //Move to the Details tab
+                    DetailsTab.click()  //Move to the Details tab
                         LocationRadioButton(Onsite).click()
                         selectLocation.value(Location)
 
@@ -247,15 +247,9 @@ class CreateOppSWU extends GebReportingSpec {
       "Project: Automation Test Project 1" | "SWU Opportunity" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | 1000000 | 100000| 300000 | 600000 | "Additional Terms for this SWU proposal" | "Stat rosa pristina nomine, nomina nuda tenemus?" | "Addenda for SWU opportunity"
   }
 
-
     def teardown(){
         to HomePage
-        //I get the base URL to build (in the LoginModule) the URL to the admin icon
-        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-
-        // Login off as an admin
-        def  logoffOK=login."Logout as administrator"(baseURL)
+        def  logoffOK = login."Logout as user"()
         assert logoffOK
     }
-
 }

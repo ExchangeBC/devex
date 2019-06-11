@@ -54,15 +54,14 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             ListProgramButton.click()
 
         then: "And open the Create Program page"
-            at ProgramCreatePage
+            waitFor { at ProgramCreatePage }
 
         when: "Enter the details for the new program"
             ProgramTitle.value(ProgramTitleValue)
             ShortDescription.value(ShortDescriptionValue)
-
-            waitFor{ProgramDescriptionBox}
+            waitFor{ ProgramDescriptionBox }
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
-            withFrame(ProgramDescriptionBox){$("body", id:"tinymce") << DescriptionValue}
+            withFrame(ProgramDescriptionBox) { $("body", id:"tinymce") << DescriptionValue }
             Website.value(WebsiteValue)
 
         and: "Click the 'Save Changes' button for the program: '#ProgramTitleValue'"
@@ -99,31 +98,31 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             ProjectName.value(ProjectNameValue)
             ShortDescription.value(ShortDescriptionValue)
             
-            waitFor{ProjectDescriptionBox}
+            waitFor { ProjectDescriptionBox }
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
-            withFrame(ProjectDescriptionBox){$("body", id:"tinymce") << DescriptionValue}
+            withFrame(ProjectDescriptionBox){ $("body", id:"tinymce") << DescriptionValue }
 
-            sleep(3000) //Makes no sense, but without this sleep it does not work
-            waitFor{Github}
+            // sleep(3000) //Makes no sense, but without this sleep it does not work
+            waitFor { Github }
             Github.value(GithubValue)
             Tags.value(TagsValue)
-            waitFor{ActivityLevel}
+            waitFor { ActivityLevel }
             ActivityLevel.value(ActivityLevelValue)
 
         and: "Click the 'Save Changes' button for the project: '#ProjectNameValue'"
-            waitFor{SaveButton}
+            waitFor{ SaveButton }
             SaveButton.click()
 
         then: "I arrive to the Projects View Page, and verify the Publish button exists"
-            waitFor {at ProjectViewPage}
-            assert waitFor{PublishButton}
+            waitFor { at ProjectViewPage }
+            assert waitFor { PublishButton }
 
         when: "I click the publish button"
-            waitFor{PublishButton.click()}
+            waitFor { PublishButton.click() }
 
         then:"The Unpublish button exists and it is displayed"
             at ProjectViewPage
-            assert waitFor{UnpublishButton}
+            assert waitFor { UnpublishButton }
             assert UnpublishButton.isDisplayed()
 
         where: "The values used to create the Project are:"
@@ -134,29 +133,29 @@ class CreateProgramProjectOpp extends GebReportingSpec {
     @Unroll   // Not actually necessary if we are using only single set of data (ie, creating only one opportunity)
     def "Publish Opportunity: '#TitleData'" () {
         // This section set and format the dates 
-        Calendar calendar= Calendar.getInstance()
+        Calendar calendar = Calendar.getInstance()
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd")
 
         calendar.add(Calendar.DATE,3)
-        def deadline=calendar.getTime()  // Define the deadline for applications (set to 3 days from today)
-        def Formatted_deadline=format.format( deadline )
-        def Formatted_deadline_Year=deadline.year +1900 // Year start counting from 1900
-        def Formatted_deadline_Month=deadline.month +1 // Month start counting from 0
-        def Formatted_deadline_Day=deadline.date
+        def deadline = calendar.getTime()  // Define the deadline for applications (set to 3 days from today)
+        def Formatted_deadline = format.format( deadline )
+        def Formatted_deadline_Year = deadline.year +1900 // Year start counting from 1900
+        def Formatted_deadline_Month = deadline.month +1 // Month start counting from 0
+        def Formatted_deadline_Day = deadline.date
 
         calendar.add(Calendar.DATE,21)
-        def assignment=calendar.getTime() // Define the date the oppoortunity is assigned (set to 21 + 3 days from today)
-        def Formatted_assignment=format.format(assignment)
-        def Formatted_assignment_Year=assignment.year +1900 // Year start counting from 1900
-        def Formatted_assignment_Month=assignment.month +1 // Month start counting from 0
-        def Formatted_assignment_Day=assignment.date
+        def assignment = calendar.getTime() // Define the date the oppoortunity is assigned (set to 21 + 3 days from today)
+        def Formatted_assignment = format.format(assignment)
+        def Formatted_assignment_Year = assignment.year +1900 // Year start counting from 1900
+        def Formatted_assignment_Month = assignment.month +1 // Month start counting from 0
+        def Formatted_assignment_Day = assignment.date
 
         calendar.add(Calendar.DATE,21)
-        def start=calendar.getTime()   // Define the start date for the work (set to 21+21+3 days from today)
-        def Formatted_start=format.format(start)
-        def Formatted_start_Year=start.year +1900 // Year start counting from 1900
-        def Formatted_start_Month=start.month +1 // Month start counting from 0
-        def Formatted_start_Day=start.date
+        def start = calendar.getTime()   // Define the start date for the work (set to 21+21+3 days from today)
+        def Formatted_start = format.format(start)
+        def Formatted_start_Year = start.year +1900 // Year start counting from 1900
+        def Formatted_start_Month = start.month +1 // Month start counting from 0
+        def Formatted_start_Day = start.date
 
         def  MyTitleData = TitleData + ": " + RandomID
 
@@ -167,34 +166,30 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             PostAnOpportunity.click()
 
         then: "I load the Landing Page that allows to create a CWU or SWU opportunity"
-            waitFor{at OpportunitiesAdminCreateLandingPage}
+            waitFor { at OpportunitiesAdminCreateLandingPage }
 
         and: "Click on the Get Started button under CWU"  
-            waitFor{createCWUOpportunityButton}
+            waitFor { createCWUOpportunityButton }
             createCWUOpportunityButton.click()
-            waitFor{at OpportunitiesAdminCreatePage}
+            waitFor { at OpportunitiesAdminCreatePage }
 
-        and: "Set the title,teaser, description.... and other details of the opportunity "
+        and: "Set the title,teaser, description... and other details of the opportunity "
             selectProject.value(Project)
-            oppTitle.value(MyTitleData) // Title
-            oppTeaser.value(Teaser) // teaser
-            oppGithub.value(Github) // Github location
+            oppTitle.value(MyTitleData)
+            oppTeaser.value(Teaser)
+            oppGithub.value(Github)
 
             // Now we move to the Background tab  
-            BackgroundTabClick
-            waitFor{OppBackgroundBox}
+            BackgroundTab.click()
+            waitFor { OppBackgroundBox }
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             // There are three iframes in the OpportunitiesAdminCreatePage, this one is the 0, if order of the iframes change, then redo the element identifiers
-            withFrame(OppBackgroundBox){$("body", id:"tinymce") << Background }
+            withFrame(OppBackgroundBox) { $("body", id:"tinymce") << Background }
 
-            DetailsTabClick //Now we move to the Details tab  
+            DetailsTab.click() //Now we move to the Details tab  
             waitFor{LocationRadioButton(Onsite).click()}
             selectLocation.value(Location)
             selectEarn.value(Earn)
-
-            // No Email field in the current incarnation of the application
-            // oppEmail.value(Email)
-            // oppEmail << Keys.chord(Keys.TAB)
 
             // Setting the proposal Deadline
             proposalDeadLine.firstElement().clear()  // clean the field from the preselected date
@@ -220,16 +215,16 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             proposalStartDate << Keys.ARROW_RIGHT  // move right to the day
             proposalStartDate << Formatted_start_Day.toString() 
 
-            AcceptanceTabClick // Now we move to the Acceptance and Evaluatio tab  
-            waitFor{OppAcceptanceBox}
+            AcceptanceTab.click() // Now we move to the Acceptance and Evaluation tab  
+            waitFor { OppAcceptanceBox }
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             // There are three iframes in the OpportunitiesAdminCreatePage, this one is the 1, if order of the iframes change, then redo the element identifiers
-            withFrame(OppAcceptanceBox){$("body", id:"tinymce") << AcceptanceCriteria  }
+            withFrame(OppAcceptanceBox){ $("body", id:"tinymce") << AcceptanceCriteria }
             sleep(1000)
-            waitFor{ProposalAcceptanceBox}
+            waitFor{ ProposalAcceptanceBox }
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             // There are three iframes in the OpportunitiesAdminCreatePage, this one is the 2, if order of the iframes change, then redo the element identifiers
-            withFrame(ProposalAcceptanceBox){$("body", id:"tinymce") << ProposalCriteria}
+            withFrame(ProposalAcceptanceBox){ $("body", id:"tinymce") << ProposalCriteria }
             sleep(1000)
             oppSkills.value(Skills) // Skills
             sleep(1000)
@@ -239,39 +234,34 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             sleep(3000) // This makes no sense given the next waitFor, but without it, then fails
 
         then: "Go to the opportunities page to publish it"
-            waitFor{to OpportunitiesPage}
+            waitFor { to OpportunitiesPage }
 
         and: "Click on the newly created opportunity (still unpublished)"
-            def MyCurrentURL=getCurrentUrl() // URL opportunity page
+            def MyCurrentURL = getCurrentUrl() // URL opportunity page
             TestCWUOpportunities[0].click()  // it clicks on the first opportunity in the list (this will be the newly created one)
             sleep(1000)
             // The following is to create from the opp title the URL
-            def OppURL= MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
-            def NewURL=getCurrentUrl() // This is the specific opportunity URL
+            def OppURL = MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+            def NewURL = getCurrentUrl() // This is the specific opportunity URL
     
         then: "Open the newly created opportunity"      
-            assert NewURL==OppURL  // matching the URL
-            assert waitFor{$("button",'data-automation-id':"button-opportunity-publish")}
+            assert NewURL == OppURL  // matching the URL
+            assert waitFor { PublishButton }
         
         and: "Finally, we publish the opp by clicking the Publish button"
-            $("button",'data-automation-id':"button-opportunity-publish").click()  
+            PublishButton.click()
         
         and: "And then click Yes in the modal box to confirmn"
-            $("button",'data-automation-id':"button-modal-yes").click()
+            ModalConfirmButton.click()
             
         where: "The values used to create the Opportunity are:"
             Project | TitleData | Teaser | Background | Github | Location | Onsite | Skills | AcceptanceCriteria | Earn | ProposalCriteria | Email
             "Project: Automation Test Project 1" | "CWU Opportunity" | "Teaser for Automation Test Opportunity 1" | "Background for Automation Test Opportunity 1" | "https://github.com" | "Burnaby" | "onsite" | "Java, JS, css, html, django, python, postgressql" | "Acceptance Criteria Automation Test Opportunity 1" | "\$20,000.00" | "Proposal Evaluation Criteria Automation Test Opportunity 1" | "crochcunill@gmail.com"
     }
 
-   
-    def teardown(){
+    def teardown() {
         to HomePage
-        // I get the base URL to build (in the LoginModule) the URL to the admin icon
-        def baseURL = getBrowser().getConfig().getBaseUrl().toString()
-
-        // Login off as an admin
-        def  logoffOK=login."Logout as administrator"(baseURL)
+        def  logoffOK=login."Logout as user"()
         assert logoffOK
     }
 }

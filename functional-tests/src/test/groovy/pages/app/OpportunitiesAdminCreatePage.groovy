@@ -12,31 +12,31 @@ class OpportunitiesAdminCreatePage extends Page {
     static url = "createcwu"
 
 	static content = {
-        HeaderTabClick { $('[data-automation-id ~= "tab-cwu-header"]').click() }
-        BackgroundTabClick { $('[data-automation-id ~= "tab-cwu-background"]').click() }
-        AcceptanceTabClick { $('[data-automation-id ~= "tab-cwu-acceptance"]').click() }
-        DetailsTabClick { $('[data-automation-id ~= "tab-cwu-details"]').click() }
+        HeaderTab(wait: 2)  { $('[data-automation-id ~= "tab-cwu-header"]') }
+        BackgroundTab(wait: 2)  { $('[data-automation-id ~= "tab-cwu-background"]') }
+        AcceptanceTab(wait: 2)  { $('[data-automation-id ~= "tab-cwu-acceptance"]') }
+        DetailsTab(wait: 2)  { $('[data-automation-id ~= "tab-cwu-details"]') }
            
-        OppBackgroundBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),0)}
-        OppAcceptanceBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),1)}
-        ProposalAcceptanceBox{$(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),2)}
+        OppBackgroundBox(wait: 2)  { $(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),0) }
+        OppAcceptanceBox(wait: 2)  { $(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),1) }
+        ProposalAcceptanceBox(wait: 2)  { $(By.xpath('//iframe[@title="Rich Text Area. Press ALT-F9 for menu. Press ALT-F10 for toolbar. Press ALT-0 for help"]'),2) }
 
-        SaveButton { $('button[data-automation-id ~= "button-cwu-save"]') }
-        DeleteButton { $('a[data-automation-id ~= "button-cwu-delete"]') }
+        SaveButton(wait: 2)  { $('button[data-automation-id ~= "button-cwu-save"]') }
+        DeleteButton(wait: 2)  { $('a[data-automation-id ~= "button-cwu-delete"]') }
             
-        selectProject { $('[id=project]') }
-        oppTitle { $("input",id:"title") }
-        oppTeaser { $("#short") }
-        oppGithub { $("input",id:"github") }
-        oppSkills { $("input", id:"skilllist") }
-        selectLocation(wait:true){$('select',name:'location')} // Location Drop Down list
-        selectEarn(wait:true){$('select', name:'earn')} // Fixed-Price Reward Drop down list
-        LocationRadioButton {option -> $("input[type='radio']", name: "onsite", value: option)}
+        selectProject(wait: 2) { $('[id=project]') }
+        oppTitle(wait: 2)  { $("input",id:"title") }
+        oppTeaser(wait: 2)  { $("#short") }
+        oppGithub(wait: 2)  { $("input",id:"github") }
+        oppSkills(wait: 2)  { $("input", id:"skilllist") }
+        selectLocation (wait: 2) { $('select',name:'location') }
+        selectEarn(wait: 2) { $('select', name:'earn') }
+        LocationRadioButton(wait: 2) {option -> $("input[type='radio']", name: "onsite", value: option)}
 
         //Dates section
-        proposalDeadLine(wait: true) {$("input",id:"deadline") }
-        proposalAssignment{$("input", type:"date", name:"assignment")}
-        proposalStartDate{$('input[name="start"]')}
+        proposalDeadLine(wait: 2) { $("input",id:"deadline") }
+        proposalAssignment(wait: 2) { $("input", type:"date", name:"assignment") }
+        proposalStartDate(wait: 2) { $('input[name="start"]') }
 
     }
    

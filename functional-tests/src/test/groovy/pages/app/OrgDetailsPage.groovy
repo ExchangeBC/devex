@@ -1,42 +1,38 @@
 package pages.app
 import geb.Page
 
-
 class OrgDetailsPage extends Page {
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 
 	static content = {
-            FindMembersInput { $("input",'data-automation-id':"findMembers") }
+            FindMembersInput(wait: true) { $("input",'data-automation-id':"findMembers") }
 
-            AcceptButton{$("button",'data-automation-id':"btnAccept")}
-            DeleteButton{$("button",'data-automation-id':"btnDelete")}
+            AcceptButton(wait: true) { $("button",'data-automation-id':"btnAccept") }
+            DeleteButton(wait: true) { $("button",'data-automation-id':"btnDelete") }
 
-            EditButtonLeft{$("button",'data-automation-id':"btnEdit_left" )}
-            EditButtonRight{$("button",'data-automation-id':"btnEdit_right" )}
+            EditButtonLeft(wait: true) { $("button",'data-automation-id':"btnEdit_left" ) }
+            EditButtonRight(wait: true) { $("button",'data-automation-id':"btnEdit_right" ) }
 
-            AddWebsite{$("a",'data-automation-id':"lnkAddWebsite")}
-            BusinessRegistration{$("div",'data-automation-id':"lblBusinessRegistration")} //Note, this is a label, not an input entry field
+            AddWebsite(wait: true) { $("a",'data-automation-id':"lnkAddWebsite") }
+            BusinessRegistration(wait: true) { $("div",'data-automation-id':"lblBusinessRegistration") }
 
-            CompanyLegalName { $("input",id:"companyname") }
-            CompanyWebAddress{$("input",'data-automation-id':"inpCompanyWebAddress")}
-            SaveCompanyNameBtn{$("button",'data-automation-id':"btnSaveCompanyName" )}
+            CompanyLegalName(wait: true) { $("input",id:"companyname") }
+            CompanyWebAddress(wait: true) { $("input",'data-automation-id':"inpCompanyWebAddress") }
+            SaveCompanyNameBtn(wait: true) { $("button",'data-automation-id':"btnSaveCompanyName" ) }
 
-            Address1{$("input",id:"address")}
-            Address2{$("input",id:"address2")}
-            City{$("input",id:"city")}
-            Province{$("input",id:"province")}
-            PostalCode{$("input",id:"postalcode")}
+            Address1(wait: true) { $("input",id:"address") }
+            Address2(wait: true) { $("input",id:"address2") }
+            City(wait: true) { $("input",id:"city") }
+            Province(wait: true) { $("input",id:"province") }
+            PostalCode(wait: true) { $("input",id:"postalcode") }
 
-            BusinessNumber { $("input",id:"businessNumber") }//This is an input entry field
-            Jurisdiction { $("input",id:"businessJurisdiction") }
+            BusinessNumber(wait: true) { $("input",id:"businessNumber") }
+            Jurisdiction(wait: true) { $("input",id:"businessJurisdiction") }
 
-            ContactName{$("input",id:"contactName")}
-            ContactPhone{$("input",id:"contactPhone")}
-            ContactEmail{$("input",id:"contactEmail")}
+            ContactName(wait: true) { $("input",id:"contactName") }
+            ContactPhone(wait: true) { $("input",id:"contactPhone") }
+            ContactEmail(wait: true) { $("input",id:"contactEmail") }
 
-            SaveCompanyOtherInformationBtn{$("button",'data-automation-id':"btnSaveCompanyOtherInformation" )}
-
-
-
+            SaveCompanyOtherInformationBtn(wait: true) { $("button",'data-automation-id':"btnSaveCompanyOtherInformation" ) }
     }
 }

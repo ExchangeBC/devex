@@ -28,10 +28,10 @@ class CreateCapability extends GebReportingSpec {
     @Unroll 
     def"Go to Home Page and click on the Admin menu item to open the drop down list"() {
         given: "Starting from the Home Page"
-            waitFor {to HomePage}
+            waitFor { to HomePage }
 
         when: "Click on the Admin Menu item to expand the drop down options"
-            waitFor{AdminMenuDropDown}
+            waitFor{ AdminMenuDropDown }
             AdminMenuDropDown.click()
     
         and:"Click on the Manage Capabilities option"  
