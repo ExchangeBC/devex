@@ -5,10 +5,11 @@ class MessagesPage extends Page {
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static url = "settings/messages"
 	static content = {
-        AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
-        BtnAccept{$("button",'data-automation-id':"btnMessage",0)}
-        BtnDecline{$("button",'data-automation-id':"btnMessage",1)}
-        UnreadMessageIcon{$("span",'data-automation-id':"unreadMessageIcon")}//Actually this is part of the header and perhaps should move to a module
-        ProcessUserRequest{$("a",'data-automation-id':"processUserRequest",0)}
+        AvatarImage(wait: true) { $("img",'data-automation-id':"UserAvatarImage" ) }
+        BtnAccept(wait: true) { $("button",'data-automation-id':"btnMessage",0) }
+        BtnDecline(wait: true) { $("button",'data-automation-id':"btnMessage",1) }
+        UnreadMessageIcon(wait: true) { $("span",'data-automation-id':"unreadMessageIcon") }
+        ProcessUserRequest(wait: true) { $("a",'data-automation-id':"processUserRequest",0) }
+        NewCompanyMenuItem(wait: true) { $("a", text: contains("Hugo and friend\'s Company")) }
     }
 }

@@ -202,9 +202,9 @@ class UserCreatesCompany extends GebReportingSpec {
                 NextPageLink.click()
                 sleep(1000)
             }
-            
+
             WebElement element = driver.findElement(By.id("holderCompanyName"))
-            actions.moveToElement(element).build().perform()
+            actions.moveToElement(NewCompany.lastElement()).build().perform()
             waitFor { JoinCompanyButton.click() }
             sleep(1000)
 
@@ -237,71 +237,68 @@ class UserCreatesCompany extends GebReportingSpec {
             waitFor {to HomePage}
 
         when: "Click on the Sign In  link to go to the Authentication page"
-            waitFor{SigninLink} //The definition for this element includes a Click
+            waitFor {SigninLink.click() }
 
         then: "Arrive at the Authenticaion page"    
-            waitFor{at AuthenticationSigninPage}
+            waitFor { at AuthenticationSigninPage }
 
         and: "Click on the: 'Sign in with you GitHub account'"
-            waitFor{SignInButton.click()}
+            waitFor { SignInButton.click() }
 
         and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
-            waitFor{at GitHubSignInPage}
-            
-            waitFor{GitHubSignInButton} //If this element is present the page has loaded
+            waitFor { at GitHubSignInPage }
+            waitFor { GitHubSignInButton }
             GitHubLogin.value("hugochibougamau")
             GitHubPwd.value("Devex_Test1")
             GitHubSignInButton.click()
-            sleep(2000) //Leave time case the next page is the reauthorization page
+            sleep(2000)
 
         and:"If redirected to the reauthorization page, click to reauthorize"    
-            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
+            assert CheckIfReauthIsNeeded()
 
         then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
-            waitFor{at HomePage} //verify we are in the home page
-            sleep(3000) //The icons take a little time to appear
-            assert AvatarImage  //Verify the avatar image is present. In the future I may check the image is correct
+            waitFor { at HomePage }
+            assert AvatarImage
 
         and: "Click on the Messages icon. This icon should reflect there are messages waiting"
-            assert UnreadMessageIcon.text().toInteger()>0
+            assert UnreadMessageIcon.text().toInteger() > 0
             UnreadMessageIcon.click()
-            sleep(2000) // Do not trust the waitFor
+            sleep(2000)
         
         then: "Redirects to the message page"
-            waitFor{at MessagesPage}
+            waitFor { at MessagesPage }
 
         and: "Open the drop down by clicking the top right icon"   
             AvatarImage.click()
 
-        and: "Click on the newly created Company name that appears in the drop down"     
-            waitFor{$("a", text: contains("Hugo and friend\'s Company")).click()}
+        and: "Click on the newly created Company name that appears in the drop down"
+            NewCompanyMenuItem.click()
+            waitFor { at OrgDetailsPage }
 
         then: "It bring us to the page that defines the new company. There we click to accept for one of the users"
-            waitFor{$("button",'data-automation-id':"btnAcceptMember",0)}
-            $("button",'data-automation-id':"btnAcceptMember",0).click() //Accept the first user
+            waitFor { AcceptJoinRequestButtons }
+            AcceptJoinRequestButtons.first().click()
 
         and: "Click yes to confirm in the modal box"
-            $("button",'data-automation-id':"button-modal-yes").click()
-            sleep(1000) //For the modal box to dissappear
+            ModalButtonYes.click()
+            sleep(1000)
     
         and: "Wait to dissappear the modal box, and then reject the second user"
-            waitFor{$("button",'data-automation-id':"btnDeclineMember",0)}//After accepting the previous user, it dissappears, so the 'second' user in the list becames 'first'
-            $("button",'data-automation-id':"btnDeclineMember",0).click() //Reject the second user
-            sleep(1000)  //For the modal box to dissappear
+            waitFor { DeclineJoinRequestButtons }
+            DeclineJoinRequestButtons.first().click() 
 
-        and: "Click No to confirm the rejection in the modal box"
-            $("button",'data-automation-id':"button-modal-no").click()
-            sleep(1000)  //For the modal box to dissappear
+        and: "Click Yes to confirm the rejection in the modal box"
+            ModalButtonYes.click()
 
         then: "Hugo can log off from BC Exchange and GitHub"    
-            waitFor{to HomePage}
-            def  logoffOK=login."Logout as user"()
+            waitFor { to HomePage }
+            def logoffOK = login."Logout as user"()
             assert logoffOK
 
         and: "Log out user from GitHub" 
-            waitFor{to GitHubPage}
+            waitFor { to GitHubPage }
             AvatarImage.click()
-            waitFor{SignOutGit}
+            waitFor { SignOutGit }
             SignOutGit.click()
     }
 
@@ -312,7 +309,7 @@ class UserCreatesCompany extends GebReportingSpec {
             waitFor {to HomePage}
 
         when: "Click on the Sign In  link to go to the Authentication page"
-            SigninLink //The definition for this element includes a Click
+            SigninLink.click()
             at AuthenticationSigninPage 
 
         and: "Click on the: 'Sign in with you GitHub account'"
@@ -320,62 +317,50 @@ class UserCreatesCompany extends GebReportingSpec {
 
         and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
             at GitHubSignInPage
-        
-            waitFor{GitHubSignInButton} //If this element is present the page has loaded
+            waitFor { GitHubSignInButton }
             GitHubLogin.value("hugochibougamau")
             GitHubPwd.value("Devex_Test1")
             GitHubSignInButton.click()
-            sleep(2000) //Leave time case the next page is the reauthorization page
-
+            sleep(2000)
 
         and:"If redirected to the reauthorization page, click to reauthorize"    
-            assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
+            assert CheckIfReauthIsNeeded()
 
         then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
-            waitFor{at HomePage} //verify we are in the home page
-            sleep(3000) //The icons take a little time to appear
-            assert AvatarImage  //Verify the avatar image is present. In the future I may check the image is correct
+            waitFor { at HomePage }
+            assert AvatarImage
 
         and: "Open the drop down by clicking the top right icon"   
             AvatarImage.click()
 
         and: "Click on the newly created Company name that appears in the drop down"     
-            waitFor{$("a", text: contains("Hugo and friend\'s Company")).click()}
+            NewCompanyMenuItem.click()
 
         then:"It bring us to the page that defines the new company. "   
-            waitFor{at OrgDetailsPage}
+            waitFor { at OrgDetailsPage }
 
         then: "There we click over the company info to make the edit button visible"
-            waitFor{$('data-automation-id':"lblBusinessRegistration" )}//I use this element because I already had wrote a label for it
-            $('data-automation-id':"lblBusinessRegistration" ).click()
-            sleep(1000)
+            BusinessRegistrationLabel.click()
 
         and: "After the edit button becames visible, I click on it"
-            $("button",'data-automation-id':"btnEdit_right" ).click() 
-            sleep(1000)
+            CompanyInfoEditButton.click() 
 
         and: "Change some values"  
             City.value("Malcom Island") 
-            ContactName.value("Hugo Chibougamau")  //Correcting the spelling mistake
+            ContactName.value("Hugo Chibougamau")
             SaveCompanyOtherInformationBtn.click()
-            sleep(1000) //There is an angular animation and I prefer is gone before proceeding
+            sleep(2000)
 
         expect: "Verify the changes have took effect"
-            assert  $("div",'data-automation-id':"lblBusinessCityPostalCode" ).text()=="Malcom Island V1V 2L2"
-            assert  $("div",'data-automation-id':"lblBusinessContactName"  ).text()=="Hugo Chibougamau"
+            assert PostalCodeLabel.text() == "Malcom Island V1V 2L2"
+            assert BusinessContactNameLabel.text() == "Hugo Chibougamau"
     }
-
 
     def teardown(){
-        //Logoff as user
-        waitFor{to HomePage}
-        sleep(1000)  //Do not fully trust waitFor
-        def  logoffOK=login."Logout as user"()
+        waitFor { to HomePage }
+        def logoffOK = login."Logout as user"()
         assert logoffOK
-
-        waitFor{to GitHubPage }
+        waitFor { to GitHubPage }
         SignOutGit.click()
     }
-
 }
-

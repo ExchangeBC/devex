@@ -35,5 +35,6 @@ class HomePage extends Page {
 		SigninLink(wait: true) { $("a", id: "authentication.signin") }
 		SprintwithusLink(wait: true) { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0) }
 		UnreadMessageIcon(wait: true) { $("span",'data-automation-id':"unreadMessageIcon") }
+		NewCompanyMenuItem(wait: true) { $("a", text: contains("Hugo and friend\'s Company")) }
     }
 }

@@ -174,10 +174,10 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             waitFor { at OpportunitiesAdminCreatePage }
 
         and: "Set the title,teaser, description... and other details of the opportunity "
-            selectProject.value(Project)
-            oppTitle.value(MyTitleData)
-            oppTeaser.value(Teaser)
-            oppGithub.value(Github)
+            ProjectSelector.value(Project)
+            OppTitleTextInput.value(MyTitleData)
+            OppTeaserInput.value(Teaser)
+            OppGithubInput.value(Github)
 
             // Now we move to the Background tab  
             BackgroundTab.click()
@@ -186,26 +186,26 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             // There are three iframes in the OpportunitiesAdminCreatePage, this one is the 0, if order of the iframes change, then redo the element identifiers
             withFrame(OppBackgroundBox) { $("body", id:"tinymce") << Background }
 
-            DetailsTab.click() //Now we move to the Details tab  
+            DetailsTab.click()
             waitFor{LocationRadioButton(Onsite).click()}
-            selectLocation.value(Location)
+            LocationSelector.value(Location)
             selectEarn.value(Earn)
 
             // Setting the proposal Deadline
-            proposalDeadLine.firstElement().clear()  // clean the field from the preselected date
-            proposalDeadLine << Formatted_deadline_Year.toString() // write the year
-            proposalDeadLine << Keys.ARROW_RIGHT  // move right to the month
-            proposalDeadLine << Formatted_deadline_Month.toString()
-            proposalDeadLine << Keys.ARROW_RIGHT  // move right to the day
-            proposalDeadLine << Formatted_deadline_Day.toString() 
+            ProposalDeadlineInput.firstElement().clear()  // clean the field from the preselected date
+            ProposalDeadlineInput << Formatted_deadline_Year.toString() // write the year
+            ProposalDeadlineInput << Keys.ARROW_RIGHT  // move right to the month
+            ProposalDeadlineInput << Formatted_deadline_Month.toString()
+            ProposalDeadlineInput << Keys.ARROW_RIGHT  // move right to the day
+            ProposalDeadlineInput << Formatted_deadline_Day.toString() 
         
             // Setting the proposal Assignment
-            proposalAssignment.firstElement().clear()  // clean the field from the preselected date
-            proposalAssignment << Formatted_assignment_Year.toString() // write the year
-            proposalAssignment<< Keys.ARROW_RIGHT  // move right to the month
-            proposalAssignment<< Formatted_assignment_Month.toString()
-            proposalAssignment << Keys.ARROW_RIGHT  //move right to the day
-            proposalAssignment << Formatted_assignment_Day.toString() 
+            ProposalAssignmentInput.firstElement().clear()  // clean the field from the preselected date
+            ProposalAssignmentInput << Formatted_assignment_Year.toString() // write the year
+            ProposalAssignmentInput << Keys.ARROW_RIGHT  // move right to the month
+            ProposalAssignmentInput << Formatted_assignment_Month.toString()
+            ProposalAssignmentInput << Keys.ARROW_RIGHT  // move right to the day
+            ProposalAssignmentInput << Formatted_assignment_Day.toString() 
 
             // Setting the proposal StartDate
             proposalStartDate.firstElement().clear()  // clean the field from the preselected date
@@ -237,15 +237,15 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             waitFor { to OpportunitiesPage }
 
         and: "Click on the newly created opportunity (still unpublished)"
-            def MyCurrentURL = getCurrentUrl() // URL opportunity page
-            TestCWUOpportunities[0].click()  // it clicks on the first opportunity in the list (this will be the newly created one)
+            def MyCurrentURL = getCurrentUrl()
+            TestCWUOpportunities[0].click()
             sleep(1000)
             // The following is to create from the opp title the URL
             def OppURL = MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
-            def NewURL = getCurrentUrl() // This is the specific opportunity URL
+            def NewURL = getCurrentUrl()
     
         then: "Open the newly created opportunity"      
-            assert NewURL == OppURL  // matching the URL
+            assert NewURL == OppURL
             assert waitFor { PublishButton }
         
         and: "Finally, we publish the opp by clicking the Publish button"
