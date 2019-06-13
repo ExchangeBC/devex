@@ -1,13 +1,14 @@
-<div class="m-4">
-  <div class="alert alert-info">
-    To submit a Proposal, you must agree to the Terms.
+<!--Before user has accepted the terms-->
+<div ng-if="!ppp.proposal.isAcceptedTerms">
+  <h5>2. Accept the terms</h5>
+  <div class="alert alert-warning small mb-3">To submit a proposal, you must agree to the <a href="/terms/cwu1" target="_blank"><span class="font-italic">Code With Us</span> terms</a>.</div>
+  <div class="custom-control custom-checkbox my-5">
+    <input type="checkbox" class="custom-control-input" data-automation-id="checkbox-cwu-proposal-terms" id="checkbox-cwu-terms" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms">
+    <label class="custom-control-label" for="checkbox-cwu-terms">I have read, fully understand, and agree to the <span class="font-italic">Code With Us</span> terms.</label>
   </div>
-  <div><a class="btn btn-primary" href="/terms/cwu1" target="_blank"><i class="fas fa-download"></i>
-      Download Terms</a></div>
-  <div>
-    <label class="checkbox-inline checkbox-alone">
-      <input type="checkbox" data-automation-id="checkbox-cwu-proposal-terms" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms">
-      I acknowledge that I have read, fully understand, and agree to these terms.
-    </label>
-  </div>
+</div>
+
+<!--Once user has accepted the terms-->
+<div class="small" ng-if="ppp.proposal.isAcceptedTerms">
+  <i class="fa-lg far fa-check-circle"></i> You accepted the <a href="/terms/cwu1" target="_blank"><span class="font-italic">Code With Us</span> terms</a>
 </div>
