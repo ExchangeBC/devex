@@ -1,22 +1,18 @@
-<div class="m-4">
-  <div class="alert alert-info" ng-if="!ppp.isclosed">Upload any supporting material here.</div>
-  <div ng-if="!ppp.isclosed">
-    <a href class="btn btn-default" id="button-cwu-proposal-upload-file"  data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
-      file</a> &nbsp; <span class="text-black-50">Max 3 MB per file</span>
-  </div>
-  <div style="padding: 20px 0;">
-    <table class="table">
-      <tr ng-repeat="file in ppp.proposal.attachments">
-        <td class="text-left" width="32px">
-          <i class="fas {{ppp.getIconName(file.type)}}"></i>
-        </td>
-        <td class="text-left">
-          <a href="/api/proposals/{{ppp.proposal._id}}/documents/{{file._id}}" target="_blank">{{file.name}}</i></a>
-        </td>
-        <td class="text-left">
-          <span ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="fas fa-trash btn-remove-attachment" title="remove"></i><span>
-        </td>
-      </tr>
-    </table>
-  </div>
+<h5 ng-if="!ppp.isclosed && ppp.proposal.status !== 'Submitted'">1. Upload your proposal</h5>
+
+<table class="table table-hover">
+  <tr ng-repeat="file in ppp.proposal.attachments">
+    
+    <td class="text-left align-middle">
+      <a href="/api/proposals/{{ppp.proposal._id}}/documents/{{file._id}}" target="_blank">{{file.name}}</i></a>
+    </td>
+    <td class="text-right">
+      <button type="button" class="btn btn-text-only p-0" ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="far fa-trash-alt" title="remove"></i></button>
+    </td>
+  </tr>
+</table>
+
+<div class="py-3" ng-if="!ppp.isclosed">
+  <a href class="btn btn-sm btn-outline-dark" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
+    file</a> &nbsp; <span class="small">You may upload multiple files (max 3 MB per file)</span>
 </div>
