@@ -162,7 +162,7 @@
     "express-handlebars": "^3.0.0",
     "file-loader": "^2.0.0",
     "font-awesome-loader": "^1.0.2",
-    "gulp": "^4.0.0",
+    "gulp": "^4.0.2",
     "gulp-angular-templatecache": "^2.2.2",
     "gulp-autoprefixer": "~5.0.0",
     "gulp-concat": "~2.6.0",
