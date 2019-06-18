@@ -1,0 +1,16 @@
+.modal-header, .modal-footer {
+	border: none;
+}
+
+.close {
+	font-weight: 300;
+	font-size: 2.5rem;
+	line-height: 1rem;
+}
+
+// Call to action inside a modal
+.modal-cta {
+	padding: 0.5rem;
+	border-left: 8px solid $brand-yellow;
+}
+

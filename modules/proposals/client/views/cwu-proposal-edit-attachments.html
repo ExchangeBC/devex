@@ -1,6 +1,6 @@
-<h5 ng-if="!ppp.isclosed && ppp.proposal.status !== 'Submitted'">1. Upload your proposal</h5>
-
-<table class="table table-hover">
+<div class="modal-cta" ng-if="!ppp.proposal.attachments.length">Please upload your proposal</div>
+<div class="small strong mb-2" ng-if="ppp.proposal.attachments.length">My proposal docs</div>
+<table class="table table-sm table-hover">
   <tr ng-repeat="file in ppp.proposal.attachments">
     
     <td class="text-left align-middle">
@@ -12,7 +12,7 @@
   </tr>
 </table>
 
-<div class="py-3" ng-if="!ppp.isclosed">
-  <a href class="btn btn-sm btn-outline-dark" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
-    file</a> &nbsp; <span class="small">You may upload multiple files (max 3 MB per file)</span>
+<div ng-if="!ppp.isclosed">
+  <a href class="btn btn-sm btn-light" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
+    file</a> &nbsp; <span class="small text-muted">You may upload multiple files (max 3 MB per file)</span>
 </div>

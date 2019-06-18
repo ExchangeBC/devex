@@ -2,38 +2,39 @@
   novalidate warn-on-exit>
 
   <div class="modal-header">
-    <h5 class="modal-title" ng-if="!ppp.isclosed && ppp.proposal.status !== 'Submitted'">Submit a proposal</h5>
-    <h5 class="modal-title" ng-if="ppp.proposal.status === 'Submitted'">My proposal</h5>
+    <h5 class="modal-title">
+      My proposal
+      <span class="badge badge-warning ml-2" ng-if="!ppp.isclosed && ppp.proposal.status === 'Draft'">DRAFT</span>
+      <span class="badge badge-success ml-2" ng-if="ppp.proposal.status === 'Submitted'">SUBMITTED</span>
+    </h5>
     <button type="button" class="close" data-ng-click="ppp.close()" aria-label="Close">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
 
-<!-- // Banner if Proposal is in Draft // -->
-<div class="banner banner-important" ng-if="ppp.proposal.status === 'Draft'">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <p><span class="strong"><i class="fas fa-file"></i> This Proposal is in DRAFT.</span>&nbsp;&nbsp; Submit before
-          <strong><span ng-bind="ppp.formatDate(ppp.opportunity.deadline, true)"></span></strong>
-          to be considered for this opportunity!</p>
-        <p data-automation-id="mustAgreeTermsWarning" class="alert alert-danger" ng-if="!ppp.proposal.isAcceptedTerms">Before you can submit your Proposal, you
-          must agree to
-          the Terms.</p>
-      </div>
+  <div class="modal-body">
+
+    <!--If proposal is in draft-->
+    <div class="mb-5 small text-muted" ng-if="!ppp.isclosed && ppp.proposal.status === 'Draft'">
+      Your proposal hasn't been submitted yet. <a href="" ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" data-automation-id="button-cwu-proposal-delete" data-ng-click="ppp.delete()">Delete this proposal</a> 
+    </div>
+
+    <!--If proposal has been submitted and closing deadline hasn't passed-->
+    <div class="mb-5 small text-muted" ng-if="!ppp.isclosed && ppp.proposal.status === 'Submitted'">
+      Your proposal has been submitted! Until the closing deadline, you can <a href="" ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" data-automation-id="button-cwu-proposal-delete" data-ng-click="ppp.delete()">delete</a> your proposal or make changes (add or remove files). Any changes you make will autosave when you close this modal.
     </div>
 
     <!--If proposal has been submitted and closing deadline has passed-->
-    <div class="alert alert-success small mb-3" ng-if="ppp.isclosed && ppp.proposal.status === 'Submitted'"><i class="fa-lg far fa-check-circle"></i> This proposal was submitted. 
+    <div class="mb-5 small text-muted" ng-if="ppp.isclosed && ppp.proposal.status === 'Submitted'">
+      Your proposal was submitted! 
     </div>
 
-
     <div class="mb-5" ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
-    <hr>
     <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
   </div>
   
-  <div class="modal-footer" ng-if="ppp.proposal.status !== 'Submitted'">
-    <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-block btn-primary" ng-if="ppp.proposal.status !== 'Submitted'" ng-disabled="!ppp.proposal.isAcceptedTerms || !ppp.hasAttachments">Submit proposal</button>
+  <div class="modal-footer" ng-if="ppp.proposal.status !== 'Submitted' && ppp.proposal.isAcceptedTerms && ppp.hasAttachments">
+    <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-primary">Submit proposal</button>
   </div>
+
 </form>
