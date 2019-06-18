@@ -41,6 +41,10 @@ class OpportunitiesRouter {
 			.all(OpportunitiesPolicy.isAllowed)
 			.put(OpportunitiesServerController.assign);
 
+		app.route('/api/opportunities/:opportunityId/assignswu/:proposalId')
+			.all(OpportunitiesPolicy.isAllowed)
+			.put(OpportunitiesServerController.assignswu);
+
 		app.route('/api/opportunities/:opportunityId/unassign/:proposalId')
 			.all(OpportunitiesPolicy.isAllowed)
 			.put(OpportunitiesServerController.unassign);

@@ -173,19 +173,16 @@ class ProposalsServerController {
 		const proposal = req.proposal;
 		const org = req.proposal.org as IOrgModel;
 
+		// Update org
+		org.awardedContractCount = !org.awardedContractCount ? 1 : org.awardedContractCount + 1;
+		await org.save();
+
+		// Update proposal
 		proposal.status = 'Assigned';
 		proposal.isAssigned = true;
-		org.awardedContractCount = !org.awardedContractCount ? 1 : org.awardedContractCount + 1;
 		CoreServerHelpers.applyAudit(proposal, req.user);
-
-		try {
-			const updatedProposal = await this.saveProposal(proposal);
-			const populatedProposal = await this.populateProposal(updatedProposal);
-			await org.save();
-			res.json(populatedProposal);
-		} catch (error) {
-			res.status(500).send({ message: CoreServerErrors.getErrorMessage(error) });
-		}
+		const updatedProposal = await this.saveProposal(proposal);
+		const populatedProposal = await this.populateProposal(updatedProposal);
 	}
 
 	public async unassignswu(req: Request, res: Response): Promise<void> {

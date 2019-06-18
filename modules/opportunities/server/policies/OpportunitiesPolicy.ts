@@ -65,6 +65,10 @@ class OpportunitiesPolicy {
 						permissions: ['put']
 					},
 					{
+						resources: '/api/opportunities/:opportunityId/assignswu/:proposalId',
+						permissions: ['put']
+					},
+					{
 						resources: '/api/opportunities/:opportunityId/unassign/:proposalId',
 						permissions: ['put']
 					},

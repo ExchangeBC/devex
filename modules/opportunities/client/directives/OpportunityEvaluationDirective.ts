@@ -526,19 +526,34 @@ export class OpportunityEvaluationDirectiveController implements IController {
 	 * @param {Proposal} proposal
 	 */
 	public async assignOpportunity(proposal: IProposalResource): Promise<void> {
-		const proposalIndex = this.proposals.indexOf(proposal);
 		const message = `Assign this opportunity to ${proposal.businessName}?`;
 		const choice = await this.ask.yesNo(message);
 		if (choice) {
 			try {
-				const updatedProposal = await this.ProposalService.assignswu({ proposalId: proposal._id }).$promise;
-				this.proposals.splice(proposalIndex, 1, updatedProposal);
-				this.opportunity.evaluationStage = this.stages.ASSIGNED;
-				this.opportunity.proposal = updatedProposal;
-				this.opportunity = await this.OpportunitiesService.update(this.opportunity).$promise;
+
+				// Notify user that the opportunity is being assigned
+				this.Notification.primary({
+					title: 'Please wait',
+					message: 'Assigning opportunity...',
+					positionX: 'center',
+					positionY: 'top',
+					closeOnClick: false,
+					delay: null
+				});
+
+				// Assign the opportunity
+				this.opportunity = await this.OpportunitiesService.assignswu({
+					opportunityId: this.opportunity.code,
+					proposalId: proposal._id
+				}).$promise;
+
+				// Update opportunity and proposal
 				this.$scope.opportunity = this.opportunity;
+				this.proposals = await this.getProposals();
+
 				this.Notification.success({
-					message: `<i class="fas fa-check-circle"></i> Opportunity assigned to ${proposal.businessName}`
+					message: `<i class="fas fa-check-circle"></i> Opportunity assigned to ${proposal.businessName}`,
+					replaceMessage: true
 				});
 			} catch (error) {
 				this.handleError(error);
