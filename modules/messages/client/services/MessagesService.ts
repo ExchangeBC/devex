@@ -16,7 +16,6 @@ export interface IMessagesService extends resource.IResourceClass<IMessageResour
 	update(message: IMessageResource): IMessageResource;
 	my(): IMessageResource[];
 	mycount(): resource.IResource<IMessageCountResponse>;
-	viewed(params: IMessageServiceParams): IMessageResource;
 	actioned(params: IMessageServiceParams): IMessageResource;
 }
 
@@ -40,13 +39,6 @@ angular.module('messages.services').factory('MessagesService', [
 			isArray: false
 		};
 
-		const viewedAction: resource.IActionDescriptor = {
-			method: 'PUT',
-			url: '/api/messages/:messageId/viewed',
-			params: { messageId: '@messageId' },
-			isArray: false
-		};
-
 		const actionedAction: resource.IActionDescriptor = {
 			method: 'PUT',
 			url: '/api/messages/:messageId/action',
@@ -63,7 +55,6 @@ angular.module('messages.services').factory('MessagesService', [
 				update: updateAction,
 				my: myAction,
 				mycount: myCountAction,
-				viewed: viewedAction,
 				actioned: actionedAction
 			}
 		) as IMessagesService;

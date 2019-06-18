@@ -90,10 +90,6 @@ export class ProjectsPolicy {
 						permissions: ['get']
 					},
 					{
-						resources: '/api/my/projects',
-						permissions: ['get']
-					},
-					{
 						resources: '/api/myadmin/projects',
 						permissions: ['get']
 					},

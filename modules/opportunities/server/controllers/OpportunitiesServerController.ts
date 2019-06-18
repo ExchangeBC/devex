@@ -5,7 +5,8 @@ import fs from 'fs';
 import JSZip from 'jszip';
 import _ from 'lodash';
 import moment from 'moment-timezone';
-import { model, Types } from 'mongoose';
+import { Types } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import Nexmo from 'nexmo';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
@@ -13,7 +14,7 @@ import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelper
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
 import ProposalsServerController from '../../../proposals/server/controllers/ProposalsServerController';
 import { IAttachmentModel, ProposalModel } from '../../../proposals/server/models/ProposalModel';
-import { UserModel } from '../../../users/server/models/UserModel';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 import OpportunitiesUtilities from '../utilities/OpportunitiesUtilities';
 
@@ -39,7 +40,8 @@ class OpportunitiesServerController {
 	// Return a list of all users who are currently waiting to be added to the
 	// opportunity member list
 	public requests = (opportunity, cb) => {
-		model('User')
+		MongooseController.mongoose
+			.model('User')
 			.find({ roles: this.requestRole(opportunity) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
 			.exec(cb);
@@ -47,8 +49,16 @@ class OpportunitiesServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
-		this.incrementViews(req.opportunity._id);
+		
+		// Ensure that the opportunity is only viewable when published or when the user is either the admin for the opportunity or a root admin
+		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			this.incrementViews(req.opportunity._id);
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// Create a new opportunity. the user doing the creation will be set as the
@@ -135,9 +145,7 @@ class OpportunitiesServerController {
 							});
 						})
 						.catch(() => {
-							res.status(422).send({
-								message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
-							});
+							this.respondWithRepoEditError(res);
 						});
 				} else {
 					this.populateOpportunity(updatedOpp).then(populatedOpportunity => {
@@ -397,14 +405,12 @@ class OpportunitiesServerController {
 		// if code matches, action and then return 200
 		if (approvalInfo.twoFACode === code) {
 			let notification: string;
-			let successMessage: string;
 			let whoToNotifyWhenDone: any;
 
 			// set up depending on action type (approve or deny) and state (pre-approval or final approval)
 			if (action === 'approve') {
 				approvalInfo.action = 'approved';
 				notification = isPreApproval ? 'opportunity-approval-request' : 'opportunity-approved-notification';
-				successMessage = isPreApproval ? 'Opportunity pre-approved!' : 'Opportunity Approved!';
 				whoToNotifyWhenDone = isPreApproval ? { email: opportunity.finalApproval.email } : opportunity.finalApproval.requestor;
 				if (!isPreApproval) {
 					opportunity.isApproved = true;
@@ -415,7 +421,6 @@ class OpportunitiesServerController {
 			} else {
 				approvalInfo.action = 'denied';
 				notification = 'opportunity-denied-notification';
-				successMessage = 'Opportunity Denied!';
 				whoToNotifyWhenDone = opportunity.finalApproval.requestor;
 			}
 
@@ -576,12 +581,7 @@ class OpportunitiesServerController {
 				zip.folder(opportunityName)
 					.folder(proponentName)
 					.file('index.html', content);
-				files.forEach(file => {
-					zip.folder(opportunityName)
-						.folder(proponentName)
-						.folder('docs')
-						.file(file.name, fs.readFileSync(file.path), { binary: true });
-				});
+				this.addFilesToZip(zip, opportunityName, proponentName, files);
 			});
 
 			res.setHeader('Content-Type', 'application/zip');
@@ -703,12 +703,7 @@ class OpportunitiesServerController {
 			zip.folder(opportunityName)
 				.folder(proponentName)
 				.file('proposal-summary.html', content);
-			files.forEach(file => {
-				zip.folder(opportunityName)
-					.folder(proponentName)
-					.folder('docs')
-					.file(file.name, fs.readFileSync(file.path), { binary: true });
-			});
+			this.addFilesToZip(zip, opportunityName, proponentName, files);
 
 			res.setHeader('Content-Type', 'application/zip');
 			res.setHeader('Content-Type', 'application/octet-stream');
@@ -749,7 +744,6 @@ class OpportunitiesServerController {
 	// pre-approval email and configuring the opportunity as required
 	private sendApprovalMessages = async (requestingUser, opportunity) => {
 		if (opportunity.intermediateApproval.state === 'ready-to-send') {
-
 			// ensure opportunity is populated
 			opportunity = await this.populateOpportunity(opportunity);
 
@@ -819,7 +813,7 @@ class OpportunitiesServerController {
 
 	private searchTerm = (req: Request, opts?: any): any => {
 		opts = opts || {};
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.opportunities.admin } }];
 		}
@@ -899,7 +893,6 @@ class OpportunitiesServerController {
 		// save and notify
 		this.updateSave(opportunity)
 			.then(() => {
-				const data = this.setNotificationData(opportunity);
 				if (firstTime) {
 					this.getSubscribedUsers().then(users => {
 						const messageCode = opportunity.opportunityTypeCd === 'code-with-us' ? 'opportunity-add-cwu' : 'opportunity-add-swu';
@@ -925,9 +918,7 @@ class OpportunitiesServerController {
 						res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 					})
 					.catch(() => {
-						res.status(422).send({
-							message: 'Opportunity saved, but there was an error creating the github issue. Please check your repo url and try again.'
-						});
+						this.respondWithRepoEditError(res);
 					});
 			})
 			.catch(err => {
@@ -938,17 +929,9 @@ class OpportunitiesServerController {
 	};
 
 	// Get a list of all users who are listening to the add opp event
-	private getSubscribedUsers = () => {
-		return new Promise((resolve, reject) => {
-			UserModel.find({ notifyOpportunities: true, email: { $ne: null } }, '_id email firstName lastName displayName').exec((err, users) => {
-				if (err) {
-					reject(err);
-				} else {
-					resolve(users);
-				}
-			});
-		});
-	};
+	private async getSubscribedUsers(): Promise<IUserModel[]> {
+		return await UserModel.find({ notifyOpportunities: true, email: { $ne: null } }, '_id email firstName lastName displayName').exec();
+	}
 
 	// Save the given opportunity and returns the updated version
 	private updateSave = async (opportunity: IOpportunityModel): Promise<IOpportunityModel> => {
@@ -1087,6 +1070,21 @@ The opportunity closes on <b>${deadline}</b>.</p>
 			.populate('addenda.createdBy', 'displayName')
 			.execPopulate();
 	};
+
+	private addFilesToZip(zip: JSZip, opportunityName: string, proponentName: string, files: IAttachmentModel[]): void {
+		files.forEach(file => {
+			zip.folder(opportunityName)
+				.folder(proponentName)
+				.folder('docs')
+				.file(file.name, fs.readFileSync(file.path), { binary: true });
+		});
+	}
+
+	private respondWithRepoEditError(res: Response) {
+		res.status(422).send({
+			message: 'Opportunity saved, but there was an error updating the github issue. Please check your repo url and try again.'
+		});
+	}
 }
 
 export default OpportunitiesServerController.getInstance();

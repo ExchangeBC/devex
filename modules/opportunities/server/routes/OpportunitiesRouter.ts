@@ -79,6 +79,11 @@ class OpportunitiesRouter {
 			.all(OpportunitiesPolicy.isAllowed)
 			.put(OpportunitiesServerController.send2FA);
 
+		// Route for retrieving all opportunities associated with a program
+		app.route('/api/opportunities/for/program/:programId')
+			.all(OpportunitiesPolicy.isAllowed)
+			.get(OpportunitiesServerController.forProgram);
+
 		// Route for actioning a pre-approval or approval request via a POST operation
 		app.route('/api/opportunities/:opportunityId/action')
 			.all(OpportunitiesPolicy.isAllowed)

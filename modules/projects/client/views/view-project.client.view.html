@@ -14,11 +14,11 @@
     <div class="row" ng-if="vm.canEdit || vm.canRequestMembership">
       <div class="col text-right">
         <!-- // Unpublish // -->
-        <a data-automation-id="button-project-unpublish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished"
+        <a data-automation-id="button-project-unpublish" href="" ng-if="vm.project.program.isPublished && vm.canEdit && vm.project.isPublished"
           class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish this project"><i class="fas fa-lg fa-ban"></i>
           Unpublish</a>
         <!-- // Publish // -->
-        <a data-automation-id="button-project-publish" href="javascript:void(0);" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished"
+        <a data-automation-id="button-project-publish" href="" ng-if="vm.project.program.isPublished && vm.canEdit && !vm.project.isPublished"
           class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this page"><i class="fas fa-bullhorn"></i>
           Publish</a>
         <!-- // Edit // -->

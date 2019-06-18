@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, model, Model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import { IMessageTemplate } from '../../shared/IMessageDTO';
 
 export interface IMessageTemplateModel extends IMessageTemplate, Document {}
@@ -26,4 +27,4 @@ const MessageTemplateSchema = new Schema({
 	]
 });
 
-export const MessageTemplateModel: Model<IMessageTemplateModel> = model<IMessageTemplateModel>('MessageTemplate', MessageTemplateSchema);
+export const MessageTemplateModel: Model<IMessageTemplateModel> = MongooseController.mongoose.model<IMessageTemplateModel>('MessageTemplate', MessageTemplateSchema);

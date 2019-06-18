@@ -7,7 +7,8 @@
 // configuring the system form outside.
 
 import express from 'express';
-import { model, Types } from 'mongoose';
+import { Types } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import MessagesServerController from '../controllers/MessagesServerController';
 import { IMessageModel } from '../models/MessageModel';
 import { IMessageTemplateModel } from '../models/MessageTemplateModel';
@@ -39,43 +40,25 @@ class MessagesRouter {
 			.all(MessagesPolicy.isAllowed)
 			.get((req, res) => {
 				return res.json(req.message);
-			})
-			.delete(MessagesServerController.archive);
+			});
 
 		// Specific actions taken for a message by the user
-		app.route('/api/messages/:messageId/viewed')
-			.all(MessagesPolicy.isAllowed)
-			.put(MessagesServerController.viewed);
-
 		app.route('/api/messages/:messageId/action')
 			.all(MessagesPolicy.isAllowed)
 			.put(MessagesServerController.actioned);
-
-		app.route('/api/messagestemplates')
-			.all(MessagesPolicy.isAllowed)
-			.get(MessagesServerController.listTemplates)
-			.post(MessagesServerController.createTemplate);
-
-		app.route('/api/messagestemplates/:templateId')
-			.all(MessagesPolicy.isAllowed)
-			.get((req, res) => {
-				return res.json(req.template);
-			})
-			.put(MessagesServerController.updateTemplate)
-			.delete(MessagesServerController.removeTemplate);
 
 		// Define route parameters
 		app.param('messageId', (req, res, next, id) => {
 			if (!Types.ObjectId.isValid(id)) {
 				return res.status(400).send({ message: 'Invalid Message Id' });
 			} else {
-				model('Message')
+				MongooseController.mongoose.model('Message')
 					.findById(id)
 					.exec((err, message) => {
 						if (err) {
 							return next(err);
 						} else if (!message) {
-							model('MessageArchive')
+							MongooseController.mongoose.model('MessageArchive')
 								.findById(id)
 								.exec((findErr, findMsg) => {
 									if (findErr) {
@@ -99,7 +82,7 @@ class MessagesRouter {
 			if (!Types.ObjectId.isValid(id)) {
 				return res.status(400).send({ message: 'Invalid Message Template Id' });
 			} else {
-				model('MessageTemplate')
+				MongooseController.mongoose.model('MessageTemplate')
 					.findById(id)
 					.exec((err, template) => {
 						if (err) {

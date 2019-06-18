@@ -16,19 +16,6 @@ class MessagesPolicy {
 	public invokeRolesPolicies = () => {
 		this.aclMem.allow([
 			{
-				roles: ['admin'],
-				allows: [
-					{
-						resources: '/api/messagestemplates',
-						permissions: ['get', 'post']
-					},
-					{
-						resources: '/api/messagestemplates/:templateId',
-						permissions: ['get', 'put', 'delete']
-					}
-				]
-			},
-			{
 				roles: ['user'],
 				allows: [
 					{
@@ -38,14 +25,6 @@ class MessagesPolicy {
 					{
 						resources: '/api/messages/count',
 						permissions: 'get'
-					},
-					{
-						resources: '/api/messages/:messageId',
-						permissions: ['get', 'delete']
-					},
-					{
-						resources: '/api/messages/:messageId/viewed',
-						permissions: 'put'
 					},
 					{
 						resources: '/api/messages/:messageId/action',

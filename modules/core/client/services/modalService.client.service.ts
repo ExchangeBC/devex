@@ -99,14 +99,6 @@
 							);
 					});
 				};
-				this.okCancel = function(question, title) {
-					return this.me({
-						question,
-						cancel: 'Cancel',
-						ok: 'OK',
-						headerText: title
-					});
-				};
 				this.yesNo = function(question, title) {
 					return this.me({
 						question,

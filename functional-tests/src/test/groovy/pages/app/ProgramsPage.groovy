@@ -11,7 +11,8 @@ class ProgramsPage extends Page  {
 
 	static url = "programs"
 	static content = {
-    ListProgramButton { $('button[data-automation-id ~= "button-list-a-program"]') }
+    ListProgramButton(wait: 2) { $('button[data-automation-id ~= "button-list-a-program"]') }
+		ListedPrograms(required: false, wait: 2) { $('data-automation-id':"listedProgram") }
 
   }
 }

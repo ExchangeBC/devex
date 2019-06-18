@@ -54,7 +54,6 @@
           } else {
             scope.getPopoverMsg = '';
             scope.passwordErrors = [];
-            status = true;
           }
         }
         return status;

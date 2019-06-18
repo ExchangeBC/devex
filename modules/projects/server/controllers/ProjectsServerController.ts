@@ -1,9 +1,12 @@
 'use strict';
 
+import { NextFunction, Request, Response } from 'express';
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
+import { IUserModel, UserModel } from '../../../users/server/models/UserModel';
 import { IProjectModel, ProjectModel } from '../models/ProjectModel';
 
 class ProjectsServerController {
@@ -13,56 +16,39 @@ class ProjectsServerController {
 
 	private static instance: ProjectsServerController;
 
-	private constructor() {}
+	private constructor() {
+		this.getMyAdminProjects = this.getMyAdminProjects.bind(this);
+		this.getSearchTerm = this.getSearchTerm.bind(this);
+		this.update = this.update.bind(this);
+		this.members = this.members.bind(this);
+		this.listMembers = this.listMembers.bind(this);
+		this.getProjectForPrograms = this.getProjectForPrograms.bind(this);
+	}
 
-	// -------------------------------------------------------------------------
-	//
-	// get a list of all my projects, but only ones I have access to as a normal
-	// member or admin, just not as request
-	//
-	// -------------------------------------------------------------------------
-	public my = (req, res) => {
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
-		const search = me.isAdmin ? {} : { code: { $in: me.projects.member } };
-		ProjectModel.find(search)
-			.select('code name short')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(projects);
-				}
+	public async getMyAdminProjects(req: Request, res: Response): Promise<void> {
+		try {
+			const myProjects = await ProjectModel.find(this.getSearchTerm(req, {}))
+				.populate('program', 'code title short logo')
+				.select('code name short program')
+				.exec();
+			res.json(myProjects);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
-	};
-	public myadmin = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, {}))
-			.populate('program', 'code title short logo')
-			.select('code name short program')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(projects);
-				}
-			});
-	};
+		}
+	}
 	// -------------------------------------------------------------------------
 	//
 	// return a list of all project members. this means all members NOT
 	// including users who have requested access and are currently waiting
 	//
 	// -------------------------------------------------------------------------
-	public members = (project, cb) => {
-		mongoose
-			.model('User')
-			.find({ roles: this.memberRole(project) })
+	public async members(project: IProjectModel): Promise<IUserModel[]> {
+		return await UserModel.find({ roles: this.memberRole(project) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
-			.exec(cb);
-	};
+			.exec();
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -71,7 +57,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public requests = (project, cb) => {
-		mongoose
+		MongooseController.mongoose
 			.model('User')
 			.find({ roles: this.requestRole(project) })
 			.select('isDisplayEmail username displayName updated created roles government profileImageURL email lastName firstName userTitle')
@@ -121,70 +107,41 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public read = (req, res) => {
-		res.json(this.decorate(req.project, req.user ? req.user.roles : []));
-	};
 
-	// -------------------------------------------------------------------------
-	//
-	// update the document, make sure to apply audit. We don't mess with the
-	// code if they change the name as that would mean reworking all the roles
-	//
-	// -------------------------------------------------------------------------
-	public update = (req, res) => {
-		if (this.ensureAdmin(req.project, req.user, res)) {
-			const wasPublished = req.project.isPublished;
-			const isPublished = req.body.isPublished;
-			// if (!wasPublished && isPublished) {
-			// 	this.opportunitiesController.rePublishOpportunities(req.project.program._id, req.project._id);
-			// } else if (wasPublished && !isPublished) {
-			// 	this.opportunitiesController.unPublishOpportunities(req.project.program._id, req.project._id);
-			// }
-			//
-			// copy over everything passed in. This will overwrite the
-			// audit fields, but they get updated in the following step
-			//
-			const project = _.assign(req.project, req.body);
-			//
-			// determine what notify actions we want to send out, if any
-			// if not published, then we send nothing
-			//
-			let notificationCodes = [];
-			const doNotNotify = _.isNil(req.body.doNotNotify) ? true : req.body.doNotNotify;
-			if (isPublished && !doNotNotify) {
-				if (wasPublished) {
-					//
-					// this is an update, we send both specific and general
-					//
-					notificationCodes = ['not-updateany-project', 'not-update-' + project.code];
-				} else {
-					//
-					// this is an add as it is the first time being published
-					//
-					notificationCodes = ['not-add-project'];
-				}
-			}
-
-			project.wasPublished = project.isPublished || project.wasPublished;
-
-			//
-			// set the audit fields so we know who did what when
-			//
-			CoreServerHelpers.applyAudit(project, req.user);
-			//
-			// save
-			//
-			project.save(err => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					project.link = 'https://' + (process.env.DOMAIN || 'localhost') + '/projects/' + project.code;
-					res.json(this.decorate(project, req.user ? req.user.roles : []));
-				}
+		// Ensure that the project is only viewable when published or when the user is either the admin for the project or a root admin
+		if (req.project.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.project)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			res.json(this.decorate(req.project, req.user ? req.user.roles : []));
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
 			});
 		}
 	};
+
+	// update the document, make sure to apply audit. We don't mess with the
+	// code if they change the name as that would mean reworking all the roles
+	public async update(req: Request, res: Response): Promise<void> {
+		if (this.ensureAdmin(req.project, req.user, res)) {
+			// copy over everything passed in. This will overwrite the
+			// audit fields, but they get updated in the following step
+			const project = _.assign(req.project, req.body);
+			project.wasPublished = project.isPublished || project.wasPublished;
+
+			const newProjectInfo = req.body;
+
+			// set the audit fields so we know who did what when
+			CoreServerHelpers.applyAudit(project, req.user);
+
+			try {
+				const updatedProject = await ProjectModel.findOneAndUpdate({ _id: req.project._id }, newProjectInfo, { new: true });
+				res.json(this.decorate(updatedProject, req.user ? req.user.roles : []));
+			} catch (error) {
+				res.status(422).send({
+					message: CoreServerErrors.getErrorMessage(error)
+				});
+			}
+		}
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -212,7 +169,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public list = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, {}))
+		ProjectModel.find(this.getSearchTerm(req, {}))
 			.sort('activity name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
@@ -228,22 +185,17 @@ class ProjectsServerController {
 			});
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// this is the service front to the members call
-	//
-	// -------------------------------------------------------------------------
-	public listMembers = (req, res) => {
-		this.members(req.project, (err, users) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(users);
-			}
-		});
-	};
+	// Returns a list of members for the given project
+	public async listMembers(req: Request, res: Response): Promise<void> {
+		try {
+			const users = await this.members(req.project);
+			res.json(users);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -273,60 +225,49 @@ class ProjectsServerController {
 		res.json({ ok: true });
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// deal with members
-	//
-	// -------------------------------------------------------------------------
-	public confirmMember = (req, res) => {
+	// Confirm a member as belonging to the project
+	public async confirmMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProjectRequest(req.project, user);
 		this.setProjectMember(req.project, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
-	public denyMember = (req, res) => {
+	public async denyMember(req: Request, res: Response): Promise<void> {
 		const user = req.model;
 		this.unsetProjectRequest(req.project, user);
 		this.unsetProjectMember(req.project, user);
-		user.save((err, result) => {
-			if (err) {
-				return res.status(422).send({
-					message: CoreServerErrors.getErrorMessage(err)
-				});
-			} else {
-				res.json(result);
-			}
-		});
+		try {
+			const savedUser = await user.save();
+			res.json(savedUser);
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// get projects under program
-	//
-	// -------------------------------------------------------------------------
-	public getProjectForPrograms = (req, res) => {
-		ProjectModel.find(this.searchTerm(req, { program: req.program._id }))
+	// Get projects for a given program
+	public async getProjectForPrograms(req: Request, res: Response): Promise<void> {
+		try {
+			const projects = await ProjectModel.find(this.getSearchTerm(req, { program: req.program._id }))
 			.sort('name')
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
-			.exec((err, projects) => {
-				if (err) {
-					return res.status(422).send({
-						message: CoreServerErrors.getErrorMessage(err)
-					});
-				} else {
-					res.json(this.decorateList(projects, req.user ? req.user.roles : []));
-				}
+			.exec();
+			res.json(this.decorateList(projects, req.user ? req.user.roles : []));
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
 			});
+		}
 	};
 
 	// -------------------------------------------------------------------------
@@ -339,52 +280,42 @@ class ProjectsServerController {
 		res.json(p);
 	};
 
-	// -------------------------------------------------------------------------
-	//
-	// magic that populates the project on the request
-	//
-	// -------------------------------------------------------------------------
-	public projectByID = (req, res, next, id) => {
+	// Get a project by ID
+	public async projectByID(req: Request, res: Response, next: NextFunction, id: string): Promise<void> {
+		let queryObject: any;
 		if (id.substr(0, 3) === 'prj') {
-			ProjectModel.findOne({ code: id })
-				.populate('createdBy', 'displayName')
-				.populate('updatedBy', 'displayName')
-				.populate('program', 'code title logo isPublished')
-				.exec((err, project) => {
-					if (err) {
-						return next(err);
-					} else if (!project) {
-						return res.status(404).send({
-							message: 'No project with that identifier has been found'
-						});
-					}
-					req.project = project;
-					next();
-				});
+			queryObject = { code: id };
 		} else {
-			if (!mongoose.Types.ObjectId.isValid(id)) {
-				return res.status(400).send({
+			if (!Types.ObjectId.isValid(id)) {
+				res.status(400).send({
 					message: 'Project is invalid'
 				});
+			} else {
+				queryObject = { _id: id };
 			}
+		}
 
-			ProjectModel.findById(id)
+		try {
+			const project = await ProjectModel.findOne(queryObject)
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
 				.populate('program', 'code title logo isPublished')
-				.exec((err, project) => {
-					if (err) {
-						return next(err);
-					} else if (!project) {
-						return res.status(404).send({
-							message: 'No project with that identifier has been found'
-						});
-					}
-					req.project = project;
-					next();
+				.exec();
+
+			if (!project) {
+				res.status(404).send({
+					message: 'No project with that identifier has been found'
 				});
+			} else {
+				req.project = project;
+				next();
+			}
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
 		}
-	};
+	}
 
 	// -------------------------------------------------------------------------
 	//
@@ -473,14 +404,14 @@ class ProjectsServerController {
 		});
 	};
 
-	private searchTerm = (req, opts) => {
+	private getSearchTerm(req: Request, opts: any): any {
 		opts = opts || {};
-		const me = CoreServerHelpers.myStuff(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.projects.admin } }];
 		}
 		return opts;
-	};
+	}
 
 	// -------------------------------------------------------------------------
 	//

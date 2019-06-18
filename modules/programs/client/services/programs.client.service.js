@@ -18,11 +18,6 @@
         method: 'GET',
         url :'/api/request/program/:programId'
       },
-      my: {
-        method: 'GET',
-        url: '/api/my/programs',
-        isArray: true
-      },
       myadmin: {
         method: 'GET',
         url: '/api/myadmin/programs',

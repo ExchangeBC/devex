@@ -2,9 +2,12 @@
 
 var defaultEnvConfig = require('./default');
 
+var databaseServiceName = (process.env.DATABASE_SERVICE_NAME || 'mongodb').toUpperCase().replace(/-/g, '_');
+var replicaSetString = process.env.MONGODB_REPLICA_NAME ? `?replicaSet=${process.env.MONGODB_REPLICA_NAME}` : '';
+
 var devConfig = {
   db: {
-    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.MONGODB_SERVICE_HOST || process.env.DB_DEVEX_PORT_27017_TCP_ADDR || 'localhost') + ':27017' + '/' + (process.env.MONGODB_DATABASE || 'mean-dev'),
+    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env[`${databaseServiceName}_SERVICE_HOST`] || 'localhost') + ':27017' + '/' + (process.env.MONGODB_DATABASE || 'mean-dev') + replicaSetString,
     options: {
       user: process.env.MONGODB_USER || '',
       pass: process.env.MONGODB_PASSWORD || '',

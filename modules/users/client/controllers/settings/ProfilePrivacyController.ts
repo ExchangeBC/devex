@@ -34,7 +34,7 @@ export class ProfilePrivacyController implements IController {
 	}
 
 	private handleError(error: any): void {
-		const errorMessage = (error as any).data ? (error as any).data.message : error.message;
+		const errorMessage = error.data ? error.data.message : error.message;
 		this.Notification.error({
 			title: 'Error',
 			message: `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`

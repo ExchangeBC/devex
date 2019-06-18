@@ -12,7 +12,7 @@ export class OrgCreateController implements IController {
 	public orgForm: IFormController;
 	public hasAgreed: boolean;
 	public creating = false;
-	private user: IUserResource;
+	public user: IUserResource;
 
 	constructor(
 		private $rootScope: IRootScopeService,
@@ -65,8 +65,13 @@ export class OrgCreateController implements IController {
 		}
 	}
 
+	// Leave the edit view
+	public close(): void {
+		this.$state.go('orgs.list', { orgId: this.org._id });
+	}
+
 	private handleError(error: any): void {
-		const errorMessage = (error as any).data ? (error as any).data.message : error.message;
+		const errorMessage = error.data ? error.data.message : error.message;
 		this.Notification.error({
 			title: 'Error',
 			message: `<i class="fas fa-exclamation-triangle"></i> ${errorMessage}`

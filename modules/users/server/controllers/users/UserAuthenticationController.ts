@@ -1,10 +1,10 @@
 'use strict';
 
-import mongoose from 'mongoose';
+import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
-import { UserModel } from '../../models/UserModel';
+import { IUserModel, UserModel } from '../../models/UserModel';
 
 class UserAuthenticationController {
 	public static getInstance() {
@@ -13,15 +13,17 @@ class UserAuthenticationController {
 
 	private static instance: UserAuthenticationController;
 
-	private claimMessages = MessagesServerController.claimMessages;
 	private sendMessages = MessagesServerController.sendMessages;
 
 	// URLs for which user can't be redirected on signin
 	private noReturnUrls = ['/authentication/signin', '/authentication/signup'];
 
-	private constructor() {}
+	private constructor() {
+		this.signin = this.signin.bind(this);
+		this.signup = this.signup.bind(this);
+	}
 
-	public signup = (req, res) => {
+	public signup(req: Request, res: Response): void {
 		// For security measurement we remove the roles from the req.body object
 		delete req.body.roles;
 
@@ -43,18 +45,7 @@ class UserAuthenticationController {
 				// Remove sensitive data before login
 				user.password = undefined;
 				user.salt = undefined;
-				//
-				// CC: this bit claims any messages attributed to this new
-				// user's email address
-				//
-				this.claimMessages(user);
-				req.login(user, loginErr => {
-					if (loginErr) {
-						res.status(400).send(loginErr);
-					} else {
-						res.json(user);
-					}
-				});
+				req.login(user, this.handleLoginResponse(res, user));
 			}
 		});
 	};
@@ -62,7 +53,7 @@ class UserAuthenticationController {
 	/**
 	 * Signin after passport authentication
 	 */
-	public signin = (req, res, next) => {
+	public signin(req: Request, res: Response, next: NextFunction) {
 		passport.authenticate('local', {}, (err, user, info) => {
 			if (err || !user) {
 				res.status(422).send(info);
@@ -70,13 +61,7 @@ class UserAuthenticationController {
 				// Remove sensitive data before login
 				user.password = undefined;
 				user.salt = undefined;
-				req.login(user, loginErr => {
-					if (loginErr) {
-						res.status(400).send(loginErr);
-					} else {
-						res.json(user);
-					}
-				});
+				req.login(user, this.handleLoginResponse(res, user));
 			}
 		})(req, res, next);
 	};
@@ -174,7 +159,6 @@ class UserAuthenticationController {
 
 							// And save the user
 							user.save(saveErr => {
-								this.claimMessages(user);
 								return done(saveErr, user, info);
 							});
 						});
@@ -277,27 +261,15 @@ class UserAuthenticationController {
 		}
 	};
 
-	private ensureOrgs = (user, orglist) => {
-		const Org = mongoose.model('Org');
-		const plist = orglist.map(orgid => {
-			return new Promise((resolve, reject) => {
-				Org.findById(orgid).exec((err, org) => {
-					if (err || !org) {
-						user.orgsAdmin.pull(orgid);
-						user.orgsMember.pull(orgid);
-						user.orgsPending.pull(orgid);
-					}
-					resolve();
-				});
-			});
-		});
-		Promise.all(plist).then(() => {
-			user.markModified('orgsAdmin');
-			user.markModified('orgsMember');
-			user.markModified('orgsPending');
-			user.save();
-		});
-	};
+	private handleLoginResponse(res: Response, user: IUserModel) {
+		return (loginErr: any) => {
+			if (loginErr) {
+				res.status(400).send(loginErr);
+			} else {
+				res.json(user);
+			}
+		}
+	}
 }
 
 export default UserAuthenticationController.getInstance();

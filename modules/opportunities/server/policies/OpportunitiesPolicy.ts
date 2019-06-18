@@ -89,6 +89,10 @@ class OpportunitiesPolicy {
 						permissions: ['put']
 					},
 					{
+						resources: '/api/opportunities/for/program/:programId',
+						permissions: ['get']
+					},
+					{
 						resources: '/api/opportunities/:opportunityId/action',
 						permissions: ['post']
 					},

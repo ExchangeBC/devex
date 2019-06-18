@@ -5,13 +5,11 @@ import pages.app.CodewithusPage
 import modules.LoginModule
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-//import extensions.AngularJSAware
+// import extensions.AngularJSAware
 
-//class HomePage extends Page implements AngularJSAware {
 class HomePage extends Page {
 
-  
-//	static at = { angularReady && title == "BCDevExchange" }
+	// static at = { angularReady && title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
 	static at = { title.startsWith("BCDevExchange - The BC Developer\'s Exchange") }
     static url = "/"
     static content = {
@@ -26,9 +24,9 @@ class HomePage extends Page {
 		AdminMenuDropDown{$("a",'data-automation-id':"AdminMenuItem")}	
 		AboutLink { PositionAndClick("a","about") }
 		AccessibilityLink { PositionAndClick("a","accessibility") }
-		API { PositionAndClick("a","api") }
+		APIs { PositionAndClick("a","api") }
 		AvatarImage{$("img",'data-automation-id':"UserAvatarImage" )}
-		BrowseOpportunities { $('a[class="btn btn-lg btn-primary mt-5"][href="/opportunities" ]')}
+		BrowseOpportunities { $("a", 'data-automation-id':"lnkBrowseOpportunities")}
 		CodewithusLink { $(('a[data-automation-id ~= "button-codewithus"]'), 0).click() }
 		CompaniesNavbar { $('a[ui-sref ~= "orgs.list"]', 0).click()    }
 		Copyright { PositionAndClick("a","copyright") }
@@ -40,6 +38,7 @@ class HomePage extends Page {
 		PrivacyLink { PositionAndClick("a","privacy") }
 		ProgramsNavbar { $('a[ui-sref ~= "programs.list"]', 0).click() }
 		ProjectsNavbar { $('a[ui-sref ~= "projects.list"]', 0).click() }
+		SettingsOption{$("a", text: contains("Settings"))}
 		SigninadminLink { PositionAndClick("a","authentication.signinadmin") }
 		SigninLink { PositionAndClick("a","authentication.signin") }
 		SprintwithusLink { $(('a[data-automation-id ~= "button-sprintwithus"]'), 0).click() }

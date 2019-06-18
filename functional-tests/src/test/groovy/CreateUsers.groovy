@@ -11,7 +11,6 @@ import geb.module.RadioButtons
 
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-//import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
@@ -34,6 +33,19 @@ The test finish with each user logged off from BC Exchange and GitHub
 @Title("Create three users, and assign one capability")
 class CreateUsers extends GebReportingSpec {
 
+    def Boolean CheckIfReauthIsNeeded(){
+        if (driver.currentUrl.contains("oauth/authorize?")) { //This is part of the reauthorization page URL
+                println("Had to reauthorize Devex to access the GibHub account")
+                $("button",name:"authorize").click()  //Click on the reauthorize button to proceed
+                sleep(2000)
+        }
+        else {
+                println("No need to reauthorize Devex to access the GibHub account")
+        }
+        return true
+    }
+
+
   @Unroll
   def "Go to Home Page and click on the log to GitHub button as user '#UserFirstName' '#UserLastName'" () {
     given: "Starting from the Home Page"
@@ -43,8 +55,8 @@ class CreateUsers extends GebReportingSpec {
         SigninLink //The definition for this element includes a Click
         at AuthenticationSigninPage 
 
-    and: "Click on the: 'Sign in with you GitHub account'"
-        SingInButton.click()
+    and: "Click on the: 'Sign in with your GitHub account'"
+        SignInButton.click()
 
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials '#Login' and '#Pwd'"
         at GitHubSignInPage
@@ -52,13 +64,13 @@ class CreateUsers extends GebReportingSpec {
 		GitHubLogin.value(Login)
 		GitHubPwd.value(Pwd)
         GitHubSignInButton.click()
+        sleep(2000) //Leave time case the next page is the reauthorization page
+
+    and:"If redirected to the reauthorization page, click to reauthorize"    
+        assert CheckIfReauthIsNeeded() //Actually, it always returns true, I kept it mainly if in the future I add some error catching or more complicated logic
 
     then: "After successful Login, arrive at the Profile page for the user"
-        at SingleProfilePage  //verify we are in the user's settings page
-
-    and: "Check the Name and Last Name have been imported correctly from GitHub"
-        assert FirstName.value().toString()==UserFirstName 
-        assert LastName.value().toString()==UserLastName
+        to SingleProfilePage  //verify we are in the user's settings page
 
     and: "Now lets write an email address and city"
         emailprofile.value(UserEmail )
@@ -83,21 +95,20 @@ class CreateUsers extends GebReportingSpec {
         def  logoffOK=login."Logout as user"()
         assert logoffOK
 
-    and: "Log out user '#UserFirstName' from GitHub" 
+    and:"Arrive to the GitHubPage"
         waitFor{to GitHubPage}
+
+    and: "Log out user '#UserFirstName' from GitHub"     
+        waitFor{AvatarImage}
         AvatarImage.click()
         waitFor{SignOutGit}
         SignOutGit.click()
 
 
-    where: "The values used to create the Opportunity are:"
+    where: "The values used to create the Users are:"
         Login | Pwd | UserFirstName | UserLastName | UserEmail | UserCity 
         "hugochibougamau" | "Devex_Test1" | "Hugo" | "Chibougamau" | "hugochibougamau@fakeaddress.ca" | "Salt Spring Island"
         "hibouleblanc"|"Devex_Test1" |"Hibou" |"Leblanc"|"hibouleblanc@fakeaddress.ca"|"Victoria"
         "hectorcunniculus"|"Devex_Test1" |"Hector" |""|"hectorcunniculus@fakeaddress.ca"|"Duncan"
-
   }
-
-  
-
 }

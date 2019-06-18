@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import mongoose from 'mongoose';
+import { Types } from 'mongoose';
 import { UserModel } from '../../models/UserModel';
 
 class UserAuthorizationController {
@@ -14,7 +14,7 @@ class UserAuthorizationController {
 	private constructor() {};
 
 	public userByID = (req, res, next, id) => {
-		if (!mongoose.Types.ObjectId.isValid(id)) {
+		if (!Types.ObjectId.isValid(id)) {
 			return res.status(400).send({
 				message: 'User is invalid'
 			});

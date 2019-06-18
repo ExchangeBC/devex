@@ -139,10 +139,9 @@ export default class OpportunityEditCWUController {
 				this.$state.go('opportunityadmin.editcwu', { opportunityId: this.opportunity.code });
 			}
 		} catch (error) {
-			const e = error as any;
 			this.Notification.error({
 				title: 'Error',
-				message: "<i class='fas fa-exclamation-triangle'></i> " + e.data.message
+				message: "<i class='fas fa-exclamation-triangle'></i> " + error.data.message
 			});
 		}
 	}
@@ -182,10 +181,9 @@ export default class OpportunityEditCWUController {
 					message: '<i class="fas fa-check-circle"></i> Approval request sent!'
 				});
 			} catch (error) {
-				const e = error as any;
 				this.Notification.error({
 					title: 'Error',
-					message: "<i class='fas fa-exclamation-triangle'></i> " + e.data.message
+					message: "<i class='fas fa-exclamation-triangle'></i> " + error.data.message
 				});
 			}
 		}
@@ -222,10 +220,9 @@ export default class OpportunityEditCWUController {
 				message: '<i class="fas fa-check-circle"></i> Approval request reset'
 			});
 		} catch (error) {
-			const e = error as any;
 			this.Notification.error({
 				title: 'Error',
-				message: "<i class='fas fa-exclamation-triangle'></i> " + e.data.message
+				message: "<i class='fas fa-exclamation-triangle'></i> " + error.data.message
 			});
 		}
 	}

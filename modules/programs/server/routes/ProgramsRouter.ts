@@ -28,12 +28,9 @@ class ProgramsRouter {
 			.put(ProgramsServerController.update)
 			.delete(ProgramsServerController.delete);
 
-		app.route('/api/my/programs')
-			.all(ProgramsPolicy.isAllowed)
-			.get(ProgramsServerController.my);
 		app.route('/api/myadmin/programs')
 			.all(ProgramsPolicy.isAllowed)
-			.get(ProgramsServerController.myadmin);
+			.get(ProgramsServerController.getMyAdminPrograms);
 
 		//
 		// get lists of users

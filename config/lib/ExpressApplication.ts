@@ -307,8 +307,7 @@ class ExpressApplication {
 			// Log it
 			console.error(err.stack);
 
-			// Redirect to error page
-			res.redirect('/server-error');
+			res.status(500).json({message: "Oops that didn't work"});
 		});
 	};
 

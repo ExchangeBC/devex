@@ -9,7 +9,7 @@
       <uib-accordion close-others="false">
         <div uib-accordion-group ng-repeat="capability in vm.capabilities">
           <uib-accordion-heading>
-            <div data-automation-id="ListCapabilitiesSection" class="w-100 h-100 py-0 my-0">
+            <div data-automation-id="ListCapabilitiesSection-{{capability.name}}" class="w-100 h-100 py-0 my-0">
               <span ng-if="vm.userHasCapability(capability)"><i class="fas fa-check-circle text-success"></i></span>
               <span ng-if="!vm.userHasCapability(capability)"><i class="far fa-circle text-dark"></i></span>
               {{capability.name}}
@@ -29,7 +29,7 @@
               <div class="checkbox">
 
                 <label>
-                  <input data-automation-id="ckbClaimCapability" type="checkbox" ng-init="bool = vm.userHasCapability(capability)" ng-change="vm.toggleCapability(bool, capability)" ng-model="bool" />
+                  <input data-automation-id="ckbClaimCapability-{{capability.name}}" type="checkbox" ng-init="bool = vm.userHasCapability(capability)" ng-change="vm.toggleCapability(bool, capability)" ng-model="bool" />
                   <strong>Claim this capability</strong>
                 </label>
               </div>
@@ -37,7 +37,7 @@
               <div ng-if="capability.skills.length > 0 && vm.userHasCapability(capability)">
                 <p>Select all the <strong>preferred technical skills</strong> you possess:</p>
                 <div class="label-list">
-                  <label data-automation-id="preferredTechSkill" class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected': vm.userHasSkill(skill)}"
+                  <label data-automation-id="preferredTechSkill-{{skill.name}}" class="label label-preferred-skill" ng-repeat="skill in capability.skills" ng-class="{'label-preferred-skill-selected': vm.userHasSkill(skill)}"
                     ng-click="vm.toggleSkill(skill)">
                     <span ng-bind="skill.name"></span>
                   </label>

@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, model, Model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import { ICapability } from '../../shared/ICapabilityDTO';
 
@@ -31,4 +32,4 @@ CapabilitySchema.statics.findUniqueCode = (title, suffix, callback) => {
 	return CoreServerHelpers.modelFindUniqueCode(CapabilityModel, 'capability', title, suffix, callback);
 };
 
-export const CapabilityModel: Model<ICapabilityModel> = model<ICapabilityModel>('Capability', CapabilitySchema);
+export const CapabilityModel: Model<ICapabilityModel> = MongooseController.mongoose.model<ICapabilityModel>('Capability', CapabilitySchema);

@@ -99,19 +99,12 @@ class OpportunitiesCommonService implements IOpportunitiesCommonService {
 			return accum;
 		}, []);
 
-		if (opportunity.opportunityTypeCd === 'code-with-us') {
-			fields.cwu.forEach(elem => {
-				if (!elem[0]) {
-					errorFields.push(elem[1]);
-				}
-			});
-		} else {
-			fields.swu.forEach(elem => {
-				if (!elem[0]) {
-					errorFields.push(elem[1]);
-				}
-			});
-		}
+		const fieldSource = opportunity.opportunityTypeCd === 'code-with-us' ? fields.cwu : fields.swu;
+		fieldSource.forEach((elem: any) => {
+			if (!elem[0]) {
+				errorFields.push(elem[1]);
+			}
+		});
 		return errorFields;
 	}
 

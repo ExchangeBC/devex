@@ -1,7 +1,8 @@
 'use strict';
 
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
 import { IOrg } from '../../shared/IOrgDTO';
+import MongooseController from '../../../../config/lib/MongooseController';
 
 export interface IOrgModel extends IOrg, Document {
 	_id: string;
@@ -100,4 +101,4 @@ OrgSchema.pre('remove', function(next) {
 	);
 });
 
-export const OrgModel: Model<IOrgModel> = model<IOrgModel>('Org', OrgSchema);
+export const OrgModel: Model<IOrgModel> = MongooseController.mongoose.model('Org', OrgSchema);

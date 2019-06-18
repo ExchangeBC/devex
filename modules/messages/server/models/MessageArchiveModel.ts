@@ -1,6 +1,7 @@
 'use strict';
 
-import { Document, model, Model, Schema } from 'mongoose';
+import { Document, Model, Schema } from 'mongoose';
+import MongooseController from '../../../../config/lib/MongooseController';
 import { IMessageArchive } from '../../shared/IMessageDTO';
 
 export interface IMessageArchiveModel extends IMessageArchive, Document {}
@@ -39,4 +40,4 @@ const MessageArchiveSchema = new Schema({
 	isArchived: { type: Boolean, default: true }
 });
 
-export const MessageArchiveModel: Model<IMessageArchiveModel> = model<IMessageArchiveModel>('MessageArchive', MessageArchiveSchema);
+export const MessageArchiveModel: Model<IMessageArchiveModel> = MongooseController.mongoose.model<IMessageArchiveModel>('MessageArchive', MessageArchiveSchema);

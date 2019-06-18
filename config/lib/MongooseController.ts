@@ -15,6 +15,11 @@ class MongooseController {
 
 	private constructor() {}
 
+	public get mongoose() {
+		// Should only import mongoose once within an app!
+		return mongoose;
+	}
+
 	public connect(): Promise<mongoose.Connection> {
 
 		return new Promise(resolve => {
@@ -24,7 +29,7 @@ class MongooseController {
 			});
 
 			mongoose.connection.on('connecting', () => {
-				console.log(chalk.yellow(`Attempting to connect to ${config.db.uri}...`));
+				console.log(chalk.yellow(`Attempting to connect to ${config.db.uri} with options:`), config.db.options);
 			})
 
 			mongoose.connection.on('connected', () => {
@@ -43,17 +48,14 @@ class MongooseController {
 				}, 5000);
 			})
 
-			_.assign(config.db.options, { useNewUrlParser: true });
+			_.assign(config.db.options, {
+				useNewUrlParser: true,
+				bufferCommands: false,
+				bufferMaxEntries: 0
+			});
+
 			mongoose.set('useFindAndModify', false);
-
-			try {
-				setTimeout(() => {
-					mongoose.connect(config.db.uri, config.db.options);
-				}, 5000);
-
-			} catch (error) {
-				console.log(chalk.red(`Unable to establish connection to ${config.db.ui}`));
-			}
+			mongoose.connect(config.db.uri, config.db.options);
 		})
 	}
 }
