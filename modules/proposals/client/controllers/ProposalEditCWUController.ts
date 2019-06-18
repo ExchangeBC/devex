@@ -118,14 +118,14 @@ export default class ProposalEditCWUController {
 	public async close(): Promise<void> {
 
 		// If looking at a proposal for a closed opportunity, simply close the modal
-		if(this.isclosed){
+		if(this.isclosed) {
 			this.$uibModalInstance.close({
 				action: ProposalModalActions.SAVED,
 				proposal: this.proposal
 			});
 
 		// If looking at a proposal for an open opportunity, save any changes made
-		}else{
+		} else {
 			this.save(true);
 		}
 	}
