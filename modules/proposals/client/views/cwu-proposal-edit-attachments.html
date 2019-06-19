@@ -1,4 +1,4 @@
-<div class="modal-cta" ng-if="ppp.proposal.isAcceptedTerms && !ppp.proposal.attachments.length">
+<div class="modal-cta" ng-if="ppp.proposal.isAcceptedTerms && !ppp.proposal.attachments.length && !ppp.isclosed">
   <div class="mb-3">Please upload your proposal</div>
   <div ng-if="!ppp.isclosed">
     <a href class="btn btn-sm btn-default" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
