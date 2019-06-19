@@ -266,6 +266,17 @@ export default class ProposalEditCWUController {
 		}
 	}
 
+	// Set the terms to accepted and update the proposal
+	public async acceptTerms(): Promise<void>{
+		try{
+			this.proposal.isAcceptedTerms = true;
+			const updatedProposal = await this.ProposalService.update(this.proposal).$promise;
+			this.refreshProposal(updatedProposal);
+		}catch(error){
+			this.handleError(error);
+		}
+	}
+
 	// Determine whether the deadline for the opportunity has passed
 	public async isClosed(){
 		const response = await this.OpportunitiesService.getDeadlineStatus({ opportunityId: this.opportunity._id }).$promise;

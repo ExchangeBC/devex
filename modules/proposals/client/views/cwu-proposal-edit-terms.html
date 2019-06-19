@@ -2,7 +2,7 @@
 <div ng-if="!ppp.proposal.isAcceptedTerms">
   <div class="modal-cta mb-3">To submit a proposal, you must agree to the <a href="/terms/cwu1" target="_blank"><span class="font-italic">Code With Us</span> terms</a>.</div>
   <div class="custom-control custom-checkbox my-3">
-    <input type="checkbox" class="custom-control-input" data-automation-id="checkbox-cwu-proposal-terms" id="checkbox-cwu-terms" name="isInception" ng-disabled="ppp.proposal.isAcceptedTerms" ng-model="ppp.proposal.isAcceptedTerms">
+    <input type="checkbox" class="custom-control-input" data-automation-id="checkbox-cwu-proposal-terms" id="checkbox-cwu-terms" name="isInception" ng-click="ppp.acceptTerms()">
     <label class="custom-control-label" for="checkbox-cwu-terms">Agree to the terms</label>
   </div>
 </div>
