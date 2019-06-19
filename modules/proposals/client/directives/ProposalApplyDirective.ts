@@ -55,7 +55,7 @@ export class ProposalApplyDirectiveController implements IController {
 	public async openProposalApplicationDialog(proposalId?: string): Promise<void> {
 
 		const modalResponse = await this.modalService.showModal({
-			size: 'lg',
+			size: 'md',
 			templateUrl: '/modules/proposals/client/views/cwu-proposal-edit.html',
 			controller: ProposalEditCWUController,
 			controllerAs: 'ppp',
