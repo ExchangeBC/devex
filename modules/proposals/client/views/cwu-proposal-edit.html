@@ -33,7 +33,7 @@
     <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
   </div>
   
-  <div class="modal-footer" ng-if="ppp.proposal.status !== 'Submitted' && ppp.proposal.isAcceptedTerms && ppp.hasAttachments">
+  <div class="modal-footer" ng-if="ppp.proposal.status !== 'Submitted' && ppp.proposal.isAcceptedTerms && ppp.hasAttachments && !ppp.isclosed">
     <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-primary">Submit proposal</button>
   </div>
 
