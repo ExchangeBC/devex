@@ -1,18 +1,26 @@
-<div class="modal-cta" ng-if="!ppp.proposal.attachments.length">Please upload your proposal</div>
-<div class="small strong mb-2" ng-if="ppp.proposal.attachments.length">My proposal docs</div>
-<table class="table table-sm table-hover">
-  <tr ng-repeat="file in ppp.proposal.attachments">
-    
-    <td class="text-left align-middle">
-      <a href="/api/proposals/{{ppp.proposal._id}}/documents/{{file._id}}" target="_blank">{{file.name}}</i></a>
-    </td>
-    <td class="text-right">
-      <button type="button" class="btn btn-text-only p-0" ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="far fa-trash-alt" title="remove"></i></button>
-    </td>
-  </tr>
-</table>
+<div class="modal-cta" ng-if="ppp.proposal.isAcceptedTerms && !ppp.proposal.attachments.length">
+  <div class="mb-3">Please upload your proposal</div>
+  <div ng-if="!ppp.isclosed">
+    <a href class="btn btn-sm btn-default" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
+      file</a> &nbsp; <span class="small text-muted">You may upload multiple files (max 3 MB per file)</span>
+  </div>
+</div>
 
-<div ng-if="!ppp.isclosed">
-  <a href class="btn btn-sm btn-light" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
-    file</a> &nbsp; <span class="small text-muted">You may upload multiple files (max 3 MB per file)</span>
+<div ng-if="ppp.proposal.attachments.length">
+  <div class="small strong mb-2">My proposal docs</div>
+  <table class="table table-sm table-hover">
+    <tr ng-repeat="file in ppp.proposal.attachments">
+      
+      <td class="text-left align-middle">
+        <a href="/api/proposals/{{ppp.proposal._id}}/documents/{{file._id}}" target="_blank">{{file.name}}</i></a>
+      </td>
+      <td class="text-right">
+        <button type="button" class="btn btn-text-only p-0" ng-if="!ppp.isclosed" ng-click="ppp.deleteAttachment(file._id)"><i class="far fa-trash-alt" title="remove"></i></button>
+      </td>
+    </tr>
+  </table>
+  <div ng-if="!ppp.isclosed">
+    <a href class="btn btn-sm btn-default" data-automation-id="button-cwu-proposal-upload-file" ngf-select="ppp.upload($file)"><i class="fas fa-upload"></i> Upload a
+      file</a> &nbsp; <span class="small text-muted">You may upload multiple files (max 3 MB per file)</span>
+  </div>
 </div>
