@@ -4,7 +4,7 @@
   <div class="modal-header">
     <h5 class="modal-title">
       My proposal
-      <span class="badge badge-warning ml-2" ng-if="!ppp.isclosed && ppp.proposal.status === 'Draft'">DRAFT</span>
+      <span class="badge badge-warning ml-2" ng-if="ppp.proposal.status === 'Draft'">DRAFT</span>
       <span class="badge badge-success ml-2" ng-if="ppp.proposal.status === 'Submitted'">SUBMITTED</span>
     </h5>
     <button type="button" class="close" data-ng-click="ppp.close()" aria-label="Close">
@@ -14,9 +14,14 @@
 
   <div class="modal-body">
 
-    <!--If proposal is in draft-->
+    <!--If proposal is in draft before the closing deadline-->
     <div class="mb-5 small text-muted" ng-if="!ppp.isclosed && ppp.proposal.status === 'Draft'">
       Your proposal hasn't been submitted yet. <a href="" ng-if="ppp.proposal.status === 'Draft' || ppp.proposal.status === 'Submitted'" data-automation-id="button-cwu-proposal-delete" data-ng-click="ppp.delete()">Delete this proposal</a> 
+    </div>
+
+    <!--If proposal is in draft after the closing deadline-->
+    <div class="mb-5 small text-muted" ng-if="ppp.isclosed && ppp.proposal.status === 'Draft'">
+      It looks like you started a proposal but didn't submit it before the closing deadline. 
     </div>
 
     <!--If proposal has been submitted and closing deadline hasn't passed-->
@@ -29,12 +34,14 @@
       Your proposal was submitted! 
     </div>
 
-    <div class="mb-5" ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
     <div ng-include="'/modules/proposals/client/views/cwu-proposal-edit-terms.html'"></div>
+
+    <div class="mb-5" ng-if="ppp.proposal.isAcceptedTerms" ng-include="'/modules/proposals/client/views/cwu-proposal-edit-attachments.html'"></div>
+
   </div>
   
   <div class="modal-footer" ng-if="ppp.proposal.status !== 'Submitted' && ppp.proposal.isAcceptedTerms && ppp.hasAttachments && !ppp.isclosed">
-    <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-primary">Submit proposal</button>
+    <button type="submit" data-automation-id="button-cwu-proposal-submit"  class="btn btn-block btn-primary">Submit proposal</button>
   </div>
 
 </form>
