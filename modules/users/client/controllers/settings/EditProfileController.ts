@@ -14,7 +14,7 @@ export class EditProfileController implements IController {
 	public pendingGovRequest: boolean;
 	public hasCompany: boolean;
 	public cities: string[];
-	public creatingRequest= false;
+	public creatingRequest = false;
 
 	constructor(
 		private $rootScope: IRootScopeService,
