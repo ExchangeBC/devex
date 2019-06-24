@@ -114,18 +114,22 @@
 
 		const determineIfDeletable = async function() {
 
-			// Determine whether program has any associated open or unassigned opportunities
-			const opportunities = await fetch('/api/opportunities/for/program/' + vm.program._id).then(response => response.json());
-			const hasPublished = opportunities.some(element => element.isPublished);
-			const hasAssigned = opportunities.some(element => element.status === 'Assigned');
+			if (editing){
+				// Determine whether program has any associated open or unassigned opportunities
+				const opportunities = await fetch('/api/opportunities/for/program/' + vm.program._id).then(response => response.json());
+				const hasPublished = opportunities.some(element => element.isPublished);
+				const hasAssigned = opportunities.some(element => element.status === 'Assigned');
 
-			// Determine whether program has any associated projects or opportunities
-			const projects = await fetch('/api/projects/for/program/' + vm.program._id).then(response => response.json());
-			const hasChildProjects = projects.length > 0;
-			const hasChildOpps = opportunities.length > 0;
+				// Determine whether program has any associated projects or opportunities
+				const projects = await fetch('/api/projects/for/program/' + vm.program._id).then(response => response.json());
+				const hasChildProjects = projects.length > 0;
+				const hasChildOpps = opportunities.length > 0;
 
-			// if no published opps, and no assigned opps and either root admin or program admin (with no child projects or opps)
-			return (!hasPublished && !hasAssigned && (vm.isAdmin || (program.userIs.admin && !hasChildProjects && !hasChildOpps)));
+				// if no published opps, and no assigned opps and either root admin or program admin (with no child projects or opps)
+				return (!hasPublished && !hasAssigned && (vm.isAdmin || (program.userIs.admin && !hasChildProjects && !hasChildOpps)));
+			} else {
+				return false;
+			}
 		}
 
 		const init_deletable = async function() {

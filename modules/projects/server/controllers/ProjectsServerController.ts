@@ -107,7 +107,15 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public read = (req, res) => {
-		res.json(this.decorate(req.project, req.user ? req.user.roles : []));
+
+		// Ensure that the project is only viewable when published or when the user is either the admin for the project or a root admin
+		if (req.project.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.project)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			res.json(this.decorate(req.project, req.user ? req.user.roles : []));
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// update the document, make sure to apply audit. We don't mess with the

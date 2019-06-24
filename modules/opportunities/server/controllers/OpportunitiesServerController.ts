@@ -49,8 +49,16 @@ class OpportunitiesServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
-		this.incrementViews(req.opportunity._id);
+		
+		// Ensure that the opportunity is only viewable when published or when the user is either the admin for the opportunity or a root admin
+		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			this.incrementViews(req.opportunity._id);
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// Create a new opportunity. the user doing the creation will be set as the
@@ -216,6 +224,7 @@ class OpportunitiesServerController {
 			// update the opportunity
 			opportunity.status = 'Assigned';
 			opportunity.proposal = proposal;
+			opportunity.assignedAt = new Date();
 			const savedOpportunity = await this.updateSave(opportunity);
 
 			// update any subscribers

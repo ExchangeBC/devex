@@ -24,9 +24,9 @@
       Member</span>
     <span ng-if="vm.isAdmin || project.userIs.admin" class="label label-admin">Admin</span>
     <a class="btn btn-sm btn-default" ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && project.isPublished"
-      href="javascript:void(0);" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish">Unpublish</a>
+      href="" ng-click="vm.publish(project, false)" ng-click="$event.stopPropagation()" title="UnPublish">Unpublish</a>
     <a class="btn btn-sm btn-primary" ng-if="project.program.isPublished && (vm.isAdmin || project.userIs.admin) && !project.isPublished"
-      href="javascript:void(0);" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish">Publish</a>
+      href="" ng-click="vm.publish(project, true)" ng-click="$event.stopPropagation()" title="Publish">Publish</a>
     <a class="btn btn-sm btn-default" ng-cloak ng-if="vm.isGov && !project.userIs.member && !project.userIs.request"
       href="javascript:void(0);" ng-click="vm.request(project)" ng-click="$event.stopPropagation()" title="Request Membership">Request
       Membership</a>

@@ -14,6 +14,7 @@ export class EditProfileController implements IController {
 	public pendingGovRequest: boolean;
 	public hasCompany: boolean;
 	public cities: string[];
+	public creatingRequest = false;
 
 	constructor(
 		private $rootScope: IRootScopeService,
@@ -51,6 +52,7 @@ export class EditProfileController implements IController {
 		const choice = await this.ask.yesNo(question);
 		if (choice) {
 			try {
+				this.creatingRequest = true;
 				this.user.addRequest = true;
 				const updatedUser = await this.UsersService.update(this.user).$promise;
 				this.pendingGovRequest = true;
@@ -60,6 +62,7 @@ export class EditProfileController implements IController {
 				});
 			} catch (error) {
 				this.handleError(error);
+				this.creatingRequest = false;
 			}
 		}
 	}
