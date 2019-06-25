@@ -77,13 +77,13 @@ class CreateUsers extends GebReportingSpec {
     and: "Claim a capability. As precondition a capability with three preferred skills must already exist"  
         MyCapabilitiesLink.click()
         at CapabilitiesSkillsPage
-        waitFor { First_Skill } // Make sure the skills have shown up
-        First_Skill.click()
-        ClaimCapabilityCheck.click()
-        waitFor { PreferredTechSkill0 } // Make sure the preferred skills have shown up
-        PreferredTechSkill0.click()
-        PreferredTechSkill1.click()
-        PreferredTechSkill2.click()
+        
+        // claim all skills for this user
+        waitFor { SkillList }
+        SkillList.eachWithIndex { skill, idx ->
+            skill.click()
+            ClaimCheckboxList[idx].click()
+        }
 
     then: "Save the User"   
         SaveChangesButton.click()

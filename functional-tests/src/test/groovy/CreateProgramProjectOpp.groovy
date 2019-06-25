@@ -38,9 +38,9 @@ class CreateProgramProjectOpp extends GebReportingSpec {
     static def RandomID = UUID.randomUUID().toString()
     
     def setup() {
-        to HomePage
+        waitFor { to HomePage }
         // Need to log as an admin
-        def  loginOK= login."Login As An Administrator"("admin","adminadmin","Admin Local")
+        def  loginOK = login."Login As An Administrator"("admin","adminadmin","Admin Local")
         assert loginOK
     }
 
@@ -63,6 +63,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             withFrame(ProgramDescriptionBox) { $("body", id:"tinymce") << DescriptionValue }
             Website.value(WebsiteValue)
+            sleep(1000)
 
         and: "Click the 'Save Changes' button for the program: '#ProgramTitleValue'"
             SaveButton.click()
@@ -102,7 +103,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             withFrame(ProjectDescriptionBox){ $("body", id:"tinymce") << DescriptionValue }
 
-            // sleep(3000) //Makes no sense, but without this sleep it does not work
+            sleep(1000)
             waitFor { Github }
             Github.value(GithubValue)
             Tags.value(TagsValue)
@@ -185,7 +186,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
             // Note: the 'body' is inside an iframe. To identify the iframe I use the title because the id changes depending on the browser we are using.
             // There are three iframes in the OpportunitiesAdminCreatePage, this one is the 0, if order of the iframes change, then redo the element identifiers
             withFrame(OppBackgroundBox) { $("body", id:"tinymce") << Background }
-
+            sleep(1000)
             DetailsTab.click()
             waitFor{LocationRadioButton(Onsite).click()}
             LocationSelector.value(Location)
@@ -239,7 +240,7 @@ class CreateProgramProjectOpp extends GebReportingSpec {
         and: "Click on the newly created opportunity (still unpublished)"
             def MyCurrentURL = getCurrentUrl()
             TestCWUOpportunities[0].click()
-            sleep(1000)
+            sleep(2000)
             // The following is to create from the opp title the URL
             def OppURL = MyCurrentURL + "/cwu/opp-" + MyTitleData.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
             def NewURL = getCurrentUrl()

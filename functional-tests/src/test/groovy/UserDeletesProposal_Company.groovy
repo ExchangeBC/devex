@@ -31,10 +31,10 @@ class UserDeletesProposal_Company extends GebReportingSpec {
   def "User Hugo Chibougamau deletes a SWU proposal" () {
    
     given: "Starting from the Home Page"
-        waitFor {to HomePage}
+        waitFor { to HomePage }
 
     when: "Click on the Sign In  link to go to the Authentication page"
-        SigninLink //The definition for this element includes a Click
+        SigninLink.click()
         at AuthenticationSigninPage 
 
     and: "Click on the: 'Sign in with you GitHub account'"
@@ -43,91 +43,91 @@ class UserDeletesProposal_Company extends GebReportingSpec {
     and: "Arrive to the GitHub login page, where we will be able to log using the credentials 'hugochibougamau' and 'Devex_Test1'"
         at GitHubSignInPage
         
-        waitFor{GitHubSignInButton} //If this element is present the page has loaded
+        waitFor { GitHubSignInButton }
 		GitHubLogin.value("hugochibougamau")
 		GitHubPwd.value("Devex_Test1")
         GitHubSignInButton.click()
         sleep(1000)
 
     then: "After successful Login, arrive at the home page, but this time showing the users' avatar"
-        waitFor{at HomePage} //verify we are in the home page
-        assert AvatarImage  //Verify the avatar image is present. In the future I may check the image itself is the correct one
+        waitFor { at HomePage }
+        assert AvatarImage
 
     and: "Click on the Opportunities link to go to the opportunities page"
         OpportunitiesNavBar.click()
 
     then: "Arrive at the opportunities page."
-        waitFor{at OpportunitiesPage}
+        waitFor { at OpportunitiesPage }
         sleep(1000)
 
     when: "User clicks again on the first opportunity of the list (we assume is the one the previously used to present a proposal"
-        waitFor{ TestSWUOpportunities }
-        def OppTitle = TestSWUOpportunities[0].text()  //Opportunity title
-        def MyCurrentURL=getCurrentUrl() //URL opportunity page
+        waitFor { TestSWUOpportunities }
+        def OppTitle = TestSWUOpportunities[0].text()
+        def MyCurrentURL = getCurrentUrl()
         //The following is to create from the opp title the URL
         def OppURL= MyCurrentURL + "/swu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
 
-        TestSWUOpportunities[0].click()  //Same opportunity as before
+        TestSWUOpportunities[0].click()
         sleep(1000)
-        def NewURL=getCurrentUrl() //This is the specific opportunity URL
+        def NewURL=getCurrentUrl()
 
     then: "User arrives to the selected opportunity URL"
-        assert NewURL==OppURL  //OppURL was defined before. This step is a bit paranoid, and may be deleted
+        assert NewURL == OppURL
 
     when: "Click on 'Update my Proposal' link"
-        waitFor{$("a",id:"proposaladmin.edit",0).click()} //there may be two locations where this link appears
+        waitFor { $("a", id:"proposaladmin.edit",0).click() }
 
     and:" We move to the Proposal Edit Page and click on the 'Delete this Proposal' -in the shape of a garbage bin-"
-        waitFor{$("button",'data-automation-id':"btnDeleteSWUProposal").click()}
+        waitFor { $("button",'data-automation-id':"btnDeleteSWUProposal").click() }
 
     then: "A modal window appears. Click on the Yes button"    
-        waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
+        waitFor { $("button",'data-automation-id':"button-modal-yes").click() }
 
     expect:"Returns to the same opportunity page, but this time showing the 'Star a Proposal' button "
-        assert waitFor{$("button",id:"proposaladmin.create")}
-
+        assert waitFor { $("button",id:"proposaladmin.create") }
     }
 
-
-  def "User Hugo Chibougamau deletes a CWU proposal" () {
+  def "Local user deletes a CWU proposal" () {
    
     given: "Starting from the Home Page"
-        //User already logged
-        waitFor {to HomePage}
-        assert AvatarImage  //Verify the avatar image is present, it indicates user is logged
+        waitFor { to HomePage }
+
+    and: "Log in as local user"
+        login."Login as Local User"();
 
     and: "Click on the Opportunities link to go to the opportunities page"
-        OpportunitiesNavBar.click()
+        waitFor { at HomePage }
+        BrowseOpportunities.click()
 
     when: "Arrive at the opportunities page."
-        waitFor{at OpportunitiesPage}
+        waitFor { at OpportunitiesPage }
         sleep(1000)
 
     and: "User clicks again on the first opportunity of the list (we assume is the one the previously used to present a proposal"
-        waitFor{ TestCWUOpportunities }
-        def OppTitle = TestCWUOpportunities[0].text()  //Opportunity title
-        def MyCurrentURL=getCurrentUrl() //URL opportunity page
-        //The following is to create from the opp title the URL
-        def OppURL= MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
+        waitFor { TestCWUOpportunities }
+        def OppTitle = TestCWUOpportunities[0].text()
+        def MyCurrentURL = getCurrentUrl()
+        // The following is to create from the opp title the URL
+        def OppURL = MyCurrentURL + "/cwu/opp-" + OppTitle.replaceAll(' ','-').replaceAll(':','-').toLowerCase()
 
-        TestCWUOpportunities[0].click()  //Same opportunity as before
+        TestCWUOpportunities[0].click()
         sleep(1000)
-        def NewURL=getCurrentUrl() //This is the specific opportunity URL
+        def NewURL = getCurrentUrl()
 
     then: "User arrives to the selected opportunity URL"
-        assert NewURL==OppURL  //OppURL was defined before. This step is a bit paranoid, and may be deleted
+        assert NewURL == OppURL
 
     when: "Click on 'Update my Proposal' link"
-        waitFor{$("a",id:"proposaladmin.edit",0).click()} //there may be two locations where this link appears
+        waitFor { $("a",id:"proposaladmin.edit",0).click() }
 
     and:" We move to the Proposal Edit Page and click on the 'Delete this Proposal' -in the shape of a garbage bin-"
-        waitFor{$("button",'data-automation-id':"button-cwu-proposal-delete").click()}
+        waitFor { $("button",'data-automation-id':"button-cwu-proposal-delete").click() }
 
     then: "A modal window appears. Click on the Yes button"    
-        waitFor{$("button",'data-automation-id':"button-modal-yes").click()}
+        waitFor { $("button",'data-automation-id':"button-modal-yes").click() }
 
     expect:"Returns to the same opportunity page, but this time showing the 'Star a Proposal' button "
-        assert waitFor{$("button",id:"proposaladmin.create")}
+        assert waitFor { $("button",id:"proposaladmin.create") }
 
     }
 
@@ -165,17 +165,15 @@ def "User Hugo Chibougamau deletes a company" () {
 
     }
 
-        def teardown(){
-            //Logoff as user
-            waitFor{to HomePage}
-            sleep(1000)  //Do not fully trust waitFor
-            def  logoffOK=login."Logout as user"()
-            assert logoffOK
+    def teardown(){
+        //Logoff as user
+        waitFor{to HomePage}
+        sleep(1000)  //Do not fully trust waitFor
+        def  logoffOK=login."Logout as user"()
+        assert logoffOK
 
-            waitFor{to GitHubPage }
-            SignOutGit.click()
-        }
-
-
+        waitFor{to GitHubPage }
+        SignOutGit.click()
+    }
 }
 

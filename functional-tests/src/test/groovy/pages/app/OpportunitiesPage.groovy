@@ -17,7 +17,7 @@ class OpportunitiesPage extends Page {
 		DownloadTerms(wait: true) { $('a[href="/terms/cwu1"]') }
 		CWULearnMore(wait: true) { $('data-automation-id':"cwu-LearnMore") }
 		SWULearnMore(wait: true) { $('data-automation-id':"swu-LearnMore") }
-		PublishButton(wait: true) { $("a", 'data-automation-id': "button-opportunity-publish") }
+		PublishButton(wait: true) { $('data-automation-id': "button-opportunity-publish") }
 		ModalConfirmButton(wait: true) { $("button", 'data-automation-id': "button-modal-yes") }
 	}
 }
