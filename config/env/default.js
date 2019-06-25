@@ -34,7 +34,7 @@ module.exports = {
 	home: process.env.PWD || process.cwd() || '/opt/mean.js',
 	terms: {
 		cwu1: {
-			path: 'public/code-with-us-terms-2018-11-05.pdf',
+			path: 'public/code-with-us-terms-2019-06-18.pdf',
 			name: 'code-with-us-terms.pdf',
 			type: 'application/pdf'
 		},
