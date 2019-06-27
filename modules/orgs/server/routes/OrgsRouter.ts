@@ -21,6 +21,11 @@ class OrgsRouter {
 			.get(OrgsServerController.list)
 			.post(OrgsServerController.create);
 
+		// Get a filtered and paginated list of orgs
+		app.route('/api/orgs/filter')
+			.all(OrgsPolicy.isAllowed)
+			.get(OrgsServerController.filter)
+
 		// Get a list of orgs that the user is a member of
 		app.route('/api/orgs/my')
 			.all(OrgsPolicy.isAllowed)

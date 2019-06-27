@@ -458,6 +458,54 @@ class OrgsServerController {
 		}
 	}
 
+	public async filter(req: Request, res: Response): Promise<void> {
+		const pageNumber = parseInt(req.query.pageNumber);
+		const itemsPerPage = parseInt(req.query.itemsPerPage);
+		const searchTerm = req.query.searchTerm;
+		
+		try{
+			// Filter orgs by the search term
+			const filterQuery = OrgModel.find({
+				name: { $regex: searchTerm, $options: "i" }
+			})
+			// Populate orgs with only the necessary information
+			.select('name orgImageURL joinRequests isAcceptedTerms')
+			.populate('admins', '_id')
+			.populate({
+				path: 'members',
+				select: 'capabilities capabilitySkills',
+				populate: [
+					{
+						path: 'capabilities',
+						model: 'Capability',
+						select: 'code'
+					},
+					{
+						path: 'capabilitySkills',
+						model: 'CapabilitySkill',
+						select: 'code'
+					}
+				]
+			});
+
+			// Retrieve the list of all orgs that match the search term
+			const filteredOrgs = await filterQuery.exec();
+
+			// Paginate the list of filtered orgs
+			const pagedOrgs = await filterQuery.skip(pageNumber>0? (pageNumber-1)*itemsPerPage : 0)
+				.limit(itemsPerPage)
+				.exec();
+			
+			// Return the list of filtered orgs for the current page and the total number of filtered items
+			res.json({'data': pagedOrgs, 'totalFilteredItems': filteredOrgs.length });
+
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
+
 	// Utility function which determines whether the given user is an administrator of the given organization
 	private isUserAdmin(org: IOrgModel, user: IUserModel): boolean {
 		if (!user || !org) {

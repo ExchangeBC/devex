@@ -7,6 +7,9 @@ import { IOrg } from '../../shared/IOrgDTO';
 interface IOrgServiceParams {
 	orgId?: string;
 	userId?: string;
+	pageNumber?: number;
+	searchTerm?: string;
+	itemsPerPage?: number;
 }
 
 interface IOrgRequestResponse extends resource.IResource<IOrgRequestResponse> {
@@ -21,6 +24,12 @@ interface IOrgCreateResponse extends resource.IResource<IOrgCreateResponse> {
 	$promise: IPromise<IOrgCreateResponse>
 }
 
+export interface IOrgPagedResponse extends resource.IResource<IOrgPagedResponse> {
+	data: IOrg[],
+	totalFilteredItems: number,
+	$promise: IPromise<IOrgPagedResponse>
+}
+
 export interface IOrgResource extends resource.IResource<IOrgResource>, IOrg {
 	orgId: string;
 	$promise: IPromise<IOrgResource>;
@@ -30,6 +39,7 @@ export interface IOrgService extends resource.IResourceClass<IOrgResource> {
 	create(org: IOrgResource): IOrgCreateResponse;
 	update(org: IOrgResource): IOrgResource;
 	list(): IOrgResource[];
+	filter(params: IOrgServiceParams): IOrgPagedResponse;
 	my(): IOrgResource[];
 	myadmin(): IOrgResource[];
 	removeUser(params: IOrgServiceParams): IOrgResource;
@@ -55,6 +65,11 @@ angular.module('orgs.services').factory('OrgService', [
 			method: 'GET',
 			url: '/api/orgs',
 			isArray: true
+		};
+
+		const filterAction: resource.IActionDescriptor = {
+			method: 'GET',
+			url: '/api/orgs/filter'
 		};
 
 		const myAction: resource.IActionDescriptor = {
@@ -122,6 +137,7 @@ angular.module('orgs.services').factory('OrgService', [
 				create: createAction,
 				update: updateAction,
 				list: listAction,
+				filter: filterAction,
 				my: myAction,
 				myadmin: myAdminAction,
 				removeUser: removeUserAction,

@@ -18,7 +18,7 @@
             name=""
             ng-model="vm.searchTerm"
             placeholder="Search companies..."
-            ng-change="vm.filterItems()">
+            ng-change="vm.search()">
   </div>
 </div>
 
@@ -27,7 +27,7 @@
     <div class="table-responsive">
       <table class="table table-borderless table-hover company-list">
         <tbody>
-          <tr  ng-repeat="org in vm.pagedItems" class="hover-area">
+          <tr  ng-repeat="org in vm.filteredItems" class="hover-area">
             <td class="company-logo">
               <a ng-if="org.website" href="{{org.website}}" target="_blank" title="Visit website"><img class="rounded" width="36" height="36" src="{{ org.orgImageURL }}"></a>
               <img ng-if="!org.website" class="rounded border" width="36" height="36" src="{{ org.orgImageURL }}">
@@ -64,10 +64,10 @@
   </div>
 </div>
 
-<div ng-if="vm.filteredItems.length > vm.itemsPerPage" class="row">
+<div ng-if="vm.totalFilteredItems > vm.itemsPerPage" class="row">
   <div class="col-sm-12">
-      <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.filteredItems.length" ng-model="vm.currentPage"
-      ng-change="vm.paginateItems()"></ul>
+      <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.totalFilteredItems" ng-model="vm.currentPage"
+      ng-change="vm.filterItems()"></ul>
   </div>
 </div>
 
