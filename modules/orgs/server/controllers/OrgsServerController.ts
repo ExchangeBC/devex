@@ -469,8 +469,9 @@ class OrgsServerController {
 				name: { $regex: searchTerm, $options: "i" }
 			})
 			// Populate orgs with only the necessary information
-			.select('name orgImageURL joinRequests isAcceptedTerms')
+			.select('name orgImageURL isAcceptedTerms')
 			.populate('admins', '_id')
+			.populate('joinRequests', '_id')
 			.populate({
 				path: 'members',
 				select: 'capabilities capabilitySkills',
