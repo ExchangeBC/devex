@@ -17,6 +17,7 @@
             type="text"
             name=""
             ng-model="vm.searchTerm"
+            ng-model-options="{ debounce: 1000 }"
             placeholder="Search companies..."
             ng-change="vm.search()">
   </div>
