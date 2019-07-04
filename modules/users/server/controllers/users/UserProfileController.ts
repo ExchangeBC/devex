@@ -9,6 +9,7 @@ import config from '../../../../../config/ApplicationConfig';
 import CoreServerErrors from '../../../../core/server/controllers/CoreServerErrors';
 import { SubscriptionModel } from '../../../../core/server/models/SubscriptionModel';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
+import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';
 import { UserModel } from '../../models/UserModel';
 
 class UserProfileController {
@@ -101,6 +102,11 @@ class UserProfileController {
 						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
+					// Check whether the RFQ is now met for any of the orgs that the user is a member of
+					const updatedOrgs = user.orgsMember.map( async orgId => {
+						const org = await OrgsServerController.getOrgById(orgId);
+						return await OrgsServerController.checkIfRFQMet(org);
+					});
 
 					req.login(user, loginErr => {
 						if (loginErr) {

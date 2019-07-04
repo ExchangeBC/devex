@@ -25,6 +25,7 @@ export interface IOrg {
 	websiteAddress?: string;
 	orgImageURL: string;
 	isAcceptedTerms: boolean;
+	hasMetRFQ: boolean;
 	owner: IUser;
 	created: Date;
 	createdBy: IUser;

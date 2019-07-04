@@ -6,7 +6,7 @@ import { IUserService } from '../../../users/client/services/UsersService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IOrg } from '../../shared/IOrgDTO';
 import { IOrgCommonService } from '../services/OrgCommonService';
-import { IOrgService, IOrgPagedResponse } from '../services/OrgService';
+import { IOrgPagedResponse, IOrgService } from '../services/OrgService';
 
 interface IOrgListDirectiveScope extends IScope {
 	orgs: IOrgPagedResponse;
@@ -133,11 +133,6 @@ class OrgListDirectiveController implements IController {
 				this.handleError(error);
 			}
 		}
-	}
-
-	public hasOrgMetRFQ(org: IOrg): boolean {
-		const status = this.OrgCommonService.hasOrgMetRFQ(org)
-		return status;
 	}
 
 	private async init(): Promise<void> {

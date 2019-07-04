@@ -35,7 +35,7 @@
             </td>
             <td data-automation-id="holderCompanyName" id="holderCompanyName" class="company-name font-weight-bold text-truncate">{{ org.name }}</td>
             <td class="member-count"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
-            <td class="swu-status"><i ng-if="vm.hasOrgMetRFQ(org)" title="Sprint With Us Qualified" class="fas fa-certificate"></i></td>
+            <td class="swu-status"><i ng-if="org.hasMetRFQ" title="Sprint With Us Qualified" class="fas fa-certificate"></i></td>
             <!-- <td><i ng-if="org.awardedContractCount > 0" title="Sprint With Us Awardee" class="fas fa-trophy"></i></td> -->
             <td class="membership-status">
               <label ng-if="vm.isUserMember(org) && !vm.userIsOrgAdmin(org)" class="label label-text-only mb-0">
