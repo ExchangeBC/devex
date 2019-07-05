@@ -469,14 +469,14 @@ class OrgsServerController {
 	}
 
 	public async filter(req: Request, res: Response): Promise<void> {
-		const pageNumber = parseInt(req.query.pageNumber);
-		const itemsPerPage = parseInt(req.query.itemsPerPage);
+		const pageNumber = parseInt(req.query.pageNumber, 10);
+		const itemsPerPage = parseInt(req.query.itemsPerPage, 10);
 		const searchTerm = req.query.searchTerm;
-		
-		try{
+
+		try {
 			// Filter orgs by the search term
 			const filterQuery = OrgModel.find({
-				name: { $regex: searchTerm, $options: "i" }
+				name: { $regex: searchTerm, $options: 'i' }
 			})
 			// Populate orgs with only the necessary information
 			.select('name orgImageURL hasMetRFQ')
@@ -488,10 +488,10 @@ class OrgsServerController {
 			const filteredOrgs = await filterQuery.exec();
 
 			// Paginate the list of filtered orgs
-			const pagedOrgs = await filterQuery.skip(pageNumber>0? (pageNumber-1)*itemsPerPage : 0)
+			const pagedOrgs = await filterQuery.skip(pageNumber > 0 ? (pageNumber - 1) * itemsPerPage : 0)
 				.limit(itemsPerPage)
 				.exec();
-			
+
 			// Return the list of filtered orgs for the current page and the total number of filtered items
 			res.json({'data': pagedOrgs, 'totalFilteredItems': filteredOrgs.length });
 

@@ -2,7 +2,7 @@
 
 import angular, { IController } from 'angular';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOrgResource, IOrgPagedResponse } from '../services/OrgService';
+import { IOrgPagedResponse, IOrgResource } from '../services/OrgService';
 
 // Controller for the master list of orgs
 export class OrgsListController implements IController {
