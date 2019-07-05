@@ -24,7 +24,7 @@ class OrgsPolicy {
 					},
 					{
 						resources: '/api/orgs/filter',
-						permissions: ['*']
+						permissions: ['get']
 					},
 					{
 						resources: '/api/orgs/my',
@@ -57,7 +57,7 @@ class OrgsPolicy {
 					},
 					{
 						resources: '/api/orgs/filter',
-						permissions: ['*']
+						permissions: ['get']
 					},
 					{
 						resources: '/api/orgs/my',

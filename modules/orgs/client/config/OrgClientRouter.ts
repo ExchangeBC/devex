@@ -4,7 +4,6 @@ import { Ng1StateDeclaration, StateParams, StateProvider } from '@uirouter/angul
 import angular from 'angular';
 import { ICapabilitiesService } from '../../../capabilities/client/services/CapabilitiesService';
 import { IOrgService } from '../services/OrgService';
-import { OrgsListController } from '../controllers/OrgsListController';
 
 class OrgClientRouter {
 	constructor(private $stateProvider: StateProvider) {
