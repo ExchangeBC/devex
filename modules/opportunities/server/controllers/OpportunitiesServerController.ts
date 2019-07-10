@@ -285,6 +285,7 @@ class OpportunitiesServerController {
 
 			// update the opportunity
 			opportunity.status = 'Assigned';
+			opportunity.assignedAt = new Date();
 			opportunity.proposal = proposal;
 			opportunity.evaluationStage = 8;
 			const savedOpportunity = await this.updateSave(opportunity);
