@@ -157,6 +157,7 @@ class OpportunitiesServerController {
 	};
 
 	public publish = (req, res) => {
+		this.requestToPublish(req, res);
 		return this.pub(req, res, true);
 	};
 
@@ -891,6 +892,26 @@ class OpportunitiesServerController {
 
 		return opportunity;
 	};
+
+	// Send a request to publish an opportunity
+	private requestToPublish = async (req: Request, res: Response): Promise<void> => {
+
+		try {
+			// retrieve a list of all admins
+			const admins = await UserModel.find({ roles: { $in: ['admin'] } });
+
+			// send every admin a request to publish the opportunity
+			this.sendMessages('opportunity-publish-request', admins, {
+				requestingUser: req.user,
+				opportunity: this.setMessageData(req.opportunity)
+			});
+
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// Publish or unpublish
 	private pub = (req, res, isToBePublished) => {

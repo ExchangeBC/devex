@@ -421,6 +421,28 @@ class MessagesServerController {
 						isDefault: true
 					}
 				]
+			}),
+
+			MessageTemplateModel.create({
+				messageCd: 'opportunity-publish-request',
+				messageLevel: 'info',
+				description: 'Send a request to publish an opportunity',
+				isSubscriptionType: false,
+				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-publish-request-msg.html'),
+				messageShortTemplate: '',
+				messageTitleTemplate: '',
+				emailBodyTemplate: fs.readFileSync('config/email-templates/opportunities/opportunity-publish-request-email.html'),
+				emailSubjectTemplate: "BC Developer's Exchange - Request to Publish an Opportunity",
+				modelsRequired: ['opportunity'],
+				daysToArchive: 0,
+				linkTemplate: '/defaultonly',
+				actions: [
+					{
+						actionCd: 'ok',
+						linkTitleTemplate: 'OK',
+						isDefault: true
+					}
+				]
 			})
 		]);
 	}
