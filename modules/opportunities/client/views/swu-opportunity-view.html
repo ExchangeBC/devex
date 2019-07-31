@@ -73,12 +73,13 @@
 
         <!-- PUBLISH -->
         <div class="col-sm-4">
-          <a data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished" class="btn btn-primary text-white float-right"
+          <a data-automation-id="button-opportunity-publish" ng-if="vm.canPublish && vm.canEdit && !vm.opportunity.isPublished && vm.opportunity.status!='PublishPending'" class="btn btn-primary text-white float-right"
             ng-click="vm.publish(true)" title="Publish this Opportunity">
             <i class="fa fa-bullhorn text-white"></i>
             Publish
-
           </a>
+          <!-- Indicate that request to publish is pending approval-->
+          <button type="button" class="btn btn-warning float-right" ng-if="vm.opportunity.status == 'PublishPending'" title="Request to publish opportunity is pending approval." disabled>Pending Approval</button>
 
           <!-- EDIT -->
           <a class="btn btn-text-only float-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editswu({opportunityId:vm.opportunity.code})"

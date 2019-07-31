@@ -157,8 +157,7 @@ class OpportunitiesServerController {
 	};
 
 	public publish = (req, res) => {
-		this.requestToPublish(req, res);
-		return this.pub(req, res, true);
+		return this.requestToPublish(req, res);
 	};
 
 	public unpublish = (req, res) => {
@@ -895,6 +894,7 @@ class OpportunitiesServerController {
 
 	// Send a request to publish an opportunity
 	private requestToPublish = async (req: Request, res: Response): Promise<void> => {
+		const opportunity = req.opportunity;
 
 		try {
 			// retrieve a list of all admins
@@ -903,8 +903,15 @@ class OpportunitiesServerController {
 			// send every admin a request to publish the opportunity
 			this.sendMessages('opportunity-publish-request', admins, {
 				requestingUser: req.user,
-				opportunity: this.setMessageData(req.opportunity)
+				opportunity: this.setMessageData(opportunity)
 			});
+
+			// set the status of the opportunity to 'Pending'
+			opportunity.status = 'PublishPending';
+
+			// update the opportunity
+			const updatedOpportunity = await this.updateSave(opportunity);
+			res.json(updatedOpportunity);
 
 		} catch (error) {
 			res.status(422).send({

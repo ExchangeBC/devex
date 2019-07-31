@@ -147,7 +147,7 @@ const OpportunitySchema: Schema = new Schema(
 		status: {
 			type: String,
 			default: 'Pending',
-			enum: ['Pending', 'Assigned', 'In Progress', 'Completed']
+			enum: ['Pending', 'PublishPending', 'Assigned', 'In Progress', 'Completed']
 		},
 		onsite: {
 			type: String,
