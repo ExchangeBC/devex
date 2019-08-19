@@ -161,8 +161,46 @@ class OpportunitiesServerController {
 	};
 
 	public unpublish = (req, res) => {
-		return this.pub(req, res, false);
+		return this.pub(req, res, false, false);
 	};
+
+	public actionPublishRequest = async (req, res) => {
+		const opportunityId = req.params.opportunityId;
+		let responseType;
+		let notificationMessage;
+
+		try {
+			let opportunity = await OpportunityModel.findById(opportunityId);
+
+			if (req.params.actionCode === 'decline') {
+				// set response type and message
+				responseType = 'publish-request-declined';
+				notificationMessage = '<i class="fas fa-lg fa-check-circle"></i> Opportunity publish request declined.';
+
+			} else {
+				// set response type and message
+				responseType = 'gov-request-approved';
+				notificationMessage = '<i class="fas fa-lg fa-check-circle"></i> Opportunity publish request approved.';
+
+				// publish the opportunity
+				opportunity = await this.pub(req, res, true, true);
+			}
+
+			// move the opportunity from a publishPending state to a pending state
+			opportunity.status = 'Pending';
+			await this.updateSave(opportunity);
+
+			// send confirmation message
+			res.status(200).send({
+				message: notificationMessage
+			});
+
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
 
 	// Unassign the given proposal from the given opportunity
 	public unassign = async (req: Request, res: Response): Promise<void> => {
@@ -921,11 +959,21 @@ class OpportunitiesServerController {
 	}
 
 	// Publish or unpublish
-	private pub = (req, res, isToBePublished) => {
+	private pub = (req, res, isToBePublished, internal) => {
 		const opportunity = req.opportunity;
-		// if no change or we dont have permission to do this just return as a no-op
-		if (req.opportunity.isPublished === isToBePublished || !this.ensureAdmin(req.opportunity, req.user, res)) {
-			return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+
+		// When unpublishing, if no change or if we dont have permission to publish just return as a no-op
+		if (!isToBePublished) {
+			if (req.opportunity.isPublished === isToBePublished || !this.ensureAdmin(req.opportunity, req.user, res)) {
+				return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			}
+		}
+
+		// When publishing, if no change or if not coming from an internal API call and the user is not a super admin, just return as a no-op
+		if (isToBePublished) {
+			if (req.opportunity.isPublished === isToBePublished || !internal && req.user.roles.indexOf('admin') === -1) {
+				return res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
+			}
 		}
 
 		// determine first time or not

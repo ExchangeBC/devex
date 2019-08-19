@@ -1,5 +1,6 @@
 'use strict';
 
+import OpportunityServerController from '../../../opportunities/server/controllers/OpportunitiesServerController';
 import UserAuthenticationController from '../../../users/server/controllers/users/UserAuthenticationController';
 
 class MessageHandlerRouter {
@@ -76,6 +77,15 @@ class MessageHandlerRouter {
 		app.route('/api/message/handler/action/:actionCode/user/:userId/gov/add/:requestingUserId')
 			.all(this.isUser)
 			.get(UserAuthenticationController.grantGovernmentRole);
+
+		// -------------------------------------------------------------------------
+		//
+		// request to publish an opportunity is approved or denied
+		//
+		// -------------------------------------------------------------------------
+		app.route('/api/message/handler/action/:actionCode/user/:userId/opportunity/actionPublishRequest/:opportunityId')
+			.all(this.isUser)
+			.get(OpportunityServerController.actionPublishRequest);
 	};
 
 	private isUser = (req, res, next) => {

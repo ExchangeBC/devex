@@ -425,7 +425,7 @@ class MessagesServerController {
 
 			MessageTemplateModel.create({
 				messageCd: 'opportunity-publish-request',
-				messageLevel: 'info',
+				messageLevel: 'request',
 				description: 'Send a request to publish an opportunity',
 				isSubscriptionType: false,
 				messageBodyTemplate: fs.readFileSync('config/message-templates/opportunities/opportunity-publish-request-msg.html'),
@@ -435,11 +435,15 @@ class MessagesServerController {
 				emailSubjectTemplate: "BC Developer's Exchange - Request to Publish an Opportunity",
 				modelsRequired: ['opportunity'],
 				daysToArchive: 0,
-				linkTemplate: '/defaultonly',
+				linkTemplate: '/opportunity/actionPublishRequest/{{ opportunity._id }}',
 				actions: [
 					{
-						actionCd: 'ok',
-						linkTitleTemplate: 'OK',
+						actionCd: 'approve',
+						linkTitleTemplate: 'Approve'
+					},
+					{
+						actionCd: 'decline',
+						linkTitleTemplate: 'Decline',
 						isDefault: true
 					}
 				]
