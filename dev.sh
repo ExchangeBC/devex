@@ -28,8 +28,8 @@ docker run \
 -e "NODE_ENV=${NODE_ENV-development}" \
 -e "MONGO_SEED=${MONGO_SEED-true}" \
 -e "DISABLE_WATCH=${DISABLE_WATCH-}" \
--e "GITHUB_ID=your_oauth_github_id" \
--e "GITHUB_SECRET=your_oauth_github_secret" \
+-e "GITHUB_ID=288b87622b7f795b69b2" \
+-e "GITHUB_SECRET=412115831aa8c16898d1adefb94c660a2591031a" \
 -e "MONGO_SEED_LOG_RESULTS=${MONGO_SEED_LOG_RESULTS-true}" \
 -e "DEVEX_PROD=${DEVEX_PROD-false}" \
 -e "DOMAIN=http://localhost:3000" \
