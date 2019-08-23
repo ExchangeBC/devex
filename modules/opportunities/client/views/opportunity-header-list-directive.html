@@ -1,0 +1,34 @@
+<section>
+  <div class="container">
+
+    <!-- Post an Opportunity button -->
+    <div class="row py-3">
+      <div class="col">
+        <button ng-if="vm.userCanAdd" class="btn btn-primary float-right"
+          ng-class="{'btn-default': !vm.project && !vm.program, 'btn-link': vm.project || vm.program}"
+          ui-sref="oppcreatelanding()">
+          <i class="fas fa-plus"></i> Post an Opportunity
+        </button>
+      </div>
+    </div>
+
+    <!-- Notify of new opportunities toggle -->
+    <div class="row pt-3">
+      <div class="col" ng-if="vm.user">
+        <a class="btn btn-textonly float-right"
+          ng-click="vm.toggleSubscription()"
+          uib-tooltip="Click to get notified when new opportunities are posted">
+          <!-- <i class="fas fa-bell fa-lg text-muted" ng-class="{'text-muted': !vm.user.notifyOpportunities, 'text-primary': vm.user.notifyOpportunities}"></i> -->
+          <span ng-if="!vm.user.notifyOpportunities" class="text-muted">
+            <i class="fas fa-bell fa-lg text-muted"></i>
+            Not listening for new opportunities
+          </span>
+          <span ng-if="vm.user.notifyOpportunities">
+            <i class="fas fa-bell fa-lg text-primary"></i>
+            Listening for new opportunities
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

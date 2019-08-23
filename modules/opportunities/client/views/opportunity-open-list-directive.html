@@ -1,0 +1,32 @@
+<section>
+
+  <!-- Loading opportunities placeholder -->
+  <div class="container" ng-if="vm.isLoading">
+    <div class="row">
+      <div class="col px-0">
+        <h6><i class="fas fa-lg fa-spinner fa-spin"></i> Loading
+          Opportunities...</h6>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="!vm.isLoading">
+    <!-- Open Opportunities List -->
+    <div class="container">
+
+      <div ng-cloak class="row">
+        <div class="col px-0">
+          <h6>Open Opportunities</h6>
+          <h6 class="small mt-3" ng-if="vm.countOpenOpportunities() === 0">
+            <emoji>🌵</emoji> No open opportunities right now, check back soon!
+          </h6>
+
+          <opportunity-card ng-cloak class="card my-3"
+            ng-repeat="opportunity in vm.openOpportunities | orderBy: 'created': true track by $index"
+            opportunity="opportunity"
+            data-automation-id="opportunityTitle{{$index}}" />
+        </div>
+      </div>
+    </div>
+
+</section>

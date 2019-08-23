@@ -15,7 +15,13 @@ export class OpportunityListDirectiveController implements IController {
 	public isGov: boolean;
 	public isLoading: boolean;
 	public userCanAdd: boolean;
-	public opportunities: IOpportunityResource[];
+	public openOpportunities: IOpportunityResource[];
+	public closedOpportunities: IOpportunityResource[];
+	public closedOpportunitiesLength: number;
+
+	private limit: number;
+	private skip: number;
+	private page: number;
 
 	constructor(
 		private $scope: IScope,
@@ -30,27 +36,19 @@ export class OpportunityListDirectiveController implements IController {
 		this.isLoading = true;
 		this.userCanAdd = this.user && (this.isGov || this.isAdmin);
 
+		this.limit = this.skip = parseInt($scope.limit, 10) || 0;
+		this.page = 1;
 		this.refreshOpportunities();
 	}
 
-	public filterOpen(record: IOpportunityResource): boolean {
-		return new Date().getTime() <= new Date(record.deadline).getTime();
-	}
-
-	public filterClosed(record: IOpportunityResource): boolean {
-		return new Date().getTime() > new Date(record.deadline).getTime();
-	}
-
 	public countOpenOpportunities(): number {
-		return this.opportunities.filter(opp => {
-			return (new Date().getTime() <= new Date(opp.deadline).getTime() &&
-				(opp.isPublished || this.isAdmin || this.user.roles.includes(`${opp.code}-admin`)));
+		return this.openOpportunities.filter(opp => {
+			return ((opp.isPublished || this.isAdmin || this.user.roles.includes(`${opp.code}-admin`)));
 		}).length;
 	}
 
 	public getTotalClosedAmount(): number {
-		return this.opportunities
-			.filter(opp => new Date().getTime() > new Date(opp.deadline).getTime())
+		return this.closedOpportunities
 			.map(opp => (opp.opportunityTypeCd === 'code-with-us' ? opp.earn : opp.budget))
 			.reduce((accumAmount, curAmount) => accumAmount + curAmount, 0);
 	}
@@ -79,12 +77,33 @@ export class OpportunityListDirectiveController implements IController {
 		});
 	};
 
+	public async loadMoreClosedOpps(): Promise<void> {
+		const opportunitiesLeft = this.closedOpportunitiesLength[0] - this.skip * this.page;
+		let nextItems = [];
+		if (opportunitiesLeft >= this.skip) {
+			nextItems = await this.OpportunitiesService.query({ status: 'closed', limit: this.limit, skip: (this.skip * this.page) }).$promise;
+		} else {
+			nextItems = await this.OpportunitiesService.query({ status: 'closed', skip: (this.skip * this.page) }).$promise;
+		}
+		this.closedOpportunities = [...this.closedOpportunities, ...nextItems];
+		this.page++;
+	}
+
+	// check if there is more closed opportunities left to show
+	public isThereMore(): boolean {
+		return this.closedOpportunitiesLength[0] > (this.skip * this.page) ? true : false;
+	}
+
 	private async refreshOpportunities(): Promise<void> {
 		this.isLoading = true;
-		this.opportunities = await this.OpportunitiesService.query().$promise;
+		this.closedOpportunitiesLength = await this.OpportunitiesService.query({ count: true, status: 'closed' }).$promise;
+		this.openOpportunities = await this.OpportunitiesService.query({ status: 'open' }).$promise;
+		this.closedOpportunities = await this.OpportunitiesService.query({ status: 'closed', limit: this.limit }).$promise;
 		this.$scope.$applyAsync();
 		this.isLoading = false;
 	}
+
+
 }
 
 angular.module('opportunities').directive('opportunityList', [
@@ -97,9 +116,12 @@ angular.module('opportunities').directive('opportunityList', [
 				project: '=',
 				program: '=',
 				title: '@',
-				context: '@'
+				context: '@',
+				limit: '@'
 			},
-			templateUrl: '/modules/opportunities/client/views/opportunity-list-directive.html',
+			templateUrl: (elem, attr) => {
+				return `/modules/opportunities/client/views/opportunity-${attr.context}-list-directive.html`
+			},
 			controller: OpportunityListDirectiveController
 		}
 	})

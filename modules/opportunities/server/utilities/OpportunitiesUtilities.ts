@@ -9,12 +9,20 @@ class OpportunitiesUtilities {
 
 	private static instance: OpportunitiesUtilities;
 
-	private constructor() {};
+	private constructor() { };
+
+	public getClosedOpportunityLength = async (query: any): Promise<number> => {
+		return await OpportunityModel.find(query).count().exec();
+	}
 
 	// Returns a list of all opportunities
 	public getOpportunityList = async (query: any, req: Request): Promise<IOpportunityModel[]> => {
+		const limit = parseInt(req.query.limit, 10) || 0;
+		const skip = parseInt(req.query.skip, 10) || 0;
 		const oppList = await OpportunityModel.find(query)
 			.sort([['deadline', -1], ['name', 1]])
+			.skip(skip)
+			.limit(limit)
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
 			.populate('project', 'code name _id isPublished')
@@ -35,6 +43,7 @@ class OpportunitiesUtilities {
 			.exec();
 
 		this.decorateList(oppList, req.user ? req.user.roles : []);
+
 		return oppList;
 	}
 

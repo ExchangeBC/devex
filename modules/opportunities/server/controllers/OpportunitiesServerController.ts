@@ -27,7 +27,7 @@ class OpportunitiesServerController {
 
 	private sendMessages = MessagesServerController.sendMessages;
 
-	private constructor() {}
+	private constructor() { }
 
 	// Return a list of all opportunity members. this means all members NOT
 	// including users who have requested access and are currently waiting
@@ -49,9 +49,9 @@ class OpportunitiesServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		
+
 		// Ensure that the opportunity is only viewable when published or when the user is either the admin for the opportunity or a root admin
-		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)) {
 			res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
 			this.incrementViews(req.opportunity._id);
 		} else {
@@ -274,7 +274,7 @@ class OpportunitiesServerController {
 
 	// Assign the passed in swu proposal
 	public assignswu = async (req: Request, res: Response): Promise<void> => {
-		
+
 		const opportunity = req.opportunity;
 		const proposal = req.proposal;
 		const user = req.user;
@@ -327,7 +327,7 @@ class OpportunitiesServerController {
 			res.json(decoratedOpportunity);
 
 			return;
-		}catch(error){
+		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)
 			});
@@ -402,9 +402,15 @@ class OpportunitiesServerController {
 	public list = async (req: Request, res: Response): Promise<void> => {
 		const query = this.searchTerm(req);
 		try {
-			const oppList = await OpportunitiesUtilities.getOpportunityList(query, req);
-			res.json(oppList);
-			return;
+			if (req.query.count) {
+				const count = await OpportunitiesUtilities.getClosedOpportunityLength(query);
+				res.json([count])
+				return;
+			} else {
+				const oppList = await OpportunitiesUtilities.getOpportunityList(query, req);
+				res.json(oppList);
+				return;
+			}
 		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)
@@ -836,6 +842,11 @@ class OpportunitiesServerController {
 		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.opportunities.admin } }];
+		}
+		if (req.query.status === 'open') {
+			opts.deadline = { $gte: new Date() };
+		} else if (req.query.status === 'closed') {
+			opts.deadline = { $lt: new Date() };
 		}
 		return opts;
 	};

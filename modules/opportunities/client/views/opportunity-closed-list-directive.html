@@ -1,0 +1,36 @@
+<section>
+
+  <div ng-if="!vm.isLoading">
+
+    <!-- Close Opportunities List -->
+    <div class="container">
+
+      <div class="row">
+        <div class="col px-0">
+          <h6 class="float-left">Closed Opportunities</h6>
+          <h6 class="float-right">Total value:
+            {{vm.getTotalClosedAmount() | currency}}</h6>
+
+        </div>
+      </div>
+
+      <div ng-cloak class="row">
+        <div class="col px-0">
+          <opportunity-card ng-cloak class="card my-3"
+            ng-repeat="opportunity in vm.closedOpportunities | orderBy: 'created': true track by opportunity._id"
+            opportunity="opportunity" />
+        </div>
+
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn-primary ml-auto"
+          ng-click="vm.loadMoreClosedOpps()" ng-if="vm.isThereMore()">Load
+          More</button>
+        <span class="ml-auto text-danger font-weight-bold"
+          ng-if="!vm.isThereMore()">No closed opporunities left to
+          load</span>
+      </div>
+    </div>
+  </div>
+
+</section>
