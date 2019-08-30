@@ -157,7 +157,14 @@ class OpportunitiesServerController {
 	};
 
 	public publish = (req, res) => {
-		return this.requestToPublish(req, res);
+
+		// if the user is a super admin, publish the opportunity directly
+		if (req.user.roles.indexOf('admin') !== -1) {
+			return this.pub(req, res, true, false);
+		// otherwise, send a request to publish the opportunity
+		} else {
+			return this.requestToPublish(req, res);
+		}
 	};
 
 	public unpublish = (req, res) => {
