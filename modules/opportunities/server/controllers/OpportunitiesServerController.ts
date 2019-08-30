@@ -988,6 +988,7 @@ class OpportunitiesServerController {
 
 		// set the correct new state and set the publish date if being published
 		opportunity.isPublished = isToBePublished;
+		opportunity.status = 'Pending';
 		if (isToBePublished) {
 			opportunity.lastPublished = new Date();
 			opportunity.wasPublished = true;
