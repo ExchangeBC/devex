@@ -49,8 +49,29 @@ class OpportunitiesServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		res.json(OpportunitiesUtilities.decorate(req.opportunity, req.user ? req.user.roles : []));
-		this.incrementViews(req.opportunity._id);
+		
+		// Ensure that the opportunity is only viewable when published or when the user is either the admin for the opportunity or a root admin
+		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			const opportunity = req.opportunity.toObject()
+			// Check if the current user is admin, and if not, remove any sensitive data (i.e. winning proposal details)
+			if (!this.ensureAdmin(opportunity, req.user)) {
+				// If not an admin, we still need to be able to see winning business name and org image url.
+				if (opportunity.proposal) {
+					opportunity.proposal = {
+						businessName: opportunity.proposal.businessName,
+						org: {
+							orgImageURL: opportunity.proposal.org.orgImageURL
+						}
+					}
+				}
+			}
+			res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
+			this.incrementViews(req.opportunity._id);
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// Create a new opportunity. the user doing the creation will be set as the
@@ -792,11 +813,13 @@ class OpportunitiesServerController {
 		user.addRoles([this.memberRole(opportunity), this.adminRole(opportunity)]);
 	};
 
-	private ensureAdmin = (opportunity, user, res) => {
-		if (user.roles.indexOf(this.adminRole(opportunity)) === -1 && user.roles.indexOf('admin') === -1) {
-			res.status(422).send({
-				message: 'User Not Authorized'
-			});
+	private ensureAdmin = (opportunity, user, res?) => {
+		if (!user || (user.roles.indexOf(this.adminRole(opportunity)) === -1 && user.roles.indexOf('admin') === -1)) {
+			if (res) {
+				res.status(422).send({
+					message: 'User Not Authorized'
+				});
+			}
 			return false;
 		} else {
 			return true;
