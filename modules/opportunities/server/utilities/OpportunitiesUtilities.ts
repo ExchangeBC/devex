@@ -40,8 +40,7 @@ class OpportunitiesUtilities {
 
 	// This takes a opportunity model, serializes it, and decorates it with what
 	// relationship the user has to the opportunity, and returns the JSON
-	public decorate = (opportunityModel, roles) => {
-		const opportunity = opportunityModel ? opportunityModel.toJSON() : {};
+	public decorate = (opportunity, roles) => {
 		opportunity.userIs = {
 			admin: roles.indexOf(opportunity.code + '-admin') !== -1,
 			member: roles.indexOf(opportunity.code) !== -1,
