@@ -81,7 +81,7 @@
 	// Controller the view of the program page
 	//
 	// =========================================================================
-	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'AuthenticationService', 'Notification', 'previousState', function ($scope, $state, $window, $timeout, Upload, program, editing, authenticationService, Notification, previousState) {
+	.controller('ProgramEditController', ['$scope', '$state', '$window', '$timeout', 'Upload', 'program', 'editing', 'AuthenticationService', 'Notification', 'previousState', 'ProjectsService', 'OpportunitiesService', function ($scope, $state, $window, $timeout, Upload, program, editing, authenticationService, Notification, previousState, ProjectsService, OpportunitiesService) {
 		var vm            = this;
 		vm.user = authenticationService.user;
 		vm.fileSelected = false;
@@ -111,6 +111,33 @@
 			plugins     : 'textcolor lists advlist link',
 			toolbar     : 'undo redo | styleselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link | forecolor backcolor'
 		};
+
+		const determineIfDeletable = async function() {
+
+			if (editing){
+				// Determine whether program has any associated open or unassigned opportunities
+				const opportunities = await fetch('/api/opportunities/for/program/' + vm.program._id).then(response => response.json());
+				const hasPublished = opportunities.some(element => element.isPublished);
+				const hasAssigned = opportunities.some(element => element.status === 'Assigned');
+
+				// Determine whether program has any associated projects or opportunities
+				const projects = await fetch('/api/projects/for/program/' + vm.program._id).then(response => response.json());
+				const hasChildProjects = projects.length > 0;
+				const hasChildOpps = opportunities.length > 0;
+
+				// if no published opps, and no assigned opps and either root admin or program admin (with no child projects or opps)
+				return (!hasPublished && !hasAssigned && (vm.isAdmin || (program.userIs.admin && !hasChildProjects && !hasChildOpps)));
+			} else {
+				return false;
+			}
+		}
+
+		const init_deletable = async function() {
+			vm.deletable = await determineIfDeletable();
+		}
+
+		init_deletable();
+
 		vm.close = function() {
 			if (editing) {
 				$state.go('programs.view', { programId: vm.program._id });
@@ -121,11 +148,41 @@
 		}
 		// -------------------------------------------------------------------------
 		//
-		// remove the program with some confirmation
+		// remove the program and associated projects and opportunities with some confirmation
 		//
 		// -------------------------------------------------------------------------
-		vm.remove = function () {
-			if ($window.confirm('Are you sure you want to delete?')) {
+		vm.remove = async function() {
+
+			let confirmMessage = 'Are you sure you want to delete this program?\n\nThe following projects and opportunities will also be deleted:\n';
+
+			// Fetch all projects associated with the program
+			const projects = await fetch('/api/projects/for/program/'+vm.program._id).then(response => response.json());
+			projects.forEach(function(element){
+				confirmMessage+=element.name+'\n';
+			});
+
+			// Fetch all opportunities associated with the program
+			const opportunities = await fetch('/api/opportunities/for/program/'+vm.program._id).then(response => response.json());
+			opportunities.forEach(function(element){
+				confirmMessage+=element.name+'\n';
+			});
+
+			// Show confirmation dialog
+			if ($window.confirm(confirmMessage)) {
+
+				// Delete child projects
+				projects.forEach(function(element){
+					var projectResource = new ProjectsService(element);
+					projectResource.$remove();
+				});
+
+				// Delete child opportunities
+				opportunities.forEach(function(element){
+					var opportunityResource = new OpportunitiesService(element);
+					opportunityResource.$remove();
+				});
+
+				// Delete program
 				vm.program.$remove(function() {
 					$state.go('programs.list');
 					Notification.success({ message: '<i class="fas fa-check-circle"></i> program deleted successfully!' });

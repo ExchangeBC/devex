@@ -21,7 +21,6 @@ import pages.app.OpportunitiesPage
 import pages.app.OpportunityDetailPage
 
 import pages.app.PrivacyPage
-import pages.app.ProfilesPage
 import pages.app.ProgramsPage
 import pages.app.ProjectsPage
 import pages.app.ProposalsPage
@@ -39,13 +38,13 @@ import spock.lang.Issue
 class FlowSpecs extends GebReportingSpec {
 
   @Unroll
-  def "Navigate Page from: #StartPage, click Link: #ClickLink, Assert Page: #AssertPage"(){
+  def "Navigate Page from: '#StartPage', click Link: '#ClickLink', Assert Page: '#AssertPage'"(){
     given: "I start on the #StartPage"
-		  to StartPage
+		  waitFor{to StartPage}
     when: "I click on the #ClickLink"
-       page."$ClickLink"
+       waitFor{page."$ClickLink"}
     then: "I arrive on the #AssertPage page"
-	     at AssertPage
+	     waitFor{at AssertPage}
     where:
          StartPage | ClickLink               || AssertPage 
          HomePage  | "HomeLink"              || HomePage
@@ -62,8 +61,8 @@ class FlowSpecs extends GebReportingSpec {
          HomePage  | "PrivacyLink"           || PrivacyPage
          HomePage  | "SigninadminLink"       || AuthenticationSigninadminPage 
          HomePage  | "Copyright"             || CopyrightPage
-         HomePage  | "API"                   || APIPage
-         OpportunitiesPage|"cwuLearnMore"     || CodewithusPage
-         OpportunitiesPage|"swuLearnMore"     || SprintwithusPage
+         //HomePage  | "APIs"                   || APIPage
+         OpportunitiesPage|"CWULearnMore"     || CodewithusPage
+         OpportunitiesPage|"SWULearnMore"     || SprintwithusPage
  }
 }

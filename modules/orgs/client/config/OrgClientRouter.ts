@@ -56,7 +56,7 @@ class OrgClientRouter {
 				orgs: [
 					'OrgService',
 					(OrgService: IOrgService) => {
-						return OrgService.query().$promise;
+						return OrgService.filter({pageNumber: 1, searchTerm: '', itemsPerPage: 8}).$promise;
 					}
 				]
 			},

@@ -26,6 +26,7 @@ export interface IOpportunitiesService extends resource.IResourceClass<IOpportun
 	publish(params: IOpportunityServiceParams): IOpportunityResource;
 	unpublish(params: IOpportunityServiceParams): IOpportunityResource;
 	assign(params: IOpportunityServiceParams): IOpportunityResource;
+	assignswu(params: IOpportunityServiceParams): IOpportunityResource;
 	unassign(params: IOpportunityServiceParams): IOpportunityResource;
 	addWatch(params: IOpportunityServiceParams): IOpportunityResource;
 	removeWatch(params: IOpportunityServiceParams): IOpportunityResource;
@@ -80,6 +81,12 @@ angular.module('opportunities.services').factory('OpportunitiesService', [
 			params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
 		};
 
+		const assignSWUAction: resource.IActionDescriptor = {
+			method: 'PUT',
+			url: '/api/opportunities/:opportunityId/assignswu/:proposalId',
+			params: { opportunityId: '@opportunityId', proposalId: '@proposalId' }
+		};
+
 		const unassignAction: resource.IActionDescriptor = {
 			method: 'PUT',
 			url: '/api/opportunities/:opportunityId/unassign/:proposalId',
@@ -131,6 +138,7 @@ angular.module('opportunities.services').factory('OpportunitiesService', [
 				publish: publishAction,
 				unpublish: unpublishAction,
 				assign: assignAction,
+				assignswu: assignSWUAction,
 				unassign: unassignAction,
 				addWatch: addWatchAction,
 				removeWatch: removeWatchAction,

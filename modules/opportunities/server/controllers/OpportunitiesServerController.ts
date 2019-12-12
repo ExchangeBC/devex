@@ -240,6 +240,7 @@ class OpportunitiesServerController {
 			// update the opportunity
 			opportunity.status = 'Assigned';
 			opportunity.proposal = proposal;
+			opportunity.assignedAt = new Date();
 			const savedOpportunity = await this.updateSave(opportunity);
 
 			// update any subscribers
@@ -288,46 +289,66 @@ class OpportunitiesServerController {
 	};
 
 	// Assign the passed in swu proposal
-	public assignswu = (opportunityId, proposalId, proposalUser, user) => {
-		return new Promise((resolve, reject) => {
-			OpportunityModel.findById(opportunityId).exec((err, opportunity) => {
-				if (err) {
-					reject(err);
-				} else if (!opportunity) {
-					reject(new Error('No opportunity with that identifier has been found'));
-				} else {
-					opportunity.status = 'Assigned';
-					opportunity.proposal = proposalId;
-					opportunity.evaluationStage = 4;
-					this.updateSave(opportunity)
-						.then((opp: IOpportunityModel) => {
-							opportunity = opp;
+	public assignswu = async (req: Request, res: Response): Promise<void> => {
+		
+		const opportunity = req.opportunity;
+		const proposal = req.proposal;
+		const user = req.user;
 
-							this.sendMessages('opportunity-update', opportunity.watchers, {
-								opportunity: this.setMessageData(opportunity)
-							});
+		try {
+			// assign the proposal
+			await ProposalsServerController.assignswu(req, res);
 
-							opportunity.assignor = user.displayName;
-							opportunity.assignoremail = opportunity.proposalEmail;
-							this.sendMessages('opportunity-assign-swu', [proposalUser], {
-								opportunity: this.setMessageData(opportunity)
-							});
+			// update the opportunity
+			opportunity.status = 'Assigned';
+			opportunity.assignedAt = new Date();
+			opportunity.proposal = proposal;
+			opportunity.evaluationStage = 8;
+			const savedOpportunity = await this.updateSave(opportunity);
 
-							return CoreGithubController.addCommentToIssue({
-								comment: 'This opportunity has been assigned',
-								repo: opportunity.github,
-								number: opportunity.issueNumber
-							}).then(() => {
-								return CoreGithubController.lockIssue({
-									repo: opportunity.github,
-									number: opportunity.issueNumber
-								});
-							});
-						})
-						.then(resolve, reject);
-				}
+			// update any subscribers
+			this.sendMessages('opportunity-update', savedOpportunity.watchers, {
+				opportunity: this.setMessageData(savedOpportunity)
 			});
-		});
+
+			// send message to assigned user
+			savedOpportunity.assignor = user.displayName;
+			savedOpportunity.assignoremail = savedOpportunity.proposalEmail;
+			this.sendMessages('opportunity-assign-swu', [proposal.user], {
+				opportunity: this.setMessageData(savedOpportunity)
+			});
+
+			// unlock github issue
+			await CoreGithubController.unlockIssue({
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// add comment to github issue
+			await CoreGithubController.addCommentToIssue({
+				comment: 'This opportunity has been assigned',
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// lock the github issue
+			await CoreGithubController.lockIssue({
+				repo: savedOpportunity.github,
+				number: savedOpportunity.issueNumber
+			});
+
+			// decorate the opportunity with the current user roles
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+
+			// respond with the decorated opportunity
+			res.json(decoratedOpportunity);
+
+			return;
+		}catch(error){
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
 	};
 
 	// REST operation for getting opportunities associated with a program

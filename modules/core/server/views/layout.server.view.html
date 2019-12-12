@@ -9,10 +9,22 @@
   <title>{{title}}</title>
   <meta name="description" content="{{description}}">
   <meta name="fragment" content="!">
+  <!-- G Suite activation -->
+  <meta name="google-site-verification" content="4hL8dGsnZVrTCPSeOFkxK_8OFFdmJ2H0AA5q0SAy1xk" />
 
   <!-- Fav Icon -->
   <link href="/{{favicon}}" rel="shortcut icon" type="image/x-icon">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- If using an unsupported browser, redirect to the appropriate landing page -->
+  <script type="text/javascript">
+
+    // Detect IE 6-11 by whether it supports conditional compiliation or document.documentMode
+    if(/*@cc_on!@*/false || !!document.documentMode){
+      window.location.href = '/unsupported/';
+    }
+
+  </script>
 </head>
 
 <body class="ng-cloak" id="page-top">

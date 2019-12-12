@@ -6,10 +6,10 @@ import { IUserService } from '../../../users/client/services/UsersService';
 import { IUser } from '../../../users/shared/IUserDTO';
 import { IOrg } from '../../shared/IOrgDTO';
 import { IOrgCommonService } from '../services/OrgCommonService';
-import { IOrgService } from '../services/OrgService';
+import { IOrgPagedResponse, IOrgService } from '../services/OrgService';
 
 interface IOrgListDirectiveScope extends IScope {
-	orgs: IOrg[];
+	orgs: IOrgPagedResponse;
 }
 
 class OrgListDirectiveController implements IController {
@@ -19,14 +19,14 @@ class OrgListDirectiveController implements IController {
 	public isAdmin: boolean;
 	public isGov: boolean;
 	public userCanAdd: boolean;
-	public orgs: IOrg[];
+	public orgs: IOrgPagedResponse;
 
 	// Filtering and pagination related fields
 	public searchTerm = '';
 	public itemsPerPage = 8;
 	public currentPage = 1;
 	public filteredItems: IOrg[] = [];
-	public pagedItems: IOrg[] = [];
+	public totalFilteredItems: number;
 
 	constructor(
 		private $scope: IOrgListDirectiveScope,
@@ -42,7 +42,7 @@ class OrgListDirectiveController implements IController {
 		this.isAdmin = this.isUser && this.AuthenticationService.user.roles.includes('admin');
 		this.isGov = this.isUser && this.AuthenticationService.user.roles.includes('gov');
 		// set the orgs for this scope
-		this.orgs = this.$scope.orgs;
+		this.filteredItems = this.$scope.orgs.data;
 		this.init();
 	}
 
@@ -80,19 +80,27 @@ class OrgListDirectiveController implements IController {
 		return org.joinRequests.map(member => member._id).includes(userId);
 	}
 
-	public paginateItems(): void {
-		const begin = (this.currentPage - 1) * this.itemsPerPage;
-		const end = begin + this.itemsPerPage;
-		this.pagedItems = this.filteredItems.slice(begin, end);
-	}
+	public search(): void {
 
-	public filterItems(): void {
-		// reset to first page to keep it simple
+		// reset the current page to 1 for simplicity
 		this.currentPage = 1;
 
-		const searchText = this.searchTerm.toLowerCase();
-		this.filteredItems = this.orgs.filter(org => org.name.toLowerCase().includes(searchText));
-		this.paginateItems();
+		// filter orgs by the search term
+		this.filterItems();
+	}
+
+	public async filterItems(): Promise<void> {
+
+		// retrieve a filtered and paginated list of orgs
+		const response = await this.OrgService.filter({ pageNumber: this.currentPage, searchTerm: this.searchTerm, itemsPerPage: this.itemsPerPage }).$promise;
+
+		// update the list of filtered items for the current page
+		this.filteredItems = response.data;
+
+		// update the total count of filtered items (to be used for paging)
+		this.totalFilteredItems = response.totalFilteredItems;
+
+		this.$scope.$applyAsync();
 	}
 
 	public canJoinOrg(org: IOrg): boolean {
@@ -105,14 +113,14 @@ class OrgListDirectiveController implements IController {
 		if (choice) {
 			// update the list of pending requests on the org and save the org
 			try {
-				const index = this.orgs.indexOf(org);
+				const index = this.filteredItems.indexOf(org);
 				org.joinRequests.push(this.AuthenticationService.user);
 				const joinRequestResponse = await this.OrgService.joinRequest({ orgId: org._id }).$promise;
 				const updatedOrg = new this.OrgService(joinRequestResponse.org);
 				const updatedUser = new this.UsersService(joinRequestResponse.user);
 
 				// replace this org with the updated one
-				this.orgs.splice(index, 1, updatedOrg);
+				this.filteredItems.splice(index, 1, updatedOrg);
 
 				// update the user
 				this.AuthenticationService.user = updatedUser;
@@ -127,11 +135,6 @@ class OrgListDirectiveController implements IController {
 		}
 	}
 
-	public hasOrgMetRFQ(org: IOrg): boolean {
-		const status = this.OrgCommonService.hasOrgMetRFQ(org)
-		return status;
-	}
-
 	private async init(): Promise<void> {
 		if (this.isUser) {
 			// get orgs that the user is an admin for
@@ -142,7 +145,6 @@ class OrgListDirectiveController implements IController {
 
 		// do initial filtering/paging
 		this.filterItems();
-		this.paginateItems();
 
 		this.$scope.$applyAsync();
 	}

@@ -13,12 +13,13 @@
 <!-- Search field to filter the list... -->
 <div class="row my-4">
   <div class="col-sm-9 col-md-6 col-lg-4">
-    <input  class="form-control" 
-            type="text" 
+    <input  class="form-control"
+            type="text"
             name=""
             ng-model="vm.searchTerm"
+            ng-model-options="{ debounce: 1000 }"
             placeholder="Search companies..."
-            ng-change="vm.filterItems()">
+            ng-change="vm.search()">
   </div>
 </div>
 
@@ -27,32 +28,32 @@
     <div class="table-responsive">
       <table class="table table-borderless table-hover company-list">
         <tbody>
-          <tr ng-repeat="org in vm.pagedItems" class="hover-area">
+          <tr  ng-repeat="org in vm.filteredItems" class="hover-area">
             <td class="company-logo">
               <a ng-if="org.website" href="{{org.website}}" target="_blank" title="Visit website"><img class="rounded" width="36" height="36" src="{{ org.orgImageURL }}"></a>
               <img ng-if="!org.website" class="rounded border" width="36" height="36" src="{{ org.orgImageURL }}">
             </td>
-            <td class="company-name font-weight-bold text-truncate">{{ org.name }}</td>
+            <td data-automation-id="holderCompanyName" id="holderCompanyName" class="company-name font-weight-bold text-truncate">{{ org.name }}</td>
             <td class="member-count"><i class="fas fa-users" title="{{ org.members.length }} members"></i> {{ org.members.length }}</td>
-            <td class="swu-status"><i ng-if="vm.hasOrgMetRFQ(org)" title="Sprint With Us Qualified" class="fas fa-certificate"></i></td>
+            <td class="swu-status"><i ng-if="org.hasMetRFQ" title="Sprint With Us Qualified" class="fas fa-certificate"></i></td>
             <!-- <td><i ng-if="org.awardedContractCount > 0" title="Sprint With Us Awardee" class="fas fa-trophy"></i></td> -->
-            <td class="membership-status">    
+            <td class="membership-status">
               <label ng-if="vm.isUserMember(org) && !vm.userIsOrgAdmin(org)" class="label label-text-only mb-0">
                 <i class="fas fa-user-check"></i>&nbsp;Member
               </label>
               <label ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" class="label label-text-only mb-0">
                 <i class="fas fa-user-cog"></i>&nbsp;Admin
               </label>
-              <label ng-if="vm.hasPendingRequest(org)" class="label label-text-only text-muted mb-0">
+              <label ng-if="vm.hasPendingRequest(org)" data-automation-id="lblPending" class="label label-text-only text-muted mb-0">
                 <i class="fas fa-user-plus"></i>&nbsp;Pending
               </label>
             </td>
             <td class="button-cell">
               <div ng-if="vm.canJoinOrg(org)" class="hidden-button">
-                <button class="btn btn-primary" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
+                <button class="btn btn-primary" data-automation-id="btnJoinCompany" ng-click="vm.sendJoinRequest(org)" title="Join {{org.name}}">Join</button>
               </div>
               <div ng-if="vm.userIsOrgAdmin(org) || vm.isAdmin" class="hidden-button">
-                <button class="btn btn-text-only" ui-sref="orgs.view({ orgId: org._id })" title="Manage company profile">
+                <button data-automation-id="btnOrgAdmin" class="btn btn-text-only" ui-sref="orgs.view({ orgId: org._id })" title="Manage company profile">
                   <i class="fas fa-cog"></i>
                 </button>
               </div>
@@ -64,10 +65,10 @@
   </div>
 </div>
 
-<div ng-if="vm.filteredItems.length > vm.itemsPerPage" class="row">
+<div ng-if="vm.totalFilteredItems > vm.itemsPerPage" class="row">
   <div class="col-sm-12">
-      <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.filteredItems.length" ng-model="vm.currentPage"
-      ng-change="vm.paginateItems()"></ul>
+      <ul class="pagination pagination-sm justify-content-center mt-5" uib-pagination items-per-page="vm.itemsPerPage" total-items="vm.totalFilteredItems" ng-model="vm.currentPage"
+      ng-change="vm.filterItems()"></ul>
   </div>
 </div>
 

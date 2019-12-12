@@ -154,7 +154,7 @@
           class="fas fa-bullhorn"></i> Publish</button>
 
       <!-- EDIT -->
-      <a data-automation-id="button-opportunity-edit" class="btn btn-text-only float-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"
+      <a data-automation-id="btnEditOpportunity" class="btn btn-text-only float-right" ng-if="vm.canEdit" ui-sref="opportunityadmin.editcwu({opportunityId:vm.opportunity.code})"
         uib-tooltip="Edit this Opportunity">
         <i class="fas fa-pencil-alt"></i>
       </a>
@@ -166,7 +166,7 @@
       </a>
 
       <!-- UNPUBLISH (if opportunity is PUBLISHED) -->
-      <a data-automation-id="button-opportunity-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.opportunity.isPublished"
+      <a data-automation-id="button-opportunity-unpublish" href="" ng-if="vm.canEdit && vm.opportunity.isPublished"
         class="btn btn-text-only float-right" ng-click="vm.publish(false)" uib-tooltip="Unpublish Opportunity">
         <i class="fas fa-ban"></i>
       </a>

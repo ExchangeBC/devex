@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Types } from 'mongoose';
 import multer from 'multer';
 import config from '../../../../config/ApplicationConfig';
+import { CapabilityModel} from '../../../capabilities/server/models/CapabilityModel';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
 import MessagesServerController from '../../../messages/server/controllers/MessagesServerController';
@@ -36,6 +37,7 @@ class OrgsServerController {
 		this.removeMeFromCompany = this.removeMeFromCompany.bind(this);
 		this.myadmin = this.myadmin.bind(this);
 		this.my = this.my.bind(this);
+		this.checkIfRFQMet = this.checkIfRFQMet.bind(this);
 	}
 
 	public async getOrgById(id: string): Promise<IOrgModel> {
@@ -115,7 +117,11 @@ class OrgsServerController {
 				});
 			} else {
 				const populatedOrg = await this.populateOrg(updatedOrg);
-				res.json(populatedOrg);
+
+				// Check whether org now meets the RFQ requirements and update the org if necessary
+				const orgWithUpdatedRFQ = await this.checkIfRFQMet(populatedOrg);
+
+				res.json(orgWithUpdatedRFQ);
 			}
 		});
 	}
@@ -167,7 +173,7 @@ class OrgsServerController {
 				.populate('admins', this.popfields)
 				.populate('joinRequests', '_id')
 				.exec();
-				res.json(orgs);
+			res.json(orgs);
 		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)
@@ -401,9 +407,13 @@ class OrgsServerController {
 			try {
 				const updatedOrg = await org.save();
 				const updatedUser = await requestingMember.save();
+
+				// Check whether the org now meets the RFQ requirements and update the org if necessary
+				const orgWithUpdatedRFQ = await this.checkIfRFQMet(updatedOrg);
+
 				res.json({
 					user: updatedUser,
-					org: updatedOrg
+					org: orgWithUpdatedRFQ
 				});
 			} catch (error) {
 				res.status(500).send({
@@ -455,6 +465,85 @@ class OrgsServerController {
 				message: CoreServerErrors.getErrorMessage(error)
 			});
 			return;
+		}
+	}
+
+	public async filter(req: Request, res: Response): Promise<void> {
+		const pageNumber = parseInt(req.query.pageNumber, 10);
+		const itemsPerPage = parseInt(req.query.itemsPerPage, 10);
+		const searchTerm = req.query.searchTerm;
+
+		try {
+			// Filter orgs by the search term
+			const filterQuery = OrgModel.find({
+				name: { $regex: searchTerm, $options: 'i' }
+			})
+			// Populate orgs with only the necessary information
+			.select('name orgImageURL hasMetRFQ')
+			.populate('admins', '_id')
+			.populate('members', '_id')
+			.populate('joinRequests', '_id');
+
+			// Retrieve the list of all orgs that match the search term
+			const filteredOrgs = await filterQuery.exec();
+
+			// Paginate the list of filtered orgs
+			const pagedOrgs = await filterQuery.skip(pageNumber > 0 ? (pageNumber - 1) * itemsPerPage : 0)
+				.limit(itemsPerPage)
+				.exec();
+
+			// Return the list of filtered orgs for the current page and the total number of filtered items
+			res.json({'data': pagedOrgs, 'totalFilteredItems': filteredOrgs.length });
+
+		} catch (error) {
+			res.status(422).send({
+				message: CoreServerErrors.getErrorMessage(error)
+			});
+		}
+	}
+
+	// Checks whether an org meets the RFQ requirements and updates the org
+	public async checkIfRFQMet(org: IOrgModel): Promise<IOrgModel> {
+		try {
+			// Check whether the org now meets the RFQ requirements
+			const metRFQ = await this.hasMetRFQ(org);
+
+			// Update and save the org
+			org.hasMetRFQ = metRFQ ? true : false;
+			org = await org.save();
+			return org;
+
+		} catch (error) {
+			throw new Error(error.message);
+		}
+	}
+
+	// Checks that the given org has met the RFQ by checking:
+	// - that the org has at least 2 team members
+	// - that the org team members collectively cover all capabilities
+	// - that the org has accepted the terms of the RFQ
+	private async hasMetRFQ(org: IOrgModel): Promise<boolean> {
+		return org.members.length >= 2 && org.isAcceptedTerms && this.isCapable(org);
+	}
+
+	// Checks whether an org's team members collectively cover all capabilities
+	private async isCapable(org: IOrgModel): Promise<boolean> {
+		try {
+			// Retrieve a list of all capabilities
+			const allCapabilities = await CapabilityModel.find({})
+			.populate('skills')
+			.exec();
+
+			// Retrieve a list of all capabilities covered by members of the org
+			const memberCaps = org.members ? _.flatten(org.members.map(member => member.capabilities)) : [];
+			const orgCapabilities = _.uniqWith(memberCaps, (cap1, cap2) => cap1.code === cap2.code);
+
+			// Determine whether the members of the org collectively cover all capabilities
+			const overlap = _.intersectionWith(allCapabilities, orgCapabilities, (cap1, cap2) => cap1.code === cap2.code);
+			return overlap.length === allCapabilities.length;
+
+		} catch (error) {
+			throw new Error(error.message);
 		}
 	}
 
@@ -535,8 +624,12 @@ class OrgsServerController {
 		// update org and return
 		org.members = org.members.filter(member => member.id !== user.id);
 		org.admins = org.admins.filter(admin => admin.id !== user.id);
-		const updatedOrg = org.save();
-		return updatedOrg;
+		const updatedOrg = await org.save();
+
+		// check whether the org now meets the RFQ requirements and update the org if necessary
+		const orgWithUpdatedRFQ = await this.checkIfRFQMet(updatedOrg);
+
+		return orgWithUpdatedRFQ;
 	}
 
 	// Populates the given org with referenced models

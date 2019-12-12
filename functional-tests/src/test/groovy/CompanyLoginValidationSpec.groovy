@@ -1,4 +1,3 @@
-//package com.athaydes.spockframework.report
 import geb.spock.GebReportingSpec
 
 import pages.app.HomePage
@@ -7,13 +6,10 @@ import pages.app.CompaniesPage
 import geb.module.RadioButtons
 import org.openqa.selenium.By
 import org.openqa.selenium.Keys
-//import extensions.AngularJSAware
 
 import spock.lang.Unroll
 import spock.lang.Narrative
 import spock.lang.Title
-
-
 
 
 @Title("Validate that unauthenticated users don't have a 'register company' button but authenticated users do.")
@@ -48,8 +44,6 @@ class CompanyLoginValidationSpec extends GebReportingSpec {
 
         then: "I should see a 'register company' button"
             assert { RegisterCompanyButton }  
-
-        
   }
 
 }

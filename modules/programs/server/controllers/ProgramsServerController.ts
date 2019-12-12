@@ -98,7 +98,15 @@ class ProgramsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public read = (req, res) => {
-		res.json(this.decorate(req.program, req.user ? req.user.roles : []));
+
+		// Ensure that the program is only viewable when published or when the user is either the admin for the program or a root admin
+		if (req.program.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.program)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+			res.json(this.decorate(req.program, req.user ? req.user.roles : []));
+		} else {
+			return res.status(403).send({
+				message: 'User is not authorized'
+			});
+		}
 	};
 
 	// update the document, make sure to apply audit. We don't mess with the

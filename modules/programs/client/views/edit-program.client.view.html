@@ -102,7 +102,7 @@
           <div class="col">
             <a data-automation-id="button-program-save" class="btn btn-primary float-right text-white" ng-click="vm.saveme(vm.form.programForm.$valid)"
               title="Save"><i class="fas fa-save"></i> Save &amp; Close</a>
-            <a data-automation-id="button-program-delete" ng-if="vm.editing" class="btn btn-text-only" ng-click="vm.remove()"
+            <a data-automation-id="button-program-delete" ng-if="vm.editing && vm.deletable" class="btn btn-text-only" ng-click="vm.remove()"
               title="Remove"><i class="fas fa-trash"></i> Delete this Program</a>
           </div>
         </div>

@@ -14,11 +14,11 @@
     <div class="row mb-2" ng-if="vm.canEdit || vm.canRequestMembership">
       <div class="col text-right">
         <!-- // Unpublish // -->
-        <a data-automation-id="button-program-unpublish" href="javascript:void(0);" ng-if="vm.canEdit && vm.program.isPublished"
+        <a data-automation-id="button-program-unpublish" href="" ng-if="vm.canEdit && vm.program.isPublished"
           class="btn btn-default" ng-click="vm.publish(false)" title="Unpublish program">
           Unpublish</a>
         <!-- // Publish // -->
-        <a data-automation-id="button-program-publish" href="javascript:void(0);" ng-if="vm.canEdit && !vm.program.isPublished"
+        <a data-automation-id="button-program-publish" href="" ng-if="vm.canEdit && !vm.program.isPublished"
           class="btn btn-primary" ng-click="vm.publish(true)" title="Publish this program page">Publish</a>
         <!-- // Edit // -->
         <button data-automation-id="button-program-edit" type="button" class="btn btn-default" ng-if="vm.canEdit"

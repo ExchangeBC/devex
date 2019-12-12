@@ -57,7 +57,7 @@ $ npm run dev
 
 Alternatively, if you do not want to run the application in a docker container, you can install the dependencies locally with:
 ```bash
-$ yarn install
+$ npm install
 ```
 and then execute `npm run dev` from a terminal on your machine.  If you are running the application outside of the container, ensure you have manually launched the MongoDB Docker container using `docker start db_devex` (the `dev.sh` script will do this for you if you use this method).
 

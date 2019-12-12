@@ -1,7 +1,6 @@
 'use strict';
 
 import crypto from 'crypto';
-import generatePassword from 'generate-password';
 import _ from 'lodash';
 import { Document, Model, Schema } from 'mongoose';
 import MongooseController from '../../../../config/lib/MongooseController';
@@ -19,7 +18,6 @@ export interface IUserModel extends IUser, Document {
 	capabilities: ICapabilityModel[];
 	capabilitySkills: ICapabilitySkillModel[];
 	findUniqueUsername(username: string, suffix: string, callback: any): string;
-	generateRandomPassphrase(): Promise<string>;
 	hashPassword(password: string): string;
 	authenticate(password: string): boolean;
 	addRoles(roles: [string]): void;
@@ -326,46 +324,6 @@ UserSchema.statics.findUniqueUsername = (username, suffix, callback) => {
 			}
 		}
 	);
-};
-
-/**
- * Generates a random passphrase that passes the owasp test
- * Returns a promise that resolves with the generated passphrase, or rejects with an error if something goes wrong.
- * NOTE: Passphrases are only tested against the required owasp strength tests, and not the optional tests.
- */
-UserSchema.statics.generateRandomPassphrase = () => {
-	return new Promise((resolve, reject) => {
-		let password = '';
-		const repeatingCharacters = new RegExp('(.)\\1{2,}', 'g');
-
-		// iterate until the we have a valid passphrase
-		// NOTE: Should rarely iterate more than once, but we need this to ensure no repeating characters are present
-		while (password.length < 20 || repeatingCharacters.test(password)) {
-			// build the random password
-			password = generatePassword.generate({
-				length: Math.floor(Math.random() * 20) + 20, // randomize length between 20 and 40 characters
-				numbers: true,
-				symbols: false,
-				uppercase: true,
-				excludeSimilarCharacters: true
-			});
-
-			// check if we need to remove any repeating characters
-			password = password.replace(repeatingCharacters, '');
-		}
-
-		// Send the rejection back if the passphrase fails to pass the strength test
-		if (owasp.test(password).errors.length) {
-			reject(
-				new Error(
-					'An unexpected problem occured while generating the random passphrase'
-				)
-			);
-		} else {
-			// resolve with the validated passphrase
-			resolve(password);
-		}
-	});
 };
 
 export const UserModel: Model<IUserModel> = MongooseController.mongoose.model<IUserModel>('User', UserSchema);

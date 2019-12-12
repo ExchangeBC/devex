@@ -2,7 +2,7 @@
 
 import angular, { IController } from 'angular';
 import { IAuthenticationService } from '../../../users/client/services/AuthenticationService';
-import { IOrgResource } from '../services/OrgService';
+import { IOrgPagedResponse, IOrgResource } from '../services/OrgService';
 
 // Controller for the master list of orgs
 export class OrgsListController implements IController {
@@ -10,7 +10,7 @@ export class OrgsListController implements IController {
 
 	public isLoggedIn: boolean;
 
-	constructor(public orgs: IOrgResource[], private AuthenticationService: IAuthenticationService) {
+	constructor(public orgs: IOrgPagedResponse, private AuthenticationService: IAuthenticationService) {
 		this.isLoggedIn = !!this.AuthenticationService.user;
 	}
 }

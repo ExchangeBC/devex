@@ -1,8 +1,8 @@
 'use strict';
 
 import { Document, Model, Schema } from 'mongoose';
-import { IOrg } from '../../shared/IOrgDTO';
 import MongooseController from '../../../../config/lib/MongooseController';
+import { IOrg } from '../../shared/IOrgDTO';
 
 export interface IOrgModel extends IOrg, Document {
 	_id: string;
@@ -37,6 +37,7 @@ const OrgSchema = new Schema(
 		website: { type: String, default: '' },
 		orgImageURL: { type: String, default: 'img/default.png' },
 		isAcceptedTerms: { type: Boolean, default: false },
+		hasMetRFQ: { type: Boolean, default: false },
 		owner: { type: Schema.Types.ObjectId, ref: 'User', default: null },
 		created: { type: Date, default: null },
 		createdBy: { type: Schema.Types.ObjectId, ref: 'User', default: null },

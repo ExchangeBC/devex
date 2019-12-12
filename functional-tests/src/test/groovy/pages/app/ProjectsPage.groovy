@@ -9,5 +9,6 @@ class ProjectsPage extends Page {
 	static url = "projects"
 	static content = {
       ListProjectButton { $('button[data-automation-id ~= "button-list-a-project"]') }
+	  ListedProjects(required: false, wait: 2) { $('data-automation-id':"listedProject") }
   }
 }

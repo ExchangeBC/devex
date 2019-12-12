@@ -166,6 +166,7 @@ const OpportunitySchema: Schema = new Schema(
 		issueUrl: { type: String, default: '' },
 		issueNumber: { type: String, default: '' },
 		assignment: { type: Date, default: Date.now },
+		assignedAt: { type: Date, default: null },
 		proposalEmail: { type: String, default: '' },
 		evaluation: { type: String, default: '' },
 		criteria: { type: String, default: '' },

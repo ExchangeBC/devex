@@ -23,6 +23,10 @@ class OrgsPolicy {
 						permissions: ['*']
 					},
 					{
+						resources: '/api/orgs/filter',
+						permissions: ['get']
+					},
+					{
 						resources: '/api/orgs/my',
 						permissions: ['*']
 					},
@@ -50,6 +54,10 @@ class OrgsPolicy {
 					{
 						resources: '/api/orgs',
 						permissions: ['*']
+					},
+					{
+						resources: '/api/orgs/filter',
+						permissions: ['get']
 					},
 					{
 						resources: '/api/orgs/my',
@@ -98,6 +106,10 @@ class OrgsPolicy {
 				allows: [
 					{
 						resources: '/api/orgs',
+						permissions: ['get']
+					},
+					{
+						resources: '/api/orgs/filter',
 						permissions: ['get']
 					},
 					{
