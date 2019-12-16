@@ -7,7 +7,6 @@ import _ from 'lodash';
 import moment from 'moment-timezone';
 import { Types } from 'mongoose';
 import MongooseController from '../../../../config/lib/MongooseController';
-import Nexmo from 'nexmo';
 import CoreGithubController from '../../../core/server/controllers/CoreGithubController';
 import CoreServerErrors from '../../../core/server/controllers/CoreServerErrors';
 import CoreServerHelpers from '../../../core/server/controllers/CoreServerHelpers';
@@ -49,9 +48,8 @@ class OpportunitiesServerController {
 
 	// Takes the already queried object and pass it back
 	public read = (req, res) => {
-		
 		// Ensure that the opportunity is only viewable when published or when the user is either the admin for the opportunity or a root admin
-		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+		if (req.opportunity.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.opportunity)) !== -1 || req.user.roles.indexOf('admin') !== -1)) {
 			const opportunity = req.opportunity.toObject()
 			// Check if the current user is admin, and if not, remove any sensitive data (i.e. winning proposal details)
 			if (!this.ensureAdmin(opportunity, req.user)) {
@@ -290,7 +288,6 @@ class OpportunitiesServerController {
 
 	// Assign the passed in swu proposal
 	public assignswu = async (req: Request, res: Response): Promise<void> => {
-		
 		const opportunity = req.opportunity;
 		const proposal = req.proposal;
 		const user = req.user;
@@ -344,7 +341,7 @@ class OpportunitiesServerController {
 			res.json(decoratedOpportunity);
 
 			return;
-		}catch(error){
+		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)
 			});
@@ -514,7 +511,7 @@ class OpportunitiesServerController {
 			if (approvalToAction.twoFAMethod === 'email') {
 				this.send2FAviaEmail(approvalToAction);
 			} else {
-				this.send2FAviaSMS(approvalToAction);
+				// this.send2FAviaSMS(approvalToAction);
 			}
 
 			res.json(opportunity);
@@ -799,18 +796,18 @@ class OpportunitiesServerController {
 	//
 	// Send a 2FA token via SMS using the passed approval info
 	//
-	private send2FAviaSMS = approvalInfo => {
-		const nexmo = new Nexmo({
-			apiKey: process.env.NEXMO_API_KEY,
-			apiSecret: process.env.NEXMO_API_SECRET
-		});
+	// private send2FAviaSMS = approvalInfo => {
+	// 	const nexmo = new Nexmo({
+	// 		apiKey: process.env.NEXMO_API_KEY,
+	// 		apiSecret: process.env.NEXMO_API_SECRET
+	// 	});
 
-		const from = process.env.NEXMO_FROM_NUMBER;
-		const to = approvalInfo.mobileNumber;
-		const msg = approvalInfo.twoFACode;
+	// 	const from = process.env.NEXMO_FROM_NUMBER;
+	// 	const to = approvalInfo.mobileNumber;
+	// 	const msg = approvalInfo.twoFACode;
 
-		nexmo.message.sendSms(from, to, msg);
-	};
+	// 	nexmo.message.sendSms(from, to, msg);
+	// };
 
 	//
 	// Send a 2FA token via email using the passed approval info
