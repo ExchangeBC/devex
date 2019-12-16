@@ -1450,14 +1450,10 @@ angular-ui-tinymce@0.0.19:
   version "0.0.19"
   resolved "https://registry.yarnpkg.com/angular-ui-tinymce/-/angular-ui-tinymce-0.0.19.tgz#6a613675a1265e415c9c21944053ac9bab9578e9"
 
-angular@>=1.4.0:
-  version "1.7.6"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.6.tgz#db3bd96e3305c870f6227b9b32a4d761880473da"
-  integrity sha512-QELpvuMIe1FTGniAkRz93O6A+di0yu88niDwcdzrSqtUHNtZMgtgFS4f7W/6Gugbuwej8Kyswlmymwdp8iPCWg==
-
-angular@^1.2.0, angular@^1.7.5:
-  version "1.7.5"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.5.tgz#d1c1c01c6f5dc835638f3f9aa51012857bdac49e"
+angular@>=1.4.0, angular@^1.2.0, angular@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.9.tgz#e52616e8701c17724c3c238cfe4f9446fd570bc4"
+  integrity sha512-5se7ZpcOtu0MBFlzGv5dsM1quQDoDeUTwZrWjGtTNA7O88cD8TEk5IEKCTDa3uECV9XnvKREVUr7du1ACiWGFQ==
 
 ansi-align@^2.0.0:
   version "2.0.0"
