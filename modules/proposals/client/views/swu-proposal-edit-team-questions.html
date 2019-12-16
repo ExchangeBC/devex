@@ -34,10 +34,7 @@
         word limit, worth {{question.questionScore}} points):</em><br>
       <div class="alert alert-success" ng-bind-html="question.question"></div>
 
-      <div ng-show="question.guideline" class="input-help-source" ng-click="ppp.toggleGuidance($index)"><i class="fas fa-lg fa-info-circle"></i>
-        Response Guideline <i>(<span ng-if="question.showGuidance">click
-            to hide</span><span ng-if="!question.showGuidance">click to show</span>)</i></div>
-      <div class="alert alert-info" ng-show="question.showGuidance && question.guideline" ng-bind-html="question.guideline"></div>
+      <div class="alert alert-info" ng-show="question.guideline" ng-bind-html="question.guideline"></div>
       <textarea name="teamQuestion" id="teamQuestion" class="form-control" ui-tinymce="ppp.TinyMceConfiguration" ng-model="ppp.proposal.teamQuestionResponses[$index].response"></textarea>
     </div>
   </div>
