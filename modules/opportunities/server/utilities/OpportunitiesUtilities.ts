@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { IUserModel } from '../../../users/server/models/UserModel';
 import { IOpportunityModel, OpportunityModel } from '../models/OpportunityModel';
 
 class OpportunitiesUtilities {
@@ -34,7 +35,7 @@ class OpportunitiesUtilities {
 			.populate('watchers')
 			.exec();
 
-		this.decorateList(oppList, req.user ? req.user.roles : []);
+		this.decorateList(oppList, req.user ? (req.user as IUserModel).roles : []);
 		return oppList;
 	}
 

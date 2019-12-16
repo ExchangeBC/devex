@@ -51,13 +51,13 @@ class ProposalsServerController {
 
 	// Get a proposal for the given opportunity and user
 	public async getUserProposalForOpp(req: Request, res: Response): Promise<void> {
-		if (!req.user) {
+		if (!(req.user as IUserModel)) {
 			res.json({});
 			return;
 		}
 
 		try {
-			const proposal = await ProposalModel.findOne({ user: req.user.id, opportunity: req.opportunity.id });
+			const proposal = await ProposalModel.findOne({ user: ((req.user as IUserModel) as IUserModel).id, opportunity: req.opportunity.id });
 			if (proposal) {
 				const populatedProposal = await this.populateProposal(proposal);
 				res.json(populatedProposal);
@@ -91,10 +91,10 @@ class ProposalsServerController {
 	public async create(req: Request, res: Response): Promise<void> {
 		const proposal = new ProposalModel(req.body);
 		proposal.status = 'Draft';
-		proposal.user = req.user;
+		proposal.user = (req.user as IUserModel) as IUserModel;
 
 		// set the audit fields so we know who did what when
-		CoreServerHelpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, (req.user as IUserModel));
 
 		// save and return
 		try {
@@ -108,7 +108,7 @@ class ProposalsServerController {
 
 	// Takes the already queried object and pass it back
 	public async read(req: Request, res: Response): Promise<void> {
-		if (this.ensureProposalOwner(req.proposal, req.user) || this.ensureAdminOnOpp(req.proposal.opportunity, req.user) || this.ensureAdmin(req.user)) {
+		if (this.ensureProposalOwner(req.proposal, (req.user as IUserModel)) || this.ensureAdminOnOpp(req.proposal.opportunity, (req.user as IUserModel)) || this.ensureAdmin((req.user as IUserModel))) {
 			const populatedOpportunity = await this.populateProposal(req.proposal);
 			res.json(populatedOpportunity);
 		} else {
@@ -119,7 +119,7 @@ class ProposalsServerController {
 	}
 
 	public async submit(req: Request, res: Response): Promise<void> {
-		if (!this.ensureProposalOwner(req.proposal, req.user) && !this.ensureAdminOnOpp(req.proposal.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+		if (!this.ensureProposalOwner(req.proposal, (req.user as IUserModel)) && !this.ensureAdminOnOpp(req.proposal.opportunity, (req.user as IUserModel)) && !this.ensureAdmin((req.user as IUserModel))) {
 			res.status(403).send({
 				message: 'User is not authorized'
 			});
@@ -138,7 +138,7 @@ class ProposalsServerController {
 
 	// Update the document, make sure to apply audit.
 	public async update(req: Request, res: Response): Promise<void> {
-		if (!this.ensureProposalOwner(req.proposal, req.user) && !this.ensureAdminOnOpp(req.proposal.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+		if (!this.ensureProposalOwner(req.proposal, (req.user as IUserModel)) && !this.ensureAdminOnOpp(req.proposal.opportunity, (req.user as IUserModel)) && !this.ensureAdmin((req.user as IUserModel))) {
 			res.status(403).send({
 				message: 'User is not authorized'
 			});
@@ -148,7 +148,7 @@ class ProposalsServerController {
 		const newProposalInfo = req.body;
 
 		// set the audit fields so we know who did what when
-		CoreServerHelpers.applyAudit(newProposalInfo, req.user);
+		CoreServerHelpers.applyAudit(newProposalInfo, (req.user as IUserModel));
 
 		try {
 			const updatedProposal = await ProposalModel.findOneAndUpdate({ _id: req.proposal._id }, newProposalInfo, { new: true });
@@ -180,7 +180,7 @@ class ProposalsServerController {
 		// Update proposal
 		proposal.status = 'Assigned';
 		proposal.isAssigned = true;
-		CoreServerHelpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, (req.user as IUserModel));
 		const updatedProposal = await this.saveProposal(proposal);
 		const populatedProposal = await this.populateProposal(updatedProposal);
 	}
@@ -192,7 +192,7 @@ class ProposalsServerController {
 		proposal.status = 'Submitted';
 		proposal.isAssigned = false;
 		org.awardedContractCount--;
-		CoreServerHelpers.applyAudit(proposal, req.user);
+		CoreServerHelpers.applyAudit(proposal, (req.user as IUserModel));
 
 		try {
 			const updatedProposal = await this.saveProposal(proposal);
@@ -249,13 +249,13 @@ class ProposalsServerController {
 	// Given an opportunity and an organization, return all members that are
 	// qualified to be assigned to each phase in the proposal
 	public async getPotentialResources(req: Request, res: Response): Promise<void> {
-		const user = req.user;
+		const user = req.user as IUserModel;
 		const org = req.org;
 		const opportunity = req.opportunity;
 		const allMembers = _.uniq(org.members.concat(org.admins));
 
 		// if the user is not an admin of the org then bail out
-		if (user._id.toString() !== org.owner._id.toString() && org.admins.indexOf(user._id) === -1) {
+		if (user._id.toString() !== org.owner._id.toString() && org.admins.indexOf(user) === -1) {
 			res.status(422).send({
 				message: 'User is not authorized'
 			});
@@ -330,7 +330,7 @@ class ProposalsServerController {
 			return;
 		}
 
-		if (!this.ensureAdminOnOpp(req.opportunity, req.user) && !this.ensureAdmin(req.user)) {
+		if (!this.ensureAdminOnOpp(req.opportunity, (req.user as IUserModel)) && !this.ensureAdmin((req.user as IUserModel))) {
 			res.status(403).send({ message: 'User is not authorized' });
 			return;
 		}
@@ -397,7 +397,7 @@ class ProposalsServerController {
 	// Upload an attachment to a proposal
 	public uploaddoc(req: Request, res: Response): void {
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 		const isAdmin = user && user.roles.indexOf('admin') !== -1;
 		const isOwner = user && proposal.user._id.toString() === user._id.toString();
 
@@ -429,7 +429,7 @@ class ProposalsServerController {
 	// Remove an attachment from a proposal
 	public async removedoc(req: Request, res: Response): Promise<void> {
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 		const isAdmin = user && user.roles.indexOf('admin') !== -1;
 		const isOwner = user && proposal.user.id.toString() === user.id.toString();
 
@@ -447,7 +447,7 @@ class ProposalsServerController {
 
 	public downloaddoc(req: Request, res: Response): void {
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 		const isAdmin = user && user.roles.indexOf('admin') !== -1;
 		const isGov = user && user.roles.indexOf('gov') !== -1;
 		const isOwner = user && proposal.user._id.toString() === user._id.toString();

@@ -27,7 +27,7 @@ class ProgramsServerController {
 
 	public async getMyAdminPrograms(req: Request, res: Response): Promise<void> {
 		try {
-			const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
+			const me = CoreServerHelpers.summarizeRoles(req.user && (req.user as IUserModel).roles ? (req.user as IUserModel).roles : null);
 			const search = me.isAdmin ? {} : { code: { $in: me.programs.admin } };
 			const myPrograms = await ProgramModel.find(search)
 				.select('code title short')
@@ -100,7 +100,7 @@ class ProgramsServerController {
 	public read = (req, res) => {
 
 		// Ensure that the program is only viewable when published or when the user is either the admin for the program or a root admin
-		if (req.program.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.program)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
+		if (req.program.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.program)) !== -1 || req.user.roles.indexOf('admin') !== -1)) {
 			res.json(this.decorate(req.program, req.user ? req.user.roles : []));
 		} else {
 			return res.status(403).send({

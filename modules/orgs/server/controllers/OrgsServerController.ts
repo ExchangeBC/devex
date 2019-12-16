@@ -46,7 +46,7 @@ class OrgsServerController {
 		return populatedOrg;
 	}
 
-	public async removeUserFromMemberList(req: Request, res: Response): Promise<void> {
+	public async removeUserFromMemberList(req: any, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -58,7 +58,7 @@ class OrgsServerController {
 		res.json(updatedOrg);
 	}
 
-	public async removeMeFromCompany(req: Request, res: Response): Promise<void> {
+	public async removeMeFromCompany(req: any, res: Response): Promise<void> {
 		if (!req.user) {
 			res.status(422).send({
 				message: 'Valid user not provided'
@@ -77,7 +77,7 @@ class OrgsServerController {
 		res.json(updatedOrg);
 	}
 
-	public async create(req: Request, res: Response): Promise<void> {
+	public async create(req: any, res: Response): Promise<void> {
 		const org = new OrgModel(req.body);
 
 		// set the owner and also add the owner to the list of admins
@@ -90,7 +90,7 @@ class OrgsServerController {
 		});
 	}
 
-	public read(req: Request, res: Response): void {
+	public read(req: any, res: Response): void {
 		// If user is not authenticated, only send the publicly available org info
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			const org = _.pick(req.org, ['_id', 'orgImageURL', 'name', 'website', 'capabilities']);
@@ -100,7 +100,7 @@ class OrgsServerController {
 		}
 	}
 
-	public async update(req: Request, res: Response): Promise<void> {
+	public async update(req: any, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -126,7 +126,7 @@ class OrgsServerController {
 		});
 	}
 
-	public async delete(req: Request, res: Response): Promise<void> {
+	public async delete(req: any, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to delete this organization'
@@ -147,7 +147,7 @@ class OrgsServerController {
 		}
 	}
 
-	public async list(req: Request, res: Response): Promise<void> {
+	public async list(req: any, res: Response): Promise<void> {
 		try {
 			const orgs = await OrgModel.find()
 				.sort('user.lastName')
@@ -184,7 +184,7 @@ class OrgsServerController {
 	public async myadmin(req: Request, res: Response): Promise<void> {
 		try {
 			const orgs = await OrgModel.find({
-				admins: { $in: [req.user._id] }
+				admins: { $in: [(req.user as IUserModel)._id] }
 			})
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
 				.populate('createdBy', 'displayName')
@@ -218,7 +218,7 @@ class OrgsServerController {
 	public async my(req: Request, res: Response): Promise<void> {
 		try {
 			const orgs = await OrgModel.find({
-				members: { $in: [req.user._id] }
+				members: { $in: [(req.user as IUserModel)._id] }
 			})
 				.populate('owner', '_id lastName firstName displayName profileImageURL')
 				.populate('createdBy', 'displayName')
@@ -291,7 +291,7 @@ class OrgsServerController {
 		}
 	}
 
-	public async logo(req: Request, res: Response): Promise<void> {
+	public async logo(req: any, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to edit this organization'
@@ -372,7 +372,7 @@ class OrgsServerController {
 	}
 
 	// Accepts a join request by moving given user into team member list.  Updates org accordingly and returns.
-	public async acceptRequest(req: Request, res: Response): Promise<void> {
+	public async acceptRequest(req: any, res: Response): Promise<void> {
 		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
 			res.status(403).send({
 				message: 'You are not authorized to add members to this company'
@@ -428,7 +428,7 @@ class OrgsServerController {
 	}
 
 	public async declineRequest(req: Request, res: Response): Promise<void> {
-		if (!req.user || !this.isUserAdmin(req.org, req.user)) {
+		if (!req.user || !this.isUserAdmin(req.org, req.user as IUserModel)) {
 			res.status(403).send({
 				message: 'You are not authorized to decline requests for this company'
 			});

@@ -10,7 +10,7 @@ import CoreServerErrors from '../../../../core/server/controllers/CoreServerErro
 import { SubscriptionModel } from '../../../../core/server/models/SubscriptionModel';
 import MessagesServerController from '../../../../messages/server/controllers/MessagesServerController';
 import OrgsServerController from '../../../../orgs/server/controllers/OrgsServerController';
-import { UserModel } from '../../models/UserModel';
+import { IUserModel, UserModel } from '../../models/UserModel';
 
 class UserProfileController {
 	public static getInstance() {
@@ -292,7 +292,7 @@ class UserProfileController {
 
 	public async newsletterSubscriptionStatus(req: Request, res: Response): Promise<void> {
 		try {
-			const user = req.user;
+			const user = req.user as IUserModel;
 			const subscribedUsers = await SubscriptionModel.find({ email: user.email });
 			if (subscribedUsers && subscribedUsers.length > 0) {
 				res.json({

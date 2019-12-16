@@ -83,7 +83,7 @@ class ProjectsServerController {
 			//
 			// set the audit fields so we know who did what when
 			//
-			CoreServerHelpers.applyAudit(project, req.user);
+			CoreServerHelpers.applyAudit(project, (req.user as IUserModel));
 			//
 			// save and return
 			//
@@ -93,8 +93,8 @@ class ProjectsServerController {
 						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
-					this.setProjectAdmin(project, req.user);
-					req.user.save();
+					this.setProjectAdmin(project, (req.user as IUserModel));
+					(req.user as IUserModel).save();
 					res.json(project);
 				}
 			});
@@ -109,8 +109,8 @@ class ProjectsServerController {
 	public read = (req, res) => {
 
 		// Ensure that the project is only viewable when published or when the user is either the admin for the project or a root admin
-		if (req.project.isPublished || req.user && (req.user.roles.indexOf(this.adminRole(req.project)) !== -1 || req.user.roles.indexOf('admin') !== -1)){
-			res.json(this.decorate(req.project, req.user ? req.user.roles : []));
+		if (req.project.isPublished || (req.user as IUserModel) && ((req.user as IUserModel).roles.indexOf(this.adminRole(req.project)) !== -1 || (req.user as IUserModel).roles.indexOf('admin') !== -1)) {
+			res.json(this.decorate(req.project, (req.user as IUserModel) ? (req.user as IUserModel).roles : []));
 		} else {
 			return res.status(403).send({
 				message: 'User is not authorized'
@@ -121,7 +121,7 @@ class ProjectsServerController {
 	// update the document, make sure to apply audit. We don't mess with the
 	// code if they change the name as that would mean reworking all the roles
 	public async update(req: Request, res: Response): Promise<void> {
-		if (this.ensureAdmin(req.project, req.user, res)) {
+		if (this.ensureAdmin(req.project, (req.user as IUserModel), res)) {
 			// copy over everything passed in. This will overwrite the
 			// audit fields, but they get updated in the following step
 			const project = _.assign(req.project, req.body);
@@ -130,11 +130,11 @@ class ProjectsServerController {
 			const newProjectInfo = req.body;
 
 			// set the audit fields so we know who did what when
-			CoreServerHelpers.applyAudit(project, req.user);
+			CoreServerHelpers.applyAudit(project, (req.user as IUserModel));
 
 			try {
 				const updatedProject = await ProjectModel.findOneAndUpdate({ _id: req.project._id }, newProjectInfo, { new: true });
-				res.json(this.decorate(updatedProject, req.user ? req.user.roles : []));
+				res.json(this.decorate(updatedProject, (req.user as IUserModel) ? (req.user as IUserModel).roles : []));
 			} catch (error) {
 				res.status(422).send({
 					message: CoreServerErrors.getErrorMessage(error)
@@ -149,7 +149,7 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public delete = (req, res) => {
-		if (this.ensureAdmin(req.project, req.user, res)) {
+		if (this.ensureAdmin(req.project, (req.user as IUserModel), res)) {
 			const project = req.project;
 			project.remove(err => {
 				if (err) {
@@ -180,7 +180,7 @@ class ProjectsServerController {
 						message: CoreServerErrors.getErrorMessage(err)
 					});
 				} else {
-					res.json(this.decorateList(projects, req.user ? req.user.roles : []));
+					res.json(this.decorateList(projects, (req.user as IUserModel) ? (req.user as IUserModel).roles : []));
 				}
 			});
 	};
@@ -220,8 +220,8 @@ class ProjectsServerController {
 	//
 	// -------------------------------------------------------------------------
 	public request = (req, res) => {
-		this.setProjectRequest(req.project, req.user);
-		req.user.save();
+		this.setProjectRequest(req.project, (req.user as IUserModel));
+		(req.user as IUserModel).save();
 		res.json({ ok: true });
 	};
 
@@ -262,7 +262,7 @@ class ProjectsServerController {
 			.populate('createdBy', 'displayName')
 			.populate('updatedBy', 'displayName')
 			.exec();
-			res.json(this.decorateList(projects, req.user ? req.user.roles : []));
+			res.json(this.decorateList(projects, (req.user as IUserModel) ? (req.user as IUserModel).roles : []));
 		} catch (error) {
 			res.status(422).send({
 				message: CoreServerErrors.getErrorMessage(error)
@@ -406,7 +406,7 @@ class ProjectsServerController {
 
 	private getSearchTerm(req: Request, opts: any): any {
 		opts = opts || {};
-		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles((req.user as IUserModel) && (req.user as IUserModel).roles ? (req.user as IUserModel).roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.projects.admin } }];
 		}

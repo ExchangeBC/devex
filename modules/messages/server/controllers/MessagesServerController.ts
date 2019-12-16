@@ -469,7 +469,7 @@ class MessagesServerController {
 		}
 
 		try {
-			const messages = await this.query({ user: req.user._id });
+			const messages = await this.query({ user: (req.user as IUserModel)._id });
 			res.status(200).json(messages);
 		} catch (error) {
 			res.status(400).send({ message: error.message });
@@ -483,7 +483,7 @@ class MessagesServerController {
 		}
 
 		try {
-			const countResult = await this.count({ user: req.user._id });
+			const countResult = await this.count({ user: (req.user as IUserModel)._id });
 			res.status(200).json({ count: countResult });
 		} catch (error) {
 			res.status(400).send({ message: error.message });
@@ -495,14 +495,14 @@ class MessagesServerController {
 		if (!req.user) {
 			res.status(400).send({ message: 'No user context supplied' });
 		}
-		if (req.user._id.toString() !== req.message.user.toString()) {
+		if ((req.user as IUserModel)._id.toString() !== req.message.user.toString()) {
 			res.status(403).send({ message: 'Not owner of message' });
 		}
 
 		// get the local domain, port, host, protocol info
 		// this gets over a potential risk by disallowing any calls to outside APIs through this
 		// mechanism
-		const options = this.getHostInfoFromDomain('/api/message/handler/action/' + req.body.action + '/user/' + req.user._id + req.message.link);
+		const options = this.getHostInfoFromDomain('/api/message/handler/action/' + req.body.action + '/user/' + (req.user as IUserModel)._id + req.message.link);
 
 		let data: any;
 		try {
@@ -517,7 +517,7 @@ class MessagesServerController {
 	}
 
 	public async send(req: Request, res: Response): Promise<void> {
-		if (req.user.roles.indexOf('admin') === -1) {
+		if ((req.user as IUserModel).roles.indexOf('admin') === -1) {
 			res.status(403).send({ message: 'Only admin can send via REST' });
 		}
 		req.body.users = req.body.users || [];

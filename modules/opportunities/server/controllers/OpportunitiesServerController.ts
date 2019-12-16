@@ -182,7 +182,7 @@ class OpportunitiesServerController {
 	public unassign = async (req: Request, res: Response): Promise<void> => {
 		const opportunity = req.opportunity;
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 
 		try {
 			// unassign the proposal
@@ -212,7 +212,7 @@ class OpportunitiesServerController {
 			});
 
 			// decorate the opportunity with the current user roles
-			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? (req.user as IUserModel).roles : []);
 
 			// respond with the decorated opportunity
 			res.json(decoratedOpportunity);
@@ -229,7 +229,7 @@ class OpportunitiesServerController {
 	public assign = async (req: Request, res: Response): Promise<void> => {
 		const opportunity = req.opportunity;
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 
 		try {
 			// assign the proposal
@@ -247,7 +247,7 @@ class OpportunitiesServerController {
 			});
 
 			// send message to assigned user
-			savedOpportunity.assignor = user.displayName;
+			savedOpportunity.assignor = user;
 			savedOpportunity.assignoremail = savedOpportunity.proposalEmail;
 			this.sendMessages('opportunity-assign-cwu', [proposal.user], {
 				opportunity: this.setMessageData(savedOpportunity)
@@ -273,7 +273,7 @@ class OpportunitiesServerController {
 			});
 
 			// decorate the opportunity with the current user roles
-			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? (req.user as IUserModel).roles : []);
 
 			// respond with the decorated opportunity
 			res.json(decoratedOpportunity);
@@ -290,7 +290,7 @@ class OpportunitiesServerController {
 	public assignswu = async (req: Request, res: Response): Promise<void> => {
 		const opportunity = req.opportunity;
 		const proposal = req.proposal;
-		const user = req.user;
+		const user = (req.user as IUserModel);
 
 		try {
 			// assign the proposal
@@ -309,7 +309,7 @@ class OpportunitiesServerController {
 			});
 
 			// send message to assigned user
-			savedOpportunity.assignor = user.displayName;
+			savedOpportunity.assignor = user;
 			savedOpportunity.assignoremail = savedOpportunity.proposalEmail;
 			this.sendMessages('opportunity-assign-swu', [proposal.user], {
 				opportunity: this.setMessageData(savedOpportunity)
@@ -335,7 +335,7 @@ class OpportunitiesServerController {
 			});
 
 			// decorate the opportunity with the current user roles
-			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? req.user.roles : []);
+			const decoratedOpportunity = OpportunitiesUtilities.decorate(savedOpportunity, req.user ? (req.user as IUserModel).roles : []);
 
 			// respond with the decorated opportunity
 			res.json(decoratedOpportunity);
@@ -352,7 +352,7 @@ class OpportunitiesServerController {
 	public forProgram = async (req: Request, res: Response): Promise<void> => {
 		const query = this.searchTerm(req, { program: req.program._id });
 		try {
-			const oppList = await OpportunitiesUtilities.getOpportunityList(query, req.user);
+			const oppList = await OpportunitiesUtilities.getOpportunityList(query, req);
 			res.json(oppList);
 			return;
 		} catch (error) {
@@ -643,7 +643,7 @@ class OpportunitiesServerController {
 		zip.folder(opportunityName);
 
 		try {
-			const proposal = await ProposalModel.findOne({ user: req.user._id, opportunity: req.opportunity._id })
+			const proposal = await ProposalModel.findOne({ user: (req.user as IUserModel)._id, opportunity: req.opportunity._id })
 				.populate('createdBy', 'displayName')
 				.populate('updatedBy', 'displayName')
 				.populate('opportunity')
@@ -849,7 +849,7 @@ class OpportunitiesServerController {
 
 	private searchTerm = (req: Request, opts?: any): any => {
 		opts = opts || {};
-		const me = CoreServerHelpers.summarizeRoles(req.user && req.user.roles ? req.user.roles : null);
+		const me = CoreServerHelpers.summarizeRoles(req.user && (req.user as IUserModel).roles ? (req.user as IUserModel).roles : null);
 		if (!me.isAdmin) {
 			opts.$or = [{ isPublished: true }, { code: { $in: me.opportunities.admin } }];
 		}
