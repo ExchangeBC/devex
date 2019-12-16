@@ -90,7 +90,7 @@ class ProposalsServerController {
 	// administrator
 	public async create(req: Request, res: Response): Promise<void> {
 		const proposal = new ProposalModel(req.body);
-		proposal.status = 'Draft';
+		proposal.status = 'New';
 		proposal.user = req.user;
 
 		// set the audit fields so we know who did what when

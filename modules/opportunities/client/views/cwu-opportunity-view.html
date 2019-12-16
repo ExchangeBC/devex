@@ -129,9 +129,9 @@
     </div>
 
     <!-- // Proposal Application Directive // -->
-    <div class="row" ng-if="!vm.isClosed()">
+    <div class="row">
       <div class="col">
-        <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
+        <proposal-apply opportunity="vm.opportunity" isclosed="vm.isClosed()" proposal="vm.myproposal"></proposal-apply>
       </div>
 
     </div>
@@ -318,13 +318,6 @@
         <h3 class="opp-detail">Proposal Evaluation Criteria</h3>
         <p>Your Proposal will be scored by this criteria:</p>
         <p ng-bind-html="vm.opportunity.evaluation"></p>
-
-        <!-- // Proposal Application Directive // -->
-        <div class="row" ng-if="!vm.isClosed()">
-          <div class="col">
-            <proposal-apply opportunity="vm.opportunity" proposal="vm.myproposal"></proposal-apply>
-          </div>
-        </div>
       </div>
     </div>
   </div>
