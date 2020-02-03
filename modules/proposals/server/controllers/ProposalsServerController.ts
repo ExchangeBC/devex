@@ -504,7 +504,6 @@ class ProposalsServerController {
 			.populate('phases.inception.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.proto.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
 			.populate('phases.aggregate.team', '_id displayName firstName lastName email username profileImageURL capabilities capabilitySkills')
-			.populate('teamQuestionResponses')
 			.populate('org')
 			.populate({
 				path: 'phases.proto.team',
