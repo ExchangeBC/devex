@@ -55,14 +55,10 @@ class OpportunitiesServerController {
 			if (!this.ensureAdmin(opportunity, req.user)) {
 				// If not an admin, we still need to be able to see winning business name and org image url.
 				if (opportunity.proposal) {
-					const org = opportunity.proposal.org
+					const isCompany = opportunity.proposal.isCompany
 					opportunity.proposal = {
-						businessName: opportunity.proposal.businessName
-					}
-					if (org) {
-						opportunity.proposal.org = {
-							orgImageURL: org.orgImageURL
-						}
+						proponentName: isCompany ? opportunity.proposal.businessName : opportunity.proposal.user.displayName,
+						imageUrl: isCompany ? opportunity.proposal.org.orgImageURL : opportunity.proposal.user.profileImageURL
 					}
 				}
 			}

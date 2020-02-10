@@ -193,10 +193,9 @@
           <div class="col text-center" ng-if="vm.opportunity.status !== 'Pending' && !vm.canEdit && vm.opportunity.proposal">
             <span class="text-black-50">Opportunity assigned to:</span>
             &nbsp;
-            <img ng-if="!vm.opportunity.proposal.isCompany" class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.user.profileImageURL.substr(0,1) == '/' || vm.opportunity.proposal.user.profileImageURL.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.user.profileImageURL}}">
+            <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.imageUrl.substr(0,1) == '/' || vm.opportunity.proposal.imageUrl.substr(0,4) == 'http') ? '' : '/') + vm.opportunity.proposal.imageUrl}}">
             &nbsp;
-            <span ng-if="!vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.user.displayName}}</span>
-            <span ng-if="vm.opportunity.proposal.isCompany">{{vm.opportunity.proposal.businessName}}</span>
+            <span>{{vm.opportunity.proposal.proponentName}}</span>
           </div>
         </div>
       </div>
