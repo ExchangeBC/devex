@@ -61,6 +61,15 @@ class OpportunitiesServerController {
 						imageUrl: isCompany ? opportunity.proposal.org.orgImageURL : opportunity.proposal.user.profileImageURL
 					}
 				}
+			} else {
+				if (opportunity.proposal) {
+					const isCompany = opportunity.proposal.org || opportunity.opportunityTypeCd !== 'code-with-us'
+					opportunity.proposal = {
+						...opportunity.proposal,
+						proponentName: isCompany ? opportunity.proposal.businessName : opportunity.proposal.user.displayName,
+						imageUrl: isCompany ? opportunity.proposal.org.orgImageURL : opportunity.proposal.user.profileImageURL
+					}
+				}
 			}
 			res.json(OpportunitiesUtilities.decorate(opportunity, req.user ? req.user.roles : []));
 			this.incrementViews(req.opportunity._id);
