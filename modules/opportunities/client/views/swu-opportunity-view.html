@@ -116,9 +116,9 @@
         <div class="text-center" ng-if="vm.opportunity.proposal">
           <span class="text-black-50">This opportunity has been awarded to:</span>
           &nbsp;
-          <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.org.orgImageURL.substr(0,1) == '/') ? '' : '/') + vm.opportunity.proposal.org.orgImageURL}}">
+          <img class="img-avatar-flat img-avatar-sm" src="{{((vm.opportunity.proposal.imageUrl.substr(0,1) == '/') ? '' : '/') + vm.opportunity.proposal.imageUrl}}">
           &nbsp;
-          <strong>{{vm.opportunity.proposal.businessName}}</strong>
+          <strong>{{vm.opportunity.proposal.proponentName}}</strong>
         </div>
 
       </div>
