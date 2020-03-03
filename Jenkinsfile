@@ -60,19 +60,19 @@ node('maven') {
        checkout scm
     }
 
-    stage('sonarqube') {
-      script {
-        openshift.withCluster() {
-          openshift.withProject() {
-            def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
-            def build = sonarqube.startBuild()
-            build.untilEach(1) {
-              return it.object().status.phase == "Complete"
-            }
-          }
-        }
-      }
-    }
+    // stage('sonarqube') {
+    //   script {
+    //     openshift.withCluster() {
+    //       openshift.withProject() {
+    //         def sonarqube = openshift.selector("bc", "sonarqube-pipeline")
+    //         def build = sonarqube.startBuild()
+    //         build.untilEach(1) {
+    //           return it.object().status.phase == "Complete"
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     stage('build') {
 	    echo "Building..."
@@ -120,60 +120,60 @@ podTemplate(label: owaspPodLabel, name: owaspPodLabel, serviceAccount: 'jenkins'
      }
   }
 
-stage('Functional Test Dev') {
-  def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
-    podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
-    volumes: [
-	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
-    ],
-    containers: [
-      containerTemplate(
-        name: 'jnlp',
-        image: 'docker-registry.default.svc:5000/devex-platform-tools/jenkins-slave-bddstack:v1-latest',
-        resourceRequestCpu: '500m',
-        resourceLimitCpu: '2000m',
-        resourceRequestMemory: '2Gi',
-        resourceLimitMemory: '8Gi',
-        workingDir: '/home/jenkins',
-        command: '',
-        args: '${computer.jnlpmac} ${computer.name}',
-        envVars: [
-            envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
-        ]
-      )
-    ]) {
-      node(podlabel) {
-	      //the checkout is mandatory, otherwise functional test would fail
-        echo "checking out source"
-        checkout scm
-	      //sleep 1000
-        dir('functional-tests') {
-            try {
-              sh './TestSuite_ChromeHeadless.sh'
-            } finally { 
-              archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
-              archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
-              junit 'build/test-results/**/*.xml'
-              publishHTML (target: [
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: true,
-                                reportDir: 'build/reports/spock',
-                                reportFiles: 'index.html',
-                                reportName: "BDD Spock Report"
-                          ])
-              publishHTML (target: [
-                                allowMissing: false,
-                                alwaysLinkToLastBuild: false,
-                                keepAll: true,
-                                reportDir: 'build/reports/tests/chromeHeadlessTest',
-                                reportFiles: 'index.html',
-                                reportName: "Full Test Report"
-                          ])  
-	    }
-        }
-     }}
-}
+// stage('Functional Test Dev') {
+//   def podlabel = "devxp-bddstack-${UUID.randomUUID().toString()}"
+//     podTemplate(label: podlabel, name: podlabel, serviceAccount: 'jenkins', cloud: 'openshift', 
+//     volumes: [
+// 	    emptyDirVolume(mountPath:'/dev/shm', memory: true)
+//     ],
+//     containers: [
+//       containerTemplate(
+//         name: 'jnlp',
+//         image: 'docker-registry.default.svc:5000/devex-platform-tools/jenkins-slave-bddstack:v1-latest',
+//         resourceRequestCpu: '500m',
+//         resourceLimitCpu: '2000m',
+//         resourceRequestMemory: '2Gi',
+//         resourceLimitMemory: '8Gi',
+//         workingDir: '/home/jenkins',
+//         command: '',
+//         args: '${computer.jnlpmac} ${computer.name}',
+//         envVars: [
+//             envVar(key:'BASEURL', value: 'http://platform-dev.pathfinder.gov.bc.ca/')
+//         ]
+//       )
+//     ]) {
+//       node(podlabel) {
+// 	      //the checkout is mandatory, otherwise functional test would fail
+//         echo "checking out source"
+//         checkout scm
+// 	      //sleep 1000
+//         dir('functional-tests') {
+//             try {
+//               sh './TestSuite_ChromeHeadless.sh'
+//             } finally { 
+//               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/reports/**/*'
+//               archiveArtifacts allowEmptyArchive: true, artifacts: 'build/test-results/**/*'
+//               junit 'build/test-results/**/*.xml'
+//               publishHTML (target: [
+//                                 allowMissing: false,
+//                                 alwaysLinkToLastBuild: false,
+//                                 keepAll: true,
+//                                 reportDir: 'build/reports/spock',
+//                                 reportFiles: 'index.html',
+//                                 reportName: "BDD Spock Report"
+//                           ])
+//               publishHTML (target: [
+//                                 allowMissing: false,
+//                                 alwaysLinkToLastBuild: false,
+//                                 keepAll: true,
+//                                 reportDir: 'build/reports/tests/chromeHeadlessTest',
+//                                 reportFiles: 'index.html',
+//                                 reportName: "Full Test Report"
+//                           ])  
+// 	    }
+//         }
+//      }}
+// }
 	
 stage('deploy-test') {	
   timeout(time: 1, unit: 'DAYS') {
