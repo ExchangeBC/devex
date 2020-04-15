@@ -36,11 +36,11 @@ RUN apt-get update -q  \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install dumb-init
-RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.0/dumb-init_1.2.0_amd64.deb
+RUN wget https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64.deb
 RUN dpkg -i dumb-init_*.deb
 
 # Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 RUN sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq nodejs \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
