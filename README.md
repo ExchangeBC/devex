@@ -1,10 +1,15 @@
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE) [![Status](https://github.com/BCDevExchange/assets/blob/master/images/badges/retired.svg)]
 
 
 # BCDevExchange Application
 
-The [BCDevExchange](https://bcdevexchange.org) is a platform that provides new ways for British Columbia's public sector to connect with developers and other IT professionals.
+This was the original web app created by the [BCDevExchange](https://bcdevexchange.org) to facilitate _Code With Us_  and _Sprint With Us_ transactions. 
+
+This product has been superceded by two new products: 
+
+* The **Digital Marketplace** web app ([digital.gov.bc.ca/marketplace](https://digital.gov.bc.ca/marketplace) / [github.com/bcgov/digital_marketplace](https://github.com/bcgov/digital_marketplace)) - where _Code With Us_ and _Sprint With Us_ opportunities can now be found
+* The **BCDevExchange website** ([bcdevexchange.org](https://bcdevexchange.org) / [github.com/bcgov/bcdevexchange](https://github.com/bcgov/bcdevexchange)) - which explains the current services offered by the BCDevExchange
 
 ***
 
