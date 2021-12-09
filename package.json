@@ -85,7 +85,7 @@
     "simple-line-icons": "^2.4.1",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
-    "tinymce": "^4.9.7",
+    "tinymce": "^4.9.11",
     "ui-bootstrap4": "^3.0.5",
     "ui-cropper": "^1.0.7",
     "validator": "10.5.0",
